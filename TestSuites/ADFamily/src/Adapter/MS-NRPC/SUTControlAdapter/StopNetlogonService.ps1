@@ -7,17 +7,17 @@ $strFileName="c:\temp\changednetlogonservicestatus.txt"
 $computerName = $PTFProp_Common_WritableDC1_NetbiosName
 
 	##get service object
-	$serviceObj = get-service -computername $computerName Netlogon
-	##stop.
-	Stop-Service -inputObject $serviceObj
-	Sleep 10
-	$serviceObj = get-service -computername $computerName Netlogon
-	if($serviceObj.Status -ne "Stopped")
-	{
-		throw "service cannot start"
+	Invoke-Command -Computername $computerName -Scriptblock { $serviceObj = Get-Service Netlogon
+		##stop.
+		Stop-Service -inputObject $serviceObj
+		Sleep 10
+		$serviceObj =Invoke-Command -Computername $computerName -Scriptblock {Get-Service Netlogon} 
+		if($serviceObj.Status -ne "Stopped")
+		{
+			throw "service cannot start"
+		}
+		Sleep 10
 	}
-	Sleep 10
-	$serviceObj.Close()
 
 	[System.GC]::Collect();
 	[System.GC]::WaitForPendingFinalizers();

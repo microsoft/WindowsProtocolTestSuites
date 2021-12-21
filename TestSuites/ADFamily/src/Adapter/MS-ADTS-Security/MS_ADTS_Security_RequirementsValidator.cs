@@ -3470,13 +3470,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             options.StartTransportLayerSecurity(null);
 
             // QueryClientCertificate
-            X509Certificate cert = new X509Certificate();
+            X509Certificate cert = new X509Certificate(certFilewithPathSpec, certPassword, X509KeyStorageFlags.DefaultKeySet);
 
             //External AuthType 
             externalConnection.AuthType = AuthType.External;
 
-            // select a certificate to import
-            cert.Import(certFilewithPathSpec, certPassword, X509KeyStorageFlags.DefaultKeySet);
 
             // add the certificate to the connection
             externalConnection.ClientCertificates.Add(cert);
@@ -3525,13 +3523,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
                                                                                        externalConnection);
             TestClassBase.BaseTestSite.Assert.IsNull(extendedoperationResponse, "extended operation is success");
             // QueryClientCertificate
-            X509Certificate cert = new X509Certificate();
+            X509Certificate cert = new X509Certificate(certFilewithPathSpec, certPassword, X509KeyStorageFlags.DefaultKeySet);
 
             //External AuthType 
             externalConnection.AuthType = AuthType.External;
 
-            //select a certificate to import
-            cert.Import(certFilewithPathSpec, certPassword, X509KeyStorageFlags.DefaultKeySet);
 
             //add the certificate to the connection
             externalConnection.ClientCertificates.Add(cert);
@@ -3561,13 +3557,11 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Security
             LdapConnection externalConnection = new LdapConnection(new LdapDirectoryIdentifier(hostNameandPort));
 
             //QueryClientCertificate
-            X509Certificate cert = new X509Certificate();
+            X509Certificate cert = new X509Certificate(certFilewithPathSpec, certPassword, X509KeyStorageFlags.DefaultKeySet);
 
             //External AuthType 
             externalConnection.AuthType = AuthType.External;
 
-            //select a certificate to import
-            cert.Import(certFilewithPathSpec, certPassword, X509KeyStorageFlags.DefaultKeySet);
 
             //add the certificate to the connection
             externalConnection.ClientCertificates.Add(cert);

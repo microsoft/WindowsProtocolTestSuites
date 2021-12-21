@@ -45,7 +45,7 @@ namespace Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema
         /// <returns>Returns unparsed string.</returns>
         public static string UnparseUInt32Enum(Type type, uint value)
         {
-            return Enum.Format(type, value, "g");
+            return Enum.Format(type, value, "f");
         }
     }
 

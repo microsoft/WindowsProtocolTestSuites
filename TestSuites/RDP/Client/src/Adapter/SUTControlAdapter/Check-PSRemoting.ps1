@@ -15,18 +15,13 @@ while($triedCount -lt $maximumRetryCount -and $sutStatus -eq $null)
     $triedCount++
     try
     {
-        Get-PSSession|Remove-PSSession
-        $psSession=New-PSSession -HostName $computerName -UserName $ptfprop_SUTUserName
+        $result=Invoke-Command -HostName $computerName -UserName $ptfprop_SUTUserName -ScriptBlock {Get-Host}
         $sutStatus = "pass"
     }
     catch
     {
         # Sleep before retry if last attempt failed.
         Start-Sleep -Seconds 1
-    }
-    finally
-    {
-        Get-PSSession|Remove-PSSession
     }
 }
 

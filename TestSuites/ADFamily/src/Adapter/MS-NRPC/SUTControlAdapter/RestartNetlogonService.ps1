@@ -5,19 +5,19 @@
 #        void RestartNetlogonService(string endpointName, string tdcName);
 #
 ##get service object
-$serviceObj = get-service -computername $endpointName Netlogon
-##restart.
-Stop-Service -inputObject $serviceObj -Force
-Start-Service -inputObject $serviceObj
-Sleep 10
-do
-    {
-	Sleep 5
-	$serviceObj = get-service -computername $endpointName Netlogon
-}While($serviceObj.Status -ne "Running")
-Sleep 10
+Invoke-Command -Computername $endpointName -Scriptblock { $serviceObj = Get-Service Netlogon
+	##restart.
+	Stop-Service -inputObject $serviceObj -Force
+	Start-Service -inputObject $serviceObj
+	Sleep 10
+	do
+		{
+		Sleep 5
+		$serviceObj =Invoke-Command -Computername $endpointName -Scriptblock {Get-Service Netlogon}
+	}While($serviceObj.Status -ne "Running")
+	Sleep 10
 
-$serviceObj.Close()
+}
 
 [System.GC]::Collect();
 [System.GC]::WaitForPendingFinalizers();
@@ -26,19 +26,19 @@ $serviceObj.Close()
 if($tdcName)
 {
 	#get service object
-	$serviceObj = get-service -computername $tdcName Netlogon
-	#restart.
-	Stop-Service -inputObject $serviceObj -Force
-	Start-Service -inputObject $serviceObj
-	Sleep 10
-	do
-		{
-		Sleep 5
-		$serviceObj = get-service -computername $tdcName Netlogon
-	}While($serviceObj.Status -ne "Running")
-	Sleep 10
+	Invoke-Command -Computername $tdcName -Scriptblock { $serviceObj = Get-Service Netlogon
+		#restart.
+		Stop-Service -inputObject $serviceObj -Force
+		Start-Service -inputObject $serviceObj
+		Sleep 10
+		do
+			{
+			Sleep 5
+			$serviceObj =Invoke-Command -Computername $tdcName -Scriptblock {Get-Service Netlogon} 
+		}While($serviceObj.Status -ne "Running")
+		Sleep 10
 
-	$serviceObj.Close()
+	}
 
 	[System.GC]::Collect();
 	[System.GC]::WaitForPendingFinalizers();
