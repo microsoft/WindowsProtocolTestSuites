@@ -107,11 +107,11 @@ export function SelectConfiguration(props: any) {
                 if (id !== configurations.selectedConfiguration?.Id) {
                     dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
                     // Resets configureMethod and detectionResult after switching configurations
-                    dispatch(ConfigureMethodActions.setConfigurationMethodAction(""))
+                    dispatch(ConfigureMethodActions.setConfigurationMethodAction())
                     dispatch(DetectionResultActions.resetDetectionResultAction())
                 }
                 if (detectResult.detectionResult === undefined) {
-                    dispatch(ConfigureMethodActions.setConfigurationMethodAction(""))
+                    dispatch(ConfigureMethodActions.setConfigurationMethodAction())
                 }
                 // go to run step
                 wizardProps.goToStep(RunSteps.RUN_SELECTED_TEST_CASE)
@@ -125,7 +125,7 @@ export function SelectConfiguration(props: any) {
                 if (id !== configurations.selectedConfiguration?.Id) {
                     dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
                     // Resets configureMethod and detectionResult after switching configurations
-                    dispatch(ConfigureMethodActions.setConfigurationMethodAction(""))
+                    dispatch(ConfigureMethodActions.setConfigurationMethodAction())
                     dispatch(DetectionResultActions.resetDetectionResultAction())
                 }
                 // go to next step

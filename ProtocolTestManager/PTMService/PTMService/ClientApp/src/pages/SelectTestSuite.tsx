@@ -41,7 +41,7 @@ export function SelectTestSuite(props: any) {
     if (testSuite.Id !== testSuiteInfo.selectedTestSuite?.Id) {
         dispatch(WizardNavBarActions.setWizardNavBarAction(wizardProps.currentStep))
         // Resets configureMethod and detectionResult after switching testSuite
-        dispatch(ConfigureMethodActions.setConfigurationMethodAction(""))
+        dispatch(ConfigureMethodActions.setConfigurationMethodAction())
         dispatch(DetectionResultActions.resetDetectionResultAction())
     }
     wizardProps.nextStep()
