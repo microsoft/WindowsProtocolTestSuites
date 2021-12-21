@@ -93,5 +93,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string LoadingAutoDetectorFailed = "Loading auto-detector assembly failed.";
 
         public const string LoadPtfconfigError = "Failed to load the PTFConfig files: {0}";
+
+        public readonly static string[] ignoredAssemblies = new string[] { "PropertyValueDetector" };
+
+        public readonly static string[] mixedAssemblies = new string[] { "Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma" };
     }
 }
