@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             logWriter.AddLog(DetectLogLevel.Information, "Check the local adapters...");
 
             string path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetLocalNetworkAdapters.ps1";
-            var output = ExecutePowerShellCommand(path, out string[] error);
+            LocalNetworkInterfaceInformation[] output = ExecutePowerShellCommand<LocalNetworkInterfaceInformation>(path, out string[] error);
 
             bool result = true;
             if (output.Length != 0)
@@ -52,13 +52,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         public List<string> GetLocalInterfaceIps(bool isNon)
         {
             string path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetLocalNetworkAdapters.ps1";
-            var output = ExecutePowerShellCommand(path, out string[] error);
+            LocalNetworkInterfaceInformation[] output = ExecutePowerShellCommand<LocalNetworkInterfaceInformation>(path, out string[] error);
 
             if (output.Length != 0)
             {
-                var networkInterfaces = output
-                                        .Select(item => ParseLocalNetworkInterfaceInformation(item))
-                                        .Where(item => item != null);
+                var networkInterfaces = output;
                 if (isNon)
                 {
                     var nonRdmaNetworkInterfaceIps = networkInterfaces.Where(networkInterface => !networkInterface.RDMACapable).Select(result => result.IpAddress);
@@ -85,11 +83,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             return new List<string>();
         }
 
-        private void FilterNetworkInterfaces(object[] output)
+        private void FilterNetworkInterfaces(LocalNetworkInterfaceInformation[] output)
         {
-            var networkInterfaces = output
-                                        .Select(item => ParseLocalNetworkInterfaceInformation(item))
-                                        .Where(item => item != null);
+            var networkInterfaces = output;
             var nonRdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => !networkInterface.RDMACapable);
             var rdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => networkInterface.RDMACapable);
 
@@ -147,24 +143,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     logWriter.AddLog(DetectLogLevel.Information, "User skipped choosing RDMA network interface of driver computer.");
                 }
-            }
-        }
-
-        private LocalNetworkInterfaceInformation ParseLocalNetworkInterfaceInformation(dynamic inputObject)
-        {
-            try
-            {
-                return new LocalNetworkInterfaceInformation
-                {
-                    Name = inputObject.Name,
-                    IpAddress = inputObject.IpAddress,
-                    Description = inputObject.Description,
-                    RDMACapable = inputObject.RDMACapable
-                };
-            }
-            catch
-            {
-                return null;
             }
         }
     }

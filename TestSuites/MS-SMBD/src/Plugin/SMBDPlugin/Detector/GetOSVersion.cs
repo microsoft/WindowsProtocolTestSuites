@@ -25,7 +25,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             logWriter.AddLog(DetectLogLevel.Information, "Check the OS version...");
 
             string path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetRemoteOSVersion.ps1";
-            var output = ExecutePowerShellCommand(path, out string[] error);
+            OSVersion[] output = ExecutePowerShellCommand<OSVersion>(path, out string[] error);
 
             if (error != null)
             {
@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 try
                 {
-                    var ret = ParseOSVersion(output[0]);
+                    var ret = output[0];
                     if (ret != null)
                     {
                         if (MapOSVersion(ret))
@@ -106,23 +106,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
 
             return found;
-        }
-
-        public OSVersion ParseOSVersion(dynamic inputObject)
-        {
-            try
-            {
-                var result = new OSVersion
-                {
-                    Caption = inputObject.Caption,
-                    Version = inputObject.Version
-                };
-                return result;
-            }
-            catch
-            {
-                return null;
-            }
         }
     }
 }
