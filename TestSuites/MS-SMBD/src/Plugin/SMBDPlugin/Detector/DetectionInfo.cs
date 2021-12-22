@@ -1,21 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    /// <summary>
-    /// Result enumeration.
-    /// </summary>
-    public enum DetectResult
-    {
-        DetectFail,
-        Supported,
-        UnSupported,
-    }
-
     /// <summary>
     /// Platform type of the SUT
     /// </summary>
@@ -123,16 +114,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// The IP address of non-RDMA network interface on SUT.
         /// </summary>
         public string SUTNonRdmaNICIPAddress { get; set; }
-
-        /// <summary>
-        /// The subnet mask of the IP address of RDMA network interface on SUT.
-        /// </summary>
-        public string SUTRdmaNICSUBNETMask { get; set; }
-
-        /// <summary>
-        /// The subnet mask of the IP address of non-RDMA network interface on SUT.
-        /// </summary>
-        public string SUTNonRdmaNICSUBNETMask { get; set; }
 
         /// <summary>
         /// Share folder on SUT.

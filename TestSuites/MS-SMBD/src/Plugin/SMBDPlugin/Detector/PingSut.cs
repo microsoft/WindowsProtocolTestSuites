@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.Detector;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using System.Text;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    partial class SMBDDetector
+    partial class SmbdDetector
     {
-        public bool PingSUT()
+        public bool PingSut()
         {
             logWriter.AddLog(DetectLogLevel.Information, "Ping Target SUT...");
 
@@ -36,12 +37,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     replys.Add(pingSender.Send(DetectionInfo.SUTName, timeout, buffer, options));
                 }
-
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(DetectLogLevel.Warning, String.Format("Error: {0}", ex), false, LogStyle.StepFailed);
-                logWriter.AddLog(DetectLogLevel.Information, String.Format("Error: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("Error: {0}", ex));
                 return false;
             }
             foreach (var reply in replys)
@@ -52,7 +52,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             if (result)
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Passed", false, LogStyle.StepPassed);
-                logWriter.AddLog(DetectLogLevel.Information, "Passed");
                 return true;
             }
             else
@@ -61,11 +60,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 logWriter.AddLog(DetectLogLevel.Information, "Target SUT doesn't respond.");
                 return false;
             }
-
         }
 
-
-        private IEnumerable<IPAddress> GetIPAdressOfSut()
+        private IEnumerable<IPAddress> GetIpAddressListOfSut()
         {
             try
             {
@@ -74,7 +71,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(DetectLogLevel.Information, String.Format("Cannot get SUT IP addresses: {0}.", ex));
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("Cannot get SUT IP addresses: {0}.", ex));
                 return new IPAddress[0];
             }
         }

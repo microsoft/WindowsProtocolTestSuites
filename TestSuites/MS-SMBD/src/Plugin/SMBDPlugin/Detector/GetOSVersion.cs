@@ -1,11 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.Detector;
 using System.Reflection;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    partial class SMBDDetector
+    partial class SmbdDetector
     {
         /// <summary>
         /// Check whether the credential of SUT is valid.
@@ -15,7 +16,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             if (!DetectionInfo.IsWindowsImplementation)
             {
-                logWriter.AddLog(DetectLogLevel.Warning, "Skip for non-Windows", false, LogStyle.StepSkipped);
+                logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepSkipped);
                 logWriter.AddLog(DetectLogLevel.Information, "Skip for non-Windows");
                 DetectionInfo.Platform = Platform.NonWindows;
                 return true;
@@ -23,9 +24,8 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             logWriter.AddLog(DetectLogLevel.Information, "Check the OS version...");
 
-            string[] error;
             string path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetRemoteOSVersion.ps1";
-            var output = ExecutePowerShellCommand(path, out error);
+            var output = ExecutePowerShellCommand(path, out string[] error);
 
             if (error != null)
             {
@@ -36,7 +36,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
 
             bool result = false;
-
             if (output.Length == 1)
             {
                 try
@@ -64,16 +63,14 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             if (result)
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLog(DetectLogLevel.Information, "Failed");
+                logWriter.AddLineToLog(DetectLogLevel.Information);
                 return false;
             }
-
         }
 
         private bool MapOSVersion(OSVersion os)
@@ -127,7 +124,5 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 return null;
             }
         }
-
-
     }
 }

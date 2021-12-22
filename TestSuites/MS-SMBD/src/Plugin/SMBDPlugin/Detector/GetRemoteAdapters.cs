@@ -1,28 +1,22 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Windows;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    partial class SMBDDetector
+    partial class SmbdDetector
     {
-
         public bool GetRemoteAdapters()
         {
             logWriter.AddLog(DetectLogLevel.Information, "Get the remote adapters...");
 
             bool result = false;
-
-            var ipList = GetIPAdressOfSut();
-
+            var ipList = GetIpAddressListOfSut();
             // try all reachable SUT IP address
             foreach (var ip in ipList)
             {
@@ -36,13 +30,12 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             if (result)
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLog(DetectLogLevel.Information, "Failed");
+                logWriter.AddLineToLog(DetectLogLevel.Information);
                 return false;
             }
         }
@@ -51,30 +44,19 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
+                using (var client = new SmbdClient(DetectionInfo.ConnectionTimeout))
                 {
-
                     client.Connect(ip, IPAddress.Parse(DetectionInfo.DriverNonRdmaNICIPAddress));
-
                     client.Smb2Negotiate(new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb302, DialectRevision.Smb311 });
-
                     client.Smb2SessionSetup(DetectionInfo.Authentication, DetectionInfo.DomainName, DetectionInfo.SUTName, DetectionInfo.UserName, DetectionInfo.Password);
 
-                    uint treeId;
-
                     string ipcPath = Smb2Utility.GetIPCPath(DetectionInfo.SUTName);
+                    client.Smb2TreeConnect(ipcPath, out uint treeId);
 
-                    client.Smb2TreeConnect(ipcPath, out treeId);
-
-                    byte[] input;
-                    byte[] output;
-
-                    client.IoCtl(treeId, CtlCode_Values.FSCTL_QUERY_NETWORK_INTERFACE_INFO, FILEID.Invalid, IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL, out input, out output);
+                    client.IoCtl(treeId, CtlCode_Values.FSCTL_QUERY_NETWORK_INTERFACE_INFO, FILEID.Invalid, IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL, out byte[] input, out byte[] output);
 
                     var networkInterfaces = Smb2Utility.UnmarshalNetworkInterfaceInfoResponse(output);
-
                     var remoteInterfaces = ParseRemoteNetworkInterfaceInformation(networkInterfaces);
-
                     FilterNetworkInterfaces(remoteInterfaces);
 
                     return true;
@@ -82,7 +64,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(DetectLogLevel.Information, String.Format("GetRemoteNetworkInterfaceInformation failed for {0}: {1}.", ip.ToString(), ex.ToString()));
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("GetRemoteNetworkInterfaceInformation failed for {0}: {1}.", ip.ToString(), ex.ToString()));
                 return false;
             }
         }
@@ -97,7 +79,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             else
             {
                 var nonRdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => !networkInterface.RDMACapable);
-
                 int nonRdmaNetworkInterfaceCount = nonRdmaNetworkInterfaces.Count();
                 if (nonRdmaNetworkInterfaceCount == 0)
                 {
@@ -114,7 +95,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                     {
                         try
                         {
-                            using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
+                            using (var client = new SmbdClient(DetectionInfo.ConnectionTimeout))
                             {
                                 client.Connect(IPAddress.Parse(nonRdmaInterface.IpAddress), IPAddress.Parse(DetectionInfo.DriverNonRdmaNICIPAddress));
                                 DetectionInfo.SUTNonRdmaNICIPAddress = nonRdmaInterface.IpAddress;
@@ -138,7 +119,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             else
             {
                 var rdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => networkInterface.RDMACapable);
-
                 int rdmaNetworkInterfaceCount = rdmaNetworkInterfaces.Count();
                 if (rdmaNetworkInterfaceCount == 0)
                 {
@@ -155,7 +135,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                     {
                         try
                         {
-                            using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
+                            using (var client = new SmbdClient(DetectionInfo.ConnectionTimeout))
                             {
                                 client.Connect(IPAddress.Parse(rdmaInterface.IpAddress), IPAddress.Parse(DetectionInfo.DriverRdmaNICIPAddress));
                                 DetectionInfo.SUTRdmaNICIPAddress = rdmaInterface.IpAddress;

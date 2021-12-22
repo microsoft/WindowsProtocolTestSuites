@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.SMBDPlugin;
 using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
@@ -200,13 +201,12 @@ namespace Microsoft.Protocols.TestManager.Detector
             string connectionTimeout = DetectorUtil.GetPropertyValue(PtfConfigConstant.SMB2CONNECTIONTIMEOUTINSECONDS);
             prerequisites.Properties.Add(PropertyDictionaryConstant.CONNECTIONTIMEOUT, new List<string> { connectionTimeout });
 
-            SMBDDetector detector = new SMBDDetector(detectionInfo);
+            SmbdDetector detector = new SmbdDetector(detectionInfo);
             List<string> DriverNonRdmaNICIPAddress = detector.GetLocalInterfaceIps(true);
             prerequisites.Properties.Add(PropertyDictionaryConstant.DriverNonRdmaNICIPAddress, DriverNonRdmaNICIPAddress);
 
             List<string> DriverRdmaNICIPAddress = detector.GetLocalInterfaceIps(false);
             prerequisites.Properties.Add(PropertyDictionaryConstant.DriverRdmaNICIPAddress, DriverRdmaNICIPAddress);
-
 
             return prerequisites;
         }
@@ -275,11 +275,8 @@ namespace Microsoft.Protocols.TestManager.Detector
         /// <returns>Return true if the function is succeeded.</returns>
         public bool RunDetection(DetectContext context)
         {
-
-            var detector = new SMBDDetector(detectionInfo);
-
+            var detector = new SmbdDetector(detectionInfo);
             bool result = detector.Detect(context);
-            
             return result;
         }
 

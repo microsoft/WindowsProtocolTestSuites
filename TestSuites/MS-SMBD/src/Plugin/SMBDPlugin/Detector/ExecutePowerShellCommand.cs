@@ -5,14 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
-using System.Linq;
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
-using System.Reflection;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    partial class SMBDDetector
+    partial class SmbdDetector
     {
         /// <summary>
         /// Execute a PowerShell script file.
@@ -26,7 +22,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = @"powershell.exe";
-                startInfo.Arguments=@"" + System.IO.Path.GetFullPath(scriptPath) + " "+DetectionInfo.DomainName+" "+ DetectionInfo.SUTName+" "+ DetectionInfo.UserName+" "+DetectionInfo.Password+"";
+                startInfo.Arguments = $"{System.IO.Path.GetFullPath(scriptPath)} { DetectionInfo.DomainName} {DetectionInfo.SUTName} {DetectionInfo.UserName} {DetectionInfo.Password}";
                 startInfo.RedirectStandardOutput = true;
                 startInfo.RedirectStandardError = true;
                 startInfo.UseShellExecute = false;
@@ -46,7 +42,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     error = null;
                 }
-                
+
                 if (string.IsNullOrEmpty(output))
                 {
                     return new object[0];
@@ -68,7 +64,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     result.Add(ParsePSObject(root));
                 }
-                
+
                 return result.ToArray();
             }
             catch (Exception ex)

@@ -1,49 +1,43 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    partial class SMBDDetector
+    partial class SmbdDetector
     {
-
-        public bool CheckSmbDialect()
+        public bool CheckSmbDialects()
         {
-            logWriter.AddLog(DetectLogLevel.Information,"Check the supported SMB dialects of SUT...");
-
+            logWriter.AddLog(DetectLogLevel.Information, "Check the supported SMB dialects of SUT...");
             bool result = false;
-
             var dialects = new DialectRevision[] { DialectRevision.Smb30, DialectRevision.Smb302, DialectRevision.Smb311 };
-
-            var ipList = GetIPAdressOfSut();
+            var ipList = GetIpAddressListOfSut();
             // try all reachable SUT IP address
             foreach (var ip in ipList)
-            {                
+            {
                 var supportedDialects = TryNegotiateDialects(ip, dialects);
                 if (supportedDialects.Length > 0)
                 {
                     DetectionInfo.SupportedSmbDialects = supportedDialects;
-                    logWriter.AddLog(DetectLogLevel.Information, String.Format("SMB dialects supported by SUT: {0}", String.Join(",", supportedDialects)));
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("SMB dialects supported by SUT: {0}", string.Join(",", supportedDialects)));
                     result = true;
                     break;
                 }
             }
-
             if (result)
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLog(DetectLogLevel.Information, "Failed");
+                logWriter.AddLineToLog(DetectLogLevel.Information);
                 return false;
             }
         }
@@ -51,7 +45,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         private DialectRevision[] TryNegotiateDialects(IPAddress ip, DialectRevision[] dialects)
         {
             var result = dialects.Where(dialect => TryNegotiateDialect(ip, dialect));
-
             return result.ToArray();
         }
 
@@ -59,7 +52,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
-                using (var client = new SMBDClient(DetectionInfo.ConnectionTimeout))
+                using (var client = new SmbdClient(DetectionInfo.ConnectionTimeout))
                 {
                     client.Connect(ip, IPAddress.Parse(DetectionInfo.DriverNonRdmaNICIPAddress));
                     client.Smb2Negotiate(new DialectRevision[] { dialect });
@@ -68,7 +61,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
             catch (Exception ex)
             {
-                logWriter.AddLog(DetectLogLevel.Information, String.Format("TryNegotiateDialect threw exception: {0}", ex));
+                logWriter.AddLog(DetectLogLevel.Information, string.Format("TryNegotiateDialect threw exception: {0}", ex));
                 return false;
             }
         }

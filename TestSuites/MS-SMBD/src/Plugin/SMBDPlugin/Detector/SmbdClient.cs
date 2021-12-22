@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
@@ -14,12 +15,12 @@ using System.Net.Sockets;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    public class SMBDClient : Smb2Client
+    public class SmbdClient : Smb2Client
     {
         #region private fields
         private TimeSpan smbdConnectionTimeout;
         private Smb2Decoder decoder;
-        private SmbdClient smbdClient;
+        private TestTools.StackSdk.FileAccessService.Smbd.SmbdClient smbdClient;
         private ulong messageId;
         private Guid clientGuid;
         private DialectRevision selectedDialect;
@@ -37,34 +38,21 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         private Dictionary<RDMAEndian, bool> endianMap;
         #endregion
 
-
-        public SMBDClient(TimeSpan timeout)
-            : base(timeout)
+        public SmbdClient(TimeSpan timeout) : base(timeout)
         {
             smbdConnectionTimeout = timeout;
-
             decoder = new Smb2Decoder(Smb2Role.Client, new System.Collections.Generic.Dictionary<ulong, Smb2CryptoInfo>());
-
-            smbdClient = new SmbdClient();
-
+            smbdClient = new TestTools.StackSdk.FileAccessService.Smbd.SmbdClient();
             messageId = 0;
-
             clientGuid = Guid.NewGuid();
-
             sessionId = 0;
-
             serverGssToken = null;
-
             creditAvailable = 0;
-
             negotiated = false;
-
             endianMap = new Dictionary<RDMAEndian, bool>();
             endianMap.Add(RDMAEndian.BigEndian, true);
             endianMap.Add(RDMAEndian.LittleEndian, false);
         }
-
-
 
         private ushort RequestAndConsumeCredit()
         {
@@ -72,7 +60,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 throw new InvalidOperationException("Not enough credit!");
             }
-
             if (creditAvailable == 0)
             {
                 creditAvailable--;
@@ -88,7 +75,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         private void UpdateCredit(Packet_Header header)
         {
             creditAvailable += header.CreditRequestResponse;
-
             if (creditAvailable < 0)
             {
                 throw new InvalidOperationException("Not enough credit!");
@@ -101,7 +87,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 throw new InvalidOperationException("Not negotiated!");
             }
-
             // The max payload size is 65536 so that buffer should be less than 65536 minus the header size
             // 100 is large enough to hold READ/WRITE
             uint maxBufferSize = 65536 - 100;
@@ -116,7 +101,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             ConnectOverTCP(serverIp, clientIp);
         }
 
-
         private ulong GetMessageId()
         {
             ulong result = messageId;
@@ -127,7 +111,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         public void Smb2Negotiate(DialectRevision[] requestDialects)
         {
             Packet_Header packetHeader;
-
             NEGOTIATE_Response response;
 
             PreauthIntegrityHashID[] preauthHashAlgs = null;
@@ -138,7 +121,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
                 encryptionAlgs = new EncryptionAlgorithm[] { EncryptionAlgorithm.ENCRYPTION_AES128_CCM, EncryptionAlgorithm.ENCRYPTION_AES128_GCM };
             }
-
             uint status = Negotiate(
                             0,
                             RequestAndConsumeCredit(),
@@ -163,13 +145,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 throw new InvalidOperationException(String.Format("Negotiate failed with {0:X08}.", status));
             }
-
             signingRequired = response.SecurityMode.HasFlag(NEGOTIATE_Response_SecurityMode_Values.NEGOTIATE_SIGNING_REQUIRED);
-
             negotiated = true;
-
             maxReadSize = response.MaxReadSize;
-
             maxWriteSize = response.MaxWriteSize;
         }
 
@@ -183,7 +161,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                                        SecurityTargetDataRepresentation.SecurityNativeDrep
                                        );
 
-
             if (authentication == SecurityPackageType.Negotiate)
             {
                 sspiClientGss.Initialize(serverGssToken);
@@ -194,11 +171,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
 
             Packet_Header packetHeader;
-
             SESSION_SETUP_Response sessionSetupResponse;
 
             uint status;
-
             while (true)
             {
                 status = SessionSetup(
@@ -219,26 +194,20 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                             );
 
                 UpdateCredit(packetHeader);
-
                 if ((status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED || status == Smb2Status.STATUS_SUCCESS) && serverGssToken != null && serverGssToken.Length > 0)
                 {
                     sspiClientGss.Initialize(serverGssToken);
                 }
-
                 if (status != Smb2Status.STATUS_MORE_PROCESSING_REQUIRED)
                 {
                     break;
                 }
             }
-
             if (status != Smb2Status.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException(String.Format("SessionSetup failed with {0:X08}.", status));
             }
-
             encryptionEnabled = sessionSetupResponse.SessionFlags.HasFlag(SessionFlags_Values.SESSION_FLAG_ENCRYPT_DATA);
-
-
             GenerateCryptoKeys(
                 sessionId,
                 sspiClientGss.SessionKey,
@@ -250,18 +219,13 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 signingRequired = true;
             }
-
             EnableSessionSigningAndEncryption(sessionId, signingRequired, encryptionEnabled);
-
         }
-
 
         public void Smb2TreeConnect(string path, out uint treeId)
         {
             Packet_Header packetHeader;
-
             TREE_CONNECT_Response response;
-
 
             uint status = TreeConnect(
                             0,
@@ -277,24 +241,19 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             UpdateCredit(packetHeader);
 
-
             if (status != Smb2Status.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException(String.Format("TreeConnect failed with {0:X08}.", status));
             }
         }
 
-
         public void CreateRandomFile(uint treeId, out FILEID fileId)
         {
             Packet_Header packetHeader;
-
             CREATE_Response response;
 
             string fileName = string.Format("{0}.txt", Guid.NewGuid());
-
             Smb2CreateContextResponse[] createContextResponse;
-
             uint status = Create(
                             0,
                             RequestAndConsumeCredit(),
@@ -425,7 +384,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         public void ConnectOverRDMA(string localIpAddress, string remoteIpAddress, int port, uint maxReceiveSize, out RdmaAdapterInfo adapterInfo)
         {
             NtStatus status;
-
             RdmaProviderInfo[] providers;
             status = (NtStatus)RdmaProvider.LoadRdmaProviders(out providers);
             if (status != NtStatus.STATUS_SUCCESS)
@@ -460,7 +418,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 throw new InvalidOperationException("Failed to query RDMA provider info!");
             }
 
-
             status = smbdClient.ConnectToServerOverRdma(
                                     localIpAddress,
                                     remoteIpAddress,
@@ -476,7 +433,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 throw new InvalidOperationException("ConnectToServerOverRdma failed!");
             }
-
             decoder.TransportType = Smb2TransportType.Rdma;
         }
 
@@ -528,7 +484,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             NtStatus status;
             SmbdBufferDescriptorV1 descriptor;
 
-
             status = smbdClient.RegisterBuffer(
                                  (uint)length,
                                  SmbdBufferReadWrite.RDMA_WRITE_PERMISSION_FOR_READ_FILE,
@@ -540,7 +495,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 throw new InvalidOperationException("SMBD register buffer failed!");
             }
-
 
             byte[] channelInfo = TypeMarshal.ToBytes(descriptor);
 
@@ -581,7 +535,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 throw new InvalidOperationException("SMBD write buffer failed!");
             }
-
         }
 
         public void SMBDWrite(uint treeId, FILEID fileId, Channel_Values channel, byte[] buffer, uint offset, RDMAEndian endian)
@@ -634,11 +587,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             request.PayLoad.WriteChannelInfoOffset = request.BufferOffset;
 
             request.Buffer = channelInfo;
-
             SendPacket(request);
 
             status = (NtStatus)WriteResponse(messageId, out packetHeader, out response);
-
             UpdateCredit(packetHeader);
 
             if (status != NtStatus.STATUS_SUCCESS)

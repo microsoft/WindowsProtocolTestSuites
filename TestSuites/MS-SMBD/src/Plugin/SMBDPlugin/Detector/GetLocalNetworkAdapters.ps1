@@ -6,25 +6,25 @@
 $results = @()
 $adapters = Get-NetAdapter
 foreach($adapter in $adapters) {
-	if($adapter.Status -ne "Up") {
-		continue
-	}
-	$ipSettings = Get-NetIPAddress -ifIndex $adapter.ifIndex | Where-Object { $_.AddressFamily -eq "IPv4" }
-	if($ipSettings -eq $null){
-		continue
-	}
-	$result = "" | Select-Object -Property Name, IpAddress, Description, RDMACapable
-	$result.Name = $adapter.Name
-	$result.IpAddress = $ipSettings[0].IpAddress
-	$result.Description = $adapter.InterfaceDescription
-	$rdma = Get-NetAdapterRdma -Name $adapter.Name
-	if($rdma -ne $null) {
-		$result.RDMACapable = $rdma.Enabled
-	}
-	else {
-		$result.RDMACapable = $false
-	}
-	$results += $result
+    if($adapter.Status -ne "Up") {
+    	continue
+    }
+    $ipSettings = Get-NetIPAddress -ifIndex $adapter.ifIndex | Where-Object { $_.AddressFamily -eq "IPv4" }
+    if($ipSettings -eq $null){
+    	continue
+    }
+    $result = "" | Select-Object -Property Name, IpAddress, Description, RDMACapable
+    $result.Name = $adapter.Name
+    $result.IpAddress = $ipSettings[0].IpAddress
+    $result.Description = $adapter.InterfaceDescription
+    $rdma = Get-NetAdapterRdma -Name $adapter.Name
+    if($rdma -ne $null) {
+    	$result.RDMACapable = $rdma.Enabled
+    }
+    else {
+    	$result.RDMACapable = $false
+    }
+    $results += $result
 }
 
-return $results|ConvertTo-Json
+return $results | ConvertTo-Json

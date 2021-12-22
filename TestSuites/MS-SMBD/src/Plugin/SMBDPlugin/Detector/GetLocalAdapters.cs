@@ -1,29 +1,23 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
-    partial class SMBDDetector
+    partial class SmbdDetector
     {
-
         public bool GetLocalAdapters()
         {
             logWriter.AddLog(DetectLogLevel.Information, "Check the local adapters...");
 
-            string[] error;
-
             string path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetLocalNetworkAdapters.ps1";
-            var output = ExecutePowerShellCommand(path, out error);
-
+            var output = ExecutePowerShellCommand(path, out string[] error);
 
             bool result = true;
-
             if (output.Length != 0)
             {
                 FilterNetworkInterfaces(output);
@@ -35,12 +29,9 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 result = false;
             }
 
-
-
             if (result)
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
-                logWriter.AddLog(DetectLogLevel.Information, "Finished");
                 return true;
             }
             else
@@ -53,16 +44,15 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                     }
                 }
                 logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLog(DetectLogLevel.Information, "Failed");
+                logWriter.AddLineToLog(DetectLogLevel.Information);
                 return false;
             }
         }
+
         public List<string> GetLocalInterfaceIps(bool isNon)
         {
-            string[] error;
-
-            string path = Assembly.GetExecutingAssembly().Location+ "/../../Plugin/script/GetLocalNetworkAdapters.ps1";
-            var output = ExecutePowerShellCommand(path, out error);
+            string path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetLocalNetworkAdapters.ps1";
+            var output = ExecutePowerShellCommand(path, out string[] error);
 
             if (output.Length != 0)
             {
@@ -86,25 +76,21 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     foreach (var item in error)
                     {
-                        logWriter.AddLog(DetectLogLevel.Information,item.ToString());
+                        logWriter.AddLog(DetectLogLevel.Information, item.ToString());
                     }
                 }
-                logWriter.AddLog(DetectLogLevel.Information, "Failed to detect any network interface!");
                 logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
-                logWriter.AddLog(DetectLogLevel.Information, "Failed");
+                logWriter.AddLog(DetectLogLevel.Information, "Failed to detect any network interface!");
             }
             return new List<string>();
         }
 
         private void FilterNetworkInterfaces(object[] output)
         {
-
             var networkInterfaces = output
                                         .Select(item => ParseLocalNetworkInterfaceInformation(item))
                                         .Where(item => item != null);
-
             var nonRdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => !networkInterface.RDMACapable);
-
             var rdmaNetworkInterfaces = networkInterfaces.Where(networkInterface => networkInterface.RDMACapable);
 
             int nonRdmaNetworkInterfaceCount = nonRdmaNetworkInterfaces.Count();
@@ -163,7 +149,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 }
             }
         }
-
 
         private LocalNetworkInterfaceInformation ParseLocalNetworkInterfaceInformation(dynamic inputObject)
         {

@@ -13,23 +13,23 @@ $pwdConverted = ConvertTo-SecureString $ptfprop_SUTUserPassword -AsPlainText -Fo
 $cred = New-Object System.Management.Automation.PSCredential "$ptfprop_DomainName\$ptfprop_SUTUserName", $pwdConverted -ErrorAction Stop
 
 $scriptblock = {
-	try {
-		$osInfo = Get-WmiObject -Class Win32_OperatingSystem
-		$result = "" | Select-Object -Property Caption, Version
-		$result.Caption = $osInfo.Caption
-		$result.Version = $osInfo.Version
-		return $result
-	}
-	catch {
-		return $null
-	}
+    try {
+        $osInfo = Get-WmiObject -Class Win32_OperatingSystem
+        $result = "" | Select-Object -Property Caption, Version
+        $result.Caption = $osInfo.Caption
+        $result.Version = $osInfo.Version
+        return $result
+    }
+    catch {
+        return $null
+    }
 }
 
 try{
-	$cmdOutput = Invoke-Command -ComputerName $ptfprop_SUTName -credential $cred -ScriptBlock $scriptblock
+    $cmdOutput = Invoke-Command -ComputerName $ptfprop_SUTName -credential $cred -ScriptBlock $scriptblock
 
-	return $cmdOutput|ConvertTo-Json  #operation succeed
+    return $cmdOutput | ConvertTo-Json  #operation succeed
 }
 catch{
-	return $null|ConvertTo-Json # operation failed
+    return $null | ConvertTo-Json # operation failed
 }

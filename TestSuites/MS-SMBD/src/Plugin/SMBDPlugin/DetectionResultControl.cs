@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.SMBDPlugin.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
 using System.Collections.Generic;
-using System.Windows;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin
 {
@@ -16,7 +16,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
         {
             info = detectionInfo;
 
-            AddDialect();
+            AddDialects();
             AddSmb2TransportSupport();
 
             resultItemMapList.Add(dialectsItems);
@@ -41,7 +41,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
         #endregion
 
         #region Private functions
-        private void AddDialect()
+        private void AddDialects()
         {
             foreach (var dialect in info.SupportedSmbDialects)
             {
@@ -131,8 +131,6 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin
             ResultItem item = new ResultItem() { DetectedResult = result, ImageUrl = imagePath, Name = value };
             resultItemMap.ResultItemList.Add(item);
         }
-
-
         #endregion
     }
 }
