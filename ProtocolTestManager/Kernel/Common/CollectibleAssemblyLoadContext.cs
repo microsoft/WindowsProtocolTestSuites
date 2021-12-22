@@ -9,30 +9,30 @@ namespace Microsoft.Protocols.TestManager.Kernel
 {
     public class CollectibleAssemblyLoadContext : AssemblyLoadContext
     {
-        private AssemblyDependencyResolver _resolver;
-        private string _ignoredAssemblyName;
-        private string _missedAssemblyName;
+        private AssemblyDependencyResolver resolver;
+        private string[] ignoredAssemblies;
+        private string[] mixedAssemblies;
 
-        public CollectibleAssemblyLoadContext(string mainAssemblyToLoadPath,string ignoredAssemblyName,string missedAssemblyName) : base(isCollectible: true)
+        public CollectibleAssemblyLoadContext(string mainAssemblyToLoadPath, string[] ignoredAssemblyName = null, string[] missedAssemblyName = null) : base(isCollectible: true)
         {
-            _resolver = new AssemblyDependencyResolver(mainAssemblyToLoadPath);
-            _ignoredAssemblyName = ignoredAssemblyName;
-            _missedAssemblyName = missedAssemblyName;
+            resolver = new AssemblyDependencyResolver(mainAssemblyToLoadPath);
+            ignoredAssemblies = ignoredAssemblyName;
+            mixedAssemblies = missedAssemblyName;
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            if (_ignoredAssemblyName.Split().Any(x=>assemblyName.Name.Contains(x)))
+            if (ignoredAssemblies != null && ignoredAssemblies.Any(x=>assemblyName.Name.Contains(x)))
             {
                 return null;
             }
 
-            string assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
+            string assemblyPath = resolver.ResolveAssemblyToPath(assemblyName);
             if (assemblyPath != null)
             {
-                if (_missedAssemblyName.Split().Any(x => assemblyPath.Contains(x)))
+                if (mixedAssemblies != null && mixedAssemblies.Any(x => assemblyPath.Contains(x)))
                 {
-                    if (AssemblyLoadContext.Default.Assemblies.Any(ass => _missedAssemblyName.Split().Any(x => ass.FullName.Contains(x))))
+                    if (AssemblyLoadContext.Default.Assemblies.Any(ass => mixedAssemblies.Any(x => ass.FullName.Contains(x))))
                         return null;
                     return AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
                 }

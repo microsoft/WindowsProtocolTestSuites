@@ -10,34 +10,39 @@ import { AppState } from '../store/configureStore'
 import { RunSteps } from '../model/DefaultNavSteps'
 import * as ConfigureMethod from '../pages/ConfigureMethod'
 
-export function WizardNavBar (wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
-  const wizardState = useSelector((state: AppState) => state.wizard)
-  const configureMethod = useSelector((state: AppState) => state.configureMethod)
-  const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
-    let isEnabledStep = item.TargetStep <= wizardState.lastStep
-    if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-      if ((wizardProps.currentStep === RunSteps.CONFIGURE_METHOD || wizardProps.currentStep === RunSteps.AUTO_DETECTION) &&
-            wizardProps.currentStep < wizardState.lastStep &&
-            configureMethod &&
-            configureMethod.selectedMethod &&
-            configureMethod.selectedMethod === ConfigureMethod.ConfigurationMethod_AutoDetection) {
-        isEnabledStep = true
-      } else {
-        isEnabledStep = item.IsEnabled
-      }
-    }
-    if (item.IsActive) {
-      return <RunningStep color="#1890ff" key={index} >{item.Caption}</RunningStep>
-    } else if (isEnabledStep) {
-      return <CompleteStep color={'#389e0d'} key={index} onClick={() => wizardProps.goToStep(item.TargetStep)}>{item.Caption}</CompleteStep>
-    } else {
-      return <NotStartStep color="#bfbfbf" key={index} >{item.Caption}</NotStartStep>
-    }
-  })
+export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
+    const wizardState = useSelector((state: AppState) => state.wizard)
+    const configureMethod = useSelector((state: AppState) => state.configureMethod)
+    const detectResult = useSelector((state: AppState) => state.detectResult)
 
-  const winSize = useWindowSize()
+    const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
+        let isEnabledStep = item.TargetStep <= wizardState.lastStep
+        if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
+            if (wizardProps.currentStep < wizardState.lastStep &&
+                configureMethod &&
+                configureMethod.selectedMethod &&
+                configureMethod.selectedMethod === ConfigureMethod.ConfigurationMethod_AutoDetection) {
+                isEnabledStep = true
+            } else {
+                isEnabledStep = item.IsEnabled
+            }
 
-  return (<LeftPanel style={{ height: winSize.height - HeaderMenuHeight }}>
+            if (item.TargetStep === RunSteps.DETECTION_RESULT && detectResult.detectionResult === undefined) {
+                isEnabledStep = false;
+            }
+        }
+        if (item.IsActive) {
+            return <RunningStep color="#1890ff" key={index} >{item.Caption}</RunningStep>
+        } else if (isEnabledStep) {
+            return <CompleteStep color={'#389e0d'} key={index} onClick={() => wizardProps.goToStep(item.TargetStep)}>{item.Caption}</CompleteStep>
+        } else {
+            return <NotStartStep color="#bfbfbf" key={index} >{item.Caption}</NotStartStep>
+        }
+    })
+
+    const winSize = useWindowSize()
+
+    return (<LeftPanel style={{ height: winSize.height - HeaderMenuHeight }}>
         <Wizard>
             <VLine tabIndex={navStepItems.length} />
             {navStepItems}

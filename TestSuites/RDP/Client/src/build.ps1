@@ -25,6 +25,14 @@ if(Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
 
+$PluginDir = "$OutDir/Plugin"
+New-Item -ItemType Directory $PluginDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/RDP/Client/src/Plugin/RDPClientPlugin/*.xml" -Destination $PluginDir -Recurse -Force
+
+$TargetDir = "$PluginDir/doc"
+New-Item -ItemType Directory $TargetDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/RDP/Client/src/Plugin/RDPClientPlugin/Docs/*" -Destination $TargetDir -Recurse -Force
+
 
 New-Item -ItemType Directory $OutDir/Batch -Force
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force

@@ -176,7 +176,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             this.rdpedispAdapter.RdprfxSendImage(testImage, originalDesktopHeight, originalDesktopWidth);
 
             rdpedycServer.Dispose();
-            this.sutControlAdapter.TriggerClientDisconnect(this.TestContext.TestName);
+            this.sutControlAdapter.TriggerCloseRDPWindow(this.TestContext.TestName);
 
             RDPConnect(NotificationType.DeactivationReactivation, false);
 
@@ -187,7 +187,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             this.rdpedispAdapter.RdprfxSendImage(testImage, originalDesktopWidth, originalDesktopHeight);
 
             rdpedycServer.Dispose();
-            this.sutControlAdapter.TriggerClientDisconnect(this.TestContext.TestName);
+            this.sutControlAdapter.TriggerCloseRDPWindow(this.TestContext.TestName);
 
             // TODO: Solve the conflict between rdpbcgr and rdpedyc BUG #6736 and merge two cases
             RDPConnect(NotificationType.DeactivationReactivation, false);

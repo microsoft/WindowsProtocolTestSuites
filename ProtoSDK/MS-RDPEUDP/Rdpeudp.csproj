@@ -12,8 +12,15 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <Compile Update="RdpeudpSocket.*.cs">
+      <DependentUpon>RdpeudpSocket.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\TransportStack\TransportStack.csproj" />
+    <ProjectReference Include="..\MS-RDPEUDP2\Rdpeudp2.csproj" />
   </ItemGroup>
 </Project>

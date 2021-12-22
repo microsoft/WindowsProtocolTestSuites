@@ -20,79 +20,80 @@ import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 export const FilterTestCase: React.FC<any> = (props: any) => {
-  const wizardProps: StepWizardChildProps = props as StepWizardChildProps
+    const wizardProps: StepWizardChildProps = props as StepWizardChildProps
 
-  const dispatch = useDispatch()
-  const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
-  const configuration = useSelector((state: AppState) => state.configurations)
-  const filterInfo = useSelector((state: AppState) => state.filterInfo)
-  const configureMethod = useSelector((state: AppState) => state.configureMethod)
+    const dispatch = useDispatch()
+    const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
+    const configuration = useSelector((state: AppState) => state.configurations)
+    const filterInfo = useSelector((state: AppState) => state.filterInfo)
+    const configureMethod = useSelector((state: AppState) => state.configureMethod)
+    const detectionResult = useSelector((state: AppState) => state.detectResult)
 
-  const navSteps = getNavSteps(wizardProps, configureMethod)
-  const wizard = WizardNavBar(wizardProps, navSteps)
+    const navSteps = getNavSteps(wizardProps, configureMethod)
+    const wizard = WizardNavBar(wizardProps, navSteps)
 
-  useEffect(() => {
-    dispatch(ConfigurationsDataSrv.getRules())
-    dispatch(TestSuitesDataSrv.getTestSuiteTestCases())
-  }, [dispatch])
+    useEffect(() => {
+        dispatch(ConfigurationsDataSrv.getRules())
+        dispatch(TestSuitesDataSrv.getTestSuiteTestCases())
+    }, [dispatch])
 
-  if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
-    return <InvalidAppStateNotification
-      testSuite={testSuiteInfo.selectedTestSuite}
-      configuration={configuration.selectedConfiguration}
-      wizard={wizard}
-      wizardProps={wizardProps} />
-  }
-
-  const onPreviousButtonClick: React.MouseEventHandler<unknown> = () => {
-    if (configureMethod?.selectedMethod === ConfigurationMethod_AutoDetection) {
-      wizardProps.previousStep()
-    } else {
-      wizardProps.goToStep(RunSteps.CONFIGURE_METHOD)
+    if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
+        return <InvalidAppStateNotification
+            testSuite={testSuiteInfo.selectedTestSuite}
+            configuration={configuration.selectedConfiguration}
+            wizard={wizard}
+            wizardProps={wizardProps} />
     }
-  }
 
-  const onNextButtonClick: React.MouseEventHandler<unknown> = () => {
-    dispatch(ConfigurationsDataSrv.setRules(() => {
-      wizardProps.nextStep()
-    }))
-  }
+    const onPreviousButtonClick: React.MouseEventHandler<unknown> = () => {
+        if (configureMethod?.selectedMethod === ConfigurationMethod_AutoDetection && detectionResult.detectionResult !== undefined) {
+            wizardProps.previousStep()
+        } else {
+            wizardProps.goToStep(RunSteps.CONFIGURE_METHOD)
+        }
+    }
 
-  const checkedAction = (data: SelectedRuleGroup): void => {
-    dispatch(FilterTestCaseActions.setSelectedRuleAction(data))
-  }
+    const onNextButtonClick: React.MouseEventHandler<unknown> = () => {
+        dispatch(ConfigurationsDataSrv.setRules(() => {
+            wizardProps.nextStep()
+        }))
+    }
 
-  const stackTokens: IStackTokens = {
-    maxHeight: '100%'
-  }
+    const checkedAction = (data: SelectedRuleGroup): void => {
+        dispatch(FilterTestCaseActions.setSelectedRuleAction(data))
+    }
 
-  const stackItemTokens: IStackItemTokens = {
-    padding: '0 10px'
-  }
+    const stackTokens: IStackTokens = {
+        maxHeight: '100%'
+    }
 
-  return (
-    <StepPanel leftNav={wizard} isLoading={filterInfo.isRulesLoading || filterInfo.isCasesLoading} errorMsg={filterInfo.errorMsg} >
-      <Stack tokens={stackTokens} verticalFill>
-        <Stack.Item grow style={{ overflowY: 'hidden' }}>
-          <Stack horizontal tokens={stackTokens}>
-            <Stack.Item grow tokens={stackItemTokens} style={{ overflowY: 'auto' }}>
-              <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
-            </Stack.Item>
-            <Stack.Item grow tokens={stackItemTokens} style={{ overflowY: 'auto' }}>
-              <div>Selected Test Cases {filterInfo.listSelectedCases.length}</div>
-              {filterInfo.listSelectedCases.map(curr => <div key={curr.Name}>{curr.Name}</div>)}
-            </Stack.Item>
-          </Stack>
-        </Stack.Item>
-        <Stack.Item disableShrink className='buttonPanel'>
-          <Stack
-            horizontal
-            horizontalAlign="end" tokens={StackGap10}>
-            <PrimaryButton onClick={onPreviousButtonClick} disabled={filterInfo.isPosting}>Previous</PrimaryButton>
-            <PrimaryButton onClick={onNextButtonClick} disabled={filterInfo.isPosting}>Next</PrimaryButton>
-          </Stack>
-        </Stack.Item>
-      </Stack>
-    </StepPanel>
-  )
+    const stackItemTokens: IStackItemTokens = {
+        padding: '0 10px'
+    }
+
+    return (
+        <StepPanel leftNav={wizard} isLoading={filterInfo.isRulesLoading || filterInfo.isCasesLoading} errorMsg={filterInfo.errorMsg} >
+            <Stack tokens={stackTokens} verticalFill>
+                <Stack.Item grow style={{ overflowY: 'hidden' }}>
+                    <Stack horizontal tokens={stackTokens}>
+                        <Stack.Item grow tokens={stackItemTokens} style={{ overflowY: 'auto' }}>
+                            <RuleListPanel ruleGroups={filterInfo.ruleGroup} selected={filterInfo.selectedRules} checkedAction={checkedAction} />
+                        </Stack.Item>
+                        <Stack.Item grow tokens={stackItemTokens} style={{ overflowY: 'auto' }}>
+                            <div>Selected Test Cases {filterInfo.listSelectedCases.length}</div>
+                            {filterInfo.listSelectedCases.map(curr => <div key={curr.Name}>{curr.Name}</div>)}
+                        </Stack.Item>
+                    </Stack>
+                </Stack.Item>
+                <Stack.Item disableShrink className='buttonPanel'>
+                    <Stack
+                        horizontal
+                        horizontalAlign="end" tokens={StackGap10}>
+                        <PrimaryButton onClick={onPreviousButtonClick} disabled={filterInfo.isPosting}>Previous</PrimaryButton>
+                        <PrimaryButton onClick={onNextButtonClick} disabled={filterInfo.isPosting}>Next</PrimaryButton>
+                    </Stack>
+                </Stack.Item>
+            </Stack>
+        </StepPanel>
+    )
 }
