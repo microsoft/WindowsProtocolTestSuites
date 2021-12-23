@@ -13,7 +13,7 @@
     <Adapter xsi:type="managed" name="IAD_LDAPModelAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Ldap.AD_LDAPModelAdapter, AD_ServerAdapter" />
     <!--MS_ADTS_PublishDC-->
     <Adapter xsi:type="managed" name="ILDAPAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.PublishDc.LDAPAdapter, AD_ServerAdapter" />
-    <Adapter xsi:type="managed" name="IMessageAnalyzerAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.MAAdapter.MessageAnalyzerAdapter, AD_ServerAdapter" />
+    <!--<Adapter xsi:type="managed" name="IMessageAnalyzerAdapter" adaptertype="Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.MAAdapter.MessageAnalyzerAdapter, AD_ServerAdapter" />-->
     <!--MS_ADTS_Schema-->
     <Adapter xsi:type="managed" name="IADDataSchemaAdapter" adaptertype="Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema.ADDataSchemaAdapter, AD_ServerAdapter" />
     <Adapter xsi:type="managed" name="IClaimsVerifyAdapter" adaptertype="Microsoft.Protocol.TestSuites.ActiveDirectory.Adts.Schema.ClaimsVerifyAdapter, AD_ServerAdapter" />
