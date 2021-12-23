@@ -53,6 +53,10 @@
         <Category name = "RDPEUDP"/>
       </Rule>
 
+      <Rule name = "RDPEUDP2">
+        <Category name = "RDPEUDP2"/>
+      </Rule>
+
       <Rule name = "RDPEUSB">
         <Category name = "RDPEUSB"/>
       </Rule>
@@ -64,7 +68,6 @@
       <Rule name = "RDPRFX">
         <Category name = "RDPRFX"/>
       </Rule>
-
     </Group>
 
     <Group name = "Priority">

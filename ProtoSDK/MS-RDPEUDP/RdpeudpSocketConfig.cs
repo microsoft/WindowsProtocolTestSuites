@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
 
+using System;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 {
@@ -14,28 +13,28 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         /// The time after which fire the retransmit timer.  
         /// </summary>
-        public TimeSpan RetransmitDuration_V1 = new TimeSpan(0, 0, 0, 0, 500);
-        public TimeSpan RetransmitDuration_V2 = new TimeSpan(0, 0, 0, 0, 300);
+        public TimeSpan RetransmitDurationV1 = new TimeSpan(0, 0, 0, 0, 500);
+        public TimeSpan RetransmitDurationV2 = new TimeSpan(0, 0, 0, 0, 300);
 
         /// <summary>
         /// This timer fires when the sender has not received any datagram from the receiver within 65 seconds
         /// Then close the connection
         /// </summary>
-        public TimeSpan LostConnectionTimeOut = new TimeSpan(0, 0, 65);
+        public TimeSpan LostConnectionTimeout = new TimeSpan(0, 0, 65);
 
         /// <summary>
         /// This duration is used for sending keep-alive diagrams periodically
         /// </summary>
-        public TimeSpan KeepaliveDuration = new TimeSpan(0,0,16);
+        public TimeSpan KeepaliveDuration = new TimeSpan(0, 0, 16);
 
         /// <summary>
         /// RDPUDP_PROTOCOL_VERSION_1: the delayed ACK time-out is 200 ms.
         /// RDPUDP_PROTOCOL_VERSION_2: the delayed ACK time-out is 50 ms or half the RTT, whichever is longer, 
         /// up to a maximum of 200 ms.
         /// </summary>
-        public TimeSpan DelayAckDuration_V1 = new TimeSpan(0, 0, 0, 0, 200);
-        public TimeSpan DelayAckDuration_V2 = new TimeSpan(0, 0, 0, 0, 50);
-        public TimeSpan DelayAckDuration_Max = new TimeSpan(0, 0, 0, 0, 200);
+        public TimeSpan DelayedAckDurationV1 = new TimeSpan(0, 0, 0, 0, 200);
+        public TimeSpan DelayedAckDurationV2 = new TimeSpan(0, 0, 0, 0, 50);
+        public TimeSpan DelayedAckDurationMax = new TimeSpan(0, 0, 0, 0, 200);
 
         /// <summary>
         /// This is the interval seconds of two heart beat packet.
@@ -58,27 +57,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// This time in milliseconds is used for indicating the receipt of a Source Packet 
         /// that was not acknowledged yet and has no acknowledgment scheduled for it.
         /// </summary>
-        public int DelayAckTime = 100;
+        public int DelayedAckTime = 100;
 
         /// <summary>
-        /// The time in seconds to wait for next packets from low layer transport.
+        /// The time in seconds to wait for next packets from lower layer transport.
         /// </summary>
         public TimeSpan Timeout = new TimeSpan(0, 0, 20);
 
         /// <summary>
         /// The initial window size of sliding window.
         /// </summary>
-        public ushort initialWindowSize = 0x40;
+        public ushort InitialWindowSize = 0x40;
 
         /// <summary>
         /// The initial Mtu of stream.
         /// </summary>
-        public ushort initialStreamMtu = 0x4D0;
+        public ushort InitialStreamMtu = 0x4D0;
 
         /// <summary>
         /// The inital Ack position.
         /// </summary>
-        public uint initialAcksPosition=0xFFFFFFFF;
+        public uint InitialAckPosition = 0xFFFFFFFF;
 
         /// <summary>
         /// This interval time in milliseconds to receive the next packet from lower layer transport.
@@ -88,34 +87,38 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <summary>
         /// The interval time in milliseconds to verify whether a packet is in send window 
         /// </summary>
-        public int sendingInterval = 50;
+        public int SendingInterval = 50;
 
         /// <summary>
         /// Retransmit limit at least three and no more five times.
         /// </summary>
-        public uint retransmitLimit = 5; 
+        public uint RetransmitLimit = 5;
 
-        public int changeSnAckOfAcksSeqNumInterval = 20;
-
-        #region Config for Timer interval
-        // RDPEUDP has three timer: retransmit, keeplive and delayACK
         /// <summary>
-        /// retransmit timer is max of 300ms\500ms and 2*RTT, 
+        /// Interval to update SnResetSeqNum.
+        /// </summary>
+        public int ChangeSnResetSeqNumInterval = 20;
+
+        #region Config for Timer intervals
+
+        // RDPEUDP has three timer: retransmit, keepalive and delayedAck
+        /// <summary>
+        /// Retransmit timer is max of 300ms/500ms and 2*RTT, 
         /// set to 20ms, so will check whether some packet need retransmit every 20ms 
         /// </summary>
-        public uint retransmitTimerInterval = 20;
-        
+        public uint RetransmitTimerInterval = 20;
+
         /// <summary>
         /// Keep alive timer is 65s
         /// set to 1s, so will check the timer every 1s
         /// </summary>
-        public uint keepAliveTimerInterval = 1000;
+        public uint KeepaliveTimerInterval = 1000;
 
         /// <summary>
-        /// Delay ACK timer is 200ms
+        /// Delayed ACK timer is 200ms
         /// set to 20ms, so will check the timer every 20ms
         /// </summary>
-        public uint delayAckInterval = 20;
+        public uint DelayedAckInterval = 20;
         #endregion
     }
 }

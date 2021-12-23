@@ -447,7 +447,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     foreach (PtfProperty child in p)
                     {
                         s.Push(child);
-                        b.Push("");
+                        b.Push("." + p.Name);
                     }
                 }
                 else

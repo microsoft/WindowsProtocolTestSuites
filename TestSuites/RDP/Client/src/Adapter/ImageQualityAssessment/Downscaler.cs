@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAccessment
+namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
 {
     /// <summary>
     /// The class is for downscaling the image

@@ -1,8 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestTools.StackSdk.Transport;
 using System;
 using System.Net;
+using System.Security.Cryptography;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
@@ -14,29 +16,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
     {
         #region Private variables
 
-        // Local Endpoint
+        // Local Endpoint.
         private IPEndPoint localEndPoint;
 
-        // Remote Endpoint
-        private IPEndPoint remoteEndpoint;
+        // Remote Endpoint.
+        private IPEndPoint remoteEndPoint;
 
-        // UDP Transport stack
+        // UDP Transport stack.
         private TransportStack udpTransport;
 
         // Transport mode
         private TransportMode transMode;
 
-        // Thread handle for receiving thread
+        // Thread handle for receiving thread.
         private Thread receiveThread;
 
         // Cancellation token source for receiving thread.
         private CancellationTokenSource receiveThreadCancellationTokenSource;
 
-        // Socket of this client. RDPEUDP client only have one socket
+        // Socket of this client. RDPEUDP client only have one socket.
         private RdpeudpClientSocket socket;
 
         // Indicating the client is started successfully.
         private bool started;
+
+        // The SHA-256 hash of the data that was transmitted from the server to the client in the securityCookie field of the Initiate Multitransport Request PDU.
+        private byte[] cookieHash;
 
         #endregion Private variables
 
@@ -69,20 +74,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 
         #region Constructor
         /// <summary>
-        /// Constructor
+        /// Initialize a new RdpeudpClient instance.
         /// </summary>
-        /// <param name="localEp"></param>
-        public RdpeudpClient(IPEndPoint localEp, IPEndPoint remoteEp, TransportMode mode, bool autoHandle = true)
+        /// <param name="localEp">Local endpoint.</param>
+        /// <param name="remoteEp">Remote endpoint.</param>
+        /// <param name="mode">Transport mode.</param>
+        /// <param name="autoHandle">Auto handle transport.</param>
+        /// <param name="securityCookie">The securityCookie field of the Initiate Multitransport Request PDU</param>
+        public RdpeudpClient(IPEndPoint localEp, IPEndPoint remoteEp, TransportMode mode, bool autoHandle = true, byte[] securityCookie = null)
         {
             this.localEndPoint = localEp;
-            this.remoteEndpoint = remoteEp;
+            this.remoteEndPoint = remoteEp;
             this.AutoHandle = autoHandle;
             this.transMode = mode;
 
             UdpClientConfig config = new UdpClientConfig(localEp.Port, remoteEp);
             udpTransport = new TransportStack(config, RdpeudpBasePacket.DecodePacketCallback);
 
-            socket = new RdpeudpClientSocket(transMode, remoteEp, autoHandle, packetsender);
+            if (securityCookie == null)
+            {
+                cookieHash = new byte[32];
+            }
+            else
+            {
+                cookieHash = SHA256.HashData(securityCookie);
+            }
+
+            socket = new RdpeudpClientSocket(transMode, remoteEp, autoHandle, PacketSender, cookieHash);
         }
         #endregion Constructor
 
@@ -174,7 +192,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
                     }
                     catch (TimeoutException)
                     { }
-                    Thread.Sleep(RdpeudpSocketConfig.ReceivingInterval);
                 }
             }
             catch (Exception ex)
@@ -188,7 +205,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// </summary>
         /// <param name="remoteEP">Remote endpoint</param>
         /// <param name="packet"></param>
-        private void packetsender(IPEndPoint remoteEP, StackPacket packet)
+        private void PacketSender(IPEndPoint remoteEP, StackPacket packet)
         {
             udpTransport.SendPacket(remoteEP, packet);
         }
