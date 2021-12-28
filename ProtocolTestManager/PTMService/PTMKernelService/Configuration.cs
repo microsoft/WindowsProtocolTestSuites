@@ -618,7 +618,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                     propertyList.Add(new Property()
                     {
-                        Key = string.Format("{0}.{1}", groupName, item.Name),
+                        Key = groupName == "Default Group" ? string.Format("{0}", item.Name) : string.Format("{0}.{1}", groupName, item.Name),
                         Name = item.Name,
                         Choices = item.ChoiceItems,
                         Description = item.Description,
