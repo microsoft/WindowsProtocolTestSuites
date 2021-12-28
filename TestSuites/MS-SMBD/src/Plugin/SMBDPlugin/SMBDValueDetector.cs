@@ -26,31 +26,31 @@ namespace Microsoft.Protocols.TestManager.Detector
 
     static class DeploymentPtfConfigConstant
     {
-        public const string SUTCOMPUTERNAME = "Default Group.SutComputerName";
-        public const string DOMAINNAME = "Default Group.DomainName";
-        public const string SUTUSERNAME = "Default Group.SutUserName";
-        public const string SUTPASSWORD = "Default Group.SutPassword";
-        public const string SERVERNONRNICIP = "Default Group.ServerNonRNicIp";
-        public const string SERVERRNICIP = "Default Group.ServerRNicIp";
-        public const string CLIENTNONRNICIP = "Default Group.ClientNonRNicIp";
-        public const string CLIENTRNICIP = "Default Group.ClientRNicIp";
-        public const string PLATFORM = "Default Group.Platform";
-        public const string SHAREFOLDER = "Default Group.ShareFolder";
+        public const string SUTCOMPUTERNAME = "SutComputerName";
+        public const string DOMAINNAME = "DomainName";
+        public const string SUTUSERNAME = "SutUserName";
+        public const string SUTPASSWORD = "SutPassword";
+        public const string SERVERNONRNICIP = "ServerNonRNicIp";
+        public const string SERVERRNICIP = "ServerRNicIp";
+        public const string CLIENTNONRNICIP = "ClientNonRNicIp";
+        public const string CLIENTRNICIP = "ClientRNicIp";
+        public const string PLATFORM = "Platform";
+        public const string SHAREFOLDER = "ShareFolder";
     }
 
     static class PtfConfigConstant
     {
-        public const string SMBDTCPPORT = "Default Group.SmbdTcpPort";
-        public const string RECEIVECREDITMAX = "Default Group.ReceiveCreditMax";
-        public const string SENDCREDITTARGET = "Default Group.SendCreditTarget";
-        public const string MAXSENDSIZE = "Default Group.MaxSendSize";
-        public const string MAXFRAGMENTEDSIZE = "Default Group.MaxFragmentedSize";
-        public const string MAXRECEIVESIZE = "Default Group.MaxReceiveSize";
-        public const string SMB2CONNECTIONTIMEOUTINSECONDS = "Default Group.Smb2ConnectionTimeoutInSeconds";
-        public const string ENDIANOFBUFFERDESCRIPTOR = "Default Group.EndianOfBufferDescriptor";
-        public const string INBOUNDENTRIES = "Default Group.InboundEntries";
-        public const string OUTBOUNDENTRIES = "Default Group.OutboundEntries";
-        public const string INBOUNDREADLIMIT = "Default Group.InboundReadLimit";
+        public const string SMBDTCPPORT = "SmbdTcpPort";
+        public const string RECEIVECREDITMAX = "ReceiveCreditMax";
+        public const string SENDCREDITTARGET = "SendCreditTarget";
+        public const string MAXSENDSIZE = "MaxSendSize";
+        public const string MAXFRAGMENTEDSIZE = "MaxFragmentedSize";
+        public const string MAXRECEIVESIZE = "MaxReceiveSize";
+        public const string SMB2CONNECTIONTIMEOUTINSECONDS = "Smb2ConnectionTimeoutInSeconds";
+        public const string ENDIANOFBUFFERDESCRIPTOR = "EndianOfBufferDescriptor";
+        public const string INBOUNDENTRIES = "InboundEntries";
+        public const string OUTBOUNDENTRIES = "OutboundEntries";
+        public const string INBOUNDREADLIMIT = "InboundReadLimit";
     }
 
     public class SMBDValueDetector : IValueDetector
