@@ -18,7 +18,8 @@ export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNa
     const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
         let isEnabledStep = item.TargetStep <= wizardState.lastStep
         if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-            if (wizardProps.currentStep < wizardState.lastStep &&
+            if (RunSteps.CONFIGURE_METHOD < wizardState.lastStep &&
+                wizardProps.currentStep < wizardState.lastStep &&
                 configureMethod &&
                 configureMethod.selectedMethod &&
                 configureMethod.selectedMethod === ConfigureMethod.ConfigurationMethod_AutoDetection) {

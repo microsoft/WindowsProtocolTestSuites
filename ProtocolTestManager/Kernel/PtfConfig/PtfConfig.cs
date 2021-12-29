@@ -17,6 +17,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </summary>
     public class PtfConfig
     {
+        public const string DefaultGroup = "Default Group";
+
         // ConfigNode Tree root according to ptfconfig files
         public PtfProperty PtfPropertyRoot { get; set; }
 
@@ -447,7 +449,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     foreach (PtfProperty child in p)
                     {
                         s.Push(child);
-                        b.Push("." + p.Name);
+                        b.Push("");
                     }
                 }
                 else
