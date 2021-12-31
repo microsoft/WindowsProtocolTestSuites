@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>Test Environment</title>
+    <style>
+        div.Title {
+            font-family: Arial;
+            font-size: larger;
+            margin-bottom: 0.625rem;
+        }
+
+        div.Context {
+            font-family: 'Segoe UI';
+            font-size: medium;
+            margin-top: auto;
+        }
+
+        .icon {
+            font-family: 'Segoe UI';
+            font-size: larger;
+            font-weight: bold;
+            margin-top: 0.625rem;
+            text-align: center;
+        }
+
+        .List {
+            margin-top: 0.25rem;
+        }
+
+        .img {
+            vertical-align: text-top;
+        }
+    </style>
+</head>
+<body>
+    <div class="Context">
+        <p>SMBD Server Test Suites can be run either on a domain environment or a workgroup environment.</p>
+
+        <div>
+            <p>The domain environment requires interactions between the following computers and servers.</p>
+            <p>The driver computer runs the test cases by sending requests over the wire in the form of protocol messages.</p>
+            <p>The SUT runs an implementation of the protocol that is being tested. The SUT responds to the requests that the driver computer sends.</p>
+            <p>The following figure shows the domain environment with recommended network configurations for your reference.</p>
+
+            <img class="img" src="deployment.png" />
+
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>
+                            Machine Name/Access Point
+                        </th>
+                        <th>
+                            NIC Type
+                        </th>
+                        <th>
+                            IPv4
+                        </th>
+                        <th>
+                            Subnet Mask
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2">
+                            SMBD-Client01
+                        </td>
+                        <td>
+                            NIC
+                        </td>
+                        <td>
+                            192.168.1.111
+                        </td>
+                        <td>
+                            255.255.255.0
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            RDMA-NIC
+                        </td>
+                        <td>
+                            192.168.1.11
+                        </td>
+                        <td>
+                            255.255.255.0
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="2">
+                            SMBD-SUT01
+                        </td>
+                        <td>
+                            NIC
+                        </td>
+                        <td>
+                            192.168.1.112
+                        </td>
+                        <td>
+                            255.255.255.0
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            RDMA-NIC
+                        </td>
+                        <td>
+                            192.168.1.12
+                        </td>
+                        <td>
+                            255.255.255.0
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="icon" style="position: relative; bottom:0rem">
+            <img class="img" src="arrow_right.png" /><a href="setup.html">Configuration</a>
+        </div>
+    </div>
+</body>
+</html>
