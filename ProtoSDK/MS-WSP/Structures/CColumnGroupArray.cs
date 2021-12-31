@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CColumnGroupArray structure contains a set of property groups with weights for each property.
@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer containing the number of elements in the aGroupArray array.
         /// </summary>
-        public UInt32 count;
+        public uint count;
 
         /// <summary>
         /// An array of CColumnGroup structures indicating individual weights for each property, which are used in probabilistic ranking.

@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum _ulRankMethod_Values : UInt32
+    public enum CVectorRestriction_ulRankMethod_Values : uint
     {
         /// <summary>
         /// Use the minimum algorithm, as specified in [SALTON].
@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// Vector restrictions represent queries using the full text vector space model of ranking (see [SALTON] for details).
     /// In addition to the OR operation, they also compute a rank based on the ranking algorithm.
     /// </summary>
-    public struct CVectorRestriction : IWspStructure
+    public struct CVectorRestriction : IWspRestriction
     {
         /// <summary>
         /// A CNodeRestriction command tree upon which a ranked OR operation is to be performed.
@@ -48,7 +48,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer specifying a ranking algorithm.
         /// </summary>
-        public _ulRankMethod_Values _ulRankMethod;
+        public CVectorRestriction_ulRankMethod_Values _ulRankMethod;
 
         public void FromBytes(WspBuffer buffer)
         {

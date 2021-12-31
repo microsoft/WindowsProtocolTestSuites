@@ -3,14 +3,14 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     public struct VT_VECTOR<T> : IWspStructure where T : struct
     {
         /// <summary>
         /// Unsigned 32-bit integer, indicating the number of elements in the vVectorData field.
         /// </summary>
-        public UInt32 vVectorElements;
+        public uint vVectorElements;
 
         public T[] vVectorData;
 

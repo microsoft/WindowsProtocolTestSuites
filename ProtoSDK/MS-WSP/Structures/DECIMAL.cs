@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// DECIMAL is used to represent an exact numeric value with a fixed precision and fixed scale.
@@ -11,21 +11,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     public struct DECIMAL : IWspStructure
     {
         /// <summary>
-        /// The highest 32 bits of the 96-bit integer.
+        /// The high 32 bits of the number.
         /// </summary>
-        /// <param name=""></param>
-        /// <returns></returns>
-        public UInt64 Hi32;
+        public uint Hi32;
 
         /// <summary>
-        /// The lowest 32 bits of the 96-bit integer.
+        /// The low 64 bits of the number.
         /// </summary>
-        public UInt64 Lo32;
-
-        /// <summary>
-        /// The middle 32 bits of the 96-bit integer.
-        /// </summary>
-        public UInt64 Mid32;
+        public ulong Lo64;
 
         public void FromBytes(WspBuffer buffer)
         {

@@ -13,7 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
 {
     /// <summary>
     /// SUT control adapter to create, delete and modify files on remote server.

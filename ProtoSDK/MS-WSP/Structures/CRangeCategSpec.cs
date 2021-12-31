@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CRangeCategSpec structure contains information about ranges for grouping into range-specified buckets.
@@ -13,12 +13,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer. Reserved. This field can be set to any arbitrary value when sent.
         /// </summary>
-        public UInt32 _lcid;
+        public uint _lcid;
 
         /// <summary>
         /// A 32-bit unsigned integer, indicating the number of RANGEBOUNDARY structures in aRangeBegin.
         /// </summary>
-        public UInt32 cRange;
+        public uint cRange;
 
         /// <summary>
         /// An array of RANGEBOUNDARY structures, specifying a set of ranges for which grouping is performed.

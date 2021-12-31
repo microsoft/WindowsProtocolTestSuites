@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CTableVariant structure contains the fixed-size portion of a variable length data type stored in the CPMGetRowsOut message.
@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A type indicator, indicating the type of vValue. It MUST be one of the values under the vType field, as specified in section 2.2.1.1.
         /// </summary>
-        public vType_Values vType;
+        public CBaseStorageVariant_vType_Values vType;
 
         /// <summary>
         /// Not used. Can be set to any arbitrary value when sent and it MUST be ignored on receipt.
@@ -39,7 +39,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public void FromBytes(WspBuffer buffer)
         {
-            vType = buffer.ToStruct<vType_Values>();
+            vType = buffer.ToStruct<CBaseStorageVariant_vType_Values>();
             reserved1 = buffer.ToStruct<ushort>();
             reserved2 = buffer.ToStruct<uint>();
 
@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         private void DecodeCount(WspBuffer buffer)
         {
-            if (vType.HasFlag(vType_Values.VT_VECTOR))
+            if (vType.HasFlag(CBaseStorageVariant_vType_Values.VT_VECTOR))
             {
                 if (Is64bit)
                 {
@@ -74,18 +74,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             {
                 if (Is64bit)
                 {
-                    Offset = buffer.ToStruct<Int64>();
+                    Offset = buffer.ToStruct<long>();
                 }
                 else
                 {
-                    Offset = buffer.ToStruct<Int32>();
+                    Offset = buffer.ToStruct<int>();
                 }
             }
         }
 
         private bool IsStringOrVectorVType()
         {
-            return vType.HasFlag(vType_Values.VT_VECTOR) || vType == vType_Values.VT_LPWSTR;
+            return vType.HasFlag(CBaseStorageVariant_vType_Values.VT_VECTOR) || vType == CBaseStorageVariant_vType_Values.VT_LPWSTR;
         }
     }
 }

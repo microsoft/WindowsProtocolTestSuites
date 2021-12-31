@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CInGroupSortAggregSets structure contains information on how the group is sorted with regard to the parent's group ranges.
@@ -13,12 +13,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of entries in SortSets.
         /// </summary>
-        public UInt32 cCount;
+        public uint cCount;
 
         /// <summary>
         /// A 4-byte field that must be ignored.
         /// </summary>
-        public UInt32 Reserved;
+        public uint Reserved;
 
         /// <summary>
         /// An array of CSortSet structures.

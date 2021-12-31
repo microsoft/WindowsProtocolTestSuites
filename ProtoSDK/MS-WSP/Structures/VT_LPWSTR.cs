@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     public struct VT_LPWSTR : IWspStructure
     {
@@ -11,7 +11,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer, indicating the size of the string field including the terminating null. 
         /// </summary>
-        public UInt32 cLen;
+        public uint cLen;
 
         /// <summary>
         /// Null-terminated string.
@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public void ToBytes(WspBuffer buffer)
         {
-            if (String.IsNullOrEmpty(_string))
+            if (string.IsNullOrEmpty(_string))
             {
                 cLen = 0;
 
@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             }
             else
             {
-                cLen = (UInt32)(_string.Length + 1);
+                cLen = (uint)(_string.Length + 1);
 
                 buffer.Add(cLen);
 

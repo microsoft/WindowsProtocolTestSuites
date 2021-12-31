@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP</AssemblyName>
-    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP</RootNamespace>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp</AssemblyName>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>

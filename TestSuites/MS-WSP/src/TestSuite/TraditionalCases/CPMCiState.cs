@@ -2,10 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using System;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
@@ -60,7 +58,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMCiState_AfterConnect()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCiStateInOut and expects success.");
             wspAdapter.CPMCiStateInOut();
@@ -72,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMCiState_AfterQuery()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -87,7 +85,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMCiState_AfterBinding()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -105,7 +103,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMCiState_AfterGetRows()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -126,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMCiState_AfterFreeCursor()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);

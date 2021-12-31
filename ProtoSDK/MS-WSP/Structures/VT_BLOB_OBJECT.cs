@@ -3,14 +3,14 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     public struct VT_BLOB_OBJECT : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer.
         /// </summary>
-        public UInt32 cbSize;
+        public uint cbSize;
 
         /// <summary>
         /// MUST be of length cbSize in bytes.

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CCategorizationSet structure contains information on how the grouping is done at each level in a hierarchical result set.
@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer containing the number of elements in the categories array.
         /// </summary>
-        public UInt32 count;
+        public uint count;
 
         /// <summary>
         /// Array of CCategorizationSpec structures specifying the grouping for each level in a hierarchical query. The first structure specifies the top level.

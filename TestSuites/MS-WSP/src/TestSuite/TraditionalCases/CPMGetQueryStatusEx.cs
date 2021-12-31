@@ -2,9 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
@@ -51,10 +50,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void BVT_CPMGetQueryStatusEx_AfterCPMCreateQueryIn()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
-            var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var columnSet = wspAdapter.Builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.Builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -63,10 +62,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_FileName,
             };
-            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+            pidMapper.count = (uint)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.Builder.Parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetQueryStatusIn and expects success.");
             wspAdapter.CPMGetQueryStatusExIn(out var response);
@@ -81,10 +80,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
-            var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var columnSet = wspAdapter.Builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.Builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -93,15 +92,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_FileName,
             };
-            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+            pidMapper.count = (uint)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.Builder.Parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
-                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
-                wspAdapter.builder.GetTableColumn(WspConsts.System_Size, vType_Values.VT_VARIANT)
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_ItemName, CBaseStorageVariant_vType_Values.VT_VARIANT),
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_Size, CBaseStorageVariant_vType_Values.VT_VARIANT)
             };
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
@@ -119,10 +118,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMGetQueryStatusEx_AfterCPMGetRowsIn()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
-            var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var columnSet = wspAdapter.Builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.Builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -131,15 +130,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_FileName,
             };
-            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+            pidMapper.count = (uint)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.Builder.Parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
-                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
-                wspAdapter.builder.GetTableColumn(WspConsts.System_Size, vType_Values.VT_VARIANT)
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_ItemName, CBaseStorageVariant_vType_Values.VT_VARIANT),
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_Size, CBaseStorageVariant_vType_Values.VT_VARIANT)
             };
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
@@ -160,10 +159,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMGetQueryStatusEx_NoExpensiveProps()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
-            var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var columnSet = wspAdapter.Builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.Builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -172,13 +171,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_FileName,
             };
-            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+            pidMapper.count = (uint)pidMapper.aPropSpec.Length;
 
             var rowsetProperties = new CRowsetProperties();
-            rowsetProperties._uBooleanOptions = _uBooleanOptions_Values.eDoNotComputeExpensiveProps;
+            rowsetProperties._uBooleanOptions = CRowsetProperties_uBooleanOptions_Values.eDoNotComputeExpensiveProps;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, rowsetProperties, pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, rowsetProperties, pidMapper, new CColumnGroupArray(), wspAdapter.Builder.Parameter.LcidValue);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetQueryStatusIn and expects success.");
             wspAdapter.CPMGetQueryStatusExIn(out var response);
@@ -192,7 +191,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMGetQueryStatusEx_InvalidCursor()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);

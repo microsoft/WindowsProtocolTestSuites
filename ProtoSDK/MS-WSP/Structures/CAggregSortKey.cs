@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum CAggregSortKey_order_Values : UInt32
+    public enum CAggregSortKey_order_Values : uint
     {
         /// <summary>
         /// The rows are to be sorted in ascending order based on the values in the column specified.

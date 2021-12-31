@@ -2,24 +2,19 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     [TestClass]
     public partial class CPMConnectTestCases : WspCommonTestBase
     {
-        private const uint InvalidClientVersion = 0;
-        private const string InvalidCatalogNameFormat = "InvalidCatalogNameFormat";
-        private string EmptyCatalogName = string.Empty;
-        private const string NotExistedCatalogName = "Windows\\AYSTEMINDEX";
+        private const uint invalidClientVersion = 0;
+        private const string invalidCatalogNameFormat = "InvalidCatalogNameFormat";
+        private string emptyCatalogName = string.Empty;
+        private const string notExistingCatalogName = "Windows\\AYSTEMINDEX";
 
         private enum ArgumentType
         {
@@ -28,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             InvalidClientVersion,
             EmptyCatalogName,
             InvalidCatalogNameFormat,
-            NotExistedCatalogName,
+            NotExistingCatalogName,
             SmallerCExtPropSet,
             LargerCExtPropSet
         }
@@ -80,7 +75,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
 
             argumentType = ArgumentType.AllValid;
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
         }
 
         [TestMethod]
@@ -91,7 +86,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with invalid isClientRemote and expects STATUS_INVALID_PARAMETER.");
 
             argumentType = ArgumentType.InvalidIsClientRemote;
-            wspAdapter.CPMConnectInRequest(wspAdapter.clientVersion, (int)ClientType.LocalClient, wspAdapter.catalogName);
+            wspAdapter.CPMConnectIn(wspAdapter.ClientVersion, (int)ClientType.LocalClient, wspAdapter.CatalogName);
         }
 
         [TestMethod]
@@ -102,7 +97,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with invalid client version and expects STATUS_INVALID_PARAMETER_MIX.");
 
             argumentType = ArgumentType.InvalidClientVersion;
-            wspAdapter.CPMConnectInRequest((uint)InvalidClientVersion, (int)ClientType.RemoteClient, wspAdapter.catalogName);
+            wspAdapter.CPMConnectIn((uint)invalidClientVersion, (int)ClientType.RemoteClient, wspAdapter.CatalogName);
         }
 
         [TestMethod]
@@ -113,7 +108,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with empty catalog name and expects NOT SUCCEED.");
 
             argumentType = ArgumentType.EmptyCatalogName;
-            wspAdapter.CPMConnectInRequest(wspAdapter.clientVersion, (int)ClientType.RemoteClient, EmptyCatalogName);
+            wspAdapter.CPMConnectIn(wspAdapter.ClientVersion, (int)ClientType.RemoteClient, emptyCatalogName);
             //E_OUTOFMEMORY
         }
 
@@ -125,20 +120,20 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with invalid catalog name format and expects NOT SUCCEED.");
 
             argumentType = ArgumentType.InvalidCatalogNameFormat;
-            wspAdapter.CPMConnectInRequest(wspAdapter.clientVersion, (int)ClientType.RemoteClient, InvalidCatalogNameFormat);
+            wspAdapter.CPMConnectIn(wspAdapter.ClientVersion, (int)ClientType.RemoteClient, invalidCatalogNameFormat);
             //0xd000000d
         }
 
         [TestMethod]
         [TestCategory("CPMConnect")]
-        [Description("This test case is designed to verify the server response if not existed catalog name is sent in CPMConnectIn.")]
-        public void CPMConnect_NotExistedCatalogName()
+        [Description("This test case is designed to verify the server response if not existing catalog name is sent in CPMConnectIn.")]
+        public void CPMConnect_NotExistingCatalogName()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with not existed catalog name and expects NOT SUCCEED.");
 
-            argumentType = ArgumentType.NotExistedCatalogName;
-            wspAdapter.CPMConnectInRequest((uint)Convert.ToUInt32
-                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, NotExistedCatalogName);
+            argumentType = ArgumentType.NotExistingCatalogName;
+            wspAdapter.CPMConnectIn((uint)Convert.ToUInt32
+                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, notExistingCatalogName);
             //MSS_E_CATALOGNOTFOUND
         }
 
@@ -150,8 +145,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with smaller cExtPropSet field and expects NOT SUCCEED.");
 
             argumentType = ArgumentType.SmallerCExtPropSet;
-            wspAdapter.CPMConnectInRequest((uint)Convert.ToUInt32
-                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, wspAdapter.catalogName, cExtPropSet: 2);
+            wspAdapter.CPMConnectIn((uint)Convert.ToUInt32
+                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, wspAdapter.CatalogName, cExtPropSet: 2);
         }
 
         [TestMethod]
@@ -162,8 +157,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn with larger cExtPropSet field and expects NOT SUCCEED.");
 
             argumentType = ArgumentType.LargerCExtPropSet;
-            wspAdapter.CPMConnectInRequest((uint)Convert.ToUInt32
-                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, wspAdapter.catalogName, cExtPropSet: 5);
+            wspAdapter.CPMConnectIn((uint)Convert.ToUInt32
+                (BaseTestSite.Properties["ClientVersion"]), (int)ClientType.RemoteClient, wspAdapter.CatalogName, cExtPropSet: 5);
         }
         #endregion
 
@@ -186,7 +181,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case ArgumentType.InvalidCatalogNameFormat:
                     Site.Assert.AreNotEqual((uint)WspErrorCode.SUCCESS, errorCode, "Server should not return succeed if catalog name format of CPMConnectIn is invalid.");
                     break;
-                case ArgumentType.NotExistedCatalogName:
+                case ArgumentType.NotExistingCatalogName:
                     Site.Assert.AreEqual((uint)WspErrorCode.MSS_E_CATALOGNOTFOUND, errorCode, "Server should return MSS_E_CATALOGNOTFOUND if catalog name of CPMConnectIn is not existed.");
                     break;
                 case ArgumentType.SmallerCExtPropSet:

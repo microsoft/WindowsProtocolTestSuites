@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CDbProp structure contains a database property. These properties control how queries are interpreted by the GSS.
@@ -13,17 +13,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer indicating the property ID.This field uniquely identifies each property in a particular query, but has no other interpretation.
         /// </summary>
-        public UInt32 DBPROPID;
+        public uint DBPROPID;
 
         /// <summary>
         /// Property options.This field MUST be set to 0x00000001 if the property is optional and to 0x00000000 otherwise.
         /// </summary>
-        public UInt32 DBPROPOPTIONS;
+        public uint DBPROPOPTIONS;
 
         /// <summary>
         /// Property status.
         /// </summary>
-        public UInt32 DBPROPSTATUS;
+        public uint DBPROPSTATUS;
 
         /// <summary>
         /// A CDbColId structure that defines the database property being passed.

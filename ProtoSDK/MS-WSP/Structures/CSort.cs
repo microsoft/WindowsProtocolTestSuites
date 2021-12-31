@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum dwOrder_Values : UInt32
+    public enum CSort_dwOrder_Values : uint
     {
         /// <summary>
         /// The rows are to be sorted in ascending order based on the values in the column specified.
@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         QUERY_DESCEND = 0x00000001,
     }
 
-    public enum dwIndividual_Values : UInt32
+    public enum CSort_dwIndividual_Values : uint
     {
         /// <summary>
         /// The complete property is used for sorting, resulting in a single row for each result.
@@ -39,24 +39,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer. This is the index in CPidMapper for the property to sort by.
         /// </summary>
-        public UInt32 pidColumn;
+        public uint pidColumn;
 
         /// <summary>
         /// A 32-bit unsigned integer specifying how to sort based on the column.
         /// </summary>
-        public dwOrder_Values dwOrder;
+        public CSort_dwOrder_Values dwOrder;
 
         /// <summary>
         /// A 32-bit unsigned integer. dwIndividual specifies how to treat properties of type VT_VECTOR with regard to sorting.
         /// </summary>
-        public dwIndividual_Values dwIndividual;
+        public CSort_dwIndividual_Values dwIndividual;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the locale (as specified in [MS-LCID]) of the column.
         /// The locale determines the sorting rules to use when sorting textual values.
         /// The GSS can use the appropriate operating system facilities to do this.
         /// </summary>
-        public UInt32 locale;
+        public uint locale;
 
         public void FromBytes(WspBuffer buffer)
         {

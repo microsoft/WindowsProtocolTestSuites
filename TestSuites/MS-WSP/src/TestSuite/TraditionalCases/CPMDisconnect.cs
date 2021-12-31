@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMDisconnect_AfterConnect()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMDisconnect.");
             wspAdapter.CPMDisconnect();
@@ -66,7 +66,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMDisconnect_AfterQuery()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMDisconnect_AfterBinding()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMDisconnect_AfterGetRows()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -121,7 +121,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void BVT_CPMDisconnect_AfterFreeCursor()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -145,7 +145,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void CPMDisconnect_Reconnect()
         {
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -166,7 +166,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             try
             {
                 Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects that exceptions should be thrown.");
-                wspAdapter.CPMConnectInRequest();
+                wspAdapter.CPMConnectIn();
             }
             catch (RequestSender.RequestSenderException e)
             {

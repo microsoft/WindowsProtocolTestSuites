@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum eKind_Values : UInt32
+    public enum CDbColId_eKind_Values : uint
     {
         /// <summary>
         /// vString contains a property name.
@@ -27,7 +27,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// This field indicates the contents of GUID and vValue.
         /// </summary>
-        public eKind_Values eKind;
+        public CDbColId_eKind_Values eKind;
 
         /// <summary>
         /// The property GUID.
@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// If eKind is DBKIND_GUID_PROPID, this field contains an unsigned integer specifying the property ID.
         /// If eKind is DBKIND_GUID_NAME, this field contains an unsigned integer specifying the number of Unicode characters contained in the vString field.
         /// </summary>
-        public UInt32 ulId;
+        public uint ulId;
 
         /// <summary>
         /// A non-null-terminated Unicode string representing the property name. It MUST be omitted unless the eKind field is set to DBKIND_GUID_NAME.
@@ -47,9 +47,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         #endregion
 
         #region Constructors
-        public CDbColId(Guid property, UInt32 value)
+        public CDbColId(Guid property, uint value)
         {
-            eKind = eKind_Values.DBKIND_GUID_PROPID;
+            eKind = CDbColId_eKind_Values.DBKIND_GUID_PROPID;
             GUID = property;
             ulId = value;
             vString = null;
@@ -57,9 +57,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         public CDbColId(Guid property, string value)
         {
-            eKind = eKind_Values.DBKIND_GUID_NAME;
+            eKind = CDbColId_eKind_Values.DBKIND_GUID_NAME;
             GUID = property;
-            ulId = (UInt32)value.Length;
+            ulId = (uint)value.Length;
             vString = value;
         }
         #endregion
@@ -77,7 +77,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             buffer.Add(ulId);
 
-            if (eKind == eKind_Values.DBKIND_GUID_NAME)
+            if (eKind == CDbColId_eKind_Values.DBKIND_GUID_NAME)
             {
                 buffer.AddUnicodeString(vString);
             }

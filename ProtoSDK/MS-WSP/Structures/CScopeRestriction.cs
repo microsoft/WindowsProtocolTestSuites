@@ -3,17 +3,17 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CScopeRestriction structure restricts the files to be returned to those with a path that matches the restriction.
     /// </summary>
-    public struct CScopeRestriction : IWspStructure
+    public struct CScopeRestriction : IWspRestriction
     {
         /// <summary>
         /// A 32-bit unsigned integer containing the number of Unicode characters in the _lowerPath field.
         /// </summary>
-        public UInt32 CcLowerPath;
+        public uint CcLowerPath;
 
         /// <summary>
         /// A non-null-terminated Unicode string representing the path to which the query is restricted. The CcLowerPath field contains the length of the string.
@@ -23,14 +23,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer containing the length of _lowerPath in Unicode characters. This MUST be the same value as CcLowerPath.
         /// </summary>
-        public UInt32 _length;
+        public uint _length;
 
         /// <summary>
         /// A 32-bit unsigned integer. MUST be set to one of the following values:
         /// 0x00000000	The server is not to examine any subdirectories.
         /// 0x00000001	The server is to recursively examine all subdirectories of the path.
         /// </summary>
-        public UInt32 _fRecursive;
+        public uint _fRecursive;
 
         /// <summary>
         /// A 32-bit unsigned integer. MUST be set to one of the following values: 
@@ -38,7 +38,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// 0x00000001	_lowerPath is a virtual path(the URL associated with a physical directory on the file system) for a website.
         /// 0x00000001	_lowerPath is a virtual path(the URL associated with a physical directory on the file system) for a website.
         /// </summary>
-        public UInt32 _fVirtual;
+        public uint _fVirtual;
 
         public void FromBytes(WspBuffer buffer)
         {

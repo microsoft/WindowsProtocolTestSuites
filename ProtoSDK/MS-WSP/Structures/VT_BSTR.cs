@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     public struct VT_BSTR : IWspStructure
     {
@@ -11,7 +11,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer.
         /// </summary>
-        public UInt32 cbSize;
+        public uint cbSize;
 
         /// <summary>
         /// MUST be of length cbSize in bytes.
@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             buffer.AddUnicodeString(val);
 
-            cbSize = (UInt32)buffer.WriteOffset;
+            cbSize = (uint)buffer.WriteOffset;
 
             blobData = buffer.GetBytes();
         }

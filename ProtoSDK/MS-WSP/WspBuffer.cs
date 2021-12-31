@@ -2,10 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// WSP buffer used to marshall.
@@ -14,13 +13,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     {
         private class DynamicByteArray
         {
-            private const int InitialSize = 64;
+            private const int initialSize = 64;
 
             public byte[] Buffer;
 
+            public int Size { get; private set; }
+
             public DynamicByteArray()
             {
-                Buffer = new byte[InitialSize];
+                Buffer = new byte[initialSize];
                 Size = 0;
             }
 
@@ -48,8 +49,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 Size += bytes.Length;
             }
 
-            public int Size { get; private set; }
-
             private void GrowBuffer(int newSize)
             {
                 int bufferSize = Buffer.Length;
@@ -76,12 +75,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
         private struct StringHelper
         {
-            public string s;
+            public string StringValue;
         }
 
         private DynamicByteArray buffer;
 
         #region Properties
+
         /// <summary>
         /// The current write buffer into buffer.
         /// </summary>
@@ -97,9 +97,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 return buffer.Size;
             }
         }
+
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// Construct an empty WSP buffer.
         /// </summary>
@@ -118,6 +120,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             ReadOffset = 0;
             buffer = new DynamicByteArray(bytes);
         }
+
         #endregion
 
         /// <summary>
@@ -136,7 +139,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="isNullTerminated">Whether to append the null character.</param>
         public void AddUnicodeString(string s, bool isNullTerminated = true)
         {
-            var stringBytes = TypeMarshal.ToBytes(new StringHelper { s = s });
+            var stringBytes = TypeMarshal.ToBytes(new StringHelper { StringValue = s });
 
             if (!isNullTerminated)
             {

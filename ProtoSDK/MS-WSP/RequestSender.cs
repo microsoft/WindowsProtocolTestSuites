@@ -7,7 +7,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
 using System;
 using System.Net;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// RequeseSender class sends MS-WSP requests to the protocol server and receives corresponding subsequent responses.

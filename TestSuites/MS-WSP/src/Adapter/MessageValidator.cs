@@ -3,9 +3,8 @@
 
 using System;
 using System.Linq;
-using System.Text;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
 {
 
     /// <summary>
@@ -36,11 +35,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Validate CPMConnectOut message
         /// </summary>
         /// <param name="connectOutResponse">ConnectOut</param>
-        public void ValidateConnectOutResponse(CPMConnectOut connectOutResponse)
+        public void ValidateCPMConnectOutResponse(CPMConnectOut connectOutResponse)
         {
             ValidateHeader(connectOutResponse.Header, WspMessageHeader_msg_Values.CPMConnectOut);
 
-            UInt32 messageStatus = connectOutResponse.Header._status;
+            uint messageStatus = connectOutResponse.Header._status;
 
             // For any arbitary value of padding fields 
             //of CDbPropSet structure the server response is success
@@ -117,7 +116,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint serverOffset = Convert.ToUInt32(site.Properties.Get("ServerOffset"));
             #region Windows Behaviour Validation
 
-            if (serverOffset == Constant.OFFSET_32)
+            if (serverOffset == Constants.OFFSET_32)
             {
                 //Updated by:v-zhil
                 //Delta testing
@@ -154,7 +153,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 // if server is handling 32 bit offset
 
-                if (serverOffset == Constant.OFFSET_32)
+                if (serverOffset == Constants.OFFSET_32)
                 {
                     uint actualValue
                         = Convert.ToUInt32
@@ -189,7 +188,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     }
                 }
                 // if server is handling 64 bit offset
-                if (serverOffset == Constant.OFFSET_64)
+                if (serverOffset == Constants.OFFSET_64)
                 {
                     uint actualValue
                         = Convert.ToUInt32
@@ -218,7 +217,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         // Edited by v-zhil
                         // This requriement should verify under both ServerOffset and ClientOffset equals 64
                         //**********************************************************************************
-                        if (Convert.ToUInt32(site.Properties.Get("ClientOffset")) == Constant.OFFSET_64)
+                        if (Convert.ToUInt32(site.Properties.Get("ClientOffset")) == Constants.OFFSET_64)
                         {
                             site.CaptureRequirementIfIsTrue
                                 (clientVersion > 0x00010000, 529,
@@ -281,7 +280,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Validates CPMCiStateInOut response from the server.
         /// </summary>
         /// <param name="stateInOutResponse">CPMCiStateInOut response.</param>
-        public void ValidateCiStateInOut(CPMCiStateInOut stateInOutResponse)
+        public void ValidateCPMCiStateInOutResponse(CPMCiStateInOut stateInOutResponse)
         {
             ValidateHeader(stateInOutResponse.Header, WspMessageHeader_msg_Values.CPMCiStateInOut);
 
@@ -345,7 +344,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             //--------------------         eState    --------------------
             var eState = stateInOutResponse.State.eState;
-            bool eStateValid = GetEStatevalid(eState);
+            bool eStateValid = IsValidCPMCiState_eState(eState);
 
             //Updated by:v-zhil
             //For Delta tesing
@@ -421,11 +420,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="queryOutResponse">CreateQueryOut</param>
         /// <param name="cursor">cursor handle that comes from the server</param>
-        public void ValidateCreateQueryOutResponse(CPMCreateQueryOut queryOutResponse, out uint[] cursor)
+        public void ValidateCPMCreateQueryOutResponse(CPMCreateQueryOut queryOutResponse, out uint[] cursor)
         {
             ValidateHeader(queryOutResponse.Header, WspMessageHeader_msg_Values.CPMCreateQueryOut);
 
-            UInt32 messageStatus = queryOutResponse.Header._status;
+            uint messageStatus = queryOutResponse.Header._status;
 
             //----------------------------   _fTrueSequential  
             uint trueSequential = queryOutResponse._fTrueSequential;
@@ -466,8 +465,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="queryStatusOutResponse">QueryStatusOut BLOB</param>
         /// <param name="queryStatusCheckSum">checksum</param>
-        public void ValidateGetQueryStatusOut
-            (Byte[] queryStatusOutResponse, uint queryStatusCheckSum)
+        public void ValidateCPMGetQueryStatusOutResponse(byte[] queryStatusOutResponse, uint queryStatusCheckSum)
         {
             int startingIndex = 0;
             ValidateHeader
@@ -506,8 +504,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// BLOB</param>
         /// <param name="queryStatusExCheckSum">checksum of
         /// QueryStatusExIn message</param>
-        public void ValidateGetQueryStatusExOut
-            (Byte[] queryStatusExOutResponse, uint queryStatusExCheckSum)
+        public void ValidateCPMGetQueryStatusExOutResponse(byte[] queryStatusExOutResponse, uint queryStatusExCheckSum)
         {
             int startingIndex = 0;
             byte[] tempByteArray;
@@ -657,11 +654,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Validates SetBingingsInResponse message
         /// </summary>
         /// <param name="response">CPMSetBindingsOut</param>
-        public void ValidateSetBindingsInResponse(CPMSetBindingsOut response)
+        public void ValidateCPMSetBindingsInResponse(CPMSetBindingsOut response)
         {
             ValidateHeader(response.Header, WspMessageHeader_msg_Values.CPMSetBindingsIn);
 
-            UInt32 messageStatus = response.Header._status;
+            uint messageStatus = response.Header._status;
 
             // For any arbitrary value of Padding bytes  
             //in the array of CFullPropSpec structures, 
@@ -753,8 +750,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// RatioFinishedIn message</param>
         /// <param name="messageStatus">status of the 
         /// RatioFinishedOut message</param>
-        public void ValidateRatioFinishedOut
-            (Byte[] ratioFinishedResponse,
+        public void ValidateCPMRatioFinishedOutResponse
+            (byte[] ratioFinishedResponse,
             uint ratioFinishedCheckSum, uint messageStatus)
         {
             int startingIndex = 0;
@@ -810,7 +807,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             //MS-WSP_R549
             site.CaptureRequirementIfIsTrue(actualValue, 549,
                 string.Format(@"The 4 bytes '_ulDenominator' field of the CPMRatioFinishedOut message SHOULD be greater than zero.<17>", "this requirement is implemented"));
-                        
+
             //-----------------------       _cRows     ----
             uint cRows
                 = Helper.GetUInt(ratioFinishedResponse, ref startingIndex);
@@ -863,8 +860,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="restartPositionResponse">ValidateRestartPositionIn
         /// Response BLOB</param>
         /// <param name="restartPositionCheckSum">checksum</param>
-        public void ValidateRestartPositionInResponse
-            (Byte[] restartPositionResponse,
+        public void ValidateCPMRestartPositionInResponse
+            (byte[] restartPositionResponse,
             uint restartPositionCheckSum)
         {
             int startingIndex = 0;
@@ -880,8 +877,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// BLOB</param>
         /// <param name="approximatePositionCheckSum">checksum of
         /// ApproximatePositionIn message</param>
-        public void ValidateGetApproximatePositionOut
-            (Byte[] approximatePositionResponse,
+        public void ValidateCPMGetApproximatePositionOutReponse
+            (byte[] approximatePositionResponse,
             uint approximatePositionCheckSum)
         {
             int startingIndex = 0;
@@ -922,11 +919,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="bytes">byte array</param>
         /// <param name="sendNotifyOutCheckSum">checksum
         /// of CPMSendNotify message</param>
-        public void ValidateSendNotifyOut(Byte[] bytes,
+        public void ValidateCPMSendNotifyOutResponse(byte[] bytes,
             uint sendNotifyOutCheckSum)
         {
             int startingIndex = 0;
-            ValidateHeader(bytes, MessageType.CPMGetNotify,
+            ValidateHeader(bytes, MessageType.CPMSendNotifyOut,
            sendNotifyOutCheckSum, ref startingIndex);
             //----------------------    _watchNotify --
             uint watchNotify = Helper.GetUInt(bytes, ref startingIndex);
@@ -948,7 +945,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="compareBmkResponse">CompareBmkOut BLOB</param>
         /// <param name="compareBmkCheckSum">checksum of CompareBmkIn 
         /// message</param>
-        public void ValidateCompareBmkOut(Byte[] compareBmkResponse,
+        public void ValidateCPMCompareBmkOutResponse(byte[] compareBmkResponse,
             uint compareBmkCheckSum)
         {
             int startingIndex = 0;
@@ -976,12 +973,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="freeCursorResponse">FreeCursorOut BLOB</param>
         /// <param name="freeCursorCheckSum">checksum of FreeCursorIn 
         /// message</param>
-        public void ValidateFreeCursorOut(Byte[] freeCursorResponse,
+        public void ValidateCPMFreeCursorOutResponse(byte[] freeCursorResponse,
             uint freeCursorCheckSum)
         {
             int startingIndex = 0;
 
-            ValidateHeader(freeCursorResponse, MessageType.CPMFreeCursorIn,
+            ValidateHeader(freeCursorResponse, MessageType.CPMFreeCursorOut,
                 freeCursorCheckSum, ref startingIndex);
 
             var header = new WspMessageHeader();
@@ -1014,7 +1011,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         ///  Validates CPMGetRowsOut message
         /// </summary>
         /// <param name="rowsOutResponse">Rowsout response blob obtained</param>
-        public void ValidateGetRowsOut(CPMGetRowsOut rowsOutResponse)
+        public void ValidateCPMGetRowsOutResponse(CPMGetRowsOut rowsOutResponse)
         {
             ValidateHeader(rowsOutResponse.Header, WspMessageHeader_msg_Values.CPMGetRowsOut);
         }
@@ -1026,10 +1023,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="bytes">byte array</param>
         /// <param name="checkSum">Checksum of the message</param>
         /// <param name="cDepthPrev">value of cDepthPrev</param>
-        public void ValidateFindIndicesOut(Byte[] bytes, uint checkSum, uint cDepthPrev)
+        public void ValidateCPMFindIndicesOutResponse(byte[] bytes, uint checkSum, uint cDepthPrev)
         {
             int startingIndex = 0;
-            ValidateHeader(bytes, MessageType.CPMFindIndicesIn, checkSum, ref startingIndex);
+            ValidateHeader(bytes, MessageType.CPMFindIndicesOut, checkSum, ref startingIndex);
 
             startingIndex = 16;
 
@@ -1071,29 +1068,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="checkSum">Checksum of the message</param>
         /// <param name="eventType">event type on server</param>
         /// <param name="additionalRowsetEvent">additional rowset event on server</param>
-        public void ValidateGetRowsetNotifyOut(Byte[] bytes, uint checkSum, int eventType, bool additionalRowsetEvent)
+        public void ValidateCPMGetRowsetNotifyOutResponse(byte[] bytes, uint checkSum, int eventType, bool additionalRowsetEvent)
         {
             int startingIndex = 0;
-            ValidateHeader(bytes, MessageType.CPMGetRowsetNotifyIn, checkSum, ref startingIndex);
+            ValidateHeader(bytes, MessageType.CPMGetRowsetNotifyOut, checkSum, ref startingIndex);
 
             startingIndex = 16;
             uint wid = Helper.GetUInt(bytes, ref startingIndex);
 
-            byte[] eventsValue = Helper.GetData(bytes, ref startingIndex, 1);
+            byte[] eventValue = Helper.GetData(bytes, ref startingIndex, 1);
             byte moreEvents;
-            byte eventTypes;
-            byte bEventValue = eventsValue[0];
+            byte eventTypeValue;
+            byte bEventValue = eventValue[0];
             string sEventValue = Convert.ToString(Convert.ToInt32(bEventValue), 2);
             if (sEventValue.Substring(sEventValue.Length - 1) == "0")
             {
                 moreEvents = 0;
-                eventTypes = bEventValue;
+                eventTypeValue = bEventValue;
             }
             else
             {
                 moreEvents = 1;
-                eventTypes = Convert.ToByte(Convert.ToInt32(bEventValue) - 1);
+                eventTypeValue = (byte)(bEventValue >> 1);
             }
+
             if (eventType == (int)EventType.PROPAGATE_NONE || eventType == (int)EventType.PROPAGATE_ROWSET)
             {
                 site.CaptureRequirementIfAreEqual<uint>(0, wid, 1027,
@@ -1103,7 +1101,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 {
                     //when server responses with eventType is PROPAGATE_NONE(0), 
                     //it indicates that there were no available rowset events waiting on the server.
-                    site.CaptureRequirementIfAreEqual<uint>(0, eventTypes, 1030,
+                    site.CaptureRequirementIfAreEqual<uint>(0, eventTypeValue, 1030,
                         "[CPMGetRowsetNotifyOut]This response [PROPAGATE_NONE 0] indicates that there were no available rowset events waiting on the server.");
                 }
             }
@@ -1112,11 +1110,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             bool verifyRowsetItemState = false;
             if (eventType == (int)EventType.PROPAGATE_ADD || eventType == (int)EventType.PROPAGATE_DELETE || eventType == (int)EventType.PROPAGATE_MODIFY)
             {
-                if (Constant.DBPROP_ENABLEROWSETEVENTS)
+                if (Constants.DBPROP_ENABLEROWSETEVENTS)
                 {
                     //if DBPROP_ENABLEROWSETEVENTS is set to true, the server should generate rowset events that are relevant to the associated query,
                     //and when eventType is PROPAGATE_ADD, PROPAGATE_DELETE or PROPAGATE_MODIFY, this requirement should be covered
-                    bool generateRowsetEvent = eventType != (int)EventType.PROPAGATE_NONE && eventType != (int)EventType.PROPAGATE_ROWSET && Constant.DBPROP_ENABLEROWSETEVENTS;
+                    bool generateRowsetEvent = eventType != (int)EventType.PROPAGATE_NONE && eventType != (int)EventType.PROPAGATE_ROWSET && Constants.DBPROP_ENABLEROWSETEVENTS;
                     site.CaptureRequirementIfIsTrue(generateRowsetEvent, 1002,
                         "[Database Properties]If TRUE [property DBPROP_ENABLEROWSETEVENTS is set], this indicates that the server should generate rowset events that are relevant to the associated query.");
                 }
@@ -1137,7 +1135,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 {
                     //when server responses with eventType is PROPAGATE_ADD(1), 
                     //it indicates that an item was added to the index that may be of interest to the query originating the rowset.
-                    site.CaptureRequirementIfAreEqual<uint>((uint)EventTypeValue.PROPAGATE_ADD, eventTypes, 1031,
+                    site.CaptureRequirementIfAreEqual<uint>((uint)EventType.PROPAGATE_ADD, eventTypeValue, 1031,
                         "[CPMGetRowsetNotifyOut]This response [PROPAGATE_ADD 1] indicates that an item was added to the index that may be of interest to the query originating the rowset.");
 
                     site.CaptureRequirementIfIsTrue(verifyRowsetItemState, 201035,
@@ -1155,7 +1153,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
                     //when server responses with eventType is PROPAGATE_DELETE(2), 
                     //it indicates that an item was deleted from the index that may be of interest to the query originating the rowset.
-                    site.CaptureRequirementIfAreEqual<uint>((uint)EventTypeValue.PROPAGATE_DELETE, eventTypes, 1032,
+                    site.CaptureRequirementIfAreEqual<uint>((uint)EventType.PROPAGATE_DELETE, eventTypeValue, 1032,
                         "[CPMGetRowsetNotifyOut]This response [PROPAGATE_DELETE 2] indicates that an item was deleted from the index that may be of interest to the query originating the rowset.");
 
                 }
@@ -1170,7 +1168,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (eventType == (int)EventType.PROPAGATE_ADD)
             {
-                if (Constant.DBPROP_ENABLEROWSETEVENTS)
+                if (Constants.DBPROP_ENABLEROWSETEVENTS)
                 {
                     //if eventType is PROPAGATE_ADD, the document identifier specified by wid, should be the new rowset,
                     //while not in the original rowset, so RowsetItemState should be set to ROWSETEVENT_ITEMSTATE_NOTINROWSET.
@@ -1230,9 +1228,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 switch (Convert.ToInt32(rowsetEvent[0]))
                 {
-                    case (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED:
-                    case (int)RowsetEvent.ROWSETEVENT_TYPE_FOREGROUNDLOST:
-                    case (int)RowsetEvent.ROWSETEVENT_TYPE_SCOPESTATISTICS:
+                    case (int)RowsetEventType.ROWSETEVENT_TYPE_DATAEXPIRED:
+                    case (int)RowsetEventType.ROWSETEVENT_TYPE_FOREGROUNDLOST:
+                    case (int)RowsetEventType.ROWSETEVENT_TYPE_SCOPESTATISTICS:
                         verifyRowsetEvent = true;
                         break;
                     default:
@@ -1246,25 +1244,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             else
             {
-                site.CaptureRequirementIfAreEqual<int>((int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED, Convert.ToInt32(rowsetEvent[0]), 1043,
+                site.CaptureRequirementIfAreEqual<int>((int)RowsetEventType.ROWSETEVENT_TYPE_DATAEXPIRED, Convert.ToInt32(rowsetEvent[0]), 1043,
                     "[CPMGetRowsetNotifyOut][ROWSETEVENT_TYPE_DATAEXPIRED 0]For other eventTypes [eventType is not PROPAGATE_ROWSET] this value [rowsetEvent]  must be set to zero.");
             }
 
-            if (Constant.eventFrequency == 0)
+            if (Constants.EventFrequency == 0)
             {
-                site.CaptureRequirementIfAreNotEqual<int>((int)RowsetEvent.ROWSETEVENT_TYPE_SCOPESTATISTICS, Convert.ToInt32(rowsetEvent[0]), 1047,
+                site.CaptureRequirementIfAreNotEqual<int>((int)RowsetEventType.ROWSETEVENT_TYPE_SCOPESTATISTICS, Convert.ToInt32(rowsetEvent[0]), 1047,
                     "[CPMSetScopePrioritizationIn]When eventFrequency is set to zero the server MUST NOT issue the ROWSETEVENT_TYPE_SCOPESTATISTICS events.");
             }
 
             if (wid == 0)
             {
-                site.CaptureRequirementIfIsTrue((Convert.ToInt32(moreEvents) == 0) && (Convert.ToInt32(eventTypes) == (int)EventType.PROPAGATE_NONE)
+                site.CaptureRequirementIfIsTrue((Convert.ToInt32(moreEvents) == 0) && (Convert.ToInt32(eventTypeValue) == (int)EventType.PROPAGATE_NONE)
                     && (Convert.ToInt32(rowsetItemState[0]) == (int)RowsetItemState.ROWSETEVENT_ITEMSTATE_NOTINROWSET) && (Convert.ToInt32(changedItemState[0]) == (int)RowsetItemState.ROWSETEVENT_ITEMSTATE_NOTINROWSET)
-                    && (Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED) && (Convert.ToInt32(rowsetEventData1[0]) == 0)
+                    && (Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEventType.ROWSETEVENT_TYPE_DATAEXPIRED) && (Convert.ToInt32(rowsetEventData1[0]) == 0)
                     && (Convert.ToInt32(rowsetEventData2[0]) == 0), 1116,
                     "[When the server receives a CPMGetRowsetNotifyIn message request from a client]All fields MUST be zero when not contributing to the value specified by eventType.");
 
-                site.CaptureRequirementIfIsTrue(moreEvents == 0 && eventTypes == (int)EventType.PROPAGATE_NONE, 1117,
+                site.CaptureRequirementIfIsTrue(moreEvents == 0 && eventTypeValue == (int)EventType.PROPAGATE_NONE, 1117,
                         "[When the server receives a CPMGetRowsetNotifyIn message request from a client, " +
                         "the following fields MUST be set based upon the following event types]PROPAGATE_NONEeventType " +
                         "MUST be set to this value to indicate that there are no events available.");
@@ -1273,7 +1271,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
             {
-                if (eventType != (int)EventType.PROPAGATE_NONE && eventType != (int)EventType.PROPAGATE_ROWSET && additionalRowsetEvent && Constant.DBPROP_ENABLEROWSETEVENTS == true)
+                if (eventType != (int)EventType.PROPAGATE_NONE && eventType != (int)EventType.PROPAGATE_ROWSET && additionalRowsetEvent && Constants.DBPROP_ENABLEROWSETEVENTS == true)
                 {
                     //MS-WSP_R201122
                     site.CaptureRequirementIfIsTrue(Convert.ToInt32(moreEvents) == 1, 201122,
@@ -1302,7 +1300,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (eventType == (int)EventType.PROPAGATE_DELETE)
             {
-                if (Constant.DBPROP_ENABLEROWSETEVENTS == true)
+                if (Constants.DBPROP_ENABLEROWSETEVENTS == true)
                 {
                     if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
                     {
@@ -1344,11 +1342,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             if (eventType == (int)EventType.PROPAGATE_MODIFY)
             {
-                if (Constant.DBPROP_ENABLEROWSETEVENTS)
+                if (Constants.DBPROP_ENABLEROWSETEVENTS)
                 {
                     //when server responses with eventType is PROPAGATE_MODIFY(3), 
                     //it indicates that an item was re-indexed that may be of interest to the query originating the rowset.
-                    site.CaptureRequirementIfAreEqual<uint>((uint)EventTypeValue.PROPAGATE_MODIFY, eventTypes, 1033,
+                    site.CaptureRequirementIfAreEqual<uint>((uint)EventType.PROPAGATE_MODIFY, eventTypeValue, 1033,
                         "[CPMGetRowsetNotifyOut]This response [PROPAGATE_MODIFY 3] indicates that an item was re-indexed that may be of interest to the query originating the rowset.");
 
                     if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
@@ -1410,11 +1408,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (eventType == (int)EventType.PROPAGATE_ROWSET)
             {
-                if (Constant.DBPROP_ENABLEROWSETEVENTS == true)
+                if (Constants.DBPROP_ENABLEROWSETEVENTS == true)
                 {
                     if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
                     {
-                        if (Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED)
+                        if (Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEventType.ROWSETEVENT_TYPE_DATAEXPIRED)
                         {
                             //if rowsetEvent is ROWSETEVENT_TYPE_DATAEXPIRED,it indicates the type [ROWSETEVENT_TYPE_DATAEXPIRED] of rowset event.
                             site.CaptureRequirement(101137,
@@ -1422,7 +1420,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                                 "rowsetEvent is set to 0  value indicating the type [ROWSETEVENT_TYPE_DATAEXPIRED] of rowset event in windows.");
 
                         }
-                        else if (Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_FOREGROUNDLOST)
+                        else if (Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEventType.ROWSETEVENT_TYPE_FOREGROUNDLOST)
                         {
                             //if rowsetEvent is ROWSETEVENT_TYPE_FOREGROUNDLOST,it indicates the type [ROWSETEVENT_TYPE_FOREGROUNDLOST] of rowset event.
                             site.CaptureRequirement(201137,
@@ -1438,9 +1436,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                         }
                     }
 
-                    actualValue = Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_DATAEXPIRED
-                        || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_FOREGROUNDLOST
-                        || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEvent.ROWSETEVENT_TYPE_SCOPESTATISTICS;
+                    actualValue = Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEventType.ROWSETEVENT_TYPE_DATAEXPIRED
+                        || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEventType.ROWSETEVENT_TYPE_FOREGROUNDLOST
+                        || Convert.ToInt32(rowsetEvent[0]) == (int)RowsetEventType.ROWSETEVENT_TYPE_SCOPESTATISTICS;
 
                     //MS-WSP_R1137
                     site.CaptureRequirementIfIsTrue(actualValue,
@@ -1458,11 +1456,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="bytes">byte array</param>
         /// <param name="checkSum">Checksum of the message</param>
         /// <param name="eventFrequency"></param>
-        public void ValidateSetScopePrioritizationOut(Byte[] bytes, uint checkSum, uint eventFrequency)
+        public void ValidateCPMSetScopePrioritizationOutResponse(byte[] bytes, uint checkSum, uint eventFrequency)
         {
             int startingIndex = 0;
 
-            ValidateHeader(bytes, MessageType.CPMSetScopePrioritizationIn, checkSum, ref startingIndex);
+            ValidateHeader(bytes, MessageType.CPMSetScopePrioritizationOut, checkSum, ref startingIndex);
 
             //MS-WSP_R1049
             //message header's length equals 16,so it must be 16 if the message not include a body
@@ -1475,15 +1473,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// this message request statistics regarding the number of indexed items, the number of items needing to be indexed 
         /// and the number of items needing to be re-indexed that are relevant to the originating query.
         /// </summary>
-        /// <param name="GetScopeStatisticsOut">response of GetScopeStatustucsOut</param>
+        /// <param name="bytes">response of GetScopeStatustucsOut</param>
         /// <param name="checkSum">Checksum of the message</param>
         /// <param name="msgStatus">return value for GetScopeStatisticsOut</param>
-        public void ValidateGetScopeStatisticsOut(byte[] GetScopeStatisticsOut,
+        public void ValidateCPMGetScopeStatisticsOutResponse(byte[] bytes,
             uint checkSum, uint msgStatus)
         {
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
             {
-                if (Constant.DBPROP_ENABLEROWSETEVENTS && msgStatus == 0x00000000)
+                if (Constants.DBPROP_ENABLEROWSETEVENTS && msgStatus == 0x00000000)
                 {
                     //MS-WSP_R101157
                     site.CaptureRequirementIfAreEqual<uint>(0x00000000, msgStatus,
@@ -1500,17 +1498,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 string.Format(@"[When the server receives a CPMGetScopeStatisticsIn message request from a client, the server MUST]" +
                 "Note that the server SHOULD return zero for all statistics unless the client has explicitly requested " +
                 "their availability by setting the DBPROP_ENABLEROWSETEVENTS property to TRUE.", "this requirement is implemented"));
-            
+
             byte[] tempByteArray;
             int startingIndex = 0;
             //Verify the massage header.
-            ValidateHeader(GetScopeStatisticsOut,
+            ValidateHeader(bytes,
                 MessageType.CPMGetScopeStatisticsOut, checkSum,
                 ref startingIndex);
 
             //Get the 4 bytes data for the dwIndexedItems
             uint dwIndexedItems
-                = Helper.GetUInt(GetScopeStatisticsOut, ref startingIndex);
+                = Helper.GetUInt(bytes, ref startingIndex);
             tempByteArray
                 = BitConverter.GetBytes(dwIndexedItems);
             site.CaptureRequirementIfAreEqual<int>(4, tempByteArray.Length, 10050, "[CPMGetScopeStatisticsOut]dwOutstandingAdds (4 bytes):" +
@@ -1525,7 +1523,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             //Get the 4 bytes data for the dwOutstandingAdds
             uint dwOutstandingAdds
-                = Helper.GetUInt(GetScopeStatisticsOut, ref startingIndex);
+                = Helper.GetUInt(bytes, ref startingIndex);
             tempByteArray
                 = BitConverter.GetBytes(dwOutstandingAdds);
 
@@ -1541,7 +1539,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             //Get the 4 bytes data for the dwOutstandingAdds
             uint dwOutstandingModifies
-                = Helper.GetUInt(GetScopeStatisticsOut, ref startingIndex);
+                = Helper.GetUInt(bytes, ref startingIndex);
             tempByteArray
                 = BitConverter.GetBytes(dwOutstandingModifies);
 
@@ -1565,7 +1563,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="cbChunk">cbchunk obtained </param>
         /// <param name="cbSoFar">cbsofar parameter obtained</param>
         /// <param name="checkSum">Checksum of the message</param>
-        public void ValidateFetchValueOut(Byte[] bytes,
+        public void ValidateCPMFetchValueOutResponse(byte[] bytes,
             uint checkSum, uint cbSoFar, uint cbChunk)
         {
 
@@ -1652,7 +1650,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     "property) to the vValue field.");
 
                 int constantFields
-                    = Constant.SIZE_OF_HEADER + 3 * Constant.SIZE_OF_UINT;
+                    = Constants.SIZE_OF_HEADER + 3 * Constants.SIZE_OF_UINT;
                 uint variableLength = (uint)(cbChunk - constantFields);
 
                 if (moreExists == 0)
@@ -1694,15 +1692,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         private int GetStorageWidth(byte[] bytes, uint offset, uint vType)
         {
             int length = 0;
-            if (IsVariableLengthType((ushort)vType))
+            if (IsValidVariableLengthDataCBaseStorageVariant_vType((ushort)vType))
             {
-                switch ((vType_Values)vType)
+                switch ((CBaseStorageVariant_vType_Values)vType)
                 {
-                    case vType_Values.VT_BLOB:
-                    case vType_Values.VT_BSTR:
-                    case vType_Values.VT_LPSTR:
-                    case vType_Values.VT_LPWSTR:
-                    case vType_Values.VT_COMPRESSED_LPWSTR:
+                    case CBaseStorageVariant_vType_Values.VT_BLOB:
+                    case CBaseStorageVariant_vType_Values.VT_BSTR:
+                    case CBaseStorageVariant_vType_Values.VT_LPSTR:
+                    case CBaseStorageVariant_vType_Values.VT_LPWSTR:
+                    case CBaseStorageVariant_vType_Values.VT_COMPRESSED_LPWSTR:
                         // First 4 byte should specify the length
                         length = BitConverter.ToInt32(bytes, (int)offset);
 
@@ -1714,13 +1712,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                             "structure MUST be of length 'cbSize' in bytes.");
 
                         break;
+
                     default:
                         break;
                 }
             }
             else
             {
-                length = Helper.GetSize((vType_Values)vType, Is64bit);
+                length = Helper.GetSize((CBaseStorageVariant_vType_Values)vType, Is64bit);
             }
             return length;
         }
@@ -1730,8 +1729,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Validates RowSeekAt Type
         /// </summary>
-        /// <param name="bytes">RowSeekAttype BLOB</param>
-        private void RowsSeekAt(Byte[] bytes)
+        /// <param name="bytes">RowSeekAt type BLOB</param>
+        private void ValidateRowSeekAt(byte[] bytes)
         {
             int startingIndex = 0;
 
@@ -1765,7 +1764,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Validates RowSeekAtRatio Type
         /// </summary>
         /// <param name="bytes">RowSeekAtRatio BLOB</param>
-        private void RowSeekAtRatio(Byte[] bytes)
+        private void ValidateRowSeekAtRatio(byte[] bytes)
         {
             int startingIndex = 0;
 
@@ -1797,10 +1796,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
-        /// 
+        /// Validates RowSeekByBookmark Type
         /// </summary>
-        /// <param name="bytes"></param>
-        private void RowSeekByBookmark(Byte[] bytes)
+        /// <param name="bytes">RowSeekByBookmark BLOB</param>
+        private void ValidateRowSeekByBookmark(byte[] bytes)
         {
             int startingIndex = 0;
 
@@ -1832,19 +1831,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             index = buffer.ReadOffset;
 
-            uint messageType = (UInt32)header._msg;
+            uint messageType = (uint)header._msg;
             //type and messageType are Equal
             uint logicalOrredValue
-                = Constant.GetAllPossibleMessageTypeValue();
+                = Constants.AllPossibleMessageTypeValues;
             //Updated by:v-zhil
             //Delta testing
             bool isValidMessage
                 = (messageType & logicalOrredValue) == messageType;
             site.CaptureRequirementIfIsTrue(isValidMessage, 363,
                 "The value of the 4 bytes 'msg' field of the message header is one of the following: " +
-                "0x000000C8, 0x000000C9, 0x000000CA, 0x000000CB, 0x000000CC, 0x000000CD, 0x000000CE," +
-                "0x000000CF, 0x000000D0, 0x000000D1, 0x000000D2, 0x000000D7,  0x000000D9, 0x000000E1, " +
-                "0x000000E4, 0x000000E6, 0x000000E7, 0x000000E8, 0x000000E9, 0x000000EC,0x000000F1,0x000000F2,0x000000F3,0x000000F4.");
+                "0x000000C8, 0x000000C9, 0x000000CA, 0x000000CB, 0x000000CC, 0x000000CD, 0x000000CE, " +
+                "0x000000CF, 0x000000D0, 0x000000D1, 0x000000D2, 0x000000D7, 0x000000D9, 0x000000E1, " +
+                "0x000000E4, 0x000000E6, 0x000000E7, 0x000000E8, 0x000000E9, 0x000000EC, 0x000000F1, 0x000000F2, 0x000000F3, 0x000000F4.");
 
             site.CaptureRequirementIfIsTrue(isValidMessage, 621,
                 "When a message arrives, the server MUST check the" +
@@ -1856,11 +1855,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             #region Windows Behaviour Validation
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
             {
-                bool isValidNTStatus = IsValidNTStatus(status);
-                site.CaptureRequirementIfIsTrue(isValidNTStatus, 1,
+                bool isValidNtStatus = IsValidNtStatus(status);
+                site.CaptureRequirementIfIsTrue(isValidNtStatus, 1,
                     "This protocol also uses NTSTATUS values taken from" +
                     "the NTSTATUS number space.");
-                site.CaptureRequirementIfIsTrue(isValidNTStatus, 2,
+                site.CaptureRequirementIfIsTrue(isValidNtStatus, 2,
                     "<1>Windows only uses the values specified" +
                     "in [MS-ERREF].");
             }
@@ -1870,7 +1869,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             //Delta testing
             // If 32 bit Status field is read as Response Status,
             // Requirement 593 is validated
-            site.CaptureRequirementIfIsTrue(IsValidNTStatus(status), 593,
+            site.CaptureRequirementIfIsTrue(IsValidNtStatus(status), 593,
                 "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
                 "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
         }
@@ -1882,35 +1881,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="requestType">type of WSP message</param>
         public void ValidateHeader(WspMessageHeader header, WspMessageHeader_msg_Values requestType)
         {
-            uint messageType = (UInt32)header._msg;
+            uint messageType = (uint)header._msg;
             //type and messageType are Equal
             uint logicalOrredValue
-                = Constant.GetAllPossibleMessageTypeValue();
+                = Constants.AllPossibleMessageTypeValues;
             //Updated by:v-zhil
             //Delta testing
             bool isValidMessage
                 = (messageType & logicalOrredValue) == messageType;
             site.CaptureRequirementIfIsTrue(isValidMessage, 363,
                 "The value of the 4 bytes 'msg' field of the message header is one of the following: " +
-                "0x000000C8, 0x000000C9, 0x000000CA, 0x000000CB, 0x000000CC, 0x000000CD, 0x000000CE," +
-                "0x000000CF, 0x000000D0, 0x000000D1, 0x000000D2, 0x000000D7,  0x000000D9, 0x000000E1, " +
-                "0x000000E4, 0x000000E6, 0x000000E7, 0x000000E8, 0x000000E9, 0x000000EC,0x000000F1,0x000000F2,0x000000F3,0x000000F4.");
+                "0x000000C8, 0x000000C9, 0x000000CA, 0x000000CB, 0x000000CC, 0x000000CD, 0x000000CE, " +
+                "0x000000CF, 0x000000D0, 0x000000D1, 0x000000D2, 0x000000D7, 0x000000D9, 0x000000E1, " +
+                "0x000000E4, 0x000000E6, 0x000000E7, 0x000000E8, 0x000000E9, 0x000000EC, 0x000000F1, 0x000000F2, 0x000000F3, 0x000000F4.");
 
             site.CaptureRequirementIfIsTrue(isValidMessage, 621,
                 "When a message arrives, the server MUST check the" +
                 "_msg field value to see if it is a known type.");
-            LogIfValidMessage((MessageType)(UInt32)requestType, messageType);
+            LogIfValidMessage((MessageType)(uint)requestType, messageType);
 
             uint status = header._status;
 
             #region Windows Behaviour Validation
             if (site.Properties["IsServerWindows"].ToUpper() == "TRUE")
             {
-                bool isValidNTStatus = IsValidNTStatus(status);
-                site.CaptureRequirementIfIsTrue(isValidNTStatus, 1,
+                bool isValidNtStatus = IsValidNtStatus(status);
+                site.CaptureRequirementIfIsTrue(isValidNtStatus, 1,
                     "This protocol also uses NTSTATUS values taken from" +
                     "the NTSTATUS number space.");
-                site.CaptureRequirementIfIsTrue(isValidNTStatus, 2,
+                site.CaptureRequirementIfIsTrue(isValidNtStatus, 2,
                     "<1>Windows only uses the values specified" +
                     "in [MS-ERREF].");
             }
@@ -1920,20 +1919,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             //Delta testing
             // If 32 bit Status field is read as Response Status,
             // Requirement 593 is validated
-            site.CaptureRequirementIfIsTrue(IsValidNTStatus(status), 593,
+            site.CaptureRequirementIfIsTrue(IsValidNtStatus(status), 593,
                 "Otherwise [WSP return failed], WSP messages return a 32-bit error code " +
                 "that can either be an HRESULT or an NTSTATUS value (see section 1.8).");
         }
 
         /// <summary>
-        /// Validates the eState field of  CPMCiStateInOut message
+        /// Validates the eState field of CPMCiStateInOut message
         /// </summary>
         /// <param name="eState">eState</param>
         /// <returns>bool value</returns>
-        private bool GetEStatevalid(eState_Values eState)
+        private bool IsValidCPMCiState_eState(CPMCiState_eState_Values eState)
         {
-            UInt32 mask = Enum.GetValues(typeof(eState_Values)).Cast<UInt32>().Aggregate((UInt32)0, (x, y) => x | y);
-            if ((((UInt32)eState) & (~mask)) != 0)
+            uint mask = Enum.GetValues(typeof(CPMCiState_eState_Values)).Cast<uint>().Aggregate((uint)0, (x, y) => x | y);
+            if ((((uint)eState) & (~mask)) != 0)
             {
                 return false;
             }
@@ -1948,12 +1947,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <returns></returns>
         public ushort GetUShort(byte[] bytes, ref int startingIndex)
         {
-            byte[] tempArray = new byte[Constant.SIZE_OF_USHORT];
-            for (int i = 0; i < Constant.SIZE_OF_USHORT; i++)
+            byte[] tempArray = new byte[Constants.SIZE_OF_USHORT];
+            for (int i = 0; i < Constants.SIZE_OF_USHORT; i++)
             {
                 tempArray[i] = bytes[i + startingIndex];
             }
-            startingIndex += Constant.SIZE_OF_USHORT;
+            startingIndex += Constants.SIZE_OF_USHORT;
             return BitConverter.ToUInt16(tempArray, 0);
         }
 
@@ -1962,27 +1961,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="vType"></param>
         /// <returns></returns>
-        private bool GetValidVType(uint vType)
+        private bool IsValidCBaseStorageVariant_vType(uint vType)
         {
             bool result = false;
             bool IsValidVector
-                = (vType != (uint)(0x1000 | (int)vType_Values.VT_DECIMAL)
-                && vType != (uint)(0x1000 | (int)vType_Values.VT_INT)
-                && vType != (uint)(0x1000 | (int)vType_Values.VT_UINT)
-                && vType != (uint)(0x1000 | (int)vType_Values.VT_BLOB));
+                = (vType != (uint)(0x1000 | (int)CBaseStorageVariant_vType_Values.VT_DECIMAL)
+                && vType != (uint)(0x1000 | (int)CBaseStorageVariant_vType_Values.VT_INT)
+                && vType != (uint)(0x1000 | (int)CBaseStorageVariant_vType_Values.VT_UINT)
+                && vType != (uint)(0x1000 | (int)CBaseStorageVariant_vType_Values.VT_BLOB));
             site.CaptureRequirementIfIsTrue(IsValidVector, 7,
                 "VT_VECTOR type modifier MUST NOT be combined(binary ORed)" +
                 "with the following types: VT_INT, VT_UINT," +
                 "VT_DECIMAL, VT_BLOB.");
 
             bool isValidArray
-                = 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_I8)
-                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_UI8)
-                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_FILETIME)
-                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_CLSID)
-                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_BLOB)
-                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_LPSTR)
-                && 0x2000 != (uint)(0x2000 | (int)vType_Values.VT_LPWSTR);
+                = 0x2000 != (uint)(0x2000 | (int)CBaseStorageVariant_vType_Values.VT_I8)
+                && 0x2000 != (uint)(0x2000 | (int)CBaseStorageVariant_vType_Values.VT_UI8)
+                && 0x2000 != (uint)(0x2000 | (int)CBaseStorageVariant_vType_Values.VT_FILETIME)
+                && 0x2000 != (uint)(0x2000 | (int)CBaseStorageVariant_vType_Values.VT_CLSID)
+                && 0x2000 != (uint)(0x2000 | (int)CBaseStorageVariant_vType_Values.VT_BLOB)
+                && 0x2000 != (uint)(0x2000 | (int)CBaseStorageVariant_vType_Values.VT_LPSTR)
+                && 0x2000 != (uint)(0x2000 | (int)CBaseStorageVariant_vType_Values.VT_LPWSTR);
             site.CaptureRequirementIfIsTrue(isValidArray, 8,
                 "VT_ARRAY type modifier MUST NOT be combined(binary ORed)" +
                 "with the following types: VT_I8, VT_UI8, VT_FILETIME," +
@@ -1992,33 +1991,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             switch ((uint)vType)
             {
-                case (uint)vType_Values.VT_BLOB:
-                case (uint)vType_Values.VT_BOOL:
-                case (uint)vType_Values.VT_BSTR:
-                case (uint)vType_Values.VT_CLSID:
-                case (uint)vType_Values.VT_COMPRESSED_LPWSTR:
-                case (uint)vType_Values.VT_CY:
-                case (uint)vType_Values.VT_DATE:
-                case (uint)vType_Values.VT_DECIMAL:
-                case (uint)vType_Values.VT_EMPTY:
-                case (uint)vType_Values.VT_ERROR:
-                case (uint)vType_Values.VT_FILETIME:
-                case (uint)vType_Values.VT_I1:
-                case (uint)vType_Values.VT_I2:
-                case (uint)vType_Values.VT_I4:
-                case (uint)vType_Values.VT_I8:
-                case (uint)vType_Values.VT_INT:
-                case (uint)vType_Values.VT_LPSTR:
-                case (uint)vType_Values.VT_LPWSTR:
-                case (uint)vType_Values.VT_NULL:
-                case (uint)vType_Values.VT_R4:
-                case (uint)vType_Values.VT_R8:
-                case (uint)vType_Values.VT_UI1:
-                case (uint)vType_Values.VT_UI2:
-                case (uint)vType_Values.VT_UI4:
-                case (uint)vType_Values.VT_UI8:
-                case (uint)vType_Values.VT_UINT:
-                case (uint)vType_Values.VT_VARIANT:
+                case (uint)CBaseStorageVariant_vType_Values.VT_BLOB:
+                case (uint)CBaseStorageVariant_vType_Values.VT_BOOL:
+                case (uint)CBaseStorageVariant_vType_Values.VT_BSTR:
+                case (uint)CBaseStorageVariant_vType_Values.VT_CLSID:
+                case (uint)CBaseStorageVariant_vType_Values.VT_COMPRESSED_LPWSTR:
+                case (uint)CBaseStorageVariant_vType_Values.VT_CY:
+                case (uint)CBaseStorageVariant_vType_Values.VT_DATE:
+                case (uint)CBaseStorageVariant_vType_Values.VT_DECIMAL:
+                case (uint)CBaseStorageVariant_vType_Values.VT_EMPTY:
+                case (uint)CBaseStorageVariant_vType_Values.VT_ERROR:
+                case (uint)CBaseStorageVariant_vType_Values.VT_FILETIME:
+                case (uint)CBaseStorageVariant_vType_Values.VT_I1:
+                case (uint)CBaseStorageVariant_vType_Values.VT_I2:
+                case (uint)CBaseStorageVariant_vType_Values.VT_I4:
+                case (uint)CBaseStorageVariant_vType_Values.VT_I8:
+                case (uint)CBaseStorageVariant_vType_Values.VT_INT:
+                case (uint)CBaseStorageVariant_vType_Values.VT_LPSTR:
+                case (uint)CBaseStorageVariant_vType_Values.VT_LPWSTR:
+                case (uint)CBaseStorageVariant_vType_Values.VT_NULL:
+                case (uint)CBaseStorageVariant_vType_Values.VT_R4:
+                case (uint)CBaseStorageVariant_vType_Values.VT_R8:
+                case (uint)CBaseStorageVariant_vType_Values.VT_UI1:
+                case (uint)CBaseStorageVariant_vType_Values.VT_UI2:
+                case (uint)CBaseStorageVariant_vType_Values.VT_UI4:
+                case (uint)CBaseStorageVariant_vType_Values.VT_UI8:
+                case (uint)CBaseStorageVariant_vType_Values.VT_UINT:
+                case (uint)CBaseStorageVariant_vType_Values.VT_VARIANT:
                     result = true;
                     break;
                 default:
@@ -2034,201 +2033,197 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="basevType_Values">Type of data storrage type</param>
         /// <returns>Fixed length data blob</returns>
         private byte[] ReadFixedLengthData(byte[] row,
-            ref int rowIndex, vType_Values basevType_Values)
+            ref int rowIndex, CBaseStorageVariant_vType_Values basevType_Values)
         {
             byte[] fixedSizedData = null;
             switch (basevType_Values)
             {
-
-                case vType_Values.VT_I1:
-
+                case CBaseStorageVariant_vType_Values.VT_I1:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_BYTE);
-                    //Successful Retrieval of 1 byte
-                    // validates requirement 12
+                        Constants.SIZE_OF_BYTE);
+                    // Successful Retrieval of 1 byte validates requirement 12
                     site.CaptureRequirement(12,
                         "The size of VT_I1  value of the vValue field of" +
                         "CBaseStorageVariant structure is 1 byte.");
                     break;
-                case vType_Values.VT_UI1:
+
+                case CBaseStorageVariant_vType_Values.VT_UI1:
                     // Read One Bytes
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_BYTE);
-                    //Successful Retrieval of 1 byte
-                    // validates requirement 13
+                        Constants.SIZE_OF_BYTE);
+                    // Successful Retrieval of 1 byte validates requirement 13
                     site.CaptureRequirement(13,
                         "The size of VT_UI1  value of the vValue field" +
                         "of CBaseStorageVariant structure is 1 byte.");
                     break;
-                case vType_Values.VT_I2:
+
+                case CBaseStorageVariant_vType_Values.VT_I2:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_USHORT);
-                    //Successful Retrieval of 2 bytes
-                    // validates requirement 14
+                        Constants.SIZE_OF_USHORT);
+                    // Successful Retrieval of 2 bytes validates requirement 14
                     site.CaptureRequirement(14,
                     "The size of VT_I2  value of the vValue field of" +
                     "CBaseStorageVariant structure is 2 bytes.");
                     break;
-                case vType_Values.VT_UI2:
+
+                case CBaseStorageVariant_vType_Values.VT_UI2:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_USHORT);
-                    //Successful Retrieval of 2 bytes
-                    // validates requirement 15
+                        Constants.SIZE_OF_USHORT);
+                    // Successful Retrieval of 2 bytes validates requirement 15
                     site.CaptureRequirement(15,
                         "The size of VT_UI2  value of the vValue field " +
                         "of CBaseStorageVariant structure is 2 bytes.");
                     break;
-                case vType_Values.VT_BOOL:
+
+                case CBaseStorageVariant_vType_Values.VT_BOOL:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_USHORT);
-                    //Successful Retrieval of 2 bytes
-                    // validates requirement 16
+                        Constants.SIZE_OF_USHORT);
+                    // Successful Retrieval of 2 bytes validates requirement 16
                     site.CaptureRequirement(16,
                         "The size of VT_BOOL  value of the vValue field" +
                         "of CBaseStorageVariant structure is 2 bytes.");
                     break;
-                case vType_Values.VT_I4:
+
+                case CBaseStorageVariant_vType_Values.VT_I4:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 4 bytes
-                    // validates requirement 17
+                        Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 4 bytes validates requirement 17
                     site.CaptureRequirement(17,
                         "The size of VT_I4  value of the vValue field of" +
                         "CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case vType_Values.VT_UI4:
+
+                case CBaseStorageVariant_vType_Values.VT_UI4:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 4 bytes
-                    // validates requirement 18
+                        Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 4 bytes validates requirement 18
                     site.CaptureRequirement(18,
                         "The size of VT_UI4  value of the vValue field of" +
                         "CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case vType_Values.VT_R4:
+
+                case CBaseStorageVariant_vType_Values.VT_R4:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 4 bytes
-                    // validates requirement 19
+                        Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 4 bytes validates requirement 19
                     site.CaptureRequirement(19,
                         "The size of VT_R4  value of the vValue field of" +
                         "CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case vType_Values.VT_INT:
+
+                case CBaseStorageVariant_vType_Values.VT_INT:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 4 bytes
-                    // validates requirement 20
+                        Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 4 bytes validates requirement 20
                     site.CaptureRequirement(20,
                         "The size of VT_INT  value of the vValue field" +
                         "of CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case vType_Values.VT_UINT:
+
+                case CBaseStorageVariant_vType_Values.VT_UINT:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 4 bytes
-                    // validates requirement 21
+                        Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 4 bytes validates requirement 21
                     site.CaptureRequirement(21,
                         "The size of VT_UINT  value of the vValue field " +
                         "of CBaseStorageVariant structure is 4 bytes.");
                     break;
-                case vType_Values.VT_ERROR:
+
+                case CBaseStorageVariant_vType_Values.VT_ERROR:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 4 bytes
-                    // validates requirement 22
+                        Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 4 bytes validates requirement 22
                     site.CaptureRequirement(22,
                         "The size of VT_ERROR  value of the vValue field" +
                         "of CBaseStorageVariant structure is 4 bytes.");
                     break;
 
-                case vType_Values.VT_I8:
+                case CBaseStorageVariant_vType_Values.VT_I8:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        2 * Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 8 bytes
-                    // validates requirement 23
+                        2 * Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 8 bytes validates requirement 23
                     site.CaptureRequirement(23,
                     "The size of VT_I8 value of the vValue field of" +
                     "CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case vType_Values.VT_UI8:
+
+                case CBaseStorageVariant_vType_Values.VT_UI8:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
-                        2 * Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 8 bytes
-                    // validates requirement 24
+                        2 * Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 8 bytes validates requirement 24
                     site.CaptureRequirement(24,
                         "The size of VT_UI8 value of the vValue field of" +
                         "CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case vType_Values.VT_R8:
+
+                case CBaseStorageVariant_vType_Values.VT_R8:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
-                        2 * Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 8 bytes
-                    // validates requirement 25
+                        2 * Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 8 bytes validates requirement 25
                     site.CaptureRequirement(25, "The size of VT_R8 value" +
                         "of the vValue field of CBaseStorageVariant " +
                         "structure is 8 bytes.");
                     break;
-                case vType_Values.VT_CY:
+
+                case CBaseStorageVariant_vType_Values.VT_CY:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
-                        2 * Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 8 bytes
-                    // validates requirement 26
+                        2 * Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 8 bytes validates requirement 26
                     site.CaptureRequirement(26,
                         "The size of VT_CY value of the vValue field of" +
                         "CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case vType_Values.VT_DATE:
+
+                case CBaseStorageVariant_vType_Values.VT_DATE:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
-                        2 * Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 8 bytes
-                    // validates requirement 27
+                        2 * Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 8 bytes validates requirement 27
                     site.CaptureRequirement(27,
                         "The size of VT_DATE value of the vValue field" +
                         "of CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case vType_Values.VT_FILETIME:
+
+                case CBaseStorageVariant_vType_Values.VT_FILETIME:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
-                        2 * Constant.SIZE_OF_UINT);
-                    //Successful Retrieval of 8 bytes
-                    // validates requirement 28
+                        2 * Constants.SIZE_OF_UINT);
+                    // Successful Retrieval of 8 bytes validates requirement 28
                     site.CaptureRequirement(28,
                         "The size of VT_FILETIME value of the vValue" +
                         "field of CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case vType_Values.VT_DECIMAL:
+
+                case CBaseStorageVariant_vType_Values.VT_DECIMAL:
                     fixedSizedData
                         = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_GUID);
-                    //Successful Retrieval of 16 bytes
-                    // validates requirement 29
+                        Constants.SIZE_OF_GUID);
+                    // Successful Retrieval of 16 bytes validates requirement 29
                     site.CaptureRequirement(29,
                         "The size of VT_DECIMAL value of the vValue field" +
                         "of CBaseStorageVariant structure is 8 bytes.");
                     break;
-                case vType_Values.VT_CLSID:
+
+                case CBaseStorageVariant_vType_Values.VT_CLSID:
                     fixedSizedData = Helper.GetData(row, ref rowIndex,
-                        Constant.SIZE_OF_GUID);
-                    //Successful Retrieval of 16 bytes
-                    // validates requirement 30
+                        Constants.SIZE_OF_GUID);
+                    // Successful Retrieval of 16 bytes validates requirement 30
                     site.CaptureRequirement(30,
                         "The size of VT_FILETIME value of the vValue field" +
                         "of CBaseStorageVariant structure is 8 bytes.");
                     break;
-
             }
+
             return fixedSizedData;
         }
 
@@ -2239,7 +2234,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="offset2"></param>
         /// <param name="actualLength"></param>
         /// <returns></returns>
-        private byte[] ReadVariableDataFromBuffer(byte[] rowsInResponse,
+        private byte[] ReadVariableLengthDataFromBuffer(byte[] rowsInResponse,
             uint offset2, int actualLength)
         {
             byte[] value = new byte[actualLength];
@@ -2247,23 +2242,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             return value;
         }
 
-        private bool IsVariableLengthType(ushort actualType)
+        private bool IsValidVariableLengthDataCBaseStorageVariant_vType(ushort actualType)
         {
-            bool isVariableType = false;
-            switch ((vType_Values)actualType)
+            bool isValid = false;
+            switch ((CBaseStorageVariant_vType_Values)actualType)
             {
-                case vType_Values.VT_BLOB:
-                case vType_Values.VT_BSTR:
-                case vType_Values.VT_LPSTR:
-                case vType_Values.VT_LPWSTR:
-                case vType_Values.VT_COMPRESSED_LPWSTR:
-                case vType_Values.VT_VARIANT:
-                    isVariableType = true;
+                case CBaseStorageVariant_vType_Values.VT_BLOB:
+                case CBaseStorageVariant_vType_Values.VT_BSTR:
+                case CBaseStorageVariant_vType_Values.VT_LPSTR:
+                case CBaseStorageVariant_vType_Values.VT_LPWSTR:
+                case CBaseStorageVariant_vType_Values.VT_COMPRESSED_LPWSTR:
+                case CBaseStorageVariant_vType_Values.VT_VARIANT:
+                    isValid = true;
                     break;
+
                 default:
                     break;
             }
-            return isVariableType;
+
+            return isValid;
         }
 
         /// <summary>
@@ -2271,7 +2268,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="status">4 byte unsigned status</param>
         /// <returns>true if it is a valid NT_STATUS, else false</returns>
-        private bool IsValidNTStatus(uint status)
+        private bool IsValidNtStatus(uint status)
         {
             bool isValidStatus = false;
             // 0x00000000 to 0x3FFFFFFF represents SUCCESS Status

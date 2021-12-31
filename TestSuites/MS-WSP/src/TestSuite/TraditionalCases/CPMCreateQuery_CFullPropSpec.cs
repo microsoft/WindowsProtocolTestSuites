@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -1064,16 +1064,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             var columnSet = new CColumnSet();
             columnSet.count = 3;
             columnSet.indexes = new uint[] { 0, 1, 3 };
 
-            CBaseStorageVariant queryPathVaraint = wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(queryPath));
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray(
-                wspAdapter.builder.GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, queryPathVaraint),
-                wspAdapter.builder.GetContentRestriction(queryText, WspConsts.System_FileName, _ulGenerateMethod_Values.GENERATE_METHOD_PREFIX));
+            CBaseStorageVariant queryPathVaraint = wspAdapter.Builder.GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_LPWSTR, new VT_LPWSTR(queryPath));
+            var restrictionArray = wspAdapter.Builder.GetRestrictionArray(
+                wspAdapter.Builder.GetPropertyRestriction(CPropertyRestriction_relop_Values.PREQ, WspConsts.System_Search_Scope, queryPathVaraint),
+                wspAdapter.Builder.GetContentRestriction(queryText, WspConsts.System_FileName, CContentRestriction_ulGenerateMethod_Values.GENERATE_METHOD_PREFIX));
 
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
@@ -1090,18 +1090,18 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             inGroupSortAggregSets.SortSets = new CSortSet[1];
             inGroupSortAggregSets.SortSets[0].count = 1;
             inGroupSortAggregSets.SortSets[0].sortArray = new CSort[1];
-            inGroupSortAggregSets.SortSets[0].sortArray[0].dwOrder = dwOrder_Values.QUERY_SORTASCEND;
+            inGroupSortAggregSets.SortSets[0].sortArray[0].dwOrder = CSort_dwOrder_Values.QUERY_SORTASCEND;
             inGroupSortAggregSets.SortSets[0].sortArray[0].pidColumn = 3; // Sort by file name.
-            inGroupSortAggregSets.SortSets[0].sortArray[0].locale = wspAdapter.builder.parameter.LcidValue;
+            inGroupSortAggregSets.SortSets[0].sortArray[0].locale = wspAdapter.Builder.Parameter.LcidValue;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, inGroupSortAggregSets, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.Builder.Parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
-                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
-                wspAdapter.builder.GetTableColumn(property, vType_Values.VT_VARIANT),
-                wspAdapter.builder.GetTableColumn(WspConsts.System_FileName, vType_Values.VT_VARIANT)
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_ItemName, CBaseStorageVariant_vType_Values.VT_VARIANT),
+                wspAdapter.Builder.GetTableColumn(property, CBaseStorageVariant_vType_Values.VT_VARIANT),
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_FileName, CBaseStorageVariant_vType_Values.VT_VARIANT)
             };
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
@@ -1128,7 +1128,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             for (var i = 0; i < expectedResults.Length; i++)
             {
                 var fileName = queryResult.Rows[i].Columns[2].Data as string;
-                Site.Assert.AreEqual(expectedResults[i], (T)queryResult.Rows[i].Columns[1].Data, $"The {propertyName} of {fileName} shoulde be {expectedResults[i]}");
+                Site.Assert.IsNotNull(queryResult.Rows[i].Columns[1].Data, $"The {propertyName} of {fileName} should not be null if the server supports querying the property.");
+
+                Site.Assert.AreEqual(expectedResults[i], (T)queryResult.Rows[i].Columns[1].Data, $"The \"{propertyName}\" of \"{fileName}\" should be \"{expectedResults[i]}\".");
             }
         }
 
@@ -1138,9 +1140,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             for (var i = 0; i < expectedResults.Length; i++)
             {
                 var fileName = queryResult.Rows[i].Columns[2].Data as string;
+                Site.Assert.IsNotNull(queryResult.Rows[i].Columns[1].Data, $"The \"{propertyName}\" of \"{fileName}\" should not be null if the server supports querying the property.");
+
                 var dataArray = queryResult.Rows[i].Columns[1].Data as T[];
                 var succeed = expectedResults[i].SequenceEqual(dataArray);
-                Site.Assert.IsTrue(succeed, $"The {propertyName} of {fileName} shoulde be {GetPrintableVector(expectedResults[i])}");
+                Site.Assert.IsTrue(succeed, $"The \"{propertyName}\" of \"{fileName}\" should be \"{GetPrintableVector(expectedResults[i])}\".");
             }
         }
 

@@ -28,15 +28,15 @@ The MS-WSP test suite requires the test environment including:
 - Generic software installed on the machines.
 - Ethernet network.
 
-| **Device Type** | **Role**                                                         | **Description**                                          |
-| --------------- | ---------------------------------------------------------------- | -------------------------------------------------------- |
-| Hardware        | SUT                                                              | System Under Test.                                       |
-|                 | Driver Computer                                                  | Driver computer to run the test suite.                   |
-| Service         | SUT                                                              | An implementation of MS-WSP.                             |
-|                 | Driver Computer                                                  | None.                                                    |
-| Software        | SUT                                                              | None.                                                    |
-|                 | Driver Computer                                                  | Install the software to enable the running of test suite. |
-| Network         | The network is an isolated hub/switch connected Ethernet network |
+| **Device Type** | **Role**        | **Description**                                                  |
+| --------------- | --------------- | ---------------------------------------------------------------- |
+| Hardware        | SUT             | System Under Test.                                               |
+|                 | Driver Computer | Driver computer to run the test suite.                           |
+| Service         | SUT             | An implementation of MS-WSP.                                     |
+|                 | Driver Computer | None.                                                            |
+| Software        | SUT             | None.                                                            |
+|                 | Driver Computer | Install the software to enable the running of test suite.        |
+| Network         |                 | The network is an isolated hub/switch connected Ethernet network |
 
 ### 1.2 Network Settings
 
@@ -52,7 +52,7 @@ They can communicate each other via host names or IP addresses.
 
 The following software is needed to install on Driver Computer.
 
-- [.NET SDK of the latest version](https://dotnet.microsoft.com/download)
+- [.NET SDK](https://dotnet.microsoft.com/download/dotnet) of the same version used to build the test suite
 - [MS-WSP test suite](https://github.com/microsoft/WindowsProtocolTestSuites/releases)
 - Any compatible tool to unzip standard ZIP archives
 
@@ -117,7 +117,7 @@ Once the **MS-WSP_ServerTestSuite.deployment.ptfconfig** file is configured acco
 
 - Navigate to the path of test suite execution scripts folder, it should be `<Path to the MS-WSP test suite installation>\Batch`.
   
-- Start a new PowerShell console window from the test suite execution scripts folder. To start the console window, please right-click with holding **Shift** key down in the free space of the **Explorer** window, and choose the **Open PowerShell window here** context menu item.
+- Start a new PowerShell console window from the test suite execution scripts folder. To start the console window, please right-click with holding **Shift** key down in the free area of the **Explorer** window, and choose the **Open PowerShell window here** context menu item (or choose the **Open command window here** context menu item and type `powershell` and then type **Enter** button in the opened command window) to open a PowerShell console window starting from the current folder.
 
 - Call `RunAllTestCases.ps1` from the PowerShell console window to run all MS-WSP test cases.
   
@@ -189,6 +189,12 @@ The table below lists all the model-based cases.
 ### 4.1 How to index files on Windows Server
 
 - Go to **Start** and type `services.msc` in the search field, press **Enter**. Find out **Windows Search** service and right-click it. Change **Startup type** to **Manual** and Click **Start**.
+
+  - If the **Windows Search** service does not present in the service list, it may be not installed on the current Windows installation. Please refer to the following page [Enable the Windows Search service if you want to use the Search for Shapes feature in Visio 2010 or in Visio 2013](https://docs.microsoft.com/en-us/office/troubleshoot/visio/search-for-shapes-use-windows-search) to enable **Windows Search** service. And the **Windows Search** service can also be installed by running the following command.
+
+    ```powershell
+    Install-WindowsFeature Search-Service
+    ```
 
 ![image5](./image/MS-WSP_TestSuiteUserGuide/image5.png)
 

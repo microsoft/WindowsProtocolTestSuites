@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CPMConnectIn message begins a session between the client and server.
@@ -13,23 +13,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit integer indicating whether the server is to validate the checksum value specified in the _ulChecksum field of the message headers for messages sent by the client.
         /// </summary>
-        public UInt32 _iClientVersion;
+        public uint _iClientVersion;
 
         /// <summary>
         /// A Boolean value indicating if the client is running on a different machine than the server.
         /// This field is set to 0x00000001 if the client is running on a different machine and 0x00000000 if it is not.
         /// </summary>
-        public UInt32 _fClientIsRemote;
+        public uint _fClientIsRemote;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the size, in bytes, of the cPropSets, PropertySet1, and PropertySet2 fields combined.
         /// </summary>
-        public UInt32 _cbBlob1;
+        public uint _cbBlob1;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the size in bytes of the cExtPropSet and aPropertySet fields, combined.
         /// </summary>
-        public UInt32 _cbBlob2;
+        public uint _cbBlob2;
 
         /// <summary>
         /// The machine name of the client. The name string MUST be a null-terminated array of less than 512 Unicode characters, including the null terminator.
@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of CDbPropSet structures following this field.
         /// </summary>
-        public UInt32 cPropSets;
+        public uint cPropSets;
 
         /// <summary>
         /// A CDbPropSet structure with guidPropertySet containing DBPROPSET_FSCIFRMWRK_EXT.
@@ -63,7 +63,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// A 32-bit unsigned integer indicating the number of CDbPropSet structures following this field.
         /// This field must be greater than or equal to 1.
         /// </summary>
-        public UInt32 cExtPropSet;
+        public uint cExtPropSet;
 
         /// <summary>
         /// An array of CDbPropSet structures specifying other properties. The number of elements in this array MUST be equal to cExtPropSet.
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             var bodyBytes = GetBodyBytes();
 
-            UInt32 checksum = Helper.CalculateCheckSum(WspMessageHeader_msg_Values.CPMConnectIn, bodyBytes);
+            var checksum = Helper.CalculateChecksum(WspMessageHeader_msg_Values.CPMConnectIn, bodyBytes);
 
             var header = Header;
 
@@ -110,7 +110,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             PropertySet2.ToBytes(bufferForBlob1);
 
-            _cbBlob1 = (UInt32)bufferForBlob1.WriteOffset;
+            _cbBlob1 = (uint)bufferForBlob1.WriteOffset;
 
             tempBuffer.Add(_cbBlob1);
 
@@ -123,7 +123,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 propertySet.ToBytes(bufferForBlob2);
             }
 
-            _cbBlob2 = (UInt32)bufferForBlob2.WriteOffset;
+            _cbBlob2 = (uint)bufferForBlob2.WriteOffset;
 
             tempBuffer.Add(_cbBlob2, 8);
 

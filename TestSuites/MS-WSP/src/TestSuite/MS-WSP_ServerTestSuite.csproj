@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\Wsp.csproj" />
     <ProjectReference Include="..\Adapter\MS-WSP_ServerAdapter.csproj" />
   </ItemGroup>
 

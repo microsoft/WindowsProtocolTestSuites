@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CPMFreeCursorOut message replies to a CPMFreeCursorIn message with the results of freeing a cursor.
@@ -20,7 +20,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public IWspInMessage Request { get; set; }
 
         public WspMessageHeader Header { get; set; }
-
 
         public void FromBytes(WspBuffer buffer)
         {

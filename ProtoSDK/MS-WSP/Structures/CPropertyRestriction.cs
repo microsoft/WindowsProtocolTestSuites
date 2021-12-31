@@ -3,12 +3,12 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// A 32-bit integer specifying the relation to perform on the property. 
     /// </summary>
-    public enum _relop_Values : UInt32
+    public enum CPropertyRestriction_relop_Values : uint
     {
         /// <summary>
         /// A less-than comparison.
@@ -71,12 +71,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// For each row, the value returned by the specific property in the row is compared against the constant to determine if it has the relationship specified by the _relop field.
     /// For the comparison to be true, the datatypes of the values MUST match.
     /// </summary>
-    public struct CPropertyRestriction : IWspStructure
+    public struct CPropertyRestriction : IWspRestriction
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the relation to perform on the property.
         /// </summary>
-        public _relop_Values _relop;
+        public CPropertyRestriction_relop_Values _relop;
 
         /// <summary>
         /// A CFullPropSpec structure indicating the property on which to perform a match operation.
@@ -91,7 +91,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer representing locale for the string contained in _prval, as specified in [MS-LCID].
         /// </summary>
-        public UInt32 _lcid;
+        public uint _lcid;
 
         public void FromBytes(WspBuffer buffer)
         {

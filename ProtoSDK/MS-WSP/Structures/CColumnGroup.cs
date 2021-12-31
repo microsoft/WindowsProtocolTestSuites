@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CColumnGroup structure contains information about a property's weight in a single group.
@@ -13,13 +13,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer containing the number of elements in the Props array.
         /// </summary>
-        public UInt32 count;
+        public uint count;
 
         /// <summary>
         /// A 32-bit unsigned integer specifying group ID, a full property specification that can be used in the corresponding CProbRestriction.
         /// The value of _groupPid MUST satisfy the following result: (0xFFFF0000 & _groupPid) == 0x7FFF0000.
         /// </summary>
-        public UInt32 _groupPid;
+        public uint _groupPid;
 
         /// <summary>
         /// An array of SProperty structures, each specifying a PID and a weight for a property.

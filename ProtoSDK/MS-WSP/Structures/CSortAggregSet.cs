@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CSortAggregSet structure contains information about group sorting.
@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of entries in SortKeys.
         /// </summary>
-        public UInt32 cCount;
+        public uint cCount;
 
         /// <summary>
         /// An array of CAggregSortKey structures, each describing a sort order.

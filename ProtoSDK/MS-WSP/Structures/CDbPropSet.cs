@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CDbPropSet structure contains a set of properties.
@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer containing the number of elements in the aProps array.
         /// </summary>
-        public UInt32 cProperties;
+        public uint cProperties;
 
         /// <summary>
         /// An array of CDbProp structures containing properties.

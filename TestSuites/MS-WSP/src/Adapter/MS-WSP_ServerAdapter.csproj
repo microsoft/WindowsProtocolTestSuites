@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>MS-WSP_ServerAdapter</AssemblyName>
-    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter</RootNamespace>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj" />
-    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\Wsp.csproj" />
   </ItemGroup>
 
 </Project>

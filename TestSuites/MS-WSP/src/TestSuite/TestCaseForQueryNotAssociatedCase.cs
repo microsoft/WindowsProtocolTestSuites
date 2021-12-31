@@ -17,11 +17,9 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     using Microsoft.Protocols.TestTools.Messages.Runtime;
     using System;
 
-
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class TestCaseForQueryNotAssociatedCase : WspModelTestBase
     {
-
         public TestCaseForQueryNotAssociatedCase()
         {
             this.SetSwitch("generatedtestpath", "..\\\\TestSuite");
@@ -50,11 +48,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         public delegate void CPMFreeCursorOutResponseDelegate1(uint errorCode);
 
-        public delegate void GetServerPlatformDelegate1(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion platform, bool @return);
+        public delegate void GetServerPlatformDelegate1(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.SkuOsVersion platform, bool @return);
 
         public delegate void CPMCreateQueryOutResponseDelegate1(uint errorCode);
 
-        public delegate void CPMGetRowsOutDelegate1(uint errorCode);
+        public delegate void CPMGetRowsOutResponseDelegate1(uint errorCode);
 
         public delegate void CPMCiStateInOutResponseDelegate1(uint errorCode);
 
@@ -70,74 +68,74 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         #endregion
 
         #region Event Metadata
-        static System.Reflection.MethodBase CPMConnectInRequestInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMConnectInRequest");
+        static System.Reflection.MethodBase CPMConnectInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMConnectIn");
 
-        static System.Reflection.EventInfo CPMConnectOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMConnectOutResponse");
+        static System.Reflection.EventInfo CPMConnectOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMConnectOutResponse");
 
-        static System.Reflection.MethodBase CPMGetQueryStatusInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetQueryStatusIn", typeof(bool));
+        static System.Reflection.MethodBase CPMGetQueryStatusInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetQueryStatusIn", typeof(bool));
 
-        static System.Reflection.EventInfo CPMGetQueryStatusOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetQueryStatusOutResponse");
+        static System.Reflection.EventInfo CPMGetQueryStatusOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetQueryStatusOutResponse");
 
-        static System.Reflection.MethodBase CPMGetQueryStatusExInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetQueryStatusExIn", typeof(bool));
+        static System.Reflection.MethodBase CPMGetQueryStatusExInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetQueryStatusExIn", typeof(bool));
 
-        static System.Reflection.EventInfo CPMGetQueryStatusExOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetQueryStatusExOutResponse");
+        static System.Reflection.EventInfo CPMGetQueryStatusExOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetQueryStatusExOutResponse");
 
-        static System.Reflection.MethodBase CPMRatioFinishedInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMRatioFinishedIn", typeof(bool));
+        static System.Reflection.MethodBase CPMRatioFinishedInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMRatioFinishedIn", typeof(bool));
 
-        static System.Reflection.EventInfo CPMRatioFinishedOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMRatioFinishedOutResponse");
+        static System.Reflection.EventInfo CPMRatioFinishedOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMRatioFinishedOutResponse");
 
-        static System.Reflection.MethodBase CPMGetNotifyInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetNotify", typeof(bool));
+        static System.Reflection.MethodBase CPMGetNotifyInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetNotify", typeof(bool));
 
-        static System.Reflection.EventInfo CPMSendNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSendNotifyOutResponse");
+        static System.Reflection.EventInfo CPMSendNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMSendNotifyOutResponse");
 
-        static System.Reflection.MethodBase CPMSetBindingsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSetBindingsIn", typeof(bool), typeof(bool));
+        static System.Reflection.MethodBase CPMSetBindingsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMSetBindingsIn", typeof(bool), typeof(bool));
 
-        static System.Reflection.EventInfo CPMSetBindingsInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSetBindingsInResponse");
+        static System.Reflection.EventInfo CPMSetBindingsInResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMSetBindingsInResponse");
 
-        static System.Reflection.MethodBase CPMFetchValueInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFetchValueIn", typeof(bool));
+        static System.Reflection.MethodBase CPMFetchValueInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMFetchValueIn", typeof(bool));
 
-        static System.Reflection.EventInfo CPMFetchValueOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFetchValueOutResponse");
+        static System.Reflection.EventInfo CPMFetchValueOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMFetchValueOutResponse");
 
-        static System.Reflection.MethodBase CPMFreeCursorInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFreeCursorIn", typeof(bool));
+        static System.Reflection.MethodBase CPMFreeCursorInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMFreeCursorIn", typeof(bool));
 
-        static System.Reflection.EventInfo CPMFreeCursorOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFreeCursorOutResponse");
+        static System.Reflection.EventInfo CPMFreeCursorOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMFreeCursorOutResponse");
 
-        static System.Reflection.MethodBase GetServerPlatformInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "GetServerPlatform", typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.SkuOsVersion).MakeByRefType());
+        static System.Reflection.MethodBase GetServerPlatformInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "GetServerPlatform", typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.SkuOsVersion).MakeByRefType());
 
-        static System.Reflection.MethodBase CPMCreateQueryInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCreateQueryIn", typeof(bool));
+        static System.Reflection.MethodBase CPMCreateQueryInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMCreateQueryIn", typeof(bool));
 
-        static System.Reflection.MethodBase CPMGetRowsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetRowsIn", typeof(bool));
+        static System.Reflection.MethodBase CPMGetRowsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetRowsIn", typeof(bool));
 
-        static System.Reflection.MethodBase CPMCiStateInOutInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOut");
+        static System.Reflection.MethodBase CPMCiStateInOutInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMCiStateInOut");
 
-        static System.Reflection.MethodBase CPMDisconnectInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMDisconnect");
+        static System.Reflection.MethodBase CPMDisconnectInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMDisconnect");
 
-        static System.Reflection.MethodBase CPMFindIndicesInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFindIndicesIn", typeof(bool));
+        static System.Reflection.MethodBase CPMFindIndicesInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMFindIndicesIn", typeof(bool));
 
-        static System.Reflection.MethodBase CPMGetRowsetNotifyInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetRowsetNotifyIn", typeof(int), typeof(bool));
+        static System.Reflection.MethodBase CPMGetRowsetNotifyInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetRowsetNotifyIn", typeof(int), typeof(bool));
 
-        static System.Reflection.MethodBase CPMSetScopePrioritizationInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSetScopePrioritizationIn", typeof(uint));
+        static System.Reflection.MethodBase CPMSetScopePrioritizationInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMSetScopePrioritizationIn", typeof(uint));
 
-        static System.Reflection.MethodBase CPMGetScopeStatisticsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetScopeStatisticsIn");
+        static System.Reflection.MethodBase CPMGetScopeStatisticsInInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetScopeStatisticsIn");
 
-        static System.Reflection.EventInfo CPMCreateQueryOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCreateQueryOutResponse");
+        static System.Reflection.EventInfo CPMCreateQueryOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMCreateQueryOutResponse");
 
-        static System.Reflection.EventInfo CPMGetRowsOutInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetRowsOut");
+        static System.Reflection.EventInfo CPMGetRowsOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetRowsOutResponse");
 
-        static System.Reflection.EventInfo CPMCiStateInOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMCiStateInOutResponse");
+        static System.Reflection.EventInfo CPMCiStateInOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMCiStateInOutResponse");
 
-        static System.Reflection.EventInfo CPMFindIndicesOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMFindIndicesOutResponse");
+        static System.Reflection.EventInfo CPMFindIndicesOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMFindIndicesOutResponse");
 
-        static System.Reflection.EventInfo CPMGetRowsetNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetRowsetNotifyOutResponse");
+        static System.Reflection.EventInfo CPMGetRowsetNotifyOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetRowsetNotifyOutResponse");
 
-        static System.Reflection.EventInfo CPMGetScopeStatisticsOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMGetScopeStatisticsOutResponse");
+        static System.Reflection.EventInfo CPMGetScopeStatisticsOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMGetScopeStatisticsOutResponse");
 
-        static System.Reflection.EventInfo CPMSetScopePrioritizationOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter), "CPMSetScopePrioritizationOutResponse");
+        static System.Reflection.EventInfo CPMSetScopePrioritizationOutResponseInfo = TestManagerHelpers.GetEventInfo(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter), "CPMSetScopePrioritizationOutResponse");
 
         #endregion
 
         #region Adapter Instances
-        private Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter IWspAdapterInstance;
+        private Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter IWspAdapterInstance;
         #endregion
 
         #region Variables
@@ -162,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         protected override void TestInitialize()
         {
             this.InitializeTestManager();
-            this.IWspAdapterInstance = ((Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.IWspAdapter))));
+            this.IWspAdapterInstance = ((Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter)(this.GetAdapter(typeof(Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.IWspAdapter))));
             this.Subscribe(CPMConnectOutResponseInfo, this.IWspAdapterInstance);
             this.Subscribe(CPMGetQueryStatusOutResponseInfo, this.IWspAdapterInstance);
             this.Subscribe(CPMGetQueryStatusExOutResponseInfo, this.IWspAdapterInstance);
@@ -172,7 +170,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             this.Subscribe(CPMFetchValueOutResponseInfo, this.IWspAdapterInstance);
             this.Subscribe(CPMFreeCursorOutResponseInfo, this.IWspAdapterInstance);
             this.Subscribe(CPMCreateQueryOutResponseInfo, this.IWspAdapterInstance);
-            this.Subscribe(CPMGetRowsOutInfo, this.IWspAdapterInstance);
+            this.Subscribe(CPMGetRowsOutResponseInfo, this.IWspAdapterInstance);
             this.Subscribe(CPMCiStateInOutResponseInfo, this.IWspAdapterInstance);
             this.Subscribe(CPMFindIndicesOutResponseInfo, this.IWspAdapterInstance);
             this.Subscribe(CPMGetRowsetNotifyOutResponseInfo, this.IWspAdapterInstance);
@@ -191,14 +189,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         #region Test Starting in S0
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute(@"MS-WSP_R592, MS-WSP_R647, MS-WSP_R648, MS-WSP_R651, MS-WSP_R653, MS-WSP_R654, MS-WSP_R673, MS-WSP_R678, MS-WSP_R681, MS-WSP_R687, MS-WSP_R689, MS-WSP_R691, MS-WSP_R694, MS-WSP_R699, MS-WSP_R728, MS-WSP_R730, MS-WSP_R734, MS-WSP_R736, MS-WSP_R743, MS-WSP_R747, MS-WSP_R752, MS-WSP_R792")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("CPMCreateQuery")]
         public virtual void TestCaseForQueryNotAssociatedCaseS0()
         {
             this.Manager.BeginTest("TestCaseForQueryNotAssociatedCaseS0");
             this.Manager.Comment("reaching state \'S0\'");
-            this.Manager.Comment("executing step \'call CPMConnectInRequest()\'");
-            this.IWspAdapterInstance.CPMConnectInRequest();
+            this.Manager.Comment("executing step \'call CPMConnectIn()\'");
+            this.IWspAdapterInstance.CPMConnectIn();
             this.Manager.Comment("reaching state \'S1\'");
-            this.Manager.Comment("checking step \'return CPMConnectInRequest\'");
+            this.Manager.Comment("checking step \'return CPMConnectIn\'");
             this.Manager.Comment("reaching state \'S2\'");
             int temp2 = this.Manager.ExpectEvent(this.QuiescenceTimeout, true, new ExpectedEvent(TestCaseForQueryNotAssociatedCase.CPMConnectOutResponseInfo, null, new CPMConnectOutResponseDelegate1(this.TestCaseForQueryNotAssociatedCaseS0CPMConnectOutResponseChecker)), new ExpectedEvent(TestCaseForQueryNotAssociatedCase.CPMConnectOutResponseInfo, null, new CPMConnectOutResponseDelegate1(this.TestCaseForQueryNotAssociatedCaseS0CPMConnectOutResponseChecker1)));
             if ((temp2 == 0))
@@ -379,7 +378,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMConnectOutResponseChecker(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMConnectOutResponse(0)\'");
-            this.Manager.Assert((errorCode == 0), String.Format("expected \'0\', actual \'{0}\' (errorCode of CPMConnectOutResponse, state S2)", errorCode));
+            this.Manager.Assert((errorCode == 0), string.Format("expected \'0\', actual \'{0}\' (errorCode of CPMConnectOutResponse, state S2)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R592");
             this.Manager.Checkpoint("MS-WSP_R647");
             this.Manager.Checkpoint("MS-WSP_R651");
@@ -390,7 +389,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMGetQueryStatusOutResponseChecker(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMGetQueryStatusOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMGetQueryStatusOutResponse, s" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMGetQueryStatusOutResponse, s" +
                         "tate S7)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R678");
             this.Manager.Checkpoint("MS-WSP_R673");
@@ -399,7 +398,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMGetQueryStatusExOutResponseChecker(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMGetQueryStatusExOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMGetQueryStatusExOutResponse," +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMGetQueryStatusExOutResponse," +
                         " state S13)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R681");
             this.Manager.Checkpoint("MS-WSP_R687");
@@ -410,7 +409,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMRatioFinishedOutResponseChecker(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMRatioFinishedOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMRatioFinishedOutResponse, st" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMRatioFinishedOutResponse, st" +
                         "ate S19)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R694");
             this.Manager.Checkpoint("MS-WSP_R699");
@@ -419,7 +418,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMSendNotifyOutResponseChecker(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMSendNotifyOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMSendNotifyOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMSendNotifyOutResponse, state" +
                         " S25)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R752");
         }
@@ -427,7 +426,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMSetBindingsInResponseChecker(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMSetBindingsInResponse(2147749384)\'");
-            this.Manager.Assert((errorCode == 2147749384), String.Format("expected \'2147749384\', actual \'{0}\' (errorCode of CPMSetBindingsInResponse, state" +
+            this.Manager.Assert((errorCode == 2147749384), string.Format("expected \'2147749384\', actual \'{0}\' (errorCode of CPMSetBindingsInResponse, state" +
                         " S31)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R747");
         }
@@ -435,7 +434,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMFetchValueOutResponseChecker(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMFetchValueOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFetchValueOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFetchValueOutResponse, state" +
                         " S41)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R728");
             this.Manager.Checkpoint("MS-WSP_R734");
@@ -446,7 +445,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMFreeCursorOutResponseChecker(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMFreeCursorOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFreeCursorOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFreeCursorOutResponse, state" +
                         " S53)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R792");
         }
@@ -454,7 +453,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMSetBindingsInResponseChecker1(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMSetBindingsInResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMSetBindingsInResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMSetBindingsInResponse, state" +
                         " S31)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R743");
         }
@@ -462,7 +461,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMFetchValueOutResponseChecker1(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMFetchValueOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFetchValueOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFetchValueOutResponse, state" +
                         " S42)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R728");
             this.Manager.Checkpoint("MS-WSP_R734");
@@ -473,7 +472,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMFreeCursorOutResponseChecker1(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMFreeCursorOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFreeCursorOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFreeCursorOutResponse, state" +
                         " S54)", errorCode));
             this.Manager.Checkpoint("MS-WSP_R792");
         }
@@ -489,7 +488,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMGetQueryStatusOutResponseChecker1(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMGetQueryStatusOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMGetQueryStatusOutResponse, s" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMGetQueryStatusOutResponse, s" +
                         "tate S8)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R678");
@@ -499,7 +498,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMGetQueryStatusExOutResponseChecker1(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMGetQueryStatusExOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMGetQueryStatusExOutResponse," +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMGetQueryStatusExOutResponse," +
                         " state S14)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R681");
@@ -511,7 +510,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMRatioFinishedOutResponseChecker1(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMRatioFinishedOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMRatioFinishedOutResponse, st" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMRatioFinishedOutResponse, st" +
                         "ate S20)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R694");
@@ -521,7 +520,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMSendNotifyOutResponseChecker1(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMSendNotifyOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMSendNotifyOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMSendNotifyOutResponse, state" +
                         " S26)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R752");
@@ -530,7 +529,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMSetBindingsInResponseChecker2(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMSetBindingsInResponse(2147749384)\'");
-            this.Manager.Assert((errorCode == 2147749384), String.Format("expected \'2147749384\', actual \'{0}\' (errorCode of CPMSetBindingsInResponse, state" +
+            this.Manager.Assert((errorCode == 2147749384), string.Format("expected \'2147749384\', actual \'{0}\' (errorCode of CPMSetBindingsInResponse, state" +
                         " S32)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R747");
@@ -539,7 +538,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMFetchValueOutResponseChecker2(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMFetchValueOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFetchValueOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFetchValueOutResponse, state" +
                         " S43)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R728");
@@ -551,7 +550,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMFreeCursorOutResponseChecker2(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMFreeCursorOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFreeCursorOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFreeCursorOutResponse, state" +
                         " S55)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R792");
@@ -560,7 +559,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMSetBindingsInResponseChecker3(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMSetBindingsInResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMSetBindingsInResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMSetBindingsInResponse, state" +
                         " S32)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R743");
@@ -569,7 +568,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMFetchValueOutResponseChecker3(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMFetchValueOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFetchValueOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFetchValueOutResponse, state" +
                         " S44)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R728");
@@ -581,7 +580,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private void TestCaseForQueryNotAssociatedCaseS0CPMFreeCursorOutResponseChecker3(uint errorCode)
         {
             this.Manager.Comment("checking step \'event CPMFreeCursorOutResponse(3221225485)\'");
-            this.Manager.Assert((errorCode == 3221225485), String.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFreeCursorOutResponse, state" +
+            this.Manager.Assert((errorCode == 3221225485), string.Format("expected \'3221225485\', actual \'{0}\' (errorCode of CPMFreeCursorOutResponse, state" +
                         " S56)", errorCode));
             this.Manager.Assert(!((this.returnCode1.Value == ((uint)(0)))), "Fail to check the assumptions, (returnCode1!=0)");
             this.Manager.Checkpoint("MS-WSP_R792");

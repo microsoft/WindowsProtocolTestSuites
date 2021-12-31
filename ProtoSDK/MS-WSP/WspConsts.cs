@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// WSP Constants.
@@ -14,12 +14,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Used to test whether the client/server version is 32bit/64-bit (set/not set).
         /// </summary>
-        public const UInt32 Is64bitVersion = 0x00010000;
+        public const uint Is64bitVersion = 0x00010000;
 
         /// <summary>
         /// Used to calculate the bitwise XOR value when calculating checksum.
         /// </summary>
-        public const UInt32 ChecksumMagicNumber = 0x59533959;
+        public const uint ChecksumMagicNumber = 0x59533959;
         #endregion
 
         #region GUID definitions

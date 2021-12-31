@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 
@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
     {
         private const uint validRowsToTransfer = 40;
         private const uint validReadBuffer = 0x4000;
-        private static readonly uint validRowWidth = MessageBuilder.rowWidth;
+        private static readonly uint validRowWidth = MessageBuilder.RowWidth;
 
         public enum ArgumentType
         {
@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             // The ReadBuffer of the CPMGetRowsIn request is 0.
             ZeroReadBuffer,
             // The ReadBuffer of the CPMGetRowsIn is not enough for a single row to be filled by the server.
-            ReadBufferNotEnoughForASingleRow,
+            ReadBufferNotEnoughForSingleRow,
             // The ReadBuffer of the CPMGetRowsIn is not enough for all the rows returned indicated by the RowsToTransfer to be filled by the server.
             ReadBufferNotEnoughForAllReturnedRows,
             // The ReadBuffer exceeds the maximum value 0x4000.
@@ -70,8 +70,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             base.TestInitialize();
 
-            wspAdapter.CPMGetRowsOut -= EnsureSuccessfulCPMGetRowsOut;
-            wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
+            wspAdapter.CPMGetRowsOutResponse -= EnsureSuccessfulCPMGetRowsOut;
+            wspAdapter.CPMGetRowsOutResponse += CPMGetRowsOut;
         }
 
         protected override void TestCleanup()
@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -135,7 +135,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn without bindings and expects E_UNEXPECTED.");
             argumentType = ArgumentType.WithoutBindings;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -155,7 +155,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 zeroRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -177,7 +177,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 rowsToTransferSmallerThanTotalRowsCount,
                 validRowWidth,
                 validReadBuffer,
@@ -201,7 +201,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose RowWidth is 0 and expects STATUS_INVALID_PARAMETER.");
             argumentType = ArgumentType.ZeroRowWidth;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 zeroRowsWidth,
                 validReadBuffer,
@@ -222,7 +222,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with a RowWidth which does not match the _cbRow sent in the previous CPMSetBindingsIn and expects ERROR_INVALID_PARAMETER.");
             argumentType = ArgumentType.MismatchedRowWidth;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 mismatchedRowWidth,
                 validReadBuffer,
@@ -244,7 +244,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with a RowWidth which exceeds the ReadBuffer and expects STATUS_ERROR_INVALID_PARAMETER.");
             argumentType = ArgumentType.RowWidthExceedingReadBuffer;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 rowWidthExceedingReadBuffer,
                 readBuffer,
@@ -265,7 +265,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose ReadBuffer is 0 and expects STATUS_INVALID_PARAMETER.");
             argumentType = ArgumentType.ZeroReadBuffer;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 zeroReadBuffer,
@@ -277,16 +277,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestMethod]
         [TestCategory("CPMGetRows")]
         [Description("This test case is designed to verify the server response if a ReadBuffer which is not enough for a single row is sent in CPMGetRowsIn.")]
-        public void CPMGetRows_ReadBuffer_NotEnoughForASingleRow()
+        public void CPMGetRows_ReadBuffer_NotEnoughForSingleRow()
         {
             uint readBufferNotEnoughForASingleRow = validRowWidth * 3;
 
             PrepareForCPMGetRows();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with a ReadBuffer which is not enough for a single row and expects STATUS_BUFFER_TOO_SMALL.");
-            argumentType = ArgumentType.ReadBufferNotEnoughForASingleRow;
+            argumentType = ArgumentType.ReadBufferNotEnoughForSingleRow;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 readBufferNotEnoughForASingleRow,
@@ -307,7 +307,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with a ReadBuffer which is not enough for all returned rows and expects DB_S_DIALECTIGNORED.");
             argumentType = ArgumentType.ReadBufferNotEnoughForAllReturnedRows;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 readBufferNotEnoughForAllReturnedRows,
@@ -331,7 +331,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with invalid ReadBuffer exceeding the maximum value and expects STATUS_INVALID_PARAMETER.");
             argumentType = ArgumentType.ReadBufferExceedingMaximum;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 readBufferExceedingMaximum,
@@ -346,7 +346,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -367,11 +367,11 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             verificationAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
             verificationAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
 
-            verificationAdapter.CPMGetRowsOut += CPMGetRowsOut;
+            verificationAdapter.CPMGetRowsOutResponse += CPMGetRowsOut;
 
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client for verification sends CPMConnectIn and expects success.");
-            verificationAdapter.CPMConnectInRequest();
+            verificationAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client for verification sends CPMCreateQueryIn and expects success.");
             verificationAdapter.CPMCreateQueryIn(false);
@@ -431,7 +431,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 case ArgumentType.ZeroReadBuffer:
                     Site.Assert.AreEqual((uint)WspErrorCode.STATUS_INVALID_PARAMETER, errorCode, "Server should return STATUS_INVALID_PARAMETER if ReadBuffer of CPMGetRowsIn is 0.");
                     break;
-                case ArgumentType.ReadBufferNotEnoughForASingleRow:
+                case ArgumentType.ReadBufferNotEnoughForSingleRow:
                     Site.Assert.AreEqual((uint)WspErrorCode.STATUS_BUFFER_TOO_SMALL, errorCode, "Server should return STATUS_BUFFER_TOO_SMALL if ReadBuffer of CPMGetRowsIn is not enough to be filled by a single row.");
                     break;
                 case ArgumentType.ReadBufferNotEnoughForAllReturnedRows:

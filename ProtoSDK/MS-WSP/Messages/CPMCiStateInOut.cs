@@ -3,10 +3,10 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     [Flags]
-    public enum eState_Values : UInt32
+    public enum CPMCiState_eState_Values : uint
     {
         /// <summary>
         /// None of the following states apply.
@@ -88,80 +88,79 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer indicating the size, in bytes, of this message (excluding the common header). MUST be set to 0x0000003C.
         /// </summary>
-        public UInt32 cbStruct;
+        public uint cbStruct;
 
         /// <summary>
         /// A 32-bit unsigned integer containing the number of in-memory indexes created for recently indexed documents.
         /// </summary>
-        public UInt32 cWordList;
+        public uint cWordList;
 
         /// <summary>
         /// A 32-bit unsigned integer containing the number of persisted indexes.
         /// </summary>
-        public UInt32 cPersistentIndex;
+        public uint cPersistentIndex;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating a number of actively running queries.
         /// </summary>
-        public UInt32 cQueries;
+        public uint cQueries;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the total number of documents waiting to be indexed.
         /// </summary>
-        public UInt32 cDocuments;
+        public uint cDocuments;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of unique documents with information in indexes that are not fully optimized for performance.
         /// </summary>
-        public UInt32 cFreshTest;
+        public uint cFreshTest;
 
         /// <summary>
         /// A 32-bit unsigned integer specifying the completion percentage of current full optimization of indexes while optimization is in progress.MUST be less than or equal to 100.
         /// </summary>
-        public UInt32 dwMergeProgress;
+        public uint dwMergeProgress;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the state of content indexing.MUST be zero or one or more of the CI_STATE_* constants defined in the following table.
         /// </summary>
-        public eState_Values eState;
+        public CPMCiState_eState_Values eState;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of documents indexed since content indexing began.
         /// </summary>
-        public UInt32 cFilteredDocuments;
+        public uint cFilteredDocuments;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the total number of documents in the system.
         /// </summary>
-        public UInt32 cTotalDocuments;
+        public uint cTotalDocuments;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of pending high-level indexing operations.
         /// The meaning of this value is provider-specific, but larger numbers are expected to indicate that more indexing remains.
         /// </summary>
-        public UInt32 cPendingScans;
+        public uint cPendingScans;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the size, in megabytes, of the index (excluding the property cache).
         /// </summary>
-        public UInt32 dwIndexSize;
+        public uint dwIndexSize;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the approximate number of unique keys in the catalog.
         /// </summary>
-        public UInt32 cUniqueKeys;
+        public uint cUniqueKeys;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of documents that the GSS will attempt to index again because of a failure during the initial indexing attempt.
         /// </summary>
-        public UInt32 cSecQDocuments;
+        public uint cSecQDocuments;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the size, in megabytes, of the property cache.
         /// </summary>
-        public UInt32 dwPropCacheSize;
+        public uint dwPropCacheSize;
     }
-
 
     /// <summary>
     /// The CPMCiStateInOut message contains information about the state of the GSS.

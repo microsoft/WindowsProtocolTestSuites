@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum CRestriction_ulType_Values : UInt32
+    public enum CRestriction_ulType_Values : uint
     {
         /// <summary>
         /// The node contains an empty Restriction (no value). It represents a node that would evaluate to no results.
@@ -111,7 +111,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CRestriction structure contains a restriction node in a query command tree.
     /// </summary>
-    public struct CRestriction : IWspStructure
+    public struct CRestriction : IWspRestriction
     {
         /// <summary>
         /// A 32-bit unsigned integer indicating the restriction type used for the command tree node. The type determines what is found in the Restriction field of the structure.
@@ -125,12 +125,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// The guidance is that results from higher-weighted nodes usually return a higher rank than results from nodes that are the same but weighted lower.
         /// Implementers of the GSS can choose the exact algorithm. 
         /// </summary>
-        public UInt32 Weight;
+        public uint Weight;
 
         /// <summary>
         /// The restriction type for the command tree node. The syntax MUST be as indicated by the _ulType field.
         /// </summary>
-        public object Restriction;
+        public IWspRestriction Restriction;
 
         public void FromBytes(WspBuffer buffer)
         {

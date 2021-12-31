@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
@@ -46,8 +46,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMSetBindingsInResponse -= EnsureSuccessfulCPMSetBindingsOut;
             wspAdapter.CPMSetBindingsInResponse += CPMSetBindingsOut;
 
-            wspAdapter.CPMGetRowsOut -= EnsureSuccessfulCPMGetRowsOut;
-            wspAdapter.CPMGetRowsOut += CPMGetRowsOut;
+            wspAdapter.CPMGetRowsOutResponse -= EnsureSuccessfulCPMGetRowsOut;
+            wspAdapter.CPMGetRowsOutResponse += CPMGetRowsOut;
 
             wspAdapter.CPMFreeCursorOutResponse -= EnsureSuccessfulCPMFreeCursorOut;
             wspAdapter.CPMFreeCursorOutResponse += CPMFreeCursorOut;
@@ -79,7 +79,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             argumentType = ArgumentType.InvalidCursor;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMFreeCursorIn and expects STATUS_INVALID_PARAMETER.");
@@ -93,7 +93,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -115,7 +115,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -132,7 +132,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -158,7 +158,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
             wspAdapter.CPMCreateQueryIn(false);
@@ -214,13 +214,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             var searchScope = BaseTestSite.Properties.Get("QueryPath");
-            var searchScopeRetriction = wspAdapter.builder.GetPropertyRestriction(
-                    _relop_Values.PREQ,
+            var searchScopeRetriction = wspAdapter.Builder.GetPropertyRestriction(
+                    CPropertyRestriction_relop_Values.PREQ,
                     WspConsts.System_Search_Scope,
-                    wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope)));
+                    wspAdapter.Builder.GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope)));
             var restrictionArray = new CRestrictionArray { count = 1, isPresent = 1, Restriction = searchScopeRetriction };
 
             var columnSet = new CColumnSet { count = 2, indexes = new uint[] { 0, 1 } };
@@ -239,10 +239,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         {
                             new CSort
                             {
-                                dwOrder = dwOrder_Values.QUERY_SORTASCEND,
-                                dwIndividual = dwIndividual_Values.QUERY_SORTALL,
+                                dwOrder = CSort_dwOrder_Values.QUERY_SORTASCEND,
+                                dwIndividual = CSort_dwIndividual_Values.QUERY_SORTALL,
                                 pidColumn = 0,
-                                locale = wspAdapter.builder.parameter.LcidValue
+                                locale = wspAdapter.Builder.Parameter.LcidValue
                             }
                         }
                     }
@@ -259,13 +259,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                         _csColumns = new CColumnSet { count = 0, indexes = new uint[0] },
                         _Spec = new CCategSpec
                         {
-                            _ulCategType = _ulCategType_Values.CATEGORIZE_UNIQUE,
+                            _ulCategType = CCategSpec_ulCategType_Values.CATEGORIZE_UNIQUE,
                             _sortKey = new CSort
                             {
-                                dwOrder = dwOrder_Values.QUERY_SORTASCEND,
-                                dwIndividual = dwIndividual_Values.QUERY_SORTALL,
+                                dwOrder = CSort_dwOrder_Values.QUERY_SORTASCEND,
+                                dwIndividual = CSort_dwIndividual_Values.QUERY_SORTALL,
                                 pidColumn = 0,
-                                locale = wspAdapter.builder.parameter.LcidValue
+                                locale = wspAdapter.Builder.Parameter.LcidValue
                             }
                         },
                         _AggregSet = new CAggregSet { cCount = 0, AggregSpecs = new CAggregSpec[0] },
@@ -284,7 +284,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 new CRowsetProperties(),
                 pidMapper,
                 new CColumnGroupArray(),
-                wspAdapter.builder.parameter.LcidValue,
+                wspAdapter.Builder.Parameter.LcidValue,
                 out var createQueryOut);
 
             Site.Assert.AreEqual(2, createQueryOut.aCursors.Length, "The count of hierarchical cursors of the current query should be 2.");

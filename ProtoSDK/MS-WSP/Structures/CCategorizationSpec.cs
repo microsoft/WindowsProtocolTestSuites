@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CCategorizationSpec structure specifies how grouping is done at one level in a hierarchical query.
@@ -39,7 +39,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// A 32-bit unsigned integer. Reserved.
         /// Note MUST be set to 0x00000000.
         /// </summary>
-        public UInt32 _cMaxResults;
+        public uint _cMaxResults;
 
         public void FromBytes(WspBuffer buffer)
         {

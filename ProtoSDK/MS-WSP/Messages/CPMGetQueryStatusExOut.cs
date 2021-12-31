@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CPMGetQueryStatusExOut message replies to a CPMGetQueryStatusExIn message with both the status of the query and other status information.
@@ -65,7 +65,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public IWspInMessage Request { get; set; }
 
         public WspMessageHeader Header { get; set; }
-
 
         public void FromBytes(WspBuffer buffer)
         {

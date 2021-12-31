@@ -3,10 +3,10 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     [Flags]
-    public enum vType_Values : UInt16
+    public enum CBaseStorageVariant_vType_Values : ushort
     {
         /// <summary>
         /// vValue is not present.
@@ -174,7 +174,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A type indicator that indicates the type of vValue.
         /// </summary>
-        public vType_Values vType;
+        public CBaseStorageVariant_vType_Values vType;
 
         /// <summary>
         /// When vType is VT_DECIMAL, the value of this field is specified as the Scale field in section 2.2.1.1.1.1. For all other vTypes, the value MUST be set to 0x00.
@@ -205,162 +205,162 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             buffer.Add(vData2);
 
-            if (!vType.HasFlag(vType_Values.VT_VECTOR) && !vType.HasFlag(vType_Values.VT_ARRAY))
+            if (!vType.HasFlag(CBaseStorageVariant_vType_Values.VT_VECTOR) && !vType.HasFlag(CBaseStorageVariant_vType_Values.VT_ARRAY))
             {
                 switch (vType)
                 {
-                    case vType_Values.VT_EMPTY:
-                    case vType_Values.VT_NULL:
+                    case CBaseStorageVariant_vType_Values.VT_EMPTY:
+                    case CBaseStorageVariant_vType_Values.VT_NULL:
                         {
 
                         }
                         break;
 
-                    case vType_Values.VT_I1:
+                    case CBaseStorageVariant_vType_Values.VT_I1:
                         {
-                            buffer.Add((SByte)vValue);
+                            buffer.Add((sbyte)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_UI1:
+                    case CBaseStorageVariant_vType_Values.VT_UI1:
                         {
-                            buffer.Add((SByte)vValue);
+                            buffer.Add((byte)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_I2:
+                    case CBaseStorageVariant_vType_Values.VT_I2:
                         {
-                            buffer.Add((Int16)vValue);
+                            buffer.Add((short)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_UI2:
+                    case CBaseStorageVariant_vType_Values.VT_UI2:
                         {
-                            buffer.Add((UInt16)vValue);
+                            buffer.Add((ushort)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_BOOL:
+                    case CBaseStorageVariant_vType_Values.VT_BOOL:
                         {
-                            buffer.Add((UInt16)vValue);
+                            buffer.Add((ushort)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_I4:
+                    case CBaseStorageVariant_vType_Values.VT_I4:
                         {
-                            buffer.Add((Int32)vValue);
+                            buffer.Add((int)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_UI4:
+                    case CBaseStorageVariant_vType_Values.VT_UI4:
                         {
-                            buffer.Add((UInt32)vValue);
+                            buffer.Add((uint)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_R4:
+                    case CBaseStorageVariant_vType_Values.VT_R4:
                         {
-                            buffer.Add((Single)vValue);
+                            buffer.Add((float)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_INT:
+                    case CBaseStorageVariant_vType_Values.VT_INT:
                         {
-                            buffer.Add((Int32)vValue);
+                            buffer.Add((int)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_UINT:
+                    case CBaseStorageVariant_vType_Values.VT_UINT:
                         {
-                            buffer.Add((UInt32)vValue);
+                            buffer.Add((uint)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_ERROR:
+                    case CBaseStorageVariant_vType_Values.VT_ERROR:
                         {
-                            buffer.Add((UInt32)vValue);
+                            buffer.Add((uint)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_I8:
+                    case CBaseStorageVariant_vType_Values.VT_I8:
                         {
-                            buffer.Add((Int64)vValue);
+                            buffer.Add((long)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_UI8:
+                    case CBaseStorageVariant_vType_Values.VT_UI8:
                         {
-                            buffer.Add((UInt64)vValue);
+                            buffer.Add((ulong)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_R8:
+                    case CBaseStorageVariant_vType_Values.VT_R8:
                         {
-                            buffer.Add((Double)vValue);
+                            buffer.Add((double)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_CY:
+                    case CBaseStorageVariant_vType_Values.VT_CY:
                         {
-                            buffer.Add((Int64)vValue);
+                            buffer.Add((long)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_DATE:
+                    case CBaseStorageVariant_vType_Values.VT_DATE:
                         {
-                            buffer.Add((Double)vValue);
+                            buffer.Add((double)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_FILETIME:
+                    case CBaseStorageVariant_vType_Values.VT_FILETIME:
                         {
-                            buffer.Add((Int64)vValue);
+                            buffer.Add((long)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_DECIMAL:
+                    case CBaseStorageVariant_vType_Values.VT_DECIMAL:
                         {
                             ((DECIMAL)vValue).ToBytes(buffer);
                         }
                         break;
 
-                    case vType_Values.VT_CLSID:
+                    case CBaseStorageVariant_vType_Values.VT_CLSID:
                         {
                             buffer.Add((Guid)vValue);
                         }
                         break;
 
-                    case vType_Values.VT_BLOB:
+                    case CBaseStorageVariant_vType_Values.VT_BLOB:
                         {
                             ((VT_BLOB)vValue).ToBytes(buffer);
                         }
                         break;
 
-                    case vType_Values.VT_BLOB_OBJECT:
+                    case CBaseStorageVariant_vType_Values.VT_BLOB_OBJECT:
                         {
                             ((VT_BLOB_OBJECT)vValue).ToBytes(buffer);
                         }
                         break;
 
-                    case vType_Values.VT_BSTR:
+                    case CBaseStorageVariant_vType_Values.VT_BSTR:
                         {
                             ((VT_BSTR)vValue).ToBytes(buffer);
                         }
                         break;
 
-                    case vType_Values.VT_LPSTR:
+                    case CBaseStorageVariant_vType_Values.VT_LPSTR:
                         {
                             ((VT_LPSTR)vValue).ToBytes(buffer);
                         }
                         break;
 
-                    case vType_Values.VT_LPWSTR:
+                    case CBaseStorageVariant_vType_Values.VT_LPWSTR:
                         {
                             ((VT_LPWSTR)vValue).ToBytes(buffer);
                         }
                         break;
 
-                    case vType_Values.VT_COMPRESSED_LPWSTR:
+                    case CBaseStorageVariant_vType_Values.VT_COMPRESSED_LPWSTR:
                         {
                             ((VT_COMPRESSED_LPWSTR)vValue).ToBytes(buffer);
                         }

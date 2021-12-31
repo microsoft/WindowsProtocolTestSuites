@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The SProperty structure contains information about single property weight.
@@ -13,12 +13,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer specifying a property identifier.
         /// </summary>
-        public UInt32 _pid;
+        public uint _pid;
 
         /// <summary>
         /// A 32-bit unsigned integer specifying the weight to be used in probabilistic ranking.
         /// </summary>
-        public UInt32 _weight;
+        public uint _weight;
 
         public void FromBytes(WspBuffer buffer)
         {

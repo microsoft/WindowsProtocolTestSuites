@@ -1,11 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum WspMessageHeader_msg_Values : UInt32
+    public enum WspMessageHeader_msg_Values : uint
     {
         /// <summary>
         /// CPMConnectIn
@@ -203,7 +201,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// The client MUST initialize this value to 0x00000000.
         /// The server then changes it as the status of the requested operation changes.
         /// </summary>
-        public UInt32 _status;
+        public uint _status;
 
         /// <summary>
         /// The _ulChecksum MUST be calculated as specified in section 3.2.4 for the following messages:
@@ -214,13 +212,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// CPMFetchValueIn
         /// Note For all other messages, _ulChecksum MUST be set to 0x00000000. A client MUST ignore the _ulChecksum field.
         /// </summary>
-        public UInt32 _ulChecksum;
+        public uint _ulChecksum;
 
         /// <summary>
         /// MUST be ignored by the receiver.
         /// Note This field MUST be set to 0x00000000 except for the CPMGetRowsIn message, where it MUST hold the high 32-bits part of a 64-bit offset if 64-bit offsets are being used(see section 2.2.3.12 for details).
         /// </summary>
-        public UInt32 _ulReserved2;
+        public uint _ulReserved2;
 
         public void FromBytes(WspBuffer buffer)
         {

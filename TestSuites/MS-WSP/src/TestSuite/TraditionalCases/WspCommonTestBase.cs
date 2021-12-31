@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
@@ -20,7 +20,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             wspAdapter.CPMConnectOutResponse += EnsureSuccessfulCPMConnectOut;
             wspAdapter.CPMCreateQueryOutResponse += EnsureSuccessfulCPMCreateQueryOut;
             wspAdapter.CPMSetBindingsInResponse += EnsureSuccessfulCPMSetBindingsOut;
-            wspAdapter.CPMGetRowsOut += EnsureSuccessfulCPMGetRowsOut;
+            wspAdapter.CPMGetRowsOutResponse += EnsureSuccessfulCPMGetRowsOut;
             wspAdapter.CPMFreeCursorOutResponse += EnsureSuccessfulCPMFreeCursorOut;
             wspAdapter.CPMGetQueryStatusOutResponse += EnsureSuccessfulCPMGetQueryStatusOut;
             wspAdapter.CPMGetQueryStatusExOutResponse += EnsureSuccessfulCPMGetQueryStatusExOut;

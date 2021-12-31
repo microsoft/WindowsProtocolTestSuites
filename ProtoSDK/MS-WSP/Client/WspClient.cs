@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// WSP client.
@@ -63,8 +63,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="calculateChecksum">Calculate the messsage checksum or not.</param>
         /// <param name="header">The header to be used.</param>
         public void SendCPMConnectIn(
-            UInt32 clientVersion,
-            UInt32 clientIsRemote,
+            uint clientVersion,
+            uint clientIsRemote,
             string machineName,
             string userName,
             CDbPropSet propertySet1,
@@ -131,7 +131,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             CRowsetProperties rowsetProperties,
             CPidMapper pidMapper,
             CColumnGroupArray columnGroupArray,
-            UInt32 lcid
+            uint lcid
             )
         {
             var request = new CPMCreateQueryIn
@@ -209,9 +209,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             uint _cbReadBuffer,
             uint _ulClientBase,
             uint _fBwdFetch,
-            eType_Values eType,
+            CPMGetRowsIn_eType_Values eType,
             uint _chapt,
-            object seekDescription
+            IWspSeekDescription seekDescription
             )
         {
             var request = new CPMGetRowsIn
@@ -271,7 +271,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <typeparam name="T">Response type.</typeparam>
         /// <param name="response">Response from server.</param>
         /// <returns>Status</returns>
-        public UInt32 ExpectMessage<T>(out T response) where T : IWspOutMessage, new()
+        public uint ExpectMessage<T>(out T response) where T : IWspOutMessage, new()
         {
             response = new T();
 
@@ -329,7 +329,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     break;
             }
         }
-
 
         public void Dispose()
         {

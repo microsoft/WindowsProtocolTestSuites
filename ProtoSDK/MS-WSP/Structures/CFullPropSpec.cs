@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum ulKind_Values : UInt32
+    public enum CFullPropSpec_ulKind_Values : uint
     {
         /// <summary>
         /// The PrSpec field specifies the number of non-null characters in the Property name field.
@@ -35,12 +35,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer that indicates the contents of PrSpec.
         /// </summary>
-        public ulKind_Values ulKind;
+        public CFullPropSpec_ulKind_Values ulKind;
 
         /// <summary>
         /// A 32-bit unsigned integer with a meaning as indicated by the ulKind field.
         /// </summary>
-        public UInt32 PrSpec;
+        public uint PrSpec;
 
         /// <summary>
         /// If ulKind is set to PRSPEC_PROPID, this field MUST NOT be present.
@@ -54,11 +54,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// </summary>
         /// <param name="guid">GUID of property.</param>
         /// <param name="propertyID">Identifier of property.</param>
-        public CFullPropSpec(Guid guid, UInt32 propertyID)
+        public CFullPropSpec(Guid guid, uint propertyID)
         {
             _guidPropSet = guid;
 
-            ulKind = ulKind_Values.PRSPEC_PROPID;
+            ulKind = CFullPropSpec_ulKind_Values.PRSPEC_PROPID;
 
             PrSpec = propertyID;
 
@@ -79,7 +79,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             buffer.Add(PrSpec);
 
-            if (ulKind == ulKind_Values.PRSPEC_LPWSTR)
+            if (ulKind == CFullPropSpec_ulKind_Values.PRSPEC_LPWSTR)
             {
                 buffer.AddUnicodeString(Property_name);
             }

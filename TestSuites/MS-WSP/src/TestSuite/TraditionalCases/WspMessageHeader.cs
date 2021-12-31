@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
@@ -55,10 +55,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void WspMessageHeader_InvalidMsg()
         {
             argumentType = ArgumentType.InvalidMsg;
-            wspAdapter.sendInvalidMsg = true;
+            wspAdapter.SendInvalidMsg = true;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends invalid _msg and expects STATUS_INVALID_PARAMETER.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
         }
 
         [TestMethod]
@@ -67,10 +67,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void WspMessageHeader_InvalidStatus()
         {
             argumentType = ArgumentType.InvalidStatus;
-            wspAdapter.sendInvalidStatus = true;
+            wspAdapter.SendInvalidStatus = true;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends invalid _status and expects STATUS_INVALID_PARAMETER.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
         }
 
         [TestMethod]
@@ -79,10 +79,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         public void WspMessageHeader_InvalidUlChecksum()
         {
             argumentType = ArgumentType.InvalidUlChecksum;
-            wspAdapter.sendInvalidUlChecksum = true;
+            wspAdapter.SendInvalidUlChecksum = true;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends invalid _ulChecksum and expects STATUS_INVALID_PARAMETER.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
         }
         #endregion
 

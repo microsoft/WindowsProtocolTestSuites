@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -486,10 +486,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 wspAdapter.CPMGetRowsIn(
                     hierarchicalCursors[currentDepth],
                     1,
-                    wspAdapter.builder.parameter.EachRowSize,
-                    wspAdapter.builder.parameter.BufferSize,
+                    wspAdapter.Builder.Parameter.EachRowSize,
+                    wspAdapter.Builder.Parameter.BufferSize,
                     0,
-                    (uint)eType_Values.eRowSeekNext,
+                    (uint)CPMGetRowsIn_eType_Values.eRowSeekNext,
                     chapterMap[currentDepth],
                     new CRowSeekNext { _cskip = 0 },
                     out var getRowsOut);
@@ -523,10 +523,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     wspAdapter.CPMGetRowsIn(
                         hierarchicalCursors[currentDepth],
                         1,
-                        wspAdapter.builder.parameter.EachRowSize,
-                        wspAdapter.builder.parameter.BufferSize,
+                        wspAdapter.Builder.Parameter.EachRowSize,
+                        wspAdapter.Builder.Parameter.BufferSize,
                         0,
-                        (uint)eType_Values.eRowSeekNext,
+                        (uint)CPMGetRowsIn_eType_Values.eRowSeekNext,
                         chapterMap[currentDepth],
                         new CRowSeekNext { _cskip = 0 },
                         out var getRowsOut);
@@ -599,15 +599,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
-            var searchScopeRetriction = wspAdapter.builder.GetPropertyRestriction(
-                    _relop_Values.PREQ,
+            var searchScopeRetriction = wspAdapter.Builder.GetPropertyRestriction(
+                    CPropertyRestriction_relop_Values.PREQ,
                     WspConsts.System_Search_Scope,
-                    wspAdapter.builder.GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope)));
+                    wspAdapter.Builder.GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope)));
             var restrictionArray = new CRestrictionArray { count = 1, isPresent = 1, Restriction = searchScopeRetriction };
 
-            var columnSet = wspAdapter.builder.GetColumnSet(mappedProps.Length);
+            var columnSet = wspAdapter.Builder.GetColumnSet(mappedProps.Length);
 
             var pidMapper = GetCPidMapper(mappedProps);
 
@@ -635,7 +635,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 new CRowsetProperties(),
                 pidMapper,
                 new CColumnGroupArray(),
-                wspAdapter.builder.parameter.LcidValue,
+                wspAdapter.Builder.Parameter.LcidValue,
                 out var createQueryOut);
 
             return createQueryOut;
@@ -648,13 +648,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 var columns = new List<CTableColumn>();
                 foreach (var prop in propsForBindings[idx])
                 {
-                    columns.Add(wspAdapter.builder.GetTableColumn(prop, vType_Values.VT_VARIANT));
+                    columns.Add(wspAdapter.Builder.GetTableColumn(prop, CBaseStorageVariant_vType_Values.VT_VARIANT));
                 }
 
                 Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
                 wspAdapter.CPMSetBindingsIn(
                     hierarchicalCursors[idx],
-                    wspAdapter.builder.parameter.EachRowSize,
+                    wspAdapter.Builder.Parameter.EachRowSize,
                     (uint)columns.Count,
                     columns.ToArray());
             }
@@ -682,10 +682,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             {
                 sortArray[idx] = new CSort
                 {
-                    dwOrder = dwOrder_Values.QUERY_SORTASCEND,
-                    dwIndividual = dwIndividual_Values.QUERY_SORTALL,
+                    dwOrder = CSort_dwOrder_Values.QUERY_SORTASCEND,
+                    dwIndividual = CSort_dwIndividual_Values.QUERY_SORTALL,
                     pidColumn = columnId,
-                    locale = wspAdapter.builder.parameter.LcidValue
+                    locale = wspAdapter.Builder.Parameter.LcidValue
                 };
                 idx++;
             }
@@ -705,7 +705,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private CCategorizationSpec GetUniqueCCategorizationSpec(uint columnIdForGrouping)
         {
-            var lcid = wspAdapter.builder.parameter.LcidValue;
+            var lcid = wspAdapter.Builder.Parameter.LcidValue;
 
             var ret = new CCategorizationSpec();
 
@@ -717,12 +717,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             ret._csColumns = csColumn;
 
             var spec = new CCategSpec();
-            spec._ulCategType = _ulCategType_Values.CATEGORIZE_UNIQUE;
+            spec._ulCategType = CCategSpec_ulCategType_Values.CATEGORIZE_UNIQUE;
             var sortKey = new CSort
             {
                 pidColumn = columnIdForGrouping,
-                dwOrder = dwOrder_Values.QUERY_SORTASCEND,
-                dwIndividual = dwIndividual_Values.QUERY_SORTALL,
+                dwOrder = CSort_dwOrder_Values.QUERY_SORTASCEND,
+                dwIndividual = CSort_dwIndividual_Values.QUERY_SORTALL,
                 locale = lcid
             };
             spec._sortKey = sortKey;
@@ -737,17 +737,17 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         private CCategorizationSpec GetRangeCCategorizationSpec(RangePivot[] rangePivots, uint columnIdForGrouping)
         {
-            var lcid = wspAdapter.builder.parameter.LcidValue;
+            var lcid = wspAdapter.Builder.Parameter.LcidValue;
 
-            vType_Values prValVType;
+            CBaseStorageVariant_vType_Values prValVType;
             var keyType = rangePivots[0].RangeValue.GetType();
             if (keyType == typeof(ulong))
             {
-                prValVType = vType_Values.VT_UI8;
+                prValVType = CBaseStorageVariant_vType_Values.VT_UI8;
             }
             else if (keyType == typeof(string))
             {
-                prValVType = vType_Values.VT_LPWSTR;
+                prValVType = CBaseStorageVariant_vType_Values.VT_LPWSTR;
             }
             else
             {
@@ -764,12 +764,12 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             ret._csColumns = csColumn;
 
             var spec = new CCategSpec();
-            spec._ulCategType = _ulCategType_Values.CATEGORIZE_RANGE;
+            spec._ulCategType = CCategSpec_ulCategType_Values.CATEGORIZE_RANGE;
             var sortKey = new CSort
             {
                 pidColumn = columnIdForGrouping,
-                dwOrder = dwOrder_Values.QUERY_SORTASCEND,
-                dwIndividual = dwIndividual_Values.QUERY_SORTALL,
+                dwOrder = CSort_dwOrder_Values.QUERY_SORTASCEND,
+                dwIndividual = CSort_dwIndividual_Values.QUERY_SORTALL,
                 locale = lcid
             };
             spec._sortKey = sortKey;
@@ -784,7 +784,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 boundaries[idx] = new RANGEBOUNDARY
                 {
                     ulType = RANGEBOUNDARY_ulType_Values.DBRANGEBOUNDTTYPE_EXACT,
-                    prVal = wspAdapter.builder.GetBaseStorageVariant(prValVType, GetValueByVType(prValVType, pivot)),
+                    prVal = wspAdapter.Builder.GetBaseStorageVariant(prValVType, GetValueByVType(prValVType, pivot)),
                 };
 
                 if (string.IsNullOrEmpty(label))
@@ -811,14 +811,14 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             return ret;
         }
 
-        private object GetValueByVType(vType_Values prValVType, object pivot)
+        private object GetValueByVType(CBaseStorageVariant_vType_Values prValVType, object pivot)
         {
             switch (prValVType)
             {
-                case vType_Values.VT_UI8:
+                case CBaseStorageVariant_vType_Values.VT_UI8:
                     return pivot;
 
-                case vType_Values.VT_LPWSTR:
+                case CBaseStorageVariant_vType_Values.VT_LPWSTR:
                     return new VT_LPWSTR(pivot as string);
 
                 default:

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The SAFEARRAYBOUND structure represents the bounds of one dimension of a SAFEARRAY or SAFEARRAY2.
@@ -13,12 +13,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer, specifying the number of elements in the dimension.
         /// </summary>
-        public UInt32 cElements;
+        public uint cElements;
 
         /// <summary>
         /// A 32-bit unsigned integer, specifying the lower bound of the dimension.
         /// </summary>
-        public UInt32 lLbound;
+        public uint lLbound;
 
         public void FromBytes(WspBuffer buffer)
         {

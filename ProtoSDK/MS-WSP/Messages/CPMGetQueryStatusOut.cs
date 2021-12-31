@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     [Flags]
     public enum QStatus_Values : uint
@@ -64,7 +64,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         public IWspInMessage Request { get; set; }
 
         public WspMessageHeader Header { get; set; }
-
 
         public void FromBytes(WspBuffer buffer)
         {

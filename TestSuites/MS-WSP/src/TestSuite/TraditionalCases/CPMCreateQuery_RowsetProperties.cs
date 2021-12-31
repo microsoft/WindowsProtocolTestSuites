@@ -2,9 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
@@ -15,7 +14,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestMethod]
         [TestCategory("CPMCreateQuery")]
         [Description("This test case is designed to test if rows with a correct count can be retrieved with the _cMaxResults in RowSetProperties set to a smaller value than the number of rows in the result.")]
-        public void CPMCreateQuery_RowsetProperties_SmallercMaxResults()
+        public void CPMCreateQuery_RowsetProperties_SmallerCMaxResults()
         {
             CPMCreateQuery_RowsetProperties_cMaxResults(_cMaxResults: 1U);
         }
@@ -23,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [TestMethod]
         [TestCategory("CPMCreateQuery")]
         [Description("This test case is designed to test if rows with a correct count can be retrieved with the _cMaxResults in RowSetProperties set to a larger value than the number of rows in the result.")]
-        public void CPMCreateQuery_RowsetProperties_LargercMaxResults()
+        public void CPMCreateQuery_RowsetProperties_LargerCMaxResults()
         {
             CPMCreateQuery_RowsetProperties_cMaxResults(_cMaxResults: 5U);
         }
@@ -34,10 +33,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
-            var columnSet = wspAdapter.builder.GetColumnSet(2);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
+            var columnSet = wspAdapter.Builder.GetColumnSet(2);
+            var restrictionArray = wspAdapter.Builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -46,18 +45,18 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_FileName,
             };
-            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+            pidMapper.count = (uint)pidMapper.aPropSpec.Length;
 
             var rowsetProperties = new CRowsetProperties();
             rowsetProperties._cMaxResults = _cMaxResults; // Use an alternative _cMaxResults value rather than the deault value.
 
             Site.Log.Add(LogEntryKind.TestStep, $"Client sends CPMCreateQueryIn with _cMaxResults set to {_cMaxResults} and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, rowsetProperties, pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, rowsetProperties, pidMapper, new CColumnGroupArray(), wspAdapter.Builder.Parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
-                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
-                wspAdapter.builder.GetTableColumn(WspConsts.System_Size, vType_Values.VT_VARIANT)
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_ItemName, CBaseStorageVariant_vType_Values.VT_VARIANT),
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_Size, CBaseStorageVariant_vType_Values.VT_VARIANT)
             };
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");

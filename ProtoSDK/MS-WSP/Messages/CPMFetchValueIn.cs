@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CPMFetchValueIn message requests a property value that was too large to return in a rowset. 
@@ -46,7 +46,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             var bodyBytes = GetBodyBytes();
 
-            UInt32 checksum = Helper.CalculateCheckSum(WspMessageHeader_msg_Values.CPMFetchValueIn, bodyBytes);
+            var checksum = Helper.CalculateChecksum(WspMessageHeader_msg_Values.CPMFetchValueIn, bodyBytes);
 
             var header = Header;
 

@@ -3,17 +3,17 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CFeedbackRestriction structure contains the number of relevant documents and a property specification for a relevance feedback query.
     /// </summary>
-    public struct CFeedbackRestriction : IWspStructure
+    public struct CFeedbackRestriction : IWspRestriction
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the count of relevant documents.
         /// </summary>
-        public UInt32 _cFeedbackDoc;
+        public uint _cFeedbackDoc;
 
         /// <summary>
         /// A CFullPropSpec structure, specifying a property.

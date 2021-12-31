@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     public enum StoreStatus : int
     {
@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     {
         public StoreStatus? Status;
         public int? Length;
-        public CTableVariant rowVariant;
+        public CTableVariant RowVariant;
         public object Data;
     }
 
@@ -51,7 +51,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of rows returned in Rows.
         /// </summary>
-        public UInt32 _cRowsReturned;
+        public uint _cRowsReturned;
 
         /// <summary>
         /// A 32-bit unsigned integer. 
@@ -61,12 +61,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit value representing the handle of the rowset chapter.
         /// </summary>
-        public UInt32 _chapt;
+        public uint _chapt;
 
         /// <summary>
         /// This field MUST contain a structure of the type indicated by the eType field.
         /// </summary>
-        public object SeekDescription;
+        public IWspSeekDescription SeekDescription;
 
         /// <summary>
         /// Row data is formatted as prescribed by column information in the most recent CPMSetBindingsIn message. 
@@ -114,26 +114,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 return;
             }
 
-            _cRowsReturned = buffer.ToStruct<UInt32>();
+            _cRowsReturned = buffer.ToStruct<uint>();
 
             eType = buffer.ToStruct<RowSeekType>();
 
-            _chapt = buffer.ToStruct<UInt32>();
+            _chapt = buffer.ToStruct<uint>();
 
             switch (eType)
             {
                 case RowSeekType.eRowSeekNone:
                     SeekDescription = null;
                     break;
+
                 case RowSeekType.eRowSeekNext:
                     SeekDescription = buffer.ToStruct<CRowSeekNext>();
                     break;
+
                 case RowSeekType.eRowSeekAt:
                     SeekDescription = buffer.ToStruct<CRowSeekAt>();
                     break;
+
                 case RowSeekType.eRowSeekAtRatio:
                     SeekDescription = buffer.ToStruct<CRowSeekAtRatio>();
                     break;
+
                 case RowSeekType.eRowSeekByBookmark:
                     var tempSeekDescription = new CRowSeekByBookmark();
                     tempSeekDescription.FromBytes(buffer);
@@ -168,25 +172,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                     {
                         int valueOffset = rowStartIndex + BindingRequest.aColumns[j].ValueOffset.Value;
 
-                        if (BindingRequest.aColumns[j].vType == vType_Values.VT_VARIANT)
+                        if (BindingRequest.aColumns[j].vType == CBaseStorageVariant_vType_Values.VT_VARIANT)
                         {
-                            Rows[i].Columns[j].rowVariant = new CTableVariant();
-                            Rows[i].Columns[j].rowVariant.Is64bit = this.Is64Bit;
+                            Rows[i].Columns[j].RowVariant = new CTableVariant();
+                            Rows[i].Columns[j].RowVariant.Is64bit = this.Is64Bit;
                             WspBuffer rowVariantBuffer = new WspBuffer(buffer.ReadBytesFromOffset(valueOffset, BindingRequest.aColumns[j].ValueSize.Value));
-                            Rows[i].Columns[j].rowVariant.FromBytes(rowVariantBuffer);
+                            Rows[i].Columns[j].RowVariant.FromBytes(rowVariantBuffer);
 
-                            if (Rows[i].Columns[j].rowVariant.vType == vType_Values.VT_LPWSTR)
+                            if (Rows[i].Columns[j].RowVariant.vType == CBaseStorageVariant_vType_Values.VT_LPWSTR)
                             {
-                                int dataOffset = GetRealOffset(Rows[i].Columns[j].rowVariant.Offset);
-                                Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, dataOffset, buffer);
+                                int dataOffset = GetRealOffset(Rows[i].Columns[j].RowVariant.Offset);
+                                Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].RowVariant.vType, dataOffset, buffer);
                             }
-                            else if (Rows[i].Columns[j].rowVariant.vType.HasFlag(vType_Values.VT_VECTOR))
+                            else if (Rows[i].Columns[j].RowVariant.vType.HasFlag(CBaseStorageVariant_vType_Values.VT_VECTOR))
                             {
-                                var baseVType = Rows[i].Columns[j].rowVariant.vType ^ vType_Values.VT_VECTOR;
-                                var vectorCount = Rows[i].Columns[j].rowVariant.Count;
-                                if (baseVType == vType_Values.VT_LPWSTR)
+                                var baseVType = Rows[i].Columns[j].RowVariant.vType ^ CBaseStorageVariant_vType_Values.VT_VECTOR;
+                                var vectorCount = Rows[i].Columns[j].RowVariant.Count;
+                                if (baseVType == CBaseStorageVariant_vType_Values.VT_LPWSTR)
                                 {
-                                    var startOffset = GetRealOffset(Rows[i].Columns[j].rowVariant.Offset);
+                                    var startOffset = GetRealOffset(Rows[i].Columns[j].RowVariant.Offset);
                                     var items = new List<string>();
                                     for (var idx = 0; idx < vectorCount; idx++)
                                     {
@@ -203,19 +207,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                                             itemOffset = GetRealOffset(offsetBuffer.ToStruct<int>());
                                         }
 
-                                        var item = ReadValueByType(vType_Values.VT_LPWSTR, itemOffset, buffer) as string;
+                                        var item = ReadValueByType(CBaseStorageVariant_vType_Values.VT_LPWSTR, itemOffset, buffer) as string;
                                         items.Add(item);
                                     }
 
                                     Rows[i].Columns[j].Data = items.ToArray();
                                 }
-                                else if (baseVType == vType_Values.VT_FILETIME)
+                                else if (baseVType == CBaseStorageVariant_vType_Values.VT_FILETIME)
                                 {
-                                    var startOffset = GetRealOffset(Rows[i].Columns[j].rowVariant.Offset);
+                                    var startOffset = GetRealOffset(Rows[i].Columns[j].RowVariant.Offset);
                                     var items = new List<object>();
                                     for (var idx = 0; idx < vectorCount; idx++)
                                     {
-                                        var item = ReadValueByType(vType_Values.VT_FILETIME, startOffset, buffer);
+                                        var item = ReadValueByType(CBaseStorageVariant_vType_Values.VT_FILETIME, startOffset, buffer);
                                         startOffset += 8; // VT_FILETIME is a 64-bit value
                                         items.Add(item);
                                     }
@@ -230,7 +234,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                             else
                             {
                                 // If the type is not a string, the offset field saves the actual data.
-                                Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].rowVariant.vType, 8, rowVariantBuffer);
+                                Rows[i].Columns[j].Data = ReadValueByType(Rows[i].Columns[j].RowVariant.vType, 8, rowVariantBuffer);
                             }
                         }
                         else
@@ -249,9 +253,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             throw new NotImplementedException();
         }
 
-        private object ReadValueByType(vType_Values vType, int valueOffset, WspBuffer buffer)
+        private object ReadValueByType(CBaseStorageVariant_vType_Values vType, int valueOffset, WspBuffer buffer)
         {
-            if (vType.HasFlag(vType_Values.VT_VECTOR) || vType.HasFlag(vType_Values.VT_ARRAY))
+            if (vType.HasFlag(CBaseStorageVariant_vType_Values.VT_VECTOR) || vType.HasFlag(CBaseStorageVariant_vType_Values.VT_ARRAY))
             {
                 throw new NotImplementedException();
             }
@@ -259,79 +263,99 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             object value = null;
             switch (vType)
             {
-                case vType_Values.VT_EMPTY:
-                case vType_Values.VT_NULL:
+                case CBaseStorageVariant_vType_Values.VT_EMPTY:
+                case CBaseStorageVariant_vType_Values.VT_NULL:
                     break;
-                case vType_Values.VT_I1:
-                case vType_Values.VT_UI1:
+
+                case CBaseStorageVariant_vType_Values.VT_I1:
+                    value = buffer.Peek<sbyte>(valueOffset);
+                    break;
+
+                case CBaseStorageVariant_vType_Values.VT_UI1:
                     value = buffer.Peek<byte>(valueOffset);
                     break;
-                case vType_Values.VT_I2:
-                case vType_Values.VT_UI2:
-                case vType_Values.VT_BOOL:
+
+                case CBaseStorageVariant_vType_Values.VT_I2:
+                    value = buffer.Peek<short>(valueOffset);
+                    break;
+
+                case CBaseStorageVariant_vType_Values.VT_UI2:
+                case CBaseStorageVariant_vType_Values.VT_BOOL:
                     value = buffer.Peek<ushort>(valueOffset);
                     break;
-                case vType_Values.VT_I4:
-                case vType_Values.VT_INT:
+
+                case CBaseStorageVariant_vType_Values.VT_I4:
+                case CBaseStorageVariant_vType_Values.VT_INT:
                     value = buffer.Peek<int>(valueOffset);
                     break;
-                case vType_Values.VT_R4:
+
+                case CBaseStorageVariant_vType_Values.VT_R4:
                     value = buffer.Peek<float>(valueOffset);
                     break;
-                case vType_Values.VT_UI4:
-                case vType_Values.VT_UINT:
-                case vType_Values.VT_ERROR:
+
+                case CBaseStorageVariant_vType_Values.VT_UI4:
+                case CBaseStorageVariant_vType_Values.VT_UINT:
+                case CBaseStorageVariant_vType_Values.VT_ERROR:
                     value = buffer.Peek<uint>(valueOffset);
                     break;
-                case vType_Values.VT_I8:
-                    value = buffer.Peek<Int64>(valueOffset);
+
+                case CBaseStorageVariant_vType_Values.VT_I8:
+                    value = buffer.Peek<long>(valueOffset);
                     break;
-                case vType_Values.VT_UI8:
-                    value = buffer.Peek<UInt64>(valueOffset);
+
+                case CBaseStorageVariant_vType_Values.VT_UI8:
+                    value = buffer.Peek<ulong>(valueOffset);
                     break;
-                case vType_Values.VT_R8:
+
+                case CBaseStorageVariant_vType_Values.VT_R8:
                     value = buffer.Peek<double>(valueOffset);
                     break;
-                case vType_Values.VT_CY: // An 8-byte two's complement integer (vValue divided by 10,000).
+
+                case CBaseStorageVariant_vType_Values.VT_CY: // An 8-byte two's complement integer (vValue divided by 10,000).
                     throw new NotImplementedException();
-                case vType_Values.VT_DATE:
+
+                case CBaseStorageVariant_vType_Values.VT_DATE:
                     value = DateTime.FromOADate(buffer.Peek<double>(valueOffset)).ToUniversalTime();
                     break;
-                case vType_Values.VT_FILETIME:
-                    value = DateTime.FromFileTime(buffer.Peek<Int64>(valueOffset)).ToUniversalTime();
+
+                case CBaseStorageVariant_vType_Values.VT_FILETIME:
+                    value = DateTime.FromFileTime(buffer.Peek<long>(valueOffset)).ToUniversalTime();
                     break;
-                case vType_Values.VT_DECIMAL:
+
+                case CBaseStorageVariant_vType_Values.VT_DECIMAL:
                     value = buffer.Peek<DECIMAL>(valueOffset);
                     break;
-                case vType_Values.VT_CLSID:
+
+                case CBaseStorageVariant_vType_Values.VT_CLSID:
                     value = buffer.Peek<Guid>(valueOffset);
                     break;
-                case vType_Values.VT_BLOB: // A 4-byte unsigned integer count of bytes in the blob, followed by that many bytes of data.
-                case vType_Values.VT_BLOB_OBJECT:
+
+                case CBaseStorageVariant_vType_Values.VT_BLOB: // A 4-byte unsigned integer count of bytes in the blob, followed by that many bytes of data.
+                case CBaseStorageVariant_vType_Values.VT_BLOB_OBJECT:
                     int blobSize = buffer.Peek<int>(valueOffset);
                     value = buffer.ReadBytesFromOffset(valueOffset + 4, blobSize);
                     break;
-                case vType_Values.VT_BSTR:
+
+                case CBaseStorageVariant_vType_Values.VT_BSTR:
                     int strSize = buffer.Peek<int>(valueOffset);
                     var bytes = buffer.ReadBytesFromOffset(valueOffset + 4, strSize);
 
-                    //TODO: just use UTF8 for a temporary solution
+                    // TODO: Just use UTF8 for a temporary solution
                     // For vType set to VT_BSTR, this field is a set of characters in an OEM–selected character set. 
-                    // The client and server MUST be configured to have interoperable character sets. There is no requirement that it be null-terminated.
+                    // The client and server MUST be configured to have interoperable character sets.
+                    // There is no requirement that it be null-terminated.
                     value = System.Text.Encoding.UTF8.GetString(bytes, 0, bytes.Length);
                     break;
-                case vType_Values.VT_LPSTR:
-                    {
-                        throw new NotImplementedException();
-                    }
+
+                case CBaseStorageVariant_vType_Values.VT_LPSTR:
+                    throw new NotImplementedException();
+
+                case CBaseStorageVariant_vType_Values.VT_LPWSTR:
+                    int strLength = GetNullTerminatedUnicodeStringLength(buffer, valueOffset);
+                    value = System.Text.Encoding.Unicode.GetString(buffer.ReadBytesFromOffset(valueOffset, strLength), 0, strLength);
                     break;
-                case vType_Values.VT_LPWSTR:
-                    {
-                        int strLength = GetNullTerminatedUnicodeStringLength(buffer, valueOffset);
-                        value = System.Text.Encoding.Unicode.GetString(buffer.ReadBytesFromOffset(valueOffset, strLength), 0, strLength);
-                    }
-                    break;
-                case vType_Values.VT_COMPRESSED_LPWSTR:
+
+                case CBaseStorageVariant_vType_Values.VT_COMPRESSED_LPWSTR:
                     value = buffer.Peek<VT_COMPRESSED_LPWSTR>(valueOffset);
                     break;
             }
@@ -356,16 +380,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             if (this.Is64Bit)
             {
                 // If 64-bit offsets are being used, the reserved2 field of the message header is used as the upper 32-bits and _ulClientBase as the lower 32-bits of a 64-bit value.
-                Int64 clientBase = Convert.ToInt64(Request.Header._ulReserved2);
-                clientBase = clientBase << 32;
+                long clientBase = Convert.ToInt64(Request.Header._ulReserved2);
+                clientBase <<= 32;
                 clientBase += ((CPMGetRowsIn)Request)._ulClientBase;
 
                 // Since the ReadBuffer cannot excceed 0x4000, so the dataOffset should be a 32-bit value.
-                return Convert.ToInt32((Int64)offset - clientBase);
+                return Convert.ToInt32((long)offset - clientBase);
             }
             else
             {
-                return (Int32)offset - (int)((CPMGetRowsIn)Request)._ulClientBase;
+                return (int)offset - (int)((CPMGetRowsIn)Request)._ulClientBase;
             }
         }
     }

@@ -3,9 +3,8 @@
 
 using System;
 using System.Linq;
-using System.Text;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
 {
     public class MessageBuilderParameter
     {
@@ -43,8 +42,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
     }
 
     /// <summary>
-    /// Message Builder class provides methods to 
-    /// build MS-WSP request messages
+    /// Message Builder class provides methods to build MS-WSP request messages
     /// </summary>
     public class MessageBuilder
     {
@@ -53,102 +51,112 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Specifies a field is Used
         /// </summary>
-        byte FIELD_USED = 0x01;
+        private const byte FIELD_USED = 0x01;
+
         /// <summary>
         /// Specifies a field is NOT used
         /// </summary>
-        byte FIELD_NOT_USED = 0x00;
+        private const byte FIELD_NOT_USED = 0x00;
+
         /// <summary>
         /// Specifies alignment of 4 bytes
         /// </summary>
-        byte OFFSET_4 = 4;
+        private const byte OFFSET_4 = 4;
+
         /// <summary>
         /// Specifies alignment of 8 bytes
         /// </summary>
-        byte OFFSET_8 = 8;
+        private const byte OFFSET_8 = 8;
+
         /// <summary>
         /// Represent a search scope
         /// </summary>
-        string searchScope = string.Empty;
+        private string searchScope = string.Empty;
+
         /// <summary>
         /// Represent a query string
         /// </summary>
-        string queryString = string.Empty;
+        private string queryString = string.Empty;
 
         /// <summary>
         /// Specifies the property type is ID
         /// </summary>
-        int PROPERTY_ID = 0x1;
+        private const int PROPERTY_ID = 0x1;
 
         /// <summary>
         /// Length of each message header
         /// </summary>
-        int HEADER_LENGTH = 16;
+        private const int HEADER_LENGTH = 16;
 
         /// <summary>
         /// Specifies comma separated properties
         /// </summary>
-        char[] delimiter = new char[] { ',' };
+        private static char[] delimiter = new char[] { ',' };
+
         /// <summary>
         /// Number of external property set count
         /// </summary>
-        uint EXTERNAL_PROPSET_COUNT = 4;
+        private const uint EXTERNAL_PROPSET_COUNT = 4;
 
         /// <summary>
         /// Value to XOR with for Header checksum
         /// </summary>
-        uint CHECKSUM_XOR_VALUE = 0x59533959;
+        private const uint CHECKSUM_XOR_VALUE = 0x59533959;
 
         /// <summary>
         /// Value to OR with for Safe Array Type
         /// </summary>
-        ushort SAFE_ARRAY_TYPE = 0x2000;
+        private const ushort SAFE_ARRAY_TYPE = 0x2000;
 
         /// <summary>
         /// Value to OR with for Vector Type
         /// </summary>
-        ushort VECTOR_TYPE = 0x1000;
+        private const ushort VECTOR_TYPE = 0x1000;
 
         /// <summary>
         /// Command time out
         /// </summary>
-        uint COMMAND_TIME_OUT = 0x1E;
+        private const uint COMMAND_TIME_OUT = 0x1E;
+
         /// <summary>
         /// Content Restriction operation
         /// </summary>
-        uint RELATION_OPERATION = 0x4;
+        private const uint RELATION_OPERATION = 0x4;
 
         /// <summary>
         /// Id of Property Restrictin Node
         /// </summary>
-        uint PROPERTY_RESTRICTION_NODE_ID = 5;
+        private const uint PROPERTY_RESTRICTION_NODE_ID = 5;
 
         /// <summary>
         /// Id of Content Restriction Node
         /// </summary>
-        uint CONTENT_RESTRICTION_NODE_ID = 4;
+        private const uint CONTENT_RESTRICTION_NODE_ID = 4;
 
         /// <summary>
         /// Wieghtage of the Node
         /// </summary>
-        uint NODE_WEIGHTAGE = 1000;
+        private const uint NODE_WEIGHTAGE = 1000;
 
         /// <summary>
         /// Means Logical AND operation between Node Restriction
         /// </summary>
-        uint LOGICAL_AND = 0x1;
+        private const uint LOGICAL_AND = 0x1;
 
         /// <summary>
-        /// static value for chapter of CPMGetRowsIn message
+        /// Static value for chapter of CPMGetRowsIn message
         /// </summary>
-        public static uint chapter;
+        private static uint chapter;
 
         /// <summary>
-        /// static value for RowWidth of CPMGetRowsIn message
+        /// Static value for RowWidth of CPMGetRowsIn message
         /// </summary>
-        public static uint rowWidth = 92;
+        public static uint RowWidth = 92;
 
-        public MessageBuilderParameter parameter;
+        /// <summary>
+        /// The parameter of the builder.
+        /// </summary>
+        public MessageBuilderParameter Parameter;
 
         /// <summary>
         /// Indicates if we use 64-bit or 32-bit when building requests.
@@ -158,42 +166,45 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         #endregion
 
         /// <summary>
-        /// constructor takes the ITestSite as parameter
+        /// Constructor takes the ITestSite as parameter
         /// </summary>
-        /// <param name="testSite">Site from where it needs 
-        /// to read configurable data</param>
+        /// <param name="testSite">Site from where it needs to read configurable data</param>
         public MessageBuilder(MessageBuilderParameter parameter)
         {
-            this.parameter = parameter;
+            this.Parameter = parameter;
         }
 
         #region MS-WSP Request Messages
+
         /// <summary>
         /// Builds CPMConnectIn message 
         /// </summary>
-        /// <param name="clientVersion">Version of the
-        /// protocol client</param>
-        /// <param name="isRemote">If the query is remote, 
-        /// then 1 else 0</param>
+        /// <param name="clientVersion">Version of the protocol client</param>
+        /// <param name="isRemote">If the query is remote, then 1 else 0</param>
         /// <param name="userName">User initiating the connection</param>
         /// <param name="machineName">Client Machine Name</param>
         /// <param name="serverMachineName">Server Machine Name</param>
-        /// <param name="catalogName">Name of the Catalog 
-        /// under operation</param>
+        /// <param name="catalogName">Name of the Catalog under operation</param>
         /// <param name="languageLocale">Language Locale</param>
         /// <param name="cPropSets">The number of CDbPropSet structures in the following fields</param>
         /// <param name="cExtPropSet">The number of CDbPropSet structures in aPropertySet</param>
         /// <returns>CPMConnectIn message</returns>
-        public CPMConnectIn GetConnectInMessage(uint clientVersion, int isRemote,
-            string userName, string machineName, string serverMachineName,
-            string catalogName, string languageLocale,
-            uint cPropSets = 2, uint cExtPropSet = 4)
+        public CPMConnectIn GetCPMConnectIn(
+            uint clientVersion,
+            int isRemote,
+            string userName,
+            string machineName,
+            string serverMachineName,
+            string catalogName,
+            string languageLocale,
+            uint cPropSets = 2,
+            uint cExtPropSet = 4)
         {
             var message = new CPMConnectIn();
 
             message._iClientVersion = clientVersion;
 
-            message._fClientIsRemote = (UInt32)isRemote;
+            message._fClientIsRemote = (uint)isRemote;
 
             message.MachineName = machineName;
 
@@ -222,8 +233,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             return message;
         }
 
-
-
         /// <summary>
         /// Gets QueryStatusIn message BLOB for a given cursor
         /// </summary>
@@ -246,8 +255,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public byte[] GetCPMQueryStatusExIn(uint cursor, uint bookMarkHandle)
         {
             int index = 0;
-            byte[] bytes = new byte[Constant.SIZE_OF_UINT/*Cursor Handle */
-                + Constant.SIZE_OF_UINT/* BookMark Handle */];
+            byte[] bytes = new byte[Constants.SIZE_OF_UINT/*Cursor Handle */
+                + Constants.SIZE_OF_UINT/* BookMark Handle */];
             Helper.CopyBytes(bytes, ref index,
                 BitConverter.GetBytes(cursor));
             Helper.CopyBytes(bytes, ref index,
@@ -286,7 +295,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <returns>CPMRatioFinishedIn BLOB</returns>
         public byte[] GetCPMRatioFinishedIn(uint cursor, uint quick)
         {
-            int ratioFinishedInMessageLength = 2 * Constant.SIZE_OF_UINT;
+            int ratioFinishedInMessageLength = 2 * Constants.SIZE_OF_UINT;
             byte[] mainBlob = new byte[ratioFinishedInMessageLength];
             //================ Converting value into Bytes ==================
             int index = 0;
@@ -325,19 +334,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Gets CPMCompareBmkIn Message Blob
         /// </summary>
-        /// <param name="cursor">Handle from the 
-        /// CPMCreateQueryOut message</param>
-        /// <param name="chapt">Handle of the 
-        /// chapter containing the bookmarks to compare</param>
-        /// <param name="bmkFirst">Handle to the 
-        /// first bookmark to compare</param>
-        /// <param name="bmkSecond">Handle to the 
-        /// second bookmark to compare</param>
+        /// <param name="cursor">Handle from the CPMCreateQueryOut message</param>
+        /// <param name="chapt">Handle of the chapter containing the bookmarks to compare</param>
+        /// <param name="bmkFirst">Handle to the first bookmark to compare</param>
+        /// <param name="bmkSecond">Handle to the second bookmark to compare</param>
         /// <returns>CPMCompareBmkIn BLOB</returns>
-        public byte[] GetCPMCompareBmkIn(uint cursor,
-            uint chapt, uint bmkFirst, uint bmkSecond)
+        public byte[] GetCPMCompareBmkIn(uint cursor, uint chapt, uint bmkFirst, uint bmkSecond)
         {
-            int compareBmkInMessageLength = 4 * Constant.SIZE_OF_UINT;
+            int compareBmkInMessageLength = 4 * Constants.SIZE_OF_UINT;
             byte[] mainBlob = new byte[compareBmkInMessageLength];
             //================ Converting values into Bytes ====================
             int index = 0;
@@ -356,14 +360,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Gets CPMRestartPositionIn Message BLOB
         /// </summary>
-        /// <param name="cursor">Handle obtained from 
-        /// a CPMCreateQueryOut message</param>
-        /// <param name="chapt">Handle of a chapter from
-        /// which to retrieve rows</param>
+        /// <param name="cursor">Handle obtained from a CPMCreateQueryOut message</param>
+        /// <param name="chapt">Handle of a chapter from which to retrieve rows</param>
         /// <returns>CPMRestartPositionIn BLOB</returns>
-        public byte[] GetRestartPositionIn(uint cursor, uint chapt)
+        public byte[] GetCPMRestartPositionIn(uint cursor, uint chapt)
         {
-            int restartPositionInMessageLength = 2 * Constant.SIZE_OF_UINT;
+            int restartPositionInMessageLength = 2 * Constants.SIZE_OF_UINT;
             byte[] mainBlob = new byte[restartPositionInMessageLength];
             //================ Converting values into Bytes ====================
             int index = 0;
@@ -377,9 +379,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="cursor">Handle from the CPMCreateQueryOut message</param>
         /// <returns>CPMFreeCursorIn Message</returns>
-        public CPMFreeCursorIn GetFreeCursorIn(uint cursor)
+        public CPMFreeCursorIn GetCPMFreeCursorIn(uint cursor)
         {
-            var message = new CPMFreeCursorIn 
+            var message = new CPMFreeCursorIn
             {
                 Header = new WspMessageHeader
                 {
@@ -394,17 +396,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Gets CPMGetApproximatePositionIn Message Blob
         /// </summary>
-        /// <param name="cursor">Handle from 
-        /// CPMCreateQueryOut message</param>
-        /// <param name="chapt">Handle to the chapter
-        /// containing the bookmark</param>
-        /// <param name="bmk">Handle to the bookmark for
-        /// which to retrieve the approximate position</param>
-        /// <returns></returns>
-        public byte[] GetApproximatePositionIn
-            (uint cursor, uint chapt, uint bmk)
+        /// <param name="cursor">Handle from CPMCreateQueryOut message</param>
+        /// <param name="chapt">Handle to the chapter containing the bookmark</param>
+        /// <param name="bmk">Handle to the bookmark for which to retrieve the approximate position</param>
+        /// <returns>CPMGetApproximatePosiionIn Mesage</returns>
+        public byte[] GetCPMApproximatePositionIn(uint cursor, uint chapt, uint bmk)
         {
-            int approximatePositionInLength = 3 * Constant.SIZE_OF_UINT;
+            int approximatePositionInLength = 3 * Constants.SIZE_OF_UINT;
             byte[] mainBlob = new byte[approximatePositionInLength];
             //========== Converting values into Bytes ============
             int index = 0;
@@ -422,7 +420,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Builds CPMDisconnect message
         /// </summary>
         /// <returns>CPMDisconnect BLOB</returns>
-        public byte[] GetDisconnectMessage()
+        public byte[] GetCPMDisconnect()
         {
             byte[] messageHeader = null;
             int index = 0;
@@ -431,7 +429,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint messageStatus = 0;
             uint checksum = 0;
             uint reserveField = 0;
-            messageHeader = new byte[4 * Constant.SIZE_OF_UINT];
+            messageHeader = new byte[4 * Constants.SIZE_OF_UINT];
             Helper.CopyBytes
                 (messageHeader, ref index, BitConverter.GetBytes(messageValue));
             Helper.CopyBytes
@@ -445,15 +443,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
-        /// Build PMFindIndicesIn message
+        /// Build CPMFindIndicesIn message
         /// </summary>
         /// <param name="cWids"></param>
         /// <param name="cDepthPrev"></param>
         /// <returns>CPMFindIndices BLOB</returns>
-        public byte[] GetCPMFindIndices(uint cWids, uint cDepthPrev)
+        public byte[] GetCPMFindIndicesIn(uint cWids, uint cDepthPrev)
         {
             int index = 0;
-            int messageOffset = 4 * Constant.SIZE_OF_UINT;
+            int messageOffset = 4 * Constants.SIZE_OF_UINT;
             byte[] pwids = new byte[cWids];
 
             byte[] prgiRowPrev = new byte[cDepthPrev];
@@ -473,9 +471,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// Build CPMGetRowsetNotifyIn message
         /// </summary>
         /// <returns>CPMGetRowsetNotify BLOB</returns>
-        public byte[] GetCPMGetRowsetNotify()
+        public byte[] GetCPMGetRowsetNotifyIn()
         {
-            byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
+            byte[] mainBlob = new byte[Constants.SIZE_OF_UINT];
 
             return AddMessageHeader
                 (MessageType.CPMGetRowsetNotifyIn, mainBlob);
@@ -487,9 +485,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="priority"></param>
         /// <param name="eventFrequency"></param>
         /// <returns>CPMSetScopePrioritization BLOB</returns>
-        public byte[] GetCPMSetScopePrioritization(uint priority, uint eventFrequency)
+        public byte[] GetCPMSetScopePrioritizationIn(uint priority, uint eventFrequency)
         {
-            byte[] mainBlob = new byte[2 * Constant.SIZE_OF_UINT];
+            byte[] mainBlob = new byte[2 * Constants.SIZE_OF_UINT];
 
             int index = 0;
             Helper.CopyBytes(mainBlob, ref index,
@@ -513,7 +511,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint messageStatus = 0;
             uint checksum = 0;
             uint reserveField = 0;
-            messageHeader = new byte[4 * Constant.SIZE_OF_UINT];
+            messageHeader = new byte[4 * Constants.SIZE_OF_UINT];
             Helper.CopyBytes
                 (messageHeader, ref index, BitConverter.GetBytes(messageValue));
             Helper.CopyBytes
@@ -525,14 +523,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             return messageHeader;
         }
+
         #endregion
 
         #region Structures for CPMConnectIn message
+
         /// <summary>
         /// Gets the first PropertySet1 ConnectIn message
         /// </summary>
-        /// <param name="messageOffset">offset from
-        /// the starting of the message</param>
         /// <param name="catalogName">Name of the catalog</param>
         /// <returns>PropertySet BLOB</returns>
         private CDbPropSet GetPropertySet1(string catalogName)
@@ -547,37 +545,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             propSet.aProps = new CDbProp[0];
 
-            // --Get First PropSet with Guid Value DBPROPSET_FSCIFRMWRK_EXT -
-
-            foreach (string property in parameter.PropertySet_One_DBProperties)
+            // Get First PropSet with Guid Value DBPROPSET_FSCIFRMWRK_EXT
+            foreach (string property in Parameter.PropertySet_One_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
-                        // Creating CDBProp with PropId 2 
-                        // for GUID type FSCIFRMWRK
-                        var value_FSCIFRMWRK_2 = GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(catalogName));
-                        AppendDBProp(ref propSet, 2, value_FSCIFRMWRK_2);
+                        // Creating CDBProp with PropId 2 for GUID type FSCIFRMWRK
+                        var value_FSCIFRMWRK_2 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_LPWSTR, new VT_LPWSTR(catalogName));
+                        AppendDbProp(ref propSet, 2, value_FSCIFRMWRK_2);
                         break;
+
                     case "3":
-                        // Creating CDBProp with PropId 3 
-                        //for GUID type FCCIFRMWRK
-                        var value_FCCIFRMWRK_3 = GetVector(vType_Values.VT_LPWSTR, new VT_LPWSTR[] { new VT_LPWSTR(null) });
-                        AppendDBProp(ref propSet, 3, value_FCCIFRMWRK_3);
+                        // Creating CDBProp with PropId 3 for GUID type FCCIFRMWRK
+                        var value_FCCIFRMWRK_3 = GetVector(CBaseStorageVariant_vType_Values.VT_LPWSTR, new VT_LPWSTR[] { new VT_LPWSTR(null) });
+                        AppendDbProp(ref propSet, 3, value_FCCIFRMWRK_3);
                         break;
+
                     case "4":
-                        // Creating CDBProp with PropId 4 
-                        // for GUID type FSCIFRMWRK
-                        var value_FSCIFRMWRK_4 = GetVector(vType_Values.VT_I4, new Int32[] { 1 });
-                        AppendDBProp(ref propSet, 4, value_FSCIFRMWRK_4);
+                        // Creating CDBProp with PropId 4 for GUID type FSCIFRMWRK
+                        var value_FSCIFRMWRK_4 = GetVector(CBaseStorageVariant_vType_Values.VT_I4, new int[] { 1 });
+                        AppendDbProp(ref propSet, 4, value_FSCIFRMWRK_4);
                         break;
 
                     case "7":
-                        // Creating CDBProp with PropId 7 
-                        //for GUID type FSCIFRMWRK
-                        var value_FSCIFRMWRK_7 = GetBaseStorageVariant(vType_Values.VT_I4, (Int32)0);
-                        AppendDBProp(ref propSet, 7, value_FSCIFRMWRK_7);
+                        // Creating CDBProp with PropId 7 for GUID type FSCIFRMWRK
+                        var value_FSCIFRMWRK_7 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_I4, (int)0);
+                        AppendDbProp(ref propSet, 7, value_FSCIFRMWRK_7);
                         break;
+
                     default:
                         break;
                 }
@@ -585,13 +581,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             return propSet;
         }
+
         /// <summary>
         /// Gets the first PropertySet2 ConnectIn message
         /// </summary>
-        /// <param name="messageOffset">offset from the 
-        /// starting of the message</param>
-        /// <param name="machineName">Name of the 
-        /// connecting client</param>
+        /// <param name="machineName">Name of the connecting client</param>
         /// <returns>PropertySet BLOB</returns>
         private CDbPropSet GetPropertySet2(string machineName)
         {
@@ -605,16 +599,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             propSet.aProps = new CDbProp[0];
 
-            foreach (string property in parameter.PropertySet_Two_DBProperties)
+            foreach (string property in Parameter.PropertySet_Two_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
-                        // Creating CDBProp with PropId 2 
-                        //for GUID type CIFRMWRKCORE
-                        var value_CIFRMWRKCORE_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(machineName));
-                        AppendDBProp(ref propSet, 2, value_CIFRMWRKCORE_2);
+                        // Creating CDBProp with PropId 2 for GUID type CIFRMWRKCORE
+                        var value_CIFRMWRKCORE_2 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BSTR, new VT_BSTR(machineName));
+                        AppendDbProp(ref propSet, 2, value_CIFRMWRKCORE_2);
                         break;
+
                     default:
                         break;
                 }
@@ -622,12 +616,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             return propSet;
         }
+
         /// <summary>
         /// PropertySet1 for extPropSets array
         /// </summary>
-        /// <param name="messageOffset">messageOffset</param>
-        /// <param name="languageLocale">language locale 
-        /// of the client</param>
+        /// <param name="languageLocale">language locale of the client</param>
         /// <returns>PropertySet BLOB</returns>
         private CDbPropSet GetAPropertySet1(string languageLocale)
         {
@@ -635,7 +628,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             uint cProperties = 6;
 
-            var guid = parameter.Array_PropertySet_One_Guid;
+            var guid = Parameter.Array_PropertySet_One_Guid;
 
             propSet.cProperties = cProperties;
 
@@ -644,154 +637,144 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             propSet.aProps = new CDbProp[0];
 
             // Compile aPropertySet1 with Guid Value DBPROPSET_MSIDXS_ROWSETEXT
-            foreach (string property in parameter.Array_PropertySet_One_DBProperties)
+            foreach (string property in Parameter.Array_PropertySet_One_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
-                        // Creating CDBProp with PropId 2 
-                        //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_2 = GetBaseStorageVariant(vType_Values.VT_I4, (Int32)0);
-                        AppendDBProp(ref propSet, 2, value_ROWSETEXT_2);
+                        // Creating CDBProp with PropId 2 for GUID type ROWSETEXT
+                        var value_ROWSETEXT_2 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_I4, (int)0);
+                        AppendDbProp(ref propSet, 2, value_ROWSETEXT_2);
                         break;
-                    case "3":
-                        // Creating CDBProp with PropId 3 
-                        //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_3 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(languageLocale));
-                        AppendDBProp(ref propSet, 3, value_ROWSETEXT_3);
-                        break;
-                    case "4":
 
-                        // Creating CDBProp with PropId 4 
-                        //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_4 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(""));
-                        AppendDBProp(ref propSet, 4, value_ROWSETEXT_4);
+                    case "3":
+                        // Creating CDBProp with PropId 3 for GUID type ROWSETEXT
+                        var value_ROWSETEXT_3 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BSTR, new VT_BSTR(languageLocale));
+                        AppendDbProp(ref propSet, 3, value_ROWSETEXT_3);
+                        break;
+
+                    case "4":
+                        // Creating CDBProp with PropId 4 for GUID type ROWSETEXT
+                        var value_ROWSETEXT_4 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BSTR, new VT_BSTR(""));
+                        AppendDbProp(ref propSet, 4, value_ROWSETEXT_4);
                         break;
 
                     case "5":
-                        // Creating CDBProp with PropId 5 
-                        //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_5 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(""));
-                        AppendDBProp(ref propSet, 5, value_ROWSETEXT_5);
+                        // Creating CDBProp with PropId 5 for GUID type ROWSETEXT
+                        var value_ROWSETEXT_5 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BSTR, new VT_BSTR(""));
+                        AppendDbProp(ref propSet, 5, value_ROWSETEXT_5);
                         break;
 
                     case "6":
-
-                        // Creating CDBProp with PropId 6 
-                        // for GUID type ROWSETEXT
-                        var value_ROWSETEXT_6 = GetBaseStorageVariant(vType_Values.VT_I4, (Int32)0);
-                        AppendDBProp(ref propSet, 6, value_ROWSETEXT_6);
+                        // Creating CDBProp with PropId 6 for GUID type ROWSETEXT
+                        var value_ROWSETEXT_6 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_I4, (int)0);
+                        AppendDbProp(ref propSet, 6, value_ROWSETEXT_6);
                         break;
 
                     case "7":
-
-                        // Creating CDBProp with PropId 7 
-                        //for GUID type ROWSETEXT
-                        var value_ROWSETEXT_7 = GetBaseStorageVariant(vType_Values.VT_I4, (Int32)0);
-                        AppendDBProp(ref propSet, 7, value_ROWSETEXT_7);
+                        // Creating CDBProp with PropId 7 for GUID type ROWSETEXT
+                        var value_ROWSETEXT_7 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_I4, (int)0);
+                        AppendDbProp(ref propSet, 7, value_ROWSETEXT_7);
                         break;
+
                     default:
                         break;
                 }
             }
+
             return propSet;
         }
+
         /// <summary>
         /// PropertySet2 for extPropSets array
         /// </summary>
-        /// <param name="messageOffset">messageOffset</param>
         /// <returns>PropertySet BLOB</returns>
         private CDbPropSet GetAPropertySet2()
         {
             var propSet = new CDbPropSet();
 
             uint cProperties = 10;
-            var guid = parameter.Array_PropertySet_Two_Guid;
+            var guid = Parameter.Array_PropertySet_Two_Guid;
 
             propSet.cProperties = cProperties;
             propSet.guidPropertySet = guid;
             propSet.aProps = new CDbProp[0];
 
-            //---- Compile aPropertySet2 with Guid Value DBPROPSET_QUERYEXT
-            foreach (string property in parameter.Array_PropertySet_Two_DBProperties)
+            // Compile aPropertySet2 with Guid Value DBPROPSET_QUERYEXT
+            foreach (string property in Parameter.Array_PropertySet_Two_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
-                        // Creating CDBProp with PropId 2
-                        // for GUID type QUERYEXT
-                        var value_QUERYEXT_2 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 2, value_QUERYEXT_2);
+                        // Creating CDBProp with PropId 2 for GUID type QUERYEXT
+                        var value_QUERYEXT_2 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 2, value_QUERYEXT_2);
                         break;
+
                     case "3":
-                        // Creating CDBProp with PropId 3 
-                        // for GUID type QUERYEXT
-                        var value_QUERYEXT_3 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 3, value_QUERYEXT_3);
+                        // Creating CDBProp with PropId 3 for GUID type QUERYEXT
+                        var value_QUERYEXT_3 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 3, value_QUERYEXT_3);
                         break;
+
                     case "4":
-
-                        // Creating CDBProp with PropId 4 
-                        //for GUID type QUERYEXT
-                        var value_QUERYEXT_4 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 4, value_QUERYEXT_4);
+                        // Creating CDBProp with PropId 4 for GUID type QUERYEXT
+                        var value_QUERYEXT_4 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 4, value_QUERYEXT_4);
                         break;
+
                     case "5":
-                        // Creating CDBProp with PropId 5 
-                        //for GUID type QUERYEXT
-                        var value_QUERYEXT_5 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 5, value_QUERYEXT_5);
+                        // Creating CDBProp with PropId 5 for GUID type QUERYEXT
+                        var value_QUERYEXT_5 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 5, value_QUERYEXT_5);
                         break;
+
                     case "6":
-                        // Creating CDBProp with PropId 6
-                        //for GUID type QUERYEXT
-                        var value_QUERYEXT_6 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(""));
-                        AppendDBProp(ref propSet, 6, value_QUERYEXT_6);
+                        // Creating CDBProp with PropId 6 for GUID type QUERYEXT
+                        var value_QUERYEXT_6 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BSTR, new VT_BSTR(""));
+                        AppendDbProp(ref propSet, 6, value_QUERYEXT_6);
                         break;
+
                     case "8":
-                        // Creating CDBProp with PropId 8 
-                        //for GUID type QUERYEXT
-                        var value_QUERYEXT_8 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 8, value_QUERYEXT_8);
+                        // Creating CDBProp with PropId 8 for GUID type QUERYEXT
+                        var value_QUERYEXT_8 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 8, value_QUERYEXT_8);
                         break;
+
                     case "10":
-
-                        // Creating CDBProp with PropId 10 
-                        //for GUID type QUERYEXT
-                        var value_QUERYEXT_10 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 10, value_QUERYEXT_10);
+                        // Creating CDBProp with PropId 10 for GUID type QUERYEXT
+                        var value_QUERYEXT_10 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 10, value_QUERYEXT_10);
                         break;
+
                     case "12":
-
-                        // Creating CDBProp with PropId 12 
-                        //for GUID type QUERYEXT
-                        var value_QUERYEXT_12 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 12, value_QUERYEXT_12);
+                        // Creating CDBProp with PropId 12 for GUID type QUERYEXT
+                        var value_QUERYEXT_12 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 12, value_QUERYEXT_12);
                         break;
+
                     case "13":
-                        // Creating CDBProp with PropId 13 
-                        //for GUID type QUERYEXT
-                        var value_QUERYEXT_13 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 13, value_QUERYEXT_13);
+                        // Creating CDBProp with PropId 13 for GUID type QUERYEXT
+                        var value_QUERYEXT_13 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 13, value_QUERYEXT_13);
                         break;
 
                     case "14":
-
-                        // Creating CDBProp with PropId 14 
-                        //for GUID type QUERYEXT
-                        var value_QUERYEXT_14 = GetBaseStorageVariant(vType_Values.VT_BOOL, (UInt16)0x0000);
-                        AppendDBProp(ref propSet, 14, value_QUERYEXT_14);
+                        // Creating CDBProp with PropId 14 for GUID type QUERYEXT
+                        var value_QUERYEXT_14 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BOOL, (ushort)0x0000);
+                        AppendDbProp(ref propSet, 14, value_QUERYEXT_14);
                         break;
+
                     default:
                         break;
                 }
             }
+
             return propSet;
         }
         /// <summary>
         /// Gets PropertySet3 of external PropertySets array
         /// </summary>
-        /// <param name="messageOffset">message Offset</param>
         /// <param name="serverName">Name of the Server to connect</param>
         /// <returns>BLOB</returns>
         private CDbPropSet GetAPropertySet3(string serverName)
@@ -799,23 +782,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             var propSet = new CDbPropSet();
 
             uint cProperties = 1;
-            var guid = parameter.Array_PropertySet_Three_Guid;
+            var guid = Parameter.Array_PropertySet_Three_Guid;
 
             propSet.cProperties = cProperties;
             propSet.guidPropertySet = guid;
             propSet.aProps = new CDbProp[0];
 
-
-            foreach (string property in parameter.Array_PropertySet_Three_DBProperties)
+            foreach (string property in Parameter.Array_PropertySet_Three_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
                         // Creating CDBProp with PropId 2
                         // for GUID type FSCIFRMWRK_EXT
-                        var value_FSCIFRMWRK_EXT_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(serverName));
-                        AppendDBProp(ref propSet, 2, value_FSCIFRMWRK_EXT_2);
+                        var value_FSCIFRMWRK_EXT_2 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BSTR, new VT_BSTR(serverName));
+                        AppendDbProp(ref propSet, 2, value_FSCIFRMWRK_EXT_2);
                         break;
+
                     default:
                         break;
                 }
@@ -826,7 +809,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Gets PropertySet4 of external PropertySets array
         /// </summary>
-        /// <param name="messageOffset">message Offset</param>
         /// <param name="catalogName">Name of the Catalog to connect</param>
         /// <returns>BLOB</returns>
         private CDbPropSet GetAPropertySet4(string catalogName)
@@ -835,39 +817,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             uint cProperties = 3;
 
-
-
-            var guid = parameter.Array_PropertySet_Four_Guid;
+            var guid = Parameter.Array_PropertySet_Four_Guid;
 
             propSet.cProperties = cProperties;
             propSet.guidPropertySet = guid;
             propSet.aProps = new CDbProp[0];
 
-
-            //Compile aPropertySet4 with Guid Value DBPROPSET_CIFRMWRKCORE_EXT
-            foreach (string property in parameter.Array_PropertySet_Four_DBProperties)
+            // Compile aPropertySet4 with Guid Value DBPROPSET_CIFRMWRKCORE_EXT
+            foreach (string property in Parameter.Array_PropertySet_Four_DBProperties)
             {
                 switch (property)
                 {
                     case "2":
-                        // Creating CDBProp with PropId 2 
-                        //for GUID type CIFRMWRKCORE_EXT
-                        var value_CIFRMWRKCORE_EXT_2 = GetBaseStorageVariant(vType_Values.VT_BSTR, new VT_BSTR(catalogName));
-                        AppendDBProp(ref propSet, 2, value_CIFRMWRKCORE_EXT_2);
+                        // Creating CDBProp with PropId 2 for GUID type CIFRMWRKCORE_EXT
+                        var value_CIFRMWRKCORE_EXT_2 = GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_BSTR, new VT_BSTR(catalogName));
+                        AppendDbProp(ref propSet, 2, value_CIFRMWRKCORE_EXT_2);
                         break;
+
                     case "3":
-                        // Creating CDBProp with PropId 3 
-                        //for GUID type CIFRMWRKCORE_EXT
-                        var safeArrayForStr = GetSafeArray<VT_BSTR>(vType_Values.VT_BSTR, new VT_BSTR[] { new VT_BSTR("") }, 0);
-                        AppendDBProp(ref propSet, 3, safeArrayForStr);
+                        // Creating CDBProp with PropId 3 for GUID type CIFRMWRKCORE_EXT
+                        var safeArrayForStr = GetSafeArray<VT_BSTR>(CBaseStorageVariant_vType_Values.VT_BSTR, new VT_BSTR[] { new VT_BSTR("") }, 0);
+                        AppendDbProp(ref propSet, 3, safeArrayForStr);
                         break;
 
                     case "4":
-                        // Creating CDBProp with PropId 4
-                        // for GUID type 
-                        var safeArrayForInt = GetSafeArray<Int32>(vType_Values.VT_I4, new Int32[] { 0 }, 0);
-                        AppendDBProp(ref propSet, 4, safeArrayForInt);
+                        // Creating CDBProp with PropId 4 for GUID type CIFRMWRKCORE_EXT
+                        var safeArrayForInt = GetSafeArray<int>(CBaseStorageVariant_vType_Values.VT_I4, new int[] { 0 }, 0);
+                        AppendDbProp(ref propSet, 4, safeArrayForInt);
                         break;
+
                     default:
                         break;
                 }
@@ -881,9 +859,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="propertySet">PropertySet BLOB</param>
         /// <param name="id">DbPropId</param>
-        /// <param name="columnValue">BLOB of the Value field</param>
-        /// <param name="messageOffSet">messageOffSet</param>
-        private void AppendDBProp(ref CDbPropSet propertySet, uint id, CBaseStorageVariant value)
+        /// <param name="value">BLOB of the Value field</param>
+        private void AppendDbProp(ref CDbPropSet propertySet, uint id, CBaseStorageVariant value)
         {
             uint dbPropId = id;
             uint dbPropOption = 0;
@@ -907,27 +884,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Get ColumnId for PropertySet
         /// </summary>
-        /// <param name="messageOffset">messageOffset</param>
         /// <returns>BLOB ColumnID</returns>
         private CDbColId GetColumnId()
         {
             var result = new CDbColId(WspConsts.EmptyGuid, 0);
             return result;
         }
+
         #endregion
 
         #region Structures of CPMGetRowsIn message
+
         /// <summary>
         /// Gets FullPropertySpec for a given GUID, eKIND and propSec Id
         /// </summary>
         /// <param name="guid">PropSpec GUID</param>
         /// <param name="kind">EKind</param>
         /// <param name="propSec">PropSec Id</param>
-        /// <param name="messageOffset">offset from the 
-        /// beginning of the message</param>
+        /// <param name="messageOffset">offset from the beginning of the message</param>
         /// <returns>full property spec structure BLOB</returns>
-        private byte[] GetFullPropSec
-            (Guid guid, int kind, int propSec, ref int messageOffset)
+        private byte[] GetFullPropSec(Guid guid, int kind, int propSec, ref int messageOffset)
         {
             int startingIndex = messageOffset;
             int index = 0;
@@ -941,10 +917,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 }
                 messageOffset += padding.Length;
             }
-            messageOffset += Constant.SIZE_OF_GUID;
+            messageOffset += Constants.SIZE_OF_GUID;
             uint ulKind = (uint)kind;
             uint pRpSec = (uint)propSec;
-            messageOffset += 2 * Constant.SIZE_OF_UINT;
+            messageOffset += 2 * Constants.SIZE_OF_UINT;
             byte[] mainBlob = new byte[messageOffset - startingIndex];
             if (padding != null)
             {
@@ -958,21 +934,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 (mainBlob, ref index, BitConverter.GetBytes(pRpSec));
             return mainBlob;
         }
+
         /// <summary>
         /// Gets the Seek Description type for the RowsIn message
         /// </summary>
         /// <param name="eType">eType</param>
         /// <returns>returns object form of SeekDescription variable</returns>
-        private object GetSeekDescription(eType_Values eType)
+        private IWspSeekDescription GetSeekDescription(CPMGetRowsIn_eType_Values eType)
         {
-            object result = null;
+            IWspSeekDescription result = null;
 
             switch (eType)
             {
-                case eType_Values.None:
+                case CPMGetRowsIn_eType_Values.None:
                     break;
 
-                case eType_Values.eRowSeekNext:
+                case CPMGetRowsIn_eType_Values.eRowSeekNext:
                     {
                         result = new CRowSeekNext()
                         {
@@ -981,7 +958,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     }
                     break;
 
-                case eType_Values.eRowSeekAt:
+                case CPMGetRowsIn_eType_Values.eRowSeekAt:
                     {
                         result = new CRowSeekAt()
                         {
@@ -992,7 +969,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     }
                     break;
 
-                case eType_Values.eRowSeekAtRatio:
+                case CPMGetRowsIn_eType_Values.eRowSeekAtRatio:
                     {
                         result = new CRowSeekAtRatio()
                         {
@@ -1087,21 +1064,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node._paNode = new CRestriction[2];
 
-            node._paNode[0] = GetPropertyRestriction(_relop_Values.PREQ, WspConsts.System_Search_Scope, GetBaseStorageVariant(vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope)));
+            node._paNode[0] = GetPropertyRestriction(CPropertyRestriction_relop_Values.PREQ, WspConsts.System_Search_Scope, GetBaseStorageVariant(CBaseStorageVariant_vType_Values.VT_LPWSTR, new VT_LPWSTR(searchScope)));
 
             node._paNode[1] = GetContentRestriction(queryString, queryStringProperty);
 
             result.Restriction = node;
 
             return result;
-
         }
 
         /// <summary>
         /// Gets CPropertyRestriction specific to the query path
         /// </summary>
         /// <returns></returns>
-        public CRestriction GetPropertyRestriction(_relop_Values relopValue, CFullPropSpec propSpec, CBaseStorageVariant prVal)
+        public CRestriction GetPropertyRestriction(CPropertyRestriction_relop_Values relopValue, CFullPropSpec propSpec, CBaseStorageVariant prVal)
         {
             var result = new CRestriction();
 
@@ -1115,15 +1091,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node._Property = propSpec;
 
-            node._prval = prVal; 
+            node._prval = prVal;
 
-            node._lcid = parameter.LcidValue;
+            node._lcid = Parameter.LcidValue;
 
             result.Restriction = node;
 
             return result;
         }
-   
+
         /// <summary>
         /// Get rowset event structure
         /// </summary>
@@ -1135,13 +1111,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (ENABLEROWSETEVENTS)
             {
-                result._uBooleanOptions = _uBooleanOptions_Values.eScrollable | _uBooleanOptions_Values.eEnableRowsetEvents;
-                Constant.DBPROP_ENABLEROWSETEVENTS = true;
+                result._uBooleanOptions = CRowsetProperties_uBooleanOptions_Values.eScrollable | CRowsetProperties_uBooleanOptions_Values.eEnableRowsetEvents;
+                Constants.DBPROP_ENABLEROWSETEVENTS = true;
             }
             else
             {
-                result._uBooleanOptions = _uBooleanOptions_Values.eScrollable;
-                Constant.DBPROP_ENABLEROWSETEVENTS = false;
+                result._uBooleanOptions = CRowsetProperties_uBooleanOptions_Values.eScrollable;
+                Constants.DBPROP_ENABLEROWSETEVENTS = false;
             }
 
             result._ulMaxOpenRows = 0x00000000;
@@ -1155,7 +1131,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             return result;
         }
 
-
         /// <summary>
         /// Gets the ContentRestrictionNode structure specific 
         /// to the query Text
@@ -1164,7 +1139,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="queryStringProperty">Property used by Query string</param>
         /// <param name="generateMethod">The value of _ulGenerateMethod field</param>
         /// <returns>ContentRestriction structure Node</returns>
-        public CRestriction GetContentRestriction(string queryString, CFullPropSpec queryStringProperty, _ulGenerateMethod_Values generateMethod = _ulGenerateMethod_Values.GENERATE_METHOD_EXACT)
+        public CRestriction GetContentRestriction(string queryString, CFullPropSpec queryStringProperty, CContentRestriction_ulGenerateMethod_Values generateMethod = CContentRestriction_ulGenerateMethod_Values.GENERATE_METHOD_EXACT)
         {
             var result = new CRestriction();
 
@@ -1176,11 +1151,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             node._Property = queryStringProperty;
 
-            node.Cc = (UInt32)queryString.Length;
+            node.Cc = (uint)queryString.Length;
 
             node._pwcsPhrase = queryString;
 
-            node.Lcid = parameter.LcidValue;
+            node.Lcid = Parameter.LcidValue;
 
             node._ulGenerateMethod = generateMethod;
 
@@ -1189,37 +1164,40 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             return result;
 
         }
+
         #endregion
 
         #region Helper methods for Base Storage Type
+
         /// <summary>
         /// Gets a Vector form of a Base Storage Type
         /// </summary>
         /// <param name="type">vType_Values (Vector Item type)</param>
-        /// <param name="inputvalues">vType_Values
-        /// (Vector Item values)</param>
+        /// <param name="inputValues">vType_Values (Vector Item values)</param>
         /// <returns>Vector Base Storage Type BLOB</returns>
-        private CBaseStorageVariant GetVector<T>(vType_Values type, T[] inputvalues) where T : struct
+        private CBaseStorageVariant GetVector<T>(CBaseStorageVariant_vType_Values type, T[] inputValues) where T : struct
         {
             var result = new CBaseStorageVariant();
-            result.vType = type | vType_Values.VT_VECTOR;
+            result.vType = type | CBaseStorageVariant_vType_Values.VT_VECTOR;
             result.vData1 = 0;
             result.vData2 = 0;
+
             switch (type)
             {
-                case vType_Values.VT_I4:
+                case CBaseStorageVariant_vType_Values.VT_I4:
                     {
-                        var vector = new VT_VECTOR<Int32>();
-                        vector.vVectorElements = (UInt32)inputvalues.Length;
-                        vector.vVectorData = inputvalues.Cast<Int32>().ToArray();
+                        var vector = new VT_VECTOR<int>();
+                        vector.vVectorElements = (uint)inputValues.Length;
+                        vector.vVectorData = inputValues.Cast<int>().ToArray();
                         result.vValue = vector;
                     }
                     break;
-                case vType_Values.VT_LPWSTR:
+
+                case CBaseStorageVariant_vType_Values.VT_LPWSTR:
                     {
                         var vector = new VT_VECTOR<VT_LPWSTR>();
-                        vector.vVectorElements = (UInt32)inputvalues.Length;
-                        vector.vVectorData = inputvalues.Cast<VT_LPWSTR>().ToArray();
+                        vector.vVectorElements = (uint)inputValues.Length;
+                        vector.vVectorData = inputValues.Cast<VT_LPWSTR>().ToArray();
                         result.vValue = vector;
                     }
                     break;
@@ -1238,10 +1216,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="arrayValue">Value of item(s)</param>
         /// <param name="features">Safe Array Features</param>
         /// <returns>Safe Array Storage Type</returns>
-        private CBaseStorageVariant GetSafeArray<T>(vType_Values type, T[] arrayValue, ushort features) where T : struct
+        private CBaseStorageVariant GetSafeArray<T>(CBaseStorageVariant_vType_Values type, T[] arrayValue, ushort features) where T : struct
         {
             var result = new CBaseStorageVariant();
-            result.vType = type | vType_Values.VT_ARRAY;
+            result.vType = type | CBaseStorageVariant_vType_Values.VT_ARRAY;
             result.vData1 = 0;
             result.vData2 = 0;
 
@@ -1252,18 +1230,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             var tempBuffer = new WspBuffer();
             if (arrayValue[0] is IWspStructure)
             {
-
                 (arrayValue[0] as IWspStructure).ToBytes(tempBuffer);
-
             }
             else
             {
                 tempBuffer.Add(arrayValue[0]);
             }
 
-            array.cbElements = (UInt32)tempBuffer.WriteOffset;
+            array.cbElements = (uint)tempBuffer.WriteOffset;
 
-            array.Rgsabound = new SAFEARRAYBOUND[] { new SAFEARRAYBOUND() { cElements = (UInt32)arrayValue.Length, lLbound = 0 } };
+            array.Rgsabound = new SAFEARRAYBOUND[] { new SAFEARRAYBOUND() { cElements = (uint)arrayValue.Length, lLbound = 0 } };
             array.vData = arrayValue;
 
             result.vValue = array;
@@ -1280,7 +1256,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <returns>Bound BLOB</returns>
         private byte[] GetBound(uint numberOfElements, uint lowerLimit)
         {
-            byte[] value = new byte[2 * Constant.SIZE_OF_UINT];
+            byte[] value = new byte[2 * Constants.SIZE_OF_UINT];
             int index = 0;
             Helper.CopyBytes
                 (value, ref index, BitConverter.GetBytes(numberOfElements));
@@ -1294,17 +1270,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="type">Type of the storage value</param>
         /// <param name="isArray">true if it is an array of items</param>
-        /// <param name="inputValue">input value, if isArray
-        /// is true, pass values as array of objects</param>
+        /// <param name="inputValue">input value, if isArray is true, pass values as array of objects</param>
         /// <returns>CBaseStorageVariant BLOB</returns>
-        public CBaseStorageVariant GetBaseStorageVariant(vType_Values type, object inputValue)
+        public CBaseStorageVariant GetBaseStorageVariant(CBaseStorageVariant_vType_Values type, object inputValue)
         {
             var result = new CBaseStorageVariant();
             ushort vType = (ushort)type;
             byte vData1 = 0;
             byte vData2 = 0;
 
-            result.vType = (vType_Values)vType;
+            result.vType = (CBaseStorageVariant_vType_Values)vType;
 
             result.vData1 = vData1;
 
@@ -1314,9 +1289,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             return result;
         }
+
         #endregion
 
-        #region Query Trio Messages (QueryIn, SetBindingsIn and RowsIn)
+        #region Query Trio Messages (CreateQueryIn, SetBindingsIn and GetRowsIn)
 
         /// <summary>
         /// Gets the CPMSetBindingsIn message
@@ -1328,7 +1304,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public CPMSetBindingsIn GetCPMSetBindingsIn(uint queryCursor, out TableColumn[] columns, bool isValidBinding)
         {
             uint cursor = queryCursor;
-            uint rows = (uint)parameter.EachRowSize;
+            uint rows = (uint)Parameter.EachRowSize;
             // SIZE of ColumnCount and Columns combined to be assigned later.
             uint dummy = 0;// Dummy value
             Random r = new Random();
@@ -1336,7 +1312,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (!isValidBinding)
             {
-                // decreasing the number of bytes to fail the Bindings
+                // Decreasing the number of bytes to fail the bindings
                 rows -= (uint)r.Next((int)rows - 10, (int)rows);
             }
 
@@ -1368,7 +1344,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Get the default table columns details.
         /// </summary>
-        /// <returns>array of Table Column</returns>
+        /// <returns>Array of Table Columns</returns>
         public TableColumn[] GetDefaultTableColumns()
         {
             var columns = new TableColumn[]
@@ -1376,16 +1352,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 new TableColumn()
                 {
                     Property = WspConsts.System_ItemName,
-                    Type = vType_Values.VT_VARIANT,
+                    Type = CBaseStorageVariant_vType_Values.VT_VARIANT,
                 },
                 new TableColumn()
                 {
                     Property = WspConsts.System_ItemFolderNameDisplay,
-                    Type = vType_Values.VT_VARIANT,
+                    Type = CBaseStorageVariant_vType_Values.VT_VARIANT,
                 },
             };
-
-
 
             return columns;
         }
@@ -1393,8 +1367,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Gets ColumnSet structure
         /// </summary>
-        /// <param name="messageOffset">offset from the
-        /// beginning of the message</param>
+        /// <param name="numberOfColumns">The number of columns.</param>
         /// <returns>ColumnSet structure BLOB</returns>
         public CColumnSet GetColumnSet(int numberOfColumns = 2)
         {
@@ -1409,7 +1382,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             }
             // Links to the 'pidMapper' field
 
-            result.count = (UInt32)indexes.Length;
+            result.count = (uint)indexes.Length;
 
             result.indexes = indexes;
 
@@ -1417,10 +1390,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         }
 
         /// <summary>
-        /// Gets the PIDMapper Structure
+        /// Gets the PidMapper Structure
         /// </summary>
-        /// <param name="messageOffset">Offset from 
-        /// the beginning of the message</param>
         /// <returns>Pid Mapper structure BLOB</returns>
         private CPidMapper GetPidMapper()
         {
@@ -1434,12 +1405,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 WspConsts.System_Search_Contents,
             };
 
-            result.count = (UInt32)result.aPropSpec.Length;
+            result.count = (uint)result.aPropSpec.Length;
 
             return result;
         }
 
-        public CPMGetRowsIn GetCPMRowsInMessage(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, uint? chapt, object seekDescription, out uint reserved)
+        public CPMGetRowsIn GetCPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, uint? chapt, IWspSeekDescription seekDescription, out uint reserved)
         {
             reserved = 256;
 
@@ -1464,11 +1435,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
                 _fBwdFetch = fBwdFetch,
 
-                eType = (eType_Values)eType,
+                eType = (CPMGetRowsIn_eType_Values)eType,
 
                 _chapt = chapt ?? chapter,
 
-                SeekDescription = seekDescription ?? GetSeekDescription((eType_Values)eType),
+                SeekDescription = seekDescription ?? GetSeekDescription((CPMGetRowsIn_eType_Values)eType),
             };
 
             return message;
@@ -1485,7 +1456,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 PropSpec = column.Property,
 
-                vType = (vType_Values)column.Type,
+                vType = (CBaseStorageVariant_vType_Values)column.Type,
 
                 AggregateType = CAggregSpec_type_Values.DBAGGTTYPE_BYNONE,
 
@@ -1500,7 +1471,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="column">TableColumn information</param>
         /// <returns>CTableColumn structure.</returns>
-        public CTableColumn GetTableColumn(CFullPropSpec property, vType_Values type)
+        public CTableColumn GetTableColumn(CFullPropSpec property, CBaseStorageVariant_vType_Values type)
         {
             var result = new CTableColumn()
             {
@@ -1548,7 +1519,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 aGroupArray = new CColumnGroup[0]
             };
 
-            message.Lcid = parameter.LcidValue;
+            message.Lcid = Parameter.LcidValue;
 
             message.Header = new WspMessageHeader
             {
@@ -1557,6 +1528,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             return message;
         }
+
         #endregion
 
         /// <summary>
@@ -1566,25 +1538,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public byte[] GetCPMGetScopeStatisticsIn()
         {
             // Add Message Header
-            byte[] mainBlob = new byte[Constant.SIZE_OF_UINT];
+            byte[] mainBlob = new byte[Constants.SIZE_OF_UINT];
             return AddMessageHeader(MessageType.CPMGetScopeStatisticsIn, mainBlob);
         }
 
         #region Utility Methods
+
         /// <summary>
         /// Adds Header to a Message and also the checksum if required
         /// </summary>
         /// <param name="msgType">Type of message</param>
         /// <param name="messageBlob">Message BLOB</param>
         /// <returns>Message BLOB with Message Header Added</returns>
-        private byte[] AddMessageHeader
-            (MessageType msgType, byte[] messageBlob)
+        private byte[] AddMessageHeader(MessageType msgType, byte[] messageBlob)
         {
             uint messageValue = 0;
             uint messageStatus = 0;
             uint reserveField = 0;
             bool requiresCheckSum = false;
             messageValue = (uint)msgType;
+
             switch (msgType)
             {
                 case MessageType.CPMConnectIn:
@@ -1594,9 +1567,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 case MessageType.CPMFetchValueIn:
                     requiresCheckSum = true;
                     break;
+
                 default:
                     break;
             }
+
             int index = 0;
             uint checksum = 0;
             byte[] messagewithHeader = null;
@@ -1625,7 +1600,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             index = 0;
             //Total message size
             messagewithHeader
-                = new byte[4 * Constant.SIZE_OF_UINT + messageBlob.Length];
+                = new byte[4 * Constants.SIZE_OF_UINT + messageBlob.Length];
             Helper.CopyBytes
                 (messagewithHeader, ref index,
                 BitConverter.GetBytes(messageValue));
@@ -1659,33 +1634,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// Base Storage Type of the Column
         /// </summary>
-        public vType_Values Type;
-    }
-
-    /// <summary>
-    /// ColumnId Class representing DBColumnId structure
-    /// </summary>
-    internal class ColumnId
-    {
-        /// <summary>
-        /// Seek Kind for ConnectIn message
-        /// </summary>
-        public Ekind eKind;
-        /// <summary>
-        /// Table Column Guid
-        /// </summary>
-        public Guid guid;
-        /// <summary>
-        /// Specifies Property type (Name or ID )
-        /// </summary>
-        public uint UlId;
-        /// <summary>
-        /// Name of the Property
-        /// </summary>
-        public string propertyName = string.Empty;
-        /// <summary>
-        /// Property Id
-        /// </summary>
-        public uint propertyId = 0;
+        public CBaseStorageVariant_vType_Values Type;
     }
 }

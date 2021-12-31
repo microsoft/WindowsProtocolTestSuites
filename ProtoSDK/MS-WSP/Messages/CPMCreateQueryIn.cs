@@ -4,7 +4,7 @@
 using System;
 using System.Linq;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CPMCreateQueryIn message creates a new query.
@@ -14,7 +14,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of bytes from the beginning of this field to the end of the message.
         /// </summary>
-        public UInt32 Size;
+        public uint Size;
 
         /// <summary>
         /// A CColumnSet structure containing the property offsets for properties in CPidMapper that are returned as a column. If no properties are in the column set, then no information will be returned from the query.
@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer, indicating the user's locale for this query, as specified in [MS-LCID].
         /// </summary>
-        public UInt32 Lcid;
+        public uint Lcid;
 
         public WspMessageHeader Header { get; set; }
 
@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             var bodyBytes = GetBodyBytes();
 
-            UInt32 checksum = Helper.CalculateCheckSum(WspMessageHeader_msg_Values.CPMCreateQueryIn, bodyBytes);
+            var checksum = Helper.CalculateChecksum(WspMessageHeader_msg_Values.CPMCreateQueryIn, bodyBytes);
 
             var header = Header;
 
@@ -173,7 +173,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             tempBuffer.Add(Lcid);
 
-            Size = (UInt32)tempBuffer.WriteOffset;
+            Size = (uint)tempBuffer.WriteOffset;
 
             buffer.Add(Size);
 

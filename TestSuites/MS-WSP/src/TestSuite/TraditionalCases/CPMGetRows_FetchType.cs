@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 rowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -36,7 +36,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 rowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -49,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 rowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client for verification sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             verificationAdapter.CPMGetRowsIn(
-                verificationAdapter.GetCursor(verificationAdapter.clientMachineName),
+                verificationAdapter.GetCursor(verificationAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -105,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 1 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -160,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 rowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -173,7 +173,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 1 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 rowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -200,7 +200,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 1 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -212,7 +212,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -227,7 +227,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client for verification sends CPMGetRowsIn with _fBwdFetch set to 0 and expects success.");
             verificationAdapter.CPMGetRowsIn(
-                verificationAdapter.GetCursor(verificationAdapter.clientMachineName),
+                verificationAdapter.GetCursor(verificationAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,

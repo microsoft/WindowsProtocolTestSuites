@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum _ulCategType_Values : UInt32
+    public enum CCategSpec_ulCategType_Values : uint
     {
         /// <summary>
         /// Unique categorization. Each unique value forms a category.
@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Indicating the type of grouping to perform.
         /// </summary>
-        public _ulCategType_Values _ulCategType;
+        public CCategSpec_ulCategType_Values _ulCategType;
 
         /// <summary>
         /// A CSort structure, specifying the sort order for the group.

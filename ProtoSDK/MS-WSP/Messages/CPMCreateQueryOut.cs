@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CPMCreateQueryOut message contains a response to a CPMCreateQueryIn message.
@@ -16,19 +16,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// 0x00000000	For the query provided in CPMCreateQueryIn, there would be a greater latency in delivering query results.
         /// 0x00000001	If _fTrueSequential is set to true, results can be returned sequentially without the server incurring the cost of processing the entire result set before returning the first result.
         /// </summary>
-        public UInt32 _fTrueSequential;
+        public uint _fTrueSequential;
 
         /// <summary>
         /// A Boolean value indicating whether the document identifiers pointed by the cursors are unique throughout query results. MUST be set to one of the following values.
         /// 0x00000000	The cursors are unique only throughout the rowset.
         /// 0x00000001	The cursors are unique across multiple query results.
         /// </summary>
-        public UInt32 _fWorkIdUnique;
+        public uint _fWorkIdUnique;
 
         /// <summary>
         /// An array of 32-bit unsigned integers representing the handles to cursors with the number of elements equal to the number of categories in the CategorizationSet field of CPMCreateQueryIn message plus one element, representing an uncategorized cursor.
         /// </summary>
-        public UInt32[] aCursors;
+        public uint[] aCursors;
 
         public IWspInMessage Request { get; set; }
 
@@ -42,9 +42,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             Header = header;
 
-            _fTrueSequential = buffer.ToStruct<UInt32>();
+            _fTrueSequential = buffer.ToStruct<uint>();
 
-            _fWorkIdUnique = buffer.ToStruct<UInt32>();
+            _fWorkIdUnique = buffer.ToStruct<uint>();
 
             int categorizationCount = 0;
 
@@ -55,11 +55,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                 categorizationCount = (int)createQueryIn.CCategorizationSet.Value.count;
             }
 
-            aCursors = new UInt32[categorizationCount + 1];
+            aCursors = new uint[categorizationCount + 1];
 
             for (int i = 0; i < aCursors.Length; i++)
             {
-                UInt32 cursor = buffer.ToStruct<UInt32>();
+                uint cursor = buffer.ToStruct<uint>();
 
                 aCursors[i] = cursor;
             }

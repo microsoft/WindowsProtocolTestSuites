@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
 {
     /// <summary>
     /// IWspAdapter interface describes the methods
@@ -20,111 +19,102 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         # region WSP requests
 
         /// <summary>
-        /// CPMConnectInRequest() is used to send a request 
-        /// to establish a connection with the server
-        /// and starts WSP query processing or WSP catalog administration.
+        /// CPMConnectIn is used to send a request to establish a connection with the server.
+        /// It will start WSP query processing or WSP catalog administration.
         /// </summary>
-        void CPMConnectInRequest();      
+        void CPMConnectIn();
 
         /// <summary>
-        /// CPMCreateQueryIn(DBPROP_ENABLEROWSETEVENTS) emulates WSP CPMCreateQueryIn 
-        /// message and associates a query with the client with DBPROP_ENABLEROWSETEVENTS as set
-        /// if successful
+        /// CPMCreateQueryIn emulates WSP CPMCreateQueryIn message and associates a query with the client with DBPROP_ENABLEROWSETEVENTS as set if successful.
         /// </summary>
+        /// <param name="ENABLEROWSETEVENTS">Indicates whether to enable rowset events.</param>
         void CPMCreateQueryIn(bool ENABLEROWSETEVENTS);
 
         /// <summary>
-        /// CPMGetQueryStatusIn() requests the status of the query.
+        /// CPMGetQueryStatusIn requests the status of the query.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client 
-        /// has a valid cursor to the query.</param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMGetQueryStatusIn(bool isCursorValid);
+
         /// <summary>
-        /// CPMGetQueryStatusExIn()requests for the status of the
-        /// query and the additional information from the server.
+        /// CPMGetQueryStatusExIn requests for the status of the query and the additional information from the server.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client 
-        /// has a valid cursor to the query.</param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMGetQueryStatusExIn(bool isCursorValid);
+
         /// <summary>
-        /// CPMRatioFinishedIn() requests for the completion 
-        /// percentage of the query.
+        /// CPMRatioFinishedIn requests for the completion percentage of the query.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client 
-        /// has a valid cursor to the query.</param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMRatioFinishedIn(bool isCursorValid);
+
         /// <summary>
-        /// CPMSetBindingsIn() requests the bindings of columns to a rowset.
+        /// CPMSetBindingsIn requests the bindings of columns to a rowset.
         /// </summary>
-        /// <param name="isValidBindingInfo">Indicates whether it 
-        /// is a valid Binding</param>
-        /// <param name="isCursorValid">Indicates the client 
-        /// has a valid cursor to the query.</param>
+        /// <param name="isValidBindingInfo">Indicates whether it is a valid Binding</param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMSetBindingsIn(bool isValidBindingInfo, bool isCursorValid);
+
         /// <summary>
-        /// CPMGetRowsIn() message requests rows from a query.
+        /// CPMGetRowsIn requests rows from a query.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client 
-        /// has a valid cursor to the query.</param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMGetRowsIn(bool isCursorValid);
+
         /// <summary>
-        /// CPMFetchValueIn() requests for the property value
-        /// that was too large to return in a rowset.
+        /// CPMFetchValueIn requests for the property value that was too large to return in a rowset.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client 
-        /// has a valid cursor to the query.</param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMFetchValueIn(bool isCursorValid);
+
         /// <summary>
-        /// CPMCiStateInOut() requests the information about 
-        /// the state of the Windows Search Service.
+        /// CPMCiStateInOut requests the information about the state of the Windows Search Service.
         /// </summary>
         void CPMCiStateInOut();
+
         /// <summary>
-        /// CPMGetNotifyIn() requests that the client wants to be notified
-        /// of rowset changes.
+        /// CPMGetNotify requests that the client wants to be notified of rowset changes.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client 
-        /// has a valid cursor to the query.</param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMGetNotify(bool isCursorValid);
+
         /// <summary>
-        /// CPMFreeCursorIn() requests to release a cursor.
+        /// CPMFreeCursorIn requests to release a cursor.
         /// </summary>
-        /// <param name="isCursorValid">Indicates the client 
-        /// has a valid cursor to the query.</param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMFreeCursorIn(bool isCursorValid);
+
         /// <summary>
-        /// CPMDisconnect() request is sent to end 
-        /// the connection with the server.
+        /// CPMDisconnect requests to end the connection with the server.
         /// </summary>
         void CPMDisconnect();
 
         /// <summary>
-        /// CPMFindIndicesIn() request the rowset position of the next occurrence of a document identifier
+        /// CPMFindIndicesIn requests the rowset position of the next occurrence of a document identifier.
         /// </summary>
-        /// <param name="isCursorValid"></param>
+        /// <param name="isCursorValid">Indicates the client has a valid cursor to the query.</param>
         void CPMFindIndicesIn(bool isCursorValid);
 
         /// <summary>
-        /// CPMGetRowsetNotifyIn message requests the next rowset event from the server if available
+        /// CPMGetRowsetNotifyIn requests the next rowset event from the server if available
         /// </summary>
-        /// <param name="eventType"></param>
-        /// <param name="moreEvent"></param>
-        void CPMGetRowsetNotifyIn(int eventType,bool moreEvent);
+        /// <param name="eventType">Indicates the type of event this message represents.</param>
+        /// <param name="moreEvents">Indicates whether there are additional rowset events remaining on the server.</param>
+        void CPMGetRowsetNotifyIn(int eventType, bool moreEvents);
 
         /// <summary>
-        /// CPMSetScopePrioritizationIn() request that server prioritize indexing of items that may be relevant to the originating query
-        /// at a rate specified in the message
+        /// CPMSetScopePrioritizationIn requests that server prioritize indexing of items that may be relevant to the originating query at a rate specified in the message.
         /// </summary>
-        /// <param name="priority"></param>
+        /// <param name="priority">The type of prioritization requested for documents that could be relevant to the originating query.</param>
         void CPMSetScopePrioritizationIn(uint priority);
 
         /// <summary>
-        /// CPMGetScopeStatisticsIn() request that statistics regarding the number of indexed items
+        /// CPMGetScopeStatisticsIn requests that statistics regarding the number of indexed items.
         /// </summary>
         void CPMGetScopeStatisticsIn();
 
         /// <summary>
-        /// CPMRestartPositionIn() request directs the server to moves the fetch position for a cursor to the beginning of the chapter. 
+        /// CPMRestartPositionIn requests the server to moves the fetch position for a cursor to the beginning of the chapter. 
         /// </summary>
         /// <param name="_hCursor">The query handle.</param>
         /// <param name="_chapt">The chapter handle.</param>
@@ -140,52 +130,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         event CPMConnectOutResponseHandler CPMConnectOutResponse;
 
         /// <summary>
-        /// This event is used to get the response 
-        /// from CPMCreateQueryIn request.
+        /// This event is used to get the response from CPMCreateQueryIn request.
         /// </summary>
-        event CPMCreateQueryOutResponseHandler 
-            CPMCreateQueryOutResponse;
+        event CPMCreateQueryOutResponseHandler CPMCreateQueryOutResponse;
 
         /// <summary>
-        /// This event is used to get the response 
-        /// from CPMGetQueryStatusIn request.
+        /// This event is used to get the response from CPMGetQueryStatusIn request.
         /// </summary>
-        event CPMGetQueryStatusOutResponseHandler
-            CPMGetQueryStatusOutResponse;
+        event CPMGetQueryStatusOutResponseHandler CPMGetQueryStatusOutResponse;
 
         /// <summary>
-        /// This event is used to get the response 
-        /// from CPMGetQueryStatusExIn request.
+        /// This event is used to get the response from CPMGetQueryStatusExIn request.
         /// </summary>
-        event CPMGetQueryStatusExOutResponseHandler
-            CPMGetQueryStatusExOutResponse;
+        event CPMGetQueryStatusExOutResponseHandler CPMGetQueryStatusExOutResponse;
 
         /// <summary>
-        /// This event is used to get the response
-        /// from CPMRatioFinishedIn request.
+        /// This event is used to get the response from CPMRatioFinishedIn request.
         /// </summary>
         event CPMRatioFinishedOutResponseHandler CPMRatioFinishedOutResponse;
 
         /// <summary>
-        /// This event is used to get the 
-        /// response from CPMSetBindingsIn request.
+        /// This event is used to get the response from CPMSetBindingsIn request.
         /// </summary>
         event CPMSetBindingsInResponseHandler CPMSetBindingsInResponse;
 
         /// <summary>
         /// This event is used to get the response from CPMGetRowsIn request.
         /// </summary>
-        event CPMGetRowsOutResponseHandler CPMGetRowsOut;
+        event CPMGetRowsOutResponseHandler CPMGetRowsOutResponse;
 
         /// <summary>
-        /// This event is used to get the response
-        /// from CPMFetchValueIn request.
+        /// This event is used to get the response from CPMFetchValueIn request.
         /// </summary>
         event CPMFetchValueOutResponseHandler CPMFetchValueOutResponse;
 
         /// <summary>
-        /// This event is used to get the response 
-        /// from CPMCiStateInOut request.
+        /// This event is used to get the response from CPMCiStateInOut request.
         /// </summary>
         event CPMCiStateInOutResponseHandler CPMCiStateInOutResponse;
 

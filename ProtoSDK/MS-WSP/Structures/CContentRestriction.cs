@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum _ulGenerateMethod_Values : UInt32
+    public enum CContentRestriction_ulGenerateMethod_Values : uint
     {
         /// <summary>
         /// Exact match. Each word in the phrase matches exactly in the inverted index.
@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// <summary>
     /// The CContentRestriction structure contains a word or phrase to match in the inverted index for a specific property. 
     /// </summary>
-    public struct CContentRestriction : IWspStructure
+    public struct CContentRestriction : IWspRestriction
     {
         /// <summary>
         /// A CFullPropSpec structure. This field indicates the property on which to perform a match operation.
@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer, specifying the number of characters in the _pwcsPhrase field.
         /// </summary>
-        public UInt32 Cc;
+        public uint Cc;
 
         /// <summary>
         /// A non-null-terminated Unicode string representing the word or phrase to match for the property.
@@ -51,12 +51,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer, indicating the locale of _pwcsPhrase, as specified in [MS-LCID].
         /// </summary>
-        public UInt32 Lcid;
+        public uint Lcid;
 
         /// <summary>
         /// A 32-bit unsigned integer, specifying the method to use when generating alternate word forms.
         /// </summary>
-        public _ulGenerateMethod_Values _ulGenerateMethod;
+        public CContentRestriction_ulGenerateMethod_Values _ulGenerateMethod;
 
         public void FromBytes(WspBuffer buffer)
         {

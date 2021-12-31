@@ -2,8 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             var categorizationSet = new CCategorizationSet();
             var categorizationSpecs = new List<CCategorizationSpec>();
@@ -91,27 +91,27 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, $"Client sends CPMCreateQueryIn with aggregate type {aggregateType} and expects success.");
             wspAdapter.CPMCreateQueryIn(
                 GetColumnSet(),
-                wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName),
+                wspAdapter.Builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName),
                 CreateSortSets(),
                 categorizationSet,
                 GetRowsetProperties(),
                 GetPidMapper(propSpec),
                 new CColumnGroupArray(),
-                wspAdapter.builder.parameter.LcidValue,
+                wspAdapter.Builder.Parameter.LcidValue,
                 out CPMCreateQueryOut createQueryResponse);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
-            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[0], MessageBuilder.rowWidth, 1, new CTableColumn[] {  GetTableColumn(propSpec, aggregateType)  });
+            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[0], MessageBuilder.RowWidth, 1, new CTableColumn[] {  GetTableColumn(propSpec, aggregateType)  });
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn and expects success.");
-            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[0], 20, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, 0, null, out CPMGetRowsOut response);
+            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[0], 20, MessageBuilder.RowWidth, wspAdapter.Builder.Parameter.BufferSize, 0, wspAdapter.Builder.Parameter.EType, 0, null, out CPMGetRowsOut response);
 
             Site.Assert.AreEqual(1U, response._cRowsReturned, "The count of rows returned from server should be 1.");
 
             if (aggregateType == CAggregSpec_type_Values.DBAGGTTYPE_DATERANGE)
             {
-                Site.Assert.AreEqual(vType_Values.VT_VECTOR | vType_Values.VT_FILETIME,
-                    response.Rows[0].Columns[0].rowVariant.vType,
+                Site.Assert.AreEqual(CBaseStorageVariant_vType_Values.VT_VECTOR | CBaseStorageVariant_vType_Values.VT_FILETIME,
+                    response.Rows[0].Columns[0].RowVariant.vType,
                     "The type of the column should be VT_VECTOR | VT_FILETIME.");
                 object[] dateRange = (object[])response.Rows[0].Columns[0].Data;
                 Site.Assert.AreEqual(2, dateRange.Length, "The count of date range returned from server should be 2.");
@@ -129,7 +129,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
             // Nested groups with 2 level.
             // Firstly group by Author, then by Size.
@@ -144,22 +144,22 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn with aggregate type DBAGGTTYPE_CHILDCOUNT and expects success.");
             wspAdapter.CPMCreateQueryIn(
                 GetColumnSet(),
-                wspAdapter.builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName), 
+                wspAdapter.Builder.GetRestrictionArray("*.bin", Site.Properties.Get("QueryPath") + "Data/CreateQuery_Size", WspConsts.System_FileName), 
                 CreateSortSets(0, 1), 
                 categorizationSet,
                 GetRowsetProperties(),
                 GetPidMapper(propSpec), 
                 new CColumnGroupArray(), 
-                wspAdapter.builder.parameter.LcidValue,
+                wspAdapter.Builder.Parameter.LcidValue,
                 out CPMCreateQueryOut createQueryResponse);
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn to the first two cursors and expects success.");
-            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[0], MessageBuilder.rowWidth, 1, new CTableColumn[] { GetTableColumn(WspConsts.System_Author, CAggregSpec_type_Values.DBAGGTTYPE_BYNONE) });
-            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[1], MessageBuilder.rowWidth, 1, new CTableColumn[] { GetTableColumn(propSpec, CAggregSpec_type_Values.DBAGGTTYPE_CHILDCOUNT) });
+            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[0], MessageBuilder.RowWidth, 1, new CTableColumn[] { GetTableColumn(WspConsts.System_Author, CAggregSpec_type_Values.DBAGGTTYPE_BYNONE) });
+            wspAdapter.CPMSetBindingsIn(createQueryResponse.aCursors[1], MessageBuilder.RowWidth, 1, new CTableColumn[] { GetTableColumn(propSpec, CAggregSpec_type_Values.DBAGGTTYPE_CHILDCOUNT) });
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn to the first two cursors and expects success.");
-            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[0], 20, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, 0, null, out CPMGetRowsOut response);
-            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[1], 1, MessageBuilder.rowWidth, wspAdapter.builder.parameter.BufferSize, 0, wspAdapter.builder.parameter.EType, 1, null, out response);
+            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[0], 20, MessageBuilder.RowWidth, wspAdapter.Builder.Parameter.BufferSize, 0, wspAdapter.Builder.Parameter.EType, 0, null, out CPMGetRowsOut response);
+            wspAdapter.CPMGetRowsIn(createQueryResponse.aCursors[1], 1, MessageBuilder.RowWidth, wspAdapter.Builder.Parameter.BufferSize, 0, wspAdapter.Builder.Parameter.EType, 1, null, out response);
 
             Site.Assert.AreEqual(1U, response._cRowsReturned, "The count of rows returned for cursor 2 should be 1.");
 
@@ -186,7 +186,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_Scope,
                 WspConsts.System_FileName
             };
-            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+            pidMapper.count = (uint)pidMapper.aPropSpec.Length;
 
             return pidMapper;
         }
@@ -194,7 +194,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         private CRowsetProperties GetRowsetProperties()
         {
             var rowsetProperties = new CRowsetProperties();
-            rowsetProperties._uBooleanOptions = _uBooleanOptions_Values.eChaptered | _uBooleanOptions_Values.eSequential;
+            rowsetProperties._uBooleanOptions = CRowsetProperties_uBooleanOptions_Values.eChaptered | CRowsetProperties_uBooleanOptions_Values.eSequential;
             return rowsetProperties;
         }
 
@@ -203,8 +203,8 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             var tableColumn = new CTableColumn();
             tableColumn.AggregateType = aggregateType;
             tableColumn.PropSpec = propSpec;
-            tableColumn.vType = vType_Values.VT_VARIANT;
-            tableColumn.ValueSize = Helper.GetSize(tableColumn.vType, wspAdapter.builder.Is64bit);
+            tableColumn.vType = CBaseStorageVariant_vType_Values.VT_VARIANT;
+            tableColumn.ValueSize = Helper.GetSize(tableColumn.vType, wspAdapter.Builder.Is64bit);
 
             return tableColumn;
         }
@@ -213,10 +213,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             // Construct sortKey.
             var sortKey = new CSort();
-            sortKey.locale = wspAdapter.builder.parameter.LcidValue;
-            sortKey.dwOrder = dwOrder_Values.QUERY_SORTASCEND;
+            sortKey.locale = wspAdapter.Builder.Parameter.LcidValue;
+            sortKey.dwOrder = CSort_dwOrder_Values.QUERY_SORTASCEND;
             sortKey.pidColumn = aggregateType == CAggregSpec_type_Values.DBAGGTTYPE_CHILDCOUNT ? idColumn : 0;
-            sortKey.dwIndividual = dwIndividual_Values.QUERY_SORTALL;
+            sortKey.dwIndividual = CSort_dwIndividual_Values.QUERY_SORTALL;
 
             // Construct aggregation set.
             var aggregateSet = new CAggregSet();
@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 },
                 _Spec = new CCategSpec()
                 {
-                    _ulCategType = _ulCategType_Values.CATEGORIZE_UNIQUE,
+                    _ulCategType = CCategSpec_ulCategType_Values.CATEGORIZE_UNIQUE,
                     _sortKey = sortKey,
                 },
                 _AggregSet = aggregateSet,

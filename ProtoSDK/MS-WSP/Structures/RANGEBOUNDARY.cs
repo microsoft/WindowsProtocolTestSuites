@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum RANGEBOUNDARY_ulType_Values : UInt32
+    public enum RANGEBOUNDARY_ulType_Values : uint
     {
         /// <summary>
         /// MUST only be used for Unicode string values in prVal. Items with a value less than the Unicode string immediately preceding prVal lexicographically are included in the range.
@@ -51,7 +51,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// A 32-bit unsigned integer representing the number of characters in the Label field.
         /// Note ccLabel MUST be omitted if labelPresent is set to 0x00; otherwise, it MUST be greater than zero.
         /// </summary>
-        public UInt32 ccLabel;
+        public uint ccLabel;
 
         /// <summary>
         /// Label (variable): A non-null-terminated Unicode string representing the label for this range. The ccLabel field contains the length of the string. 

@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum CAggregSpec_type_Values : Byte
+    public enum CAggregSpec_type_Values : byte
     {
         /// <summary>
         /// No aggregation is used.
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of characters in the Alias field.
         /// </summary>
-        public UInt32 ccAlias;
+        public uint ccAlias;
 
         /// <summary>
         /// A non-null-terminated Unicode string that represents the alias name for the aggregate. The ccAlias field contains the length of the string.
@@ -91,17 +91,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// Property ID for the column to be aggregated over.
         /// </summary>
-        public UInt32 idColumn;
+        public uint idColumn;
 
         /// <summary>
         /// An optional 32-bit unsigned integer that is the number of elements to return for First, ByFreq, and RepresentativeOf aggregates.
         /// </summary>
-        public UInt32 ulMaxNumToReturn;
+        public uint ulMaxNumToReturn;
 
         /// <summary>
         /// An optional 32-bit unsigned integer that is the representative property ID requested for the RepresentativeOf aggregate.
         /// </summary>
-        public UInt32 idRepresentative;
+        public uint idRepresentative;
 
         public void FromBytes(WspBuffer buffer)
         {

@@ -4,7 +4,7 @@
 namespace Microsoft.Protocols.TestSuites.WspTS
 {
     using Microsoft.Protocols.TestTools;
-    using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter;
+    using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter;
     using System;
     using System.Collections.Generic;
     using System.Reflection;

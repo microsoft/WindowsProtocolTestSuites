@@ -3,14 +3,14 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     public struct VT_LPSTR : IWspStructure
     {
         /// <summary>
         /// A 32-bit unsigned integer, indicating the size of the string field including the terminating null. 
         /// </summary>
-        public UInt32 cLen;
+        public uint cLen;
 
         /// <summary>
         /// Null-terminated string.

@@ -8,8 +8,8 @@
   </Properties>
 
   <Adapters>
-    <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.WspAdapter"/>
-    <Adapter xsi:type="managed" name="IWspSutAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter.WspSutAdapter"/>
+    <Adapter xsi:type="managed" name="IWspAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.WspAdapter"/>
+    <Adapter xsi:type="managed" name="IWspSutAdapter" adaptertype="Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter.WspSutAdapter"/>
   </Adapters>
   
   <TestLog defaultprofile="Verbose">

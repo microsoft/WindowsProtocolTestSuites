@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -65,7 +65,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMFetchValueIn and expects success.");
             wspAdapter.CPMFetchValueIn((uint)wids[0], WspConsts.System_Search_Autosummary, out var propValue);
 
-            Site.Assert.AreEqual(vType_Values.VT_LPWSTR, (vType_Values)propValue.Value.dwType, "The type of System.Search.Autosummary should be VT_LPWSTR.");
+            Site.Assert.AreEqual(CBaseStorageVariant_vType_Values.VT_LPWSTR, (CBaseStorageVariant_vType_Values)propValue.Value.dwType, "The type of System.Search.Autosummary should be VT_LPWSTR.");
             Site.Assert.IsTrue(propValue.Value.rgb is VT_LPWSTR, "The value of System.Search.Autosummary should be in VT_LPWSTR form.");
         }
 
@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test the server behavior when a VT_UI8 property is fetched by a single CPMFetchValueIn message.")]
         public void CPMFetchValue_SingleChunk_VT_UI8()
         {
-            CPMFetchValue_Positive(WspConsts.System_Size, vType_Values.VT_UI8, documentSize);
+            CPMFetchValue_Positive(WspConsts.System_Size, CBaseStorageVariant_vType_Values.VT_UI8, documentSize);
         }
 
         [TestMethod]
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test the server behavior when a VT_FILETIME property is fetched by a single CPMFetchValueIn message.")]
         public void CPMFetchValue_SingleChunk_VT_FILETIME()
         {
-            CPMFetchValue_Positive(WspConsts.System_DateCreated, vType_Values.VT_FILETIME, null);
+            CPMFetchValue_Positive(WspConsts.System_DateCreated, CBaseStorageVariant_vType_Values.VT_FILETIME, null);
         }
 
         [TestMethod]
@@ -115,17 +115,17 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test the server behavior when a VT_LPWSTR property is fetched by a single CPMFetchValueIn message.")]
         public void CPMFetchValue_SingleChunk_VT_LPWSTR()
         {
-            CPMFetchValue_Positive(WspConsts.System_Title, vType_Values.VT_LPWSTR, new VT_LPWSTR { cLen = 20, _string = "Very Important Text" });
+            CPMFetchValue_Positive(WspConsts.System_Title, CBaseStorageVariant_vType_Values.VT_LPWSTR, new VT_LPWSTR { cLen = 20, _string = "Very Important Text" });
         }
 
         [TestMethod]
         [TestCategory("CPMFetchValue")]
         [Description("This test case is designed to test the server behavior when a VT_VECTOR of VT_LPWSTR property is fetched by a single CPMFetchValueIn message.")]
-        public void CPMFetchValue_SingleChunk_VT_VECTOR_of_VT_LPWSTR()
+        public void CPMFetchValue_SingleChunk_VT_VECTOR_Of_VT_LPWSTR()
         {
             CPMFetchValue_Positive(
                 WspConsts.System_Author,
-                vType_Values.VT_LPWSTR | vType_Values.VT_VECTOR,
+                CBaseStorageVariant_vType_Values.VT_LPWSTR | CBaseStorageVariant_vType_Values.VT_VECTOR,
                 new VT_VECTOR<VT_LPWSTR>
                 {
                     vVectorElements = 4,
@@ -160,7 +160,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test the server behavior when a VT_UI8 property is fetched by consequent CPMFetchValueIn messages.")]
         public void CPMFetchValue_MultipleChunks_VT_UI8()
         {
-            CPMFetchValue_Positive(WspConsts.System_Size, vType_Values.VT_UI8, documentSize, false);
+            CPMFetchValue_Positive(WspConsts.System_Size, CBaseStorageVariant_vType_Values.VT_UI8, documentSize, false);
         }
 
         [TestMethod]
@@ -168,7 +168,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test the server behavior when a VT_FILETIME property is fetched by consequent CPMFetchValueIn messages.")]
         public void CPMFetchValue_MultipleChunks_VT_FILETIME()
         {
-            CPMFetchValue_Positive(WspConsts.System_DateCreated, vType_Values.VT_FILETIME, null, false);
+            CPMFetchValue_Positive(WspConsts.System_DateCreated, CBaseStorageVariant_vType_Values.VT_FILETIME, null, false);
         }
 
         [TestMethod]
@@ -176,17 +176,17 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         [Description("This test case is designed to test the server behavior when a VT_LPWSTR property is fetched by consequent CPMFetchValueIn messages.")]
         public void CPMFetchValue_MultipleChunks_VT_LPWSTR()
         {
-            CPMFetchValue_Positive(WspConsts.System_Title, vType_Values.VT_LPWSTR, new VT_LPWSTR { cLen = 20, _string = "Very Important Text" }, false);
+            CPMFetchValue_Positive(WspConsts.System_Title, CBaseStorageVariant_vType_Values.VT_LPWSTR, new VT_LPWSTR { cLen = 20, _string = "Very Important Text" }, false);
         }
 
         [TestMethod]
         [TestCategory("CPMFetchValue")]
         [Description("This test case is designed to test the server behavior when a VT_VECTOR of VT_LPWSTR property is fetched by consequent CPMFetchValueIn messages.")]
-        public void CPMFetchValue_MultipleChunks_VT_VECTOR_of_VT_LPWSTR()
+        public void CPMFetchValue_MultipleChunks_VT_VECTOR_Of_VT_LPWSTR()
         {
             CPMFetchValue_Positive(
                 WspConsts.System_Author,
-                vType_Values.VT_LPWSTR | vType_Values.VT_VECTOR,
+                CBaseStorageVariant_vType_Values.VT_LPWSTR | CBaseStorageVariant_vType_Values.VT_VECTOR,
                 new VT_VECTOR<VT_LPWSTR>
                 {
                     vVectorElements = 4,
@@ -219,7 +219,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
         #endregion
 
-        private void CPMFetchValue_Positive(CFullPropSpec propToFetch, vType_Values vType, object expectedResult, bool useSingleMessage = true)
+        private void CPMFetchValue_Positive(CFullPropSpec propToFetch, CBaseStorageVariant_vType_Values vType, object expectedResult, bool useSingleMessage = true)
         {
             var wids = GetWids(propToFetch);
             var widToFetch = (uint)wids[0];
@@ -230,15 +230,15 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             switch (vType)
             {
-                case vType_Values.VT_UI8:
+                case CBaseStorageVariant_vType_Values.VT_UI8:
                     Site.Assert.AreEqual((ulong)expectedResult, (ulong)propValue.Value.rgb, $"The property value of type VT_UI8 should be {expectedResult}.");
                     break;
 
-                case vType_Values.VT_FILETIME:
+                case CBaseStorageVariant_vType_Values.VT_FILETIME:
                     Site.Assert.IsTrue(propValue.Value.rgb is DateTime, "The property value of type VT_FILETIME should be in DateTime form.");
                     break;
 
-                case vType_Values.VT_LPWSTR:
+                case CBaseStorageVariant_vType_Values.VT_LPWSTR:
                     var expectedLpwstr = (VT_LPWSTR)expectedResult;
                     var actualPropValue = (VT_LPWSTR)propValue.Value.rgb;
                     Site.Log.Add(LogEntryKind.TestStep, "Verification for the property value of type VT_LPWSTR:");
@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                     Site.Assert.AreEqual(expectedLpwstr._string, actualPropValue._string, $"The _string field should be {expectedLpwstr._string}");
                     break;
 
-                case vType_Values.VT_LPWSTR | vType_Values.VT_VECTOR:
+                case CBaseStorageVariant_vType_Values.VT_LPWSTR | CBaseStorageVariant_vType_Values.VT_VECTOR:
                     var expectedLpwstrVector = (VT_VECTOR<VT_LPWSTR>)expectedResult;
                     var actualLpwstrVector = (VT_VECTOR<VT_LPWSTR>)propValue.Value.rgb;
                     Site.Log.Add(LogEntryKind.TestStep, "Verification for the property value of type VT_LPWSTR | VT_VECTOR:");
@@ -268,10 +268,10 @@ namespace Microsoft.Protocols.TestSuites.WspTS
         {
             argumentType = ArgumentType.AllValid;
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMConnectIn and expects success.");
-            wspAdapter.CPMConnectInRequest();
+            wspAdapter.CPMConnectIn();
 
-            var columnSet = wspAdapter.builder.GetColumnSet(3);
-            var restrictionArray = wspAdapter.builder.GetRestrictionArray("document.doc", Site.Properties.Get("QueryPath") + "Data/FetchValue", WspConsts.System_FileName);
+            var columnSet = wspAdapter.Builder.GetColumnSet(3);
+            var restrictionArray = wspAdapter.Builder.GetRestrictionArray("document.doc", Site.Properties.Get("QueryPath") + "Data/FetchValue", WspConsts.System_FileName);
             var pidMapper = new CPidMapper();
             pidMapper.aPropSpec = new CFullPropSpec[]
             {
@@ -279,16 +279,16 @@ namespace Microsoft.Protocols.TestSuites.WspTS
                 WspConsts.System_Search_EntryID,
                 propToFetch
             };
-            pidMapper.count = (UInt32)pidMapper.aPropSpec.Length;
+            pidMapper.count = (uint)pidMapper.aPropSpec.Length;
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMCreateQueryIn and expects success.");
-            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.builder.parameter.LcidValue);
+            wspAdapter.CPMCreateQueryIn(columnSet, restrictionArray, null, null, new CRowsetProperties(), pidMapper, new CColumnGroupArray(), wspAdapter.Builder.Parameter.LcidValue);
 
             var columns = new CTableColumn[]
             {
-                wspAdapter.builder.GetTableColumn(WspConsts.System_ItemName, vType_Values.VT_VARIANT),
-                wspAdapter.builder.GetTableColumn(WspConsts.System_Search_EntryID, vType_Values.VT_VARIANT),
-                wspAdapter.builder.GetTableColumn(propToFetch, vType_Values.VT_VARIANT)
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_ItemName, CBaseStorageVariant_vType_Values.VT_VARIANT),
+                wspAdapter.Builder.GetTableColumn(WspConsts.System_Search_EntryID, CBaseStorageVariant_vType_Values.VT_VARIANT),
+                wspAdapter.Builder.GetTableColumn(propToFetch, CBaseStorageVariant_vType_Values.VT_VARIANT)
             };
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMSetBindingsIn and expects success.");
             wspAdapter.CPMSetBindingsIn(columns);

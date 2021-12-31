@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CPidMapper structure contains an array of property specifications and serves to map from a property offset to a full property specification.
@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer containing the number of elements in the aPropSpec array.
         /// </summary>
-        public UInt32 count;
+        public uint count;
 
         /// <summary>
         /// Array of CFullPropSpec structures indicating the properties to return.

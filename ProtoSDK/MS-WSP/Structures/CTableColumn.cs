@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CTableColumn structure contains a column of a CPMSetBindingsIn message.
@@ -18,7 +18,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer that specifies the type of data value contained in the column.
         /// </summary>
-        public vType_Values vType;
+        public CBaseStorageVariant_vType_Values vType;
 
         /// <summary>
         /// This field MUST be set to one of the aggregation type values specified under the type field in section 2.2.1.25.
@@ -28,23 +28,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// An unsigned 2-byte integer specifying the offset of the column value in the row.
         /// </summary>
-        public UInt16? ValueOffset;
+        public ushort? ValueOffset;
 
         /// <summary>
         /// An unsigned 2-byte integer specifying the size of the column value in bytes.
         /// </summary>
-        public UInt16? ValueSize;
+        public ushort? ValueSize;
 
         /// <summary>
         /// An unsigned 2-byte integer specifying the offset of the column status in the row.
         /// </summary>
-        public UInt16? StatusOffset;
+        public ushort? StatusOffset;
 
         /// <summary>
         /// An unsigned 2-byte integer specifying the offset of the column length in the row.
         /// In CPMGetRowsOut, length is represented by a 32-bit unsigned integer by the offset specified in LengthOffset.
         /// </summary>
-        public UInt16? LengthOffset;
+        public ushort? LengthOffset;
 
         public void FromBytes(WspBuffer buffer)
         {
@@ -55,7 +55,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             PropSpec.ToBytes(buffer);
 
-            buffer.Add((UInt32)vType, 4);
+            buffer.Add((uint)vType, 4);
 
             byte AggregateUsed;
 

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CPMSetBindingsIn message requests the binding of columns to a rowset.
@@ -14,27 +14,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit value representing the handle from the CPMCreateQueryOut message that identifies the query for which to set bindings.
         /// </summary>
-        public UInt32 _hCursor;
+        public uint _hCursor;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the size, in bytes, of a row.
         /// </summary>
-        public UInt32 _cbRow;
+        public uint _cbRow;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the length, in bytes, of the fields following the _dummy field.
         /// </summary>
-        public UInt32 _cbBindingDesc;
+        public uint _cbBindingDesc;
 
         /// <summary>
         /// This field is unused and MUST be ignored. It can be set to any arbitrary value.
         /// </summary>
-        public UInt32 _dummy;
+        public uint _dummy;
 
         /// <summary>
         /// A 32-bit unsigned integer indicating the number of elements in the aColumns array.
         /// </summary>
-        public UInt32 cColumns;
+        public uint cColumns;
 
         /// <summary>
         /// An array of CTableColumn structures describing the columns of a row in the rowset.
@@ -53,7 +53,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         {
             var bodyBytes = GetBodyBytes();
 
-            UInt32 checksum = Helper.CalculateCheckSum(WspMessageHeader_msg_Values.CPMSetBindingsIn, bodyBytes);
+            var checksum = Helper.CalculateChecksum(WspMessageHeader_msg_Values.CPMSetBindingsIn, bodyBytes);
 
             var header = Header;
 
@@ -87,7 +87,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
 
             var bytesAfterDummy = tempBuffer.GetBytes();
 
-            _cbBindingDesc = (UInt32)bytesAfterDummy.Length;
+            _cbBindingDesc = (uint)bytesAfterDummy.Length;
 
             buffer.Add(_cbBindingDesc);
 

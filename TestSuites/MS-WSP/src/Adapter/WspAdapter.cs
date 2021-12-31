@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
 {
     /// <summary>
     /// WspAdapter class implements the methods of the IWspAdapter interface.
@@ -16,137 +16,162 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         #region Fields
 
         //Platform version
-        private SkuOsVersion _platform;
+        private SkuOsVersion platform;
 
         /// <summary>
         /// startingIndex define the offset of the massage
         /// </summary>
-        int startingIndexconnect;
+        private int startingIndexconnect;
 
         /// <summary>
         /// ITestSite to access the configurable data and requirement logging 
         /// </summary>
-        public ITestSite wspTestSite = null;
+        private ITestSite wspTestSite = null;
 
         /// <summary>
         /// Sends WSP-Messages to the Server for negative scenarios
         /// (To validate messages with out sending the pre-requisite
         /// ConnectIn message)
         /// </summary>
-        public WspClient defaultClient = null;
+        private WspClient defaultClient = null;
+
         /// <summary>
         /// Sends WSP-Messages to the Server for negative scenarios
         /// (To validate messages with out sending the pre-requisite
         /// ConnectIn message)
         /// </summary>
-        RequestSender defaultSender = null;
+        private RequestSender defaultSender = null;
+
         /// <summary>
         /// MessageBuilder builds client requests
         /// </summary>
-        public MessageBuilder builder = null;
+        public MessageBuilder Builder = null;
+
         /// <summary>
         /// Validates Server responses
         /// </summary>
-        public MessageValidator validator = null;
+        private MessageValidator validator = null;
+
         /// <summary>
         /// Maps list of connected clients
         /// </summary>
-        Dictionary<string, WspClient> connectedClients = null;
+        private Dictionary<string, WspClient> connectedClients = null;
+
         /// <summary>
         /// List of disconnected clients for cleaning up underlying SMB2Client instances
         /// </summary>
-        List<WspClient> disconnectedClients = new List<WspClient>();
+        private List<WspClient> disconnectedClients = new List<WspClient>();
+
         /// <summary>
         /// Maps a cursor corresponding to a client
         /// </summary>
-        Dictionary<string, uint> cursorMap = new Dictionary<string, uint>();
+        private Dictionary<string, uint> cursorMap = new Dictionary<string, uint>();
+
         /// <summary>
         /// Name of the Server hosting Windows Search Service
         /// </summary>
-        string serverMachineName = null;
+        private string serverMachineName = null;
+
         /// <summary>
         /// Timeout of the underlying SMB2Client used by the RequestSender.
         /// </summary>
-        TimeSpan smb2ClientTimeout = default(TimeSpan);
+        private TimeSpan smb2ClientTimeout = default(TimeSpan);
+
         /// <summary>
         /// Number of bytes read from the server for a 
         /// given request message
         /// </summary>
-        int bytesRead = -1;
+        private int bytesRead = -1;
+
         /// <summary>
         /// Name of the connected Client
         /// </summary>
-        public string clientMachineName = null;
+        public string ClientMachineName = null;
+
         /// <summary>
         /// Catalog Name to Query
         /// </summary>
-        public string catalogName = null;
+        public string CatalogName = null;
+
         /// <summary>
         /// Name of the connected user
         /// </summary>
-        string userName = null;
+        private string userName = null;
+
         /// <summary>
         /// Domain of the connected user
         /// </summary>
-        string domainName = null;
+        private string domainName = null;
+
         /// <summary>
         /// Password of the connected user
         /// </summary>
-        string password = null;
+        private string password = null;
+
         /// <summary>
         /// Security package used for authentication.
         /// </summary>
         private string securityPackage = null;
+
         /// <summary>
         /// Whether the client will use server-initiated SPNEGO authentication.
         /// </summary>
         private bool useServerGssToken = false;
+
         /// <summary>
         /// Determines whether the client is connected
         /// </summary>
-        bool isClientConnected = false;
+        private bool isClientConnected = false;
+
         /// <summary>
         /// CbReserve Field of RowsIn message
         /// </summary>
-        uint rowsInReserve = 0;
+        private uint rowsInReserve = 0;
+
         /// <summary>
         /// Client Base Field of RowsIn message
         /// </summary>
-        uint rowsInClientBase = 0;
+        private uint rowsInClientBase = 0;
+
         /// <summary>
         /// TableColumns to be queried
         /// </summary>
-        TableColumn[] tableColumns = null;
+        private TableColumn[] tableColumns = null;
+
         /// <summary>
         /// Language locale
         /// </summary>
-        string locale = null;
+        private string locale = null;
+
         /// <summary>
         /// Client version
         /// </summary>
-        public uint clientVersion = 0;
+        public uint ClientVersion = 0;
 
         /// <summary>
         /// Send an invalid _msg value in the message header
         /// </summary>
-        public bool sendInvalidMsg = false;
+        public bool SendInvalidMsg = false;
 
         /// <summary>
         /// Send an invalid _status value in the message header.
         /// </summary>
-        public bool sendInvalidStatus = false;
+        public bool SendInvalidStatus = false;
 
         /// <summary>
         /// Send an invalid _ulChecksum value in the message header. 
         /// </summary>
-        public bool sendInvalidUlChecksum = false;
+        public bool SendInvalidUlChecksum = false;
 
         /// <summary>
         /// Calculate the corret checksum of the message.
         /// </summary>
-        public bool calculateChecksum = true;
+        private bool calculateChecksum = true;
 
-        public CPMSetBindingsIn setBindingsIn;
+        /// <summary>
+        /// The current CPMSetBindingsIn message sent to service indicates the columns bindings of the current query.
+        /// </summary>
+        private CPMSetBindingsIn currentCPMSetBindingsIn;
         #endregion
 
         #region Initialize & Cleanup
@@ -163,12 +188,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.DefaultProtocolDocShortName = "MS-WSP";
             validator = new MessageValidator(wspTestSite);
             serverMachineName = wspTestSite.Properties.Get("ServerComputerName");
-            clientMachineName = wspTestSite.Properties.Get("ClientName");
-            catalogName = wspTestSite.Properties.Get("CatalogName");
+            ClientMachineName = wspTestSite.Properties.Get("ClientName");
+            CatalogName = wspTestSite.Properties.Get("CatalogName");
             userName = wspTestSite.Properties.Get("UserName");
             domainName = wspTestSite.Properties.Get("DomainName");
             password = wspTestSite.Properties.Get("Password");
-            clientVersion = Convert.ToUInt32(wspTestSite.Properties["ClientVersion"]);
+            ClientVersion = Convert.ToUInt32(wspTestSite.Properties["ClientVersion"]);
 
             securityPackage = wspTestSite.Properties.Get("SupportedSecurityPackage");
             useServerGssToken = bool.Parse(wspTestSite.Properties.Get("UseServerGssToken"));
@@ -187,7 +212,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             defaultClient.sender = defaultSender;
 
             var parameter = InitializeParameter();
-            builder = new MessageBuilder(parameter);
+            Builder = new MessageBuilder(parameter);
 
             isClientConnected = false;
         }
@@ -218,17 +243,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             parameter.Array_PropertySet_Four_DBProperties = wspTestSite.Properties.Get("Array_PropertySet_Four_DBProperties").Split(delimiter);
 
-            parameter.EachRowSize = MessageBuilder.rowWidth;
+            parameter.EachRowSize = MessageBuilder.RowWidth;
 
-            parameter.EType = UInt32.Parse(wspTestSite.Properties.Get("EType"));
+            parameter.EType = uint.Parse(wspTestSite.Properties.Get("EType"));
 
-            parameter.BufferSize = UInt32.Parse(wspTestSite.Properties.Get("BufferSize"));
+            parameter.BufferSize = uint.Parse(wspTestSite.Properties.Get("BufferSize"));
 
-            parameter.LcidValue = UInt32.Parse(wspTestSite.Properties.Get("LcidValue"));
+            parameter.LcidValue = uint.Parse(wspTestSite.Properties.Get("LcidValue"));
 
-            parameter.ClientBase = UInt32.Parse(wspTestSite.Properties.Get("ClientBase"));
+            parameter.ClientBase = uint.Parse(wspTestSite.Properties.Get("ClientBase"));
 
-            parameter.RowsToTransfer = UInt32.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
+            parameter.RowsToTransfer = uint.Parse(wspTestSite.Properties.Get("RowsToTransfer"));
 
             return parameter;
         }
@@ -266,14 +291,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         #region CPMConnectIn and CPMConnectOut
 
         /// <summary>
-        /// CPMConnectInRequest() is used to send a request to establish
+        /// CPMConnectIn is used to send a request to establish
         /// a connection with the server and starts WSP query processing
         /// or WSP catalog administration.
         /// </summary>
-        public void CPMConnectInRequest()
+        public void CPMConnectIn()
         {
             int remoteClient = 1;
-            CPMConnectInRequest(clientVersion, remoteClient, catalogName);
+            CPMConnectIn(ClientVersion, remoteClient, CatalogName);
         }
 
         /// <summary>
@@ -285,18 +310,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="catalogName">The name of the catalog</param>
         /// <param name="cPropSets">The number of CDbPropSet structures in the following fields</param>
         /// <param name="cExtPropSet">The number of CDbPropSet structures in aPropertySet</param>
-        public void CPMConnectInRequest(uint clientVersion, int isClientRemote, string catalogName, uint cPropSets = 2, uint cExtPropSet = 4)
+        public void CPMConnectIn(uint clientVersion, int isClientRemote, string catalogName, uint cPropSets = 2, uint cExtPropSet = 4)
         {
             WspClient client;
 
             string locale = wspTestSite.Properties.Get("LanguageLocale");
 
-            var connectInMessage = builder.GetConnectInMessage(clientVersion, isClientRemote, userName, clientMachineName, serverMachineName, catalogName, locale, cPropSets, cExtPropSet);
+            var connectInMessage = Builder.GetCPMConnectIn(clientVersion, isClientRemote, userName, ClientMachineName, serverMachineName, catalogName, locale, cPropSets, cExtPropSet);
 
             WspMessageHeader? header = GetWspMessageHeader(connectInMessage.Header._msg, connectInMessage.Header._status, connectInMessage.Header._ulChecksum);
 
             //Send the connectIn message to Server.
-            if (!connectedClients.ContainsKey(clientMachineName))
+            if (!connectedClients.ContainsKey(ClientMachineName))
             {
                 client = new WspClient();
                 client.sender = new RequestSender(
@@ -307,21 +332,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     securityPackage,
                     useServerGssToken,
                     smb2ClientTimeout);
-                connectedClients.Add(clientMachineName, client);
+                connectedClients.Add(ClientMachineName, client);
             }
             else
             {
-                client = connectedClients[clientMachineName];
+                client = connectedClients[ClientMachineName];
             }
-            // Send CPMConnectIn Message
-            //Write the message in the Pipe and Get the response 
-            //in the outputBuffer
 
+            // Send CPMConnectIn Message
+            // Write the message in the Pipe and Get the response in the outputBuffer
             var connectInMessageBytes = Helper.ToBytes(connectInMessage);
-            uint checkSum = GetCheckSumField(connectInMessageBytes);
+            uint checkSum = GetChecksumField(connectInMessageBytes);
             client.SendCPMConnectIn(connectInMessage._iClientVersion, connectInMessage._fClientIsRemote, connectInMessage.MachineName, connectInMessage.UserName, connectInMessage.PropertySet1, connectInMessage.PropertySet2, connectInMessage.aPropertySets, cPropSets: connectInMessage.cPropSets, cExtPropSet: connectInMessage.cExtPropSet, calculateChecksum: calculateChecksum, header: header);
-            // RequestSender objects uses path '\\pipe\\MSFTEWDS'
-            // for the protocol transport
+
+            // RequestSender objects uses path '\\pipe\\MSFTEWDS' for the protocol transport
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                  "transported using a named pipe: \\pipe\\MSFTEWDS");
 
@@ -332,7 +356,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
                 client.ExpectMessage(out connectOutMessage);
 
-                uint msgId = (UInt32)connectOutMessage.Header._msg;
+                uint msgId = (uint)connectOutMessage.Header._msg;
                 uint msgStatus = connectOutMessage.Header._status;
                 if (msgStatus != 0)
                 {
@@ -344,8 +368,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMConnectOut)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateConnectOutResponse(connectOutMessage);
-                    builder.Is64bit = validator.Is64bit;
+                    validator.ValidateCPMConnectOutResponse(connectOutMessage);
+                    Builder.Is64bit = validator.Is64bit;
                     isClientConnected = true;
                 }
 
@@ -383,10 +407,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public event CPMConnectOutResponseHandler CPMConnectOutResponse;
 
-
         #endregion
 
         #region CPMCreateQueryIn and CPMCreateQueryOut
+
         /// <summary>
         /// CPMCreateQueryIn() emulates WSP CPMCreateQueryIn message and 
         /// associates a query with the client if successful
@@ -396,7 +420,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             string queryScope = wspTestSite.Properties.Get("QueryPath");
             string queryText = wspTestSite.Properties.Get("QueryText");
 
-            var queryInMessage = builder.GetCPMCreateQueryIn(queryScope, queryText, WspConsts.System_Search_Contents, ENABLEROWSETEVENTS);
+            var queryInMessage = Builder.GetCPMCreateQueryIn(queryScope, queryText, WspConsts.System_Search_Contents, ENABLEROWSETEVENTS);
 
             CPMCreateQueryIn(
                 queryInMessage.ColumnSet,
@@ -457,8 +481,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             if (createQueryOut.Header._status == 0)
             {
                 uint[] cursor = null;// to be obtained from the server
-                validator.ValidateCreateQueryOutResponse(createQueryOut, out cursor);
-                cursorMap[clientMachineName] = cursor[0];
+                validator.ValidateCPMCreateQueryOutResponse(createQueryOut, out cursor);
+                cursorMap[ClientMachineName] = cursor[0];
             }
 
             CPMCreateQueryOutResponse(createQueryOut.Header._status);
@@ -467,8 +491,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <summary>
         /// This event is used to get the response for CPMCreateQueryIn request.
         /// </summary>
-        public event CPMCreateQueryOutResponseHandler
-            CPMCreateQueryOutResponse;
+        public event CPMCreateQueryOutResponseHandler CPMCreateQueryOutResponse;
 
         #endregion
 
@@ -487,7 +510,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(clientMachineName);
+                cursorAssociated = GetCursor(ClientMachineName);
             }
             else
             {
@@ -497,7 +520,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     = uint.MaxValue - (uint)r.Next(MIN_RANGE, MAX_RANGE);
             }
             byte[] statusInMessage
-                = builder.GetCPMQueryStatusIn(cursorAssociated);
+                = Builder.GetCPMQueryStatusIn(cursorAssociated);
             byte[] statusOutMessage;
             RequestSender sender = GetRequestSender(isClientConnected);
             bytesRead
@@ -531,7 +554,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                    Constant.SIZE_OF_HEADER, 619,
+                    Constants.SIZE_OF_HEADER, 619,
                     "Whenever an error occurs during processing of a " +
                     "message sent by a client, the server MUST respond " +
                     "with the message header (only) of the message sent " +
@@ -546,24 +569,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMGetQueryStatusOut)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateGetQueryStatusOut(statusOutMessage,
+                    validator.ValidateCPMGetQueryStatusOutResponse(statusOutMessage,
                         checkSum);
                 }
                 CPMGetQueryStatusOutResponse(msgStatus);
             }
         }
 
-
         /// <summary>
         /// This event is used to get the response from 
         /// CPMGetQueryStatusIn request.
         /// </summary>
-        public event CPMGetQueryStatusOutResponseHandler
-            CPMGetQueryStatusOutResponse;
+        public event CPMGetQueryStatusOutResponseHandler CPMGetQueryStatusOutResponse;
 
         #endregion
 
         #region CPMGetQueryStatusExIn and CPMGetQueryStatusExOut
+
         /// <summary>
         /// CPMGetQueryStatusExIn() requests for the status of the query and the additional information from the server.
         /// </summary>
@@ -573,7 +595,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(clientMachineName);
+                cursorAssociated = GetCursor(ClientMachineName);
             }
             else
             {
@@ -589,7 +611,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="response">The CPMGetQueryStatusExOut response.</param>
         public void CPMGetQueryStatusExIn(out CPMGetQueryStatusExOut response)
         {
-            uint cursorAssociated = GetCursor(clientMachineName);
+            uint cursorAssociated = GetCursor(ClientMachineName);
             CPMGetQueryStatusExIn(cursorAssociated, 1, out response);
         }
 
@@ -602,7 +624,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public void CPMGetQueryStatusExIn(uint cursor, uint bookMarkHandle, out CPMGetQueryStatusExOut response)
         {
             response = null;
-            byte[] statusExInMessage = builder.GetCPMQueryStatusExIn(cursor, bookMarkHandle);
+            byte[] statusExInMessage = Builder.GetCPMQueryStatusExIn(cursor, bookMarkHandle);
             byte[] statusExOutMessage;
             uint checkSum = 0;
             RequestSender sender = GetRequestSender(isClientConnected); //Get the Sender
@@ -639,7 +661,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                        Constant.SIZE_OF_HEADER, 619,
+                        Constants.SIZE_OF_HEADER, 619,
                         "Whenever an error occurs during processing of a " +
                         "message sent by a client, the server MUST respond " +
                         "with the message header (only) of the message sent " +
@@ -656,7 +678,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMGetQueryStatusExOut)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateGetQueryStatusExOut(statusExOutMessage,
+                    validator.ValidateCPMGetQueryStatusExOutResponse(statusExOutMessage,
                         checkSum);
 
                     var getQueryStatusExOut = new CPMGetQueryStatusExOut();
@@ -668,12 +690,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 CPMGetQueryStatusExOutResponse(msgStatus);
             }
         }
+
         /// <summary>
         /// This event is used to get the response from 
         /// CPMGetQueryStatusExIn request.
         /// </summary>
-        public event CPMGetQueryStatusExOutResponseHandler
-            CPMGetQueryStatusExOutResponse;
+        public event CPMGetQueryStatusExOutResponseHandler CPMGetQueryStatusExOutResponse;
 
         #endregion
 
@@ -690,7 +712,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(clientMachineName);
+                cursorAssociated = GetCursor(ClientMachineName);
             }
             else
             {
@@ -699,7 +721,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             //Build ratioFinishedIn request
             byte[] ratioFinishedInrequest
-                = builder.GetCPMRatioFinishedIn(cursorAssociated, 1);
+                = Builder.GetCPMRatioFinishedIn(cursorAssociated, 1);
             byte[] ratioFinishedInResponse;
             //Send ratioFinishedIn message to server
             RequestSender sender = GetRequestSender(isClientConnected);
@@ -737,7 +759,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                    Constant.SIZE_OF_HEADER, 619,
+                    Constants.SIZE_OF_HEADER, 619,
                     "Whenever an error occurs during processing of a " +
                     "message sent by a client, the server MUST respond " +
                     "with the message header (only) of the message sent " +
@@ -752,7 +774,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMRatioFinishedOut)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateRatioFinishedOut(ratioFinishedInResponse,
+                    validator.ValidateCPMRatioFinishedOutResponse(ratioFinishedInResponse,
                         checkSum, msgStatus);
                 }
 
@@ -774,8 +796,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from 
         /// CPMRatioFinishedIn request.
         /// </summary>
-        public event CPMRatioFinishedOutResponseHandler
-            CPMRatioFinishedOutResponse;
+        public event CPMRatioFinishedOutResponseHandler CPMRatioFinishedOutResponse;
 
         #endregion
 
@@ -790,10 +811,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// is valid</param>
         public void CPMSetBindingsIn(bool isValidBinding, bool isCursorValid)
         {
-            uint cursorAssociated = isCursorValid ? GetCursor(clientMachineName) : 0;
+            uint cursorAssociated = isCursorValid ? GetCursor(ClientMachineName) : 0;
 
-            var setBindingsInMessage = builder.GetCPMSetBindingsIn(cursorAssociated, out tableColumns, isValidBinding);
-            this.setBindingsIn = setBindingsInMessage;
+            var setBindingsInMessage = Builder.GetCPMSetBindingsIn(cursorAssociated, out tableColumns, isValidBinding);
+            this.currentCPMSetBindingsIn = setBindingsInMessage;
 
             CPMSetBindingsIn(
                 setBindingsInMessage._hCursor,
@@ -808,8 +829,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public void CPMSetBindingsIn(CTableColumn[] aColumns)
         {
             CPMSetBindingsIn(
-                GetCursor(clientMachineName),
-                MessageBuilder.rowWidth,
+                GetCursor(ClientMachineName),
+                MessageBuilder.RowWidth,
                 (uint)aColumns.Length,
                 aColumns);
         }
@@ -845,7 +866,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                          "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            uint msgId = (UInt32)response.Header._msg;
+            uint msgId = (uint)response.Header._msg;
             uint msgStatus = response.Header._status;
             if (msgStatus != 0)
             {
@@ -860,7 +881,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             if ((msgId == (uint)MessageType.CPMSetBindingsIn)
                 && (msgStatus == 0x00000000))
             {
-                validator.ValidateSetBindingsInResponse(response);
+                validator.ValidateCPMSetBindingsInResponse(response);
             }
             CPMSetBindingsInResponse(msgStatus); // Fire Response Event
         }
@@ -869,8 +890,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from 
         /// CPMSetBindingsIn request.
         /// </summary>
-        public event CPMSetBindingsInResponseHandler
-            CPMSetBindingsInResponse;
+        public event CPMSetBindingsInResponseHandler CPMSetBindingsInResponse;
 
         #endregion
 
@@ -885,7 +905,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(clientMachineName);
+                cursorAssociated = GetCursor(ClientMachineName);
             }
             else
             {
@@ -893,7 +913,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 cursorAssociated = (uint)r.Next(50, 60);
             }
 
-            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out CPMGetRowsOut _);
+            CPMGetRowsIn(cursorAssociated, Builder.Parameter.RowsToTransfer, Builder.Parameter.EachRowSize, Builder.Parameter.BufferSize, 0, Builder.Parameter.EType, out CPMGetRowsOut _);
         }
 
         /// <summary>
@@ -902,8 +922,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="getRowsOut">The CPMGetRowsOut response from the server.</param>
         public void CPMGetRowsIn(out CPMGetRowsOut getRowsOut)
         {
-            uint cursorAssociated = GetCursor(clientMachineName);
-            CPMGetRowsIn(cursorAssociated, builder.parameter.RowsToTransfer, builder.parameter.EachRowSize, builder.parameter.BufferSize, 0, builder.parameter.EType, out getRowsOut);
+            uint cursorAssociated = GetCursor(ClientMachineName);
+            CPMGetRowsIn(cursorAssociated, Builder.Parameter.RowsToTransfer, Builder.Parameter.EachRowSize, Builder.Parameter.BufferSize, 0, Builder.Parameter.EType, out getRowsOut);
         }
 
         /// <summary>
@@ -932,7 +952,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="eType">Type of SeekDescription</param>
         /// <param name="seekDescription">The SeekDescription structure.</param>
         /// <param name="response">The CPMGetRowsOut response from the server.</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, object seekDescription, out CPMGetRowsOut response)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, IWspSeekDescription seekDescription, out CPMGetRowsOut response)
         {
             CPMGetRowsIn(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, null, seekDescription, out response);
         }
@@ -949,13 +969,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// <param name="chapt">The handle to a chapter of hierarchical results.</param>
         /// <param name="seekDescription">The SeekDescription structure.</param>
         /// <param name="response">The CPMGetRowsOut response from the server.</param>
-        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, uint? chapt, object seekDescription, out CPMGetRowsOut response)
+        public void CPMGetRowsIn(uint cursor, uint rowsToTransfer, uint rowWidth, uint cbReadBuffer, uint fBwdFetch, uint eType, uint? chapt, IWspSeekDescription seekDescription, out CPMGetRowsOut response)
         {
             response = null;
 
             // Get hold of appropriate Sender (Pipe with/without connection)
             var client = GetClient(isClientConnected);
-            var getRowsInMessage = builder.GetCPMRowsInMessage(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, chapt, seekDescription, out rowsInReserve);
+            var getRowsInMessage = Builder.GetCPMGetRowsIn(cursor, rowsToTransfer, rowWidth, cbReadBuffer, fBwdFetch, eType, chapt, seekDescription, out rowsInReserve);
             var getRowsInMessageBytes = Helper.ToBytes(getRowsInMessage);
 
             client.SendCPMGetRowsIn(
@@ -988,23 +1008,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-
-            if (CPMGetRowsOut != null)
+            if (CPMGetRowsOutResponse != null)
             {
                 client.ExpectMessage<CPMGetRowsOut>(out response);
 
                 uint offsetUsed = GetOffsetUsed();
-                validator.ValidateGetRowsOut(response);
+                validator.ValidateCPMGetRowsOutResponse(response);
 
                 // Fire Response Event
-                CPMGetRowsOut(response.Header._status);
+                CPMGetRowsOutResponse(response.Header._status);
             }
         }
 
         /// <summary>
         /// This event is used to get the response from CPMGetRowsIn request.
         /// </summary>
-        public event CPMGetRowsOutResponseHandler CPMGetRowsOut;
+        public event CPMGetRowsOutResponseHandler CPMGetRowsOutResponse;
 
         #endregion
 
@@ -1087,12 +1106,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             fetchValueOut = null;
             byte[] value = null;
 
-            CPMFetchValueIn fetchValueIn = builder.GetCPMFetchValueIn(workId, cbSoFar, cbChunk, propSpec);
+            CPMFetchValueIn fetchValueIn = Builder.GetCPMFetchValueIn(workId, cbSoFar, cbChunk, propSpec);
             var tempBuffer = new WspBuffer();
             fetchValueIn.ToBytes(tempBuffer);
             var fetchValueInBytes = tempBuffer.GetBytes();
 
-            uint checkSum = GetCheckSumField(fetchValueInBytes);
+            uint checkSum = GetChecksumField(fetchValueInBytes);
             RequestSender sender = GetRequestSender(isClientConnected);
             bytesRead = sender.SendMessage(fetchValueInBytes, out var fetchValueOutBytes);
             value = new byte[bytesRead];
@@ -1102,7 +1121,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint msgStatus = Helper.GetUInt(fetchValueOutBytes, ref index);
             if (msgStatus == 0)
             {
-                validator.ValidateFetchValueOut(value, checkSum, cbSoFar, cbChunk);
+                validator.ValidateCPMFetchValueOutResponse(value, checkSum, cbSoFar, cbChunk);
 
                 fetchValueOut = new CPMFetchValueOut();
                 fetchValueOut.FromBytes(new WspBuffer(fetchValueOutBytes));
@@ -1115,8 +1134,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// this event is used to get the response from 
         /// cpmfetchvaluein request.
         /// </summary>
-        public event CPMFetchValueOutResponseHandler
-            CPMFetchValueOutResponse;
+        public event CPMFetchValueOutResponseHandler CPMFetchValueOutResponse;
 
         #endregion
 
@@ -1128,7 +1146,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         public void CPMCiStateInOut()
         {
-            var ciStateInOutMessage = builder.GetCPMCiStateInOut();
+            var ciStateInOutMessage = Builder.GetCPMCiStateInOut();
             var ciStateInOutMessageBytes = Helper.ToBytes(ciStateInOutMessage);
             byte[] ciStateInOutResponseMessageBytes;
             RequestSender sender
@@ -1157,12 +1175,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 var header = new WspMessageHeader();
                 Helper.FromBytes(ref header, ciStateInOutResponseMessageBytes);
 
-                uint msgId = (UInt32)header._msg;
+                uint msgId = (uint)header._msg;
                 uint msgStatus = header._status;
                 if (msgStatus != 0)
                 {
                     wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                        Constant.SIZE_OF_HEADER, 619,
+                        Constants.SIZE_OF_HEADER, 619,
                         "Whenever an error occurs during processing of a " +
                         "message sent by a client, the server MUST respond " +
                         "with the message header (only) of the message sent " +
@@ -1179,7 +1197,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     var response = new CPMCiStateInOut();
                     Helper.FromBytes(ref response, ciStateInOutResponseMessageBytes);
 
-                    validator.ValidateCiStateInOut(response);
+                    validator.ValidateCPMCiStateInOutResponse(response);
                 }
                 CPMCiStateInOutResponse(msgStatus); // Fire Response Event
             }
@@ -1188,15 +1206,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from 
         /// CPMCiStateInOut request.
         /// </summary>
-        public event CPMCiStateInOutResponseHandler
-            CPMCiStateInOutResponse;
+        public event CPMCiStateInOutResponseHandler CPMCiStateInOutResponse;
 
         #endregion
 
-        #region CPMGetNotifyIn and CPMSendNotifyOut
+        #region CPMGetNotify and CPMSendNotifyOut
 
         /// <summary>
-        /// CPMGetNotifyIn() requests that the client wants to be notified
+        /// CPMGetNotify() requests that the client wants to be notified
         /// of rowset changes.
         /// </summary>
         /// <param name="isCursorValid">Indicates whether the 
@@ -1206,14 +1223,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(clientMachineName);
+                cursorAssociated = GetCursor(ClientMachineName);
             }
             else
             {
                 cursorAssociated = uint.MaxValue - 10;
             }
 
-            byte[] getNotifyMessage = builder.GetCPMGetNotify();
+            byte[] getNotifyMessage = Builder.GetCPMGetNotify();
             byte[] sendNotifyOut;
             uint checkSum = 0;
             RequestSender sender
@@ -1249,7 +1266,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                     if (wspTestSite.Properties.Get("ServerOSVersion").ToUpper() != "WIN7")
                     {
                         wspTestSite.CaptureRequirementIfAreEqual<int>(bytesRead,
-                        Constant.SIZE_OF_HEADER, 619,
+                        Constants.SIZE_OF_HEADER, 619,
                         "Whenever an error occurs during processing of a " +
                         "message sent by a client, the server MUST respond " +
                         "with the message header (only) of the message sent " +
@@ -1266,11 +1283,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMSendNotifyOut)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateSendNotifyOut(sendNotifyOut, checkSum);
+                    validator.ValidateCPMSendNotifyOutResponse(sendNotifyOut, checkSum);
                 }
                 CPMSendNotifyOutResponse(msgStatus); // Fire Response Event
             }
         }
+
         /// <summary>
         /// This event is used to get the response from CPMGetNotify request.
         /// </summary>
@@ -1299,7 +1317,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             uint cursorAssociated = 0;
             if (isCursorValid)
             {
-                cursorAssociated = GetCursor(clientMachineName);
+                cursorAssociated = GetCursor(ClientMachineName);
             }
             else
             {
@@ -1326,7 +1344,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public void CPMFreeCursorIn(uint cursor, out CPMFreeCursorOut freeCursorOut)
         {
             freeCursorOut = null;
-            CPMFreeCursorIn freeCursorIn = builder.GetFreeCursorIn(cursor);
+            CPMFreeCursorIn freeCursorIn = Builder.GetCPMFreeCursorIn(cursor);
             RequestSender sender = GetRequestSender(isClientConnected);
             var tempBuffer = new WspBuffer();
             freeCursorIn.ToBytes(tempBuffer);
@@ -1358,7 +1376,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 {
                     freeCursorOut = new CPMFreeCursorOut();
                     freeCursorOut.FromBytes(new WspBuffer(freeCursorOutBytes));
-                    validator.ValidateFreeCursorOut(freeCursorOutBytes, checkSumZero);
+                    validator.ValidateCPMFreeCursorOutResponse(freeCursorOutBytes, checkSumZero);
                 }
 
                 CPMFreeCursorOutResponse(errorCode);
@@ -1369,8 +1387,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from 
         /// CPMFreeCursorIn request.
         /// </summary>
-        public event CPMFreeCursorOutResponseHandler
-            CPMFreeCursorOutResponse;
+        public event CPMFreeCursorOutResponseHandler CPMFreeCursorOutResponse;
 
         #endregion
 
@@ -1392,10 +1409,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             byte[] disconnectResponse = null;
             RequestSender sender = null;
-            byte[] disconnectMessage = builder.GetDisconnectMessage();
-            if (connectedClients.ContainsKey(clientMachineName))
+            byte[] disconnectMessage = Builder.GetCPMDisconnect();
+            if (connectedClients.ContainsKey(ClientMachineName))
             {
-                sender = connectedClients[clientMachineName].sender;
+                sender = connectedClients[ClientMachineName].sender;
             }
             else
             {
@@ -1421,11 +1438,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             wspTestSite.CaptureRequirement(3, @"All messages MUST be " +
                 "transported using a named pipe: \\pipe\\MSFTEWDS");
 
-            if (connectedClients.ContainsKey(clientMachineName) && removeClient)
+            if (connectedClients.ContainsKey(ClientMachineName) && removeClient)
             {
                 // Remove the Request Sender associated with the client
-                disconnectedClients.Add(connectedClients[clientMachineName]);
-                connectedClients.Remove(clientMachineName);
+                disconnectedClients.Add(connectedClients[ClientMachineName]);
+                connectedClients.Remove(ClientMachineName);
             }
         }
 
@@ -1444,8 +1461,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             byte[] findIndicesOut = null;
             byte[] value = null;
             byte[] findIndicesIn
-                = builder.GetCPMFindIndices(cWids, cDepthPrev);
-            uint checkSum = GetCheckSumField(findIndicesIn);
+                = Builder.GetCPMFindIndicesIn(cWids, cDepthPrev);
+            uint checkSum = GetChecksumField(findIndicesIn);
             RequestSender sender = GetRequestSender(isClientConnected);
             bytesRead = sender.SendMessage(findIndicesIn, out findIndicesOut);
             value = new byte[bytesRead];
@@ -1471,7 +1488,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (errorCode == 0)
             {
-                validator.ValidateFindIndicesOut(value, checkSum, cDepthPrev);
+                validator.ValidateCPMFindIndicesOutResponse(value, checkSum, cDepthPrev);
             }
 
             CPMFindIndicesOutResponse(errorCode);
@@ -1481,11 +1498,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from 
         /// CPMFindIndicesIn request.
         /// </summary>
-        public event CPMFindIndicesOutResponseHandler
-            CPMFindIndicesOutResponse;
+        public event CPMFindIndicesOutResponseHandler CPMFindIndicesOutResponse;
+
         #endregion
 
         #region CPMGetRowsetNotidyIn and CPMGetRowsetNotidyOut
+
         /// <summary>
         /// CPMGetRowsetNotifyIn message requests the next rowset event from the server if available
         /// </summary>
@@ -1569,14 +1587,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             byte[] getRowsetNotifyOutMessage = null;
             RequestSender sender = GetRequestSender(isClientConnected);
-            byte[] getRowsetNotifyInMessage = builder.GetCPMGetRowsetNotify();
+            byte[] getRowsetNotifyInMessage = Builder.GetCPMGetRowsetNotifyIn();
             int bytesRead = sender.SendMessage(getRowsetNotifyInMessage,
                 out getRowsetNotifyOutMessage);
             byte[] value = null;
             value = new byte[bytesRead];
             Array.Copy(getRowsetNotifyOutMessage, 0, value, 0, bytesRead);
 
-            uint checkSum = GetCheckSumField(getRowsetNotifyInMessage);
+            uint checkSum = GetChecksumField(getRowsetNotifyInMessage);
 
             int startingIndex = 0;
             uint msgId = Helper.GetUInt(getRowsetNotifyOutMessage, ref startingIndex);
@@ -1584,7 +1602,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (errorCode == 0)
             {
-                validator.ValidateGetRowsetNotifyOut(value, checkSum, eventType, additionalRowsetEvent);
+                validator.ValidateCPMGetRowsetNotifyOutResponse(value, checkSum, eventType, additionalRowsetEvent);
             }
             CPMGetRowsetNotifyOutResponse(errorCode);
 
@@ -1691,7 +1709,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 default:
                     break;
             }
-
         }
 
         /// <summary>
@@ -1703,8 +1720,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public bool VerifyHResult(byte[] bytes, ref int startingIndex)
         {
             bool success = false;
-            byte[] temp = new byte[Constant.SIZE_OF_UINT];
-            temp = Helper.GetData(bytes, ref startingIndex, Constant.SIZE_OF_UINT);
+            byte[] temp = new byte[Constants.SIZE_OF_UINT];
+            temp = Helper.GetData(bytes, ref startingIndex, Constants.SIZE_OF_UINT);
             if (Convert.ToInt32(temp[3]) == 0)
             {
                 //if the last bit is not set, it should be shown as success
@@ -1718,8 +1735,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from 
         /// CPMGetRowsetNotifyIn request.
         /// </summary>
-        public event CPMGetRowsetNotifyOutResponseHandler
-            CPMGetRowsetNotifyOutResponse;
+        public event CPMGetRowsetNotifyOutResponseHandler CPMGetRowsetNotifyOutResponse;
+
         #endregion
 
         #region CPMGetScopeStatisticsIn and CMPGetScopeStatisticsOut
@@ -1730,7 +1747,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public void CPMGetScopeStatisticsIn()
         {
             byte[] statusInMessage
-                = builder.GetCPMGetScopeStatisticsIn();
+                = Builder.GetCPMGetScopeStatisticsIn();
             byte[] statusOutMessage;
             RequestSender sender = GetRequestSender(isClientConnected);
             bytesRead
@@ -1766,7 +1783,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 if ((msgId == (uint)MessageType.CPMGetScopeStatisticsOut)
                     && (msgStatus == 0x00000000))
                 {
-                    validator.ValidateGetScopeStatisticsOut(statusOutMessage, checkSum, msgStatus);
+                    validator.ValidateCPMGetScopeStatisticsOutResponse(statusOutMessage, checkSum, msgStatus);
 
                     //if message response successfully, it must populated with the appropriate statistics
                     wspTestSite.CaptureRequirement(1153,
@@ -1804,7 +1821,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             {
                 eventFrequency = 0x00001000;
             }
-            byte[] setScopePrioritizationInMessage = builder.GetCPMSetScopePrioritization(priority, eventFrequency);
+            byte[] setScopePrioritizationInMessage = Builder.GetCPMSetScopePrioritizationIn(priority, eventFrequency);
 
             int bytesRead = sender.SendMessage(setScopePrioritizationInMessage,
                 out setScopePrioritizationOutMessage);
@@ -1812,7 +1829,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
             value = new byte[bytesRead];
             Array.Copy(setScopePrioritizationOutMessage, 0, value, 0, bytesRead);
 
-            uint checkSum = GetCheckSumField(setScopePrioritizationInMessage);
+            uint checkSum = GetChecksumField(setScopePrioritizationInMessage);
             // Read the message Response           
 
             int startingIndex = 0;
@@ -1821,7 +1838,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (errorCode == 0)
             {
-                validator.ValidateSetScopePrioritizationOut(value, checkSum, eventFrequency);
+                validator.ValidateCPMSetScopePrioritizationOutResponse(value, checkSum, eventFrequency);
             }
             CPMSetScopePrioritizationOutResponse(errorCode);
         }
@@ -1830,8 +1847,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from 
         /// CPMSetScopePrioritizationIn request.
         /// </summary>
-        public event CPMSetScopePrioritizationOutResponseHandler
-            CPMSetScopePrioritizationOutResponse;
+        public event CPMSetScopePrioritizationOutResponseHandler CPMSetScopePrioritizationOutResponse;
+
         #endregion
 
         #region CPMRestartPositionIn request and response
@@ -1845,13 +1862,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             RequestSender sender = GetRequestSender(isClientConnected);
 
-            byte[] restartPositionInRequset = builder.GetRestartPositionIn(_hCursor, _chapt);
+            byte[] restartPositionInRequset = Builder.GetCPMRestartPositionIn(_hCursor, _chapt);
 
             int bytesRead = sender.SendMessage(restartPositionInRequset, out byte[] restartPositionInResponse);
             byte[] value = null;
             value = new byte[bytesRead];
             Array.Copy(restartPositionInResponse, 0, value, 0, bytesRead);
-            uint checkSum = GetCheckSumField(restartPositionInResponse);
+            uint checkSum = GetChecksumField(restartPositionInResponse);
 
             // Read the message Response           
             int startingIndex = 0;
@@ -1860,7 +1877,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             if (errorCode == 0)
             {
-                validator.ValidateRestartPositionInResponse(value, checkSum);
+                validator.ValidateCPMRestartPositionInResponse(value, checkSum);
             }
 
             CPMRestartPositionInResponse(errorCode);
@@ -1870,12 +1887,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// This event is used to get the response from CPMRestartPositionIn request.
         /// </summary>
         public event CPMRestartPositionInResponseHadler CPMRestartPositionInResponse;
+
         #endregion
 
         #endregion
 
         #region Helper Methods
-
 
         /// <summary>
         /// Get server's OS version
@@ -1885,7 +1902,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         public bool GetServerPlatform(out SkuOsVersion platform)
         {
             platform = CheckSkuOsVersion();
-            _platform = platform;
+            this.platform = platform;
 
             return true;
         }
@@ -1936,11 +1953,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         /// </summary>
         /// <param name="wspMessage">WSP message BLOB</param>
         /// <returns>Checksum</returns>
-        private uint GetCheckSumField(byte[] wspMessage)
+        private uint GetChecksumField(byte[] wspMessage)
         {
             int index = 8;
-            uint checkSumField = Helper.GetUInt(wspMessage, ref index);
-            return checkSumField;
+            uint checksumField = Helper.GetUInt(wspMessage, ref index);
+            return checksumField;
         }
 
         /// <summary>
@@ -1967,7 +1984,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             if (isClientConnected)
             {
-                return connectedClients[clientMachineName];
+                return connectedClients[ClientMachineName];
             }
             else
             {
@@ -1985,7 +2002,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             if (isclientConnected)
             {
-                return connectedClients[clientMachineName].sender;
+                return connectedClients[ClientMachineName].sender;
             }
             else
             {
@@ -2004,14 +2021,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 = Convert.ToUInt32(wspTestSite.Properties["ClientOffset"]);
             uint serverOffset
                 = Convert.ToUInt32(wspTestSite.Properties["ServerOffset"]);
-            if (serverOffset == Constant.OFFSET_64
-                && clientOffset == Constant.OFFSET_64)
+            if (serverOffset == Constants.OFFSET_64
+                && clientOffset == Constants.OFFSET_64)
             {
-                returnValue = Constant.OFFSET_64;
+                returnValue = Constants.OFFSET_64;
             }
             else
             {
-                returnValue = Constant.OFFSET_32;
+                returnValue = Constants.OFFSET_32;
             }
             return returnValue;
         }
@@ -2027,7 +2044,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
         {
             WspMessageHeader? header = null;
 
-            if (sendInvalidMsg)
+            if (SendInvalidMsg)
             {
                 header = new WspMessageHeader
                 {
@@ -2037,7 +2054,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 };
             }
 
-            if (sendInvalidStatus)
+            if (SendInvalidStatus)
             {
                 header = new WspMessageHeader
                 {
@@ -2047,7 +2064,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
                 };
             }
 
-            if (sendInvalidUlChecksum)
+            if (SendInvalidUlChecksum)
             {
                 header = new WspMessageHeader
                 {
@@ -2060,6 +2077,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
 
             return header;
         }
+
         #endregion
     }
 }

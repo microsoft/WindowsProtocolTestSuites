@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CAggregSet structure contains information about aggregates.
@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of entries in AggregSpecs.
         /// </summary>
-        public UInt32 cCount;
+        public uint cCount;
 
         /// <summary>
         /// An array of CAggregSpec structures, each describing individual aggregation.

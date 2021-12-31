@@ -3,17 +3,17 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CNodeRestriction structure contains an array of command tree restriction nodes for constraining the results of a query.
     /// </summary>
-    public struct CNodeRestriction : IWspStructure
+    public struct CNodeRestriction : IWspRestriction
     {
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of CRestriction structures contained in the _paNode field.
         /// </summary>
-        public UInt32 _cNode;
+        public uint _cNode;
 
         /// <summary>
         /// An array of CRestriction structures.

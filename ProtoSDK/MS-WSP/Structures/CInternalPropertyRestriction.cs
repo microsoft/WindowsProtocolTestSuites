@@ -3,22 +3,22 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CInternalPropertyRestriction structure contains a property value to match with an operation.
     /// </summary>
-    public struct CInternalPropertyRestriction : IWspStructure
+    public struct CInternalPropertyRestriction : IWspRestriction
     {
         /// <summary>
         /// A 32-bit integer specifying the relation to perform on the property.
         /// </summary>
-        public _relop_Values _relop;
+        public CPropertyRestriction_relop_Values _relop;
 
         /// <summary>
         /// A 32-bit unsigned integer, representing the property ID.
         /// </summary>
-        public UInt32 _pid;
+        public uint _pid;
 
         /// <summary>
         /// A CBaseStorageVariant that contains the value to relate to the property.
@@ -28,7 +28,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer, indicating the locale of a string, contained in _prval value, as specified in [MS-LCID]. 
         /// </summary>
-        public UInt32 _lcid;
+        public uint _lcid;
 
         /// <summary>
         /// A byte value. MUST be set to one of the following values.

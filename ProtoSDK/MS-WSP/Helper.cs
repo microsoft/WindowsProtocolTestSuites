@@ -2,19 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.Text;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-
     /// <summary>
-    /// Helper class provides utility methods which are used through 
-    /// out Adapter implementation
-    /// and response validation
+    /// Helper class provides utility methods which are used through out Adapter implementation and response validation
     /// </summary>
     public class Helper
     {
         #region  Utility Methods
+
         /// <summary>
         /// Read unsigned Int from a byte array
         /// </summary>
@@ -23,12 +20,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <returns>unsigned int</returns>
         public static uint GetUInt(byte[] bytes, ref int startingIndex)
         {
-            byte[] tempArray = new byte[Constant.SIZE_OF_UINT];
-            for (int i = 0; i < Constant.SIZE_OF_UINT; i++)
+            byte[] tempArray = new byte[Constants.SIZE_OF_UINT];
+            for (int i = 0; i < Constants.SIZE_OF_UINT; i++)
             {
                 tempArray[i] = bytes[i + startingIndex];
             }
-            startingIndex += Constant.SIZE_OF_UINT;
+            startingIndex += Constants.SIZE_OF_UINT;
             // Values are retrieved in little indian format
             return BitConverter.ToUInt32(tempArray, 0);
 
@@ -40,17 +37,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="mainBlob">destination array where 
         /// new bytes are to be appended</param>
         /// <param name="index">starting index (from where to append)</param>
-        /// <param name="bytesTobeAppended">source bytes</param>
-        public static void CopyBytes(byte[] mainBlob,
-            ref int index, byte[] bytesTobeAppended)
+        /// <param name="bytesToBeAppended">source bytes</param>
+        public static void CopyBytes(byte[] mainBlob, ref int index, byte[] bytesToBeAppended)
         {
-            if (mainBlob.Length - index >= bytesTobeAppended.Length)
+            if (mainBlob.Length - index >= bytesToBeAppended.Length)
             {
-                for (int i = 0; i < bytesTobeAppended.Length; i++)
+                for (int i = 0; i < bytesToBeAppended.Length; i++)
                 {
-                    mainBlob[i + index] = bytesTobeAppended[i];
+                    mainBlob[i + index] = bytesToBeAppended[i];
                 }
-                index += bytesTobeAppended.Length;
+                index += bytesToBeAppended.Length;
             }
             else
             {
@@ -63,8 +59,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// Retrieves a data as byte array from a containing BLOB
         /// </summary>
         /// <param name="bytes">Parent BLOB object</param>
-        /// <param name="index">Index from where the data
-        /// should be retrieved</param>
+        /// <param name="index">Index from where the data should be retrieved</param>
         /// <param name="dataWidth">Length of the data field</param>
         /// <returns></returns>
         public static byte[] GetData(byte[] bytes, ref int index, int dataWidth)
@@ -90,8 +85,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="condition">Condition to be verified</param>
         /// <param name="requirementId">Requirement Id</param>
         /// <param name="description">Requirement Description or text</param>
-        public static void Requires(bool condition,
-            int requirementId, string description)
+        public static void Requires(bool condition, int requirementId, string description)
         {
             //Contracts.Requires(condition, 
             //    MakeReqId(requirementId, description));
@@ -101,8 +95,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// A short cut for Contracts.Requires using a requirement id and description. 
         /// Every requires which captures a requirement should use this.
         /// </summary>
-        public static void RequiresCapture(int requirementId,
-            string description)
+        public static void RequiresCapture(int requirementId, string description)
         {
             //Requirements.Capture(MakeReqId(requirementId, description));
         }
@@ -115,11 +108,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="bytes">BLOB to read 4 bytes from</param>
         /// <param name="startingIndex">offset in the BLOB</param>
         /// <returns>4 byte unsigned integer</returns>
-        public static uint GetUIntWithOutAdvancing(byte[] bytes,
-            int startingIndex)
+        public static uint GetUIntWithoutAdvancing(byte[] bytes, int startingIndex)
         {
-            byte[] tempArray = new byte[Constant.SIZE_OF_UINT];
-            for (int i = 0; i < Constant.SIZE_OF_UINT; i++)
+            byte[] tempArray = new byte[Constants.SIZE_OF_UINT];
+            for (int i = 0; i < Constants.SIZE_OF_UINT; i++)
             {
                 tempArray[i] = bytes[i + startingIndex];
             }
@@ -135,16 +127,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             return buffer.GetBytes();
         }
 
-        public static void FromBytes<T>(ref T t, byte[] bytes) where T : IWspObject, new ()
+        public static void FromBytes<T>(ref T t, byte[] bytes) where T : IWspObject, new()
         {
             var buffer = new WspBuffer(bytes);
 
             t.FromBytes(buffer);
         }
 
-        public static UInt32 CalculateCheckSum(WspMessageHeader_msg_Values msg, byte[] messageBlob)
+        public static uint CalculateChecksum(WspMessageHeader_msg_Values msg, byte[] messageBlob)
         {
-            UInt32 checksum = 0;
+            uint checksum = 0;
 
             if (messageBlob.Length % 4 != 0)
             {
@@ -162,7 +154,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
             }
 
             checksum = checksum ^ WspConsts.ChecksumMagicNumber;
-            checksum -= (UInt32)msg;
+            checksum -= (uint)msg;
 
             return checksum;
         }
@@ -200,46 +192,52 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <param name="type">vType_Values.</param>
         /// <param name="is64Bit">Is 64-bit supported by both client and server.</param>
         /// <returns>size in bytes</returns>
-        public static ushort GetSize(vType_Values type, bool is64Bit)
+        public static ushort GetSize(CBaseStorageVariant_vType_Values type, bool is64Bit)
         {
             ushort size = 0;
             switch (type)
             {
-                case vType_Values.VT_EMPTY:
+                case CBaseStorageVariant_vType_Values.VT_EMPTY:
                     break;
-                case vType_Values.VT_NULL:
+
+                case CBaseStorageVariant_vType_Values.VT_NULL:
                     break;
-                case vType_Values.VT_I1:
-                case vType_Values.VT_UI1:
+
+                case CBaseStorageVariant_vType_Values.VT_I1:
+                case CBaseStorageVariant_vType_Values.VT_UI1:
                     size = 1; // Take 1 Byte
                     break;
-                case vType_Values.VT_I2:
-                case vType_Values.VT_UI2:
-                case vType_Values.VT_BOOL:
+
+                case CBaseStorageVariant_vType_Values.VT_I2:
+                case CBaseStorageVariant_vType_Values.VT_UI2:
+                case CBaseStorageVariant_vType_Values.VT_BOOL:
                     size = 2; // Take 2 Bytes
                     break;
-                case vType_Values.VT_I4:
-                case vType_Values.VT_UI4:
-                case vType_Values.VT_INT:
-                case vType_Values.VT_UINT:
-                case vType_Values.VT_ERROR:
-                case vType_Values.VT_R4:
+
+                case CBaseStorageVariant_vType_Values.VT_I4:
+                case CBaseStorageVariant_vType_Values.VT_UI4:
+                case CBaseStorageVariant_vType_Values.VT_INT:
+                case CBaseStorageVariant_vType_Values.VT_UINT:
+                case CBaseStorageVariant_vType_Values.VT_ERROR:
+                case CBaseStorageVariant_vType_Values.VT_R4:
                     size = 4; // Take 4 byte
                     break;
-                case vType_Values.VT_I8:
-                case vType_Values.VT_UI8:
-                case vType_Values.VT_CY:
-                case vType_Values.VT_R8:
-                case vType_Values.VT_DATE:
-                case vType_Values.VT_CLSID:
-                case vType_Values.VT_FILETIME:
+
+                case CBaseStorageVariant_vType_Values.VT_I8:
+                case CBaseStorageVariant_vType_Values.VT_UI8:
+                case CBaseStorageVariant_vType_Values.VT_CY:
+                case CBaseStorageVariant_vType_Values.VT_R8:
+                case CBaseStorageVariant_vType_Values.VT_DATE:
+                case CBaseStorageVariant_vType_Values.VT_CLSID:
+                case CBaseStorageVariant_vType_Values.VT_FILETIME:
                     size = 8;
                     break;
 
-                case vType_Values.VT_DECIMAL:
+                case CBaseStorageVariant_vType_Values.VT_DECIMAL:
                     size = 12;
                     break;
-                case vType_Values.VT_VARIANT:
+
+                case CBaseStorageVariant_vType_Values.VT_VARIANT:
                     if (is64Bit)
                     {
                         size = 24;
@@ -249,12 +247,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
                         size = 16;
                     }
                     break;
+
                 default:
                     break;
             }
+
             return size;
         }
-
     }
 }
 

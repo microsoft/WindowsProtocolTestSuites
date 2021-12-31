@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CNatLanguageRestriction structure contains a natural language query match for a property.
@@ -11,7 +11,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
     /// The GSS is free to match on the string in a variety of ways.
     /// It can drop words, add alternate forms, or make no changes.
     /// </summary>
-    public struct CNatLanguageRestriction : IWspStructure
+    public struct CNatLanguageRestriction : IWspRestriction
     {
         /// <summary>
         /// A CFullPropSpec structure. This field indicates the property on which to perform the match operation.
@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer. The number of characters in the _pwcsPhrase field.
         /// </summary>
-        public UInt32 Cc;
+        public uint Cc;
 
         /// <summary>
         /// A non-null-terminated Unicode string containing the text to search for within the specific property.
@@ -32,7 +32,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer indicating the locale of _pwcsPhrase, as specified in [MS-LCID].
         /// </summary>
-        public UInt32 Lcid;
+        public uint Lcid;
 
         public void FromBytes(WspBuffer buffer)
         {

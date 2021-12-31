@@ -1,14 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP.Adapter
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
 {
     /// <summary>
     /// SUT Control Adapter to create, delete and modify files on remote server.
     /// </summary>
     public interface IWspSutAdapter : IAdapter
     {
-  
         /// <summary>
         /// This method is to create a file on remote server machine.
         /// </summary>

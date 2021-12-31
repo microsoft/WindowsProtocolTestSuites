@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
@@ -22,13 +22,13 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn with an invalid eType and expects STATUS_INVALID_PARAMETER.");
             argumentType = ArgumentType.InvalidEType;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
                 (uint)FetchType.ForwardOrder,
                 255U,
-                new object(),
+               new InvalidSeekDescription(),
                 out _);
         }
 
@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose eType and SeekDescription are mismatched and the size of SeekDescription is smaller than what eType indicates and expects E_ABORT.");
             argumentType = ArgumentType.MismatchedETypeSmallerSeekDescription;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -62,7 +62,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose SeekDescription is a CRowSeekNext and expects success.");
             Site.Log.Add(LogEntryKind.Debug, $"Field values of the CRowSeekNext structure: _cskip: 2");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -78,7 +78,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client for verification sends CPMGetRowsIn and expects success.");
             verificationAdapter.CPMGetRowsIn(
-                verificationAdapter.GetCursor(verificationAdapter.clientMachineName),
+                verificationAdapter.GetCursor(verificationAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose SeekDescription is a CRowSeekNext with a _cskip larger than the total rows count and expects success.");
             Site.Log.Add(LogEntryKind.Debug, $"Field values of the CRowSeekNext structure: _cskip: 40");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -134,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose SeekDescription is a CRowSeekAtRatio with a ratio of 0 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 rowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client for verification sends CPMGetRowsIn and expects success.");
             verificationAdapter.CPMGetRowsIn(
-                verificationAdapter.GetCursor(verificationAdapter.clientMachineName),
+                verificationAdapter.GetCursor(verificationAdapter.ClientMachineName),
                 rowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
 
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose SeekDescription is a CRowSeekAtRatio with a ratio of 1 and expects success.");
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -204,7 +204,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose SeekDescription is a CRowSeekAtRatio whose _ulDenominator is 0 and expects DB_E_BADRATIO.");
             argumentType = ArgumentType.InvalidCRowSeekAtRatio;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,
@@ -228,7 +228,7 @@ namespace Microsoft.Protocols.TestSuites.WspTS
             Site.Log.Add(LogEntryKind.TestStep, "Client sends CPMGetRowsIn whose SeekDescription is a CRowSeekAtRatio whose _ulNumerator is larger than the _ulDenominator and expects DB_E_BADRATIO.");
             argumentType = ArgumentType.InvalidCRowSeekAtRatio;
             wspAdapter.CPMGetRowsIn(
-                wspAdapter.GetCursor(wspAdapter.clientMachineName),
+                wspAdapter.GetCursor(wspAdapter.ClientMachineName),
                 validRowsToTransfer,
                 validRowWidth,
                 validReadBuffer,

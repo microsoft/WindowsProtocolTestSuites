@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     /// <summary>
     /// The CSortSet structure contains the sort order of the query.
@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// A 32-bit unsigned integer specifying the number of elements in sortArray.
         /// </summary>
-        public UInt32 count;
+        public uint count;
 
         /// <summary>
         /// An array of CSort structures describing the order in which to sort the results of the query.

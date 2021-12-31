@@ -3,9 +3,9 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
-    public enum _uBooleanOptions_Values : UInt32
+    public enum CRowsetProperties_uBooleanOptions_Values : uint
     {
         /// <summary>
         /// The cursor can only be moved forward.
@@ -73,30 +73,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
         /// <summary>
         /// _uBooleanOptions
         /// </summary>
-        public _uBooleanOptions_Values _uBooleanOptions;
+        public CRowsetProperties_uBooleanOptions_Values _uBooleanOptions;
 
         /// <summary>
         /// A 32-bit unsigned integer.
         /// Note This field MUST be set to 0x00000000. It is not used and MUST be ignored.
         /// </summary>
-        public UInt32 _ulMaxOpenRows;
+        public uint _ulMaxOpenRows;
 
         /// <summary>
         /// A 32-bit unsigned integer.
         /// Note This field MUST be set to 0x00000000. It is not used and MUST be ignored.
         /// </summary>
-        public UInt32 _ulMemoryUsage;
+        public uint _ulMemoryUsage;
 
         /// <summary>
         /// A 32-bit unsigned integer specifying the maximum number of rows that are to be returned for the query.
         /// </summary>
-        public UInt32 _cMaxResults;
+        public uint _cMaxResults;
 
         /// <summary>
         /// A 32-bit unsigned integer, specifying the number of seconds at which a query is to time out and automatically terminate, counting from the time the query starts executing on the server.
         /// Note A value of 0x00000000 means that the query is not to time out.
         /// </summary>
-        public UInt32 _cCmdTimeout;
+        public uint _cCmdTimeout;
 
         public void FromBytes(WspBuffer buffer)
         {

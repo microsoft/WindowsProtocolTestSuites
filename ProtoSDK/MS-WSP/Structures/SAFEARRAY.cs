@@ -3,24 +3,24 @@
 
 using System;
 
-namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.WSP
+namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
 {
     public struct SAFEARRAY<T> : IWspStructure where T : struct
     {
         /// <summary>
         /// Unsigned 16-bit integer, indicating the number of dimensions of the multidimensional array.
         /// </summary>
-        public UInt16 cDims;
+        public ushort cDims;
 
         /// <summary>
         /// A 16-bit bitfield. The values represent features defined by upper-layer applications and MUST be ignored.
         /// </summary>
-        public UInt16 fFeatures;
+        public ushort fFeatures;
 
         /// <summary>
         /// A 32-bit unsigned integer specifying the size of each element of the array.
         /// </summary>
-        public UInt32 cbElements;
+        public uint cbElements;
 
         /// <summary>
         /// An array that contains one SAFEARRAYBOUND structure per dimension in the SAFEARRAY.
