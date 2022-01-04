@@ -101,6 +101,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         int TriggerClientDisconnectAll(string caseName);
 
         /// <summary>
+        /// This method is used to trigger RDP client to re-enter the valid account name.
+        /// </summary>
+        /// <param name="caseName">Name of test case</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please re-enter the valid account name for the SUT.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
+        [DefaultValue("1")]
+        int TriggerReverseCredentialManager(string caseName);
+
+        /// <summary>
         /// This method is used to trigger RDP client to start an Auto-Reconnect sequence after a network interruption.
         /// </summary>
         /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>

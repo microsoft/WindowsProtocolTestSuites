@@ -106,6 +106,9 @@
 	<None Update="SUTControlAdapter\RDPConnectWithNegotiationApproachInvalidAccount.ps1">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
+	<None Update="SUTControlAdapter\Run-CredentialManagerWithPSRemoting.ps1">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
     <None Update="SUTControlAdapter\Run-TaskWithPSRemoting.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
