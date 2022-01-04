@@ -11,13 +11,14 @@ Param(
 )
 
 # Run Task to start RDP connection remotely
+
+$cmdOutput_ = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock {param([string]$taskName) cmd /c schtasks /run /TN $taskName} -ArgumentList "CredentialManager_Invalid"
+
+$cmdOutput_ | out-file "./RunTask_CredentialManager.log"
+
 $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock {param([string]$taskName) cmd /c schtasks /run /TN $taskName} -ArgumentList $taskName
 
 $cmdOutput | out-file "./RunTask_$taskName.log"
-
-$ptfprop_SUTUserName | out-file "./RunTask_$taskName.log"
-
-$ptfprop_ServerDomain | out-file "./RunTask_$taskName.log"
 
 if($cmdOutput -ne $null)
 {

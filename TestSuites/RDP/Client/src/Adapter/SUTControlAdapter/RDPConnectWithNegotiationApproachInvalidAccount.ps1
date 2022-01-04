@@ -10,5 +10,5 @@ $isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
 if(-not $isSutPSRemotingStarted) {return -1}
 
 # Run task to start RDP connection remotely
-$returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_RDPConnectWithNegotiationApproachInvalidAccount_Task $PtfProp_SUTUserName
+$returnValue = ./Run-CredentialManagerWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_RDPConnectWithNegotiationApproachInvalidAccount_Task $PtfProp_SUTUserName
 return $returnValue
