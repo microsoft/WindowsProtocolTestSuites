@@ -265,6 +265,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// The NetBios name of driver computer for RDSTLS redirection test.
         /// </summary>
         public static string Test_NetBiosName = "DriverComputerNetBiosName";
+
+        /// <summary>
+        /// The NetBios name of driver computer for RDSTLS redirection test.
+        /// </summary>
+        public static string Test_Protocol = "Protocol";
     }
 
     /// <summary>

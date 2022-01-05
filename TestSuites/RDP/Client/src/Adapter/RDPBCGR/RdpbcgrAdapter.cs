@@ -7,6 +7,7 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -343,7 +344,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// Expect a transport level (TCP) non connection
         /// </summary>
         /// <param name="sessionType">The type of session to be established.</param>
-        public void ExpectNonTransportConnection(RDPSessionType sessionType)
+        /// <param name="invalidCredentials">Invalid Credentials used.</param>
+        public void ExpectTransportConnection(RDPSessionType sessionType, bool invalidCredentials = true)
         {
             this.pduCache.Clear();
             RdpbcgrServerSessionContext oldSession = sessionContext;
@@ -369,7 +371,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 }
                 catch (TimeoutException)
                 {
-                    site.Assert.Fail("Timeout when expecting Connection");
+                    site.Assert.Pass("Timeout when not expecting Connection");
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -383,12 +385,29 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 }
 
             }
-            if (isRecieved)
-            {
-                site.Assert.Fail("Timeout when expecting Connection");
-            }
-
+            
             site.Log.Add(LogEntryKind.Debug, "A RDP client initiates a connection. The local endpoint is {0}. The remote endpoint is {1}", sessionContext.LocalIdentity, sessionContext.Identity.ToString());
+
+            sessionState = ServerSessionState.TransportConnected;
+
+            if (this.serverConfig.encryptedProtocol == EncryptedProtocol.Rdp && isWindowsImplementation && sessionType != RDPSessionType.AutoReconnection)
+            {
+                site.Log.Add(LogEntryKind.Debug, @"Section 3.2.5.3.2, disconnect and then restart the connection sequence, specifying only the PROTOCOL_RDP flag (0x00000000) 
+                in the requestedProtocols field of the RDP Negotiation Request structure (section 2.2.1.1.1).");
+
+                ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, pduWaitTimeSpan);
+
+                Server_X_224_Connection_Confirm(selectedProtocols_Values.PROTOCOL_RDP_FLAG, serverConfig.isExtendedClientDataSupported, true, NegativeType.None);
+
+                RdpbcgrServerSessionContext orgSession = sessionContext;
+                sessionContext = rdpbcgrServerStack.ExpectConnect(pduWaitTimeSpan);
+                if (sessionContext.Identity == orgSession.Identity)
+                {
+                    sessionContext = rdpbcgrServerStack.ExpectConnect(pduWaitTimeSpan);
+                }
+
+                sessionState = ServerSessionState.TransportConnected;
+            }
         }
 
         /// <summary>
@@ -451,9 +470,92 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 confirmPdu.rdpNegData = null;
             }
+
             SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
             sessionState = ServerSessionState.X224ConnectionResponseSent;
         }
+
+
+        /// Attempt To Send Server X_224 Connection Confirm Pdu to client With Invalid Credentials.
+        /// </summary>
+        /// <param name="protocol">Indicates the selected security protocol</param>
+        /// <param name="bSupportExtClientData">Indicates Extended Client Data is supported </param>
+        /// <param name="setRdpNegData">Indicates rdpNegData is set</param>
+        /// <param name="bSupportEGFX">Indicates the server supports MS-RDPEGFX</param>
+        /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
+        /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
+        /// <param name="bSupportRestrictedAuthenticationMode">Indicates the server supports Restricted Authentication mode</param>
+        public void Server_X_224_Attempt_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false)
+        {
+            //ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
+            serverConfig.selectedProtocol = protocol;
+            serverConfig.isExtendedClientDataSupported = bSupportExtClientData;
+            bool isSendTLSHandshakeAfterX224ConnectionConfirmPdu = true;
+
+            Server_X_224_Connection_Confirm_Pdu confirmPdu
+                = rdpbcgrServerStack.CreateX224ConnectionConfirmPdu(sessionContext, protocol);
+            if (bSupportExtClientData)
+            {
+                confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.EXTENDED_CLIENT_DATA_SUPPORTED;
+            }
+            if (bSupportEGFX)
+            {
+                confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.DYNVC_GFX_PROTOCOL_SUPPORTED;
+            }
+            if (bSupportRestrictedAdminMode)
+            {
+                confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.RESTRICTED_ADMIN_MODE_SUPPORTED;
+            }
+            if (bReservedSet)
+            {
+                confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.NEGRSP_FLAG_RESERVED;
+            }
+            if (bSupportRestrictedAuthenticationMode)
+            {
+                confirmPdu.rdpNegData.flags |= RDP_NEG_RSP_flags_Values.REDIRECTED_AUTHENTICATION_MODE_SUPPORTED;
+            }
+
+            switch (invalidType)
+            {
+                case NegativeType.InvalidTPKTHeader:
+                    confirmPdu.tpktHeader.version = 0;
+                    isSendTLSHandshakeAfterX224ConnectionConfirmPdu = false;
+                    break;
+                case NegativeType.InvalidX224:
+                    confirmPdu.x224Ccf.lengthIndicator--;
+                    break;
+                case NegativeType.InvalidRdpNegData:
+                    confirmPdu.rdpNegData.type = RDP_NEG_RSP_type_Values.Invalid;
+                    isSendTLSHandshakeAfterX224ConnectionConfirmPdu = false;
+                    break;
+            }
+            if (!setRdpNegData)
+            {
+                confirmPdu.rdpNegData = null;
+            }
+
+            try
+            {
+                SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
+                if (RdpbcgrTestData.Test_Protocol.Equals("CredSSP"))
+                {
+                    site.Assert.Fail("Invalid Account Check Failed. SSPI Handshake Succeeded on Invalid User Account");
+                }
+                else
+                {
+                    site.Assert.Inconclusive("Invalid Account Check Inconclusive.");
+                }
+            }
+            catch (SspiException e)
+            {
+                site.Assert.Pass("Invalid Account Encountered. SSPI Handshake Failed");
+                
+            }
+
+            sessionState = ServerSessionState.X224ConnectionResponseSent;
+        }
+
+
 
         /// <summary>
         /// Send X.224 Connection Confirm PDU. It is sent as a response of X.224 Connection Request.
@@ -3295,6 +3397,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (PtfPropUtility.GetPtfPropertyValue(site, "SUTNetBiosName", out tempStr))
             {
                 RdpbcgrTestData.Test_NetBiosName = tempStr;
+            }
+            if (PtfPropUtility.GetPtfPropertyValue(site, "Protocol", out tempStr))
+            {
+                RdpbcgrTestData.Test_Protocol = tempStr;
             }
         }
 

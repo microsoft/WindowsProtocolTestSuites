@@ -157,6 +157,27 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         }
 
         /// <summary>
+        /// This method is used to trigger RDP client to close all RDP connection to a server for clean up.
+        /// </summary>
+        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
+        public int TriggerReverseCredentialManager(string caseName)
+        {
+            // Get help message
+            string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
+            // Create payload
+            byte[] payload = null;
+
+            // Create request message
+            ushort reqId = controlHandler.GetNextRequestId();
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.REVERSE_CREDENTIAL_MANAGER_FOR_SUT, caseName,
+                reqId, helpMessage, payload);
+
+            //Send the request and get response if necessary
+            byte[] resposePayload = null;
+            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
+        }
+
+        /// <summary>
         /// This method is used to trigger RDP client to start an Auto-Reconnect sequence after a network interruption.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
