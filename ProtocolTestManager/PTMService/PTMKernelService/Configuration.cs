@@ -442,7 +442,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     Kernel.Utility.DirectoryCopy(source, target, true);
                 }
             }
-            catch (Exception e)
+            catch
             {
                 storagePool.GetKnownNode(KnownStorageNodeNames.Configuration).RemoveNode(testSuiteConfiguration.Id.ToString());
                 throw;
