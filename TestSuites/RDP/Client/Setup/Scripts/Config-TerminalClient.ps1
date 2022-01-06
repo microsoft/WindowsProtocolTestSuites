@@ -185,26 +185,45 @@ if (Test-Path -Path "$dataPath\Base\DirectCredSSPFullScreen.RDP")
     Copy-Item $dataPath\DirectCredSSPFullScreen.RDP $dataPath\Base\DirectCredSSPFullScreen.RDP -Force
 }
 
+if (Test-Path -Path "$dataPath\Base\CredentialManager_InvalidAccount.ps1")
+{
+    Copy-Item $dataPath\Base\CredentialManager_InvalidAccount.ps1 $dataPath\CredentialManager_InvalidAccount.ps1 -Force
+}else
+{
+    Copy-Item $dataPath\CredentialManager_InvalidAccount.ps1 $dataPath\Base\CredentialManager_InvalidAccount.ps1 -Force
+}
+
+if (Test-Path -Path "$dataPath\Base\CredentialManager_InvalidAccount_Reverse.ps1")
+{
+    Copy-Item $dataPath\Base\CredentialManager_InvalidAccount_Reverse.ps1 $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 -Force
+}else
+{
+    Copy-Item $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 $dataPath\Base\CredentialManager_InvalidAccount_Reverse.ps1 -Force
+}
+
+"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}/${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding Unicode
+"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}/${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding Unicode
+
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
-"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
+"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
+"`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 
 "`n$compressionStr" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`n$compressionStr" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
-"`n$compressionStr" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`n$compressionStr" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
+"`n$compressionStr" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
+"`n$compressionStr" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
-"`nusbdevicestoredirect:s:*" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
-"`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\NegotiateFullScreen.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
+"`nusbdevicestoredirect:s:*" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
+"`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
 
 Write-Host "Allow RDP connecting to unkown publisher for $driverComputerName..."
 cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client\LocalDevices" /v $driverComputerName /t REG_DWORD /d 68 /F
@@ -215,17 +234,17 @@ cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_RDPConnect /TR "$
 Write-Host "Creating task to trigger client to initiate a RDP connection using CredSSP security protocol with Direct Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_RDPConnect /TR "$dataPath\DirectCredSSP.RDP" /IT /F
 
-Write-Host "Creating task to trigger client to initiate a RDP connection with Negotiation Approach and an Invalid Account..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_InvalidAccount_RDPConnect /TR "$dataPath\NegotiateInvalidAccount.RDP" /IT /F
-
-Write-Host "Creating task to trigger client to initiate a RDP connection using CredSSP security protocol with Direct Approach and an Invalid Account..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_InvalidAccount_RDPConnect /TR "$dataPath\DirectCredSSPInvalidAccount.RDP" /IT /F
-
 Write-Host "Creating task to trigger client to initiate a full screen RDP connection with Negotiation Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_FullScreen_RDPConnect /TR "$dataPath\NegotiateFullScreen.RDP" /IT /F
 
 Write-Host "Creating task to trigger client to initiate a full screen RDP connection using CredSSP security protocol with Direct Approach..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_FullScreen_RDPConnect /TR "$dataPath\DirectCredSSPFullScreen.RDP" /IT /F
+
+Write-Host "Creating task to trigger client to initiate a RDP connection with Negotiation Approach for Invalid Account..."
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_InvalidAccount_RDPConnect /TR "$dataPath\NegotiateInvalidAccount.RDP" /IT /F
+
+Write-Host "Creating task to trigger client to initiate a RDP connection using CredSSP security protocol with Direct Approach for Invalid Account..."
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_InvalidAccount_RDPConnect /TR "$dataPath\DirectCredSSPInvalidAccount.RDP" /IT /F
 
 Write-Host "Creating task to maximize mstsc window..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN MaximizeMstsc /TR "powershell $scriptsPath\MaximizeMstsc.ps1" /IT /F
@@ -238,6 +257,12 @@ cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN TriggerNetworkFailure /TR "
 
 Write-Host "Creating task to close all RDP connections of terminal client..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DisconnectAll /TR "$dataPath\DisconnectAll.bat" /IT /F
+
+Write-Host "Creating task to change username of Server to an invalid username..."
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN CredentialManager_Invalid /TR "powershell $dataPath\CredentialManager_InvalidAccount.ps1" /IT /F
+
+Write-Host "Creating task to change username of Server back to a valid username..."
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN CredentialManager_InvalidAccount_Reverse /TR "powershell $dataPath\CredentialManager_InvalidAccount_Reverse.ps1" /IT /F
 
 #-----------------------------------------------------
 # Edit registery.
