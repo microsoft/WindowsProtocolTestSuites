@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
@@ -7,6 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -61,7 +63,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
     [TestClass]
     public partial class RdpeudpTestSuite : RdpTestClassBase
     {
-
         #region Variables
 
         private RdpeudpServer rdpeudpServer;
@@ -73,15 +74,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
         private uint multitransportRequestId = 0;
 
-        private int DelayedACKTimer = 200;
+        private int delayedACKTimer = 200;
 
-        private int RetransmitTimer = 200;
+        private int retransmitTimer = 200;
 
         private uint? initSequenceNumber = null;
 
-        private uUdpVer_Values? clientUUdpVer = null;
+        private RDPUDP_PROTOCOL_VERSION? clientUUdpVer = null;
 
-        private uSynExFlags_Values? clientRdpudpVerfionInfoValidFlag = null;
+        private RDPUDP_VERSION_INFO? clientRdpudpVersionInfoValidFlag = null;
+
+        private const TransportMode rdpeudp2TransportMode = TransportMode.Reliable;
 
         #endregion
 
@@ -106,23 +109,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             //Reset the client status to avoid dirty data for the next test case.
             this.clientUUdpVer = null;
-            this.clientRdpudpVerfionInfoValidFlag = null;
+            this.clientRdpudpVersionInfoValidFlag = null;
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Trigger client to close all RDP connections for clean up.");
 
             TriggerClientDisconnectAll();
 
-            if (rdpemtServerL != null)
-                rdpemtServerL.Dispose();
+            rdpemtServerL?.Dispose();
+            rdpemtServerR?.Dispose();
 
-            if (rdpemtServerR != null)
-                rdpemtServerR.Dispose();
-            if (rdpeudpServer != null)
-                rdpeudpServer.Stop();
-            if (rdpeudpSocketR != null && rdpeudpSocketR.Connected)
-                rdpeudpSocketR.Close();
-            if (rdpeudpSocketL != null && rdpeudpSocketL.Connected)
-                rdpeudpSocketL.Close();
+            rdpeudpServer?.Stop();
+            rdpeudpSocketR?.Close();
+            rdpeudpSocketL?.Close();
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Stop RDP listening.");
             this.rdpbcgrAdapter?.StopRDPListening();
@@ -136,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// </summary>
         /// <param name="udpTransportMode">The transport mode: reliable or lossy</param>
         /// <returns>The initial sequence number of the source packet</returns>
-        private uint getSnInitialSequenceNumber(TransportMode udpTransportMode)
+        private uint GetSnInitialSequenceNumber(TransportMode udpTransportMode)
         {
             if (udpTransportMode == TransportMode.Reliable)
             {
@@ -145,7 +143,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             return rdpeudpSocketL.SnInitialSequenceNumber;
         }
 
-        private uint getSourcePacketSequenceNumber(TransportMode udpTransportMode)
+        private uint GetSourcePacketSequenceNumber(TransportMode udpTransportMode)
         {
             if (udpTransportMode == TransportMode.Reliable)
             {
@@ -157,9 +155,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// <summary>
         /// Start RDP connection.
         /// </summary>
-        private void StartRDPConnection()
+        private void StartRDPConnection(bool enableRdpeudp2 = false)
         {
-
             // Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -168,7 +165,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             #region Trigger Client To Connect
             // Trigger client to connect. 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
-            triggerClientRDPConnect(transportProtocol);
+            TriggerClientRDPConnect(transportProtocol);
             #endregion
 
             #region RDPBCGR Connection
@@ -177,13 +174,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting the transport layer connection request.");
             this.rdpbcgrAdapter.ExpectTransportConnection(RDPSessionType.Normal);
 
-
             // Waiting for the RDP connection sequence.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Establishing RDP connection.");
-            this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR);
+            if (enableRdpeudp2)
+            {
+                this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, TS_UD_SC_CORE_version_Values.V9, MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR);
+            }
+            else
+            {
+                this.rdpbcgrAdapter.EstablishRDPConnection(selectedProtocol, enMethod, enLevel, true, false, rdpServerVersion, MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECL | MULTITRANSPORT_TYPE_FLAGS.TRANSPORTTYPE_UDPFECR);
+            }
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server Save Session Info PDU to SUT to notify user has logged on.");
-            this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn, ErrorNotificationType_Values.LOGON_FAILED_OTHER);
+            this.rdpbcgrAdapter.ServerSaveSessionInfo(LogonNotificationType.UserLoggedOn);
 
             #endregion
         }
@@ -193,7 +196,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// </summary>
         /// <param name="udpTransportMode">Transport mode: Reliable or Lossy</param>
         /// <param name="invalidType">invalid type</param>
-        public void SendSynAndAckPacket(TransportMode udpTransportMode, SynAndAck_InvalidType invalidType, uint? initSequenceNumber = null, uUdpVer_Values? uUdpVer = null)
+        public void SendSynAndAckPacket(TransportMode udpTransportMode, SynAndAck_InvalidType invalidType, uint? initSequenceNumber = null, RDPUDP_PROTOCOL_VERSION? uUdpVer = null)
         {
             RdpeudpServerSocket rdpeudpSocket = rdpeudpSocketR;
             if (udpTransportMode == TransportMode.Lossy)
@@ -209,7 +212,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             }
 
             // Create the SYN and ACK packet first.
-            RdpeudpPacket SynAndAckPacket = CreateInvalidSynAndACKPacket(udpTransportMode, invalidType, initSequenceNumber);
+            RdpeudpPacket SynAndAckPacket = CreateInvalidSynAndAckPacket(udpTransportMode, invalidType, initSequenceNumber);
 
             rdpeudpSocket.SendPacket(SynAndAckPacket);
         }
@@ -222,7 +225,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// <param name="timeout">Wait time.</param>
         /// <param name="verifyPacket">Whether verify the received packet.</param>
         /// <returns>The accepted socket.</returns>
-        private RdpeudpSocket EstablishUDPConnection(TransportMode udpTransportMode, TimeSpan timeout, bool verifyPacket = false, bool autoHanlde = false, uUdpVer_Values? uUdpVer = null)
+        private RdpeudpSocket EstablishUDPConnection(TransportMode udpTransportMode, TimeSpan timeout, bool verifyPacket = false, bool autoHanlde = false, RDPUDP_PROTOCOL_VERSION? uUdpVer = null)
         {
             // Start UDP listening.
             if (rdpeudpServer == null)
@@ -249,23 +252,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.rdpbcgrAdapter.SendServerInitiateMultitransportRequestPDU(++this.multitransportRequestId, requestedProtocol, securityCookie);
 
             // Create a UDP socket.
-            RdpeudpServerSocket rdpudpSocket = rdpeudpServer.CreateSocket(((IPEndPoint)this.rdpbcgrAdapter.SessionContext.Identity).Address, udpTransportMode, timeout);
-            if (rdpudpSocket == null)
+            RdpeudpServerSocket rdpeudpSocket = rdpeudpServer.CreateSocket(((IPEndPoint)this.rdpbcgrAdapter.SessionContext.Identity).Address, udpTransportMode, timeout);
+            if (rdpeudpSocket == null)
             {
                 this.Site.Assert.Fail("Failed to create a UDP socket for the Client : {0}", ((IPEndPoint)this.rdpbcgrAdapter.SessionContext.Identity).Address);
             }
 
             if (udpTransportMode == TransportMode.Reliable)
             {
-                this.rdpeudpSocketR = rdpudpSocket;
+                this.rdpeudpSocketR = rdpeudpSocket;
             }
             else
             {
-                this.rdpeudpSocketL = rdpudpSocket;
+                this.rdpeudpSocketL = rdpeudpSocket;
             }
 
             // Expect a SYN packet.
-            RdpeudpPacket synPacket = rdpudpSocket.ExpectSynPacket(timeout);
+            RdpeudpPacket synPacket = rdpeudpSocket.ExpectSynPacket(timeout);
             if (synPacket == null)
             {
                 this.Site.Assert.Fail("Time out when waiting for the SYN packet");
@@ -274,53 +277,54 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             // Verify the SYN packet.
             if (verifyPacket)
             {
-                VerifySYNPacket(synPacket, udpTransportMode);
+                VerifySynPacket(synPacket, udpTransportMode);
             }
 
             // Send a SYN and ACK packet.
-            if (this.clientRdpudpVerfionInfoValidFlag == uSynExFlags_Values.RDPUDP_VERSION_INFO_VALID)
+            if (this.clientRdpudpVersionInfoValidFlag == RDPUDP_VERSION_INFO.RDPUDP_VERSION_INFO_VALID)
             {
                 //Section 3.1.5.1.3: The uUdpVer field MUST be set to the highest RDP-UDP protocol version supported by both endpoints. 
                 uUdpVer = uUdpVer > this.clientUUdpVer ? this.clientUUdpVer : uUdpVer;
                 SendSynAndAckPacket(udpTransportMode, SynAndAck_InvalidType.None, initSequenceNumber, uUdpVer);
             }
-            else if (this.clientRdpudpVerfionInfoValidFlag == uSynExFlags_Values.None)
+            else if (this.clientRdpudpVersionInfoValidFlag == RDPUDP_VERSION_INFO.None)
             {
                 //Section 3.1.5.1.3: The highest version supported by both endpoints, which is RDPUDP_PROTOCOL_VERSION_1 if either this packet or the SYN packet does not specify a version, is the version that MUST be used by both endpoints.
-                SendSynAndAckPacket(udpTransportMode, SynAndAck_InvalidType.None, initSequenceNumber, uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1);
+                SendSynAndAckPacket(udpTransportMode, SynAndAck_InvalidType.None, initSequenceNumber, RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_1);
             }
             else
             {
-                //Section 3.1.5.1.3: The RDPUDP_SYNEX_PAYLOAD structure (section 2.2.2.9) SHOULD only be present if it is also present in the received SYN packet. 
-                // When the 
+                //Section 3.1.5.1.3: The RDPUDP_SYNEX_PAYLOAD structure (section 2.2.2.9) SHOULD only be present if it is also present in the received SYN packet.
                 SendSynAndAckPacket(udpTransportMode, SynAndAck_InvalidType.None, initSequenceNumber, null);
             }
 
-
-            // Expect an ACK packet or ACK and Source Packet.
-            RdpeudpPacket ackPacket = rdpudpSocket.ExpectACKPacket(timeout);
-            if (ackPacket == null)
+            if (!rdpeudpSocket.UpgradedToRdpeudp2)
             {
-                this.Site.Assert.Fail("Time out when waiting for the ACK packet to response the ACK and SYN packet");
+                // Expect an ACK packet or ACK and Source Packet.
+                RdpeudpPacket ackPacket = rdpeudpSocket.ExpectAckPacket(timeout);
+                if (ackPacket == null)
+                {
+                    this.Site.Assert.Fail("Time out when waiting for the ACK packet to response the ACK and SYN packet");
+                }
+
+                // Verify the ACK packet.
+                if (verifyPacket)
+                {
+                    VerifyAckPacket(ackPacket);
+                }
+
+                // If the packet is an ACK and Source Packet, add the source packet to the un-processed packet.
+                if (ackPacket.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_DATA))
+                {
+                    byte[] bytes = PduMarshaler.Marshal(ackPacket, false);
+                    RdpeudpBasePacket stackpacket = new RdpeudpBasePacket(bytes);
+                    rdpeudpSocket.ReceivePacket(stackpacket);
+                }
             }
 
-            // Verify the ACK packet.
-            if (verifyPacket)
-            {
-                VerifyACKPacket(ackPacket);
-            }
+            rdpeudpSocket.Connected = true;
 
-            // If the packet is an ACK and Source Packet, add the source packet to the un-processed packet.
-            if (ackPacket.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_DATA))
-            {
-                byte[] bytes = PduMarshaler.Marshal(ackPacket, false);
-                RdpeudpBasePacket stackpacket = new RdpeudpBasePacket(bytes);
-                rdpudpSocket.ReceivePacket(stackpacket);
-            }
-
-            rdpudpSocket.Connected = true;
-
-            return rdpudpSocket;
+            return rdpeudpSocket;
         }
 
         /// <summary>
@@ -350,7 +354,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             PtfPropUtility.GetPtfPropertyValue(Site, "CertificatePassword", out certPwd);
 
             X509Certificate2 cert = new X509Certificate2(certFile, certPwd);
-
 
             RdpemtServer rdpemtServer = new RdpemtServer(rdpeudpSocket, cert);
 
@@ -392,31 +395,30 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             return pass;
         }
 
-        private int GetMaxiumPayloadSizeForSourcePacket(int upStreamMtu)
+        private int GetMaximumPayloadSizeForSourcePacket(int upStreamMtu)
         {
             // Create a fake empty RDPEUDP ACK+SOURCE packet.
             var packet = new RdpeudpPacket();
 
-            packet.fecHeader.snSourceAck = 0;
-            packet.fecHeader.uReceiveWindowSize = 0;
-            packet.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_DATA | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
+            packet.FecHeader.snSourceAck = 0;
+            packet.FecHeader.uReceiveWindowSize = 0;
+            packet.FecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_DATA | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
 
             var ackVectorHeader = new RDPUDP_ACK_VECTOR_HEADER();
             ackVectorHeader.uAckVectorSize = 0;
-            ackVectorHeader.AckVectorElement = null;
+            ackVectorHeader.AckVector = null;
             ackVectorHeader.Padding = null;
-            packet.ackVectorHeader = ackVectorHeader;
+            packet.AckVectorHeader = ackVectorHeader;
 
             var sourceHeader = new RDPUDP_SOURCE_PAYLOAD_HEADER();
             sourceHeader.snCoded = 0;
             sourceHeader.snSourceStart = 0;
-            packet.sourceHeader = sourceHeader;
+            packet.SourceHeader = sourceHeader;
 
             var size = PduMarshaler.Marshal(packet).Length;
 
             // Maximum payload size = upstream MTU - empty ACK+SOURCE header size.
             return upStreamMtu - size;
-
         }
 
         /// <summary>
@@ -441,15 +443,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 RdpeudpTLSChannel secChannel = new RdpeudpTLSChannel(rdpeudpSocketR);
                 secChannel.AuthenticateAsServer(cert);
                 RdpeudpPacket packet = rdpeudpSocketR.ExpectPacket(waitTime);
-                if (packet.payload != null)
+                if (packet.Payload != null)
                 {
                     rdpeudpSocketR.ProcessSourceData(packet); // Process Source Data to make sure ACK Vector created next is correct
-                    secChannel.ReceiveBytes(packet.payload);
+                    secChannel.ReceiveBytes(packet.Payload);
                 }
                 dataToSent = secChannel.GetDataToSent(waitTime);
 
                 // Make sure this test packet does not exceed upstream MTU.
-                int maxPayloadsize = GetMaxiumPayloadSizeForSourcePacket(rdpeudpSocketR.UUpStreamMtu);
+                int maxPayloadsize = GetMaximumPayloadSizeForSourcePacket(rdpeudpSocketR.UUpStreamMtu);
 
                 dataToSent = dataToSent.Take(maxPayloadsize).ToArray();
 
@@ -460,15 +462,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 RdpeudpDTLSChannel secChannel = new RdpeudpDTLSChannel(rdpeudpSocketL);
                 secChannel.AuthenticateAsServer(cert);
                 RdpeudpPacket packet = rdpeudpSocketL.ExpectPacket(waitTime);
-                if (packet.payload != null)
+                if (packet.Payload != null)
                 {
                     rdpeudpSocketL.ProcessSourceData(packet); // Process Source Data to make sure ACK Vector created next is correct
-                    secChannel.ReceiveBytes(packet.payload);
+                    secChannel.ReceiveBytes(packet.Payload);
                 }
                 dataToSent = secChannel.GetDataToSent(waitTime);
 
                 // Make sure this test packet does not exceed upstream MTU.
-                int maxPayloadsize = GetMaxiumPayloadSizeForSourcePacket(rdpeudpSocketL.UUpStreamMtu);
+                int maxPayloadsize = GetMaximumPayloadSizeForSourcePacket(rdpeudpSocketL.UUpStreamMtu);
 
                 dataToSent = dataToSent.Take(maxPayloadsize).ToArray();
 
@@ -476,62 +478,90 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             }
 
             return firstPacket;
-
         }
 
         /// <summary>
-        /// Get the next valid rdpeudp packet.
+        /// Get the next valid RDPEUDP packet.
         /// </summary>
-        /// <param name="udpTransportMode">Transport mode: reliable or Lossy.</param>
-        /// <returns>The next valid rdpeudp packet.</returns>
+        /// <param name="udpTransportMode">Transport mode: Reliable or Lossy.</param>
+        /// <param name="data">Data to be sent.</param>
+        /// <returns>The next valid RDPEUDP packet.</returns>
         private RdpeudpPacket GetNextValidUdpPacket(TransportMode udpTransportMode, byte[] data = null)
         {
             /*This function is used to get a valid rdpeudp packet.
-             * Using rdpeudpSocket.LossPacket flag to control whether the socket send the packet.
-             * First set rdpeudpSocket.LossPacket to true and send a tunnal Data, the socket will store the next packet(RDPEUDP socket which contains the encrypted tunnel data) and doesn't send it.
-             * Then get the stored packet and return it.
-             */
-            RdpemtServer rdpemtServer = rdpemtServerR;
+            * Using rdpeudpSocket.LossPacket flag to control whether the socket send the packet.
+            * First set rdpeudpSocket.LossPacket to true and send a tunnal Data, the socket will store the next packet(RDPEUDP socket which contains the encrypted tunnel data) and doesn't send it.
+            * Then get the stored packet and return it.
+            */
             RdpeudpSocket rdpeudpSocket = rdpeudpSocketR;
             if (udpTransportMode == TransportMode.Lossy)
             {
-                rdpemtServer = rdpemtServerL;
                 rdpeudpSocket = rdpeudpSocketL;
+            }
+
+            var encryptedData = GetEncryptedData(udpTransportMode, data);
+            RdpeudpPacket packet = rdpeudpSocket.CreateSourcePacket(encryptedData);
+
+            return packet;
+        }
+
+        /// <summary>
+        /// Get the next valid RDPEUDP2 packet.
+        /// </summary>
+        /// <param name="data">Data to be sent.</param>
+        /// <returns>The next valid RDPEUDP2 packet.</returns>
+        private Rdpeudp2Packet GetNextValidUdp2Packet(byte[] data = null)
+        {
+            var encryptedData = GetEncryptedData(rdpeudp2TransportMode, data);
+            var packet = rdpeudpSocketR.Rdpeudp2Handler.CreateDataPacket(encryptedData);
+
+            return packet;
+        }
+
+        /// <summary>
+        /// Get the encrypted data from the TLS tunnel established with the RpdemtServer.
+        /// </summary>
+        /// <param name="udpTransportMode">Transport mode: Reliable or Lossy.</param>
+        /// <param name="data">Data to be sent.</param>
+        /// <returns>The data encrypted with the associated TLS context.</returns>
+        private byte[] GetEncryptedData(TransportMode udpTransportMode, byte[] data = null)
+        {
+            RdpemtServer rdpemtServer = rdpemtServerR;
+            if (udpTransportMode == TransportMode.Lossy)
+            {
+                rdpemtServer = rdpemtServerL;
             }
 
             if (data == null)
                 data = new byte[1000];
             RDP_TUNNEL_DATA tunnelData = rdpemtServer.CreateTunnelDataPdu(data, null);
 
-            byte[] unEncryptData = PduMarshaler.Marshal(tunnelData);
-            byte[] encryptData = null;
+            byte[] plainData = PduMarshaler.Marshal(tunnelData);
+            byte[] encryptedData = null;
 
             if (udpTransportMode == TransportMode.Reliable)
             {
                 RdpeudpTLSChannel secChannel = rdpemtServer.SecureChannel as RdpeudpTLSChannel;
-                encryptData = secChannel.Encrypt(unEncryptData);
+                encryptedData = secChannel.Encrypt(plainData);
             }
             else
             {
                 RdpeudpDTLSChannel secChannel = rdpemtServer.SecureChannel as RdpeudpDTLSChannel;
-                List<byte[]> encryptDataList = secChannel.Encrypt(unEncryptData);
+                List<byte[]> encryptDataList = secChannel.Encrypt(plainData);
                 if (encryptDataList != null && encryptDataList.Count > 0)
                 {
-                    encryptData = encryptDataList[0];
+                    encryptedData = encryptDataList[0];
                 }
             }
 
-            RdpeudpPacket packet = rdpeudpSocket.CreateSourcePacket(encryptData);
-
-            return packet;
-
+            return encryptedData;
         }
 
         /// <summary>
-        /// Send a udp packet.
+        /// Send a UDP packet.
         /// </summary>
-        /// <param name="udpTransportMode">Transport mode: reliable or lossy.</param>
-        /// <param name="packet">The packet to send.</param>
+        /// <param name="udpTransportMode">Transport mode: Reliable or lossy.</param>
+        /// <param name="packet">The packet to be sent.</param>
         private void SendPacket(TransportMode udpTransportMode, RdpeudpPacket packet)
         {
             RdpeudpSocket rdpeudpSocket = rdpeudpSocketR;
@@ -541,6 +571,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             }
 
             rdpeudpSocket.SendPacket(packet);
+        }
+
+        /// <summary>
+        /// Send a UDP packet.
+        /// </summary>
+        /// <param name="packet">The packet to be sent.</param>
+        private void SendPacket(Rdpeudp2Packet packet)
+        {
+            rdpeudpSocketR.SendPacket(packet);
         }
 
         /// <summary>
@@ -590,13 +629,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 rdpeudpSocket.UUpStreamMtu = upstreamMtu;
             }
         }
+
         /// <summary>
         /// Compare two AckVectors.
         /// </summary>
         /// <param name="vector1">Ack Vector 1.</param>
         /// <param name="vector2">Ack Vector 2.</param>
         /// <returns></returns>
-        private bool CompareAckVectors(AckVector[] vector1, AckVector[] vector2)
+        private bool CompareAckVectors(AckVectorElement[] vector1, AckVectorElement[] vector2)
         {
             int posForVector1 = 0;
             int posForVector2 = 0;
@@ -661,9 +701,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             while (DateTime.Now < endTime)
             {
                 RdpeudpPacket packet = rdpeudpSocket.ExpectPacket(endTime - DateTime.Now);
-                if (packet != null && packet.fecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_DATA))
+                if (packet != null && packet.FecHeader.uFlags.HasFlag(RDPUDP_FLAG.RDPUDP_FLAG_DATA))
                 {
-                    if (sequnceNumber == 0 || packet.sourceHeader.Value.snSourceStart == sequnceNumber)
+                    if (sequnceNumber == 0 || packet.SourceHeader.Value.snSourceStart == sequnceNumber)
                     {
                         return packet;
                     }
@@ -682,7 +722,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// <param name="hasFlag">Flags, which the ACK packet must contain.</param>
         /// <param name="notHasFlag">Flags, which the ACK packet must no contain.</param>
         /// <returns></returns>
-        private RdpeudpPacket WaitForACKPacket(TransportMode udpTransportMode, TimeSpan timeout, AckVector[] expectAckVectors = null, RDPUDP_FLAG hasFlag = 0, RDPUDP_FLAG notHasFlag = 0)
+        private RdpeudpPacket WaitForAckPacket(TransportMode udpTransportMode, TimeSpan timeout, AckVectorElement[] expectAckVectors = null, RDPUDP_FLAG hasFlag = 0, RDPUDP_FLAG notHasFlag = 0)
         {
             RdpeudpSocket rdpeudpSocket = rdpeudpSocketR;
             if (udpTransportMode == TransportMode.Lossy)
@@ -694,26 +734,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             while (DateTime.Now < endTime)
             {
-                RdpeudpPacket ackPacket = rdpeudpSocket.ExpectACKPacket(endTime - DateTime.Now);
+                RdpeudpPacket ackPacket = rdpeudpSocket.ExpectAckPacket(endTime - DateTime.Now);
                 if (ackPacket != null)
                 {
                     if (expectAckVectors != null)
                     {
-                        if (!(ackPacket.ackVectorHeader.HasValue && CompareAckVectors(ackPacket.ackVectorHeader.Value.AckVectorElement, expectAckVectors)))
+                        if (!(ackPacket.AckVectorHeader.HasValue && CompareAckVectors(ackPacket.AckVectorHeader.Value.AckVector, expectAckVectors)))
                         {
                             continue;
                         }
                     }
                     if (hasFlag != 0)
                     {
-                        if ((ackPacket.fecHeader.uFlags & hasFlag) != hasFlag)
+                        if ((ackPacket.FecHeader.uFlags & hasFlag) != hasFlag)
                         {
                             continue;
                         }
                     }
                     if (notHasFlag != 0)
                     {
-                        if ((ackPacket.fecHeader.uFlags & notHasFlag) != 0)
+                        if ((ackPacket.FecHeader.uFlags & notHasFlag) != 0)
                         {
                             continue;
                         }
@@ -732,7 +772,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// <param name="invalidType">Invalid type</param>
         /// <param name="initSequenceNumber">init sequence</param>
         /// <returns></returns>
-        private RdpeudpPacket CreateInvalidSynAndACKPacket(TransportMode udpTransportMode, SynAndAck_InvalidType invalidType, uint? initSequenceNumber = null)
+        private RdpeudpPacket CreateInvalidSynAndAckPacket(TransportMode udpTransportMode, SynAndAck_InvalidType invalidType, uint? initSequenceNumber = null)
         {
             RdpeudpServerSocket rdpeudpSocket = rdpeudpSocketR;
             if (udpTransportMode == TransportMode.Lossy)
@@ -742,10 +782,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             // Create the SYN and ACK packet.
             RdpeudpPacket SynAndAckPacket = new RdpeudpPacket();
-            SynAndAckPacket.fecHeader.snSourceAck = rdpeudpSocket.SnSourceAck;
-            SynAndAckPacket.fecHeader.uReceiveWindowSize = rdpeudpSocket.UReceiveWindowSize;
-            SynAndAckPacket.fecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_SYN | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
-
+            SynAndAckPacket.FecHeader.snSourceAck = rdpeudpSocket.SnSourceAck;
+            SynAndAckPacket.FecHeader.uReceiveWindowSize = rdpeudpSocket.UReceiveWindowSize;
+            SynAndAckPacket.FecHeader.uFlags = RDPUDP_FLAG.RDPUDP_FLAG_SYN | RDPUDP_FLAG.RDPUDP_FLAG_ACK;
 
             RDPUDP_SYNDATA_PAYLOAD SynPayload = rdpeudpSocket.CreateSynData(initSequenceNumber);
 
@@ -778,34 +817,33 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// </summary>
         /// <param name="synPacket">The SYN packet.</param>
         /// <param name="udpTransportMode">Transport mode: reliable or lossy.</param>
-        private void VerifySYNPacket(RdpeudpPacket synPacket, TransportMode udpTransportMode)
+        private void VerifySynPacket(RdpeudpPacket synPacket, TransportMode udpTransportMode)
         {
-
             if (synPacket == null)
             {
                 this.Site.Assert.Fail("The SYN Packet should not be null!");
             }
 
-            if (synPacket.fecHeader.snSourceAck != uint.MaxValue)
+            if (synPacket.FecHeader.snSourceAck != uint.MaxValue)
             {
                 this.Site.Assert.Fail("The snSourceAck variable MUST be set to -1 (max value of uint)!");
             }
 
-            if ((synPacket.fecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYN) == 0)
+            if ((synPacket.FecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYN) == 0)
             {
                 this.Site.Assert.Fail("The RDPUDP_FLAG_SYN flag MUST be set in SYN packet!");
             }
 
             if (udpTransportMode == TransportMode.Reliable)
             {
-                if ((synPacket.fecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYNLOSSY) == RDPUDP_FLAG.RDPUDP_FLAG_SYNLOSSY)
+                if ((synPacket.FecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYNLOSSY) == RDPUDP_FLAG.RDPUDP_FLAG_SYNLOSSY)
                 {
                     this.Site.Assert.Fail("The RDPUDP_FLAG_SYNLOSSY flag MUST not be set when choose reliable UDP connection!");
                 }
             }
             else
             {
-                if ((synPacket.fecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYNLOSSY) == 0)
+                if ((synPacket.FecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYNLOSSY) == 0)
                 {
                     this.Site.Assert.Fail("The RDPUDP_FLAG_SYNLOSSY flag MUST be set When choose lossy UDP connection!");
                 }
@@ -827,7 +865,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             }
 
             // The RDPUDP_FLAG_SYNEX flag and RDPUDP_SYNDATAEX_PAYLOAD structure should appear at the same time.
-            if ((synPacket.SynDataEx == null) ^ ((synPacket.fecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYNEX) == 0))
+            if ((synPacket.SynDataEx == null) ^ ((synPacket.FecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_SYNEX) == 0))
             {
                 this.Site.Assert.Fail("Section 3.1.5.1.1: The RDPUDP_FLAG_SYNEX flag MUST be set only when the RDPUDP_SYNDATAEX_PAYLOAD structure is included. Section 3.1.5.1.1: The RDPUDP_SYNEX_PAYLOAD structure MUST be appended to the UDP datagram if the RDPUDP_FLAG_SYNEX flag is set in uFlags.");
             }
@@ -835,20 +873,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             //Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported. 
             if (synPacket.SynDataEx == null)
             {
-                this.clientUUdpVer = uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1;
-                this.clientRdpudpVerfionInfoValidFlag = null;
+                this.clientUUdpVer = RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_1;
+                this.clientRdpudpVersionInfoValidFlag = null;
             }
             else
             {
                 this.clientUUdpVer = synPacket.SynDataEx.Value.uUdpVer;
-                this.clientRdpudpVerfionInfoValidFlag = synPacket.SynDataEx.Value.uSynExFlags;
+                this.clientRdpudpVersionInfoValidFlag = synPacket.SynDataEx.Value.uSynExFlags;
 
                 //Section 3.1.5.1.1: The RDPUDP_VERSION_INFO_VALID flag MUST be set only if the structure contains a valid RDP-UDP protocol version.
-                if (synPacket.SynDataEx.Value.uSynExFlags.HasFlag(uSynExFlags_Values.RDPUDP_VERSION_INFO_VALID) && ((int)synPacket.SynDataEx.Value.uUdpVer & 0xfffc) != 0)
+                if (synPacket.SynDataEx.Value.uSynExFlags.HasFlag(RDPUDP_VERSION_INFO.RDPUDP_VERSION_INFO_VALID) && !Enum.IsDefined(synPacket.SynDataEx.Value.uUdpVer))
                 {
                     this.Site.Assert.Fail("Section 3.1.5.1.1: The RDPUDP_VERSION_INFO_VALID flag MUST be set only if the structure contains a valid RDP-UDP protocol version");
                 }
-
             }
         }
 
@@ -856,18 +893,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// Verify an ACK Packet.
         /// </summary>
         /// <param name="ackPacket">The ACK packet.</param>
-        private void VerifyACKPacket(RdpeudpPacket ackPacket)
+        private void VerifyAckPacket(RdpeudpPacket ackPacket)
         {
             if (ackPacket == null)
             {
                 this.Site.Assert.Fail("The ACK Packet should not be null!");
             }
 
-            if ((ackPacket.fecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_ACK) == 0)
+            if ((ackPacket.FecHeader.uFlags & RDPUDP_FLAG.RDPUDP_FLAG_ACK) == 0)
             {
                 this.Site.Assert.Fail("The RDPUDP_FLAG_ACK flag MUST be set in ACK packet!");
             }
-
         }
 
         #endregion

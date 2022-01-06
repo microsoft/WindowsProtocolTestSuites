@@ -43,6 +43,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool isClientSupportTunnelingStaticVCTraffic = true;
         protected bool isClientSupportEmptyRdpNegData;
         protected bool supportCompression = false;
+        protected static int? compressionValueResult = null; // the return value of SetCompressionValue(supportCompression)
         protected static Image image_64X64; //Defined to static for reuse across test cases
         protected static Image imageForVideoMode;
         protected uint maxRequestSize = 0x50002A; //The MaxReqestSize field of  Multifragment Update Capability Set. Just for test.
@@ -105,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             this.rdpbcgrAdapter.Reset();
             LoadConfig();
 
-            this.rdpbcgrAdapter.ConfirmActiveRequest += new ConfirmActiveRequestHandler(this.testClassBase_getConfirmActivePduInfo);
+            this.rdpbcgrAdapter.ConfirmActiveRequest += new ConfirmActiveRequestHandler(this.TestClassBase_GetConfirmActivePduInfo);
 
             if (isWindowsImplementation)
             {
@@ -122,10 +123,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 }
             }
 
-            var result = this.sutControlAdapter.SetCompressionValue(supportCompression);
-            if (result < 0)
+            if (!compressionValueResult.HasValue)
             {
-                TestSite.Assume.Inconclusive("The compression value didn't set propery as supportCompression");
+                compressionValueResult = this.sutControlAdapter.SetCompressionValue(supportCompression);
+            }
+
+            if (compressionValueResult < 0)
+            {
+                TestSite.Assume.Inconclusive("The compression value was not set properly as supportCompression");
             }
 
             CheckPlatformCompatibility();
@@ -286,15 +291,15 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             #region Security Approach and Protocol
             string strRDPSecurityProtocol;
             bool isNegotiationBased = true;
-            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityNegotiation, out isNegotiationBased, new string[] { RdpPtfGroupNames.Security}))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityNegotiation, out isNegotiationBased, new string[] { RdpPtfGroupNames.Security }))
             {
-                assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityNegotiation);
+                AssumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityNegotiation);
             }
 
             selectedProtocol = selectedProtocols_Values.PROTOCOL_RDP_FLAG;
-            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityProtocol, out strRDPSecurityProtocol, new string[] { RdpPtfGroupNames.Security}))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityProtocol, out strRDPSecurityProtocol, new string[] { RdpPtfGroupNames.Security }))
             {
-                assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
+                AssumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
             }
 
             // Check the combination of RdpSecurityNegotiation and RdpSecurityProtocol
@@ -327,16 +332,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
             else
             {
-                assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
+                AssumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityProtocol);
             }
             #endregion
 
             #region Encryption Level
             string strRDPSecurityEncryptionLevel;
             enLevel = EncryptionLevel.ENCRYPTION_LEVEL_LOW;
-            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityEncryptionLevel, out strRDPSecurityEncryptionLevel, new string[] { RdpPtfGroupNames.Security, RdpPtfGroupNames.Encryption}))
+            if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityEncryptionLevel, out strRDPSecurityEncryptionLevel, new string[] { RdpPtfGroupNames.Security, RdpPtfGroupNames.Encryption }))
             {
-                assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionLevel);
+                AssumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionLevel);
             }
             else
             {//None, Low, Client, High, FIPS
@@ -362,7 +367,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 }
                 else
                 {
-                    assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionLevel);
+                    AssumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionLevel);
                 }
 
             }
@@ -384,7 +389,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             enMethod = EncryptionMethods.ENCRYPTION_METHOD_128BIT;
             if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.RdpSecurityEncryptionMethod, out strRDPSecurityEncryptionMethod, new string[] { RdpPtfGroupNames.Security, RdpPtfGroupNames.Encryption }))
             {
-                assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionMethod);
+                AssumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionMethod);
             }
             else
             {//None, 40bit, 56bit, 128bit, FIPS
@@ -410,7 +415,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 }
                 else
                 {
-                    assumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionMethod);
+                    AssumeFailForInvalidPtfProp(RdpPtfPropNames.RdpSecurityEncryptionMethod);
                 }
             }
 
@@ -433,7 +438,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             int waitSeconds;
             if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.Timeout, out waitSeconds))
             {
-                assumeFailForInvalidPtfProp(RdpPtfPropNames.Timeout);
+                AssumeFailForInvalidPtfProp(RdpPtfPropNames.Timeout);
             }
             else
             {
@@ -560,7 +565,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 String rdprfxImageFile;
                 if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.MSRDPRFX_Image, out rdprfxImageFile))
                 {
-                    assumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_Image);
+                    AssumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_Image);
                 }
 
                 image_64X64 = Image.FromFile(rdprfxImageFile);
@@ -571,7 +576,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 String rdprfxVideoModeImageFile;
                 if (!PtfPropUtility.GetPtfPropertyValue(TestSite, RdpPtfPropNames.MSRDPRFX_VideoModeImage, out rdprfxVideoModeImageFile))
                 {
-                    assumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_VideoModeImage);
+                    AssumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_VideoModeImage);
                 }
 
                 imageForVideoMode = Image.FromFile(rdprfxVideoModeImageFile);
@@ -656,13 +661,13 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
         }
         //override, assume fail for an invalid PTF property.
-        private void assumeFailForInvalidPtfProp(string propName)
+        private void AssumeFailForInvalidPtfProp(string propName)
         {
             this.TestSite.Assume.Fail("The property \"{0}\" is invalid or not present in PTFConfig file!", propName);
         }
 
         //Capture image from screen
-        private Bitmap captureScreenImage(int left, int top, int width, int height)
+        private Bitmap CaptureScreenImage(int left, int top, int width, int height)
         {
             Bitmap bitmap = new Bitmap(width, height);
             Graphics g = Graphics.FromImage(bitmap);
@@ -673,7 +678,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         //Get capability information from Client_Confirm_Active_Pdu, 
         //will be added to ConfirmActiveRequest event
-        private void testClassBase_getConfirmActivePduInfo(Client_Confirm_Active_Pdu confirmActivePdu)
+        private void TestClassBase_GetConfirmActivePduInfo(Client_Confirm_Active_Pdu confirmActivePdu)
         {
             foreach (ITsCapsSet cap in confirmActivePdu.confirmActivePduData.capabilitySets)
             {

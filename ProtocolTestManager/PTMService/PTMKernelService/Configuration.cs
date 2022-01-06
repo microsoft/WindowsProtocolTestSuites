@@ -64,7 +64,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
 
                 // create mapping table
-                CreateMappingTable(ruleGroups);
+                if (targetFilterIndex != -1 && mappingFilterIndex != -1)
+                {
+                    CreateMappingTable(ruleGroups);
+                }
 
                 return ruleGroups;
             }
@@ -212,9 +215,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                                 {
                                     continue;
                                 }
-                                updateMappingTable(featureMappingTable, target, currentRule);
+                                UpdateMappingTable(featureMappingTable, target, currentRule);
                                 // Add item to reverse mapping table
-                                updateMappingTable(reverseMappingTable, category, targetRuleTable[target]);
+                                UpdateMappingTable(reverseMappingTable, category, targetRuleTable[target]);
                             }
                         }
                         break;
@@ -223,7 +226,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        private void updateMappingTable(Dictionary<string, List<Rule>> mappingTable, string target, Rule currentRule)
+        private void UpdateMappingTable(Dictionary<string, List<Rule>> mappingTable, string target, Rule currentRule)
         {
             if (mappingTable.ContainsKey(target))
             {
@@ -615,7 +618,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                     propertyList.Add(new Property()
                     {
-                        Key = string.Format("{0}.{1}", groupName, item.Name),
+                        Key = groupName == PtfConfig.DefaultGroup ? item.Name : string.Format("{0}.{1}", groupName, item.Name),
                         Name = item.Name,
                         Choices = item.ChoiceItems,
                         Description = item.Description,

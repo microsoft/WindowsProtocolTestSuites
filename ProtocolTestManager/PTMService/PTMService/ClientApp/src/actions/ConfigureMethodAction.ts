@@ -12,7 +12,7 @@ export const IMPORT_PROFILE_SUCCESS = 'CONFIGUREMETHOD/IMPORT_PROFILE_SUCCESS'
 export const IMPORT_PROFILE_FAILURE = 'CONFIGUREMETHOD/IMPORT_PROFILE_FAILURE'
 
 // define action types
-interface SetConfigurationMethodType { type: typeof SET_CONFIGURATION_METHOD, selectedMethod: string }
+interface SetConfigurationMethodType { type: typeof SET_CONFIGURATION_METHOD, selectedMethod?: string }
 
 // save profile actions
 interface SaveProfileActionRequestType { type: typeof SAVE_PROFILE_REQUEST, testResultId: number, selectedTestCases?: string[] }
@@ -35,7 +35,7 @@ export type TestSuiteConfigureMethodActionTypes =
 
 // define actions
 export const ConfigureMethodActions = {
-  setConfigurationMethodAction: (key: string): TestSuiteConfigureMethodActionTypes => {
+  setConfigurationMethodAction: (key?: string): TestSuiteConfigureMethodActionTypes => {
     return {
       type: SET_CONFIGURATION_METHOD,
       selectedMethod: key

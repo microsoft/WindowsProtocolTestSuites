@@ -11,7 +11,13 @@ Param(
 )
 
 # Run Task to start RDP connection remotely
-$cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock {param([string]$taskName) cmd /c schtasks /run /TN $taskName} -ArgumentList $taskName
+$cmdOutput = ""
+$retryCount = 10
+while($cmdOutput -eq "" -and ($retryCount -ne 0)) {
+    $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock {param([string]$taskName) cmd /c schtasks /run /TN $taskName} -ArgumentList $taskName
+    $retryCount--
+}
+$cmdOutput | out-file "./RunTask_$taskName.log"
 
 if($cmdOutput -ne $null)
 {

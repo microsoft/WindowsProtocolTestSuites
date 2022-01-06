@@ -335,11 +335,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
             catch (System.IO.IOException ioE)
             {
-                Site.Assert.Fail("Send slow-path input packets failed, got IOException: {1}.", ioE.Message);
+                Site.Assert.Fail("Send slow-path input packets failed, got IOException: {0}.", ioE.Message);
             }
             catch (InvalidOperationException invalidE)
             {
-                Site.Assert.Fail("Send slow-path input packets failed, got InvalidOperationException: {1}.", invalidE.Message);
+                Site.Assert.Fail("Send slow-path input packets failed, got InvalidOperationException: {0}.", invalidE.Message);
             }
         }
 

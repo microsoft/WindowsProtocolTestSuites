@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Samr
             // SAMR DES(ECB mode) encrypted data size
             const int samrDesEncryptedDataSize = 8;
 
-            DESCryptoServiceProvider desCSP = DES.Create() as DESCryptoServiceProvider;
+            DESCryptoServiceProvider desCSP = new DESCryptoServiceProvider();
             desCSP.Mode = CipherMode.ECB;
             desCSP.Key = key;
 

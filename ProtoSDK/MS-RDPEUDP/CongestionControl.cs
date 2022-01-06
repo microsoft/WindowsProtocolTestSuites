@@ -1,10 +1,5 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 {
@@ -18,8 +13,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="congestionOccured"></param>
         public void UpdateCongestionWindowSize(ref ushort windowSize, bool congestionOccured)
         {
-            //TODO: Should Implementate a real congrestion algorithm
-            //Currently, no change for windowSize;
+            // TODO: Should Implement a real congrestion algorithm
+            // Currently, no change for windowSize;
         }
     }
 }

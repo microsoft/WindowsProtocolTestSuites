@@ -57,8 +57,10 @@ const HomePage: React.FC = () => {
         </div>
         <div className="ms-Grid-row center">
           <div className="contact">
-            If you have any questions, please contact&nbsp;
-                <Link href="mailto:prototest@microsoft.com">prototest@microsoft.com</Link>.
+                      If you have any questions, please contact&nbsp;
+                      <Link href="mailto:prototest@microsoft.com">prototest@microsoft.com</Link>.
+                      <br /> Visit our GitHub repo at&nbsp;
+                      <Link href="https://aka.ms/wpts">https://aka.ms/wpts</Link> for inquiry, issues or suggestions.
               </div>
         </div>
       </div>

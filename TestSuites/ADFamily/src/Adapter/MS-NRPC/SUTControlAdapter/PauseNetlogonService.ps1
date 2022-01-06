@@ -16,17 +16,17 @@ if($sutType -eq "TrustDc")
 
 
 ##get service object
-$serviceObj = get-service -computername $computerName Netlogon
-##pause service.
-Suspend-Service -inputObject $serviceObj
+Invoke-Command -Computername $computerName -Scriptblock { $serviceObj = Get-Service Netlogon
+	##pause service.
+	Suspend-Service -inputObject $serviceObj
 	
-do{
-	Sleep 5
-	$serviceObj = get-service -computername $computerName Netlogon
-}While($serviceObj.Status -ne "Paused")
-Sleep 10
+	do{
+		Sleep 5
+		$serviceObj =Invoke-Command -Computername $computerName -Scriptblock {Get-Service Netlogon} 
+	}While($serviceObj.Status -ne "Paused")
+	Sleep 10
+}
 
-$serviceObj.Close()
 [System.GC]::Collect();
 [System.GC]::WaitForPendingFinalizers();
 [System.GC]::Collect();
