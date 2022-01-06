@@ -221,7 +221,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             return null;
         }
 
-        protected void triggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false, bool invalidCredentials = false)
+        protected void TriggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false, bool invalidCredentials = false)
         {
             int iResult;
             string strMethod = null;

@@ -149,6 +149,10 @@
     <Property name="TriggerClientDisconnectAll_Task" value="DisconnectAll">
       <Description>The Windows task name for SUT Control interface: TriggerClientDisconnectAll.</Description>
     </Property>
+	  <!-- The Windows task name for SUT Control interface:TriggerCloseRDPWindow. -->
+	  <Property name="TriggerCloseRDPWindow_Task" value="TriggerCloseRDPWindow">
+		  <Description>The Windows task name for SUT Control interface: TriggerCloseRDPWindow.</Description>
+	  </Property>
 	  <!-- The Windows task name for SUT Control interface: CredentialManagerAddInvalidAccount. -->
 	  <Property name="CredentialManagerAddInvalidAccount_Task" value="CredentialManager_Invalid">
 		  <Description>The Windows task name for SUT Control interface: CredentialManagerAddInvalidAccount.</Description>
