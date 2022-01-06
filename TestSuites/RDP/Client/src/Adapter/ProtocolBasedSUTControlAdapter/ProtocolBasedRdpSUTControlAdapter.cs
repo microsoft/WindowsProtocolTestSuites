@@ -157,10 +157,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         }
 
         /// <summary>
-        /// This method is used to trigger RDP client to close all RDP connection to a server for clean up.
+        /// This method is used to trigger change of stored credentials to invalid user account.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerReverseCredentialManager(string caseName)
+        public int CredentialManagerAddInvalidAccount(string caseName)
         {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
@@ -169,7 +169,28 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
-            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.REVERSE_CREDENTIAL_MANAGER_FOR_SUT, caseName,
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CREDENTIAL_MANAGER_ADD_INVALID_ACCOUNT, caseName,
+                reqId, helpMessage, payload);
+
+            //Send the request and get response if necessary
+            byte[] resposePayload = null;
+            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
+        }
+
+        /// <summary>
+        /// This method is used to trigger change of stored credentials to valid user account.
+        /// </summary>
+        /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
+        public int CredentialManagerReverseInvalidAccount(string caseName)
+        {
+            // Get help message
+            string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
+            // Create payload
+            byte[] payload = null;
+
+            // Create request message
+            ushort reqId = controlHandler.GetNextRequestId();
+            SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CREDENTIAL_MANAGER_REVERSE_INVALID_ACCOUNT, caseName,
                 reqId, helpMessage, payload);
 
             //Send the request and get response if necessary

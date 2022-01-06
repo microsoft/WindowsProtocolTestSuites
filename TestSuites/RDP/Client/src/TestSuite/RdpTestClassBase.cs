@@ -229,6 +229,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     {
                         if (invalidCredentials)
                         {
+                            iResult = 0;
+                            CredentialManagerAddInvalidAccount();
                             iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachInvalidAccount(this.TestContext.TestName);
                         }
 
@@ -249,6 +251,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     {
                         if (invalidCredentials)
                         {
+                            iResult = 0;
+                            CredentialManagerAddInvalidAccount();
                             iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPInvalidAccount(this.TestContext.TestName);
                         }
 
@@ -763,6 +767,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             try
             {
                 iResult = sutControlAdapter?.TriggerClientDisconnectAll(this.TestContext.TestName);
+
+                if (this.TestContext.TestName.Contains("InvalidAccount"))
+                {
+                    CredentialManagerReverseInvalidAccount();
+                }
             }
             catch (Exception ex)
             {
@@ -774,6 +783,54 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (iResult != null)
             {
                 TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
+            }
+        }
+
+        /// <summary>
+        /// Trigger Change Of Stored Credentials To Invalid User Account.
+        /// </summary>
+        public void CredentialManagerAddInvalidAccount()
+        {
+            int? iResult;
+
+            try
+            {
+                iResult = sutControlAdapter?.CredentialManagerAddInvalidAccount(this.TestContext.TestName);
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during CredentialManagerAddInvalidAccount(): {0}.", ex);
+
+                return;
+            }
+
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of CredentialManagerAddInvalidAccount is {0}.", iResult);
+            }
+        }
+
+        /// <summary>
+        /// Trigger Change Of Stored Credentials To Valid User Account.
+        /// </summary>
+        public void CredentialManagerReverseInvalidAccount()
+        {
+            int? iResult;
+
+            try
+            {
+                iResult = sutControlAdapter?.CredentialManagerReverseInvalidAccount(this.TestContext.TestName);
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during CredentialManagerReverseInvalidAccount(): {0}.", ex);
+
+                return;
+            }
+
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of CredentialManagerReverseInvalidAccount is {0}.", iResult);
             }
         }
 
