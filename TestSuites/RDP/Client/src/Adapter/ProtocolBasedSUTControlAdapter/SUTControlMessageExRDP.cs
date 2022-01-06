@@ -30,7 +30,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         DISPLAY_FULLSCREEN = 0x0203,
 
         // For Credential Manager
-        REVERSE_CREDENTIAL_MANAGER_FOR_SUT = 0x0201,
+        CREDENTIAL_MANAGER_ADD_INVALID_ACCOUNT = 0x0006,
+        CREDENTIAL_MANAGER_REVERSE_INVALID_ACCOUNT = 0x0007,
     }
 
     /// <summary>

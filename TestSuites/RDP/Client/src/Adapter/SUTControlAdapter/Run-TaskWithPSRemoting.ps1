@@ -13,12 +13,6 @@ Param(
 # Run Task to start RDP connection remotely
 $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock {param([string]$taskName) cmd /c schtasks /run /TN $taskName} -ArgumentList $taskName
 
-$cmdOutput | out-file "./RunTask_$taskName.log"
-
-$ptfprop_SUTUserName | out-file "./RunTask_$taskName.log"
-
-$ptfprop_ServerDomain | out-file "./RunTask_$taskName.log"
-
 if($cmdOutput -ne $null)
 {
     if($cmdOutput.GetType().IsArray)

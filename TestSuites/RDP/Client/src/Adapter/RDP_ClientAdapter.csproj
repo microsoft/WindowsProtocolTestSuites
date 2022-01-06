@@ -85,6 +85,12 @@
     <None Update="SUTControlAdapter\Check-PSRemoting.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="SUTControlAdapter\CredentialManagerAddInvalidAccount.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="SUTControlAdapter\CredentialManagerReverseInvalidAccount.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="SUTControlAdapter\EditFileWithPSRemoting.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

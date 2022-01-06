@@ -101,14 +101,24 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         int TriggerClientDisconnectAll(string caseName);
 
         /// <summary>
-        /// This method is used to trigger RDP client to re-enter the valid account name.
+        /// This method is used to trigger change of stored credentials to invalid user account.
         /// </summary>
         /// <param name="caseName">Name of test case</param>
         /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
-        [MethodHelp("Please re-enter the valid account name for the SUT.\r\n\r\n" +
+        [MethodHelp("Please initiate the addition of invalid credentials into the credential manager.\r\n\r\n" +
                     "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
         [DefaultValue("1")]
-        int TriggerReverseCredentialManager(string caseName);
+        int CredentialManagerAddInvalidAccount(string caseName);
+
+        /// <summary>
+        /// This method is used to trigger change of stored credentials to valid user account.
+        /// </summary>
+        /// <param name="caseName">Name of test case</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please initiate the addition of valid credentials into the credential manager.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
+        [DefaultValue("1")]
+        int CredentialManagerReverseInvalidAccount(string caseName);
 
         /// <summary>
         /// This method is used to trigger RDP client to start an Auto-Reconnect sequence after a network interruption.
