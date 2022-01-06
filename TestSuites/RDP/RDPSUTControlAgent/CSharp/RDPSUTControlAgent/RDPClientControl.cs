@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Win32.TaskScheduler;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -46,7 +47,9 @@ namespace RDPSUTControlAgent
                 {
                     case RDPSUTControl_CommandId.START_RDP_CONNECTION:
                         RDP_Connection_Payload rdpPayload = new RDP_Connection_Payload();
+
                         int index = 0;
+
                         if (rdpPayload.Decode(requestMessage.payload, (int)requestMessage.payloadLength, ref index))
                         {
                             if (rdpPayload.type == RDP_Connect_Payload_Type.RDP_FILE)
@@ -69,6 +72,7 @@ namespace RDPSUTControlAgent
                             }
                         }
                         break;
+
                     case RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION:
                         if (Close_RDP_Connection() > 0)
                         {
@@ -78,16 +82,49 @@ namespace RDPSUTControlAgent
                             errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command: " + commandId;
                         }
                         break;
+
                     case RDPSUTControl_CommandId.AUTO_RECONNECT:
                         resultCode = (uint)SUTControl_ResultCode.SUCCESS;
                         PostOperation = AUTO_RECONNECT;
                         break;
+
                     case RDPSUTControl_CommandId.SCREEN_SHOT:
                         if (TAKE_SCREEN_SHOT(out payload) > 0)
                         {
                             resultCode = (uint)SUTControl_ResultCode.SUCCESS;
                         }
                         break;
+
+                    case RDPSUTControl_CommandId.CREDENTIAL_MANAGER_ADD_INVALID_ACCOUNT:
+                        try
+                        {
+                            using (TaskService ts = new TaskService())
+                            {
+                                var runCreatedTask = ts.FindTask("CredentialManager_Invalid").Run();
+                            }
+                            resultCode = (uint)SUTControl_ResultCode.SUCCESS;
+                        }
+                        catch (Exception e)
+                        {
+                            errorMessage = $"SUT control agent encountered an error when executing this command: {commandId} ({e.Message})";
+                        }
+                        break;
+
+                    case RDPSUTControl_CommandId.CREDENTIAL_MANAGER_REVERSE_INVALID_ACCOUNT:
+                        try 
+                        {
+                            using (TaskService ts = new TaskService())
+                            {
+                                var runCreatedTask = ts.FindTask("CredentialManager_InvalidAccount_Reverse").Run();
+                            }
+                            resultCode = (uint)SUTControl_ResultCode.SUCCESS;
+                        }
+                        catch (Exception e)
+                        {
+                            errorMessage = $"SUT control agent encountered an error when executing this command: {commandId} ({e.Message})";
+                        }
+                        break;
+
                     default:
                         errorMessage = "SUT control agent doesn't support this command: " + commandId;
                         break;
