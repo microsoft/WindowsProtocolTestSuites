@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                         if (selectedRule != null)
                         {
                             var originalRules = selectedRule.Rules;
-                            var rule = selectedRule.Rules.Where(i => i.Name.Contains(parentRuleName) && (i.Name.Contains('.') ? i.Name.Remove(0,i.Name.LastIndexOf('.')+1) : i.Name) == r.Name).FirstOrDefault();
+                            var rule = selectedRule.Rules.Where(i => i.Name.Contains(parentRuleName) && (i.Name.Contains('.') ? i.Name.Remove(0, i.Name.LastIndexOf('.') + 1) : i.Name) == r.Name && i.Categories.OrderBy(s => s).SequenceEqual(r.Categories.OrderBy(s => s))).FirstOrDefault();
                             if (rule != null)
                             {
                                 originalRules.Remove(rule);
