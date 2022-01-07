@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
 
             defaultClient = new WspClient();
 
-            defaultClient.sender = defaultSender;
+            defaultClient.Sender = defaultSender;
 
             var parameter = InitializeParameter();
             Builder = new MessageBuilder(parameter);
@@ -263,16 +263,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
         /// </summary>
         public override void Reset()
         {
-            defaultClient.sender.Disconnect();
+            defaultClient.Sender.Disconnect();
 
             foreach (var client in connectedClients.Values)
             {
-                client.sender.Disconnect();
+                client.Sender.Disconnect();
             }
 
             foreach (var client in disconnectedClients)
             {
-                client.sender.Disconnect();
+                client.Sender.Disconnect();
             }
 
             connectedClients.Clear();
@@ -324,7 +324,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
             if (!connectedClients.ContainsKey(ClientMachineName))
             {
                 client = new WspClient();
-                client.sender = new RequestSender(
+                client.Sender = new RequestSender(
                     serverMachineName,
                     userName,
                     domainName,
@@ -1412,7 +1412,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
             byte[] disconnectMessage = Builder.GetCPMDisconnect();
             if (connectedClients.ContainsKey(ClientMachineName))
             {
-                sender = connectedClients[ClientMachineName].sender;
+                sender = connectedClients[ClientMachineName].Sender;
             }
             else
             {
@@ -2002,7 +2002,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter
         {
             if (isclientConnected)
             {
-                return connectedClients[ClientMachineName].sender;
+                return connectedClients[ClientMachineName].Sender;
             }
             else
             {

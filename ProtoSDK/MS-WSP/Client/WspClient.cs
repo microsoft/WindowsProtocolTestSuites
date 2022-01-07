@@ -19,7 +19,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
         #endregion
 
         #region Fields
-        public RequestSender sender;
+        public RequestSender Sender;
 
         private IWspInMessage lastRequest;
 
@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
         {
             lastRequest = request;
 
-            sender.SendMessage(Helper.ToBytes(request), out lastResponseBytes);
+            Sender.SendMessage(Helper.ToBytes(request), out lastResponseBytes);
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp
             request.Header = header;
             lastRequest = request;
 
-            sender.SendMessage(requestBytes, out lastResponseBytes);
+            Sender.SendMessage(requestBytes, out lastResponseBytes);
         }
 
         /// <summary>

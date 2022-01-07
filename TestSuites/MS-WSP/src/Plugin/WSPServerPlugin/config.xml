@@ -1,0 +1,70 @@
+<Config>
+  <TestSuiteName>MS-WSP</TestSuiteName>
+  <PtfFileNames>
+    <PtfFileName>MS-WSP_ServerTestSuite.deployment.ptfconfig</PtfFileName>
+    <PtfFileName>MS-WSP_ServerTestSuite.ptfconfig</PtfFileName>
+  </PtfFileNames>
+  <DllFileNames>
+    <DllFileName>MS-WSP_ServerTestSuite.dll</DllFileName>
+  </DllFileNames>
+  <AutoDetectionDllName>WSPServerPlugin.dll</AutoDetectionDllName>
+
+  <ConfigCaseRule>
+    <Group name = "Priority">
+      <Rule name = "BVT">
+        <Category name = "BVT"/>
+      </Rule>
+      <Rule name = "NonBVT">
+        <Category name = "!BVT"/>
+      </Rule>
+    </Group>
+
+    <Group name = "Scenario">
+      <Rule name = "CPMCiState">
+        <Category name = "CPMCiState"/>
+      </Rule>
+      <Rule name = "CPMConnect">
+        <Category name = "CPMConnect"/>
+      </Rule>
+      <Rule name = "CPMCreateQuery">
+        <Category name = "CPMCreateQuery"/>
+      </Rule>
+      <Rule name = "CPMDisconnect">
+        <Category name = "CPMDisconnect"/>
+      </Rule>
+      <Rule name = "CPMFetchValue">
+        <Category name = "CPMFetchValue"/>
+      </Rule>
+      <Rule name = "CPMFindIndices">
+        <Category name = "CPMFindIndices"/>
+      </Rule>
+      <Rule name = "CPMFreeCursor">
+        <Category name = "CPMFreeCursor"/>
+      </Rule>
+      <Rule name = "CPMGetQueryStatus">
+        <Category name = "CPMGetQueryStatus"/>
+      </Rule>
+      <Rule name = "CPMGetQueryStatusEx">
+        <Category name = "CPMGetQueryStatusEx"/>
+      </Rule>
+      <Rule name = "CPMGetRows">
+        <Category name = "CPMGetRows"/>
+      </Rule>
+      <Rule name = "CPMGetRowsetNotify">
+        <Category name = "CPMGetRowsetNotify"/>
+      </Rule>
+      <Rule name = "CPMGetScopeStatistics">
+        <Category name = "CPMGetScopeStatistics"/>
+      </Rule>
+      <Rule name = "CPMSetBindings">
+        <Category name = "CPMSetBindings"/>
+      </Rule>
+      <Rule name = "CPMSetScopePrioritization">
+        <Category name = "CPMSetScopePrioritization"/>
+      </Rule>
+      <Rule name = "WspMessageHeader">
+        <Category name = "WspMessageHeader"/>
+      </Rule>
+    </Group>
+  </ConfigCaseRule>
+</Config>

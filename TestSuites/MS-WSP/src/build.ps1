@@ -2,7 +2,7 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 Param(
-    [string]$Configuration="Release",
+    [string]$Configuration = "Release",
     [string]$OutDir
 ) 
 
@@ -19,9 +19,17 @@ if ([string]::IsNullOrEmpty($OutDir)) {
 
 $CommonScripts = @()
 
-if(Test-Path -Path $OutDir) {
+if (Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
+
+$PluginDir = "$OutDir/Plugin"
+New-Item -ItemType Directory $PluginDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/MS-WSP/src/Plugin/WSPServerPlugin/*.xml" -Destination $PluginDir -Recurse -Force
+
+$TargetDir = "$PluginDir/doc"
+New-Item -ItemType Directory $TargetDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/MS-WSP/src/Plugin/WSPServerPlugin/Docs/*" -Destination $TargetDir -Recurse -Force
 
 New-Item -ItemType Directory "$OutDir/Batch" -Force
 Copy-Item "$TestSuiteRoot/TestSuites/MS-WSP/src/Batch/*.sh" -Destination "$OutDir/Batch/" -Recurse -Force
