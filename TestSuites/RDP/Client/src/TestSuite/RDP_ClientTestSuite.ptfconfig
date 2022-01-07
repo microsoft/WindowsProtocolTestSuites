@@ -13,7 +13,6 @@
     <Property name="Version" value="10.8">
       <Description>The version of test suite.</Description>
     </Property>
-    <Property name="AdapterInvokeTimeout" value="5" />
     <!--Property used for protocol-based SUT control adapter-->
     <Group name="SUTControl">
       <!--IP addresses or host name of SUT control Agent, seperated by ";"-->
@@ -50,7 +49,7 @@
     <!-- SUT Control Adapters-->
     <!-- Basic RDP SUT Control Adapters -->
     <!--<Adapter xsi:type="interactive" name="IRdpSutControlAdapter" />-->
-    <Adapter xsi:type="managed" name="IRdpSutControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpSUTControlAdapter"/>
+    <!--<Adapter xsi:type="managed" name="IRdpSutControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpSUTControlAdapter"/>-->
     <!-- RDPEI SUT Control Adapters -->
     <!--<Adapter xsi:type="interactive" name="IRdpeiSUTControlAdapter"/>-->
     <!--<Adapter xsi:type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpei.RdpeiSUTControlAdapter"/>-->
@@ -58,7 +57,7 @@
     <!--RDPEDISP SUT Control Adapters-->
     <!--<Adapter xsi:type="interactive" name="IRdpedispSUTControlAdapter" />-->
     <!--<Adapter xsi:type="managed" name="IRdpedispSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpedispSUTControlAdapter"/>-->
-    <!--<Adapter xsi:type="powershell" name="IRdpSutControlAdapter" scriptdir=".\SUTControlAdapter" />-->
+    <Adapter xsi:type="powershell" name="IRdpSutControlAdapter" scriptdir=".\SUTControlAdapter" />
     <Adapter xsi:type="powershell" name="IRdpeiSUTControlAdapter" scriptdir=".\RdpeiSUTControlAdapter" />
     <Adapter xsi:type="powershell" name="IRdpedispSUTControlAdapter" scriptdir=".\RdpedispSUTControlAdapter" />
   </Adapters>
