@@ -32,7 +32,6 @@ foreach ($filePath in $filePaths)
     }
 }
 
-$returnValue = 0
 ""|out-file "./EditFile.log" -Append -Encoding unicode
 return $returnValue
 

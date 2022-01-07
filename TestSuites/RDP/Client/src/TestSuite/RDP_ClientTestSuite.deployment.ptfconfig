@@ -18,7 +18,7 @@
         <Description>Negotiation-Base: True; Direct Approach: False. When security protocol is RDP, this value is ignored. For direct approach, only CredSSP is valid for security protocol.</Description>
       </Property>
       <!--One of the TLS, CredSSP, or RDP.-->
-      <Property name="Protocol" value="CredSSP">
+      <Property name="Protocol" value="TLS">
         <Choice>TLS, CredSSP, RDP</Choice>
         <Description>One of the TLS, CredSSP, or RDP.</Description>
       </Property>
@@ -150,17 +150,17 @@
       <Description>The Windows task name for SUT Control interface: TriggerClientDisconnectAll.</Description>
     </Property>
 	  <!-- The Windows task name for SUT Control interface:TriggerCloseRDPWindow. -->
-	  <Property name="TriggerCloseRDPWindow_Task" value="TriggerCloseRDPWindow">
-		  <Description>The Windows task name for SUT Control interface: TriggerCloseRDPWindow.</Description>
-	  </Property>
-	  <!-- The Windows task name for SUT Control interface: CredentialManagerAddInvalidAccount. -->
-	  <Property name="CredentialManagerAddInvalidAccount_Task" value="CredentialManager_Invalid">
-		  <Description>The Windows task name for SUT Control interface: CredentialManagerAddInvalidAccount.</Description>
-	  </Property>
-	  <!-- The Windows task name for SUT Control interface: CredentialManagerReverseInvalidAccount. -->
-	  <Property name="CredentialManagerReverseInvalidAccount_Task" value="CredentialManager_InvalidAccount_Reverse">
-		  <Description>The Windows task name for SUT Control interface: CredentialManagerReverseInvalidAccount.</Description>
-	  </Property>
+    <Property name="TriggerCloseRDPWindow_Task" value="TriggerCloseRDPWindow">
+        <Description>The Windows task name for SUT Control interface: TriggerCloseRDPWindow.</Description>
+    </Property>
+    <!-- The Windows task name for SUT Control interface: CredentialManagerAddInvalidAccount. -->
+    <Property name="CredentialManagerAddInvalidAccount_Task" value="CredentialManager_Invalid">
+        <Description>The Windows task name for SUT Control interface: CredentialManagerAddInvalidAccount.</Description>
+    </Property>
+    <!-- The Windows task name for SUT Control interface: CredentialManagerReverseInvalidAccount. -->
+    <Property name="CredentialManagerReverseInvalidAccount_Task" value="CredentialManager_InvalidAccount_Reverse">
+        <Description>The Windows task name for SUT Control interface: CredentialManagerReverseInvalidAccount.</Description>
+    </Property>
     <!-- The Windows task name for RDPEI SUT Control interface: TriggerOneTouchEventOnClient. -->
     <Property name="TriggerOneTouchEvent_Task" value="TriggerOneTouchEvent">
       <Description>The Windows task name for RDPEI SUT Control interface: TriggerOneTouchEventOnClient.</Description>

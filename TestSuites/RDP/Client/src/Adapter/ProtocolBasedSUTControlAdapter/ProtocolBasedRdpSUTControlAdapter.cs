@@ -374,7 +374,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             catch(Exception e)
             {
                 this.Site.Log.Add(LogEntryKind.Comment, "RDP Connection: RDP Connection To SUT Failed:" + e.Message);
-                
             }
 
             return output;

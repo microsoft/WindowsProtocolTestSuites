@@ -106,7 +106,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Expect the transport layer connection request.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start a transport layer connection request (TCP).");
-            this.rdpbcgrAdapter.ExpectTransportConnection(RDPSessionType.Normal, true);
+            this.rdpbcgrAdapter.ExpectTransportConnection(RDPSessionType.Normal);
 
             //Expect SUT send a Client X.224 Connection Request PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client X.224 Connection Request PDU");

@@ -360,6 +360,9 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             hiddenProp.Add("TriggerSingleTouchPositionEvent_Task");
             hiddenProp.Add("TriggerContinuousTouchEvent_Task");
             hiddenProp.Add("TriggerTouchHoverEvent_Task");
+            hiddenProp.Add("TriggerCloseRDPWindow_Task");
+            hiddenProp.Add("CredentialManagerAddInvalidAccount_Task");
+            hiddenProp.Add("CredentialManagerReverseInvalidAccount_Task");
             hiddenProp.Add("MaximizeRDPClientWindow_Task");
 
             // Image configure for RDPEDISP
