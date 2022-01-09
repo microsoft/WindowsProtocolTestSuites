@@ -5,10 +5,6 @@
 # and the client should use Negotiation-Based Approach to advertise the support for TLS, 
 # CredSSP or RDP standard security protocol.
 
-# Check SUT started the PS Remoting
-$isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
-if(-not $isSutPSRemotingStarted) {return -1}
-
 # Run task to start RDP connection remotely
 $returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_RDPConnectWithNegotiationApproach_Task $PtfProp_SUTUserName
 return $returnValue

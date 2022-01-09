@@ -14,10 +14,6 @@
 # Step 3: trun on/off the keyboard toggle keys, suc as NUM Lock.
 # Step 4: Maximize and minimize the remote desktop
 
-# Check SUT started the PS Remoting
-$isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
-if(-not $isSutPSRemotingStarted) {return -1}
-
 # Run task to trigger different input events
 $returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_TriggerInputEvents_Task $PtfProp_SUTUserName
 sleep 20 # take couple of seconds to generate input events
