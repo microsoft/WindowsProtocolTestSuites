@@ -75,6 +75,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
         internal const uint SP_PROT_TLS1_SERVER = 0x00000040;
         //Transport Layer Security 1.0 client side.
         internal const uint SP_PROT_TLS1_CLIENT = 0x00000080;
+        internal const uint SP_PROT_TLS1_0_SERVER = SP_PROT_TLS1_SERVER;
+        internal const uint SP_PROT_TLS1_0_CLIENT = SP_PROT_TLS1_CLIENT;
+        internal const uint SP_PROT_TLS1_1_SERVER = 0x00000100;
+        internal const uint SP_PROT_TLS1_1_CLIENT = 0x00000200;
+        internal const uint SP_PROT_TLS1_2_SERVER = 0x00000400;
+        internal const uint SP_PROT_TLS1_2_CLIENT = 0x00000800;
+
         internal const uint SP_PROT_UNI_SERVER = 0x40000000;
         internal const uint SP_PROT_UNI_CLIENT = 0x80000000;
         internal const uint SP_PROT_CLIENTS = SP_PROT_PCT1_CLIENT
@@ -82,15 +89,51 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
             | SP_PROT_SSL3_CLIENT
             | SP_PROT_UNI_CLIENT
             | SP_PROT_TLS1_CLIENT;
+
+        internal const uint ClientEnabledTlsProtocols = SP_PROT_PCT1_CLIENT
+            // https://docs.microsoft.com/en-us/windows/win32/api/schannel/ns-schannel-schannel_cred
+            // Important: Secure Sockets Layer 2.0 and Transport Layer Security 1.2 flags are mutually exclusive.
+            // so we disable SP_PROT_SSL2_CLIENT here.
+            | SP_PROT_SSL3_CLIENT
+            | SP_PROT_UNI_CLIENT
+            | SP_PROT_TLS1_CLIENT
+            | SP_PROT_TLS1_0_CLIENT
+            | SP_PROT_TLS1_1_CLIENT
+            | SP_PROT_TLS1_2_CLIENT;
+
         internal const uint SP_PROT_SERVERS = SP_PROT_PCT1_SERVER
             | SP_PROT_SSL2_SERVER
             | SP_PROT_SSL3_SERVER
             | SP_PROT_UNI_SERVER
             | SP_PROT_TLS1_SERVER;
+
+        internal const uint ServerEnabledTlsProtocols = SP_PROT_PCT1_SERVER
+            // https://docs.microsoft.com/en-us/windows/win32/api/schannel/ns-schannel-schannel_cred
+            // Important: Secure Sockets Layer 2.0 and Transport Layer Security 1.2 flags are mutually exclusive.
+            // so we disable SP_PROT_SSL2_SERVER here.
+            | SP_PROT_SSL3_SERVER
+            | SP_PROT_UNI_SERVER
+            | SP_PROT_TLS1_SERVER
+            | SP_PROT_TLS1_0_SERVER
+            | SP_PROT_TLS1_1_SERVER
+            | SP_PROT_TLS1_2_SERVER;
+
         //DTLS 1.0 server side
         internal const uint SP_PROT_DTLS_SERVER = 0x00010000;
+        internal const uint SP_PROT_DTLS1_0_SERVER = SP_PROT_DTLS_SERVER;
+        internal const uint SP_PROT_DTLS1_2_SERVER = 0x00040000;
+        internal const uint SP_PROT_DTLS1_X_SERVER = SP_PROT_DTLS_SERVER
+            | SP_PROT_DTLS1_0_SERVER
+            | SP_PROT_DTLS1_2_SERVER;
+
         //DTLS 1.0 client side
         internal const uint SP_PROT_DTLS_CLIENT = 0x00020000;
+        internal const uint SP_PROT_DTLS1_0_CLIENT = SP_PROT_DTLS_CLIENT;
+        internal const uint SP_PROT_DTLS1_2_CLIENT = 0x00080000;
+        internal const uint SP_PROT_DTLS1_X_CLIENT = SP_PROT_DTLS_CLIENT
+            | SP_PROT_DTLS1_0_CLIENT
+            | SP_PROT_DTLS1_2_CLIENT;
+
 
         //Identity of Unicode in SEC_WINNT_AUTH_IDENTITY.
         internal const int SEC_WINNT_AUTH_IDENTITY_UNICODE = 0x2;

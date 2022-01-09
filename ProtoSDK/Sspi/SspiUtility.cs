@@ -815,11 +815,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Sspi
 
             if (fCredentialUse == NativeMethods.SECPKG_CRED_OUTBOUND)
             {
-                enabledProtocols = NativeMethods.SP_PROT_CLIENTS;
+                enabledProtocols = NativeMethods.ClientEnabledTlsProtocols;
             }
             else
             {
-                enabledProtocols = NativeMethods.SP_PROT_SERVERS;
+                enabledProtocols = NativeMethods.ServerEnabledTlsProtocols;
             }
 
             SchannelCred schannelCred = new SchannelCred(certificateCredential, enabledProtocols);
