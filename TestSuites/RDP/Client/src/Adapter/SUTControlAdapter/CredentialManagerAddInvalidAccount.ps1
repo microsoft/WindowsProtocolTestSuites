@@ -3,10 +3,6 @@
 
 #This method is used to trigger change of stored credentials to invalid user account.
 
-# Check SUT started the PS Remoting
-$isSutPSRemotingStarted = ./Check-PSRemoting.ps1 $PtfProp_SUTName
-if(-not $isSutPSRemotingStarted) {return -1}
-
 # Run task to simulate a client initiated disconnect request
 $returnValue = ./Run-TaskWithPSRemoting.ps1 $PtfProp_SUTName $PtfProp_CredentialManagerAddInvalidAccount_Task $PtfProp_SUTUserName
 return $returnValue
