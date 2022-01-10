@@ -60,7 +60,7 @@ namespace RDPSUTControlAgent
                                 }
                                 else
                                 {
-                                    errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId +" when it is .rdp file";
+                                    errorMessage = $"SUT control agent in '{GetCurrentOSType()}' doesn't support this command:" + commandId + " when it is .rdp file";
                                 }
                             }
                             else
@@ -98,10 +98,7 @@ namespace RDPSUTControlAgent
                     case RDPSUTControl_CommandId.CREDENTIAL_MANAGER_ADD_INVALID_ACCOUNT:
                         try
                         {
-                            using (TaskService ts = new TaskService())
-                            {
-                                var runCreatedTask = ts.FindTask("CredentialManager_Invalid").Run();
-                            }
+                            Run_TaskScheduler_Task("CredentialManager_Invalid");
                             resultCode = (uint)SUTControl_ResultCode.SUCCESS;
                         }
                         catch (Exception e)
@@ -111,12 +108,9 @@ namespace RDPSUTControlAgent
                         break;
 
                     case RDPSUTControl_CommandId.CREDENTIAL_MANAGER_REVERSE_INVALID_ACCOUNT:
-                        try 
+                        try
                         {
-                            using (TaskService ts = new TaskService())
-                            {
-                                var runCreatedTask = ts.FindTask("CredentialManager_InvalidAccount_Reverse").Run();
-                            }
+                            Run_TaskScheduler_Task("CredentialManager_InvalidAccount_Reverse");
                             resultCode = (uint)SUTControl_ResultCode.SUCCESS;
                         }
                         catch (Exception e)
@@ -221,7 +215,7 @@ namespace RDPSUTControlAgent
         {
             string stopRDPArguments = GetConfiguredValue("StopRDP");
             int result = InvokeRemoteClientProcess(stopRDPArguments);
-            
+
             if (GetRemoteClientName().Equals("mstsc", StringComparison.OrdinalIgnoreCase))
             {
                 Thread.Sleep(1000);
@@ -241,6 +235,24 @@ namespace RDPSUTControlAgent
             // Restart network using another thread.
             Thread restartNetworkThread = new Thread(new ThreadStart(RestartNetWorkThread));
             restartNetworkThread.Start();
+        }
+
+        /// <summary>
+        /// Trigger scheduled task
+        /// </summary>
+        public static void Run_TaskScheduler_Task( string taskName)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                using (TaskService ts = new TaskService())
+                {
+                    var runCreatedTask = ts.FindTask(taskName).Run();
+                }
+            }
+            else
+            {
+                throw new NotImplementedException($"Not Implement in OS {GetCurrentOSType()}");
+            }
         }
 
         /// <summary>
