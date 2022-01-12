@@ -211,9 +211,6 @@ cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN TriggerCloseRDPWindow /TR "
 Write-Host "Creating task to trigger RDP client to start a Auto-Reconnect sequence after a network interruption..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN TriggerNetworkFailure /TR "powershell $dataPath\TriggerNetworkFailure.ps1" /IT /F
 
-Write-Host "Creating task to close all RDP connections of terminal client..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DisconnectAll /TR "$dataPath\DisconnectAll.bat" /IT /F
-
 #-----------------------------------------------------
 # Edit registery.
 #-----------------------------------------------------
@@ -238,6 +235,16 @@ if($driverComputerIP -ne $driverComputerName)
 
 # To avoid warning dialog
 New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\LocalDevices $driverComputerName -value 588 -PropertyType DWORD -Force
+
+#-----------------------------------------------------
+# Edit registery.
+# Disable TLS 1.0 for client
+#-----------------------------------------------------
+Write-Host "Disable TLS 1.0 for client."
+New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -Force | Out-Null
+New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -name 'Enabled' -value 0 -PropertyType 'DWord' -Force | Out-Null
+New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -name 'DisabledByDefault' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+Write-Host 'TLS 1.0 has been disabled.'
 
 #-----------------------------------------------------
 # Edit registery.

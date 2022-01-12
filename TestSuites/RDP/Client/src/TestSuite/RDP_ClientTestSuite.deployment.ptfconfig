@@ -148,10 +148,6 @@
       <Property name="TriggerInputEvents_Task" value="TriggerInputEvents">
         <Description>The Windows task name for SUT Control interface:TriggerInputEvents.</Description>
       </Property>
-      <!-- The Windows task name for SUT Control interface: TriggerClientDisconnectAll. -->
-      <Property name="TriggerClientDisconnectAll_Task" value="DisconnectAll">
-        <Description>The Windows task name for SUT Control interface: TriggerClientDisconnectAll.</Description>
-      </Property>
       <!-- The Windows task name for SUT Control interface:TriggerCloseRDPWindow. -->
       <Property name="TriggerCloseRDPWindow_Task" value="TriggerCloseRDPWindow">
         <Description>The Windows task name for SUT Control interface: TriggerCloseRDPWindow.</Description>

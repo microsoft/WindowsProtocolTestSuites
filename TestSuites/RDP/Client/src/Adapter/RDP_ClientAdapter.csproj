@@ -82,9 +82,6 @@
     <None Update="ShellSUTControlAdapter\TriggerClientDisconnectAll.sh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="SUTControlAdapter\Check-PSRemoting.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="SUTControlAdapter\EditFileWithPSRemoting.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
