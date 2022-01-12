@@ -43,7 +43,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
 
         protected override void TestInitialize()
         {
-            VerifyInteractiveOrDeviceNeededRdpeusbTestCase();
+            VerifyDeviceNeededRdpeusbTestCase();
 
             base.TestInitialize();
 
@@ -96,34 +96,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpeusb
         /// <summary>
         /// Inconclude the interactive test cases.
         /// </summary>
-        private void VerifyInteractiveOrDeviceNeededRdpeusbTestCase()
+        private void VerifyDeviceNeededRdpeusbTestCase()
         {
-            var isInteractiveTestCase = IsInteractiveRdpeusbTestCase();
             var isDeviceNeededTestCase = IsDeviceNeededRdpeusbTestCase();
-            var isInteractiveAdapter = Site.Config.GetAdapterConfig("IRdpeusbAdapter").GetType().Name == "InteractiveAdapterConfig";
+            bool isSUTSupportEUSBDevice;
+            PtfPropUtility.GetPtfPropertyValue(BaseTestSite, "SupportEUSBDevice", out isSUTSupportEUSBDevice);
 
-            if (isInteractiveTestCase && !isInteractiveAdapter)
-            {
-                Site.Assume.Inconclusive("The RDPEUSB case requires interactive operation.");
-            }
-
-            if (isDeviceNeededTestCase && !isInteractiveAdapter)
+            if (isDeviceNeededTestCase && !isSUTSupportEUSBDevice)
             {
                 Site.Assume.Inconclusive("The RDPEUSB case requires device operation.");
             }
-        }
-
-        /// <summary>
-        /// Determine whether the executing Rdpeusb test case is interactive or not
-        /// </summary>
-        /// <returns>The executing Rdpeusb test case is interactive or not</returns>
-        private bool IsInteractiveRdpeusbTestCase()
-        {
-            var testName = this.TestContext.TestName;
-            var method = GetType().GetMethod(testName);
-            var attrs = method.GetCustomAttributes<TestCategoryAttribute>();
-
-            return attrs.Any(attr => attr.TestCategories.Contains("Interactive"));
         }
 
         /// <summary>
