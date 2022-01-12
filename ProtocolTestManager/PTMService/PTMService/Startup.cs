@@ -129,7 +129,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
