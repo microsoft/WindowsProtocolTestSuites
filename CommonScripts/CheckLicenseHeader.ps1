@@ -5,7 +5,7 @@ param (
     [string]$IsCheckAll = "false",
     [string]$targetBranch = "main",
     [string]$sourceBranch,
-    [string]$prId
+    [string]$prNum = ""
 )
 
 $InvocationPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
@@ -14,10 +14,13 @@ if ($targetBranch -notmatch "refs/heads/(.+)") {
     $targetBranch = "origin/$targetBranch"
 }
 
-$isGitHubPR = $false
 if ($sourceBranch -notmatch "refs/heads/(.+)") {
-    $sourceBranch = "origin/pull/$prId"
-    $isGitHubPR = $true
+    $sourceBranch = "origin/pull/$sourceBranch"
+}
+
+$isGitHubPR = -not [string]::IsNullOrEmpty($prNum)
+if ($isGitHubPR) {
+    $sourceBranch = "origin/pull/$prNum"
 }
 
 Write-Host "InvocationPath: $InvocationPath"
@@ -25,14 +28,14 @@ Write-Host "TestSuitePath: $TestSuitePath"
 Write-Host "targetBranch: $targetBranch"
 Write-Host "sourceBranch: $sourceBranch"
 if ($isGitHubPR) {
-    Write-Host "prId: $prId"
+    Write-Host "prNum: $prNum"
 }
 
 Push-Location $TestSuitePath
 
 if ($isGitHubPR) {
     Write-Host "Fetch the GitHub PR branch"
-    git fetch origin "pull/$prId/head:$sourceBranch"
+    git fetch origin "pull/$prNum/head:$sourceBranch"
 }
 
 $Diff = git diff --name-only "$targetBranch...$sourceBranch"
