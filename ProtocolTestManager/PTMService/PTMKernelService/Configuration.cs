@@ -418,7 +418,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 string name = Path.GetFileName(file);
 
-                File.Copy(file, Path.Combine(ptfConfigStorage.AbsolutePath, name));
+                File.Copy(file, Path.Combine(ptfConfigStorage.AbsolutePath, name), true);
             }
 
             var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
@@ -438,6 +438,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 foreach (string dir in scriptAdapters)
                 {
                     var source = Kernel.Utility.CombineToNormalizedPath(testSuite.StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, dir);
+                    if (!Directory.Exists(source))
+                    {
+                        continue;
+                    }
                     var target = Kernel.Utility.CombineToNormalizedPath(ptfConfigStorage.AbsolutePath, dir);
                     Kernel.Utility.DirectoryCopy(source, target, true);
                 }
