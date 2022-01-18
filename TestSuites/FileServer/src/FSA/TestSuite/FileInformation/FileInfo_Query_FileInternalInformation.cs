@@ -87,11 +87,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //For file systems that do not support a 64-bit file ID, this field MUST be set to 0, and MUST be ignored.
             //See [MS-FSCC] section <10> for the supportted file system list.
-            if (this.fsaAdapter.FileSystem == FileSystem.CDFS
-                || this.fsaAdapter.FileSystem == FileSystem.CSVFS
-                || this.fsaAdapter.FileSystem == FileSystem.OTHERFS)
+            if (this.fsaAdapter.Is64bitFileIdSupported)
             {
-                this.TestSite.Assert.AreEqual(0, fileInternalInformation.IndexNumber, string.Format("The current file system is {0}. [MS-FSCC] section 2.1.9: For file systems that do not support a 64-bit file ID, this field MUST be set to 0, and MUST be ignored. ", this.fsaAdapter.FileSystem));
+                Site.Assert.AreNotEqual(0, fileInternalInformation.IndexNumber, "FileId of the entry should not be 0.");
+            }
+            else
+            {
+                //For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
+                Site.Assert.AreEqual(0, fileInternalInformation.IndexNumber, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
             }
         }
         
