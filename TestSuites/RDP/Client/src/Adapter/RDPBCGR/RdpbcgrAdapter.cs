@@ -162,6 +162,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (this.rdpbcgrServerStack != null)
             {
                 this.rdpbcgrServerStack.Dispose();
+                sessionContext = null;
             }
 
         }
@@ -1446,7 +1447,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// </summary>
         /// <param name="notificationType">The Logon Notification type.</param>
         /// <param name="errorType">The Logon Error type. Only used when Notification Type is LogonError.</param>
-        public void ServerSaveSessionInfo(LogonNotificationType notificationType, ErrorNotificationType_Values errorType)
+        public void ServerSaveSessionInfo(LogonNotificationType notificationType, ErrorNotificationType_Values errorType = ErrorNotificationType_Values.LOGON_MSG_NO_PERMISSION)
         {
             if (this.sessionState != ServerSessionState.RDPConnected || this.connectionFinalizationState != ConnectionFinalization_ServerState.ServerFontMapSent)
             {
@@ -1533,7 +1534,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
                 TS_LOGON_ERRORS_INFO errorInfo = new TS_LOGON_ERRORS_INFO();
                 errorInfo.ErrorNotificationType = errorType;
-                errorInfo.ErrorNotificationData = ErrorNotificationData_Values.LOGON_MSG_NO_PERMISSION;
+                errorInfo.ErrorNotificationData = ErrorNotificationData_Values.LOGON_FAILED_OTHER;
 
                 logonField.cbFieldData = 8;
                 logonField.FieldData = errorInfo;

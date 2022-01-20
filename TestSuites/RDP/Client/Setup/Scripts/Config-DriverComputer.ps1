@@ -293,6 +293,16 @@ Write-Host  "TurnOff FileReadonly for $DepPtfConfig due to Execution Console..."
 .\TurnOff-FileReadonly.ps1 $DepPtfConfig
 
 #-----------------------------------------------------
+# Edit registery.
+# Disable TLS 1.0 for Server
+#-----------------------------------------------------
+Write-Host "Disable TLS 1.0 for Server."
+New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -Force | Out-Null
+New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -name 'Enabled' -value 0 -PropertyType 'DWord' -Force | Out-Null
+New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -name 'DisabledByDefault' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+Write-Host 'TLS 1.0 has been disabled.'
+
+#-----------------------------------------------------
 # Create task to detect whether the SUT Adapter works
 #-----------------------------------------------------
 Write-Host "Creating task to detect whether the SUT Adapter works and try 10 times if fails ..."

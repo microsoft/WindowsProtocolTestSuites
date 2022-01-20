@@ -955,7 +955,6 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                         { "PtfProp_RDPConnectWithDirectCredSSPFullScreen_Task",DetectorUtil.GetPropertyValue("RDPConnectWithDirectCredSSPFullScreen_Task")},
                         { "PtfProp_RDPConnectWithDirectCredSSP_Task",DetectorUtil.GetPropertyValue("RDPConnectWithDirectCredSSP_Task")},
                         { "PtfProp_RDPConnectWithNegotiationApproach_Task",DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationApproach_Task")},
-                        { "PtfProp_TriggerClientDisconnectAll_Task",DetectorUtil.GetPropertyValue("TriggerClientDisconnectAll_Task")},
                         { "PtfProp_TriggerClientAutoReconnect_Task",DetectorUtil.GetPropertyValue("TriggerClientAutoReconnect_Task")},
                         { "PtfProp_SUTSystemDrive",DetectorUtil.GetPropertyValue("SUTSystemDrive")},
                         { "PtfProp_TriggerInputEvents_Task",DetectorUtil.GetPropertyValue("TriggerInputEvents_Task")},

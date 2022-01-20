@@ -687,6 +687,46 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
+        [TestCategory(TestCategories.Compatibility)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.")]
+        public void Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported()
+        {
+            CheckCompressionApplicability();
+
+            var unsupportedCompressionAlgorithms = new CompressionAlgorithm[] { CompressionAlgorithm.Unsupported };
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SUT unsupported compression algorithms.");
+            NegotiateWithNegotiateContexts(
+                DialectRevision.Smb311,
+                new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 },
+                compressionAlgorithms: unsupportedCompressionAlgorithms,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, header.Status, "SUT MUST return STATUS_SUCCESS if the negotiation finished successfully.");
+
+                    bool isExpectedCompressionContext = false;
+                    if (TestConfig.Platform == Platform.WindowsServerV1903 || TestConfig.Platform == Platform.WindowsServerV1909|| TestConfig.Platform == Platform.WindowsServer2022)
+                    {
+                        isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Length == 1 && client.Smb2Client.CompressionInfo.CompressionIds[0] == CompressionAlgorithm.NONE;
+                    }
+                    else
+                    {
+                        isExpectedCompressionContext = client.Smb2Client.CompressionInfo.CompressionIds.Count() == 0;
+                    }
+
+                    BaseTestSite.Assert.IsTrue(
+                        isExpectedCompressionContext,
+                        "[MS-SMB2] section 3.3.5.4: If the server does not support any of the algorithms provided by the client, Connection.CompressionIds MUST be set to an empty list. " +
+                        "Building an SMB2_COMPRESSION_CAPABILITIES negotiate response context: " +
+                        "If Connection.CompressionIds is empty, The server SHOULD<261> set CompressionAlgorithmCount to 0." +
+                        "<261> Windows 10 v1903, Windows 10 v1909, Windows Server v1903, and Windows Server v1909 set CompressionAlgorithmCount to 1 and CompressionAlgorithms to \"NONE\""
+                        );
+                });
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("This test case is designed to test whether server ignores SMB2_COMPRESSION_CAPABILITIES context when negotiate with SMB dialect less than 3.1.1.")]
         public void Negotiate_SMB311_Compression_InvalidSmbDialect()
@@ -779,6 +819,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 checker: (Packet_Header header, NEGOTIATE_Response response) =>
                 {
                     BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_INVALID_PARAMETER, header.Status, "[MS-SMB2] section 3.3.5.4: The server MUST fail the negotiate request with STATUS_INVALID_PARAMETER, if CompressionAlgorithmCount is equal to zero.");
+
+                },
+                responseChecker: (Packet_Header header, Smb2NegotiateResponsePacket response) =>
+                {
+                    CheckCompressionAlgorithmsForWindowsImplementationWithEmptyCompressions(response);
                 });
         }
 
@@ -1250,7 +1295,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         private void CheckSigningCompatibility(bool isSigningRequired = false)
         {
             // Check platform
-            TestConfig.CheckPlatform(Platform.WindowsServerV21H1);
+            if(TestConfig.IsWindowsPlatform && TestConfig.Platform < Platform.Windows10V21H1)
+            {
+                BaseTestSite.Assert.Inconclusive("Windows 10 v20H2 and prior and Windows Server v20H2 and prior do not send or process SMB2_SIGNING_CAPABILITIES negotiate context.");
+            }
 
             // Check SUT supported signing algorithms
             TestConfig.CheckSigningAlgorithm();
@@ -1266,11 +1314,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             // Check platform
             if (TestConfig.IsWindowsPlatform)
             {
-                BaseTestSite.Assume.IsFalse(TestConfig.Platform < Platform.WindowsServerV1903, "Windows 10 v1809 operating system and prior, Windows Server v1809 operating system and prior, and Windows Server 2019 and prior do not support compression.");
-
-                if (isChainedCompressionRequired)
+                if(TestConfig.Platform < Platform.WindowsServerV1903)
                 {
-                    BaseTestSite.Assume.IsTrue(TestConfig.Platform >= Platform.WindowsServerV2004, "Only Windows 10 v2004 operating system and later and Windows Server v2004 operating system and later operating systems support chained compression.");
+                    BaseTestSite.Assume.Inconclusive("Windows 10 v1809 operating system and prior, Windows Server v1809 operating system and prior, and Windows Server 2019 and prior do not support compression.");
+                }                
+
+                if (isChainedCompressionRequired && TestConfig.Platform < Platform.WindowsServerV2004)
+                {
+                    BaseTestSite.Assume.Inconclusive("Only Windows 10 v2004 operating system and later and Windows Server v2004 operating system and later operating systems support chained compression.");
                 }
             }
 
@@ -1307,16 +1358,30 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             }
         }
 
-        private void CheckRdmaCompatibility(bool isRdmaCapabilitySupported = false)
+        private void CheckCompressionAlgorithmsForWindowsImplementationWithEmptyCompressions(Smb2NegotiateResponsePacket response)
         {
             if (TestConfig.IsWindowsPlatform)
             {
-                BaseTestSite.Assume.IsFalse(TestConfig.Platform <= Platform.WindowsServerV2004, "Windows 10 v2004 operating system and prior and Windows Server v2004 operating system and prior do not send or process SMB2_RDMA_TRANSFORM_CAPABILITIES.");
-
-                if (isRdmaCapabilitySupported)
+                if (TestConfig.Platform >= Platform.WindowsServerV2004 && TestConfig.Platform <= Platform.WindowsServerV20H2)
                 {
-                    BaseTestSite.Assume.IsTrue(TestConfig.Platform > Platform.WindowsServerV2004, "Only operating systems greater than Windows 10 v2004 and operating systems greater than Windows server v2004 support RDMA transforms.");
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount == 0, "[MS-SMB2] section 3.3.5.4 <265> Windows 10 v2004, Windows 10 v20H2, and Windows Server v20H2 operating system without [MSKB-5001391] set CompressionAlgorithmCount to 0");
+
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms.Count() == 0, "[MS-SMB2] section 3.3.5.4 <266> Windows 10 v2004, Windows 10 v20H2, and Windows Server v20H2 operating system without [MSKB-5001391] set CompressionAlgorithms to empty");
                 }
+                else
+                {
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithmCount == 1, "[MS-SMB2] section 3.3.5.4 The server SHOULD <265> set CompressionAlgorithmsCount to 1.");
+
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_COMPRESSION.Value.CompressionAlgorithms[0] == CompressionAlgorithm.NONE, "[MS-SMB2] section 3.3.5.4 The server SHOULD <266> set CompressionAlgorithms to NONE.");
+                }
+            }
+        }
+
+        private void CheckRdmaCompatibility(bool isRdmaCapabilitySupported = false)
+        {
+            if (TestConfig.IsWindowsPlatform && TestConfig.Platform <= Platform.WindowsServerV2004)
+            {
+                BaseTestSite.Assume.Inconclusive("Windows 10 v2004 operating system and prior and Windows Server v2004 operating system and prior do not send or process SMB2_RDMA_TRANSFORM_CAPABILITIES.");
             }
 
             BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces support to process SMB2_RDMA_TRANSFORM_CAPABILITIES");

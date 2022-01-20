@@ -45,6 +45,9 @@
         * [FsCtl_Get_Compression](#FsCtl_Get_Compression)
         * [FsCtl_Set_Compression](#FsCtl_Set_Compression)
         * [FsCtl_RefsStreamSnapshotManagement](#FsCtl_RefsStreamSnapshotManagement)
+        * [FsCtl_RefsStreamSnapshotOperationCreate](#FsCtl_RefsStreamSnapshotOperationCreate)
+        * [FsCtl_RefsStreamSnapshotOperationQueryDeltas](#FsCtl_RefsStreamSnapshotOperationQueryDeltas)
+        * [FsCtl_Mark_Handle](#FsCtl_Mark_Handle)
     * [Scenarios for QuotaInformation](#Scenarios-for-QuotaInformation)
         * [QuotaInfo_IsQuotaInfoSupported](#QuotaInfo_IsQuotaInfoSupported)
     * [Scenarios for Alternate Data Stream](#Scenarios-for-Alternate-Data-Stream)
@@ -233,6 +236,17 @@
             * [FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute](#FsCtl_RefsStreamSnapshotManagement_List_AccessDenied_LacksReadAttribute)
             * [FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute](#FsCtl_RefsStreamSnapshotManagement_QueryDeltas_AccessDenied_LacksReadAttribute)
             * [FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute](#FsCtl_RefsStreamSnapshotManagement_Create_AccessDenied_LacksWriteAttribute)
+        * [RefsStreamSnapshotOperation_Create](#RefsStreamSnapshotOperation_Create)
+            * [BVT_FsCtl_RefsStreamSnapshotOperation_Create_Positive](#BVT_FsCtl_RefsStreamSnapshotOperation_Create_Positive)
+            * [FsCtl_RefsStreamSnapshotOperation_Create_Negative](#FsCtl_RefsStreamSnapshotOperation_Create_Negative)        
+        * [RefsStreamSnapshotOperation_QueryDeltas](#RefsStreamSnapshotOperation_QueryDeltas)
+            * [BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive](#BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive)
+            * [FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative](#FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative)
+        * [IsMarkHandleSupported](#IsMarkHandleSupported)
+            * [FsCtl_MarkHandle_File_IsSupported (4TCs)](#FsCtl_MarkHandle_File_IsSupported-4TCs)
+            * [Fsctl_MarkHandle_File_BufferedNotSupported](Fsctl_MarkHandle_File_BufferedNotSupported)
+            * [Fsctl_MarkHandle_File_RedundantMedia (4TCs)](#Fsctl_MarkHandle_File_RedundantMedia-4TCs)
+            * [FsCtl_MarkHandle_Dir_NotSupported (4TCs)](#FsCtl_MarkHandle_Dir_NotSupported-4TCs)
     * [Test cases for QuotaInformation](#Test-cases-for-QuotaInformation)
         * [IsQuotaInfoSupported](#IsQuotaInfoSupported)
             * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported)
@@ -370,7 +384,7 @@ There are 170 test cases in total:
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 8 | 51 (25) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
-| Scenarios for FsControlRequest | 13 | 60 (18) |
+| Scenarios for FsControlRequest | 13 | 77 (21) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
@@ -941,6 +955,64 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile.|
 | | FSCTL request with **FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT**.|
 | | Verify server responds according to input parameters.|
+
+#### <a name="FsCtl_RefsStreamSnapshotOperationCreate"/>FsCtl_RefsStreamSnapshotOOperationCreate
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test FSCTL request: **FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE**|
+| | Note: Support for this operation is optional.|
+| | Test environment: ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| | Supporting test:|
+| | If not supported by operating system, failed with **STATUS_NOT_SUPPORTED**.|
+| | If not implemented, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
+| | Input parameter test:|
+| | Test with single snapshot created and duplicate snapshot name created.|
+| | Operation test:|
+| | Upon successful completion of the operation, returns **STATUS_SUCCESS**.|
+| Message Sequence| CreateFile.|
+| | FSCTL request with **FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE**.|
+| | Verify snapshot is created.|
+
+#### <a name="FsCtl_RefsStreamSnapshotOperationQueryDeltas"/>FsCtl_RefsStreamSnapshotOOperationQueryDeltas
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test FSCTL request: **REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS**|
+| | Note: Support for this operation is optional.|
+| | Test environment: ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | FsCtl: REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS|
+| | Supporting test:|
+| | If not supported by operating system, failed with **STATUS_NOT_SUPPORTED**.|
+| | If not implemented, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
+| | Input parameter test:|
+| | Test with modified file and unmodified file.|
+| | Operation test:|
+| | Upon successful completion of the operation, returns **STATUS_SUCCESS**.|
+| Message Sequence| CreateFile and fill with random data.|
+| | FSCTL request with **REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS**.|
+| | Verify that modification extents are returned.|
+
+#### <a name="FsCtl_Mark_Handle"/>FsCtl_Mark_Handle
+	
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if **FSCTL_MARK_HANDLE** is supported.|
+| | Note: This is implemented by the **ReFS** file system and **NTFS** file system.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FsCtl: FSCTL_MARK_HANDLE|
+| | Input parameter test: |
+| | Test with different parameter, verify server returns different status code accordingly: **STATUS_DIRECTORY_NOT_SUPPORTED**, **STATUS_INVALID_DEVICE_REQUEST**, **STATUS_NOT_REDUNDANT_STORAGE**, **STATUS_INVALID_PARAMETER**, **STATUS_RESIDENT_FILE_NOT_SUPPORTED**, **STATUS_SUCCESS**.|
+| Message Sequence| CreateFile.|
+| | FSCTL request with **FSCTL_MARK_HANDLE**.|
+| | Verify server response is correct.|
 
 ### <a name="Scenarios-for-QuotaInformation"/>Scenarios for QuotaInformation
 
@@ -3532,6 +3604,248 @@ There are 343 test cases in total:
 | Message Sequence| Create test file (DataFile) without Write Attribute|
 | | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
 | | Verify returned NT_STATUS is STATUS_ACCESS_DENIED|
+
+#### <a name="RefsStreamSnapshotOperationCreate"/>RefsStreamSnapshotOperationCreate
+
+##### <a name="BVT_FsCtl_RefsStreamSnapshotOperation_Create_Positive"/>BVT_FsCtl_RefsStreamSnapshotOperation_Create_Positive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create snapshot with FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE then send FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST using snapshot name and expect one entry returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE.|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_LIST using snapshot name.|
+| | Verify returned NT_STATUS|
+| | Verify returned snapshot count is 1|
+
+##### <a name="FsCtl_RefsStreamSnapshotOperation_Create_Negative"/>FsCtl_RefsStreamSnapshotOperation_Create_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create two snapshots with FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE using the same snapshot name and expect STATUS_OBJECT_NAME_COLLISION.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE.|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE using the same snapshot name.|
+| | Verify returned NT_STATUS is OBJECT_NAME_COLLISION|
+
+#### <a name="RefsStreamSnapshotOperationQueryDeltas"/>RefsStreamSnapshotOperationQueryDeltas
+
+##### <a name="BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive"/>BVT_FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Positive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to modified data file and verify extent returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS|
+| Message Sequence| Create test file (DataFile) and fill with random data|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS.|
+| | Verify returned NT_STATUS|
+| | Verify returned extent count is greater than 0|
+
+##### <a name="FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative"/>FsCtl_RefsStreamSnapshotOperation_QueryDeltas_Negative
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to unmodified data file and verify no extent returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS.|
+| | Verify returned NT_STATUS|
+| | Verify returned extent count is 0|
+
+#### <a name="IsMarkHandleSupported"/>IsMarkHandleSupported
+
+##### <a name="FsCtl_MarkHandle_File_IsSupported-4TCs"/>FsCtl_MarkHandle_File_IsSupported (4TCs)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| BVT_FsCtl_MarkHandle_File_IsSupported |
+| Description| To test if FSCTL_MARK_HANDLE is supported for different file systems.|
+| | Test environment: FAT32, NTFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_MARK_HANDLE|
+| | If (FileSystem == NTFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| FsCtl_MarkHandle_EmptyFile_IsSupported |
+| Description| To test if FSCTL_MARK_HANDLE on an empty file is supported for different file systems.|
+| | Test environment: FAT32, NTFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_MARK_HANDLE|
+| | If (FileSystem == NTFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| FsCtl_MarkHandle_NotEmptyFile_IsSupported |
+| Description| To test if FSCTL_MARK_HANDLE on a non empty file is supported for different file systems.|
+| | Test environment: FAT32, NTFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_MARK_HANDLE|
+| | If (FileSystem == NTFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| Fsctl_MarkHandle_File_CompressedSupported |
+| Description| To test if FSCTL_MARK_HANDLE on a non empty file with Compression set is supported for different file systems.|
+| | Test environment: FAT32, NTFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_SET_COMPRESSION with CompressionState equal COMPRESSION_FORMAT_LZNT1|
+| | FsCtl request with FSCTL_MARK_HANDLE|
+| | If (FileSystem == NTFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+##### <a name="Fsctl_MarkHandle_File_BufferedNotSupported"/>Fsctl_MarkHandle_File_BufferedNotSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_MARK_HANDLE on a buffered file is supported for different file systems.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING not set |
+| | FsCtl request with FSCTL_MARK_HANDLE|
+| | If (FileSystem == NTFS \|\| FileSystem == ReFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+##### <a name="Fsctl_MarkHandle_File_RedundantMedia-4TCs"/>Fsctl_MarkHandle_File_RedundantMedia (4TCs)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| Fsctl_MarkHandle_File_RedundantMedia_CopyNumberLessThanDataCopies_EmptyFile |
+| Description| To test if FSCTL_MARK_HANDLE returns correct response on a redundant media with CopyNumber set to less than or equal to the NumberOfDataCopies of the file.|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_MARK_HANDLE with CopyNumber &gt; 1 &amp;&amp; CopyNumber &lt; NumberOfDataCopies|
+| | If (FileSystem != NTFS &amp;&amp; FileSystem != ReFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } Else If (FileSystem == NTFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_RESIDENT_FILE_NOT_SUPPORTED**, ActualResult);|
+| | } Else If (IsRedundantMedia) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_REDUNDANT_STORAGE**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| FsCtl_MarkHandle_File_RedundantMedia_CopyNumberLessThanDataCopies_NotEmptyFileSupported |
+| Description| To test if FSCTL_MARK_HANDLE returns correct response on a redundant media with CopyNumber set to less than or equal to the NumberOfDataCopies of the file.|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_MARK_HANDLE with CopyNumber &gt; 1 &amp;&amp; CopyNumber &lt; NumberOfDataCopies|
+| | If (FileSystem != NTFS &amp;&amp; FileSystem != ReFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } Else If (IsRedundantMedia) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_REDUNDANT_STORAGE**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| Fsctl_MarkHandle_File_RedundantMedia_CompressedNotSupported |
+| Description| To test if FSCTL_MARK_HANDLE returns correct response on a redundant media with Compression set, and CopyNumber set to less than or equal to the NumberOfDataCopies of the file.|
+| | Test environment: NTFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_SET_COMPRESSION with CompressionState equal COMPRESSION_FORMAT_LZNT1|
+| | FsCtl request with FSCTL_MARK_HANDLE with CopyNumber &gt; 1 &amp;&amp; CopyNumber &lt; NumberOfDataCopies|
+| | If (FileSystem != NTFS &amp;&amp; IsRedundantMedia) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_COMPRESSED_FILE_NOT_SUPPORTED**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| Fsctl_MarkHandle_File_RedundantMedia_CopyNumberGreaterThanDataCopiesNotSupported |
+| Description| To test if FSCTL_MARK_HANDLE returns correct response on a redundant media with CopyNumber set to greater than the NumberOfDataCopies of the file.|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_MARK_HANDLE with CopyNumber &gt; NumberOfDataCopies|
+| | If (FileSystem != NTFS &amp;&amp; FileSystem != ReFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } Else If (IsRedundantMedia) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**INVALID_PARAMETER**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_REDUNDANT_STORAGE**, ActualResult);|
+| | }|
+
+##### <a name="FsCtl_MarkHandle_Dir_NotSupported-4TCs"/>FsCtl_MarkHandle_Dir_NotSupported (4TCs)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| FsCtl_MarkHandle_Dir_NotSupported |
+| Description| To test if FSCTL_MARK_HANDLE returns correct response for a directory.|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_MARK_HANDLE |
+| | If (FileSystem == NTFS \|\| FileSystem == ReFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_DIRECTORY_NOT_SUPPORTED**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| Fsctl_MarkHandle_Dir_BufferedNotSupported |
+| Description| To test if FSCTL_MARK_HANDLE returns correct response for a buffered directory.|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile) with NO_INTERMEDIATE_BUFFERING not set |
+| | FsCtl request with FSCTL_MARK_HANDLE |
+| | If (FileSystem == NTFS \|\| FileSystem == ReFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_DIRECTORY_NOT_SUPPORTED**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| Fsctl_MarkHandle_Dir_CompressedNotSupported |
+| Description| To test if FSCTL_MARK_HANDLE returns correct response for a directory with compression set.|
+| | Test environment: NTFS|
+| Message Sequence| CreateFile (DirectoryFile) with NO_INTERMEDIATE_BUFFERING not set |
+| | FsCtl request with FSCTL_SET_COMPRESSION with CompressionState equal COMPRESSION_FORMAT_LZNT1|
+| | FsCtl request with FSCTL_MARK_HANDLE |
+| | If (FileSystem == NTFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_DIRECTORY_NOT_SUPPORTED**, ActualResult);|
+| | }|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case| Fsctl_MarkHandle_Dir_RedundantMediaNotSupported |
+| Description| To test if FSCTL_MARK_HANDLE returns correct response for a directory on redundant media.|
+| | Test environment: NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile) with NO_INTERMEDIATE_BUFFERING set |
+| | FsCtl request with FSCTL_MARK_HANDLE |
+| | If (FileSystem == NTFS \|\| FileSystem == ReFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_DIRECTORY_NOT_SUPPORTED**, ActualResult);|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | }|
 
 ### <a name="Test-cases-for-QuotaInformation"/>Test cases for QuotaInformation
 

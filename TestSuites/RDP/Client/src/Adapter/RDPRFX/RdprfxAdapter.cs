@@ -99,6 +99,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             if (this.rdpbcgrServerStack != null)
             {
                 this.rdpbcgrServerStack.Dispose();
+                rdpbcgrSessionContext = null;
             }
         }
 

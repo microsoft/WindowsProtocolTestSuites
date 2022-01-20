@@ -16,7 +16,7 @@ while($tryTime -lt 10){
 	Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {cmd /c schtasks /run /TN Negotiate_RDPConnect}
 	sleep 5
 	$process = Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {Get-Process mstsc}
-	Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {cmd /c schtasks /run /TN DisconnectAll}
+	Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {taskkill /F /IM mstsc.exe}
 	if($process -ne $null -and $process.Name -eq "mstsc"){
 		Write-Host "$sutComputerIP task scheduler ready." -foregroundcolor Green
         cmd /C ECHO MSTSC FINISHED > $env:HOMEDRIVE\mstsc.finished.signal

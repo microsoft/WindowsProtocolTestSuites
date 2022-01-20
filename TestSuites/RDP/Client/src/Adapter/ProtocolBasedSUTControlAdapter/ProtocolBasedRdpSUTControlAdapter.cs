@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// This method is used to trigger RDP client initiate a disconnection of current session.
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
-        public int TriggerClientDisconnect(string caseName)
+        public int TriggerCloseRDPWindow(string caseName)
         {      
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);

@@ -136,14 +136,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             {
                 throw new InvalidOperationException(
                     String.Format(
-                        "Flags/EncryptionAlgorithm field is invalid for encrypted message. Expected value 0x0001, actual {0}.",
+                        "[MS-SMB2] section 3.3.5.2.1.1 Flags/EncryptionAlgorithm field is invalid for encrypted message. Expected value 0x0001, actual {0}.",
                         (ushort)transformHeader.Flags
                     )
                 );
             }
 
             if (transformHeader.SessionId == 0 || !cryptoInfoTable.ContainsKey(transformHeader.SessionId))
-                throw new InvalidOperationException("Invalid SessionId in TRANSFORM_HEADER.");
+                throw new InvalidOperationException("[MS-SMB2] section 3.3.5.2.1.1 Invalid SessionId in TRANSFORM_HEADER.");
 
             Smb2CryptoInfo cryptoInfo = cryptoInfoTable[transformHeader.SessionId];
 

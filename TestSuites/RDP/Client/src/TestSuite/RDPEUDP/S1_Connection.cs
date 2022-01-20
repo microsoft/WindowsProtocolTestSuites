@@ -61,7 +61,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             {
                 this.TestSite.Log.Add(LogEntryKind.Comment, $"Create a {transportMode} UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_1.");
 
-                this.EstablishUDPConnection(transportMode, waitTime, true, false, uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1);
+                this.EstablishUDPConnection(transportMode, waitTime, true, false, RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_1);
 
                 Site.Log.Add(LogEntryKind.Debug, $"Client accept the server's {transportMode} UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_1.");
             }
@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             {
                 this.TestSite.Log.Add(LogEntryKind.Comment, $"Create a {transportMode} UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_2.");
 
-                this.EstablishUDPConnection(transportMode, waitTime, true, false, uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_1 | uUdpVer_Values.RDPUDP_PROTOCOL_VERSION_2);
+                this.EstablishUDPConnection(transportMode, waitTime, true, false, RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_1 | RDPUDP_PROTOCOL_VERSION.RDPUDP_PROTOCOL_VERSION_2);
 
                 Site.Log.Add(LogEntryKind.Debug, $"Client accept the server's {transportMode} UDP connection with uUdpVer RDPUDP_PROTOCOL_VERSION_2.");
             }
@@ -128,12 +128,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
                 "RDPEMT tunnel creation failed");
 
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expect RDP client to send an ACK packet to keep alive or acknowledge the receipt");
-                RdpeudpPacket ackpacket = WaitForACKPacket(transportMode, waitTime);
+                RdpeudpPacket ackpacket = WaitForAckPacket(transportMode, waitTime);
                 Site.Assert.IsNotNull(ackpacket, "Client should send an ACK to keep alive or acknowledge the receipt of source packet. Transport mode is {0}", transportMode);
 
 
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expect RDP client to resend the ACK packet to keep alive");
-                ackpacket = WaitForACKPacket(transportMode, waitTime);
+                ackpacket = WaitForAckPacket(transportMode, waitTime);
                 Site.Assert.IsNotNull(ackpacket, "Client should resend the ACK packet to keep alive. Transport mode is {0}", transportMode);
             }
         }

@@ -2292,7 +2292,7 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         /// <returns>FLAG Name </returns>
         public static string UnparseUInt32Enum(Type type, uint value)
         {
-            return Enum.Format(type, value, "g");
+            return Enum.Format(type, value, "f");
         }
 
         /// <summary>
