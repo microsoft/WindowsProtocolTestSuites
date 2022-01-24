@@ -352,7 +352,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
         /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
         /// <param name="bSupportRestrictedAuthenticationMode">Indicates the server supports Restricted Authentication mode</param>
-        public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false)
+        public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false, bool invalidAccount = false)
         {
             //ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
             serverConfig.selectedProtocol = protocol;
@@ -401,7 +401,30 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 confirmPdu.rdpNegData = null;
             }
 
-            SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
+            if (!invalidAccount)
+            {
+                SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
+            }
+            else
+            {
+                try
+                {
+                    SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
+                    if (RdpbcgrTestData.Test_Protocol.Equals("CredSSP"))
+                    {
+                        site.Assert.Fail("Invalid Account Check Failed. SSPI Handshake Succeeded on Invalid User Account");
+                    }
+                    else
+                    {
+                        site.Assert.Inconclusive("Invalid Account Check Inconclusive.");
+                    }
+                }
+                catch (SspiException e)
+                {
+                    site.Assert.Pass("Invalid Account Encountered. SSPI Handshake Failed");
+
+                }
+            }
             sessionState = ServerSessionState.X224ConnectionResponseSent;
         }
 

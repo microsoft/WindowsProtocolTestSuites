@@ -114,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             //Respond a Server X.224 Connection Confirm PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server X.224 Connection Confirm PDU to SUT. Selected protocol: {0}; Extended Client Data supported: false", selectedProtocol.ToString());
-            this.rdpbcgrAdapter.Server_X_224_Attempt_Connection_Confirm(selectedProtocol, false, true, NegativeType.None);
+            this.rdpbcgrAdapter.Server_X_224_Connection_Confirm(selectedProtocol, false, true, NegativeType.None, invalidAccount:true);
 
             #endregion
         }

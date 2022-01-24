@@ -186,20 +186,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
         /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
         /// <param name="bSupportRestrictedAuthenticationMode">Indicates the server supports restricted authentication mode</param>
-        void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool bSetRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false);
-
-        /// <summary>
-        /// Attempt To Send Server X_224 Connection Confirm Pdu to client With Invalid Credentials
-        /// </summary>
-        /// <param name="protocol">Indicates the selected security protocol</param>
-        /// <param name="bSupportExtClientData">Indicates Extended Client Data is supported</param>
-        /// <param name="bSetRdpNegData">Indicates RdpNegData field is set</param>
-        /// <param name="invalidType">Indicates the type of invalid field</param>
-        /// <param name="bSupportEGFX">Indicates the server supports MS-RDPEGFX</param>
-        /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
-        /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
-        /// <param name="bSupportRestrictedAuthenticationMode">Indicates the server supports restricted authentication mode</param>
-        void Server_X_224_Attempt_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool bSetRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false);
+        /// <param name="invalidAccount">Indicates the test is being executed with an invalid account</param>
+        void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool bSetRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false, bool invalidAccount = false);
 
         /// <summary>
         /// Send X.224 Connection Confirm PDU. It is sent as a response of X.224 Connection Request.
