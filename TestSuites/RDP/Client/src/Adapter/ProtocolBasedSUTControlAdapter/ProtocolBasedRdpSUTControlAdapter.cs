@@ -45,12 +45,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         public int RDPConnectWithDirectCredSSPInvalidAccount(string caseName)
         {
-            // Get help message
-            string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
-            // Create payload
-            byte[] payload = CreateRDPConncectPayload(connectPayloadType, rdpServerIP, localPort, true, false);
-
-            return Start_RDP_Connection(caseName, payload, helpMessage);
+            return RDPConnectWithDirectCredSSP(caseName);
         }
 
         /// <summary>
@@ -90,12 +85,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
         public int RDPConnectWithNegotiationApproachInvalidAccount(string caseName)
         {
-            // Get help message
-            string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
-            // Create payload
-            byte[] payload = CreateRDPConncectPayload(connectPayloadType, rdpServerIP, localPort, false, false);
-
-            return Start_RDP_Connection(caseName, payload, helpMessage);
+            return RDPConnectWithNegotiationApproach(caseName);
         }
 
         /// <summary>
