@@ -4035,7 +4035,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if Alternate Data Stream create is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (DataFile) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
@@ -4046,7 +4046,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if Alternate Data Stream create is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (DirectoryFile)|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
@@ -4059,7 +4059,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if Alternate Data Stream list is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (DataFile) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
@@ -4072,7 +4072,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if Alternate Data Stream list is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory)|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
@@ -4087,7 +4087,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if Alternate Data Stream delete is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
@@ -4101,7 +4101,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if Alternate Data Stream delete is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory)|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
@@ -4151,7 +4151,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if write and read from the Alternate Data Streams is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Read the bytes from the Alternate Data Streams created on this file|
@@ -4165,7 +4165,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if write and read from the Alternate Data Streams is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Read the bytes from the Alternate Data Streams created on this file|
@@ -4181,7 +4181,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if lock and unlock a byte range of the Alternate Data Streams is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
@@ -4195,7 +4195,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if lock and unlock a byte range of the Alternate Data Streams is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
@@ -4211,7 +4211,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileAccessInformation query of the Alternate Data Streams on a file is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query the file information with FileInfoClass.FILE_ACCESS_INFORMATION on this Alternate Data Stream created on this file|
@@ -4223,7 +4223,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileAccessInformation query of the Alternate Data Streams on a file is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query the file information with FileInfoClass.FILE_ACCESS_INFORMATION on this Alternate Data Stream created on this file|
@@ -4235,7 +4235,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileBasicInformation query of the Alternate Data Streams on a file is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query the file information with FileInfoClass.FILE_BASIC_INFORMATION on this Alternate Data Stream created on this file|
@@ -4246,7 +4246,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileBasicInformation query of the Alternate Data Streams on a file is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query the file information with FileInfoClass.FILE_BASIC_INFORMATION on this Alternate Data Stream created on this file|
@@ -4257,31 +4257,39 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileCompressionInformation query of the Alternate Data Streams on a file is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_SET_COMPRESSION with CompressionState = COMPRESSION_FORMAT_LZNT1|
 | | Query the file information with FileInfoClass.FILE_COMPRESSION_INFORMATION on this Alternate Data Stream created on this file|
-| | Verify OutputBuffer.CompressionFormat & COMPRESSION_FORMAT_LZNT1 == COMPRESSION_FORMAT_LZNT1|
+| | If (IsCompressionSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Verify OutputBuffer.CompressionFormat & COMPRESSION_FORMAT_LZNT1 == COMPRESSION_FORMAT_LZNT1|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Verify OutputBuffer.CompressionFormat & COMPRESSION_FORMAT_LZNT1 != COMPRESSION_FORMAT_LZNT1|
+| | }|
 
 ##### <a name="AlternateDataStream_Query_FileCompressionInformation_Dir"/>AlternateDataStream_Query_FileCompressionInformation_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileCompressionInformation query of the Alternate Data Streams on a file is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_SET_COMPRESSION with CompressionState = COMPRESSION_FORMAT_LZNT1|
 | | Query the file information with FileInfoClass.FILE_COMPRESSION_INFORMATION on this Alternate Data Stream created on this file|
-| | Verify OutputBuffer.CompressionFormat & COMPRESSION_FORMAT_LZNT1 == COMPRESSION_FORMAT_LZNT1|
+| | If (IsCompressionSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Verify OutputBuffer.CompressionFormat & COMPRESSION_FORMAT_LZNT1 == COMPRESSION_FORMAT_LZNT1|
+| | } Else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Verify OutputBuffer.CompressionFormat & COMPRESSION_FORMAT_LZNT1 != COMPRESSION_FORMAT_LZNT1|
+| | }|
 
 ##### <a name="AlternateDataStream_Query_FileNetworkOpenInformation_File"/>AlternateDataStream_Query_FileNetworkOpenInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileNetworkOpenInformation query of the Alternate Data Streams on a file is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query the file information with FileInfoClass.FILE_NETWORKOPEN_INFORMATION on this Alternate Data Stream created on this file|
@@ -4292,7 +4300,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileNetworkOpenInformation query of the Alternate Data Streams on a file is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query the file information with FileInfoClass.FILE_NETWORKOPEN_INFORMATION on this Alternate Data Stream created on this file|
@@ -4303,7 +4311,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileStandardInformation query of the Alternate Data Streams on a file is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query the file information with FileInfoClass.FILE_STANDARD_INFORMATION on this Alternate Data Stream created on this file|
@@ -4315,7 +4323,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileStandardInformation query of the Alternate Data Streams on a file is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Query the file information with FileInfoClass.FILE_STANDARD_INFORMATION on this Alternate Data Stream created on this file|
@@ -4327,7 +4335,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileEaInformation set of the Alternate Data Streams on a file is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Set the file information with FileInfoClass.FILE_EA_INFORMATION on this Alternate Data Stream created on this file|
@@ -4338,7 +4346,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileEaInformation set of the Alternate Data Streams on a file is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Set the file information with FileInfoClass.FILE_EA_INFORMATION on this Alternate Data Stream created on this file|
@@ -4349,7 +4357,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileShortNameInformation set of the Alternate Data Streams on a file is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Set the file information with FileInfoClass.FILE_SHORTNAME_INFORMATION on this Alternate Data Stream created on this file|
@@ -4360,7 +4368,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileShortNameInformation set of the Alternate Data Streams on a file is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Set the file information with FileInfoClass.FILE_SHORTNAME_INFORMATION on this Alternate Data Stream created on this file|
@@ -4371,7 +4379,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileValidDataLengthInformation set of the Alternate Data Streams on a file is supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Set the file information with FileInfoClass.FILE_VALIDDATALENGTH_INFORMATION on this Alternate Data Stream created on this file|
@@ -4382,7 +4390,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FileValidDataLengthInformation set of the Alternate Data Streams on a file is supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Set the file information with FileInfoClass.FILE_VALIDDATALENGTH_INFORMATION on this Alternate Data Stream created on this file|
@@ -4395,33 +4403,37 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_GET_COMPRESSION request and response on the Alternate Data Streams are supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_SET_COMPRESSION with CompressionState = COMPRESSION_FORMAT_DEFAULT|
 | | FsCtl request with FSCTL_GET_COMPRESSION on this Alternate Data Stream created on this file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
-| | Verify OutputBuffer.CompressionState == COMPRESSION_FORMAT_LZNT1|
+| | If (FileSystem == NTFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Verify OutputBuffer.CompressionState == COMPRESSION_FORMAT_LZNT1|
+| | }|
 
 ##### <a name="AlternateDataStream_FsCtl_Get_Compression_Dir"/>AlternateDataStream_FsCtl_Get_Compression_Dir
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_GET_COMPRESSION request and response on the Alternate Data Streams are supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory)|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_SET_COMPRESSION with CompressionState = COMPRESSION_FORMAT_DEFAULT|
 | | FsCtl request with FSCTL_GET_COMPRESSION on this Alternate Data Stream created on this file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
-| | Verify OutputBuffer.CompressionState == COMPRESSION_FORMAT_LZNT1|
+| | If (FileSystem == NTFS) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Verify OutputBuffer.CompressionState == COMPRESSION_FORMAT_LZNT1|
+| | }|
 
 ##### <a name="AlternateDataStream_FsCtl_Get_IntegrityInformation_File"/>AlternateDataStream_FsCtl_Get_IntegrityInformation_File
 
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_GET_INTEGRITY_INFORMATION request and response on the Alternate Data Streams are supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_GET_INTEGRITY_INFORMATION on this Alternate Data Stream created on this file|
@@ -4432,7 +4444,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_GET_INTEGRITY_INFORMATION request and response on the Alternate Data Streams are supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_GET_INTEGRITY_INFORMATION on this Alternate Data Stream created on this file|
@@ -4443,7 +4455,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_QUERY_ALLOCATED_RANGES request and response on the Alternate Data Streams are supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_QUERY_ALLOCATED_RANGES on this Alternate Data Stream created on this file|
@@ -4455,7 +4467,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_QUERY_ALLOCATED_RANGES request and response on the Alternate Data Streams are supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_QUERY_ALLOCATED_RANGES on this Alternate Data Stream created on this file|
@@ -4467,7 +4479,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_SET_COMPRESSION request and response on the Alternate Data Streams are supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_SET_COMPRESSION on this Alternate Data Stream created on this file|
@@ -4478,7 +4490,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_SET_COMPRESSION request and response on the Alternate Data Streams are supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl request with FSCTL_SET_COMPRESSION on this Alternate Data Stream created on this file|
@@ -4489,7 +4501,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_SET_ZERO_DATA request and response on the Alternate Data Streams are supported on a Data file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl Request with FSCTL_SET_ZERO_DATA on this Alternate Data Stream created on this file|
@@ -4500,7 +4512,7 @@ There are 343 test cases in total:
 | &#32;| &#32; |
 | -------------| ------------- |
 | Description| To test if the FSCTL_SET_ZERO_DATA request and response on the Alternate Data Streams are supported on a Directory file|
-| | Test environment: NTFS|
+| | Test environment: NTFS, ReFS|
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | FsCtl Request with FSCTL_SET_ZERO_DATA on this Alternate Data Stream created on this file|

@@ -101,7 +101,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 compressionReply = TypeMarshal.ToStruct<FSCTL_GET_COMPRESSION_Reply>(outputBuffer);
                 // [MS-FSCC] 2.3.49	FSCTL_SET_COMPRESSION Request
                 // <39> Section 2.3.49: Equivalent to COMPRESSION_FORMAT_LZNT1.
-                this.fsaAdapter.AssertAreEqual(this.Manager, CompressionState_Values.COMPRESSION_FORMAT_LZNT1, compressionReply.CompressionState, "FSCTL_GET_COMPRESSION.CompressionState should match with what has been assigned to the file.");
+                if (this.fsaAdapter.IsCompressionSupported)
+                {
+                    this.fsaAdapter.AssertAreEqual(this.Manager, CompressionState_Values.COMPRESSION_FORMAT_LZNT1, compressionReply.CompressionState, "FSCTL_GET_COMPRESSION.CompressionState should match with what has been assigned to the file.");
+                }
             }
             else
             {

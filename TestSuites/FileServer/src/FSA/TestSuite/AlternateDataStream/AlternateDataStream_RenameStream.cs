@@ -20,6 +20,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Rename an Alternate Data Stream on a DataFile.")]
         public void BVT_AlternateDataStream_RenameStream_File()
         {
+            CheckAlternateDataStreamRenamingSupport();
+
             AlternateDataStream_CreateStreams(FileType.DataFile);
 
             AlternateDataStream_ListStreams(FileType.DataFile);
@@ -37,6 +39,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Rename an Alternate Data Stream on a DirectoryFile.")]
         public void BVT_AlternateDataStream_RenameStream_Dir()
         {
+            CheckAlternateDataStreamRenamingSupport();
+
             AlternateDataStream_CreateStreams(FileType.DirectoryFile);
 
             AlternateDataStream_ListStreams(FileType.DirectoryFile);

@@ -57,6 +57,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isMarkHandleSupported;
         private bool isRedundantMedia;
         private bool isStreamSnapshotManagementImplemented;
+        private bool isAlternateDataStreamSupported;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -251,6 +252,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return numberOfDataCopies; }
         }
 
+        public bool IsAlternateDataStreamSupported
+        {
+            get { return isAlternateDataStreamSupported; }
+        }
+
         public string UncSharePath
         {
             get
@@ -349,6 +355,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isMarkHandleSupported = testConfig.GetProperty("WhichFileSystemSupport_MarkHandle").Contains(this.fileSystem.ToString());
             this.isRedundantMedia = testConfig.GetProperty("WhichFileSystemSupport_RedundantStorage").Contains(this.fileSystem.ToString());
             this.isStreamSnapshotManagementImplemented = testConfig.GetProperty("WhichFileSystemSupport_StreamSnapshotManagement").Contains(this.fileSystem.ToString());
+            this.isAlternateDataStreamSupported = testConfig.GetProperty("WhichFileSystemSupport_AlternateDataStream").Contains(this.fileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
@@ -1693,7 +1700,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 fileId,
                 treeId,
                 sessionId,
-                (byte) FileInfoClass.FILE_OBJECTID_INFORMATION,
+                (byte)FileInfoClass.FILE_OBJECTID_INFORMATION,
                 maxOutputSize,
                 restartScan,
                 returnSingleEntry,
@@ -5648,7 +5655,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="opt">Directory will be added to test directory list, else, will be added to test file list for cleanup</param>
         /// <param name="addtoList">True for add to the testfiles.</param>        /// 
         /// <returns>A file name with a random string of the given length.</returns>
-        public string ComposeRandomFileName(int fileNameLength,  string extension = "", CreateOptions opt = CreateOptions.DIRECTORY_FILE,  bool addToList = true, string parentDirectoryName = "")
+        public string ComposeRandomFileName(int fileNameLength, string extension = "", CreateOptions opt = CreateOptions.DIRECTORY_FILE, bool addToList = true, string parentDirectoryName = "")
         {
             int randomNumber = 0;
             char fileNameLetter = ' ';
@@ -5662,7 +5669,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     randomNumber = randomRange.Next(1, 52);
                 }
                 fileNameLetter = (char)(97 + randomNumber % 26);
-                randomFileName = randomFileName + fileNameLetter.ToString() ; ;
+                randomFileName = randomFileName + fileNameLetter.ToString();
             }
 
             randomFileName = randomFileName + extension;

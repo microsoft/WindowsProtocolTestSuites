@@ -71,8 +71,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 streamList.Add("::$DATA", bytesToWrite);
 
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the file with " + bytesToWrite + " bytes data.", ++testStep);
-                status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
-                this.fsaAdapter.AssertIfNotSuccess(status, "Write data to file operation failed.");
+                status = WriteNewFile(bytesToWrite, out bytesWritten);
             }
             else
             {
@@ -100,8 +99,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             streamList.Add(":" + streamName1 + ":$DATA", bytesToWrite);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the stream with " + bytesToWrite + " bytes data.", ++testStep);
-            status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
-            this.fsaAdapter.AssertIfNotSuccess(status, "Write data to stream operation failed.");
+            status = WriteNewFile(bytesToWrite, out bytesWritten);
 
             //Step 5: Read some bytes from the Alternate Data Stream <Stream1> in the file
             bytesToRead = (int)bytesWritten;
@@ -128,8 +126,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             streamList.Add(":" + streamName2 + ":$DATA", bytesToWrite);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the stream with " + bytesToWrite + " bytes data.", ++testStep);
-            status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
-            this.fsaAdapter.AssertIfNotSuccess(status, "Write data to stream operation failed.");
+            status = WriteNewFile(bytesToWrite, out bytesWritten);
 
             //Step 8: Read some bytes from the Alternate Data Stream <Stream2> in the file
             bytesToRead = (int)bytesWritten;
