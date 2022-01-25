@@ -84,6 +84,51 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_REVERT to a data file and expect STATUS_SUCCESS.")]
+        public void BVT_FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported()
+        {
+            REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
+                GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_REVERT);
+            MessageStatus status = this.fsaAdapter.TestConfig.IsWindowsPlatform ? MessageStatus.STATUS_NOT_IMPLEMENTED : MessageStatus.SUCCESS;
+            Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, status);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE to a data file and expect STATUS_SUCCESS.")]
+        public void BVT_FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported()
+        {
+            REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
+                GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE);
+            MessageStatus status = this.fsaAdapter.TestConfig.IsWindowsPlatform ? MessageStatus.STATUS_NOT_IMPLEMENTED : MessageStatus.SUCCESS;
+            Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, status);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Send FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE to a data file and expect STATUS_SUCCESS.")]
+        public void BVT_FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported()
+        {
+            REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
+                GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE);
+            MessageStatus status = this.fsaAdapter.TestConfig.IsWindowsPlatform ? MessageStatus.STATUS_NOT_IMPLEMENTED : MessageStatus.SUCCESS;
+            Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, status);
+        }
+
+        [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
@@ -355,6 +400,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.ACCESS_DENIED, status,
                     "The Open lacks required FILE_READ_ATTRIBUTES or (FILE_WRITE_ATTRIBUTES | FILE_WRITE_DATA) access");
+            }
+            else if (expectedStatus == MessageStatus.STATUS_NOT_IMPLEMENTED)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.STATUS_NOT_IMPLEMENTED, status,
+                    "The requested operation is not supported");
             }
             else
             {
