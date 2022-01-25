@@ -48,6 +48,7 @@
         * [FsCtl_RefsStreamSnapshotOperationCreate](#FsCtl_RefsStreamSnapshotOperationCreate)
         * [FsCtl_RefsStreamSnapshotOperationQueryDeltas](#FsCtl_RefsStreamSnapshotOperationQueryDeltas)
         * [FsCtl_Mark_Handle](#FsCtl_Mark_Handle)
+        * [FsCtl_RefsStreamSnapshotOperationList](#FsCtl_RefsStreamSnapshotOperationList)
     * [Scenarios for QuotaInformation](#Scenarios-for-QuotaInformation)
         * [QuotaInfo_IsQuotaInfoSupported](#QuotaInfo_IsQuotaInfoSupported)
     * [Scenarios for Alternate Data Stream](#Scenarios-for-Alternate-Data-Stream)
@@ -223,6 +224,9 @@
             * [BVT_FsCtl_RefsStreamSnapshotManagement_Create_IsSupported](#BVT_FsCtl_RefsStreamSnapshotManagement_Create_IsSupported)
             * [BVT_FsCtl_RefsStreamSnapshotManagement_List_IsSupported](#BVT_FsCtl_RefsStreamSnapshotManagement_List_IsSupported)
             * [BVT_FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported](#BVT_FsCtl_RefsStreamSnapshotManagement_Query_Deltas_IsSupported)
+            * [BVT_FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported](#BVT_FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported)
+            * [BVT_FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported](#BVT_FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported)
+            * [BVT_FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported](#BVT_FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported)
             * [BVT_FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported](#BVT_FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported)
             * [FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero](#FsCtl_RefsStreamSnapshotManagement_BufferTooSmall_OperationInputBufferLengthNotZero)
             * [FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero](#FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero)
@@ -247,6 +251,10 @@
             * [Fsctl_MarkHandle_File_BufferedNotSupported](Fsctl_MarkHandle_File_BufferedNotSupported)
             * [Fsctl_MarkHandle_File_RedundantMedia (4TCs)](#Fsctl_MarkHandle_File_RedundantMedia-4TCs)
             * [FsCtl_MarkHandle_Dir_NotSupported (4TCs)](#FsCtl_MarkHandle_Dir_NotSupported-4TCs)
+        * [RefsStreamSnapshotOperation_List](#RefsStreamSnapshotOperation_List)
+            * [BVT_FsCtl_RefsStreamSnapshotOperation_List_SingleEntry](#BVT_FsCtl_RefsStreamSnapshotOperation_List_SingleEntry)
+            * [BVT_FsCtl_RefsStreamSnapshotOperation_List_MultipleEntry](#BVT_FsCtl_RefsStreamSnapshotOperation_List_MultipleEntry)
+            * [FsCtl_RefsStreamSnapshotOperation_List_NoEntry](#FsCtl_RefsStreamSnapshotOperation_List_NoEntry)
     * [Test cases for QuotaInformation](#Test-cases-for-QuotaInformation)
         * [IsQuotaInfoSupported](#IsQuotaInfoSupported)
             * [QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported](#QuotaInfo_Query_QuotaInformation_IsQuotaInfoSupported)
@@ -384,7 +392,7 @@ There are 170 test cases in total:
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 8 | 51 (25) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
-| Scenarios for FsControlRequest | 13 | 77 (21) |
+| Scenarios for FsControlRequest | 13 | 83 (26) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
@@ -956,7 +964,7 @@ There are 343 test cases in total:
 | | FSCTL request with **FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT**.|
 | | Verify server responds according to input parameters.|
 
-#### <a name="FsCtl_RefsStreamSnapshotOperationCreate"/>FsCtl_RefsStreamSnapshotOOperationCreate
+#### <a name="FsCtl_RefsStreamSnapshotOperationCreate"/>FsCtl_RefsStreamSnapshotOperationCreate
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -977,7 +985,7 @@ There are 343 test cases in total:
 | | FSCTL request with **FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE**.|
 | | Verify snapshot is created.|
 
-#### <a name="FsCtl_RefsStreamSnapshotOperationQueryDeltas"/>FsCtl_RefsStreamSnapshotOOperationQueryDeltas
+#### <a name="FsCtl_RefsStreamSnapshotOperationQueryDeltas"/>FsCtl_RefsStreamSnapshotOperationQueryDeltas
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -1013,6 +1021,28 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile.|
 | | FSCTL request with **FSCTL_MARK_HANDLE**.|
 | | Verify server response is correct.|
+
+#### <a name="FsCtl_RefsStreamSnapshotOperationList"/>FsCtl_RefsStreamSnapshotOperationList
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test FSCTL request: **REFS_STREAM_SNAPSHOT_OPERATION_LIST**|
+| | Note: Support for this operation is optional.|
+| | Test environment: ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | FsCtl: REFS_STREAM_SNAPSHOT_OPERATION_LIST|
+| | Supporting test:|
+| | If not supported by operating system, failed with **STATUS_NOT_SUPPORTED**.|
+| | If not implemented, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
+| | Input parameter test:|
+| | Test with multiple snapshot created. Verify that single entry, multiple entry and no entry returned appropriately.|
+| | Operation test:|
+| | Upon successful completion of the operation, returns **STATUS_SUCCESS**.|
+| Message Sequence| CreateFile |
+| | FSCTL request with **FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE**.|
+| | FSCTL request with **REFS_STREAM_SNAPSHOT_OPERATION_LIST**.|
+| | Verify that correct number of entry is returned.|
 
 ### <a name="Scenarios-for-QuotaInformation"/>Scenarios for QuotaInformation
 
@@ -3440,6 +3470,69 @@ There are 343 test cases in total:
 | | &nbsp;&nbsp;&nbsp;&nbsp;}
 | | }
 
+##### <a name="BVT_FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported"/>BVT_FsCtl_RefsStreamSnapshotManagement_Revert_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_REVERT is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_REVERT.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;If (FileSystem != ReFS) {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | &nbsp;&nbsp;&nbsp;&nbsp;} Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_SUPPORTED**, ActualResult);
+| | &nbsp;&nbsp;&nbsp;&nbsp;}
+| | }
+
+##### <a name="BVT_FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported"/>BVT_FsCtl_RefsStreamSnapshotManagement_Set_ShadowBTree_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_SET_SHADOW_BTREE.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;If (FileSystem != ReFS) {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | &nbsp;&nbsp;&nbsp;&nbsp;} Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_SUPPORTED**, ActualResult);
+| | &nbsp;&nbsp;&nbsp;&nbsp;}
+| | }
+
+##### <a name="BVT_FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported"/>BVT_FsCtl_RefsStreamSnapshotManagement_Clear_ShadowBTree_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT with operation REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE is supported.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CLEAR_SHADOW_BTREE.|
+| | Verify returned NT_STATUS|
+| | If (IsRefsStreamSnapshotManagementSupported == True) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+| | } Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;If (FileSystem != ReFS) {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | &nbsp;&nbsp;&nbsp;&nbsp;} Else {
+| | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_NOT_SUPPORTED**, ActualResult);
+| | &nbsp;&nbsp;&nbsp;&nbsp;}
+| | }
+
 ##### <a name="BVT_FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported"/>BVT_FsCtl_RefsStreamSnapshotManagement_Invalid_IsSupported
 
 | &#32;| &#32; |
@@ -3846,6 +3939,50 @@ There are 343 test cases in total:
 | | } Else {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
 | | }|
+
+#### <a name="RefsStreamSnapshotOperationList"/>RefsStreamSnapshotOperationList
+
+##### <a name="BVT_FsCtl_RefsStreamSnapshotOperation_List_SingleEntry"/>BVT_FsCtl_RefsStreamSnapshotOperation_List_SingleEntry
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create snapshot with FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE then send FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST and expect one entry returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE twice.|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_LIST and one snapshot name.|
+| | Verify returned NT_STATUS|
+| | Verify returned snapshot is 1|
+
+##### <a name="BVT_FsCtl_RefsStreamSnapshotOperation_List_MultipleEntry"/>BVT_FsCtl_RefsStreamSnapshotOperation_List_MultipleEntry
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create snapshot with FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE then send FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST with asterisk and expect two entry returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE twice.|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST and asterisk.|
+| | Verify returned NT_STATUS|
+| | Verify returned snapshot is 2|
+
+##### <a name="FsCtl_RefsStreamSnapshotOperation_List_NoEntry"/>FsCtl_RefsStreamSnapshotOperation_List_NoEntry
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create two snapshots with FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_CREATE then send FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST with wrong snapshot name and expect no entry returned.|
+| | Note: This is only implemented by the **REFS** file system file system.|
+| | Test environment: ReFS|
+| | FsCtl: FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST|
+| Message Sequence| Create test file (DataFile)|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation REFS_STREAM_SNAPSHOT_OPERATION_CREATE twice.|
+| | FSCTL request with FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT using operation FSCTL_REFS_STREAM_SNAPSHOT_OPERATION_LIST and wrong snapshot name.|
+| | Verify returned NT_STATUS|
+| | Verify returned snapshot is 0|
 
 ### <a name="Test-cases-for-QuotaInformation"/>Test cases for QuotaInformation
 
