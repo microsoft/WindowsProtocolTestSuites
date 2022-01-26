@@ -259,7 +259,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_DataTransfer_v2**| | 
 | -------------| ------------- |
-|  **Test ID**| S3_DataTransfer_v2_AcknowledgeTest_AcknowlegeLostPackage| 
+|  **Test ID**| S3_DataTransfer_v2_AcknowledgeTest_AcknowlegeLostPacket| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client will send a ACK to acknowledge the package loss when detect a package loss in a reliable connection| 
 |  **Prerequisites**| N/A| 
@@ -281,7 +281,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client will send a ACK to acknowledge the package loss when detect a package loss in a reliable connection| 
 |  **Prerequisites**| N/A| 
-|  **Test Execution Steps**| For Reliable and Lossy transport mode, do the following respectively:| 
+|  **Test Execution Steps**| For Reliable transport mode, do the following respectively:| 
 | | Test suite trigger RDP client to create a RDP-UDP, reliable (as MS-RDPEUDP2 only supports reliable UDP mode) transport mode | 
 | | Establish the RDPEMT connection.| 
 | | In the RDP-UDP connection, test suite send one **RDPUDP2 Packet** with channel sequence number of x| 
@@ -298,10 +298,10 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Priority**| P0| 
 |  **Description** | Verify that the final OnWire version of the RDP2 Packet sent is evaluated to a specific output as shared in Section 4.4.6 of the RDPEUDP2 document| 
 |  **Prerequisites**| N/A| 
-|  **Test Execution Steps**| For Reliable and Lossy transport mode, do the following respectively:| 
+|  **Test Execution Steps**| For Reliable transport mode, do the following respectively:| 
 | | Test suite trigger RDP client to create a RDP-UDP, reliable (as MS-RDPEUDP2 only supports reliable UDP mode) transport mode | 
 | | Establish the RDPEMT connection.| 
-| | In the RDP-UDP connection, test suite prepare one **RDPUDP2 Packet** with the packet values given in section 4.4 of the RDPEUDAP2 document| 
+| | In the RDP-UDP connection, test suite prepare one **RDPUDP2 Packet** with the packet values given in section 4.4 of the RDPEUDP2 document| 
 | | Before sending the packet, verify that the on-wire version has been evaluated to the output given in section 4.4.6| 
 | | Expect a RDPUDP2 Packet to acknowledge the receipt of all  **RDPUDP2 Packets**  | 
 |  **Cleanup**| N/A| 
