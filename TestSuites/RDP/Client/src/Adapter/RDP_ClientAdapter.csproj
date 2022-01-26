@@ -83,7 +83,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SUTControlAdapter\Check-PSRemoting.ps1">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="SUTControlAdapter\CredentialManagerAddInvalidAccount.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
