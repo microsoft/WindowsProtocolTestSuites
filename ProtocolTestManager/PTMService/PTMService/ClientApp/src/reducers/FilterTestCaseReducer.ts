@@ -195,7 +195,6 @@ function getFeatures(rules: Rule[], parent: string): string[] {
         if (rule.MappingRules) {
             rule.MappingRules.forEach(c => { results.push(`${curr}%${c}`) })
         }
-        results.push(curr)
     })
     return results
 }

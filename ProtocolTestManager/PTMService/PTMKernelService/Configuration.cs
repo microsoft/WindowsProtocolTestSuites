@@ -149,7 +149,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                         }
                     }
                 }
-                
+
                 return this.selectedRules;
             }
         }
@@ -418,7 +418,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 string name = Path.GetFileName(file);
 
-                File.Copy(file, Path.Combine(ptfConfigStorage.AbsolutePath, name));
+                File.Copy(file, Path.Combine(ptfConfigStorage.AbsolutePath, name), true);
             }
 
             var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
@@ -430,19 +430,23 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     return node.Attributes[ConfigurationConsts.AdapterScriptDirectoryAttributeName].Value;
                 }
-                return null;                
+                return null;
             }).Where(x => x != null).ToList();
-            
+
             try
-            {                
+            {
                 foreach (string dir in scriptAdapters)
                 {
                     var source = Kernel.Utility.CombineToNormalizedPath(testSuite.StorageRoot.GetNode(TestSuiteConsts.Bin).AbsolutePath, dir);
+                    if (!Directory.Exists(source))
+                    {
+                        continue;
+                    }
                     var target = Kernel.Utility.CombineToNormalizedPath(ptfConfigStorage.AbsolutePath, dir);
                     Kernel.Utility.DirectoryCopy(source, target, true);
                 }
             }
-            catch(Exception e)
+            catch
             {
                 storagePool.GetKnownNode(KnownStorageNodeNames.Configuration).RemoveNode(testSuiteConfiguration.Id.ToString());
                 throw;
@@ -450,7 +454,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var result = new Configuration(testSuiteConfiguration, testSuite, configurationNode);
 
             return result;
-        }        
+        }
 
         public static Configuration Open(TestSuiteConfiguration testSuiteConfiguration, ITestSuite testSuite, IStoragePool storagePool)
         {
@@ -478,7 +482,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 selectedRules.Add(new Detector.CaseSelectRule()
                 {
-                    Name = rule,
+                    Name = rule.Contains('%') ? rule.Split('%')[0] : rule,
                     Status = Detector.RuleStatus.Selected
                 });
 
@@ -540,7 +544,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                         if (rule != null)
                         {
                             rule.SelectStatus = RuleSelectStatus.Selected;
-                            ruleGroup.Rules.Add(new Common.Types.Rule() { Name = ruleName });
+                            ruleGroup.Rules.Add(new Common.Types.Rule() { Name = ruleName, Categories = rule.Categories });
                         }
                     }
 

@@ -1,156 +1,167 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
   <Properties>
-    <!--Block Begin: Properties that required to be set ***-->
-    <!--The RDP listening port number.-->
-    <Property name="ServerPort" value="3389">
-      <Description>The RDP listening port number.</Description>
-    </Property>
-    <!--The version of IP address to use. Ipv4 or Ipv6.-->
-    <Property name="IpVersion" value="Ipv4">
-      <Choice>Ipv4, Ipv6</Choice>
-      <Description>The version of IP address to use. Ipv4 or Ipv6.</Description>
-    </Property>
-    <Group name="Security">
-      <!--Negotiation-Base: True; Direct Approach: False.-->
-      <Property name="Negotiation" value="True">
-        <Choice>True, False</Choice>
-        <Description>Negotiation-Base: True; Direct Approach: False. When security protocol is RDP, this value is ignored. For direct approach, only CredSSP is valid for security protocol.</Description>
+
+      <!--Block Begin: Properties that required to be set ***-->
+      <!--The RDP listening port number.-->
+      <Property name="ServerPort" value="3389">
+        <Description>The RDP listening port number.</Description>
       </Property>
-      <!--One of the TLS, CredSSP, or RDP.-->
-      <Property name="Protocol" value="CredSSP">
-        <Choice>TLS, CredSSP, RDP</Choice>
-        <Description>One of the TLS, CredSSP, or RDP.</Description>
+      <!--The version of IP address to use. Ipv4 or Ipv6.-->
+      <Property name="IpVersion" value="Ipv4">
+        <Choice>Ipv4, Ipv6</Choice>
+        <Description>The version of IP address to use. Ipv4 or Ipv6.</Description>
       </Property>
-      <!--One of the None, Low, Client, High.-->
-      <Group name="Encryption">
-        <Property name="Level" value="None">
-          <Choice>None, Low, Client, High</Choice>
-          <Description>One of the None, Low, Client, High.</Description>
+
+      <Group name="Security">
+        <!--Negotiation-Base: True; Direct Approach: False.-->
+        <Property name="Negotiation" value="True">
+          <Choice>True, False</Choice>
+          <Description>Negotiation-Base: True; Direct Approach: False. When security protocol is RDP, this value is ignored. For direct approach, only CredSSP is valid for security protocol.</Description>
         </Property>
-        <!--One of the None, 40bit, 56bit, 128bit.-->
-        <Property name="Method" value="None">
-          <Choice>None, 40bit, 56bit, 128bit</Choice>
-          <Description>One of the None, 40bit, 56bit, 128bit.</Description>
+        <!--One of the TLS, CredSSP, or RDP.-->
+        <Property name="Protocol" value="TLS">
+          <Choice>TLS, CredSSP, RDP</Choice>
+          <Description>One of the TLS, CredSSP, or RDP.</Description>
+        </Property>
+        
+        <!--One of the None, Low, Client, High.-->
+        <Group name ="Encryption" >
+          <Property name="Level" value="None">
+            <Choice>None, Low, Client, High</Choice>
+            <Description>One of the None, Low, Client, High.</Description>
+          </Property>
+          <!--One of the None, 40bit, 56bit, 128bit.-->
+          <Property name="Method" value="None">
+            <Choice>None, 40bit, 56bit, 128bit</Choice>
+            <Description>One of the None, 40bit, 56bit, 128bit.</Description>
+          </Property>
+        </Group>
+        
+        <!--Indicates if the client-to-server traffic is encrypted, true or false.-->
+        <Property name="IsClientToServerEncrypted" value="true">
+          <Choice>true, false</Choice>
+          <Description>Indicates if the client-to-server traffic is encrypted, true or false.</Description>
         </Property>
       </Group>
-      <!--Indicates if the client-to-server traffic is encrypted, true or false.-->
-      <Property name="IsClientToServerEncrypted" value="true">
+    
+      <!--Indicates if SUT is Windows Implementation.-->
+      <Property name="IsWindowsImplementation" value="true">
         <Choice>true, false</Choice>
-        <Description>Indicates if the client-to-server traffic is encrypted, true or false.</Description>
+        <Description>Indicates if SUT is Windows Implementation.</Description>
       </Property>
-    </Group>
-    <!--Indicates if SUT is Windows Implementation.-->
-    <Property name="IsWindowsImplementation" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if SUT is Windows Implementation.</Description>
-    </Property>
-    <!--Indicates if SUT drops the connection when an invalid request received.-->
-    <Property name="DropConnectionForInvalidRequest" value="true">
-      <Choice>true, false</Choice>
-      <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
-    </Property>
-    <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8-->
-    <!--The seperator between the Version is required to be ".".-->
-    <Property name="Version" value="10.6">
-      <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Choice>
-      <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Description>
-    </Property>
-    <!-- Block End -->
-    <!--Block Begin: Properties that required to be set when TLS or CredSSP security protocol is in effect ***-->
-    <!--The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host. -->
-    <Property name="ServerDomain" value="RDPServer">
-      <Description>The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host.</Description>
-    </Property>
-    <!--The user name of local host (RDP server). -->
-    <Property name="ServerUserName" value="Administrator">
-      <Description>The user name of local host (RDP server).</Description>
-    </Property>
-    <!--The logon password of "ServerUserName". -->
-    <Property name="ServerUserPassword" value="Password01!">
-      <Description>The logon password of "ServerUserName".</Description>
-    </Property>
-    <!--The pfx format certificate with private key, which used to secure TLS or CredSSP transport.  -->
-    <Property name="CertificatePath" value="C:\RDPServer.pfx">
-      <Description>The pfx format certificate with private key, which used to secure TLS or CredSSP transport.</Description>
-    </Property>
-    <!--The password of the pfx certificate-->
-    <Property name="CertificatePassword" value="Password01!">
-      <Description>The password of the pfx certificate.</Description>
-    </Property>
-    <!--The indication of enables or disables message verification-->
-    <Property name="VerifyRdpbcgrMessage" value="true">
-      <Choice>true, false</Choice>
-      <Description>Enables or disables message verification as defined in MS-RDPBCGR. Set to True to enable, otherwise set to False.</Description>
-    </Property>
-    <!-- Block End -->
-    <!-- Block Begin: Properties that only used when the SUT is Windows OS-->
-    <!-- The host name or IP address of SUT machine (RDP Client). -->
-    <Property name="SUTName" value="RDPClient">
-      <Description>The host name or IP address of SUT machine (RDP Client).</Description>
-    </Property>
-    <!-- The User Id of SUT which should have administrator privileges. -->
-    <Property name="SUTUserName" value="administrator">
-      <Description>The User Id of SUT which should have administrator privileges.</Description>
-    </Property>
-    <!-- The logon password of SUTUserName. -->
-    <Property name="SUTUserPassword" value="Password01!">
-      <Description>The logon password of SUTUserName.</Description>
-    </Property>
-    <!-- The redirection GUID for RDSTLS. -->
-    <Property name="SUTRedirectionGuid" value="RDSTLSForTestSuite">
-      <Description>The redirection GUID for RDSTLS.</Description>
-    </Property>
-    <!-- The full qualified domain name of driver computer for RDSTLS redirection test. If not in a domain environment, this value can be set arbitrarily.  -->
-    <Property name="DriverComputerFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
-      <Description>The full qualified domain name of driver computer for RDSTLS redirection test.</Description>
-    </Property>
-    <!-- The NetBios name of driver computer for RDSTLS redirection test. -->
-    <Property name="DriverComputerNetBiosName" value="RDPServer">
-      <Description>The NetBios name of driver computer for RDSTLS redirection test.</Description>
-    </Property>
-    <!-- The system drive letter of SUT machine. -->
-    <Property name="SUTSystemDrive" value="C">
-      <Description>The system drive letter of SUT machine.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach. -->
-    <Property name="RDPConnectWithNegotiationApproach_Task" value="Negotiate_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach.</Description>
-    </Property>
-	  <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachInvalidAccount. -->
-    <Property name="RDPConnectWithNegotiationApproachInvalidAccount_Task" value="Negotiate_InvalidAccount_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachInvalidAccount.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP. -->
-    <Property name="RDPConnectWithDirectCredSSP_Task" value="DirectCredSSP_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP.</Description>
-    </Property>
-	<!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPInvalidAccount. -->
-    <Property name="RDPConnectWithDirectCredSSPInvalidAccount_Task" value="DirectCredSSP_InvalidAccount_RDPConnect">
+      <!--Indicates if SUT drops the connection when an invalid request received.-->
+      <Property name="DropConnectionForInvalidRequest" value="true">
+        <Choice>true, false</Choice>
+        <Description>Indicates if SUT drops the connection when an invalid request received.</Description>
+      </Property>
+      <!--The version of the RDP intends to test. It should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8-->
+      <!--The seperator between the Version is required to be ".".-->
+      <Property name="Version" value="10.6">
+        <Choice>7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Choice>
+        <Description>The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1, 10.0, 10.1, 10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8</Description>
+      </Property>
+      <!-- Block End -->
+
+      <!--Block Begin: Properties that required to be set when TLS or CredSSP security protocol is in effect ***-->
+      <!--The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host. -->
+      <Property name="ServerDomain" value="RDPServer">
+        <Description>The domain name of local host (RDP server). If local host doesn't in domain, then fill this field with the computer name of local host.</Description>
+      </Property>
+      <!--The user name of local host (RDP server). -->
+      <Property name="ServerUserName" value="Administrator">
+        <Description>The user name of local host (RDP server).</Description>
+      </Property>
+      <!--The logon password of "ServerUserName". -->
+      <Property name="ServerUserPassword" value="Password01!">
+        <Description>The logon password of "ServerUserName".</Description>
+      </Property>
+      <!--The pfx format certificate with private key, which used to secure TLS or CredSSP transport.  -->
+      <Property name="CertificatePath" value="C:\RDPServer.pfx">
+        <Description>The pfx format certificate with private key, which used to secure TLS or CredSSP transport.</Description>
+      </Property>
+      <!--The password of the pfx certificate-->
+      <Property name="CertificatePassword" value="Password01!">
+        <Description>The password of the pfx certificate.</Description>
+      </Property>
+
+      <!--The indication of enables or disables message verification-->
+      <Property name="VerifyRdpbcgrMessage" value="true">
+        <Choice>true, false</Choice>
+        <Description>Enables or disables message verification as defined in MS-RDPBCGR. Set to True to enable, otherwise set to False.</Description>
+      </Property>
+      <!-- Block End -->
+
+      <!-- Block Begin: Properties that only used when the SUT is Windows OS-->
+      <!-- The host name or IP address of SUT machine (RDP Client). -->
+      <Property name="SUTName" value="RDPClient">
+        <Description>The host name or IP address of SUT machine (RDP Client).</Description>
+      </Property>
+      <!-- The User Id of SUT which should have administrator privileges. -->
+      <Property name="SUTUserName" value="administrator">
+        <Description>The User Id of SUT which should have administrator privileges.</Description>
+      </Property>
+      <!-- The logon password of SUTUserName. -->
+      <Property name="SUTUserPassword" value="Password01!">
+        <Description>The logon password of SUTUserName.</Description>
+      </Property>
+      <!-- The redirection GUID for RDSTLS. -->
+      <Property name="SUTRedirectionGuid" value="RDSTLSForTestSuite">
+        <Description>The redirection GUID for RDSTLS.</Description>
+      </Property>
+      <!-- The full qualified domain name of driver computer for RDSTLS redirection test. If not in a domain environment, this value can be set arbitrarily.  -->
+      <Property name="DriverComputerFullQualifiedDomainName" value="RDPServer.CONTOSO.com">
+        <Description>The full qualified domain name of driver computer for RDSTLS redirection test.</Description>
+      </Property>
+      <!-- The NetBios name of driver computer for RDSTLS redirection test. -->
+      <Property name="DriverComputerNetBiosName" value="RDPServer">
+        <Description>The NetBios name of driver computer for RDSTLS redirection test.</Description>
+      </Property>
+      <!-- The system drive letter of SUT machine. -->
+      <Property name="SUTSystemDrive" value="C">
+        <Description>The system drive letter of SUT machine.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach. -->
+      <Property name="RDPConnectWithNegotiationApproach_Task" value="Negotiate_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproach.</Description>
+      </Property>
+       <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachInvalidAccount. -->
+      <Property name="RDPConnectWithNegotiationApproachInvalidAccount_Task" value="Negotiate_InvalidAccount_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachInvalidAccount.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPInvalidAccount. -->
+      <Property name="RDPConnectWithDirectCredSSPInvalidAccount_Task" value="DirectCredSSP_InvalidAccount_RDPConnect">
       <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPInvalidAccount.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen. -->
-    <Property name="RDPConnectWithNegotiationApproachFullScreen_Task" value="Negotiate_FullScreen_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen. -->
-    <Property name="RDPConnectWithDirectCredSSPFullScreen_Task" value="DirectCredSSP_FullScreen_RDPConnect">
-      <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: TriggerClientAutoReconnect. -->
-    <Property name="TriggerClientAutoReconnect_Task" value="TriggerNetworkFailure">
-      <Description>The Windows task name for SUT Control interface: TriggerClientAutoReconnect.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface:TriggerInputEvents. -->
-    <Property name="TriggerInputEvents_Task" value="TriggerInputEvents">
-      <Description>The Windows task name for SUT Control interface:TriggerInputEvents.</Description>
-    </Property>
-    <!-- The Windows task name for SUT Control interface: TriggerClientDisconnectAll. -->
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP. -->
+      <Property name="RDPConnectWithDirectCredSSP_Task" value="DirectCredSSP_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSP.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen. -->
+      <Property name="RDPConnectWithNegotiationApproachFullScreen_Task" value="Negotiate_FullScreen_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithNegotiationApproachFullScreen.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen. -->
+      <Property name="RDPConnectWithDirectCredSSPFullScreen_Task" value="DirectCredSSP_FullScreen_RDPConnect">
+        <Description>The Windows task name for SUT Control interface: RDPConnectWithDirectCredSSPFullScreen.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: TriggerClientAutoReconnect. -->
+      <Property name="TriggerClientAutoReconnect_Task" value="TriggerNetworkFailure">
+        <Description>The Windows task name for SUT Control interface: TriggerClientAutoReconnect.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface:TriggerInputEvents. -->
+      <Property name="TriggerInputEvents_Task" value="TriggerInputEvents">
+        <Description>The Windows task name for SUT Control interface:TriggerInputEvents.</Description>
+      </Property>
+      <!-- The Windows task name for SUT Control interface: TriggerClientDisconnectAll. -->
     <Property name="TriggerClientDisconnectAll_Task" value="DisconnectAll">
       <Description>The Windows task name for SUT Control interface: TriggerClientDisconnectAll.</Description>
     </Property>
-	  <!-- The Windows task name for SUT Control interface:TriggerCloseRDPWindow. -->
-    <Property name="TriggerCloseRDPWindow_Task" value="TriggerCloseRDPWindow">
+      <!-- The Windows task name for SUT Control interface:TriggerCloseRDPWindow. -->
+      <Property name="TriggerCloseRDPWindow_Task" value="TriggerCloseRDPWindow">
         <Description>The Windows task name for SUT Control interface: TriggerCloseRDPWindow.</Description>
     </Property>
     <!-- The Windows task name for SUT Control interface: CredentialManagerAddInvalidAccount. -->
@@ -360,6 +371,10 @@
       <Choice>true, false</Choice>
       <Description>Static virtual channel traffic can optionally be tunneled over a reliable multitransport tunnel, using dynamic virtual channels, if this capability is supported by the server and client.</Description>
     </Property>
+    <Property name="SupportEUSBDevice" value="false">
+        <Choice>true, false</Choice>
+        <Description>Determines whether SUT supports EUSB Device.</Description>
+    </Property>
     <Property name="SupportCompression" value="false">
       <Choice>true, false</Choice>
       <Description>Determines whether bulk compression is enabled when it is transmitted by RDP to the local computer.</Description>
@@ -367,6 +382,7 @@
   </Properties>
   <Adapters>
   </Adapters>
+
   <!-- The default profile name.-->
   <TestLog defaultprofile="Verbose">
     <Sinks>

@@ -163,6 +163,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (this.rdpbcgrServerStack != null)
             {
                 this.rdpbcgrServerStack.Dispose();
+                sessionContext = null;
             }
 
         }

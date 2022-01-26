@@ -58,7 +58,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. FSCTL request with FSCTL_SET_COMPRESSION", ++testStep);
             status = this.fsaAdapter.FsCtlSetCompression(setCompressionRequest, inputBufferSize);
-            this.fsaAdapter.AssertIfNotSuccess(status, "FSCTL request with FSCTL_SET_COMPRESSION operation failed.");
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.NOT_SUPPORTED, status,
+                    ("For ReFS, it is only supported and returns STATUS_SUCCESS when CompressionState is set to COMPRESSION_FORMAT_NONE. " +
+                     "The method fails with STATUS_NOT_SUPPORTED for any other value of CompressionState."));
+            }
+            else
+            {
+                this.fsaAdapter.AssertIfNotSuccess(status, "FSCTL request with FSCTL_SET_COMPRESSION operation failed.");
+            }
 
             //Step 2: Query FILE_COMPRESSION_INFORMATION
             FileCompressionInformation fileCompressionInfo = new FileCompressionInformation() { Reserved = new byte[3] };
@@ -75,7 +84,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                     "If a file system does not support a specific File Information Class, STATUS_INVALID_PARAMETER MUST be returned.");
                 return;
             }
-            
+
             //Step 3: Verify outputBuffer.CompressionFormat
             fileCompressionInfo = TypeMarshal.ToStruct<FileCompressionInformation>(outputBuffer);
             bool isCompressionFormatLZNT1 = (fileCompressionInfo.CompressionFormat & CompressionFormat_Values.COMPRESSION_FORMAT_LZNT1) == CompressionFormat_Values.COMPRESSION_FORMAT_LZNT1;

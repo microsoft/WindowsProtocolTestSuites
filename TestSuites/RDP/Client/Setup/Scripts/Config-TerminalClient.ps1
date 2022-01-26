@@ -294,6 +294,16 @@ New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\LocalDevices 
 
 #-----------------------------------------------------
 # Edit registery.
+# Disable TLS 1.0 for client
+#-----------------------------------------------------
+Write-Host "Disable TLS 1.0 for client."
+New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -Force | Out-Null
+New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -name 'Enabled' -value 0 -PropertyType 'DWord' -Force | Out-Null
+New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -name 'DisabledByDefault' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+Write-Host 'TLS 1.0 has been disabled.'
+
+#-----------------------------------------------------
+# Edit registery.
 # Enable TLS 1.1 and TLS 1.2 for client
 #-----------------------------------------------------
 Write-Host "Change Registry, force client to use TLS 1.0"

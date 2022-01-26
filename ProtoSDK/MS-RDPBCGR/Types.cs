@@ -6966,7 +6966,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.9 clients
         /// </summary>
-        V12 = 0x0008000E
+        V12 = 0x0008000E,
+
+        /// <summary>
+        /// RDP 10.10 clients
+        /// </summary>
+        V13 = 0x0008000F
     }
 
     /// <summary>
@@ -7915,7 +7920,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.9 servers
         /// </summary>
-        V12 = 0x0008000E
+        V12 = 0x0008000E,
+
+        /// <summary>
+        /// RDP 10.10 servers
+        /// </summary>
+        V13 = 0x0008000F
     }
 
     /// <summary>

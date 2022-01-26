@@ -8,7 +8,6 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
@@ -54,7 +53,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 2. Transport: " + this.fsaAdapter.Transport.ToString());
             BaseTestSite.Log.Add(LogEntryKind.Comment, "\t 3. Share Path: " + this.fsaAdapter.UncSharePath);
 
-            BaseTestSite.Assume.AreEqual(FileSystem.NTFS, this.fsaAdapter.FileSystem, "Alternate Data Stream is only supported by NTFS file system.");
+            BaseTestSite.Assume.IsTrue(this.fsaAdapter.IsAlternateDataStreamSupported, $"Alternate Data Stream should be supported by the target File System: {this.fsaAdapter.FileSystem}.");
 
             this.fsaAdapter.FsaInitial();
 
@@ -72,12 +71,33 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         #region Test Case Utility
 
+        private void CheckAlternateDataStreamRenamingSupport()
+        {
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+                BaseTestSite.Assume.Inconclusive("Current ReFS Alternate Data Stream implementation does not support stream renaming.");
+            }
+        }
+
+        private MessageStatus WriteNewFile(long byteCount, out long bytesWritten)
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"{++testStep}. Set new EOF of the file to {byteCount} bytes");
+            var status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_ENDOFFILE_INFORMATION, BitConverter.GetBytes(byteCount));
+            this.fsaAdapter.AssertIfNotSuccess(status, $"Set new EOF of the file operation failed.");
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, $"{++testStep}. Actually write the file with {byteCount} bytes data.");
+            status = this.fsaAdapter.WriteFile(0, byteCount, out bytesWritten);
+            this.fsaAdapter.AssertIfNotSuccess(status, "Actually write data to file operation failed.");
+
+            return status;
+        }
+
         /// <summary>
         /// Create one alternate data stream on the newly created file
         /// </summary>
         /// <param name="fileType">The newly created file type: DataFile, DirectoryFile</param>
         private void AlternateDataStream_CreateStream(FileType fileType)
-        {   
+        {
             dataStreamList = new Dictionary<string, long>();
             long bytesToWrite = 0;
             long bytesWritten = 0;
@@ -104,8 +124,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 dataStreamList.Add("::$DATA", bytesToWrite);
 
                 BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the file with " + bytesToWrite + " bytes data.", ++testStep);
-                status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
-                this.fsaAdapter.AssertIfNotSuccess(status, "Write data to file operation failed.");
+                status = WriteNewFile(bytesToWrite, out bytesWritten);
             }
             else
             {
@@ -133,8 +152,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             dataStreamList.Add(":" + dataStreamName1 + ":$DATA", bytesToWrite);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the stream with " + bytesToWrite + " bytes data.", ++testStep);
-            status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
-            this.fsaAdapter.AssertIfNotSuccess(status, "Write data to stream operation failed.");
+            status = WriteNewFile(bytesToWrite, out bytesWritten);
         }
 
         /// <summary>
@@ -168,8 +186,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             dataStreamList.Add(":" + dataStreamName2 + ":$DATA", bytesToWrite);
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Write the stream with " + bytesToWrite + " bytes data.", ++testStep);
-            status = this.fsaAdapter.WriteFile(0, bytesToWrite, out bytesWritten);
-            this.fsaAdapter.AssertIfNotSuccess(status, "Write data to stream operation failed.");
+            status = WriteNewFile(bytesToWrite, out bytesWritten);
         }
 
         private void AlternateDataStream_ListStreams(FileType fileType)
@@ -264,7 +281,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         /// <param name="fileStreamInformations">A list of FileStreamInformation structures</param>
         /// <param name="streamList">A dictionary of streamname and streamsize mapping</param>
         private void VerifyFileStreamInformations(List<FileStreamInformation> fileStreamInformations, Dictionary<string, long> streamList)
-        {   
+        {
             // To verify whether the count of filestreaminformation data elements equals to the actual data streams counts
             BaseTestSite.Assert.AreEqual(streamList.Count, fileStreamInformations.Count,
                 "The total number of the returned FILE_STREAM_INFORMATION data elements should be equal the total streams that has been added to the file.");
