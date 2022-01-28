@@ -277,23 +277,6 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_DataTransfer_v2**| | 
 | -------------| ------------- |
-|  **Test ID**| S3_DataTransfer_v2_PacketReOrdering| 
-|  **Priority**| P0| 
-|  **Description** | Verify the RDP client will send a ACK to acknowledge the package loss when detect a package loss in a reliable connection| 
-|  **Prerequisites**| N/A| 
-|  **Test Execution Steps**| For Reliable transport mode, do the following respectively:| 
-| | Test suite trigger RDP client to create a RDP-UDP, reliable (as MS-RDPEUDP2 only supports reliable UDP mode) transport mode | 
-| | Establish the RDPEMT connection.| 
-| | In the RDP-UDP connection, test suite send one **RDPUDP2 Packet** with channel sequence number of x| 
-| | Test suite send another **RDPUDP2 Packet** with channel sequence number of x+2| 
-| | Expect RDPUDP2 Packet RDP client, to acknowledge the receipt of the 1st, 3rd packet and an acknowledgment vector packet containing the missing sequence number as the base sequence number, and the current received sequence number at the top in the acknowledgment vector, with valid timing information. | 
-| | Test suite send another **RDPUDP2 Packet** with channel sequence number of x+1| 
-| | Expect a RDPUDP2 Packet to acknowledge the receipt of all  **RDPUDP2 Packets**  | 
-|  **Cleanup**| N/A| 
-
-
-|  **S3_DataTransfer_v2**| | 
-| -------------| ------------- |
 |  **Test ID**| S3_DataTransfer_v2_DataPacketWithACK| 
 |  **Priority**| P0| 
 |  **Description** | Verify that the final OnWire version of the RDP2 Packet sent is evaluated to a specific output as shared in Section 4.4.6 of the RDPEUDP2 document| 
