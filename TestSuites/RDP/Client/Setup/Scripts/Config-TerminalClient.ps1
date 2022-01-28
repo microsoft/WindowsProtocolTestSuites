@@ -201,8 +201,8 @@ if (Test-Path -Path "$dataPath\Base\CredentialManager_InvalidAccount_Reverse.ps1
     Copy-Item $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 $dataPath\Base\CredentialManager_InvalidAccount_Reverse.ps1 -Force
 }
 
-"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}/${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding Unicode
-"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}/${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding Unicode
+"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}\${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
+"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}\${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding UTF8
 
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
