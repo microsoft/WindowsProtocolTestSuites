@@ -93,6 +93,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion
 
             #region Test Sequence
+            if(transportProtocol != EncryptedProtocol.DirectCredSsp && transportProtocol != EncryptedProtocol.NegotiationCredSsp)
+            {
+                this.TestSite.Assume.Inconclusive("This case requires using CredSSP encrypted protocol");
+            }
 
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
