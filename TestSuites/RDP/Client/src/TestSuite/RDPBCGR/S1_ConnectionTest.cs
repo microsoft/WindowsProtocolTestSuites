@@ -108,17 +108,29 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             TriggerClientRDPConnect(transportProtocol, false, true);
             #endregion
 
-            //Expect the transport layer connection request.
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start a transport layer connection request (TCP).");
-            this.rdpbcgrAdapter.ExpectTransportConnection(RDPSessionType.Normal);
+            if (transportProtocol == EncryptedProtocol.DirectCredSsp)
+            {
+                //Expect the transport layer connection request.
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start a transport layer connection request (TCP).");
+                this.rdpbcgrAdapter.ExpectTransportConnectionForInvalidAccount(RDPSessionType.Normal);
+            }
 
-            //Expect SUT send a Client X.224 Connection Request PDU.
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client X.224 Connection Request PDU");
-            this.rdpbcgrAdapter.ExpectPacket<Client_X_224_Connection_Request_Pdu>(waitTime);
+            if (transportProtocol == EncryptedProtocol.NegotiationCredSsp)
+            {
+                //Expect the transport layer connection request.
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start a transport layer connection request (TCP).");
+                this.rdpbcgrAdapter.ExpectTransportConnection(RDPSessionType.Normal);
 
-            //Respond a Server X.224 Connection Confirm PDU.
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server X.224 Connection Confirm PDU to SUT. Selected protocol: {0}; Extended Client Data supported: false", selectedProtocol.ToString());
-            this.rdpbcgrAdapter.Server_X_224_Connection_Confirm(selectedProtocol, false, true, NegativeType.None, invalidAccount:true);
+                //Expect SUT send a Client X.224 Connection Request PDU.
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client X.224 Connection Request PDU");
+                this.rdpbcgrAdapter.ExpectPacket<Client_X_224_Connection_Request_Pdu>(waitTime);
+
+                //Respond a Server X.224 Connection Confirm PDU.
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server X.224 Connection Confirm PDU to SUT. Selected protocol: {0}; Extended Client Data supported: false", selectedProtocol.ToString());
+                this.rdpbcgrAdapter.Server_X_224_Connection_Confirm(selectedProtocol, false, true, NegativeType.None, invalidAccount: true);
+
+            }
+
 
             #endregion
         }

@@ -342,6 +342,57 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
         /// <summary>
+        /// Check if transport level (TCP) connection happens with Invalid Account DirectCredSSP.
+        /// </summary>
+        /// <param name="sessionType">The type of session to be established.</param>
+        public void ExpectTransportConnectionForInvalidAccount(RDPSessionType sessionType)
+        {
+            this.pduCache.Clear();
+            RdpbcgrServerSessionContext oldSession = sessionContext;
+
+            TimeSpan leftTime = pduWaitTimeSpan;
+            DateTime expiratedTime = DateTime.Now + pduWaitTimeSpan;
+            bool isRecieved = false;
+            while (!isRecieved && leftTime.CompareTo(new TimeSpan(0)) > 0)
+            {
+                try
+                {
+                    sessionContext = rdpbcgrServerStack.ExpectConnect(leftTime);
+                    if (oldSession == null)
+                    {
+                        isRecieved = true;
+                        break;
+                    }
+                    else if (oldSession.Identity.ToString() != sessionContext.Identity.ToString())
+                    {
+                        isRecieved = true;
+                        break;
+                    }
+                }
+                catch (TimeoutException)
+                {
+                    site.Assert.Pass("Timeout when expecting connection shows account Is invalid");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    //break;
+                    site.Log.Add(LogEntryKind.Warning, "Excetpion thrown out when expect Connection With Invalid Account. {0}", ex.Message);
+                }
+                finally
+                {
+                    System.Threading.Thread.Sleep(100);//Wait some time for next packet.
+                    leftTime = expiratedTime - DateTime.Now;
+                }
+
+            }
+            
+            if (isRecieved)
+            {
+                site.Assert.Fail("Connection Should Not Be Received With Invalid Account");
+            }
+        }
+
+        /// <summary>
         /// 2.2.1.1 - 2.2.1.2
         /// 
         /// Send X.224 Connection Confirm PDU. It is sent as a response of X.224 Connection Request.
