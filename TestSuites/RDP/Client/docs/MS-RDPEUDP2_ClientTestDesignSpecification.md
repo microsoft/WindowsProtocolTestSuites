@@ -253,7 +253,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | In the connection and initiation phase, set UDP version to RDPUDP_PROTOCOL_VERSION_3.| 
 | | In the RDP-UDP connection, Construct and send one **RDPUDP2 Packet (with ACK and Data)**.| 
 | | In the RDP-UDP connection, Expect RDP client response an RDPUDP2 Packet containing only the Acknowledgement Payload for proof of receipts of set packets. And verify:| 
-| | Obtain both the channel sequence number and the sequence number from the received Acknowledgement Payload and verify its equal to the generated channel sequence mapped to the sent package.| 
+| | Obtain both the channel sequence number and the sequence number from the received payload and verify its equal to the generated channel sequence mapped to the sent package.| 
 |  **Cleanup**| N/A| 
 
 
