@@ -1147,7 +1147,7 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
 
             //If Open.File contains open files, the operation MUST be failed with STATUS_ACCESS_DENIED
             //if (isOpenFileContain)
-            if (gIsOpenListContains)
+            if (gOpenListContains)
             {
                 Helper.CaptureRequirement(3044, @"[In FileRenameInformation,Pseudocode for the operation is as follows:]
                     If Open.File contains open files, the operation MUST be failed with STATUS_ACCESS_DENIED.");
@@ -1398,7 +1398,7 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
                     return MessageStatus.OBJECT_NAME_COLLISION;
                 }
                 //If TargetStream.File.OpenList contains any Opens to TargetStream
-                if (gIsOpenListContains)
+                if (gOpenListContains)
                 {
                     Helper.CaptureRequirement(3149, @"[In Algorithm for Performing Stream Rename,Pseudocode for the algorithm is as follows:
                         If TargetStream is found:]If TargetStream.File.OpenList contains any Opens to TargetStream, 
@@ -1473,7 +1473,7 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
                 return MessageStatus.SHORT_NAMES_NOT_ENABLED_ON_VOLUME;
             }
             // If Open.File contains open files as per section 3.1.4.2
-            if (gIsOpenListContains)
+            if (gOpenListContains)
             {
                 Helper.CaptureRequirement(3183, @"[In FileShortNameInformation,Pseudocode for the algorithm is as follows:]
                     If Open.File contains open files, the operation MUST be failed with STATUS_ACCESS_DENIED.");

@@ -32,19 +32,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         
         public delegate void GetIfImplementQueryFileFsControlInformationDelegate1(bool isImplemented);
         
-        public delegate void GetIFObjectIDsSupportedDelegate1(bool isObjectIDsSupported);
+        public delegate void GetIfObjectIDsSupportedDelegate1(bool isObjectIDsSupported);
         
-        public delegate void GetIFQuotasSupportedDelegate1(bool isQuotasSupported);
+        public delegate void GetIfQuotasSupportedDelegate1(bool isQuotasSupported);
         #endregion
         
         #region Event Metadata
         static System.Reflection.MethodBase GetIfImplementQueryFileFsObjectIdInformationInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetIfImplementQueryFileFsObjectIdInformation", typeof(bool).MakeByRefType());
         
-        static System.Reflection.MethodBase GetIFObjectIDsSupportedInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetIFObjectIDsSupported", typeof(bool).MakeByRefType());
+        static System.Reflection.MethodBase GetIfObjectIDsSupportedInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetIfObjectIDsSupported", typeof(bool).MakeByRefType());
         
         static System.Reflection.MethodBase GetIfImplementQueryFileFsControlInformationInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetIfImplementQueryFileFsControlInformation", typeof(bool).MakeByRefType());
         
-        static System.Reflection.MethodBase GetIFQuotasSupportedInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetIFQuotasSupported", typeof(bool).MakeByRefType());
+        static System.Reflection.MethodBase GetIfQuotasSupportedInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetIfQuotasSupported", typeof(bool).MakeByRefType());
         #endregion
         
         #region Adapter Instances
@@ -118,11 +118,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             if ((temp14 == 0)) {
                 this.Manager.Comment("reaching state \'S144\'");
                 bool temp2;
-                this.Manager.Comment("executing step \'call GetIFObjectIDsSupported(out _)\'");
-                this.IFSAAdapterInstance.GetIFObjectIDsSupported(out temp2);
-                this.Manager.AddReturn(GetIFObjectIDsSupportedInfo, null, temp2);
+                this.Manager.Comment("executing step \'call GetIfObjectIDsSupported(out _)\'");
+                this.IFSAAdapterInstance.GetIfObjectIDsSupported(out temp2);
+                this.Manager.AddReturn(GetIfObjectIDsSupportedInfo, null, temp2);
                 this.Manager.Comment("reaching state \'S153\'");
-                int temp7 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFObjectIDsSupportedInfo, null, new GetIFObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS0GetIFObjectIDsSupportedChecker)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFObjectIDsSupportedInfo, null, new GetIFObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS0GetIFObjectIDsSupportedChecker1)));
+                int temp7 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfObjectIDsSupportedInfo, null, new GetIfObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS0GetIfObjectIDsSupportedChecker)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfObjectIDsSupportedInfo, null, new GetIfObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS0GetIfObjectIDsSupportedChecker1)));
                 if ((temp7 == 0)) {
                     this.Manager.Comment("reaching state \'S161\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FsInfoByteCount temp3;
@@ -167,11 +167,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             if ((temp14 == 1)) {
                 this.Manager.Comment("reaching state \'S145\'");
                 bool temp8;
-                this.Manager.Comment("executing step \'call GetIFObjectIDsSupported(out _)\'");
-                this.IFSAAdapterInstance.GetIFObjectIDsSupported(out temp8);
-                this.Manager.AddReturn(GetIFObjectIDsSupportedInfo, null, temp8);
+                this.Manager.Comment("executing step \'call GetIfObjectIDsSupported(out _)\'");
+                this.IFSAAdapterInstance.GetIfObjectIDsSupported(out temp8);
+                this.Manager.AddReturn(GetIfObjectIDsSupportedInfo, null, temp8);
                 this.Manager.Comment("reaching state \'S154\'");
-                int temp13 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFObjectIDsSupportedInfo, null, new GetIFObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS0GetIFObjectIDsSupportedChecker2)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFObjectIDsSupportedInfo, null, new GetIFObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS0GetIFObjectIDsSupportedChecker3)));
+                int temp13 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfObjectIDsSupportedInfo, null, new GetIfObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS0GetIfObjectIDsSupportedChecker2)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfObjectIDsSupportedInfo, null, new GetIfObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS0GetIfObjectIDsSupportedChecker3)));
                 if ((temp13 == 0)) {
                     this.Manager.Comment("reaching state \'S163\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FsInfoByteCount temp9;
@@ -224,18 +224,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetIfImplementQueryFileFsObjectIdInformation, state S120");
         }
         
-        private void QueryFileSystemInformationTestCaseS0GetIFObjectIDsSupportedChecker(bool isObjectIDsSupported) {
-            this.Manager.Comment("checking step \'return GetIFObjectIDsSupported/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isObjectIDsSupported, "isObjectIDsSupported of GetIFObjectIDsSupported, state S153");
+        private void QueryFileSystemInformationTestCaseS0GetIfObjectIDsSupportedChecker(bool isObjectIDsSupported) {
+            this.Manager.Comment("checking step \'return GetIfObjectIDsSupported/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isObjectIDsSupported, "isObjectIDsSupported of GetIfObjectIDsSupported, state S153");
         }
         
         private void QueryFileSystemInformationTestCaseS193() {
             this.Manager.Comment("reaching state \'S193\'");
         }
         
-        private void QueryFileSystemInformationTestCaseS0GetIFObjectIDsSupportedChecker1(bool isObjectIDsSupported) {
-            this.Manager.Comment("checking step \'return GetIFObjectIDsSupported/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isObjectIDsSupported, "isObjectIDsSupported of GetIFObjectIDsSupported, state S153");
+        private void QueryFileSystemInformationTestCaseS0GetIfObjectIDsSupportedChecker1(bool isObjectIDsSupported) {
+            this.Manager.Comment("checking step \'return GetIfObjectIDsSupported/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isObjectIDsSupported, "isObjectIDsSupported of GetIfObjectIDsSupported, state S153");
         }
         
         private void QueryFileSystemInformationTestCaseS194() {
@@ -247,18 +247,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isImplemented, "isImplemented of GetIfImplementQueryFileFsObjectIdInformation, state S120");
         }
         
-        private void QueryFileSystemInformationTestCaseS0GetIFObjectIDsSupportedChecker2(bool isObjectIDsSupported) {
-            this.Manager.Comment("checking step \'return GetIFObjectIDsSupported/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isObjectIDsSupported, "isObjectIDsSupported of GetIFObjectIDsSupported, state S154");
+        private void QueryFileSystemInformationTestCaseS0GetIfObjectIDsSupportedChecker2(bool isObjectIDsSupported) {
+            this.Manager.Comment("checking step \'return GetIfObjectIDsSupported/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isObjectIDsSupported, "isObjectIDsSupported of GetIfObjectIDsSupported, state S154");
         }
         
         private void QueryFileSystemInformationTestCaseS150() {
             this.Manager.Comment("reaching state \'S150\'");
         }
         
-        private void QueryFileSystemInformationTestCaseS0GetIFObjectIDsSupportedChecker3(bool isObjectIDsSupported) {
-            this.Manager.Comment("checking step \'return GetIFObjectIDsSupported/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isObjectIDsSupported, "isObjectIDsSupported of GetIFObjectIDsSupported, state S154");
+        private void QueryFileSystemInformationTestCaseS0GetIfObjectIDsSupportedChecker3(bool isObjectIDsSupported) {
+            this.Manager.Comment("checking step \'return GetIfObjectIDsSupported/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isObjectIDsSupported, "isObjectIDsSupported of GetIfObjectIDsSupported, state S154");
         }
         
         private void QueryFileSystemInformationTestCaseS195() {
@@ -569,11 +569,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             if ((temp44 == 0)) {
                 this.Manager.Comment("reaching state \'S146\'");
                 bool temp32;
-                this.Manager.Comment("executing step \'call GetIFQuotasSupported(out _)\'");
-                this.IFSAAdapterInstance.GetIFQuotasSupported(out temp32);
-                this.Manager.AddReturn(GetIFQuotasSupportedInfo, null, temp32);
+                this.Manager.Comment("executing step \'call GetIfQuotasSupported(out _)\'");
+                this.IFSAAdapterInstance.GetIfQuotasSupported(out temp32);
+                this.Manager.AddReturn(GetIfQuotasSupportedInfo, null, temp32);
                 this.Manager.Comment("reaching state \'S155\'");
-                int temp37 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFQuotasSupportedInfo, null, new GetIFQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS2GetIFQuotasSupportedChecker)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFQuotasSupportedInfo, null, new GetIFQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS2GetIFQuotasSupportedChecker1)));
+                int temp37 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfQuotasSupportedInfo, null, new GetIfQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS2GetIfQuotasSupportedChecker)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfQuotasSupportedInfo, null, new GetIfQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS2GetIfQuotasSupportedChecker1)));
                 if ((temp37 == 0)) {
                     this.Manager.Comment("reaching state \'S165\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FsInfoByteCount temp33;
@@ -618,11 +618,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             if ((temp44 == 1)) {
                 this.Manager.Comment("reaching state \'S147\'");
                 bool temp38;
-                this.Manager.Comment("executing step \'call GetIFQuotasSupported(out _)\'");
-                this.IFSAAdapterInstance.GetIFQuotasSupported(out temp38);
-                this.Manager.AddReturn(GetIFQuotasSupportedInfo, null, temp38);
+                this.Manager.Comment("executing step \'call GetIfQuotasSupported(out _)\'");
+                this.IFSAAdapterInstance.GetIfQuotasSupported(out temp38);
+                this.Manager.AddReturn(GetIfQuotasSupportedInfo, null, temp38);
                 this.Manager.Comment("reaching state \'S156\'");
-                int temp43 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFQuotasSupportedInfo, null, new GetIFQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS2GetIFQuotasSupportedChecker2)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFQuotasSupportedInfo, null, new GetIFQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS2GetIFQuotasSupportedChecker3)));
+                int temp43 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfQuotasSupportedInfo, null, new GetIfQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS2GetIfQuotasSupportedChecker2)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfQuotasSupportedInfo, null, new GetIfQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS2GetIfQuotasSupportedChecker3)));
                 if ((temp43 == 0)) {
                     this.Manager.Comment("reaching state \'S167\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FsInfoByteCount temp39;
@@ -680,18 +680,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isImplemented, "isImplemented of GetIfImplementQueryFileFsControlInformation, state S121");
         }
         
-        private void QueryFileSystemInformationTestCaseS2GetIFQuotasSupportedChecker(bool isQuotasSupported) {
-            this.Manager.Comment("checking step \'return GetIFQuotasSupported/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isQuotasSupported, "isQuotasSupported of GetIFQuotasSupported, state S155");
+        private void QueryFileSystemInformationTestCaseS2GetIfQuotasSupportedChecker(bool isQuotasSupported) {
+            this.Manager.Comment("checking step \'return GetIfQuotasSupported/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isQuotasSupported, "isQuotasSupported of GetIfQuotasSupported, state S155");
         }
         
         private void QueryFileSystemInformationTestCaseS196() {
             this.Manager.Comment("reaching state \'S196\'");
         }
         
-        private void QueryFileSystemInformationTestCaseS2GetIFQuotasSupportedChecker1(bool isQuotasSupported) {
-            this.Manager.Comment("checking step \'return GetIFQuotasSupported/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isQuotasSupported, "isQuotasSupported of GetIFQuotasSupported, state S155");
+        private void QueryFileSystemInformationTestCaseS2GetIfQuotasSupportedChecker1(bool isQuotasSupported) {
+            this.Manager.Comment("checking step \'return GetIfQuotasSupported/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isQuotasSupported, "isQuotasSupported of GetIfQuotasSupported, state S155");
         }
         
         private void QueryFileSystemInformationTestCaseS2GetIfImplementQueryFileFsControlInformationChecker1(bool isImplemented) {
@@ -699,18 +699,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetIfImplementQueryFileFsControlInformation, state S121");
         }
         
-        private void QueryFileSystemInformationTestCaseS2GetIFQuotasSupportedChecker2(bool isQuotasSupported) {
-            this.Manager.Comment("checking step \'return GetIFQuotasSupported/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isQuotasSupported, "isQuotasSupported of GetIFQuotasSupported, state S156");
+        private void QueryFileSystemInformationTestCaseS2GetIfQuotasSupportedChecker2(bool isQuotasSupported) {
+            this.Manager.Comment("checking step \'return GetIfQuotasSupported/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isQuotasSupported, "isQuotasSupported of GetIfQuotasSupported, state S156");
         }
         
         private void QueryFileSystemInformationTestCaseS197() {
             this.Manager.Comment("reaching state \'S197\'");
         }
         
-        private void QueryFileSystemInformationTestCaseS2GetIFQuotasSupportedChecker3(bool isQuotasSupported) {
-            this.Manager.Comment("checking step \'return GetIFQuotasSupported/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isQuotasSupported, "isQuotasSupported of GetIFQuotasSupported, state S156");
+        private void QueryFileSystemInformationTestCaseS2GetIfQuotasSupportedChecker3(bool isQuotasSupported) {
+            this.Manager.Comment("checking step \'return GetIfQuotasSupported/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isQuotasSupported, "isQuotasSupported of GetIfQuotasSupported, state S156");
         }
         
         private void QueryFileSystemInformationTestCaseS198() {
@@ -1291,11 +1291,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             if ((temp89 == 0)) {
                 this.Manager.Comment("reaching state \'S148\'");
                 bool temp77;
-                this.Manager.Comment("executing step \'call GetIFObjectIDsSupported(out _)\'");
-                this.IFSAAdapterInstance.GetIFObjectIDsSupported(out temp77);
-                this.Manager.AddReturn(GetIFObjectIDsSupportedInfo, null, temp77);
+                this.Manager.Comment("executing step \'call GetIfObjectIDsSupported(out _)\'");
+                this.IFSAAdapterInstance.GetIfObjectIDsSupported(out temp77);
+                this.Manager.AddReturn(GetIfObjectIDsSupportedInfo, null, temp77);
                 this.Manager.Comment("reaching state \'S157\'");
-                int temp82 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFObjectIDsSupportedInfo, null, new GetIFObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS4GetIFObjectIDsSupportedChecker)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFObjectIDsSupportedInfo, null, new GetIFObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS4GetIFObjectIDsSupportedChecker1)));
+                int temp82 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfObjectIDsSupportedInfo, null, new GetIfObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS4GetIfObjectIDsSupportedChecker)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfObjectIDsSupportedInfo, null, new GetIfObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS4GetIfObjectIDsSupportedChecker1)));
                 if ((temp82 == 0)) {
                     this.Manager.Comment("reaching state \'S169\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FsInfoByteCount temp78;
@@ -1340,11 +1340,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             if ((temp89 == 1)) {
                 this.Manager.Comment("reaching state \'S149\'");
                 bool temp83;
-                this.Manager.Comment("executing step \'call GetIFObjectIDsSupported(out _)\'");
-                this.IFSAAdapterInstance.GetIFObjectIDsSupported(out temp83);
-                this.Manager.AddReturn(GetIFObjectIDsSupportedInfo, null, temp83);
+                this.Manager.Comment("executing step \'call GetIfObjectIDsSupported(out _)\'");
+                this.IFSAAdapterInstance.GetIfObjectIDsSupported(out temp83);
+                this.Manager.AddReturn(GetIfObjectIDsSupportedInfo, null, temp83);
                 this.Manager.Comment("reaching state \'S158\'");
-                int temp88 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFObjectIDsSupportedInfo, null, new GetIFObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS4GetIFObjectIDsSupportedChecker2)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFObjectIDsSupportedInfo, null, new GetIFObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS4GetIFObjectIDsSupportedChecker3)));
+                int temp88 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfObjectIDsSupportedInfo, null, new GetIfObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS4GetIfObjectIDsSupportedChecker2)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfObjectIDsSupportedInfo, null, new GetIfObjectIDsSupportedDelegate1(this.QueryFileSystemInformationTestCaseS4GetIfObjectIDsSupportedChecker3)));
                 if ((temp88 == 0)) {
                     this.Manager.Comment("reaching state \'S171\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FsInfoByteCount temp84;
@@ -1402,14 +1402,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isImplemented, "isImplemented of GetIfImplementQueryFileFsObjectIdInformation, state S122");
         }
         
-        private void QueryFileSystemInformationTestCaseS4GetIFObjectIDsSupportedChecker(bool isObjectIDsSupported) {
-            this.Manager.Comment("checking step \'return GetIFObjectIDsSupported/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isObjectIDsSupported, "isObjectIDsSupported of GetIFObjectIDsSupported, state S157");
+        private void QueryFileSystemInformationTestCaseS4GetIfObjectIDsSupportedChecker(bool isObjectIDsSupported) {
+            this.Manager.Comment("checking step \'return GetIfObjectIDsSupported/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isObjectIDsSupported, "isObjectIDsSupported of GetIfObjectIDsSupported, state S157");
         }
         
-        private void QueryFileSystemInformationTestCaseS4GetIFObjectIDsSupportedChecker1(bool isObjectIDsSupported) {
-            this.Manager.Comment("checking step \'return GetIFObjectIDsSupported/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isObjectIDsSupported, "isObjectIDsSupported of GetIFObjectIDsSupported, state S157");
+        private void QueryFileSystemInformationTestCaseS4GetIfObjectIDsSupportedChecker1(bool isObjectIDsSupported) {
+            this.Manager.Comment("checking step \'return GetIfObjectIDsSupported/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isObjectIDsSupported, "isObjectIDsSupported of GetIfObjectIDsSupported, state S157");
         }
         
         private void QueryFileSystemInformationTestCaseS4GetIfImplementQueryFileFsObjectIdInformationChecker1(bool isImplemented) {
@@ -1417,14 +1417,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetIfImplementQueryFileFsObjectIdInformation, state S122");
         }
         
-        private void QueryFileSystemInformationTestCaseS4GetIFObjectIDsSupportedChecker2(bool isObjectIDsSupported) {
-            this.Manager.Comment("checking step \'return GetIFObjectIDsSupported/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isObjectIDsSupported, "isObjectIDsSupported of GetIFObjectIDsSupported, state S158");
+        private void QueryFileSystemInformationTestCaseS4GetIfObjectIDsSupportedChecker2(bool isObjectIDsSupported) {
+            this.Manager.Comment("checking step \'return GetIfObjectIDsSupported/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isObjectIDsSupported, "isObjectIDsSupported of GetIfObjectIDsSupported, state S158");
         }
         
-        private void QueryFileSystemInformationTestCaseS4GetIFObjectIDsSupportedChecker3(bool isObjectIDsSupported) {
-            this.Manager.Comment("checking step \'return GetIFObjectIDsSupported/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isObjectIDsSupported, "isObjectIDsSupported of GetIFObjectIDsSupported, state S158");
+        private void QueryFileSystemInformationTestCaseS4GetIfObjectIDsSupportedChecker3(bool isObjectIDsSupported) {
+            this.Manager.Comment("checking step \'return GetIfObjectIDsSupported/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isObjectIDsSupported, "isObjectIDsSupported of GetIfObjectIDsSupported, state S158");
         }
         #endregion
         
@@ -1625,11 +1625,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             if ((temp113 == 0)) {
                 this.Manager.Comment("reaching state \'S151\'");
                 bool temp101;
-                this.Manager.Comment("executing step \'call GetIFQuotasSupported(out _)\'");
-                this.IFSAAdapterInstance.GetIFQuotasSupported(out temp101);
-                this.Manager.AddReturn(GetIFQuotasSupportedInfo, null, temp101);
+                this.Manager.Comment("executing step \'call GetIfQuotasSupported(out _)\'");
+                this.IFSAAdapterInstance.GetIfQuotasSupported(out temp101);
+                this.Manager.AddReturn(GetIfQuotasSupportedInfo, null, temp101);
                 this.Manager.Comment("reaching state \'S159\'");
-                int temp106 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFQuotasSupportedInfo, null, new GetIFQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS46GetIFQuotasSupportedChecker)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFQuotasSupportedInfo, null, new GetIFQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS46GetIFQuotasSupportedChecker1)));
+                int temp106 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfQuotasSupportedInfo, null, new GetIfQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS46GetIfQuotasSupportedChecker)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfQuotasSupportedInfo, null, new GetIfQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS46GetIfQuotasSupportedChecker1)));
                 if ((temp106 == 0)) {
                     this.Manager.Comment("reaching state \'S173\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FsInfoByteCount temp102;
@@ -1672,11 +1672,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             if ((temp113 == 1)) {
                 this.Manager.Comment("reaching state \'S152\'");
                 bool temp107;
-                this.Manager.Comment("executing step \'call GetIFQuotasSupported(out _)\'");
-                this.IFSAAdapterInstance.GetIFQuotasSupported(out temp107);
-                this.Manager.AddReturn(GetIFQuotasSupportedInfo, null, temp107);
+                this.Manager.Comment("executing step \'call GetIfQuotasSupported(out _)\'");
+                this.IFSAAdapterInstance.GetIfQuotasSupported(out temp107);
+                this.Manager.AddReturn(GetIfQuotasSupportedInfo, null, temp107);
                 this.Manager.Comment("reaching state \'S160\'");
-                int temp112 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFQuotasSupportedInfo, null, new GetIFQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS46GetIFQuotasSupportedChecker2)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIFQuotasSupportedInfo, null, new GetIFQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS46GetIFQuotasSupportedChecker3)));
+                int temp112 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfQuotasSupportedInfo, null, new GetIfQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS46GetIfQuotasSupportedChecker2)), new ExpectedReturn(QueryFileSystemInformationTestCase.GetIfQuotasSupportedInfo, null, new GetIfQuotasSupportedDelegate1(this.QueryFileSystemInformationTestCaseS46GetIfQuotasSupportedChecker3)));
                 if ((temp112 == 0)) {
                     this.Manager.Comment("reaching state \'S175\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FsInfoByteCount temp108;
@@ -1727,14 +1727,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetIfImplementQueryFileFsControlInformation, state S143");
         }
         
-        private void QueryFileSystemInformationTestCaseS46GetIFQuotasSupportedChecker(bool isQuotasSupported) {
-            this.Manager.Comment("checking step \'return GetIFQuotasSupported/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isQuotasSupported, "isQuotasSupported of GetIFQuotasSupported, state S159");
+        private void QueryFileSystemInformationTestCaseS46GetIfQuotasSupportedChecker(bool isQuotasSupported) {
+            this.Manager.Comment("checking step \'return GetIfQuotasSupported/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isQuotasSupported, "isQuotasSupported of GetIfQuotasSupported, state S159");
         }
         
-        private void QueryFileSystemInformationTestCaseS46GetIFQuotasSupportedChecker1(bool isQuotasSupported) {
-            this.Manager.Comment("checking step \'return GetIFQuotasSupported/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isQuotasSupported, "isQuotasSupported of GetIFQuotasSupported, state S159");
+        private void QueryFileSystemInformationTestCaseS46GetIfQuotasSupportedChecker1(bool isQuotasSupported) {
+            this.Manager.Comment("checking step \'return GetIfQuotasSupported/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isQuotasSupported, "isQuotasSupported of GetIfQuotasSupported, state S159");
         }
         
         private void QueryFileSystemInformationTestCaseS46GetIfImplementQueryFileFsControlInformationChecker1(bool isImplemented) {
@@ -1742,14 +1742,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isImplemented, "isImplemented of GetIfImplementQueryFileFsControlInformation, state S143");
         }
         
-        private void QueryFileSystemInformationTestCaseS46GetIFQuotasSupportedChecker2(bool isQuotasSupported) {
-            this.Manager.Comment("checking step \'return GetIFQuotasSupported/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isQuotasSupported, "isQuotasSupported of GetIFQuotasSupported, state S160");
+        private void QueryFileSystemInformationTestCaseS46GetIfQuotasSupportedChecker2(bool isQuotasSupported) {
+            this.Manager.Comment("checking step \'return GetIfQuotasSupported/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isQuotasSupported, "isQuotasSupported of GetIfQuotasSupported, state S160");
         }
         
-        private void QueryFileSystemInformationTestCaseS46GetIFQuotasSupportedChecker3(bool isQuotasSupported) {
-            this.Manager.Comment("checking step \'return GetIFQuotasSupported/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isQuotasSupported, "isQuotasSupported of GetIFQuotasSupported, state S160");
+        private void QueryFileSystemInformationTestCaseS46GetIfQuotasSupportedChecker3(bool isQuotasSupported) {
+            this.Manager.Comment("checking step \'return GetIfQuotasSupported/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isQuotasSupported, "isQuotasSupported of GetIfQuotasSupported, state S160");
         }
         #endregion
         

@@ -748,7 +748,7 @@ machine OpenFileScenario23() : OpenFileConfig
             StreamFoundType.StreamIsNotFound,
             SymbolicLinkType.IsNotSymbolicLink,
             FileType.DataFile,
-            FileNameStatus.isprefixLinkNotFound,
+            FileNameStatus.IsPrefixLinkNotFound,
             CreateOptions.DIRECTORY_FILE,
             ShareAccess.FILE_SHARE_READ,
             FileAccess.FILE_READ_DATA,
