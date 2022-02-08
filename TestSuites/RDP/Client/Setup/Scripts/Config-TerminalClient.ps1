@@ -241,10 +241,10 @@ Write-Host "Creating task to trigger client to initiate a full screen RDP connec
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_FullScreen_RDPConnect /TR "$dataPath\DirectCredSSPFullScreen.RDP" /IT /F
 
 Write-Host "Creating task to trigger client to initiate a RDP connection with Negotiation Approach for Invalid Account..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_InvalidAccount_RDPConnect /TR "$dataPath\NegotiateInvalidAccount.RDP" /IT /F
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN Negotiate_InvalidAccount_RDPConnect /TR "$dataPath\Negotiate.RDP" /IT /F
 
 Write-Host "Creating task to trigger client to initiate a RDP connection using CredSSP security protocol with Direct Approach for Invalid Account..."
-cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_InvalidAccount_RDPConnect /TR "$dataPath\DirectCredSSPInvalidAccount.RDP" /IT /F
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DirectCredSSP_InvalidAccount_RDPConnect /TR "$dataPath\DirectCredSSP.RDP" /IT /F
 
 Write-Host "Creating task to maximize mstsc window..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN MaximizeMstsc /TR "powershell $scriptsPath\MaximizeMstsc.ps1" /IT /F

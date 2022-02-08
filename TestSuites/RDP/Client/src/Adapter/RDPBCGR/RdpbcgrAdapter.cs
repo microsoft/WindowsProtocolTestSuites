@@ -462,14 +462,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 try
                 {
                     SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
-                    if (RdpbcgrTestData.Test_Protocol.Equals("CredSSP"))
-                    {
-                        site.Assert.Fail("Invalid Account Check Failed. SSPI Handshake Succeeded on Invalid User Account");
-                    }
-                    else
-                    {
-                        site.Assert.Inconclusive("Invalid Account Check Inconclusive.");
-                    }
+                    site.Assert.Fail("Invalid Account Check Failed. SSPI Handshake Succeeded on Invalid User Account");
                 }
                 catch (SspiException e)
                 {
