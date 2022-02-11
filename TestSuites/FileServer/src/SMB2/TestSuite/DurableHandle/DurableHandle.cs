@@ -382,59 +382,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.DurableHandl
             clientBeforeDisconnection.LogOff();
             clientBeforeDisconnection.Disconnect();
         }
-
-        [TestMethod]
-        [TestCategory(TestCategories.Smb21)]
-        [TestCategory(TestCategories.UnexpectedContext)]
-        [TestCategory(TestCategories.DurableHandleV1LeaseV1)]
-        [Description("Test reconnect with DurableHandleV1 and LeaseV1 context but with a different LeaseKey")]
-        public void DurableHandleV1_Reconnect_WithDifferentLeaseKey()
-        {
-            //Client requests a durable handle with LeaseV1.
-            //Client sends Disconnect to lose connection.
-            //Client sends reconnect request with LeaseV1 and different lease key and expects STATUS_OBJECT_NAME_NOT_FOUND.
-            DurableHandleV1_Reconnect_WithLeaseV1(differentLeaseKey: true, addInvalidLease: false);
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.Smb21)]
-        [TestCategory(TestCategories.DurableHandleV1LeaseV1)]
-        [TestCategory(TestCategories.UnexpectedContext)]
-        [Description("Test reconnect with DurableHandleV1 and LeaseV1 context and invalid create request contexts.")]
-        public void DurableHandleV1_Reconnect_WithInvalidCreateContexts()
-        {
-            //Client requests a durable handle with LeaseV1.
-            //Client sends Disconnect to lose connection.
-            //Client sends reconnect request with LeaseV1 and same lease key and expects STATUS_INVALID_PARAMETER.
-            DurableHandleV1_Reconnect_WithLeaseV1(differentLeaseKey: false, addInvalidLease: true);
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.Smb21)]
-        [TestCategory(TestCategories.DurableHandleV1LeaseV1)]
-        [TestCategory(TestCategories.UnexpectedContext)]
-        [Description("Test reconnect with DurableHandleV1 and LeaseV1 context and different client guid.")]
-        public void DurableHandleV1_Reconnect_WithDifferentClientGuid()
-        {
-            //Client requests a durable handle with LeaseV1.
-            //Client sends Disconnect to lose connection.
-            //Client sends reconnect request with LeaseV1 and different client GUID and expects STATUS_OBJECT_NAME_NOT_FOUND.
-            DurableHandleV1_Reconnect_WithLeaseV1(differentClientGuid: true);
-        }
-
-        [TestMethod]
-        [TestCategory(TestCategories.Smb21)]
-        [TestCategory(TestCategories.MixedOplockLease)]
-        [TestCategory(TestCategories.UnexpectedContext)]
-        [Description("Test reconnect with DurableHandleV1 and invalid OplockLevel.")]
-        public void DurableHandleV1_Reconnect_WithInvalidOplockLevel()
-        {
-            //Client requests a durable handle with LeaseV1.
-            //Client sends Disconnect to lose connection.
-            //Client sends reconnect request without LeaseV1 and Oplock level different from OPLOCK_LEVEL_BATCH, and expects STATUS_OBJECT_NAME_NOT_FOUND.
-            DurableHandleV1_Reconnect_WithInvalidOplock();
-        }
-
         #endregion
 
         #region Common Methods
@@ -507,7 +454,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.DurableHandl
             Connect(DialectRevision.Smb21, clientAfterDisconnection, clientGuid, testConfig.AccountCredential, ConnectShareType.BasicShareWithoutAssert, out treeIdAfterDisconnection, clientBeforeDisconnection);
 
             FILEID fileIdAfterDisconnection;
-
             uint status = clientAfterDisconnection.Create(
                 treeIdAfterDisconnection,
                 sameFileName ? fileName : GetTestFileName(durableHandleUncSharePath),
@@ -515,7 +461,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.DurableHandl
                 out fileIdAfterDisconnection,
                 out serverCreateContexts,
                 RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] {
+                new Smb2CreateContextRequest[] { 
                     new Smb2CreateDurableHandleReconnect
                     {
                         Data = new FILEID { Persistent = fileIdBeforeDisconnection.Persistent }
@@ -523,7 +469,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.DurableHandl
                     new Smb2CreateRequestLease
                     {
                         LeaseKey = leaseKey,
-                        LeaseState = leaseState
+                        LeaseState = leaseState,
                     }
                 },
                 shareAccess: ShareAccess_Values.NONE,
@@ -531,7 +477,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.DurableHandl
 
             if (sameFileName)
             {
-                BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Reconnect a durable handle should be successful. Servers response: {0}", Smb2Status.GetStatusCode(status));
+                BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status, "Reconnect a durable handle should be successful");
                 string readContent;
                 clientAfterDisconnection.Read(treeIdAfterDisconnection, fileIdAfterDisconnection, 0, (uint)content.Length, out readContent);
 
@@ -544,266 +490,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.DurableHandl
             {
                 BaseTestSite.Assert.AreEqual(
                     Smb2Status.STATUS_INVALID_PARAMETER, status,
-                    "[MS-SMB2] Sectiion 3.3.5.9.7 If Open.Lease is not NULL, Open.Lease.FileDeleteOnClose is FALSE, and Open.Lease.FileName " +
-                    "does not match the file name specified in the Buffer field of the SMB2 CREATE request, the server MUST " +
-                    "fail the request with STATUS_INVALID_PARAMETER.");
+                    "If Open.Lease is not NULL and Open.FileName does not match the file name specified in the Buffer field of the SMB2 CREATE request, " +
+                    "the server MUST fail the request with STATUS_INVALID_PARAMETER.");
             }
-
-            clientAfterDisconnection.TreeDisconnect(treeIdAfterDisconnection);
-            clientAfterDisconnection.LogOff();
-            clientAfterDisconnection.Disconnect();
-            #endregion
-        }
-
-        private void DurableHandleV1_Reconnect_WithLeaseV1(bool differentLeaseKey = false, bool addInvalidLease = false, bool differentClientGuid = false)
-        {
-            #region Check Applicability
-            TestConfig.CheckDialect(DialectRevision.Smb21);
-            TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING);
-            TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST, CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_RECONNECT, CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE);
-            #endregion
-
-            string content = Smb2Utility.CreateRandomString(testConfig.WriteBufferLengthInKb);
-            durableHandleUncSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            string fileName = GetTestFileName(durableHandleUncSharePath);
-
-            #region client connect to server
-            BaseTestSite.Log.Add(
-                LogEntryKind.Comment,
-                "Client connects to server and opens file with a durable handle");
-
-            uint treeIdBeforeDisconnection;
-            Connect(DialectRevision.Smb21, clientBeforeDisconnection, clientGuid, testConfig.AccountCredential, ConnectShareType.BasicShareWithoutAssert, out treeIdBeforeDisconnection, null);
-            Guid leaseKey = Guid.NewGuid();
-            LeaseStateValues leaseState = LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING | LeaseStateValues.SMB2_LEASE_WRITE_CACHING;
-            FILEID fileIdBeforeDisconnection;
-            Smb2CreateContextResponse[] serverCreateContexts = null;
-            clientBeforeDisconnection.Create(
-                treeIdBeforeDisconnection,
-                fileName,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdBeforeDisconnection,
-                out serverCreateContexts,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] {
-                    new Smb2CreateDurableHandleRequest
-                    {
-                         DurableRequest = Guid.Empty,
-                    },
-                    new Smb2CreateRequestLease
-                    {
-                        LeaseKey = leaseKey,
-                        LeaseState = leaseState,
-                    }
-                },
-                shareAccess: ShareAccess_Values.NONE,
-                checker: (header, response) =>
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        header.Status,
-                        "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
-                    CheckCreateContextResponses(serverCreateContexts, new DefaultDurableHandleResponseChecker(BaseTestSite));
-                });
-
-            clientBeforeDisconnection.Write(treeIdBeforeDisconnection, fileIdBeforeDisconnection, content);
-            #endregion
-
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "The client with clientGuid {0} sends DISCONNECT request.", clientGuid.ToString());
-            clientBeforeDisconnection.Disconnect();
-
-            #region client reconnect to server
-            BaseTestSite.Log.Add(
-            LogEntryKind.Comment,
-            "Client opens the same file and reconnects the durable handle");
-
-            uint treeIdAfterDisconnection;
-
-            if (differentClientGuid)
-            {
-                clientGuid = new Guid();
-            }
-
-            Connect(DialectRevision.Smb21, clientAfterDisconnection, clientGuid, testConfig.AccountCredential, ConnectShareType.BasicShareWithoutAssert, out treeIdAfterDisconnection, clientBeforeDisconnection);
-
-            FILEID fileIdAfterDisconnection;
-
-            Smb2CreateContextRequest[] createContextRequests;
-
-            Smb2CreateContextRequest[] validContextRequests = new Smb2CreateContextRequest[] {
-                new Smb2CreateDurableHandleReconnect
-                {
-                    Data = new FILEID { Persistent = fileIdBeforeDisconnection.Persistent }
-                },
-                new Smb2CreateRequestLease
-                {
-                    LeaseKey = differentLeaseKey ? Guid.NewGuid() : leaseKey,
-                    LeaseState = leaseState
-                }
-            };
-
-            if (addInvalidLease)
-            {
-                Smb2CreateContextRequest[] invalidContextsRequests = new Smb2CreateContextRequest[]
-                {
-                    new Smb2CreateDurableHandleReconnectV2
-                    {
-                        FileId = new FILEID { Persistent = fileIdBeforeDisconnection.Persistent }
-                    }
-                };
-
-                int totalLength = validContextRequests.Length + invalidContextsRequests.Length;
-                createContextRequests = new Smb2CreateContextRequest[totalLength];
-                validContextRequests.CopyTo(createContextRequests, 0);
-                invalidContextsRequests.CopyTo(createContextRequests, validContextRequests.Length);
-            }
-            else
-            {
-                createContextRequests = validContextRequests;
-            }
-
-            uint status = clientAfterDisconnection.Create(
-                treeIdAfterDisconnection,
-                fileName,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdAfterDisconnection,
-                out serverCreateContexts,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                createContextRequests,
-                shareAccess: ShareAccess_Values.NONE,
-                checker: (header, response) => { });
-
-            if (differentClientGuid && differentLeaseKey == false && addInvalidLease == false)
-            {
-                BaseTestSite.Assert.AreEqual(
-                    Smb2Status.STATUS_OBJECT_NAME_NOT_FOUND, status,
-                    "[MS-SMB2] Section 3.3.5.9.7 if any Open.Lease is not NULL and Open.clientGuid is not equal " +
-                    "to the ClientGuid of the connection that received this request, the server MUST fail this " +
-                    "request with STATUS_OBJECT_NAME_NOT_FOUND.");
-            }
-            else if (differentLeaseKey && addInvalidLease == false)
-            {
-                BaseTestSite.Assert.AreEqual(
-                    Smb2Status.STATUS_OBJECT_NAME_NOT_FOUND, status,
-                    "[MS-SMB2] Section 3.3.5.9.7 The SMB2_CREATE_REQUEST_LEASE create context is also present in the request, " +
-                    "Connection.Dialect is \"2.1\" or belongs to the SMB 3.x dialect family, the server supports directory leasing, " +
-                    "Open.Lease is not NULL, and Open.Lease.LeaseKey does not match the LeaseKey provided in the SMB2_CREATE_REQUEST_LEASE_V2 create context." +
-                    "the server MUST fail the request with STATUS_OBJECT_NAME_NOT_FOUND.");
-            }
-            else if (differentLeaseKey == false && addInvalidLease)
-            {
-                BaseTestSite.Assert.AreEqual(
-                    Smb2Status.STATUS_INVALID_PARAMETER, status,
-                    "[MS-SMB2] Section 3.3.5.9.7 If the create request also contains an SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 " +
-                    "or SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 create context, the server SHOULD " +
-                    "fail the request with STATUS_INVALID_PARAMETER.");
-            }
-
-            clientAfterDisconnection.TreeDisconnect(treeIdAfterDisconnection);
-            clientAfterDisconnection.LogOff();
-            clientAfterDisconnection.Disconnect();
-            #endregion
-        }
-
-        private void DurableHandleV1_Reconnect_WithInvalidOplock()
-        {
-            #region Check Applicability
-            TestConfig.CheckDialect(DialectRevision.Smb21);
-            TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING);
-            TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_REQUEST, CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_RECONNECT, CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE);
-            #endregion
-
-            string content = Smb2Utility.CreateRandomString(testConfig.WriteBufferLengthInKb);
-            durableHandleUncSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            string fileName = GetTestFileName(durableHandleUncSharePath);
-
-            #region client connect to server
-            BaseTestSite.Log.Add(
-                LogEntryKind.Comment,
-                "Client connects to server and opens file with a durable handle");
-
-            uint treeIdBeforeDisconnection;
-            Connect(DialectRevision.Smb21, clientBeforeDisconnection, clientGuid, testConfig.AccountCredential, ConnectShareType.BasicShareWithoutAssert, out treeIdBeforeDisconnection, null);
-            Guid leaseKey = Guid.NewGuid();
-            LeaseStateValues leaseState = LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING | LeaseStateValues.SMB2_LEASE_WRITE_CACHING;
-            FILEID fileIdBeforeDisconnection;
-            Smb2CreateContextResponse[] serverCreateContexts = null;
-            clientBeforeDisconnection.Create(
-                treeIdBeforeDisconnection,
-                fileName,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdBeforeDisconnection,
-                out serverCreateContexts,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] {
-                    new Smb2CreateDurableHandleRequest
-                    {
-                         DurableRequest = Guid.Empty,
-                    },
-                    new Smb2CreateRequestLease
-                    {
-                        LeaseKey = leaseKey,
-                        LeaseState = leaseState,
-                    }
-                },
-                shareAccess: ShareAccess_Values.NONE,
-                checker: (header, response) =>
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        header.Status,
-                        "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
-                    CheckCreateContextResponses(serverCreateContexts, new DefaultDurableHandleResponseChecker(BaseTestSite));
-                });
-
-            clientBeforeDisconnection.Write(treeIdBeforeDisconnection, fileIdBeforeDisconnection, content);
-            #endregion
-
-            BaseTestSite.Log.Add(
-                LogEntryKind.TestStep,
-                "The client with clientGuid {0} sends DISCONNECT request.", clientGuid.ToString());
-            clientBeforeDisconnection.Disconnect();
-
-            #region client reconnect to server
-            BaseTestSite.Log.Add(
-            LogEntryKind.Comment,
-            "Client opens the same file and reconnects the durable handle");
-
-            uint treeIdAfterDisconnection;
-
-            Connect(DialectRevision.Smb21, clientAfterDisconnection, clientGuid, testConfig.AccountCredential, ConnectShareType.BasicShareWithoutAssert, out treeIdAfterDisconnection, clientBeforeDisconnection);
-
-            FILEID fileIdAfterDisconnection;
-
-            Smb2CreateContextRequest[] createContextRequests;
-
-            Smb2CreateContextRequest[] validContextRequests = new Smb2CreateContextRequest[] {
-                new Smb2CreateDurableHandleReconnect
-                {
-                    Data = new FILEID { Persistent = fileIdBeforeDisconnection.Persistent }
-                }
-            };
-
-            createContextRequests = validContextRequests;
-
-            uint status = clientAfterDisconnection.Create(
-                treeIdAfterDisconnection,
-                fileName,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdAfterDisconnection,
-                out serverCreateContexts,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                createContextRequests,
-                shareAccess: ShareAccess_Values.NONE,
-                checker: (header, response) => { });
-
-            BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_OBJECT_NAME_NOT_FOUND, status,
-                        "[MS-SMB2] Section 3.3.5.9.7 Open.Durable is TRUE, Open.Lease is NULL and Open.OplockLevel is not equal " +
-                        "to SMB2_OPLOCK_LEVEL_BATCH.");
-
 
             clientAfterDisconnection.TreeDisconnect(treeIdAfterDisconnection);
             clientAfterDisconnection.LogOff();
