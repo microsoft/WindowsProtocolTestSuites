@@ -88,10 +88,77 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.OpLock
             client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
             client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
             client1.TreeConnect(sharePath, out treeId);
-
             Smb2CreateContextResponse[] createContextResponse;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends CREATE request with BatchOplock.");
             client1.Create(treeId, fileName, CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out fileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_BATCH,
+                checker: (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                       "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+
+                    if (response.OplockLevel == OplockLevel_Values.OPLOCK_LEVEL_NONE)
+                    {
+                        BaseTestSite.Assert.Inconclusive("OpLock request not succeeded.");
+                    }
+                });
+            #endregion
+
+            #region Oplock Break
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start the second client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.");
+            client2.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client2.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
+            uint client2TreeId;
+            client2.TreeConnect(sharePath, out client2TreeId);
+
+            FILEID client2FileId;
+            ulong createRequestId;
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "The second client sends CREATE request on the same file with the first client.");
+            client2.CreateRequest(client2TreeId, fileName, CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out createRequestId);
+
+            BaseTestSite.Assert.IsTrue(OpLockNotificationReceived.WaitOne(TestConfig.WaitTimeoutInMilliseconds),
+                "The expected OPLOCK_BREAK_NOTIFY should be received within {0} milliseconds", TestConfig.WaitTimeoutInMilliseconds);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends OPLOCK_ACKNOWLEDGEMENT request after received OPLOCK_BREAK_NOTIFICATION response from server.");
+            OplockBreakAcknowledgment(client1);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "The second client sends CREATE response");
+            client2.CreateResponse(createRequestId, out client2FileId, out createContextResponse);
+            #endregion
+
+            #region Tear Down Clients
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the first client by sending CLOSE, TREE_DISCONNECT, and LOG_OFF.");
+            client1.Close(treeId, fileId);
+            client1.TreeDisconnect(treeId);
+            client1.LogOff();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the second client by sending CLOSE, TREE_DISCONNECT, and LOG_OFF.");
+            client2.Close(client2TreeId, client2FileId);
+            client2.TreeDisconnect(client2TreeId);
+            client2.LogOff();
+            #endregion
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.OplockOnShareWithoutForceLevel2OrSOFS)]
+        [Description("This test case is designed to test whether sever can handle OplockBreak correctly for lease level.")]
+        public void BVT_OpLockBreak_Lease()
+        {
+            #region Add Event Handler
+            client1.Smb2Client.OplockBreakNotificationReceived += new Action<Packet_Header, OPLOCK_BREAK_Notification_Packet>(OnOpLockBreakNotificationReceived);
+            #endregion
+
+            #region Client1 Open a File with BatchOpLock
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start the first client by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT.");
+            client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
+            client1.TreeConnect(sharePath, out treeId);
+            Smb2CreateContextResponse[] createContextResponse;
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "The first client sends CREATE request with BatchOplock.");
+            client1.Create(treeId, fileName, CreateOptions_Values.FILE_NON_DIRECTORY_FILE, out fileId, out createContextResponse, RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
                 checker: (header, response) =>
                 {
                     BaseTestSite.Assert.AreEqual(
