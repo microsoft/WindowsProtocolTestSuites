@@ -266,7 +266,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
         [TestCategory(TestCategories.Smb21)]
         [TestCategory(TestCategories.FsctlLmrRequestResiliency)]
         [Description("Test whether server can request a durable open when receiving FSCTL_LMR_REQUEST_RESILLIENNCY successfully for lease level.")]
-        public void BVT_ResilientHandle_Reconnect_Leasing()
+        public void BVT_ResilientHandle_Reconnect_Lease()
         {
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb21);
@@ -330,7 +330,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
         [TestCategory(TestCategories.Smb21)]
         [TestCategory(TestCategories.FsctlLmrRequestResiliency)]
         [Description("This test case is designed to test whether server can handle Lock request with specified LockSequence for lease level.")]
-        public void BVT_ResilientHandle_LockSequence_Leasing()
+        public void BVT_ResilientHandle_LockSequence_Lease()
         {
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb21);
