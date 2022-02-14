@@ -39,9 +39,10 @@ finally
 try
 {
 	##get service object
-	$serviceObj = get-service -computername $computerName Netlogon
-	##restart.
-	Restart-Service -inputObject $serviceObj -force
+	Invoke-Command -Computername $computerName -Scriptblock { $serviceObj = Get-Service Netlogon
+		##restart.
+		Restart-Service -inputObject $serviceObj -force
+	}
 }
 catch
 {
@@ -49,7 +50,6 @@ catch
 }
 finally
 {
-	$serviceObj.Close()
 
 	[System.GC]::Collect();
 	[System.GC]::WaitForPendingFinalizers();

@@ -356,7 +356,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         // Decompressor Glyph Storage 
         private Dictionary<ushort, Image> clearCodecGlyphStorage;
 
-        private ImageQualityAccessment.FRIQAIndexBase iqaIndex;
+        private ImageQualityAssessment.FRIQAIndexBase iqaIndex;
 
         private double assessValueThreshold;
 
@@ -406,15 +406,15 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             this.assessValueThreshold = assessValueThreshold;
             if (IQAAlgorithm == IQA_Algorithm.GSSIM)
             {
-                iqaIndex = new ImageQualityAccessment.Gssim();
+                iqaIndex = new ImageQualityAssessment.Gssim();
             }
             else if (IQAAlgorithm == IQA_Algorithm.MSSSIM)
             {
-                iqaIndex = new ImageQualityAccessment.Msssim();
+                iqaIndex = new ImageQualityAssessment.Msssim();
             }
             else
             {
-                iqaIndex = new ImageQualityAccessment.Ssim();
+                iqaIndex = new ImageQualityAssessment.Ssim();
             }
 
             baseImage = new Bitmap(width, height);
@@ -988,13 +988,13 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             Bitmap inputImage = bitmap.Clone(new Rectangle(shift.X + compareRect.Left, shift.Y + compareRect.Top, compareRect.Width, compareRect.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
             // Extend image if necessary, so as to make sure the image used for IQA assess is not smaller than size requested by SSIM/MS-SSIM/G-SSIM algorithm
-            referenceImage = ExtendImage(referenceImage, ImageQualityAccessment.Ssim.MinWidth, ImageQualityAccessment.Ssim.MinHeight);
-            inputImage = ExtendImage(inputImage, ImageQualityAccessment.Ssim.MinWidth, ImageQualityAccessment.Ssim.MinWidth);
+            referenceImage = ExtendImage(referenceImage, ImageQualityAssessment.Ssim.MinWidth, ImageQualityAssessment.Ssim.MinHeight);
+            inputImage = ExtendImage(inputImage, ImageQualityAssessment.Ssim.MinWidth, ImageQualityAssessment.Ssim.MinWidth);
 
             if (IQAAssessY)
             {
                 // Assess Y component
-                ImageQualityAccessment.AssessResult res = iqaIndex.Assess(referenceImage, inputImage, ImageQualityAccessment.UseComponent.Luma);
+                ImageQualityAssessment.AssessResult res = iqaIndex.Assess(referenceImage, inputImage, ImageQualityAssessment.UseComponent.Luma);
                 double assessValueY = res.Luma;
 
                 site.Log.Add(LogEntryKind.Comment, "SimulatedScreen: Assess Y component of Images using {0} algorithm, assess value is {1}, assess value threshold is {2}.", iqaIndex.IndexName, assessValueY, assessValueThreshold);
@@ -1007,7 +1007,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (IQAAssessCb)
             {
                 // Assess Cb component
-                ImageQualityAccessment.AssessResult res = iqaIndex.Assess(referenceImage, inputImage, ImageQualityAccessment.UseComponent.Cb);
+                ImageQualityAssessment.AssessResult res = iqaIndex.Assess(referenceImage, inputImage, ImageQualityAssessment.UseComponent.Cb);
                 double assessValueCb = res.Cb;
 
                 site.Log.Add(LogEntryKind.Comment, "SimulatedScreen: Assess Cb component of Images using {0} algorithm, assess value is {1}, assess value threshold is {2}.", iqaIndex.IndexName, assessValueCb, assessValueThreshold);
@@ -1020,7 +1020,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             if (IQAAssessCr)
             {
                 // Assess Cr component
-                ImageQualityAccessment.AssessResult res = iqaIndex.Assess(referenceImage, inputImage, ImageQualityAccessment.UseComponent.Cr);
+                ImageQualityAssessment.AssessResult res = iqaIndex.Assess(referenceImage, inputImage, ImageQualityAssessment.UseComponent.Cr);
                 double assessValueCr = res.Cr;
 
                 site.Log.Add(LogEntryKind.Comment, "SimulatedScreen: Assess Cr component of Images using {0} algorithm, assess value is {1}, assess value threshold is {2}.", iqaIndex.IndexName, assessValueCr, assessValueThreshold);

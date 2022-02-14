@@ -48,7 +48,7 @@ You should install the software listed below based on your testing purpose, incl
 
       Note:
 
-<a name="footnote1">1</a>: This individual component is required by ADFamily and MS-SMBD which have C++ code.
+<a name="footnote1">[1]</a>: This individual component is required by ADFamily and MS-SMBD which have C++ code.
 
 1. [Protocol Test Framework v2.2 (build 2.2.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/2.2.0)
 

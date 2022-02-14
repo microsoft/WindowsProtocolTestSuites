@@ -231,13 +231,15 @@ This section describes how to set up the driver computer.
 ![image5.png](./image/MS-SMBD_ServerUserGuide/image5.png)
 Important 
 
->Microsoft Visual Studio 2017 and Protocol Test Framework must be installed on the driver computer before you run the test suite installer.
+>Microsoft Visual Studio 2019 must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 
 * Install the required and the optional software as mentioned in [6.5](#_Toc395696801).
+* Install <a href="https://www.microsoft.com/en-us/download/details.aspx?id=36043">Network Direct DDK.
+* Install Windows 10 SDK (10.0.19041.0)
+* Install C++ 2019 Redistributable Update
 * Install the related R-NIC Driver.
-* Install the MSI on the driver computer. When options are prompted, select the option, **Install Test Suite on Driver Computer**.
 
 ### <a name="_Toc395696825"/>Setup the SUT
 

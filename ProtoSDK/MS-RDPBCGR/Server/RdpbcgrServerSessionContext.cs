@@ -660,7 +660,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             {
                 lock (contextLock)
                 {
-                    if (mcsConnectInitialPdu != null)
+                    if (mcsConnectInitialPdu != null && mcsConnectInitialPdu.gccPdu != null && mcsConnectInitialPdu.gccPdu.clientMultitransportChannelData != null)
                     {
                         return mcsConnectInitialPdu.gccPdu.clientMultitransportChannelData.flags;
                     }

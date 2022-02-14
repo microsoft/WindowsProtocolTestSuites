@@ -215,7 +215,7 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 95         | SMB2 common scenarios.                                                                                            |
+| SMB2 BVT                 | 97         | SMB2 common scenarios.                                                                                            |
 | SMB2 Feature Test        | 2640       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
@@ -3264,6 +3264,30 @@ This is used to test SMB2 common user scenarios.
 |                          | 2.  Client write compressible data to server by sending WRITE request chained and compressed with PatternV1. |
 |                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
 |                          | 4.  Verifies the READ response is chained and compressed with PatternV1 and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_Unchained |
+| **Description** | This test case is designed to test whether server can compress WRITE request and READ response using unchained compression. |
+| **Prerequisites** | The server implements dialect 3.11 and unchained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with unchained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write unchained compressible data to server by sending WRITE request compressed with supported server compression. |
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified. | 
+|                          | 4.  Verifies the READ response is unchained and compressed with supported SUT compression and data read out are equal to the written one. | 
+|                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+|||
+|---|---|
+| **Test ID** | BVT_SMB2Compression_Unchained_LargeFile |
+| **Description** | This test case is designed to test whether server can compress WRITE request and READ response using unchained compression for large file. |
+| **Prerequisites** | The server implements dialect 3.11 and unchained compression feature. |
+| **Test Execution Steps** | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE with unchained compression enabled; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                          | 2.  Client write 1 megabyte unchained compressible data to server by sending WRITE request compressed with supported server compression multiple times to generate a large file.|
+|                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file.| 
+|                          | 4.  Verifies the READ response is unchained and compressed with supported SUT compression and data read out are equal to the written one. | 
 |                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cleanup**              ||
 

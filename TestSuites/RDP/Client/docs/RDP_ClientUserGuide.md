@@ -74,6 +74,8 @@
 
             -    [MS-RDPBCGR Required Property Settings](#ms-rdpbcgr-required-property-settings)
 
+            -    [MS-RDPEUSB Required Property Settings](#ms-rdpeusb-required-property-settings)
+
             -    [MS-RDPRFX Required Property Settings](#ms-rdprfx-required-property-settings)
 
             -    [MS-RDPEGFX Required Property Settings](#ms-rdpegfx-required-property-settings)
@@ -1448,6 +1450,8 @@ require property setting verification include the following:
 
 -   MS- RDPBCGR
 
+-   MS- RDPEUSB
+
 -   MS- RDPRFX
 
 -   MS- RDPEGFX
@@ -1473,12 +1477,24 @@ MS-RDPBCGR Test Cases only.
 | **SupportServerRedirection** | Indicates if the remote desktop client (**SUT**) installation supports Server Redirection. The possible values are **True** and **False**.<br/>Default value: **True** |
 |                              |                                      |
 
+#### **MS-RDPEUSB Required Property Settings**
+
+The following data table describes the property settings required for
+MS-RDPEUSB Test Cases only.
+
+**Table 11. Required property settings for MS- RDPEUSB Test Cases**
+
+| **Property**                 | **Description/Value**                |
+|------------------------------|--------------------------------------|
+| **SupportEUSBDevice**        | Indicates if the remote desktop client (**SUT**) installation supports EUSB device. The possible values are **True** and **False**.<br/>Default value: **False** |
+|                              |                                      |
+
 #### **MS-RDPRFX Required Property Settings**
 
 The following data table describes the property settings required for
 MS-RDPRFX Test Cases only.
 
-**Table 11. Required property settings for MS- RDPRFX Test Cases**
+**Table 12. Required property settings for MS- RDPRFX Test Cases**
 
 
 | **Property**             | **Description/Value**                    |
@@ -1492,7 +1508,7 @@ MS-RDPRFX Test Cases only.
 The following data table describes the property settings required for
 MS-RDPEGFX Test Cases only
 
-**Table 12. Required property settings for MS- RDPEGFX Test Cases**
+**Table 13. Required property settings for MS- RDPEGFX Test Cases**
 
 | **Property**                 | **Description/Value**                |
 |------------------------------|--------------------------------------|
@@ -1505,7 +1521,7 @@ MS-RDPEGFX Test Cases only
 
 The following data table describes the property settings required for MS-RDPEDISP Test Cases only.
 
-**Table 13. Required property settings for MS- RDPEDISP Test Cases**
+**Table 14. Required property settings for MS- RDPEDISP Test Cases**
 
 | **Property**              | **Description/Value**                   |
 |---------------------------|-----------------------------------------|
@@ -1522,7 +1538,7 @@ The following data table describes the property settings required for MS-RDPEDIS
 
 The following table describes optionally configurable properties and suggested value settings in the RDP_ClientTestSuite.deployment.ptfconfig file.
 
-**Table 14. Optional property settings**
+**Table 15. Optional property settings**
 
 | **Property**           | **Description/Value**                      |
 |------------------------|--------------------------------------------|
@@ -1800,7 +1816,7 @@ You will find the BVT command files (.ps1) in the directory location below on th
 Note that the command files (.ps1) in this directory are accessible from a directory shortcut named **Run Test Cases Scripts** on your **Driver** computer desktop, 
 which is created during the **Test Suite** installation process.
 
-**Table 15. Verification tests and executable command files on the Driver computer**
+**Table 16. Verification tests and executable command files on the Driver computer**
 
 |  **Verification Test Entity** |  **Verification Command File**|
 |------------------------------ |-------------------------------|
@@ -1826,7 +1842,7 @@ The table that follows specifies test case entities, command files, and the acti
 Note that the command files (.ps1) in the above directory are accessible from a directory shortcut named **Run Test Cases Scripts**, which is
 created on your **Driver computer** desktop during the **Test Suite** installation process.
 
-**Table 16. Test Cases and executable command files on the Driver computer**
+**Table 17. Test Cases and executable command files on the Driver computer**
 
 |  **Verification Test Entity** |  **Verification Command File**|
 |------------------------------ |-------------------------------|
@@ -1937,7 +1953,7 @@ configured in **PowerShell** mode. To test this example on the **Driver** comput
 The **RDP Client Test Suite** test results output is located in different directory paths depending on the method used to execute the
 Test Cases. The table that follows identifies the test mode and the related directory locations from where you can view test results data:
 
-**Table 17. Test Case results directories**
+**Table 18. Test Case results directories**
 
 | **Test Mode**                              | **Test Results Directory**                  |
 |--------------------------------------------|---------------------------------------------|
@@ -2241,7 +2257,7 @@ the following steps:
 
 15. In the **Configure Adapters** page of the PTM Wizard, observe the following Adapters and the indicated topics to which the adapter settings correspond:
 
-    **Table 18. Control Adapter configuration setting instructions**
+    **Table 19. Control Adapter configuration setting instructions**
 
     |**Adapter Name**               |**Related Topic**|
     |-------------------------------|-----------------|
@@ -2420,7 +2436,7 @@ a successfully functioning protocol.
 Some of the status indicators that you will encounter as you review your
 test results are described in the table that follows:
 
-**Table 19. Test results status indicators**
+**Table 20. Test results status indicators**
 
 | **Status Indicator** | **Description**      | **UI Location**      |
 |----------------------|----------------------|----------------------|
@@ -2954,7 +2970,7 @@ Rules** for identification of certain RDP messages.
 
       The table that follows describes the **Color Rules** and the origin of the messages that trigger them to display:
 
-      **Table 20. Message Analyzer Color Rule data for RDP Test Suite**
+      **Table 21. Message Analyzer Color Rule data for RDP Test Suite**
 
       | **Color Rule**       | **Rule Activation Trigger**    | **Description**      |
       |----------------------|--------------------------------|----------------------|
@@ -3038,7 +3054,7 @@ In this section you will find information about troubleshooting common
 
 ## Ping Failure
 
-**Table 21. Problem, Cause, and Resolution of Ping failures**
+**Table 22. Problem, Cause, and Resolution of Ping failures**
 |                  |                                                                            |
 |------------------|----------------------------------------------------------------------------|
 |  **PROBLEM**     | The **SUT** computer does not respond to pings from the **Driver** computer.|
@@ -3048,7 +3064,7 @@ In this section you will find information about troubleshooting common
 
 ## Test Run Issues
 
-**Table 22. Problem, Cause, and Resolution of Test Case execution issues**
+**Table 23. Problem, Cause, and Resolution of Test Case execution issues**
 
 |                  |                                                                            |
 |------------------|----------------------------------------------------------------------------|
@@ -3063,7 +3079,7 @@ In this section you will find information about troubleshooting common
 
 ## RDPEUSB Test Cases Fail
 
-**Table 23. Problem, Cause, and Resolution of RDPEUSB Test Case execution issues**
+**Table 24. Problem, Cause, and Resolution of RDPEUSB Test Case execution issues**
 
 |                |                                                    |
 |----------------|----------------------------------------------------|
@@ -3074,7 +3090,7 @@ In this section you will find information about troubleshooting common
 
 ## RDPEUDP and RDPEMT Test Cases Fail
 
-**Table 24. Problem, Cause, and Resolution of RDPEUDP and RDPEMT Test Case execution issues**
+**Table 25. Problem, Cause, and Resolution of RDPEUDP and RDPEMT Test Case execution issues**
 
 |                |                                                    |
 |----------------|----------------------------------------------------|
@@ -3086,7 +3102,7 @@ In this section you will find information about troubleshooting common
 
 ## RDPBCGR Test Cases Fail When Running in PowerShell Mode
 
-**Table 25. Problem, Cause, and Resolution of RDPBCGR Test Case failures**
+**Table 26. Problem, Cause, and Resolution of RDPBCGR Test Case failures**
 
 |                |                                                    |
 |----------------|----------------------------------------------------|
@@ -3095,7 +3111,7 @@ In this section you will find information about troubleshooting common
 
 ## RDPEGFX Test Cases Require H264 Enabled on SUT
 
-**Table 26. Problem, Cause, and Resolution of RDPEGFX Test Case failures**
+**Table 27. Problem, Cause, and Resolution of RDPEGFX Test Case failures**
 
 |                |                                                    |
 |----------------|----------------------------------------------------|
@@ -3106,7 +3122,7 @@ In this section you will find information about troubleshooting common
 
 ## Test Cases Fail When Using the TLS or CredSSP Protocol
 
-**Table 27. Problem, Cause, and Resolution of Test Case failures associated with TLS and CredSSP use**
+**Table 28. Problem, Cause, and Resolution of Test Case failures associated with TLS and CredSSP use**
 
 |                  |                                                    |
 |------------------|----------------------------------------------------|

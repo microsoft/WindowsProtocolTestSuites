@@ -34,6 +34,7 @@ if(Test-Path -Path $settingFile)
     $workgroupDomain    = .\Get-Parameter.ps1 $settingFile workgroupDomain
     $tcSystemDrive      = .\Get-Parameter.ps1 $settingFile tcSystemDrive
     $agentPort          = .\Get-Parameter.ps1 $settingFile agentPort
+    $agentRemoteClient  = .\Get-Parameter.ps1 $settingFile agentRemoteClient
     $compressionInTC    = .\Get-Parameter.ps1 $settingFile compressionInTC
     .\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
 }
@@ -132,6 +133,7 @@ Write-Host "`$RDPVersion         = $RDPVersion"
 Write-Host "`$workgroupDomain    = $workgroupDomain"
 Write-Host "`$tcSystemDrive      = $tcSystemDrive"
 Write-Host "`$agentPort          = $agentPort"
+Write-Host "`$agentRemoteClient  = $agentRemoteClient"
 Write-Host "`$compressionInTC    = $compressionInTC"
 
 #-----------------------------------------------------
@@ -264,8 +266,15 @@ if ($osVersion.ToUpper() -eq "NONWINDOWS")
 }
 else
 {
-    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "IsWindowsImplementation"      "true"
-    .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" $DropConnectionForInvalidRequest
+    if($agentRemoteClient -ne "mstsc"){
+        .\Modify-ConfigFileNode.ps1 $DepPtfConfig "IsWindowsImplementation" "false"
+        .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" "false"
+    }
+    else
+    {
+        .\Modify-ConfigFileNode.ps1 $DepPtfConfig "IsWindowsImplementation"      "true"
+        .\Modify-ConfigFileNode.ps1 $DepPtfConfig "DropConnectionForInvalidRequest" $DropConnectionForInvalidRequest
+    }
 }
 
 if ($securityProtocol.ToUpper() -eq "RDP")
@@ -291,6 +300,16 @@ else
 
 Write-Host  "TurnOff FileReadonly for $DepPtfConfig due to Execution Console..."
 .\TurnOff-FileReadonly.ps1 $DepPtfConfig
+
+#-----------------------------------------------------
+# Edit registery.
+# Disable TLS 1.0 for Server
+#-----------------------------------------------------
+Write-Host "Disable TLS 1.0 for Server."
+New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -Force | Out-Null
+New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -name 'Enabled' -value 0 -PropertyType 'DWord' -Force | Out-Null
+New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -name 'DisabledByDefault' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+Write-Host 'TLS 1.0 has been disabled.'
 
 #-----------------------------------------------------
 # Create task to detect whether the SUT Adapter works

@@ -1209,7 +1209,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// Encrypted files
         /// File system metadata files
         /// </summary>
-        STATUS_OFFLOAD_WRITE_FILE_NOT_SUPPORTED = 0xC000A2A4
+        STATUS_OFFLOAD_WRITE_FILE_NOT_SUPPORTED = 0xC000A2A4,
+
+        /// <summary>
+        /// This operation is not supported on directory files.
+        /// </summary>
+        STATUS_DIRECTORY_NOT_SUPPORTED = 0xC000047C,
+
+        /// <summary>
+        /// This operation is only supported on redundant media.
+        /// </summary>
+        STATUS_NOT_REDUNDANT_STORAGE = 0xC0000479,
+
+        /// <summary>
+        /// This operation is not supported on a resident file.
+        /// </summary>
+        STATUS_RESIDENT_FILE_NOT_SUPPORTED = 0xC000047A,
+
+        /// <summary>
+        /// This operation is not supported on compressed files.
+        /// </summary>
+        STATUS_COMPRESSED_FILE_NOT_SUPPORTED = 0xC000047B
     }
 
     /// <summary>

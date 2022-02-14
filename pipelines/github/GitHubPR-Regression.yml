@@ -15,7 +15,7 @@ stages:
             displayName: 'Check License Header'
             inputs:
               filePath: 'CommonScripts/CheckLicenseHeader.ps1'
-              arguments: '-TestSuitePath $(Build.Repository.LocalPath) -IsCheckAll $false -targetBranch "$(system.pullRequest.targetBranch)" -sourceBranch "$(system.pullRequest.sourceBranch)" '
+              arguments: '-TestSuitePath $(Build.Repository.LocalPath) -IsCheckAll $false -targetBranch "$(system.pullRequest.targetBranch)" -sourceBranch "$(system.pullRequest.sourceBranch)" -prNum "$(system.pullRequest.pullRequestNumber)"'
             condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
 
           - task: PowerShell@2

@@ -352,7 +352,6 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             hiddenProp.Add("RDPConnectWithDirectCredSSPFullScreen_Task");
             hiddenProp.Add("TriggerClientAutoReconnect_Task");
             hiddenProp.Add("TriggerInputEvents_Task");
-            hiddenProp.Add("TriggerClientDisconnectAll_Task");
             hiddenProp.Add("TriggerOneTouchEvent_Task");
             hiddenProp.Add("TriggerMultiTouchEvent_Task");
             hiddenProp.Add("TriggerSingleTouchPositionEvent_Task");
