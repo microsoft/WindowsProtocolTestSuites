@@ -466,7 +466,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 }
                 catch (SspiException e)
                 {
-                    site.Assert.Pass("Invalid Account Encountered. SSPI Handshake Failed");
+                    site.Assert.Pass("Invalid Account Encountered. SSPI Handshake or CredSSP Authentication Failed");
 
                 }
             }
