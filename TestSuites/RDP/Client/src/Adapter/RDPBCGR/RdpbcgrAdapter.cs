@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -466,8 +467,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 }
                 catch (SspiException e)
                 {
-                    site.Assert.Pass("Invalid Account Encountered. SSPI Handshake or CredSSP Authentication Failed");
+                    site.Assert.Pass("Invalid Account Encountered. SSPI Handshake Failed");
 
+                }
+                catch (EndOfStreamException e)
+                {
+                    site.Assert.Pass("Invalid Account Encountered. CredSSP Authentication Failed");
                 }
             }
             sessionState = ServerSessionState.X224ConnectionResponseSent;
