@@ -1,18 +1,13 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools;
-using System.Timers;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
 {
@@ -44,6 +39,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
         protected override void TestInitialize()
         {
             base.TestInitialize();
+            notificationReceived = new AutoResetEvent(false);
             sharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
             fileName = GetTestFileName(sharePath);
             client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
@@ -163,7 +159,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             #endregion
 
             #region Client1 Open a File with Lease RWH
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, 
+            BaseTestSite.Log.Add(LogEntryKind.TestStep,
                 "Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE (with context: {0})",
                 leaseContext is Smb2CreateRequestLease ? "LeaseV1" : "LeaseV2");
             client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
