@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
-using Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System.Threading;
@@ -18,9 +17,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         protected LEASE_BREAK_Notification_Packet receivedLeaseBreakNotify;
 
         /// <summary>
-        /// ManualResetEvent instance for signal
+        /// AutoResetEvent instance for signal
         /// </summary>
-        protected ManualResetEvent notificationReceived = new ManualResetEvent(false);
+        protected AutoResetEvent notificationReceived = new AutoResetEvent(false);
 
         /// <summary>
         /// Expected new lease state in LEASE_BREAK_Notification

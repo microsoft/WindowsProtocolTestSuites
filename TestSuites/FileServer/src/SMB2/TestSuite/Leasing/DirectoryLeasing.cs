@@ -3,12 +3,11 @@
 
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
-using Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.IO;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 {
@@ -37,6 +36,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         protected override void TestInitialize()
         {
             base.TestInitialize();
+            notificationReceived = new AutoResetEvent(false);
             client = new Smb2FunctionalClient(TestConfig.LongerTimeout, TestConfig, BaseTestSite);
             client.Smb2Client.LeaseBreakNotificationReceived +=
                 new Action<Packet_Header, LEASE_BREAK_Notification_Packet>(base.OnLeaseBreakNotificationReceived);
