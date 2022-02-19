@@ -535,9 +535,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
             packet.Header.LogWindowSize = SocketConfig.InitialLogWindowSize;
 
             packet.Header.Flags |= Rdpeudp2PacketHeaderFlags.ACK;
-            packet.ACK = null;
+            packet.ACK = new AcknowledgementPayload();
             packet.Header.Flags |= Rdpeudp2PacketHeaderFlags.ACKVEC;
-            packet.ACKVEC = null;
+            packet.ACKVEC = new AcknowledgementVectorPayload();
 
 
             lock (sequenceNumberLock)
