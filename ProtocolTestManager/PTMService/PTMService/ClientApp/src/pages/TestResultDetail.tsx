@@ -545,7 +545,7 @@ export function TestResultDetail(props: any) {
               testResults.selectedTestResult === undefined
                 ? null
                 : testResults.selectedTestResult.Overview.Status === 'Running'
-                  ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={toggleAbortDialogHidden}>Abort</PrimaryButton>
+                  ? <PrimaryButton style={{ backgroundColor: '#ce3939' }} onClick={toggleAbortDialogHidden}>Abort</PrimaryButton>
                   : null
             }
             {
@@ -599,7 +599,7 @@ export function TestResultDetail(props: any) {
         </div>
         <DialogFooter>
           <PrimaryButton onClick={toggleAbortDialogHidden} text="Cancel" />
-          <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onAbortDialogAbortButtonClick} text="Abort" />
+          <PrimaryButton style={{ backgroundColor: '#ce3939' }} onClick={onAbortDialogAbortButtonClick} text="Abort" />
         </DialogFooter>
       </Dialog>
       <Dialog
