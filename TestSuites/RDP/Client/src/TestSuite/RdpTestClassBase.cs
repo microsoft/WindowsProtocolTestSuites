@@ -236,6 +236,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                         {
                             iResult = 0;
                             CredentialManagerAddInvalidAccount();
+                            // Will delay for five seconds as 12R2 is slower to execute Account Name change
+                            Thread.Sleep(5000);
                             iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachInvalidAccount(this.TestContext.TestName);
                         }
                         else if (fullScreen)
@@ -257,6 +259,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                         {
                             iResult = 0;
                             CredentialManagerAddInvalidAccount();
+                            // Will delay for five seconds as 12R2 is slower to execute Account Name change
+                            Thread.Sleep(5000);
                             iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPInvalidAccount(this.TestContext.TestName);
                         }
                         else if (fullScreen)
