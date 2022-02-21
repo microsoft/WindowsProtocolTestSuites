@@ -432,6 +432,10 @@ export function TaskHistory(props: any) {
                   marginTop: -10
                 }
               }}
+              firstPageAriaLabel="First page"
+              previousPageAriaLabel="Previous page"
+              nextPageAriaLabel="Next page"
+              lastPageAriaLabel="Last page"
               selectedPageIndex={testResults.pageNumber}
               pageCount={testResults.pageCount}
               onPageChange={onChangePageNumber}
