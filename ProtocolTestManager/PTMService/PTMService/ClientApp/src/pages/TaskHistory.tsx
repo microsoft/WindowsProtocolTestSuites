@@ -150,7 +150,7 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
           <Stack horizontal tokens={StackGap10}>
             {
               item.Status === 'Created' || item.Status === 'Running'
-                ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={() => { props.onAbort(item.Id) }}>Abort</PrimaryButton>
+                ? <PrimaryButton style={{ backgroundColor: '#ce3939' }} onClick={() => { props.onAbort(item.Id) }}>Abort</PrimaryButton>
                 : null
             }
             {
@@ -274,7 +274,7 @@ export function TaskHistory(props: any) {
   const renderId = useCallback((testResultId: number) => {
     if (latestTestResultId !== undefined && latestTestResultId === testResultId) {
       return <Stack horizontal>
-        <div style={{ color: '#ff4949', fontSize: 'large', fontWeight: 'bold' }}>New!</div>
+        <div style={{ color: '#ce3939', fontSize: 'large', fontWeight: 'bold' }}>New!</div>
         <div style={{ paddingLeft: 5, fontSize: 'large' }}>{testResultId}</div>
       </Stack>
     } else {
@@ -459,7 +459,7 @@ export function TaskHistory(props: any) {
         </Stack>
         <DialogFooter>
           <PrimaryButton onClick={toggleDialogHidden} text="Cancel" />
-          <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onDialogAbortButtonClick} text="Abort" />
+          <PrimaryButton style={{ backgroundColor: '#ce3939' }} onClick={onDialogAbortButtonClick} text="Abort" />
         </DialogFooter>
       </Dialog>
     </div>
