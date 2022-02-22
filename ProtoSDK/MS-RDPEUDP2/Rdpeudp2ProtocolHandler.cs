@@ -418,6 +418,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
         public IEnumerable<Rdpeudp2Packet> ExpectPackets(TimeSpan timeout, Func<Rdpeudp2Packet, bool> filter)
         {
             DateTime endtime = DateTime.Now + timeout;
+            int count = 0;
+
             while (DateTime.Now < endtime)
             {
                 lock (unprocessedPacketBuffer)
@@ -428,7 +430,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
                         if (filter(eudp2Packet))
                         {
                             unprocessedPacketBuffer.RemoveAt(i);
+                            count++;
                             yield return eudp2Packet;
+                        }
+                        if(count == 1)
+                        {
+                            yield break;
                         }
                     }
                 }
