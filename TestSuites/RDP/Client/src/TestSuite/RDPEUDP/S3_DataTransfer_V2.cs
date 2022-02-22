@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpeudp
 {
@@ -196,10 +197,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.SendPacket(nextUdpPacket[5]);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Packet to acknowledge the receipt of all RDPUDP2 Packets.");
-            var ackVECPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPacket(this.waitTime);
+            var ackVECPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPackets(this.waitTime);
 
-            var codedAckVecSize = ackVECPacket.ACKVEC.Value.codedAckVecSize;
-            var BaseSeqNum = ackVECPacket.ACKVEC.Value.BaseSeqNum;
+            var codedAckVecSize = ackVECPacket.ToList().Count;//.ACKVEC.Value.codedAckVecSize;
+            var BaseSeqNum = ackVECPacket.ToList().Count;//.ACKVEC.Value.BaseSeqNum;
 
             Site.Assert.AreEqual<int>(2, Convert.ToInt32(codedAckVecSize),"Value Wrong");
 
