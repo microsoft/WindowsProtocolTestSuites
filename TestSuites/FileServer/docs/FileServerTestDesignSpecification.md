@@ -7783,7 +7783,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 |||
 |---|---|
-| **Test ID**              | SWNRegistrationEx\_InvalidIpAddress                                                   |
+| **Test ID**              | SWNRegistrationEx\_InvalidShareName                                                   |
 | **Description**         | Register with WitnessrRegisterEx and invalid sharename.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |
