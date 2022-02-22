@@ -181,7 +181,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             {
                 { 1, GetRandomByteData()},
                 { 2, GetRandomByteData()},
-                { 3, GetRandomByteData()}
+                { 3, GetRandomByteData()},
+                { 4, GetRandomByteData()},
+                { 5, GetRandomByteData()}
             };
 
             var nextUdpPacket = this.GetNextValidUdp2PacketList(dataList);
@@ -191,6 +193,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             this.SendPacket(nextUdpPacket[1]);
             this.SendPacket(nextUdpPacket[3]);
+            this.SendPacket(nextUdpPacket[5]);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Packet to acknowledge the receipt of all RDPUDP2 Packets.");
             var ackVECPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPacket(this.waitTime);
