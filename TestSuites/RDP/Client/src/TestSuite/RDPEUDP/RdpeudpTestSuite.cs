@@ -527,9 +527,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         {
             var packetList = new Dictionary<int, Rdpeudp2Packet>();
 
-            for (int i = 1; i < 3; i++)
+            for (int i = 1; i <= 3; i++)
             {
-                var encryptedData = GetEncryptedData(rdpeudp2TransportMode, dataList.GetValueOrDefault(i));
+                var encryptedData = GetEncryptedData(rdpeudp2TransportMode, dataList[i]);
                 var packet = rdpeudpSocketR.Rdpeudp2Handler.CreateDataPacket(encryptedData);
 
                 packetList.Add(i, packet);

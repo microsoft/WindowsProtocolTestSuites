@@ -176,15 +176,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             TimeSpan.FromSeconds(0.5),
             "RDPEMT tunnel creation failed");
 
-            Random random = new Random();
-            byte[] bytes = new byte[1000];
-            
             this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepare one RDPUDP2 Packet with the packet values given in section 4.4 of the RDPEUDP2 document.");
             var dataList = new Dictionary<int, byte[]>()
             {
-                { 1, new byte[1000] },
-                { 2, new byte[1000] },
-                { 3, new byte[1000] }
+                { 1, GetRandomByteData()},
+                { 2, GetRandomByteData()},
+                { 3, GetRandomByteData()}
             };
 
             var nextUdpPacket = this.GetNextValidUdp2PacketList(dataList);
@@ -192,8 +189,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             //this.TestSite.Log.Add(LogEntryKind.Debug, $"The DataSeqNum of next valid RDPEUDP2 packet is {nextUdpPacket.DataHeader.Value.DataSeqNum}.");
             //this.TestSite.Log.Add(LogEntryKind.Debug, $"The ACK payload of next valid RDPEUDP2 packet is to acknowledge {nextUdpPacket.ACK.Value.SeqNum}.");
 
-            this.SendPacket(nextUdpPacket.GetValueOrDefault(1));
-            this.SendPacket(nextUdpPacket.GetValueOrDefault(3));
+            this.SendPacket(nextUdpPacket[1]);
+            this.SendPacket(nextUdpPacket[3]);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Packet to acknowledge the receipt of all RDPUDP2 Packets.");
             var ackPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPacket(this.waitTime);
@@ -201,6 +198,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             var delayedAcksNum = ackPacket.ACK.Value.numDelayedAcks;
             this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge DataSeqNum {dataSeqNum} and previous {delayedAcksNum} DataSeqNums.");
             Site.Assert.IsNotNull(ackPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
+        }
+
+        private byte[] GetRandomByteData()
+        {
+            Random random = new Random();
+            byte[] bytes = new byte[1000];
+
+            random.NextBytes(bytes);
+
+            return bytes;
         }
     }
 }
