@@ -519,6 +519,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         }
 
         /// <summary>
+        /// Get the an odd list of valid sequenced RDPEUDP2 packet.
+        /// </summary>
+        /// <param name="dataList">List of data to be sent with the order.</param>
+        /// <returns>The a list of valid sequenced RDPEUDP2 packets.</returns>
+        private Dictionary<int, Rdpeudp2Packet> GetNextValidUdp2PacketList(Dictionary<int, byte[]> dataList)
+        {
+            var packetList = new Dictionary<int, Rdpeudp2Packet>();
+
+            for (int i = 1; i < 3; i++)
+            {
+                var encryptedData = GetEncryptedData(rdpeudp2TransportMode, dataList.GetValueOrDefault(i));
+                var packet = rdpeudpSocketR.Rdpeudp2Handler.CreateDataPacket(encryptedData);
+
+                packetList.Add(i, packet);
+            }
+
+            return packetList;
+        }
+
+        /// <summary>
         /// Get the next invalid RDPEUDP2 packet with both ACK flag and ACKVEC flag.
         /// </summary>
         /// <param name="data">Data to be sent.</param>
