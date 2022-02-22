@@ -193,11 +193,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.SendPacket(nextUdpPacket[3]);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Packet to acknowledge the receipt of all RDPUDP2 Packets.");
-            var ackPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPacket(this.waitTime);
-            var dataSeqNum = ackPacket.ACK.Value.SeqNum;
-            var delayedAcksNum = ackPacket.ACK.Value.numDelayedAcks;
-            this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge DataSeqNum {dataSeqNum} and previous {delayedAcksNum} DataSeqNums.");
-            Site.Assert.IsNotNull(ackPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
+            var ackVECPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPacket(this.waitTime);
+
+            var codedAckVecSize = ackVECPacket.ACKVEC.Value.codedAckVecSize;
+            var BaseSeqNum = ackVECPacket.ACKVEC.Value.BaseSeqNum;
+
+            this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge codedAckVecSize {codedAckVecSize} and previous {BaseSeqNum} BaseSeqNum.");
+            Site.Assert.IsNotNull(ackVECPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
         }
 
         private byte[] GetRandomByteData()
