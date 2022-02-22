@@ -176,12 +176,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             TimeSpan.FromSeconds(0.5),
             "RDPEMT tunnel creation failed");
 
+            Random random = new Random();
+            byte[] bytes = new byte[1000];
+            
             this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepare one RDPUDP2 Packet with the packet values given in section 4.4 of the RDPEUDP2 document.");
             var dataList = new Dictionary<int, byte[]>()
             {
-                { 1, null },
-                { 2, null },
-                { 3, null }
+                { 1, new byte[1000] },
+                { 2, new byte[1000] },
+                { 3, new byte[1000] }
             };
 
             var nextUdpPacket = this.GetNextValidUdp2PacketList(dataList);
