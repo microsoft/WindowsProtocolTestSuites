@@ -182,9 +182,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             {
                 { 1, GetRandomByteData()},
                 { 2, GetRandomByteData()},
-                { 3, GetRandomByteData()},
-                { 4, GetRandomByteData()},
-                { 5, GetRandomByteData()}
+                { 3, GetRandomByteData()}
             };
 
             var nextUdpPacket = this.GetNextValidUdp2PacketList(dataList);
@@ -194,15 +192,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             this.SendPacket(nextUdpPacket[1]);
             this.SendPacket(nextUdpPacket[3]);
-            this.SendPacket(nextUdpPacket[5]);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Packet to acknowledge the receipt of all RDPUDP2 Packets.");
-            var ackVECPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPackets(this.waitTime);
+            var ackVECPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPacket(this.waitTime);
 
-            var codedAckVecSize = ackVECPacket.ToList().Count;//.ACKVEC.Value.codedAckVecSize;
-            var BaseSeqNum = ackVECPacket.ToList().Count;//.ACKVEC.Value.BaseSeqNum;
+            var codedAckVecSize = ackVECPacket.ACKVEC.Value.BaseSeqNum; //.ACKVEC.Value.codedAckVecSize;
+            var BaseSeqNum = ackVECPacket.ACKVEC.Value.BaseSeqNum;//.ACKVEC.Value.BaseSeqNum;
 
-            Site.Assert.AreEqual<int>(2, Convert.ToInt32(codedAckVecSize),"Value Wrong");
+            Site.Assert.AreEqual<ushort>(nextUdpPacket[1].DataHeader.Value.DataSeqNum, BaseSeqNum, "Value Wrong");
 
             this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge codedAckVecSize {codedAckVecSize} and previous {BaseSeqNum} BaseSeqNum.");
             Site.Assert.IsNotNull(ackVECPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
