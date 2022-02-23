@@ -199,7 +199,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             var codedAckVecSize = ackVECPacket.ACKVEC.Value.BaseSeqNum; //.ACKVEC.Value.codedAckVecSize;
             var BaseSeqNum = ackVECPacket.ACKVEC.Value.BaseSeqNum;//.ACKVEC.Value.BaseSeqNum;
 
-            Site.Assert.AreEqual<ushort>(nextUdpPacket[1].DataHeader.Value.DataSeqNum, BaseSeqNum, "Value Wrong");
+            Site.Assert.AreEqual<ushort>(nextUdpPacket[2].DataHeader.Value.DataSeqNum, BaseSeqNum, "Value Wrong");
 
             this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge codedAckVecSize {codedAckVecSize} and previous {BaseSeqNum} BaseSeqNum.");
             Site.Assert.IsNotNull(ackVECPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
