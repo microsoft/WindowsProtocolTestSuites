@@ -2,13 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
-using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
-using Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -50,9 +46,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         private Task checkBreakNotificationTask;
 
         /// <summary>
-        /// Manual event signal collection indicate the arrival of LEASE_BREAK_Notification packet and indexed by the LeaseKey Guid
+        /// Auto event signal collection indicate the arrival of LEASE_BREAK_Notification packet and indexed by the LeaseKey Guid
         /// </summary>
-        private Dictionary<Guid, ManualResetEvent> notificationsReceived;
+        private Dictionary<Guid, AutoResetEvent> notificationsReceived;
         #endregion
 
         #region Test Initialize and Cleanup
@@ -74,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             base.TestInitialize();
 
-            notificationsReceived = new Dictionary<Guid, ManualResetEvent>();
+            notificationsReceived = new Dictionary<Guid, AutoResetEvent>();
             clientGuids = new List<Guid>();
             testClients = new Dictionary<Guid, Smb2FunctionalClient>();
             breakNotifications = new Dictionary<Guid, LEASE_BREAK_Notification_Packet>();
@@ -128,12 +124,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             Guid client1GuidRequestingLease = Guid.NewGuid();
             clientGuids.Add(client1GuidRequestingLease);
-            notificationsReceived.Add(client1GuidRequestingLease, new ManualResetEvent(false));
+            notificationsReceived.Add(client1GuidRequestingLease, new AutoResetEvent(false));
             testClients.Add(client1GuidRequestingLease, new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite));
 
             Guid client2GuidRequestingLease = Guid.NewGuid();
             clientGuids.Add(client2GuidRequestingLease);
-            notificationsReceived.Add(client2GuidRequestingLease, new ManualResetEvent(false));
+            notificationsReceived.Add(client2GuidRequestingLease, new AutoResetEvent(false));
             testClients.Add(client2GuidRequestingLease, new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite));
 
             Guid clientGuidTirggeringBreak = Guid.NewGuid();

@@ -140,7 +140,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         private void VerifyInteractiveRdpedispTestCase()
         {
             var isInteractiveTestCase = IsInteractiveRdpedispTestCase();
-            var isInteractiveAdapter = Site.Config.GetAdapterConfig("IRdpeiSUTControlAdapter").GetType().Name == "InteractiveAdapterConfig";
+            var isInteractiveAdapter = Site.Config.GetAdapterConfig("IRdpedispSUTControlAdapter").GetType().Name == "InteractiveAdapterConfig";
 
             if (isInteractiveTestCase && !isInteractiveAdapter)
             {

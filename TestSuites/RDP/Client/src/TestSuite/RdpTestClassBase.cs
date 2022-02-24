@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
@@ -50,7 +51,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool isWindowsImplementation = true;
         protected bool DropConnectionForInvalidRequest = true;
         protected bool bVerifyRdpbcgrMessage;
-        protected bool isclientSupportPersistentBitmapCache = false;
+        protected bool isClientSupportPersistentBitmapCache = false;
         protected ushort payloadLength = 15992; //payload length for RDP_BW_PAYLOAD and RDP_BW_STOP
         protected int payloadNum = 10;//How many RDP_BW_PAYLOAD will be sent
 
@@ -688,9 +689,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     TS_BITMAPCACHE_CAPABILITYSET_REV2 bitmapCacheV2 = (TS_BITMAPCACHE_CAPABILITYSET_REV2)cap;
                     if ((bitmapCacheV2.CacheFlags & CacheFlags_Values.PERSISTENT_KEYS_EXPECTED_FLAG) != 0)
                     {
-                        isclientSupportPersistentBitmapCache = true;
+                        isClientSupportPersistentBitmapCache = true;
                     }
-
                 }
             }
         }
