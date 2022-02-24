@@ -1,16 +1,10 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using Microsoft.Protocols.TestSuites.Rdp;
+
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdprfx;
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
 
 namespace Microsoft.Protocols.TestSuites.Rdpei
 {
@@ -34,7 +28,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             this.rdprfxAdapter = Site.GetAdapter<IRdprfxAdapter>();
             this.rdprfxAdapter.Initialize(testSite);
             this.rdpbcgrAdapter = Site.GetAdapter<IRdpbcgrAdapter>();
-            RdpeiUtility.Initialized(this.site);
+            RdpeiUtility.Initialize(this.site);
         }
 
         public override void Reset()

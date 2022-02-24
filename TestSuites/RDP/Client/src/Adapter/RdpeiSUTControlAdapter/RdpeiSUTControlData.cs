@@ -1,15 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+
 using System.Drawing;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdprfx;
 
 namespace Microsoft.Protocols.TestSuites.Rdpei
 {
@@ -17,9 +9,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
     {
         public static readonly RdpeiSUTControlConfig OneTouchEventControlData = new RdpeiSUTControlConfig
             (
-            new RdpeiSUTControlInstruction[] 
-            { 
-                new RdpeiSUTControlInstruction("Please touch the screen.", new Font("Arial", 35), 0, 0) 
+            new RdpeiSUTControlInstruction[]
+            {
+                new RdpeiSUTControlInstruction("Please touch the screen.", new Font("Arial", 35), 0, 0)
             },
             540,
             100
@@ -27,8 +19,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
         public static readonly RdpeiSUTControlConfig ContinuousTouchEventControlData = new RdpeiSUTControlConfig
             (
-            new RdpeiSUTControlInstruction[] 
-            { 
+            new RdpeiSUTControlInstruction[]
+            {
                 new RdpeiSUTControlInstruction("Please touch the screen several times to trigger", new Font("Arial", 28), 0, 0),
                 new RdpeiSUTControlInstruction("touch events (at least touch 5 times).", new Font("Arial", 28), 0, 70)
             },
@@ -40,10 +32,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         {
             return new RdpeiSUTControlConfig
                 (
-                new RdpeiSUTControlInstruction[] 
+                new RdpeiSUTControlInstruction[]
                 {
                     new RdpeiSUTControlInstruction("Please multitouch the screen with", new Font("Arial", 35), 0, 0),
-                    new RdpeiSUTControlInstruction(count.ToString() + " fingers.", new Font("Arial", 35), 0, 70)
+                    new RdpeiSUTControlInstruction($"2 to {count} fingers.", new Font("Arial", 35), 0, 70)
                 },
                 720,
                 150
@@ -52,9 +44,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
         public static readonly RdpeiSUTControlConfig PositionSpecifiedTouchEventControlData = new RdpeiSUTControlConfig
             (
-            new RdpeiSUTControlInstruction[] 
-            { 
-                new RdpeiSUTControlInstruction("Please touch the red circles.", new Font("Arial", 35), 0, 0) 
+            new RdpeiSUTControlInstruction[]
+            {
+                new RdpeiSUTControlInstruction("Please touch the red circles.", new Font("Arial", 35), 0, 0)
             },
             600,
             100
@@ -62,8 +54,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
         public static readonly RdpeiSUTControlConfig DismissHoveringContactPduControlData = new RdpeiSUTControlConfig
             (
-            new RdpeiSUTControlInstruction[] 
-            { 
+            new RdpeiSUTControlInstruction[]
+            {
                 new RdpeiSUTControlInstruction("Does your device support proximity? If yes,", new Font("Verdana", 24), 0, 0),
                 new RdpeiSUTControlInstruction("trigger RDPINPUT_DISMISS_HOVERING_CONTACT_PDU.", new Font("Verdana", 20), 0, 70),
                 new RdpeiSUTControlInstruction("If no, touch the 'Exit' at the bottom right.", new Font("Verdana", 24), 0, 140)
@@ -74,8 +66,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
         public static readonly RdpeiSUTControlConfig UnexpectedPositionNotice = new RdpeiSUTControlConfig
             (
-            new RdpeiSUTControlInstruction[] 
-            { 
+            new RdpeiSUTControlInstruction[]
+            {
                 new RdpeiSUTControlInstruction("Oops...Unexpected position.", new Font("Arial", 35), 0, 0)
             },
             650,
