@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Collections.Generic;
-using Microsoft.Protocols.TestTools.StackSdk;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
 {
@@ -1011,6 +1010,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
         /// </summary>
         public RDPINPUT_SC_READY_ProtocolVersion protocolVersion;
 
+        /// <summary>
+        /// An optional 32-bit unsigned integer that specifies granular protocol features supported by the server.
+        /// </summary>
+        public RDPINPUT_SC_READY_SupportedFeatures? supportedFeatures;
+
         public uint Length()
         {
             return 10;
@@ -1022,6 +1026,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
         {
             base.Encode(marshaler);
             marshaler.WriteUInt32((uint)protocolVersion);
+
+            if (supportedFeatures.HasValue)
+            {
+                marshaler.WriteUInt32((uint)supportedFeatures.Value);
+            }
         }
 
         public override bool Decode(PduMarshaler marshaler)
@@ -1033,6 +1042,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
                     return false;
                 }
                 protocolVersion = (RDPINPUT_SC_READY_ProtocolVersion)marshaler.ReadUInt32();
+
+                if (protocolVersion == RDPINPUT_SC_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V300)
+                {
+                    supportedFeatures = (RDPINPUT_SC_READY_SupportedFeatures)marshaler.ReadUInt32();
+                }
+
                 return true;
             }
             catch
@@ -1063,8 +1078,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
         /// Version 2.0.0 of the RDP input remoting protocol. 
         /// This version supports the remoting of both multitouch and pen frames.
         /// </summary>
-        RDPINPUT_PROTOCOL_V200 = 0x00020000
+        RDPINPUT_PROTOCOL_V200 = 0x00020000,
 
+        /// <summary>
+        /// Version 3.0.0 of the RDP input remoting protocol.
+        /// This version supports specifying granular protocol features in the optional supportedFeatures field.
+        /// </summary>
+        RDPINPUT_PROTOCOL_V300 = 0x00030000
+    }
+
+    /// <summary>
+    /// An optional 32-bit unsigned integer that specifies granular protocol features supported by the server.
+    /// </summary>
+    public enum RDPINPUT_SC_READY_SupportedFeatures : uint
+    {
+        /// <summary>
+        /// The simultaneous injection of input from up to four pen devices is supported.
+        /// </summary>
+        SC_READY_MULTIPEN_INJECTION_SUPPORTED = 0x00000001
     }
 
     /// <summary>
@@ -1075,7 +1106,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
         /// <summary>
         /// A 32-bit unsigned integer that specifies touch initialization flags.
         /// </summary>
-        public RDPINPUT_CS_READY_Flag flags;
+        public RDPINPUT_CS_READY_Flags flags;
 
         /// <summary>
         /// A 32-bit unsigned integer that specifies the input protocol version.
@@ -1110,7 +1141,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
                 {
                     return false;
                 }
-                flags = (RDPINPUT_CS_READY_Flag)marshaler.ReadUInt32();
+                flags = (RDPINPUT_CS_READY_Flags)marshaler.ReadUInt32();
                 protocolVersion = (RDPINPUT_CS_READY_ProtocolVersion)marshaler.ReadUInt32();
                 maxTouchContacts = marshaler.ReadUInt16();
                 return true;
@@ -1128,19 +1159,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
     /// A 32-bit unsigned integer that specifies touch initialization flags.
     /// </summary>
     [Flags]
-    public enum RDPINPUT_CS_READY_Flag : uint
+    public enum RDPINPUT_CS_READY_Flags : uint
     {
         /// <summary>
         /// A 16-bit unsigned integer that specifies the maximum number of simultaneous touch contacts supported by the client.
         /// </summary>
-        READY_FLAGS_SHOW_TOUCH_VISUALS = 0x00000001,
+        CS_READY_FLAGS_SHOW_TOUCH_VISUALS = 0x00000001,
 
         /// <summary>
         /// The client does not support touch frame timestamp remoting. 
         /// The server MUST ignore any values specified in the frameOffset field of the RDPINPUT_TOUCH_FRAME (section 2.2.3.3.1) structure 
         /// and the encodeTime field of the RDPINPUT_TOUCH_EVENT_PDU (section 2.2.3.3) message.
         /// </summary>
-        READY_FLAGS_DISABLE_TIMESTAMP_INJECTION = 0x00000002
+        CS_READY_FLAGS_DISABLE_TIMESTAMP_INJECTION = 0x00000002,
+
+        /// <summary>
+        /// The server should configure the pen injection subsystem so that the simultaneous injection of input from up to four pen devices is possible.
+        /// </summary>
+        CS_READY_FLAGS_ENABLE_MULTIPEN_INJECTION = 0x00000004
     }
 
     /// <summary>
@@ -1162,7 +1198,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
         /// Version 2.0.0 of the RDP input remoting protocol. 
         /// This version supports the remoting of both multitouch and pen frames.
         /// </summary>
-        RDPINPUT_PROTOCOL_V200 = 0x00020000
+        RDPINPUT_PROTOCOL_V200 = 0x00020000,
+
+        /// <summary>
+        /// Version 3.0.0 of the RDP input remoting protocol.
+        /// This version supports specifying granular protocol features in the optional supportedFeatures field.
+        /// </summary>
+        RDPINPUT_PROTOCOL_V300 = 0x00030000
     }
 
     /// <summary>
@@ -1194,25 +1236,25 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
             {
                 length += f.contactCount.Length();
                 length += f.frameOffset.Length();
-                foreach (RDPINPUT_CONTACT_DATA d in f.contacts)
+                foreach (RDPINPUT_TOUCH_CONTACT d in f.contacts)
                 {
                     length += 1;
                     length += d.fieldsPresent.Length();
                     length += d.x.Length();
                     length += d.y.Length();
                     length += d.contactFlags.Length();
-                    if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_CONTACTRECT_PRESENT))
+                    if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_CONTACTRECT_PRESENT))
                     {
                         length += d.contactRectLeft.Length();
                         length += d.contactRectTop.Length();
                         length += d.contactRectRight.Length();
                         length += d.contactRectBottom.Length();
                     }
-                    if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_ORIENTATION_PRESENT))
+                    if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_ORIENTATION_PRESENT))
                     {
                         length += d.orientation.Length();
                     }
-                    if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_PRESSURE_PRESENT))
+                    if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_PRESSURE_PRESENT))
                     {
                         length += d.pressure.Length();
                     }
@@ -1232,7 +1274,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
             {
                 f.contactCount.Encode(marshaler);
                 f.frameOffset.Encode(marshaler);
-                foreach (RDPINPUT_CONTACT_DATA d in f.contacts)
+                foreach (RDPINPUT_TOUCH_CONTACT d in f.contacts)
                 {
                     marshaler.WriteByte(d.contactId);
                     d.fieldsPresent.Encode(marshaler);
@@ -1240,18 +1282,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
                     d.y.Encode(marshaler);
                     d.contactFlags.Encode(marshaler);
                     ushort fieldPresent = d.fieldsPresent.ToUShort();
-                    if ((ushort)(fieldPresent & (ushort)(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_CONTACTRECT_PRESENT)) == (ushort)RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_CONTACTRECT_PRESENT)
+                    if ((ushort)(fieldPresent & (ushort)(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_CONTACTRECT_PRESENT)) == (ushort)RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_CONTACTRECT_PRESENT)
                     {
                         d.contactRectLeft.Encode(marshaler);
                         d.contactRectTop.Encode(marshaler);
                         d.contactRectRight.Encode(marshaler);
                         d.contactRectBottom.Encode(marshaler);
                     }
-                    if ((ushort)(fieldPresent & (ushort)(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_ORIENTATION_PRESENT)) == (ushort)RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_ORIENTATION_PRESENT)
+                    if ((ushort)(fieldPresent & (ushort)(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_ORIENTATION_PRESENT)) == (ushort)RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_ORIENTATION_PRESENT)
                     {
                         d.orientation.Encode(marshaler);
                     }
-                    if ((ushort)(fieldPresent & (ushort)(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_PRESSURE_PRESENT)) == (ushort)RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_PRESSURE_PRESENT)
+                    if ((ushort)(fieldPresent & (ushort)(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_PRESSURE_PRESENT)) == (ushort)RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_PRESSURE_PRESENT)
                     {
                         d.pressure.Encode(marshaler);
                     }
@@ -1292,11 +1334,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
                     ushort contactCount = frames[i].contactCount.ToUShort();
                     if (contactCount > 0)
                     {
-                        frames[i].contacts = new RDPINPUT_CONTACT_DATA[contactCount];
+                        frames[i].contacts = new RDPINPUT_TOUCH_CONTACT[contactCount];
                     }
                     for (int j = 0; j < contactCount; j++)
                     {
-                        frames[i].contacts[j] = new RDPINPUT_CONTACT_DATA();
+                        frames[i].contacts[j] = new RDPINPUT_TOUCH_CONTACT();
                         frames[i].contacts[j].contactId = marshaler.ReadByte();
                         if (!frames[i].contacts[j].fieldsPresent.Decode(marshaler) || !frames[i].contacts[j].x.Decode(marshaler)
                             || !frames[i].contacts[j].y.Decode(marshaler) || !frames[i].contacts[j].contactFlags.Decode(marshaler))
@@ -1305,7 +1347,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
                         }
 
                         ushort fieldsPresent = frames[i].contacts[j].fieldsPresent.ToUShort();
-                        if ((ushort)(fieldsPresent & (ushort)(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_CONTACTRECT_PRESENT)) == (ushort)RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_CONTACTRECT_PRESENT)
+                        if ((ushort)(fieldsPresent & (ushort)(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_CONTACTRECT_PRESENT)) == (ushort)RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_CONTACTRECT_PRESENT)
                         {
                             TWO_BYTE_SIGNED_INTEGER left = new TWO_BYTE_SIGNED_INTEGER();
                             if (!left.Decode(marshaler))
@@ -1332,7 +1374,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
                             }
                             frames[i].contacts[j].contactRectBottom = bottom;
                         }
-                        if ((ushort)(fieldsPresent & (ushort)(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_ORIENTATION_PRESENT)) == (ushort)RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_ORIENTATION_PRESENT)
+                        if ((ushort)(fieldsPresent & (ushort)(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_ORIENTATION_PRESENT)) == (ushort)RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_ORIENTATION_PRESENT)
                         {
                             FOUR_BYTE_UNSIGNED_INTEGER orientation = new FOUR_BYTE_UNSIGNED_INTEGER();
                             if (!orientation.Decode(marshaler))
@@ -1341,7 +1383,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
                             }
                             frames[i].contacts[j].orientation = orientation;
                         }
-                        if ((ushort)(fieldsPresent & (ushort)(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_PRESSURE_PRESENT)) == (ushort)RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_PRESSURE_PRESENT)
+                        if ((ushort)(fieldsPresent & (ushort)(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_PRESSURE_PRESENT)) == (ushort)RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_PRESSURE_PRESENT)
                         {
                             FOUR_BYTE_UNSIGNED_INTEGER pressure = new FOUR_BYTE_UNSIGNED_INTEGER();
                             if (!pressure.Decode(marshaler))
@@ -1381,7 +1423,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
         /// <summary>
         /// An array of RDPINPUT_CONTACT_DATA structures. The number of structures in this array is specified by the contactCount field.
         /// </summary>
-        public RDPINPUT_CONTACT_DATA[] contacts;
+        public RDPINPUT_TOUCH_CONTACT[] contacts;
 
         public RDPINPUT_TOUCH_FRAME()
         {
@@ -1393,7 +1435,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
     /// <summary>
     /// The RDPINPUT_CONTACT_DATA structure describes the characteristics of a contact that is encapsulated in an RDPINPUT_TOUCH_FRAME (section 2.2.3.3.1) structure.
     /// </summary>
-    public class RDPINPUT_CONTACT_DATA
+    public class RDPINPUT_TOUCH_CONTACT
     {
         /// <summary>
         /// An 8-bit unsigned integer that specifies the ID assigned to the contact. This value MUST be in the range 0x00 to 0xFF (inclusive).
@@ -1450,7 +1492,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
         /// </summary>
         public FOUR_BYTE_UNSIGNED_INTEGER pressure;
 
-        public RDPINPUT_CONTACT_DATA()
+        public RDPINPUT_TOUCH_CONTACT()
         {
             fieldsPresent = new TWO_BYTE_UNSIGNED_INTEGER();
             x = new FOUR_BYTE_SIGNED_INTEGER();
@@ -1469,29 +1511,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei
     /// A TWO_BYTE_UNSIGNED_INTEGER (section 2.2.2.1) structure that specifies the presence of the optional contactRectLeft, contactRectTop, contactRectRight, contactRectBottom, orientation, and pressure fields.
     /// </summary>
     [Flags]
-    public enum RDPINPUT_CONTACT_DATA_FieldsPresent : ushort
+    public enum RDPINPUT_TOUCH_CONTACT_FieldsPresent : ushort
     {
         /// <summary>
         /// The optional contactRectLeft, contactRectTop, contactRectRight, and contactRectBottom fields are all present.
         /// </summary>
-        CONTACT_DATA_CONTACTRECT_PRESENT = 0x0001,
+        TOUCH_CONTACT_CONTACTRECT_PRESENT = 0x0001,
 
         /// <summary>
         /// The optional orientation field is present.
         /// </summary>
-        CONTACT_DATA_ORIENTATION_PRESENT = 0x0002,
+        TOUCH_CONTACT_ORIENTATION_PRESENT = 0x0002,
 
         /// <summary>
         /// The optional pressure field is present.
         /// </summary>
-        CONTACT_DATA_PRESSURE_PRESENT = 0x0004
+        TOUCH_CONTACT_PRESSURE_PRESENT = 0x0004
     }
 
     /// <summary>
     /// A FOUR_BYTE_UNSIGNED_INTEGER (section 2.2.2.3) structure that specifies the current state of the contact.
     /// </summary>
     [Flags]
-    public enum RDPINPUT_CONTACT_DATA_ContactFlags : uint
+    public enum RDPINPUT_TOUCH_CONTACT_ContactFlags : uint
     {
         /// <summary>
         /// The contact transitioned to the engaged state (made contact).
