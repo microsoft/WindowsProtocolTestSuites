@@ -259,7 +259,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_DataTransfer_v2**| | 
 | -------------| ------------- |
-|  **Test ID**| S3_DataTransfer_v2_AcknowlegeLostPacket| 
+|  **Test ID**| S3_DataTransfer_v2_AcknowledgeLostPacket| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client will send a ACK to acknowledge the package loss when detect a package loss in a reliable connection| 
 |  **Prerequisites**| N/A| 

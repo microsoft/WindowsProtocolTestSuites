@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("RDPEUDP2")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
-        [Description("Verify that the RDPUDP2 Packet sent and an acknowlegdment is received as shared in Section 4.1 of the RDPEUDP2 document")]
+        [Description("Verify that the RDPUDP2 Packet sent and an acknowlegdement is received as shared in Section 4.1 of the RDPEUDP2 document")]
         public void S3_DataTransfer_v2_ClientReceiveData()
         {
             CheckSecurityProtocolForMultitransport();
@@ -49,13 +49,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             this.SendPacket(nextUdpPacket);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Packet to acknowledge the receipt of all RDPUDP2 Packets.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Packet to acknowledge the receipt of the RDPUDP2 Packet and check if the Sequence Number is equal to the ACK packet Sequence Number.");
             var ackPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckPacket(this.waitTime, nextUdpPacket.DataHeader.Value.DataSeqNum);
             var dataSeqNum = ackPacket.ACK.Value.SeqNum;
-            var delayedAcksNum = ackPacket.ACK.Value.numDelayedAcks;
-            this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge DataSeqNum {dataSeqNum} and previous {delayedAcksNum} DataSeqNums.");
+
+            this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge DataSeqNum {dataSeqNum}.");
             Site.Assert.IsNotNull(ackPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
-            Site.Assert.AreEqual<ushort>(ackPacket.DataHeader.Value.DataSeqNum, dataSeqNum, "");
         }
 
         [TestMethod]
@@ -115,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("Verify behaviour of client when missing packet is detected as shared in Section 4.3 of the RDPEUDP2 document")]
-        public void S3_DataTransfer_v2_AcknowlegeLostPacket()
+        public void S3_DataTransfer_v2_AcknowledgeLostPacket()
         {
             CheckSecurityProtocolForMultitransport();
 
@@ -164,8 +163,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect an acknowledge packet showing the receipt of missing RDPUDP2 Packet.");
             var ackPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckPacket(this.waitTime, nextUdpPacket[2].DataHeader.Value.DataSeqNum);
             var dataSeqNum = ackPacket.ACK.Value.SeqNum;
-            var delayedAcksNum = ackPacket.ACK.Value.numDelayedAcks;
-            this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge DataSeqNum {dataSeqNum} and previous {delayedAcksNum} DataSeqNums.");
+            this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge DataSeqNum {dataSeqNum}.");
             Site.Assert.IsNotNull(ackPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
         }
 
