@@ -539,19 +539,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         }
 
         /// <summary>
-        /// Get the next invalid RDPEUDP2 packet with both ACK flag and ACKVEC flag.
-        /// </summary>
-        /// <param name="data">Data to be sent.</param>
-        /// <returns>The next valid RDPEUDP2 packet.</returns>
-        private Rdpeudp2Packet GetNextInvalidUdp2Packet(byte[] data = null)
-        {
-            var encryptedData = GetEncryptedData(rdpeudp2TransportMode, data);
-            var packet = rdpeudpSocketR.Rdpeudp2Handler.CreateInvalidDataPacket(encryptedData);
-
-            return packet;
-        }
-
-        /// <summary>
         /// Get the encrypted data from the TLS tunnel established with the RpdemtServer.
         /// </summary>
         /// <param name="udpTransportMode">Transport mode: Reliable or Lossy.</param>

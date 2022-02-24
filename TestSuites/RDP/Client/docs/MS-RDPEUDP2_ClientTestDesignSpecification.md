@@ -251,7 +251,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 |  **Test Execution Steps**| For Reliable  mode, do the following:| 
 | | Test suite trigger RDP client to create a RDP-UDP, reliable (as MS-RDPEUDP2 only supports reliable UDP mode) transport mode.| 
 | | In the connection and initiation phase, set UDP version to RDPUDP_PROTOCOL_VERSION_3.| 
-| | In the RDP-UDP connection, Construct and send one **RDPUDP2 Packet (with ACK and Data)**.| 
+| | In the RDP-UDP connection, Construct and send one **RDPUDP2 Packet (excluding optional payloads)**.| 
 | | In the RDP-UDP connection, Expect RDP client response an RDPUDP2 Packet containing only the Acknowledgement Payload for proof of receipts of set packets. And verify:| 
 | | Obtain both the channel sequence number and the sequence number from the received payload and verify its equal to the generated channel sequence mapped to the sent package.| 
 |  **Cleanup**| N/A| 
@@ -259,17 +259,16 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_DataTransfer_v2**| | 
 | -------------| ------------- |
-|  **Test ID**| S3_DataTransfer_v2_AcknowledgeTest_AcknowlegeLostPacket| 
+|  **Test ID**| S3_DataTransfer_v2_AcknowlegeLostPacket| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client will send a ACK to acknowledge the package loss when detect a package loss in a reliable connection| 
 |  **Prerequisites**| N/A| 
 |  **Test Execution Steps**| For Reliable and Lossy transport mode, do the following respectively:| 
 | | Test suite trigger RDP client to create a RDP-UDP, reliable (as MS-RDPEUDP2 only supports reliable UDP mode) transport mode | 
 | | Establish the RDPEMT connection.| 
-| | In the RDP-UDP connection, test suite send one **RDPUDP2 Packet** with channel sequence number of x| 
-| | Test suite creates an **RDPUDP2 Packet** as a lost packet with middle channel sequence number of x+1 and don’t send it.| 
-| | Test suite send another **RDPUDP2 Packet** with channel sequence number of x+2| 
-| | Expect RDPUDP2 Packet RDP client, to acknowledge the receipt of the 1st, 3rd packet and the loss of the 2nd packet. | 
+| | In the RDP-UDP connection, create 3 sequential **RDPUDP2 Packets** and send only the first packet and last packet| 
+| | The receiver responds with a Acknowledgement Vector payload with the missing **RDPUDP2 Packet** sequence number returned as the Base Sequence Number.| 
+| | Confirm that the Data Sequence Number of the packet sent equals the Base Sequence Number of the Acknowledgement Vector payload.| | 
 | | Test suite sends the lost **RDPUDP2 Packet**.| 
 | | Expect a RDPUDP2 Packet to acknowledge the receipt of all  **RDPUDP2 Packets**  | 
 |  **Cleanup**| N/A| 
@@ -286,7 +285,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 | | Establish the RDPEMT connection.| 
 | | In the RDP-UDP connection, test suite prepare one **RDPUDP2 Packet** with the packet values given in section 4.4 of the RDPEUDP2 document| 
 | | Before sending the packet, verify that the on-wire version has been evaluated to the output given in section 4.4.6| 
-| | Expect a RDPUDP2 Packet to acknowledge the receipt of all  **RDPUDP2 Packets**  | 
+| | Expect a RDPUDP2 Packet to acknowledge the receipt of  **RDPUDP2 Packet**  | 
 |  **Cleanup**| N/A| 
 
 ## <a name="_Toc350342315"/>Appendix

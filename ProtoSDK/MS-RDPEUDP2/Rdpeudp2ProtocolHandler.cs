@@ -566,45 +566,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
         }
 
         /// <summary>
-        /// Create a Data Packet from byte data with ACK and ACKVec Flags.
-        /// </summary>
-        /// <param name="data">The data to be sent.</param>
-        /// <param name="isDummyPacket">Whether to create a dummy packet.</param>
-        /// <returns>The data packet packet to be sent.</returns>
-        public Rdpeudp2Packet CreateInvalidDataPacket(byte[] data, bool isDummyPacket = false)
-        {
-            if (data == null || data.Length == 0)
-            {
-                return null;
-            }
-
-            var packet = new Rdpeudp2Packet(isDummyPacket);
-            packet.Header.Flags = Rdpeudp2PacketHeaderFlags.DATA;
-            packet.Header.LogWindowSize = SocketConfig.InitialLogWindowSize;
-
-            packet.Header.Flags |= Rdpeudp2PacketHeaderFlags.ACK;
-            packet.ACK = new AcknowledgementPayload();
-            packet.Header.Flags |= Rdpeudp2PacketHeaderFlags.ACKVEC;
-            packet.ACKVEC = new AcknowledgementVectorPayload();
-
-
-            lock (sequenceNumberLock)
-            {
-                var dataHeader = new DataHeaderPayload();
-                dataHeader.DataSeqNum = currentSenderDataSeqNum++;
-
-                var dataBody = new DataBodyPayload();
-                dataBody.ChannelSeqNum = isDummyPacket ? (ushort)0 : currentSenderChannelSeqNum++;
-                dataBody.Data = data;
-
-                packet.DataHeader = dataHeader;
-                packet.DataBody = dataBody;
-            }
-
-            return packet;
-        }
-
-        /// <summary>
         /// Create an ACK payloads acording to current receiver buffer.
         /// </summary>
         /// <returns>The ACK payload can be sent currently.</returns>
