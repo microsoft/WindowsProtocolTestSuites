@@ -806,13 +806,18 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             catch (Exception ex)
             {
                 TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during CredentialManagerAddInvalidAccount(): {0}.", ex);
-
+                TestSite.Assert.Fail("Adding an invalid credential failed");
                 return;
             }
 
             if (iResult != null)
             {
                 TestSite.Log.Add(LogEntryKind.Debug, "The result of CredentialManagerAddInvalidAccount is {0}.", iResult);
+            }
+
+            if (iResult != 0)
+            {
+                TestSite.Assert.Fail("Adding an invalid credential failed"); ;
             }
         }
 
@@ -830,7 +835,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             catch (Exception ex)
             {
                 TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during CredentialManagerReverseInvalidAccount(): {0}.", ex);
-
+                TestSite.Assert.Fail("Removing the invalid credential failed");
                 return;
             }
 
@@ -838,6 +843,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 TestSite.Log.Add(LogEntryKind.Debug, "The result of CredentialManagerReverseInvalidAccount is {0}.", iResult);
             }
+
+            if (iResult != 0)
+            {
+                TestSite.Assert.Fail("Removing the invalid credential failed");
+            }
+
         }
 
         /// <summary>
