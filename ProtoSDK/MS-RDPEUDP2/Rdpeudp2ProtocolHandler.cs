@@ -763,7 +763,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
         /// <returns>Return true if the packet was successfully sent.</returns>
         public bool SendAckPacket()
         {
-            if (processedPackets.Count > 0)
+            if (!processedPackets.Any())
             {
                 return false;
             }
