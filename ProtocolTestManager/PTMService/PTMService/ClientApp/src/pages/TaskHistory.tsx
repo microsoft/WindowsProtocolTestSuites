@@ -23,7 +23,7 @@ import { AppState } from '../store/configureStore'
 
 type NumberValueKeysOf<T> = { [P in keyof T]-?: T[P] extends number ? P : never }[keyof T]
 
-function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>>(items: TItem[], keyName: NumberValueKeysOf<TItem>) {
+function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>> (items: TItem[], keyName: NumberValueKeysOf<TItem>) {
   return items.reduce((dict: { [key: number]: TItem }, item) => {
     const keyValue: number = item[keyName]
     dict[keyValue] = item
@@ -183,7 +183,7 @@ const getTestCaseStateColor = (kind: TestCaseState | 'Total') => {
       return 'green'
 
     case 'Failed':
-      return 'red'
+      return '#e50000'
 
     case 'Inconclusive':
       return 'orange'
@@ -213,7 +213,7 @@ const getTestResultStateColor = (kind: TestResultState) => {
       return 'green'
 
     case 'Failed':
-      return 'red'
+      return '#e50000'
   }
 }
 
@@ -221,7 +221,7 @@ const renderStatus = (status: TestResultState) => {
   return <div style={{ color: getTestResultStateColor(status), fontSize: 'large' }}>{status}</div>
 }
 
-export function TaskHistory(props: any) {
+export function TaskHistory (props: any) {
   const winSize = useWindowSize()
 
   const history = useHistory()
@@ -436,6 +436,8 @@ export function TaskHistory(props: any) {
               previousPageAriaLabel="Previous page"
               nextPageAriaLabel="Next page"
               lastPageAriaLabel="Last page"
+              pageAriaLabel='Page'
+              selectedAriaLabel='Selected'
               selectedPageIndex={testResults.pageNumber}
               pageCount={testResults.pageCount}
               onPageChange={onChangePageNumber}

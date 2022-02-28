@@ -93,7 +93,7 @@ const getLineBackgroundColor = (kind: string) => {
   } else if (kind.includes('Inconclusive')) {
     return 'yellow'
   } else if (kind.includes('Succeeded')) {
-    return 'green'
+    return '#008c00'
   }
 
   return 'transparent'
@@ -111,7 +111,7 @@ const renderOutputLines = (lines: string[]) => {
   }, [])
 }
 
-function TestCaseResultView(props: TestCaseResultViewProps) {
+function TestCaseResultView (props: TestCaseResultViewProps) {
   return (
     props.result !== undefined
       ? <Stack tokens={StackGap10}>
@@ -138,7 +138,7 @@ interface SelectedTestCasesViewProps {
   results: TestCaseOverview[]
 }
 
-function SelectedTestCasesView(props: SelectedTestCasesViewProps) {
+function SelectedTestCasesView (props: SelectedTestCasesViewProps) {
   return (
     <div>
       <Label style={{ fontWeight: 'bold', color: '#337ab7', fontSize: 'large' }}>Selected {props.results.length} Test Case Results:</Label>
@@ -162,7 +162,7 @@ interface RerunContextualMenuProps {
   onRerun: (kind: 'All' | 'Failed' | 'Selected') => () => void
 }
 
-function RerunContextualMenu(props: RerunContextualMenuProps) {
+function RerunContextualMenu (props: RerunContextualMenuProps) {
   const menuProps = useMemo<IContextualMenuProps>(() => ({
     shouldFocusOnMount: true,
     items: [
@@ -190,7 +190,7 @@ function RerunContextualMenu(props: RerunContextualMenuProps) {
   return <PrimaryButton menuProps={menuProps}>Rerun</PrimaryButton>
 }
 
-export function TestResultDetail(props: any) {
+export function TestResultDetail (props: any) {
   const winSize = useWindowSize()
 
   const history = useHistory()
@@ -642,6 +642,7 @@ export function TestResultDetail(props: any) {
               <Label>Format</Label>
               <Dropdown
                 style={{ alignSelf: 'center', minWidth: 180 }}
+                ariaLabel='Report format'
                 placeholder='Select a report format'
                 selectedKey={reportFormat}
                 options={reportFormatOptions}
