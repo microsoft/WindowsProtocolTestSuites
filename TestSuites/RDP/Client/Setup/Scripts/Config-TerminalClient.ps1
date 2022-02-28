@@ -185,21 +185,8 @@ if (Test-Path -Path "$dataPath\Base\DirectCredSSPFullScreen.RDP")
     Copy-Item $dataPath\DirectCredSSPFullScreen.RDP $dataPath\Base\DirectCredSSPFullScreen.RDP -Force
 }
 
-if (Test-Path -Path "$dataPath\Base\CredentialManager_InvalidAccount.ps1")
-{
-    Copy-Item $dataPath\Base\CredentialManager_InvalidAccount.ps1 $dataPath\CredentialManager_InvalidAccount.ps1 -Force
-}else
-{
-    Copy-Item $dataPath\CredentialManager_InvalidAccount.ps1 $dataPath\Base\CredentialManager_InvalidAccount.ps1 -Force
-}
-
-if (Test-Path -Path "$dataPath\Base\CredentialManager_InvalidAccount_Reverse.ps1")
-{
-    Copy-Item $dataPath\Base\CredentialManager_InvalidAccount_Reverse.ps1 $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 -Force
-}else
-{
-    Copy-Item $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 $dataPath\Base\CredentialManager_InvalidAccount_Reverse.ps1 -Force
-}
+New-Item -Path $dataPath\CredentialManager_InvalidAccount.ps1 -ItemType File  -Force
+New-Item -Path $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 -ItemType File  -Force
 
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}\${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerIP}`" /user:`"${driverComputerName}\${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
