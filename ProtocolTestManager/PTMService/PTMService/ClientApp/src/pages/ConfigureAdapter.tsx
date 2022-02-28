@@ -229,7 +229,7 @@ function AdapterItem (props: AdapterItemProp) {
       paramsDiv = <div>
                 <Stack horizontalAlign="start" horizontal tokens={StackGap10}>
                     <div style={{ fontWeight: 'bold' }}>Adapter Type: </div>
-                    <TextField value={paramAdapterType} className='input' onChange={onChangeParamManagedAdapterType} errorMessage={errorMsg} />
+                    <TextField ariaLabel='Managed adapter type' value={paramAdapterType} className='input' onChange={onChangeParamManagedAdapterType} errorMessage={errorMsg} />
                 </Stack>
             </div>
       break
@@ -242,7 +242,7 @@ function AdapterItem (props: AdapterItemProp) {
                 <div>You need to configure the location of the scripts.</div>
                 <Stack horizontalAlign="start" horizontal tokens={StackGap10}>
                     <div style={{ fontWeight: 'bold' }}>Script Directory: </div>
-                    <TextField value={paramScriptDirectory} className='input' onChange={onChangeParamScriptDirectory} errorMessage={errorMsg} />
+                    <TextField ariaLabel='PowerShell adapter script directory' value={paramScriptDirectory} className='input' onChange={onChangeParamScriptDirectory} errorMessage={errorMsg} />
                 </Stack>
             </div>
       break
@@ -255,7 +255,7 @@ function AdapterItem (props: AdapterItemProp) {
                 <div>You need to configure the location of the scripts.</div>
                 <Stack horizontalAlign="start" horizontal tokens={StackGap10}>
                     <div style={{ fontWeight: 'bold' }}>Script Directory: </div>
-                    <TextField value={paramShellScriptDirectory} className='input' onChange={onChangeParamShellScriptDirectory} errorMessage={errorMsg} />
+                    <TextField ariaLabel='Shell adapter script directory' value={paramShellScriptDirectory} className='input' onChange={onChangeParamShellScriptDirectory} errorMessage={errorMsg} />
                 </Stack>
             </div>
       break
@@ -278,6 +278,7 @@ function AdapterItem (props: AdapterItemProp) {
                 <ComboBox className='input'
                     allowFreeform={false}
                     autoComplete={'on'}
+                    ariaLabel='Select an adapter type'
                     options={INITIAL_OPTIONS}
                     selectedKey={adapterKind}
                     onChange={onChange}

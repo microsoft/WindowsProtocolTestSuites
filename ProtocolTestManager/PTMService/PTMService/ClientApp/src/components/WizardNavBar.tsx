@@ -10,42 +10,63 @@ import { AppState } from '../store/configureStore'
 import { RunSteps } from '../model/DefaultNavSteps'
 import * as ConfigureMethod from '../pages/ConfigureMethod'
 
-export function WizardNavBar(wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
-    const wizardState = useSelector((state: AppState) => state.wizard)
-    const configureMethod = useSelector((state: AppState) => state.configureMethod)
-    const detectResult = useSelector((state: AppState) => state.detectResult)
+export function WizardNavBar (wizardProps: StepWizardChildProps, navSteps: StepNavItemInfo[]) {
+  const wizardState = useSelector((state: AppState) => state.wizard)
+  const configureMethod = useSelector((state: AppState) => state.configureMethod)
+  const detectResult = useSelector((state: AppState) => state.detectResult)
 
-    const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
-        let isEnabledStep = item.TargetStep <= wizardState.lastStep
-        if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
-            if (RunSteps.CONFIGURE_METHOD < wizardState.lastStep &&
+  const navStepItems = navSteps.map((item: StepNavItemInfo, index: number) => {
+    let isEnabledStep = item.TargetStep <= wizardState.lastStep
+    if (item.TargetStep === RunSteps.AUTO_DETECTION || item.TargetStep === RunSteps.DETECTION_RESULT) {
+      if (RunSteps.CONFIGURE_METHOD < wizardState.lastStep &&
                 wizardProps.currentStep < wizardState.lastStep &&
                 configureMethod &&
                 configureMethod.selectedMethod &&
                 configureMethod.selectedMethod === ConfigureMethod.ConfigurationMethod_AutoDetection) {
-                isEnabledStep = true
-            } else {
-                isEnabledStep = item.IsEnabled
-            }
+        isEnabledStep = true
+      } else {
+        isEnabledStep = item.IsEnabled
+      }
 
-            if (item.TargetStep === RunSteps.DETECTION_RESULT && detectResult.detectionResult === undefined) {
-                isEnabledStep = false;
-            }
-        }
-        if (item.IsActive) {
-            return <RunningStep color="#1890ff" key={index} >{item.Caption}</RunningStep>
-        } else if (isEnabledStep) {
-            return <CompleteStep color={'#389e0d'} key={index} onClick={() => wizardProps.goToStep(item.TargetStep)}>{item.Caption}</CompleteStep>
-        } else {
-            return <NotStartStep color="#bfbfbf" key={index} >{item.Caption}</NotStartStep>
-        }
-    })
+      if (item.TargetStep === RunSteps.DETECTION_RESULT && detectResult.detectionResult === undefined) {
+        isEnabledStep = false
+      }
+    }
+    if (item.IsActive) {
+      return <SetupStep
+                stepStatus='Running'
+                tabIndex={0}
+                key={index}>
+                {item.Caption}
+            </SetupStep>
+    } else if (isEnabledStep) {
+      return <SetupStep
+                stepStatus='Complete'
+                onKeyDown={(evt) => {
+                  if (evt.key === 'Enter' || evt.key === ' ') {
+                    wizardProps.goToStep(item.TargetStep)
+                  }
+                }}
+                tabIndex={0}
+                key={index}
+                onClick={() => wizardProps.goToStep(item.TargetStep)}>
+                {item.Caption}
+            </SetupStep>
+    } else {
+      return <SetupStep
+                stepStatus='NotStart'
+                tabIndex={-1}
+                key={index}>
+                {item.Caption}
+            </SetupStep>
+    }
+  })
 
-    const winSize = useWindowSize()
+  const winSize = useWindowSize()
 
-    return (<LeftPanel style={{ height: winSize.height - HeaderMenuHeight }}>
+  return (<LeftPanel style={{ height: winSize.height - HeaderMenuHeight }}>
         <Wizard>
-            <VLine tabIndex={navStepItems.length} />
+            <VLine stepCount={navStepItems.length} />
             {navStepItems}
         </Wizard>
     </LeftPanel>)
@@ -56,11 +77,13 @@ export const LeftPanelWidth = 250
 export const HeaderMenuHeight = 72
 
 export const LeftPanel = styled.div`
-    float: left;
+    position: absolute;
+    top: 0px;
+    left: 0px;
     width: ${LeftPanelWidth}px;
     z-index:999;
     border-right-color: #7565;
-    border-style: none solid none  none ;
+    border-style: none solid none none;
     border-width: 2px;
     padding-left: 5px;
     padding-Top: 20px;
@@ -74,7 +97,7 @@ export const RightPanel = styled.div`
     & {
         margin-Left: ${LeftPanelWidth + 10}px;
         height: 100%;
-        z-index:999;
+        z-index: 999;
     }
     &::after {
         clear: "both";
@@ -86,64 +109,54 @@ export const Wizard = styled.div`
     position: relative;
 `
 
-export const VLine = styled.div`
+export const VLine = styled.div<{ stepCount: number }>`
     width: 3px;
     background-color: #69c0ff;
     position: absolute;
     margin-left: -21px;
-    height: ${props => (props.tabIndex! - 1) * 56}px;
-    `
-
-export const CompleteStep = styled.div`
-        padding-Bottom: 30px;
-        position: relative;
-        cursor: pointer;
-        color: #297808;
-        &:before {
-            content: '✔';
-            color: #092b00;
-            display: block;
-            width: 1.5em;
-            height: 1.5em;
-            text-align: center;
-            border-radius: 50%;
-            background-color: ${props => props.color};
-            position: absolute;
-            margin-left:-35px;
-          }
-    `
-
-export const RunningStep = styled.div`
-    padding-Bottom: 30px;
-    position: relative;
-    color: #116dc3;
-    &:before {
-        content: '▶';
-        color: #003a8c;
-        display: block;
-        width: 1.5em;
-        height: 1.5em;
-        text-align: center;
-        border-radius: 50%;
-        background-color: ${props => props.color};
-        position: absolute;
-        margin-left:-35px;
-      }
+    height: ${props => (props.stepCount - 1) * 56}px;
 `
 
-export const NotStartStep = styled.div`
-    padding-Bottom: 30px;
+type StepStatus = 'Running' | 'Complete' | 'NotStart'
+
+const getStepColor = (stepStatus: StepStatus) => {
+  switch (stepStatus) {
+    case 'Running': return '#116dc3'
+    case 'Complete': return '#297808'
+    case 'NotStart': return '#6e6e6e'
+  }
+}
+
+const getStepContentColor = (stepStatus: Exclude<StepStatus, 'NotStart'>) => {
+  switch (stepStatus) {
+    case 'Running': return '#003a8c'
+    case 'Complete': return '#092b00'
+  }
+}
+
+const getStepContent = (stepStatus: StepStatus) => {
+  switch (stepStatus) {
+    case 'Running': return '▶'
+    case 'Complete': return '✔'
+    case 'NotStart': return ''
+  }
+}
+
+export const SetupStep = styled.div<{ stepStatus: StepStatus }>`
+    padding-bottom: 30px;
     position: relative;
-    color: #6e6e6e;
+    ${props => props.stepStatus === 'Complete' ? 'cursor: pointer;' : ''}
+    color: ${props => getStepColor(props.stepStatus)};
     &:before {
-        content: '';
+        content: '${props => getStepContent(props.stepStatus)}';
+        ${props => props.stepStatus === 'NotStart' ? '' : `color: ${getStepContentColor(props.stepStatus)};`}
         display: block;
         width: 1.5em;
         height: 1.5em;
         text-align: center;
         border-radius: 50%;
-        background-color: ${props => props.color};
+        background-color: ${props => getStepColor(props.stepStatus)};
         position: absolute;
         margin-left:-35px;
-      }
+    }
 `

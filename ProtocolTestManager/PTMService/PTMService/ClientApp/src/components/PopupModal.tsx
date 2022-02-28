@@ -30,11 +30,12 @@ export function PopupModal (props: PopupModalProp): ReactElement {
                 <IconButton
                   styles={iconButtonStyles}
                   iconProps={cancelIcon}
+                  ariaLabel='Close'
                   onClick={props.onClose}
                 />
               </div>
               <div className={contentStyles.body}>
-                  <TextField multiline readOnly autoAdjustHeight resizable={false} defaultValue={props.text} />
+                  <TextField multiline readOnly autoAdjustHeight ariaLabel='Popup content' resizable={false} defaultValue={props.text} />
               </div>
             </Modal>)
 }

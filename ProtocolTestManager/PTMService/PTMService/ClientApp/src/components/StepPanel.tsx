@@ -66,14 +66,13 @@ export const StepPanel: FunctionComponent<StepPanelProps> = (props) => {
 
   const showMessageBar = (((errorMessageBar ?? warningMessageBar ?? infoMessageBar) !== undefined) && showMsg)
   return (
-        <div>
-            {props.leftNav}
+        <div style={{ height: winSize.height - (HeaderMenuHeight - 20) }}>
             <RightPanel>
                 {
                     showMessageBar ? <div>{errorMessageBar ?? warningMessageBar ?? infoMessageBar}</div> : undefined
                 }
                 {
-                    < div >
+                    <div>
                         {
                             props.isLoading
                               ? <LoadingPanel />
@@ -84,7 +83,7 @@ export const StepPanel: FunctionComponent<StepPanelProps> = (props) => {
                     </div>
                 }
             </RightPanel>
-        </div >
-
+            {props.leftNav}
+        </div>
   )
 }

@@ -16,7 +16,7 @@ import { Property } from '../model/Property'
 import { PropertyGroupsDataSrv } from '../services/PropertyGroups'
 import { AppState } from '../store/configureStore'
 
-export function ConfigureTestCase(props: StepWizardProps) {
+export function ConfigureTestCase (props: StepWizardProps) {
   const dispatch = useDispatch()
   const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
   const configuration = useSelector((state: AppState) => state.configurations)
@@ -79,7 +79,7 @@ export function ConfigureTestCase(props: StepWizardProps) {
                 propertyGroups.propertyGroups.map((propertyGroup, index) => {
                   return (
                     <div key={index} style={{ alignSelf: 'start' }}>
-                      <Link style={{ fontSize: 'large', fontWeight: 'bold', color: propertyGroups.editingPropertyGroupIndex === index ? '#0078D4' : '#A19F9D' }}
+                      <Link style={{ fontSize: 'large', fontWeight: 'bold', color: propertyGroups.editingPropertyGroupIndex === index ? '#0078D4' : '#737271' }}
                         disabled={propertyGroups.editingPropertyGroupIndex === index}
                         onClick={() => onEditingPropertyGroupChange(index)}>
                         {propertyGroup.Name}

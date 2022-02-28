@@ -22,7 +22,7 @@ import { FileUploader, IFile } from '../components/FileUploader'
 import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 
 interface ListItem extends IObjectWithKey {
-  Name: string;
+  Name: string
   FullName: string
 }
 
@@ -36,14 +36,14 @@ const getListItems = (testCases: TestCase[]): ListItem[] => {
   })
 }
 
-function copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+function copyAndSort<T> (items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
   const key = columnKey as keyof T
   return items.slice(0).sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1))
 }
 
 interface FilterByDropdownOption extends IDropdownOption {
-  filterFunc: (filterPhrase: string | undefined) => (item: ListItem) => boolean;
-  filterPlaceholder: string;
+  filterFunc: (filterPhrase: string | undefined) => (item: ListItem) => boolean
+  filterPlaceholder: string
 }
 
 const isValidFilterPhrase = (filterPhrase: string | undefined) => {
@@ -65,17 +65,18 @@ const filterByDropdownOptions: FilterByDropdownOption[] = [
   }
 ]
 
-type FilterByDropdownProps = {
-  options: FilterByDropdownOption[],
+interface FilterByDropdownProps {
+  options: FilterByDropdownOption[]
   onOptionChange: (newOption: FilterByDropdownOption) => void
 }
 
-function FilterByDropdown(props: FilterByDropdownProps) {
+function FilterByDropdown (props: FilterByDropdownProps) {
   return (
     props.options.length > 0
       ? <Stack horizontal tokens={StackGap10}>
         <Label style={{ alignSelf: 'center' }}>Filter By</Label>
         <Dropdown
+          ariaLabel='Name of the property to be filtered'
           style={{ alignSelf: 'center', minWidth: 80 }}
           defaultSelectedKey={props.options[0].key}
           options={props.options}
@@ -110,7 +111,7 @@ const exportPlaylist = (items: string[]) => {
   downloadPlaylist(pageHTML)
 }
 
-export function RunSelectedCase(props: StepWizardProps) {
+export function RunSelectedCase (props: StepWizardProps) {
   const dispatch = useDispatch()
 
   const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
@@ -183,7 +184,7 @@ export function RunSelectedCase(props: StepWizardProps) {
         selection.setChangeEvents(false, true)
         // Select the imported items.
         const selectionItems = selection.getItems().map(item => item.key)
-        tests.forEach(test => { if (selectionItems.includes(test)) selection.setKeySelected(test, true, false); })
+        tests.forEach(test => { if (selectionItems.includes(test)) selection.setKeySelected(test, true, false) })
         // Enable onSelectionChanged.
         selection.setChangeEvents(true, false)
         // Update selection.
@@ -246,10 +247,10 @@ export function RunSelectedCase(props: StepWizardProps) {
 
   if (testSuiteInfo.selectedTestSuite === undefined || configuration.selectedConfiguration === undefined) {
     return <InvalidAppStateNotification
-        testSuite={testSuiteInfo.selectedTestSuite}
-        configuration={configuration.selectedConfiguration}
-        wizard={wizard}
-        wizardProps={wizardProps} />
+      testSuite={testSuiteInfo.selectedTestSuite}
+      configuration={configuration.selectedConfiguration}
+      wizard={wizard}
+      wizardProps={wizardProps} />
   }
 
   const onColumnHeaderClick = useCallback((column: IColumn) => {
@@ -396,6 +397,7 @@ export function RunSelectedCase(props: StepWizardProps) {
           <div style={{ height: winSize.height - 170, overflowY: 'auto' }}>
             <MarqueeSelection selection={selection}>
               <DetailsList
+                ariaLabelForSelectAllCheckbox='Select all test cases in the list'
                 items={filteredTestCases}
                 setKey="set"
                 columns={listColumns}
