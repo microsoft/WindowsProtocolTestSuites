@@ -68,8 +68,8 @@
 		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 		* [ Query\_Quota\_Info](#3.1.55)
-        * [ Compression](#3.1.56)
-		* [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.57)
+        * [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.56)
+        * [ Compression](#3.1.57)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -3124,9 +3124,40 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-#### <a name="3.1.56"> Compression
+
+#### <a name="3.1.56"> BVT\_SMB2Basic\_Query\_FileAllInformation
 
 ##### <a name="3.1.56.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify whether server can handle QUERY requests to a file for FileAllInformation correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries FileAllInformation by sending QUERY\_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.56.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_FileAllInformation |
+| **Description** | Verify whether server can handle QUERY requests to a file for FileAllInformation correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+#### <a name="3.1.57"> Compression
+
+##### <a name="3.1.57.1"> Scenario
 
 |||
 |---|---|
@@ -3138,7 +3169,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cluster Involved Scenario** | **NO** |
 
-##### <a name="3.1.56.2"> Test Case
+##### <a name="3.1.57.2"> Test Case
 
 |||
 |---|---|
@@ -3258,216 +3289,6 @@ This is used to test SMB2 common user scenarios.
 |                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file.| 
 |                          | 4.  Verifies the READ response is unchained and compressed with supported SUT compression and data read out are equal to the written one. | 
 |                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
-| **Cleanup**              ||
-
-#### <a name="3.1.57"> BVT\_SMB2Basic\_Query\_FileAllInformation
-
-##### <a name="3.1.57.1"> Scenario
-
-|||
-|---|---|
-| **Description**               | Verify whether server can handle QUERY requests to a file for FileAllInformation correctly. |
-| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client queries FileAllInformation by sending QUERY\_INFO request. |
-|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
-| **Cluster Involved Scenario** | **NO** |
-
-##### <a name="3.1.57.2"> Test Case
-
-|||
-|---|---|
-| **Test ID** | BVT\_SMB2Basic\_Query\_FileAllInformation |
-| **Description** | Verify whether server can handle QUERY requests to a file for FileAllInformation correctly. |
-| **Prerequisites** ||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (File)|
-|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-| **Cleanup**              ||
-
-#### <a name="3.1.58"> BVT\_SMB2Basic\_Query\_QueryDirectory\_FileNamesInformation
-
-##### <a name="3.1.58.1"> Scenario
-
-|||
-|---|---|
-| **Description**               | Verify the Query Directory response with FileNamesInformation from the server for search pattern described in [MS-FSA] 2.1.4. |
-| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client queries FileNamesInformation by sending QUERY\_INFO request with . |
-|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
-| **Cluster Involved Scenario** | **NO** |
-
-##### <a name="3.1.58.2"> Test Case
-
-|||
-|---|---|
-| **Test ID** | BVT\_SMB2Basic\_Query\_QueryDirectory\_FileNamesInformation |
-| **Description** | Verify whether server can handle QUERY requests for search pattern described in [MS-FSA] 2.1.4 to a file for FileNamesInformation correctly. |
-| **Prerequisites** ||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (File)|
-|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-| **Cleanup**              ||
-
-#### <a name="3.1.59"> BVT\_SMB2Basic\_Query\_QueryDirectory\_FileIdFullDirectoryInformation
-
-##### <a name="3.1.59.1"> Scenario
-
-|||
-|---|---|
-| **Description**               | Verify the Query Directory response with FileIdFullDirectoryInformation from the server for search pattern described in [MS-FSA] 2.1.4. |
-| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client queries FileIdFullDirectoryInformation by sending QUERY\_INFO request with . |
-|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
-| **Cluster Involved Scenario** | **NO** |
-
-##### <a name="3.1.59.2"> Test Case
-
-|||
-|---|---|
-| **Test ID** | BVT\_SMB2Basic\_Query\_QueryDirectory\_FileIdFullDirectoryInformation |
-| **Description** | Verify whether server can handle QUERY requests for search pattern described in [MS-FSA] 2.1.4 to a file for FileIdFullDirectoryInformation correctly. |
-| **Prerequisites** ||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (File)|
-|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-| **Cleanup**              ||
-
-#### <a name="3.1.60"> BVT\_SMB2Basic\_Query\_QueryDirectory\_FileIdBothDirectoryInformation
-
-##### <a name="3.1.60.1"> Scenario
-
-|||
-|---|---|
-| **Description**               | Verify the Query Directory response with FileIdBothDirectoryInformation from the server for search pattern described in [MS-FSA] 2.1.4. |
-| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client queries FileIdBothDirectoryInformation by sending QUERY\_INFO request with . |
-|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
-| **Cluster Involved Scenario** | **NO** |
-
-##### <a name="3.1.60.2"> Test Case
-
-|||
-|---|---|
-| **Test ID** | BVT\_SMB2Basic\_Query\_QueryDirectory\_FileIdBothDirectoryInformation |
-| **Description** | Verify whether server can handle QUERY requests for search pattern described in [MS-FSA] 2.1.4 to a file for FileIdBothDirectoryInformation correctly. |
-| **Prerequisites** ||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (File)|
-|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-| **Cleanup**              ||
-
-#### <a name="3.1.61"> BVT\_SMB2Basic\_Query\_QueryDirectory\_FileFullDirectoryInformation
-
-##### <a name="3.1.61.1"> Scenario
-
-|||
-|---|---|
-| **Description**               | Verify the Query Directory response with FileFullDirectoryInformation from the server for search pattern described in [MS-FSA] 2.1.4. |
-| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client queries FileFullDirectoryInformation by sending QUERY\_INFO request with . |
-|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
-| **Cluster Involved Scenario** | **NO** |
-
-##### <a name="3.1.61.2"> Test Case
-
-|||
-|---|---|
-| **Test ID** | BVT\_SMB2Basic\_Query\_QueryDirectory\_FileFullDirectoryInformation |
-| **Description** | Verify whether server can handle QUERY requests for search pattern described in [MS-FSA] 2.1.4 to a file for FileFullDirectoryInformation correctly. |
-| **Prerequisites** ||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (File)|
-|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-| **Cleanup**              ||
-
-#### <a name="3.1.62"> BVT\_SMB2Basic\_Query\_QueryDirectory\_FileDirectoryInformation
-
-##### <a name="3.1.62.1"> Scenario
-
-|||
-|---|---|
-| **Description**               | Verify the Query Directory response with FileDirectoryInformation from the server for search pattern described in [MS-FSA] 2.1.4. |
-| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client queries FileDirectoryInformation by sending QUERY\_INFO request with . |
-|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
-| **Cluster Involved Scenario** | **NO** |
-
-##### <a name="3.1.62.2"> Test Case
-
-|||
-|---|---|
-| **Test ID** | BVT\_SMB2Basic\_Query\_QueryDirectory\_FileDirectoryInformation |
-| **Description** | Verify whether server can handle QUERY requests for search pattern described in [MS-FSA] 2.1.4 to a file for FileDirectoryInformation correctly. |
-| **Prerequisites** ||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (File)|
-|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
-| **Cleanup**              ||
-
-#### <a name="3.1.63"> BVT\_SMB2Basic\_Query\_QueryDirectory\_FileBothDirectoryInformation
-
-##### <a name="3.1.63.1"> Scenario
-
-|||
-|---|---|
-| **Description**               | Verify the Query Directory response with FileBothDirectoryInformation from the server for search pattern described in [MS-FSA] 2.1.4. |
-| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
-|                               | 2.  Client queries FileBothDirectoryInformation by sending QUERY\_INFO request with . |
-|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
-| **Cluster Involved Scenario** | **NO** |
-
-##### <a name="3.1.63.2"> Test Case
-
-|||
-|---|---|
-| **Test ID** | BVT\_SMB2Basic\_Query\_QueryDirectory\_FileBothDirectoryInformation |
-| **Description** | Verify whether server can handle QUERY requests for search pattern described in [MS-FSA] 2.1.4 to a file for FileBothDirectoryInformation correctly. |
-| **Prerequisites** ||
-| **Test Execution Steps** | Create Client |
-|                          | NEGOTIATE |
-|                          | SESSION\_SETUP |
-|                          | TREE\_CONNECT|
-|                          | CREATE (File)|
-|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
-|                          | CLOSE |
-|                          | TREE\_DISCONNECT |
-|                          | LOGOFF |
 | **Cleanup**              ||
 
 ### <a name="3.2">SMB2 Feature Test
