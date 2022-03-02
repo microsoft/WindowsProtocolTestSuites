@@ -440,6 +440,7 @@ There are 170 test cases in total:
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
 | Scenarios for CommonAlgorithm | 1 | 8 (8) |
+| Scenarios for Create and Query Directory Using Expressions | 7 | 49 (49) |
 | Other Scenarios | 3 | 6 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
