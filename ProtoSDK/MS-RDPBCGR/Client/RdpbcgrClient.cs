@@ -709,7 +709,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         #region SSL methods
         /// <summary>
-        /// This method is used for SSL authentication.
+        /// This method is used for SSL authentication. The SSL Certificate used is a self signed cetificate and is not imported into the Trusted Certificate Storage.
+        /// The method must return true to bypass the override and bypass the inbuilt validation.
         /// </summary>
         /// <param name="sender">Not used.</param>
         /// <param name="certificate">Not used.</param>
@@ -724,12 +725,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             SslPolicyErrors sslPolicyErrors)
         {
             return true;
-            //if (sslPolicyErrors == SslPolicyErrors.None)
-            //{
-            //    return true;
-            //}
-
-            //return false;
         }
         #endregion SSL methods
 
