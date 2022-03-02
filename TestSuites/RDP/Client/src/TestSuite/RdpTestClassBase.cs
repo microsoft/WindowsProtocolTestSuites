@@ -60,6 +60,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool TurnOffRDPEIVerification;
         protected bool TurnOffRDPEUSBVerification;
         protected bool TurnOffRDPRFXVerification;
+        protected bool invalidCredentialSet = false;
 
         // Variable for SUT display verification
         protected bool verifySUTDisplay = false;
@@ -774,7 +775,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 iResult = sutControlAdapter?.TriggerClientDisconnectAll(this.TestContext.TestName);
 
-                if (this.TestContext.TestName.Contains("InvalidAccount"))
+                if (invalidCredentialSet)
                 {
                     CredentialManagerReverseInvalidAccount();
                 }
@@ -802,6 +803,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             try
             {
                 iResult = sutControlAdapter?.CredentialManagerAddInvalidAccount(this.TestContext.TestName);
+                invalidCredentialSet = true;
             }
             catch (Exception ex)
             {
@@ -831,6 +833,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             try
             {
                 iResult = sutControlAdapter?.CredentialManagerReverseInvalidAccount(this.TestContext.TestName);
+                invalidCredentialSet = false;
             }
             catch (Exception ex)
             {
