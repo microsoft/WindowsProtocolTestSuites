@@ -108,7 +108,7 @@ machine IoCtlRequest_FSCTL_DELETE_REPARSE_POINT() : IoCtlRequestConfig
 machine IoCtlRequest_FSCTL_FIND_FILES_BY_SID() : IoCtlRequestConfig
 {
     (
-         GetopenHasManageVolPrivilege;
+         GetOpenHasManageVolPrivilege;
          GetObjectFunctionality;
          FsaInitial;
          GetSystemConfig;

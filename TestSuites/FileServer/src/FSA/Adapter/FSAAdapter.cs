@@ -1,25 +1,22 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
+using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Security.AccessControl;
 using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Text;
 using Smb2 = Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
-using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
@@ -76,7 +73,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private IpVersion ipVersion;
         private ITestSite site;
         private ITransportAdapter transAdapter;
-        public UInt32 transBufferSize; // Make it accessible from test cases' code.
+        public uint transBufferSize; // Make it accessible from test cases' code.
         private string rootDirectory;
         private string quotaFile;
         private string reparsePointFile;
@@ -568,7 +565,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             else if ((fileNameStatus == FileNameStatus.BackslashName) &&
                (createOption & CreateOptions.NON_DIRECTORY_FILE) != 0)
             {
-                if (fileSystem == Adapter.FileSystem.NTFS || fileSystem == Adapter.FileSystem.REFS)
+                if (this.isAlternateDataStreamSupported)
                 {
                     randomFile = randomFile + @"\\\\\\" + "::$DATA";
                 }
@@ -629,7 +626,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
 
             //Construct the Non-Exist folder to trigger the error code OBJECT_PATH_NOT_FOUND
-            if (createDisposition == CreateDisposition.OPEN && fileNameStatus == FileNameStatus.isprefixLinkNotFound)
+            if (createDisposition == CreateDisposition.OPEN && fileNameStatus == FileNameStatus.IsPrefixLinkNotFound)
             {
                 randomFile = Guid.NewGuid().ToString();
             }
@@ -709,7 +706,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
              * Work around for test cases only designed for NTFS and ReFS:
              * Make assertion in the adapter, then convert the return code according to the test case.
              */
-            if (this.fileSystem != Adapter.FileSystem.NTFS && this.fileSystem != Adapter.FileSystem.REFS)
+            if (!this.isAlternateDataStreamSupported)
             {
                 if ((createOption & CreateOptions.DIRECTORY_FILE) == CreateOptions.DIRECTORY_FILE &&
                 (createOption & CreateOptions.NON_DIRECTORY_FILE) == CreateOptions.NON_DIRECTORY_FILE)
@@ -1324,7 +1321,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
              * Work around for test cases only designed for NTFS and ReFS:
              * Make assertion in the adapter, then convert the return code according to the test case.
              */
-            if (this.fileSystem != Adapter.FileSystem.NTFS && this.fileSystem != Adapter.FileSystem.REFS)
+            if (!this.isAlternateDataStreamSupported)
             {
                 if (randomFile.Contains("$STANDARD_INFORMATION")
                         || randomFile.Contains("$ATTRIBUTE_LIST")
@@ -5273,8 +5270,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedstatus;
         }
 
-
-
         #endregion
 
         #region 3.1.5.14.14 FileValidDataLengthInformation
@@ -5463,14 +5458,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #region 3.1.5.19   Server Requests Canceling an Operation
 
         /// <summary>
-        /// Implement CancelinganOperation method
+        /// Implement CancelingAnOperation method
         /// Server Requests Canceling an Operation
         /// this method was called by 3.1.5.7, and the scenario was in Scenario16_ByteRangeLock
         /// </summary>
         /// <param name="iorequest">An implementation-specific identifier that is unique for each 
         /// outstanding IO operation. See [MS-CIFS] section 3.3.5.51.</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
-        public MessageStatus CancelinganOperation(IORequest iorequest)
+        public MessageStatus CancelingAnOperation(IORequest iorequest)
         {
             throw (new NotImplementedException());
         }
@@ -5717,7 +5712,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// To make sure whether Quotas is supported.
         /// </summary>
         /// <param name="isQuotasSupported">True: if Quotas is supported</param>
-        public void GetIFQuotasSupported(out bool isQuotasSupported)
+        public void GetIfQuotasSupported(out bool isQuotasSupported)
         {
             isQuotasSupported = this.isQuotaSupported;
         }
@@ -5726,7 +5721,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// To make sure whether ObjectIDs is supported.
         /// </summary>
         /// <param name="isObjectIDsSupported">True: if ObjectIDs is supported</param>
-        public void GetIFObjectIDsSupported(out bool isObjectIDsSupported)
+        public void GetIfObjectIDsSupported(out bool isObjectIDsSupported)
         {
             isObjectIDsSupported = this.isObjectIDsSupported;
         }
@@ -5745,7 +5740,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// To make sure whether open has manage.vol.privilege
         /// </summary>
         /// <param name="isSupported">True: if open has manage.vol.privilege.</param>
-        public void GetopenHasManageVolPrivilege(out bool isSupported)
+        public void GetOpenHasManageVolPrivilege(out bool isSupported)
         {
             isSupported = bool.Parse(testConfig.GetProperty("IsOpenHasManageVolPrivilege"));
         }
@@ -5800,7 +5795,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// defined in 3.1.5.17
         /// </summary>
         /// <param name="isMoreThanOneOpenContained">True: if Open.ListContains</param>
-        public void GetIsOpenListContains(out bool isMoreThanOneOpenContained)
+        public void GetIfOpenListContains(out bool isMoreThanOneOpenContained)
         {
             isMoreThanOneOpenContained = bool.Parse(testConfig.GetProperty("IsMoreThanOneOpenContained"));
         }
@@ -6110,7 +6105,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     }
                 }
             }
-
         }
         #endregion
     }
