@@ -25,6 +25,18 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         int RDPConnectWithDirectCredSSP(string caseName);
 
         /// <summary>
+        /// This method used to trigger client to initiate a RDP connection from RDP client, 
+        /// and the client should use Direct Approach with CredSSP as the security protocol
+        /// and should also attempt connecting with an invalid username.
+        /// </summary>
+        /// <param name="caseName">Name of test case</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please initiate a remote desktop connection from the client, with invalid credentials, using the Direct Approach connection sequence and the CredSSP security protocol.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
+        [DefaultValue("1")]
+        int RDPConnectWithDirectCredSSPInvalidAccount(string caseName);
+
+        /// <summary>
         /// This method used to trigger client to initiate a full screen RDP connection from RDP client, 
         /// and the client should use Direct Approach with CredSSP as the security protocol.
         /// </summary>
@@ -45,6 +57,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
         [DefaultValue("1")]
         int RDPConnectWithNegotiationApproach(string caseName);
+
+        /// <summary>
+        /// This method used to trigger client to initiate a RDP connection from RDP client, 
+        /// and the client should use Negotiation-Based Approach to advertise the support for TLS, CredSSP or RDP standard security protocol using an Invalid Username.
+        /// </summary>
+        /// <param name="caseName">Name of test case</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please initiate a remote desktop connection from the client using the negotiation-based approach and the TLS, CredSSP, or RDP standard security protocol.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
+        [DefaultValue("1")]
+        int RDPConnectWithNegotiationApproachInvalidAccount(string caseName);
 
         /// <summary>
         /// This method used to trigger client to initiate a full screen RDP connection from RDP client, 
@@ -76,6 +99,26 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
         [DefaultValue("1")]
         int TriggerClientDisconnectAll(string caseName);
+
+        /// <summary>
+        /// This method is used to trigger change of stored credentials to invalid user account.
+        /// </summary>
+        /// <param name="caseName">Name of test case</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please initiate the addition of invalid credentials into the credential manager.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
+        [DefaultValue("1")]
+        int CredentialManagerAddInvalidAccount(string caseName);
+
+        /// <summary>
+        /// This method is used to trigger change of stored credentials to valid user account.
+        /// </summary>
+        /// <param name="caseName">Name of test case</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Please initiate the addition of valid credentials into the credential manager.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
+        [DefaultValue("1")]
+        int CredentialManagerReverseInvalidAccount(string caseName);
 
         /// <summary>
         /// This method is used to trigger RDP client to start an Auto-Reconnect sequence after a network interruption.

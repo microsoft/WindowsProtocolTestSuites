@@ -7,9 +7,11 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr.Mcs;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -340,6 +342,56 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
         }
 
+        /// <summary>
+        /// Check if transport level (TCP) connection happens with Invalid Account DirectCredSSP.
+        /// </summary>
+        /// <param name="sessionType">The type of session to be established.</param>
+        public void ExpectTransportConnectionForInvalidAccount(RDPSessionType sessionType)
+        {
+            this.pduCache.Clear();
+            RdpbcgrServerSessionContext oldSession = sessionContext;
+
+            TimeSpan leftTime = pduWaitTimeSpan;
+            DateTime expiratedTime = DateTime.Now + pduWaitTimeSpan;
+            bool isRecieved = false;
+            while (!isRecieved && leftTime.CompareTo(new TimeSpan(0)) > 0)
+            {
+                try
+                {
+                    sessionContext = rdpbcgrServerStack.ExpectConnect(leftTime);
+                    if (oldSession == null)
+                    {
+                        isRecieved = true;
+                        break;
+                    }
+                    else if (oldSession.Identity.ToString() != sessionContext.Identity.ToString())
+                    {
+                        isRecieved = true;
+                        break;
+                    }
+                }
+                catch (TimeoutException)
+                {
+                    site.Assert.Pass("Timeout when expecting connection shows account Is invalid");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    //break;
+                    site.Log.Add(LogEntryKind.Warning, "Excetpion thrown out when expect Connection With Invalid Account. {0}", ex.Message);
+                }
+                finally
+                {
+                    System.Threading.Thread.Sleep(100);//Wait some time for next packet.
+                    leftTime = expiratedTime - DateTime.Now;
+                }
+
+            }
+            
+            if (isRecieved)
+            {
+                site.Assert.Fail("Connection Should Not Be Received With Invalid Account");
+            }
+        }
 
         /// <summary>
         /// 2.2.1.1 - 2.2.1.2
@@ -353,7 +405,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         /// <param name="bSupportRestrictedAdminMode">Indicates the server supports Restricted admin mode</param>
         /// <param name="bReservedSet">Indicates the value of NEGRSP_FLAG_RESERVED in the flags field of RDP Negotiation Response</param>
         /// <param name="bSupportRestrictedAuthenticationMode">Indicates the server supports Restricted Authentication mode</param>
-        public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false)
+        public void Server_X_224_Connection_Confirm(selectedProtocols_Values protocol, bool bSupportExtClientData, bool setRdpNegData, NegativeType invalidType, bool bSupportEGFX = false, bool bSupportRestrictedAdminMode = false, bool bReservedSet = false, bool bSupportRestrictedAuthenticationMode = false, bool invalidAccount = false)
         {
             //ExpectPacket<Client_X_224_Connection_Request_Pdu>(sessionContext, timeout);
             serverConfig.selectedProtocol = protocol;
@@ -401,9 +453,31 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 confirmPdu.rdpNegData = null;
             }
-            SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
+
+            if (!invalidAccount)
+            {
+                SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
+            }
+            else
+            {
+                try
+                {
+                    SendPdu(confirmPdu, isSendTLSHandshakeAfterX224ConnectionConfirmPdu);
+                    site.Assert.Fail("Invalid Account Check Failed. SSPI Handshake Succeeded on Invalid User Account");
+                }
+                catch (SspiException e)
+                {
+                    site.Assert.Pass("Invalid Account Encountered. SSPI Handshake Failed");
+
+                }
+                catch (EndOfStreamException e)
+                {
+                    site.Assert.Pass("Invalid Account Encountered. CredSSP Authentication Failed");
+                }
+            }
             sessionState = ServerSessionState.X224ConnectionResponseSent;
         }
+
 
         /// <summary>
         /// Send X.224 Connection Confirm PDU. It is sent as a response of X.224 Connection Request.
@@ -3245,6 +3319,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             if (PtfPropUtility.GetPtfPropertyValue(site, "SUTNetBiosName", out tempStr))
             {
                 RdpbcgrTestData.Test_NetBiosName = tempStr;
+            }
+            if (PtfPropUtility.GetPtfPropertyValue(site, "Protocol", out tempStr))
+            {
+                RdpbcgrTestData.Test_Protocol = tempStr;
             }
         }
 

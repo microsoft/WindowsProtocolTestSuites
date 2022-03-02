@@ -254,7 +254,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cssp
             while (context.NeedContinueProcessing)
             {
                 // Get handshake resopnse
-                bytesReceived = serverStream.Read(receivedBuffer, 0, receivedBuffer.Length);
+                try
+                {
+                    bytesReceived = serverStream.Read(receivedBuffer, 0, receivedBuffer.Length);
+                }
+                catch
+                {
+                    bytesReceived = 0;
+                }
+                
                 // The remote connection has been closed
                 if (bytesReceived == 0)
                 {
