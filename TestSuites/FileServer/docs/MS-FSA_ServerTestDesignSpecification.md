@@ -428,7 +428,7 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 221 test cases in total:
+There are 218 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
@@ -440,7 +440,7 @@ There are 221 test cases in total:
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
 | Scenarios for CommonAlgorithm | 1 | 8 (8) |
-| Scenarios for Query Directory | 1 | 51 (51) |
+| Scenarios for Query Directory | 1 | 48 (48) |
 | Other Scenarios | 3 | 6 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
