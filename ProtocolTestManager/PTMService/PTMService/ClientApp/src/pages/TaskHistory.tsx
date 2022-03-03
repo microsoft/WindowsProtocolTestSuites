@@ -461,7 +461,7 @@ export function TaskHistory (props: any) {
         </Stack>
         <DialogFooter>
           <PrimaryButton onClick={toggleDialogHidden} text="Cancel" />
-          <PrimaryButton style={{ backgroundColor: '#ce3939' }} onClick={onDialogAbortButtonClick} text="Abort" />
+          <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onDialogAbortButtonClick} text="Abort" />
         </DialogFooter>
       </Dialog>
     </div>
