@@ -91,7 +91,7 @@
       </Description>
     </Property>
     <!--The timeout used for main transport based on RDPBCGR.-->
-    <Property name="Timeout" value="300"/>
+    <Property name="Timeout" value="60"/>
 
     <!--The timeout used for multiple transport based on RDPEUDP.-->
     <Property name="MultiTransportTimeout" value="70"/>
