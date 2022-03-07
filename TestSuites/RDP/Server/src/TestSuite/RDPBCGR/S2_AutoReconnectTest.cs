@@ -50,7 +50,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.Site.Log.Add(LogEntryKind.Comment, "Disconnect transport layer connection with RDP server.");
             rdpbcgrAdapter.Disconnect();
             // Wait a few time before reconnect
-            System.Threading.Thread.Sleep(10000);
+            System.Threading.Thread.Sleep(60000);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
