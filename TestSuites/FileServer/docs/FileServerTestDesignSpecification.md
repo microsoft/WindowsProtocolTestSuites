@@ -68,7 +68,7 @@
 		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 		* [ Query\_Quota\_Info](#3.1.55)
-		* [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.56)
+        * [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.56)
         * [ Compression](#3.1.57)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
@@ -3124,6 +3124,7 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
+
 #### <a name="3.1.56"> BVT\_SMB2Basic\_Query\_FileAllInformation
 
 ##### <a name="3.1.56.1"> Scenario
@@ -3153,7 +3154,6 @@ This is used to test SMB2 common user scenarios.
 |                          | TREE\_DISCONNECT |
 |                          | LOGOFF |
 | **Cleanup**              ||
-
 
 #### <a name="3.1.57"> Compression
 
@@ -3290,7 +3290,6 @@ This is used to test SMB2 common user scenarios.
 |                          | 4.  Verifies the READ response is unchained and compressed with supported SUT compression and data read out are equal to the written one. | 
 |                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cleanup**              ||
-
 
 ### <a name="3.2">SMB2 Feature Test
 
