@@ -198,7 +198,10 @@ def handle_connection(client_socket, config):
     end = datetime.datetime.now() + datetime.timedelta(seconds=15)
     while datetime.datetime.now() < end:
         buffer_size = int(config.get('general', 'buffer_size'))
-        request = client_socket.recv(buffer_size)
+        try:
+            request = client_socket.recv(buffer_size)
+        except:
+            continue
         if len(request) == 0:
             continue
         
@@ -236,8 +239,12 @@ def handle_connection(client_socket, config):
             proc = subprocess.Popen(cmd.split(' '))
             proc.wait()
         elif msg.command_id == command_id['AUTO_RECONNECT']:
-            # TODO
-            pass
+            config_cmd = config.get('client', 'RestartNetwork')
+            cmd = build_client_cmd(config_cmd)
+            logging.debug("Restarting network...")
+            client_socket.sendall(response.encode())
+            proc = subprocess.Popen(cmd.split(' '))
+            proc.wait()
         elif msg.command_id == command_id['SCREEN_SHOT']:
             # TODO
             pass
@@ -270,7 +277,10 @@ def handle_connection(client_socket, config):
 
         # FIXME: response.request_message = ""
         # FIXME: response.error_message = ""
-        client_socket.sendall(response.encode())
+        try:
+            client_socket.sendall(response.encode())
+        except:
+            pass
         logging.debug("Response has been sent")
 
 

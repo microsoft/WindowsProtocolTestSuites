@@ -71,6 +71,19 @@ public class SUTControl
                         errorMessage = "Take screen shot failed!";
                     }
                     break;
+                case RDPSUTControl_CommandId.AUTO_RECONNECT:
+                    if(Restart_Network() > 0)
+                    {
+                        resultCode = SUTControl_ResultCode.SUCCESS;
+                    }
+                    else
+                    {
+                        errorMessage = "Auto-Reconnect failed!";
+                    }
+                    break;
+                case RDPSUTControl_CommandId.BASIC_INPUT:
+                    // TODO
+                    break;
                 case RDPSUTControl_CommandId.TOUCH_EVENT_SINGLE:
                     // TODO
                     break;
@@ -105,29 +118,32 @@ public class SUTControl
 
     public int Start_RDP_Connection(RDP_Connection_Configure_Parameters parameters)
     {
+        String propertyName;
         String cmd;
 
         if (parameters.connectApproach == 0x0000 && parameters.screenType == 0x0000)
         {
-            cmd = config.getProperty("Negotiate");
+            propertyName = "Negotiate";
         }
         else if (parameters.connectApproach == 0x0000 && parameters.screenType == 0x0001)
         {
-            cmd = config.getProperty("NegotiateFullScreen");
+            propertyName = "NegotiateFullScreen";
         }
         else if (parameters.connectApproach == 0x0001 && parameters.screenType == 0x0000)
         {
-            cmd = config.getProperty("DirectCredSSP");
+            propertyName = "DirectCredSSP";
         }
         else if (parameters.connectApproach == 0x0001 && parameters.screenType == 0x0001)
         {
-            cmd = config.getProperty("DirectCredSSPFullScreen");
+            propertyName = "DirectCredSSPFullScreen";
         }
         else
         {
             // Negotiate is the default one
-            cmd = config.getProperty("Negotiate");
+            propertyName = "Negotiate";
         }
+
+        cmd = config.getProperty(propertyName);
 
         try
         {
@@ -147,7 +163,25 @@ public class SUTControl
     public int Stop_RDP_Connection()
     {
         String cmd;
+        
         cmd = config.getProperty("StopRDP");
+
+        try
+        {
+            System.out.println(cmd);
+            Runtime.getRuntime().exec(cmd);
+            return 1;
+        }
+        catch (Exception e)
+        {
+            return -1;
+        }
+    }
+
+    public int Restart_Network()
+    {
+        String cmd;
+        cmd = config.getProperty("RestartNetwork");
 
         try
         {

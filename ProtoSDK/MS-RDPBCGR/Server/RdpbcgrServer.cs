@@ -621,18 +621,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                     }
                     else
                     {
-                        pdu = (StackPacket)transportEvent.EventObject;
-                        if (transportEvent.EndPoint == sessionContext.Identity)
+                        if (transportEvent.EventObject is StackPacket packet)
                         {
-                            return pdu;
-                        }
-                        else
-                        {
-                            // Add the pdu into packet buffer of corresponding RDP session
-                            RdpbcgrServerSessionContext context = this.serverContext.LookupSession(transportEvent.EndPoint);
-                            if (context != null)
+                            pdu = packet;
+                            if (transportEvent.EndPoint == sessionContext.Identity)
                             {
-                                context.AddPacketToBuffer(pdu);
+                                return pdu;
+                            }
+                            else
+                            {
+                                // Add the pdu into packet buffer of corresponding RDP session
+                                RdpbcgrServerSessionContext context = this.serverContext.LookupSession(transportEvent.EndPoint);
+                                if (context != null)
+                                {
+                                    context.AddPacketToBuffer(pdu);
+                                }
                             }
                         }
                     }
