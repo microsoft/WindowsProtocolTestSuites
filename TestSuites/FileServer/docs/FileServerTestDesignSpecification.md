@@ -218,7 +218,7 @@ Test scenarios are categorized as below table and will be described in following
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
 | SMB2 BVT                 | 99         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2644       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 Feature Test        | 2647       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -1442,6 +1442,42 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
+|||
+|---|---|
+|**Test ID**|BVT_OpLockBreak_Lease |
+|**Description**|This test case is designed to test whether sever can handle OplockBreak correctly for lease level.|
+|**Prerequisites**||
+|**Test Execution Steps**|Via NIC1|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request with BatchOpLock|
+||Server sends CREATE response|
+||Via NIC2|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request on the same file|
+||Via NIC1|
+||Server sends OPLOCK_BREAK_NOTIFICATION response|
+||Client sends OPLOCK_BREAK_ACKNOWLEDGEMENT request|
+||Server sends OPLOCK_BREAK_RESPONSE response|
+||Via NIC2|
+||Server sends CREATE response|
+||Via NIC1|
+||Tear down the client by sending CLOSE, TREE_DISCONNECT and LOG_OFF.|
+||Via NIC2|
+||Tear down the client by sending CLOSE, TREE-CONNECT and LOG_OFF.|
+|**Cleanup**||
+
+
 #### <a name="3.1.17">FileLeasing
 
 ##### <a name="3.1.17.1"> Scenario
@@ -1728,8 +1764,37 @@ This is used to test SMB2 common user scenarios.
 
 |||
 |---|---|
+|**Test ID**|BVT_ResilientHandle_Reconnect_Lease|
+|**Description**|Test whether server can request a durable open when receiving FSCTL_LMR_REQUEST_RESILLIENNCY successfully for lease level.|
+|**Prerequisites**||
+|**Test Execution Steps**|Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT|
+||The first client sends an IOCTL FSCTL_LMR_REQUEST_RESILLIENCY request.|
+||Tear down the first client by sending DISCONNECT request.|
+||Start a second client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT|
+||The second client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_RECONNECT create context to open the same file created by the first client.|
+||Tear down the second client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF|
+|**Cleanup**||
+
+
+|||
+|---|---|
 |**Test ID**|BVT_ResilientHandle_LockSequence|
 |**Description**|This test case is designed to test whether server can handle Lock request with specified LockSequence.|
+|**Prerequisites**||
+|**Test Execution Steps**|Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE. The first client sends an IOCTL FSCTL_LMR_REQUEST_RESILLIENCY request|
+||The first client sends WRITE request.|
+||The first client sends Flush request.|
+||The first client sends LOCK request with LockSequence set to (BucketNumber<< 4) + BucketSequence"|
+||Start the second client to reconnect to the file created by the first client by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4.CREATE (with SMB2_CREATE_DURABLE_HANDLE_RECONNECT Create Context).|
+||The second client sends LOCK request with the same LockSequence with the first client.|
+||Tear down the second client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_ResilientHandle_LockSequence_Lease|
+|**Description**|This test case is designed to test whether server can handle Lock request with specified LockSequence for lease level.|
 |**Prerequisites**||
 |**Test Execution Steps**|Start the first client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION_SETUP; 3. TREE_CONNECT; 4. CREATE. The first client sends an IOCTL FSCTL_LMR_REQUEST_RESILLIENCY request|
 ||The first client sends WRITE request.|
