@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Create a directory file and confirm that FoundFiles count")]
+        [Description("Create a directory file and confirm that FoundFiles count is zero")]
         public void CreateFile_CheckNoFilesFound()
         {
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
@@ -39,7 +39,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.CreateFile)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Create a directory, write a file to the directory and confirm the foundFiles count")]
+        [Description("Create a directory, write a file to the directory and confirm the foundFiles count is one")]
         public void CreateFile_CheckSingleFileFound()
         {
             // Create root directory
@@ -89,7 +89,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Create a directory file, write files and confirm the FoundFiles size")]
         public void CreateFile_CheckMultipleFilesFound()
         {
-
             string dirName = this.fsaAdapter.ComposeRandomFileName(8);
             CreateFile(dirName, CreateOptions.DIRECTORY_FILE);
             BaseTestSite.Log.Add(LogEntryKind.TestStep, $"Root directory created and named {dirName}");
