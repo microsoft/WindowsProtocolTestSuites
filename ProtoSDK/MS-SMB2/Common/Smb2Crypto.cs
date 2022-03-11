@@ -201,7 +201,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                         authData);
                 }
             }
-            
+
 
             return decrypted;
         }
@@ -224,7 +224,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 var (_, tag) = AesGmac.ComputeHash(cryptoInfo.SigningKey, nonce, original.ToBytes());
 
                 return tag;
-            }   
+            }
             else
             {
                 // [MS-SMB2] 3.1.4.1 
@@ -368,6 +368,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
             // Return null if the message is not required to be encrypted.
             return null;
+        }
+
+        public static void SignByteArray(Smb2CryptoInfo cryptoInfo, byte[] original, out byte[] nonce, out byte[] signature, Smb2Role role, Smb2Command smb2Command, UInt64 messageId = 1)
+        {
+            if (Smb2Utility.IsSmb2Family(cryptoInfo.Dialect))
+            {
+                // [MS-SMB2] 3.1.4.1 
+                // 3. If Connection.Dialect is "2.02" or "2.1", the sender MUST compute a 32-byte hash using HMAC-SHA256 over the entire message, 
+                HMACSHA256 hmacSha = new HMACSHA256(cryptoInfo.SigningKey);
+                signature = hmacSha.ComputeHash(original);
+                nonce = Array.Empty<byte>();
+            }
+            else if (Smb2Utility.IsSmb3xFamily(cryptoInfo.Dialect))
+            {
+                if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
+                {
+                    // [MS-SMB2] 3.1.4.1
+                    // 1. If Connection.Dialect belongs to the SMB 3.x dialect family and Connection.SigningAlgorithmId is AES-GMAC, 
+                    // compute a 16-byte hash using the AES-GMAC over the entire message using nonce as specified
+                    nonce = Smb2Utility.ComputeNonce(messageId, role, smb2Command);
+                    var (_, tag) = AesGmac.ComputeHash(cryptoInfo.SigningKey, nonce, original);
+
+                    signature = tag;
+                }
+                else
+                {
+                    // [MS-SMB2] 3.1.4.1 
+                    // 2. If Connection.Dialect belongs to the SMB 3.x dialect family, the sender MUST compute a 16-byte hash using AES-128-CMAC over the entire message
+                    signature = AesCmac128.ComputeHash(cryptoInfo.SigningKey, original);
+                    nonce = Array.Empty<byte>();
+                }
+            }
+            else
+            {
+                nonce = Array.Empty<byte>();
+                signature = Array.Empty<byte>();
+            }
         }
     }
 }
