@@ -32,6 +32,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             #region Test Code
 
+            //Wait for the disconnected session of the last test case to be removed
+            System.Threading.Thread.Sleep(65000);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
@@ -50,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.Site.Log.Add(LogEntryKind.Comment, "Disconnect transport layer connection with RDP server.");
             rdpbcgrAdapter.Disconnect();
             // Wait a few time before reconnect
-            System.Threading.Thread.Sleep(60000);
+            System.Threading.Thread.Sleep(65000);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
@@ -62,21 +64,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 supportAutoReconnect: true);
 
             //this.Site.Log.Add(LogEntryKind.Comment, "Wait RDP server to notify user logon.");
-            //rdpbcgrAdapter.WaitForLogon(testConfig.timeout);
-
-            this.Site.Log.Add(LogEntryKind.Comment, "Disconnect transport layer connection with RDP server.");
-            rdpbcgrAdapter.Disconnect();
-            // Wait a few time before reconnect
-            System.Threading.Thread.Sleep(60000);
-
-            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
-            rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
-
-            this.Site.Log.Add(LogEntryKind.Comment, "Reconnect to RDP Server.");
-            rdpbcgrAdapter.EstablishRDPConnection(testConfig.requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
-                true,  // Is reconnect
-                true,  // Is auto logon
-                supportAutoReconnect: true);
+            rdpbcgrAdapter.WaitForLogonAfterAutoReconnect(testConfig.timeout);
 
             #endregion Test Code
         }

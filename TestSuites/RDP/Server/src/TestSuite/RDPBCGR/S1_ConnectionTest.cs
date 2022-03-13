@@ -487,6 +487,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion Test Steps
 
             #region Test Code
+            //Wait for the disconnected session of the last test case to be removed
+            System.Threading.Thread.Sleep(65000);
+
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
 
