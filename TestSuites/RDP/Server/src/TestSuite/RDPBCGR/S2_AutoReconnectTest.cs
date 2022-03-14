@@ -63,9 +63,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                 true,  // Is auto logon
                 supportAutoReconnect: true);
 
-            //this.Site.Log.Add(LogEntryKind.Comment, "Wait RDP server to notify user logon.");
-            rdpbcgrAdapter.WaitForLogonAfterAutoReconnect(testConfig.timeout);
-
             #endregion Test Code
         }
     }

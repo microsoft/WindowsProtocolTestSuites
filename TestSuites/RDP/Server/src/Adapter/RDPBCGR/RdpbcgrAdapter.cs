@@ -1533,37 +1533,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.Assert.Fail("Timeout when waiting server send Server_Save_Session_Info_Pdu to notify user logon. ReceivedLogon is {0}, Received Cookie is {1}.", receivedLogon, receivedCookie);
         }
 
-        /// <summary>
-        /// Wait until user logon or timeout
-        /// </summary>
-        /// <param name="timeout">Timeout</param>
-        /// <param name="expectCookie">Also expect a Server Save Session Info PDU with auto-reconnect cookie</param>
-        public void WaitForLogonAfterAutoReconnect(TimeSpan timeout, bool expectCookie = false)
-        {
-            bool receivedLogon = false;
-            bool receivedCookie = false;
-            DateTime endtime = DateTime.Now + timeout;
-            while (timeout.TotalMilliseconds > 0)
-            {
-                Server_Save_Session_Info_Pdu saveSessionInfoPdu = ExpectPacket<Server_Save_Session_Info_Pdu>(timeout);
-                if (saveSessionInfoPdu != null &&
-                    (saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON || saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON_LONG || saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON_PLAINNOTIFY))
-                {
-                    receivedLogon = true;
-                }
-                if (saveSessionInfoPdu != null && saveSessionInfoPdu.saveSessionInfoPduData.infoType == infoType_Values.INFOTYPE_LOGON_EXTENDED_INF)
-                {
-                    receivedCookie = true;
-                }
-                if (receivedLogon && (!expectCookie || receivedCookie))
-                {
-                    Site.Log.Add(LogEntryKind.Comment, "Received Server_Save_Session_Info_Pdu from RDP server to notify user logon.");
-                    return;
-                }
-                timeout = endtime - DateTime.Now;
-            }
-        }
-
         #endregion Expect Methods
 
         #region Verify Capability
