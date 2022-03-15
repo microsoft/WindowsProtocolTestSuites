@@ -516,7 +516,7 @@ export function TestResultDetail (props: any) {
                       : testResults.selectedTestResultId !== undefined
                         ? <div>
                           <Spinner size={SpinnerSize.medium} />
-                          <p style={{ color: '#fa8c16' }}>Loading...</p>
+                          <p style={{ color: '#ab5f0e' }}>Loading...</p>
                         </div>
                         : <p>Please select a test result on the Task History page.</p>
                   }
