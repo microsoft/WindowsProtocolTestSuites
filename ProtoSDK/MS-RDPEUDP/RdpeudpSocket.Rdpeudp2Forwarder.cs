@@ -4,6 +4,7 @@
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2.Types;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
 {
@@ -46,6 +47,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp
         /// <param name="data">The data to be sent from RDPEUDP2 layer to higher layer.</param>
         public void ReceiveDataOnHigherLayer(byte[] data)
         {
+            SpinWait.SpinUntil(() => Received != null);
+
             Received?.Invoke(data);
         }
     }
