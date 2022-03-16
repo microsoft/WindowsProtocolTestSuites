@@ -3824,15 +3824,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED : byte
     {
         /// <summary>
-        /// The file or directory integrity state must not change.
-        /// </summary>
-        KEEP_INTEGRITY = 0x00,
-
-        /// <summary>
         /// The file or directory integrity state should change 
         /// based on the EnableIntegrity parameter.
         /// </summary>
-        CHANGE_INTEGRITY = 0x01,
+        CHANGE_INTEGRITY = 0x00,
+
+        /// <summary>
+        /// The file or directory integrity state must not change.
+        /// </summary>
+        KEEP_INTEGRITY = 0x01,
     }
 
     /// <summary>

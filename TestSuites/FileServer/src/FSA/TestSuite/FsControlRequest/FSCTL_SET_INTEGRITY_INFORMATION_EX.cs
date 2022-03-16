@@ -32,7 +32,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a directory and check if Integrity is supported.")]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION_EX request to a directory and check if Integrity is supported.")]
         public void FsCtl_Set_IntegrityInformationEx_Dir_IsIntegritySupported()
         {
             FsCtl_Set_IntegrityInformationEx_IsIntegritySupported(FileType.DirectoryFile);
@@ -486,6 +486,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 5: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION_EX
             integrityInfo.KeepIntegrityStateUnchanged = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED.KEEP_INTEGRITY;
+            // The below line should not matter because KEEP_INTEGRITY has precedence; if DisableIntegrityAndUnchanged tests fail and commenting out the line below makes the test pass again,
+            // update your Windows to the latest patch.
+            integrityInfo.EnableIntegrity = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY.DISABLE_INTEGRITY;
+            // it is invalid to turn enforcement off for non-integrity streams.
+            integrityInfo.Flags = enableIntegrity == FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY.ENABLE_INTEGRITY ? FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS.FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF : FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS.NONE;
             inputBufferSize = (uint)TypeMarshal.ToBytes(integrityInfo).Length;
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. FSCTL request FSCTL_SET_INTEGRITY_INFORMATION_EX with KeepIntegrityStateUnchanged set to 0 (unchanged).");
@@ -497,6 +502,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             {
                 fsaAdapter.AssertAreEqual(Manager, MessageStatus.INVALID_DEVICE_REQUEST, status, "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.");
                 return;
+            }
+            else
+            {
+                fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Status should be STATUS_SUCCESS.");
             }
 
             //Step 6: FSCTL request FSCTL_GET_INTEGRITY_INFORMATION

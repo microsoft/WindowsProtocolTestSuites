@@ -112,10 +112,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to get integrity info of the file.");
 
             //Step 4: Verify ChecksumAlgorithm is correctly set
+            //NOTE: on ReFS v1, only CRC64 is applicable; on ReFS v2 the actual checksum configured will not depend on the request parameter; it's CRC32 if cluster size is 4KB and CRC64 if cluster size is 64KB.
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
-            bool isChecksumTypeCRC64 = (getIntegrityInfo.ChecksumAlgorithm == FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64);
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify ChecksumAlgorithm is correctly set.");
-            fsaAdapter.AssertAreEqual(Manager, true, isChecksumTypeCRC64, "ChecksumAlgorithm should be CHECKSUM_TYPE_CRC64.");
+            if (fsaAdapter.ReFSVersion == 1)
+            {
+                bool isChecksumTypeCRC64 = (getIntegrityInfo.ChecksumAlgorithm == FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64);
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify ChecksumAlgorithm is correctly set.");
+                fsaAdapter.AssertAreEqual(Manager, true, isChecksumTypeCRC64, "ChecksumAlgorithm should be CHECKSUM_TYPE_CRC64.");
+            }
+            else
+            {
+                bool isChecksumSet = (getIntegrityInfo.ChecksumAlgorithm != FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_NONE);
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify ChecksumAlgorithm is correctly set.");
+                fsaAdapter.AssertAreEqual(Manager, true, isChecksumSet, "ChecksumAlgorithm should not be CHECKSUM_TYPE_NONE.");
+            }
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "5. Write some data so that the file is not empty.");
 
             //Step 5: Write some data so that the file is not empty
@@ -526,10 +536,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "Failed to get integrity info of the file.");
 
             //Step 4: Verify ChecksumAlgorithm
+            //NOTE: on ReFS v1, only CRC64 is applicable; on ReFS v2 the actual checksum configured will not depend on the request parameter; it's CRC32 if cluster size is 4KB and CRC64 if cluster size is 64KB.
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
-            bool isChecksumTypeNone = (getIntegrityInfo.ChecksumAlgorithm == FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64);
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify ChecksumAlgorithm.");
-            fsaAdapter.AssertAreEqual(Manager, true, isChecksumTypeNone, "ChecksumAlgorithm is CHECKSUM_TYPE_CRC64.");
+            if (fsaAdapter.ReFSVersion == 1)
+            {
+                bool isChecksumTypeCRC64 = (getIntegrityInfo.ChecksumAlgorithm == FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64);
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify ChecksumAlgorithm is correctly set.");
+                fsaAdapter.AssertAreEqual(Manager, true, isChecksumTypeCRC64, "ChecksumAlgorithm should be CHECKSUM_TYPE_CRC64.");
+            }
+            else
+            {
+                bool isChecksumSet = (getIntegrityInfo.ChecksumAlgorithm != FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_NONE);
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify ChecksumAlgorithm is correctly set.");
+                fsaAdapter.AssertAreEqual(Manager, true, isChecksumSet, "ChecksumAlgorithm should not be CHECKSUM_TYPE_NONE.");
+            }
 
             //Step 5: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION
             integrityInfo.ChecksumAlgorithm = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_UNCHANGED;
@@ -553,10 +573,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 7: Verify ChecksumAlgorithm
             getIntegrityInfo = TypeMarshal.ToStruct<FSCTL_GET_INTEGRITY_INFORMATION_BUFFER>(outputBuffer);
-            isChecksumTypeNone = (getIntegrityInfo.ChecksumAlgorithm == FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64);
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "7. Verify ChecksumAlgorithm.");
-            fsaAdapter.AssertAreEqual(Manager, true, isChecksumTypeNone, "ChecksumAlgorithm is CHECKSUM_TYPE_CRC64.");
-
+            if (fsaAdapter.ReFSVersion == 1)
+            {
+                bool isChecksumTypeCRC64 = (getIntegrityInfo.ChecksumAlgorithm == FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64);
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "7. Verify ChecksumAlgorithm is correctly set.");
+                fsaAdapter.AssertAreEqual(Manager, true, isChecksumTypeCRC64, "ChecksumAlgorithm should be CHECKSUM_TYPE_CRC64.");
+            }
+            else
+            {
+                bool isChecksumSet = (getIntegrityInfo.ChecksumAlgorithm != FSCTL_GET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_NONE);
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "7. Verify ChecksumAlgorithm is correctly set.");
+                fsaAdapter.AssertAreEqual(Manager, true, isChecksumSet, "ChecksumAlgorithm should not be CHECKSUM_TYPE_NONE.");
+            }
         }
 
         #endregion
