@@ -486,7 +486,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 5: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION_EX
             integrityInfo.KeepIntegrityStateUnchanged = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED.KEEP_INTEGRITY;
-            // The below line should not matter because KEEP_INTEGRITY has precedence; if DisableIntegrityAndUnchanged tests fail and commenting out the line below makes the test pass again,
+            // The below line should not matter because KEEP_INTEGRITY has precedence; if EnableIntegrityAndUnchanged tests fail and commenting out the line below makes the test pass again,
             // update your Windows to the latest patch.
             integrityInfo.EnableIntegrity = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY.DISABLE_INTEGRITY;
             // it is invalid to turn enforcement off for non-integrity streams.
