@@ -558,7 +558,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// <param name="iorequest">An implementation-specific identifier that is unique for each 
         /// outstanding IO operation. See [MS-CIFS] section 3.3.5.51.</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
-        public static MessageStatus CancelinganOperation(IORequest iorequest)
+        public static MessageStatus CancelingAnOperation(IORequest iorequest)
         {
             //When a cancelation request is received, scan CancelableOperations.
             //CancelableOperationList looking for an operation CanceledOperation 
@@ -639,7 +639,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                     if (!sequenceIORequest.Contains(IORequest.ByteRangeLock))
                     {
                         sequenceIORequest.Add(IORequest.ByteRangeLock);
-                        CancelinganOperation(IORequest.ByteRangeLock);
+                        CancelingAnOperation(IORequest.ByteRangeLock);
                     }
                 }
             }

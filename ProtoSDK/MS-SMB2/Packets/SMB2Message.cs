@@ -2716,7 +2716,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// and ReadChannelInfoLength fields. The server is requested to perform remote invalidation when responding to 
         /// the request as specified in [MS-SMBD] section 3.1.4.2.
         /// </summary>
-        CHANNEL_RDMA_V1_INVALIDATE = 0x00000002
+        CHANNEL_RDMA_V1_INVALIDATE = 0x00000002,
+
+        /// <summary>
+        /// This flag is not valid for SMB 3.0 and 3.0.2 dialects. When connection supports RDMA transform, SMB2_RDMA_TRANSFORM
+        /// structure is present in the channel information specified by the RemainingBytes, WriteChannelInfoOffset, and 
+        /// WriteChannelInfoLength fields.
+        /// </summary>
+        CHANNEL_RDMA_TRANSFORM = 0x00000003
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 52)]
@@ -7263,6 +7270,137 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         BACKUP_SECURITY_INFORMATION = 0x00010000,
 
+    }
+
+    /// <summary> 
+    /// The SMB2_RDMA_TRANSFORM is used by the client or server to send/receive transformed RDMA 
+    /// payload in READ/WRITE operations. The SMB2_RDMA_TRANSFORM is optional and only valid for the 
+    /// SMB 3.1.1 dialect when connection supports RDMA transform
+    /// </summary>
+    public struct SMB2_RDMA_TRANSFORM
+    {
+        // <summary>
+        // This field contains the offset, in bytes, from the beginning of
+        // this structure to the RDMA descriptors as specified by the Channel field.
+        // </summary>
+        [StaticSize(2)]
+        public ushort RdmaDescriptorOffset;
+
+        // <summary>
+        // This field contains the length, in bytes, of the RDMA
+        // descriptors as specified by the Channel field.
+        // </summary>
+        [StaticSize(2)]
+        public ushort RdmaDescriptorLength;
+
+        /// <summary>
+        /// This field MUST contain exactly one of the following values:
+        /// SMB2_CHANNEL_NONE, SMB2_CHANNEL_RDMA_V1, SMB2_CHANNEL_RDMA_V1_INVALIDATE
+        /// </summary>
+        [StaticSize(4)]
+        public Smb2RdmaTransformChannel Channel;
+
+        // <summary>
+        // This field specifies the number of transforms present after
+        // this structure. This value MUST be greater than 0.
+        // </summary>
+        [StaticSize(2)]
+        public ushort TransformCount;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved. 
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort Reserved1;
+
+        /// <summary>
+        /// This field MUST NOT be used and MUST be reserved. 
+        /// The sender MUST set this to 0, and the receiver MUST ignore it on receipt.
+        /// </summary>
+        [StaticSize(4)]
+        public uint Reserved2;
+    }
+
+    public enum Smb2RdmaTransformChannel : uint
+    {
+        /// <summary>
+        /// No channel information is present in the request. The RemainingBytes, WriteChannelInfoOffset 
+        /// and WriteChannelInfoLength fields MUST be set to zero by the client and MUST be ignored by the server.
+        /// </summary>
+        SMB2_CHANNEL_NONE = 0x00000000,
+
+        /// <summary>
+        /// One or more SMB_DIRECT_BUFFER_DESCRIPTOR_V1 structures as specified in [MS-SMBD] section 2.2.3.1 
+        /// are present in the channel information specified by RemainingBytes, WriteChannelInfoOffset and 
+        /// WriteChannelInfoLength fields.
+        /// </summary>
+        SMB2_CHANNEL_RDMA_V1 = 0x00000001,
+
+        /// <summary>
+        /// One or more SMB_DIRECT_BUFFER_DESCRIPTOR_V1 structures as specified in [MS-SMBD] section 2.2.3.1 
+        /// are present in the channel information specified by the RdmaDescriptorOffset and RdmaDescriptorLength 
+        /// fields. The server is requested to perform remote invalidation when responding to the request as 
+        /// specified in [MS-SMBD] section 3.1.4.2.
+        /// </summary>
+        SMB2_CHANNEL_RDMA_V1_INVALIDATE = 0x00000002
+    }
+
+    /// <summary>
+    ///  The SMB2_RDMA_CRYPTO_TRANSFORM is used by the client or server to send/receive encrypted or 
+    ///  signed RDMA payload in READ/WRITE operations. The SMB2_RDMA_CRYPTO_TRANSFORM is optional 
+    ///  and only valid for the SMB 3.1.1 dialect.
+    /// </summary>
+    public partial struct SMB2_RDMA_CRYPTO_TRANSFORM
+    {
+        /// <summary>
+        ///  This field MUST be set to one of the following values.
+        ///  SMB2_RDMA_TRANSFORM_TYPE_ENCRYPTION - 0x0001
+        ///  SMB2_RDMA_TRANSFORM_TYPE_SIGNING - 0x0002.
+        /// </summary>
+        [StaticSize(2)]
+        public Smb2RDMATransformType TransformType;
+
+        /// <summary>
+        ///  The length, in bytes, of Signature field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort SignatureLength;
+
+        /// <summary>
+        ///  The length, in bytes, of Nonce field.
+        /// </summary>
+        [StaticSize(2)]
+        public ushort NonceLength;
+
+        [StaticSize(2)]
+        public ushort Reserved;
+
+        /// <summary>
+        ///   The signature of the encrypted/signed data generated using Session.EncryptionKey.
+        /// </summary>
+        [Size("SignatureLength")]
+        public byte[] Signature;
+
+        /// <summary>
+        ///   An implementation-specific value assigned for encrypted/signed data. 
+        ///   This MUST NOT be reused for an SMB2 message within a session.
+        /// </summary>
+        [Size("NonceLength")]
+        public byte[] Nonce;
+    }
+
+    public enum Smb2RDMATransformType : ushort
+    {
+        /// <summary>
+        /// RDMA transform of type encryption is present and the payload is encrypted.
+        /// </summary>
+        SMB2_RDMA_TRANSFORM_TYPE_ENCRYPTION = 0x0001,
+
+        /// <summary>
+        /// RDMA transform of type signing is present and the payload is signed.
+        /// </summary>
+        SMB2_RDMA_TRANSFORM_TYPE_SIGNING = 0x0002,
     }
 
     /// <summary>

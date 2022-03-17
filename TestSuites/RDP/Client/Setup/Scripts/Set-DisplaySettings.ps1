@@ -2,7 +2,7 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 Function Set-ScreenResolution {
-<#
+    <#
 	.SYNOPSIS
 	Change screen resolution
 	.DESCRIPTION
@@ -12,24 +12,24 @@ Function Set-ScreenResolution {
 	.EXAMPLE
 	Set-ScreenResolution 1024 768
 #>
-param (
-[Parameter(Mandatory=$true,
-           Position = 0)]
-[int]
-$Width,
+    param (
+        [Parameter(Mandatory = $true,
+            Position = 0)]
+        [int]
+        $Width,
 
-[Parameter(Mandatory=$true,
-           Position = 1)]
-[int]
-$Height
-)
+        [Parameter(Mandatory = $true,
+            Position = 1)]
+        [int]
+        $Height
+    )
 
-Add-Type $DisplaySettingsCode
-[DisplaySettings.DisplaySettings]::ChangeResolution($width,$height)
+    Add-Type $DisplaySettingsCode
+    [DisplaySettings.DisplaySettings]::ChangeResolution($width, $height)
 }
 
 Function Set-ScreenOrientation {
-<#
+    <#
 	.SYNOPSIS
 	Change screen orientation
 	.DESCRIPTION
@@ -41,17 +41,17 @@ Function Set-ScreenOrientation {
 	.EXAMPLE
 	Set-ScreenOrientation -Orientation 1
 	.EXAMPLE
-	Set-ScreenOrentation 1
+	Set-ScreenOrientation 1
 #>
-param (
-[Parameter(Mandatory=$true,
-           Position = 0)]
-[int]
-$Orientation
-)
+    param (
+        [Parameter(Mandatory = $true,
+            Position = 0)]
+        [int]
+        $Orientation
+    )
 
-Add-Type $DisplaySettingsCode
-[DisplaySettings.DisplaySettings]::ChangeOrientation($Orientation)
+    Add-Type $DisplaySettingsCode
+    [DisplaySettings.DisplaySettings]::ChangeOrientation($Orientation)
 }
 
 $DisplaySettingsCode = @'
@@ -105,7 +105,7 @@ public struct DEVMODE
     public UInt32 dmPanningHeight;
 };
 
-class User_32
+class User32
 {
 	[DllImport("user32.dll")]
 	public static extern int EnumDisplaySettings (string deviceName, int modeNum, ref DEVMODE devMode );         
@@ -141,7 +141,7 @@ namespace DisplaySettings
             dm.dmFormName = new String(new char[32]);
             dm.dmSize = (UInt16)Marshal.SizeOf(dm);
 
-            if (0 != User_32.EnumDisplaySettings(null, User_32.ENUM_CURRENT_SETTINGS, ref dm))
+            if (0 != User32.EnumDisplaySettings(null, User32.ENUM_CURRENT_SETTINGS, ref dm))
             {
                 UInt32 width = dm.dmPelsWidth;
                 UInt32 height = dm.dmPelsHeight;
@@ -167,7 +167,7 @@ namespace DisplaySettings
             dm.dmFormName = new String(new char[32]);
             dm.dmSize = (UInt16)Marshal.SizeOf(dm);
 
-            if (0 != User_32.EnumDisplaySettings(null, User_32.ENUM_CURRENT_SETTINGS, ref dm))
+            if (0 != User32.EnumDisplaySettings(null, User32.ENUM_CURRENT_SETTINGS, ref dm))
             {
                 dm.dmPelsWidth = width;
                 dm.dmPelsHeight = height;
@@ -184,21 +184,21 @@ namespace DisplaySettings
         /// <returns></returns>
         static string ChangeDisplaySettings(DEVMODE dm)
         {
-            int result = User_32.ChangeDisplaySettings(ref dm, User_32.CDS_TEST);
-            if (result == User_32.DISP_CHANGE_FAILED)
+            int result = User32.ChangeDisplaySettings(ref dm, User32.CDS_TEST);
+            if (result == User32.DISP_CHANGE_FAILED)
             {
                 return "Unable to process your request";
             }
             else
             {
-                result = User_32.ChangeDisplaySettings(ref dm, User_32.CDS_UPDATEREGISTRY);
+                result = User32.ChangeDisplaySettings(ref dm, User32.CDS_UPDATEREGISTRY);
                 switch (result)
                 {
-                    case User_32.DISP_CHANGE_SUCCESSFUL:
+                    case User32.DISP_CHANGE_SUCCESSFUL:
                         {
                             return "Success";
                         }
-                    case User_32.DISP_CHANGE_RESTART:
+                    case User32.DISP_CHANGE_RESTART:
                         {
                             return "You need to reboot for the change to happen";
                         }
@@ -210,7 +210,6 @@ namespace DisplaySettings
             }
         }
     }
-
 }
 
 '@

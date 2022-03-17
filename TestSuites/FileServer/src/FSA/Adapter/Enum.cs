@@ -2363,9 +2363,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         /// <summary>
         /// If set, search ParentFile.DirectoryList for a link where Link.Name or Link.ShortName 
-        //matches FileNamei, If no such link is found
+        /// matches FileName, If no such link is found
         /// </summary>
-        isprefixLinkNotFound,
+        IsPrefixLinkNotFound,
 
         /// <summary>
         /// If set, Open.File is not null.

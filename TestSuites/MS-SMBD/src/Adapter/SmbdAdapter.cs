@@ -317,20 +317,26 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
         public uint Smb2Negotiate(
             DialectRevision[] requestDialects,
-            out DialectRevision selectedDialect
+            out DialectRevision selectedDialect,
+            Smb2RDMATransformId[] smb2RDMATransformIds = null,
+            EncryptionAlgorithm[] encryptionAlgs = null,
+            bool addDefaultEncryption = true,
+            SigningAlgorithm[] signingAlgorithms = null
             )
         {
-            return client.Smb2Negotiate(requestDialects, out selectedDialect);
+            return client.Smb2Negotiate(requestDialects, out selectedDialect, smb2RDMATransformIds, encryptionAlgs, addDefaultEncryption, signingAlgorithms);
         }
 
-        public uint Smb2SessionSetup()
+        public uint Smb2SessionSetup(bool enableSigning = true, bool enableEncryption = false)
         {
             return client.Smb2SessionSetup(
                 testConfig.SecurityPackageForSmb2UserAuthentication,
                 testConfig.DomainName,
                 testConfig.UserName,
                 testConfig.Password,
-                testConfig.ServerName);
+                testConfig.ServerName,
+                enableSigning,
+                enableEncryption);
         }
 
         public uint Smb2TreeConnect()
@@ -415,7 +421,15 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             return client.Smb2LogOff();
         }
 
-        public NtStatus Smb2EstablishSessionAndOpenFile(string fileName, DialectRevision[] negotiatedDialects = null)
+        public NtStatus Smb2EstablishSessionAndOpenFile(
+            string fileName,
+            DialectRevision[] negotiatedDialects = null,
+            Smb2RDMATransformId[] smb2RDMATransformIds = null,
+            EncryptionAlgorithm[] encryptionAlgs = null,
+            bool addDefaultEncryption = true,
+            SigningAlgorithm[] signingAlgorithms = null,
+            bool enableSigning = true,
+            bool enableEncryption = false)
         {
             if (negotiatedDialects == null)
             {
@@ -425,14 +439,20 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
             // SMB2 Negotiate
             DialectRevision selectedDialect;
-            NtStatus status = (NtStatus)Smb2Negotiate(negotiatedDialects, out selectedDialect);
+            NtStatus status = (NtStatus)Smb2Negotiate(
+                negotiatedDialects,
+                out selectedDialect,
+                smb2RDMATransformIds,
+                encryptionAlgs,
+                addDefaultEncryption,
+                signingAlgorithms);
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 return status;
             }
 
             // SMB2 Session Setup
-            status = (NtStatus)Smb2SessionSetup();
+            status = (NtStatus)Smb2SessionSetup(enableSigning, enableEncryption);
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 return status;
@@ -450,6 +470,10 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
         #endregion
 
+        public void SignByteArray(byte[] original, out byte[] nonce, out byte[] signature, Smb2Command smb2Command)
+        {
+            client.SignByteArray(original, out nonce, out signature, smb2Command);
+        }
 
     }
 }

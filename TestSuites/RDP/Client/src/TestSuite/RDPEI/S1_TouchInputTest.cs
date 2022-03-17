@@ -1,16 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Drawing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei;
-using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdpegt;
 
 namespace Microsoft.Protocols.TestSuites.Rdpei
 {
@@ -121,21 +116,28 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             RDPINPUT_CS_READY_PDU csReadyPdu = this.rdpeiServer.ExpectRdpInputCsReadyPdu(waitTime);
             TestSite.Assert.IsTrue(csReadyPdu != null, "Client is expected to send RDPINPUT_CS_READY_PDU to the server.");
 
-            this.rdpeiSUTControlAdapter.TriggerPositionSpecifiedTouchEventOnClient("Rdpei_TouchInputTest_Positive_SingleTouchEvent");
+            this.rdpeiSUTControlAdapter.TriggerPositionSpecifiedTouchEventOnClient(this.TestContext.TestName);
             // RDPEI running phase
             ushort width = this.rdpbcgrAdapter.CapabilitySetting.DesktopWidth;
             ushort height = this.rdpbcgrAdapter.CapabilitySetting.DesktopHeight;
             // The diameter of the circle to be sent to the client.
             ushort diam = 64;
-            Random random = new Random();
             // The left and top position of the circles to be sent to the client.
-            //ushort[] arr = { 0, 0, 0, (ushort)(height - diam), (ushort)(width - diam), 0, (ushort)(width - diam), (ushort)(height - diam), (ushort)(random.Next(width - diam * 2) + diam), (ushort)(random.Next(height - diam * 2) + diam) };
-            ushort[] arr = { 0, 0, 0, (ushort)(height - diam), (ushort)(width - diam), 0, (ushort)(width - diam), (ushort)(height - diam), (ushort)(width / 2 - diam / 2), (ushort)(height / 2 - diam / 2) };
+            (ushort left, ushort top)[] poses =
+            {
+                (0, 0),
+                (0, (ushort)(height - diam)),
+                ((ushort)(width - diam), 0),
+                ((ushort)(width - diam), (ushort)(height - diam)),
+                ((ushort)(width / 2 - diam / 2), (ushort)(height / 2 - diam / 2))
+            };
             bool isFirstFrame = true;
             for (int i = 0; i < 5; i++)
             {
-                ushort left = arr[i * 2];
-                ushort top = arr[i * 2 + 1];
+                var currPos = poses[i];
+
+                ushort left = currPos.left;
+                ushort top = currPos.top;
 
                 if (isManagedAdapter)
                 {
@@ -143,8 +145,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                 }
                 Site.Log.Add(LogEntryKind.Debug, "Expecting RDPINPUT_TOUCH_EVENT_PDU ...");
 
-                ushort preLeft = (i == 0) ? (ushort)(width + 1) : arr[(i - 1) * 2];
-                ushort preTop = (i == 0) ? (ushort)(height + 1) : arr[2 * i - 1];
+                ushort preLeft = (i == 0) ? (ushort)(width + 1) : poses[i - 1].left;
+                ushort preTop = (i == 0) ? (ushort)(height + 1) : poses[i - 1].top;
                 bool isExpectedFrameReceived = false;
                 while (!isExpectedFrameReceived)
                 {
@@ -156,15 +158,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                     }
                     foreach (RDPINPUT_TOUCH_FRAME f in touchEventPdu.frames)
                     {
-                        foreach (RDPINPUT_CONTACT_DATA d in f.contacts)
+                        foreach (RDPINPUT_TOUCH_CONTACT d in f.contacts)
                         {
+                            var conctactFlags = (RDPINPUT_TOUCH_CONTACT_ContactFlags)d.contactFlags.ToUInt();
+
+                            if (!conctactFlags.HasFlag(RDPINPUT_TOUCH_CONTACT_ContactFlags.CONTACT_FLAG_INCONTACT))
+                            {
+                                continue;
+                            }
+
                             int contactX = d.x.ToInt();
                             int contactY = d.y.ToInt();
+
                             // Consume the RDPINPUT_TOUCH_EVENT_PDU received from last touch action.
                             if (contactX >= preLeft && contactX <= preLeft + diam && contactY >= preTop && contactY <= preTop + diam)
                             {
                                 continue;
                             }
+
                             // Touch out of the valid range, send the unexpected position instruction to the client, and fail the case.
                             if (contactX < left || contactX > left + diam || contactY < top || contactY > top + diam)
                             {
@@ -176,6 +187,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
                                     RdpeiUtility.SendInstruction(RdpeiSUTControlData.UnexpectedPositionNotice);
                                 }
+
                                 Site.Assert.IsTrue(false, "Client is expected to send a RDPINPUT_TOUCH_EVENT_PDU whose contact position near ({0}, {1}), not ({2}, {3}).", left + diam / 2, top + diam / 2, contactX, contactY);
                             }
                             else
@@ -225,7 +237,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             RDPINPUT_CS_READY_PDU csReadyPdu = this.rdpeiServer.ExpectRdpInputCsReadyPdu(waitTime);
             TestSite.Assert.IsTrue(csReadyPdu != null, "Client is expected to send RDPINPUT_CS_READY_PDU to the server.");
 
-            ushort contactCount = (csReadyPdu.maxTouchContacts > 5) ? (ushort)5 : csReadyPdu.maxTouchContacts;
+            if (csReadyPdu.maxTouchContacts < 2)
+            {
+                TestSite.Assume.Inconclusive("Client does not support mulitple touch.");
+            }
+
+            ushort contactCount = csReadyPdu.maxTouchContacts;
             this.rdpeiSUTControlAdapter.TriggerMultiTouchEventOnClient(this.TestContext.TestName, contactCount);
 
             // RDPEI running phase
@@ -236,7 +253,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             while (DateTime.Now < endTime && !isExpectedFrameReceived)
             {
                 RDPINPUT_TOUCH_EVENT_PDU touchEventPdu = this.rdpeiServer.ExpectRdpInputTouchEventPdu(waitTime);
-                Site.Assert.IsNotNull(touchEventPdu, "Client is expected to send to the server a RDPINPUT_TOUCH_EVENT_PDU whose contactCount is {0}.", contactCount);
+                Site.Assert.IsNotNull(touchEventPdu, "Client is expected to send to the server a RDPINPUT_TOUCH_EVENT_PDU indicating a mulitple touch event.");
                 VerifyRdpInputTouchEventPdu(touchEventPdu, isFirstFrame);
                 if (isFirstFrame)
                 {
@@ -244,14 +261,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                 }
                 foreach (RDPINPUT_TOUCH_FRAME f in touchEventPdu.frames)
                 {
-                    if (f.contactCount.ToUShort() == contactCount)
+                    if (f.contactCount.ToUShort() >= 2)
                     {
                         isExpectedFrameReceived = true;
                         break;
                     }
                 }
             }
-            Site.Assert.IsTrue(isExpectedFrameReceived, "Client is expected to send to the server a RDPINPUT_TOUCH_EVENT_PDU whose contactCount is {0}.", contactCount);
+            Site.Assert.IsTrue(isExpectedFrameReceived, "Client is expected to send to the server a RDPINPUT_TOUCH_EVENT_PDU indicating a mulitple touch event.");
             if (isManagedAdapter)
             {
                 RdpeiUtility.SendConfirmImage();
@@ -353,7 +370,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             {
                 foreach (RDPINPUT_TOUCH_FRAME f in touchEventPdu.frames)
                 {
-                    foreach (RDPINPUT_CONTACT_DATA d in f.contacts)
+                    foreach (RDPINPUT_TOUCH_CONTACT d in f.contacts)
                     {
                         int x = d.x.ToInt();
                         int y = d.y.ToInt();
@@ -411,7 +428,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             // RDPEI initializing phase
             Site.Log.Add(LogEntryKind.Debug, "Sending an invalid PDU.");
             RDPINPUT_INVALID_PDU invalidPdu = CreateRdpInputInvalidPdu(0xFFFF, 10, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF });
-            SendRdpInvalidPdu(invalidPdu);
+            SendRdpInputInvalidPdu(invalidPdu);
             RDPINPUT_CS_READY_PDU csReadyPdu = this.rdpeiServer.ExpectRdpInputCsReadyPdu(shortWaitTime);
             Site.Assert.IsNull(csReadyPdu, "The client should ignore the RDPINPUT_SC_READY_PDU message with invalid eventId.");
         }
@@ -464,7 +481,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             bool bProtocolSupported = this.rdpeiServer.CreateRdpeiDvc(waitTime);
             TestSite.Assert.IsTrue(bProtocolSupported, "Client should support this protocol.");
 
-            this.rdpeiSUTControlAdapter.TriggerContinuousTouchEventOnClient("Rdpei_TouchInputTest_Negative_TouchEventWithoutNegotiation");
+            this.rdpeiSUTControlAdapter.TriggerContinuousTouchEventOnClient(this.TestContext.TestName);
 
             RDPINPUT_TOUCH_EVENT_PDU touchEventPdu = this.rdpeiServer.ExpectRdpInputTouchEventPdu(waitTime);
             Site.Assert.IsNull(touchEventPdu, "The client is not expected to send a RDPINPUT_TOUCH_EVENT_PDU.");

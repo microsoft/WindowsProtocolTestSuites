@@ -386,7 +386,7 @@ machine SetFileRenameInformationScenario() : SetFileRenameInformationConfig
 {
     (
         FsaInitial;
-        GetIsOpenListContains;
+        GetIfOpenListContains;
         CreateFile(
              FileAttribute.NORMAL,
              CreateOptions.NON_DIRECTORY_FILE,

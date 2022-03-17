@@ -150,7 +150,7 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
           <Stack horizontal tokens={StackGap10}>
             {
               item.Status === 'Created' || item.Status === 'Running'
-                ? <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={() => { props.onAbort(item.Id) }}>Abort</PrimaryButton>
+                ? <PrimaryButton style={{ backgroundColor: '#ce3939' }} onClick={() => { props.onAbort(item.Id) }}>Abort</PrimaryButton>
                 : null
             }
             {
@@ -183,7 +183,7 @@ const getTestCaseStateColor = (kind: TestCaseState | 'Total') => {
       return 'green'
 
     case 'Failed':
-      return 'red'
+      return '#e50000'
 
     case 'Inconclusive':
       return 'orange'
@@ -213,7 +213,7 @@ const getTestResultStateColor = (kind: TestResultState) => {
       return 'green'
 
     case 'Failed':
-      return 'red'
+      return '#e50000'
   }
 }
 
@@ -261,6 +261,22 @@ export function TaskHistory(props: any) {
     return () => clearInterval(interval)
   }, [dispatch])
 
+  useEffect(() => {
+    const pageNumbers = document.getElementsByClassName("ms-Pagination-pageNumber")
+    if (pageNumbers.length > 0) {
+      for (let index = 0; index < pageNumbers.length; index++) {
+        const pageNumber = pageNumbers.item(index)
+        if (pageNumber) {
+          const selectedValue = pageNumber.getAttribute("aria-selected")
+          pageNumber.removeAttribute("aria-selected")
+          if (selectedValue) {
+            pageNumber.setAttribute("data-selected", selectedValue)
+          }
+        }
+      }
+    }
+  })
+
   const onDialogAbortButtonClick = () => {
     if (testResultToAbort !== undefined) {
       dispatch(SelectedTestCasesDataSrv.abortRunRequest(testResultToAbort.Id, () => {
@@ -274,7 +290,7 @@ export function TaskHistory(props: any) {
   const renderId = useCallback((testResultId: number) => {
     if (latestTestResultId !== undefined && latestTestResultId === testResultId) {
       return <Stack horizontal>
-        <div style={{ color: '#ff4949', fontSize: 'large', fontWeight: 'bold' }}>New!</div>
+        <div style={{ color: '#ce3939', fontSize: 'large', fontWeight: 'bold' }}>New!</div>
         <div style={{ paddingLeft: 5, fontSize: 'large' }}>{testResultId}</div>
       </Stack>
     } else {
@@ -417,7 +433,7 @@ export function TaskHistory(props: any) {
               : testResults.pageCount > 0
                 ? <div>
                   <Spinner size={SpinnerSize.medium} />
-                  <p style={{ color: '#fa8c16' }}>Loading...</p>
+                  <p style={{ color: '#ab5f0e' }}>Loading...</p>
                 </div>
                 : <p>There are no results found currently.</p>
           }
@@ -432,6 +448,12 @@ export function TaskHistory(props: any) {
                   marginTop: -10
                 }
               }}
+              firstPageAriaLabel="First page"
+              previousPageAriaLabel="Previous page"
+              nextPageAriaLabel="Next page"
+              lastPageAriaLabel="Last page"
+              pageAriaLabel='Page'
+              selectedAriaLabel='Selected'
               selectedPageIndex={testResults.pageNumber}
               pageCount={testResults.pageCount}
               onPageChange={onChangePageNumber}

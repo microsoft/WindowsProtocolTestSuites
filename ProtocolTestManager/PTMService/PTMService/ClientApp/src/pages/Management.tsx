@@ -288,7 +288,7 @@ export function Management(props: any) {
                 dialogContentProps.kind === 'Remove'
                   ? <PrimaryButton
                     onClick={onTestSuiteRemove}
-                    style={{ backgroundColor: '#ff4949' }}
+                    style={{ backgroundColor: '#ce3939' }}
                     text={managementState.isProcessing ? 'Removing' : 'Remove'}
                     disabled={managementState.isProcessing}
                   />

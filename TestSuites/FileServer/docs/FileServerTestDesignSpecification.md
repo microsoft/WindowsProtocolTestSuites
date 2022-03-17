@@ -68,8 +68,10 @@
 		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 		* [ Query\_Quota\_Info](#3.1.55)
-		* [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.56)
-        * [ Compression](#3.1.57)
+		* [ SMB2Basic\_Query\_FileAllInformation](#3.1.56)
+		* [ SMB2Basic\_Query\_FileNormalizedNameInformation\_DataFile](#3.1.57)
+		* [ SMB2Basic\_Query\_FileNormalizedNameInformation\_DirectoryFile](#3.1.58)
+        * [ Compression](#3.1.59)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -215,8 +217,8 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 97         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2640       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 99         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2644       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -3124,7 +3126,7 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-#### <a name="3.1.56"> BVT\_SMB2Basic\_Query\_FileAllInformation
+#### <a name="3.1.56"> SMB2Basic\_Query\_FileAllInformation
 
 ##### <a name="3.1.56.1"> Scenario
 
@@ -3154,10 +3156,70 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-
-#### <a name="3.1.57"> Compression
+#### <a name="3.1.57"> SMB2Basic\_Query\_FileNormalizedNameInformation\_DataFile
 
 ##### <a name="3.1.57.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Test whether server can handle QUERY requests to a data file for FileNormalizedNameInformation correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries FileNormalizedNameInformation by sending QUERY\_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.57.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_FileNormalizedNameInformation\_DataFile |
+| **Description** | Verify whether server can handle QUERY requests to a file for FileNormalizedNameInformation correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+#### <a name="3.1.58"> SMB2Basic\_Query\_FileNormalizedNameInformation\_DirectoryFile
+
+##### <a name="3.1.58.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Test whether server can handle QUERY requests to a directory file for FileNormalizedNameInformation correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries FileNormalizedNameInformation by sending QUERY\_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.58.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_FileNormalizedNameInformation\_DirectoryFile |
+| **Description** | Verify whether server can handle QUERY requests to a file for FileNormalizedNameInformation correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+
+#### <a name="3.1.59"> Compression
+
+##### <a name="3.1.59.1"> Scenario
 
 |||
 |---|---|
@@ -3169,7 +3231,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cluster Involved Scenario** | **NO** |
 
-##### <a name="3.1.57.2"> Test Case
+##### <a name="3.1.59.2"> Test Case
 
 |||
 |---|---|
@@ -3291,7 +3353,6 @@ This is used to test SMB2 common user scenarios.
 |                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cleanup**              ||
 
-
 ### <a name="3.2">SMB2 Feature Test
 
 Test scenarios are prioritized and designed based on customer interests and SMB3 new features.
@@ -3389,6 +3450,28 @@ Scenario see [Scenario](#3.1.13.1)
 ||Server responses successfully.|
 ||Client2 sends CREATE request to the same file with client1, and same AppInstanceId, and without DH2Q create context. Client2 should create the open successfully.|
 ||The first client sends another WRITE request and gets failure because the open is closed.|
+||Tear down client1.|
+||Tear down client2.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|AppInstanceId_Smb302|
+|**Description**|The case is designed to test if the server implements dialect 3.02, and when client fails over to a new client, check if the Open is closed.|
+|**Prerequisites**|The server implements dialect 3.02.|
+|**Test Execution Steps**|Client1 sends NEGOTIATE request with dialect 3.02 and gets NEGOTIATE response also with dialect 3.02.|
+||Client1 sends the following requests: SESSION_SETUP; TREE_CONNECT.|
+||Server responds successfully.|
+||Client1 sends CREATE request with the context SMB2_CREATE_APP_INSTANCE_ID, without DH2Q create context.|
+||Server responds successfully.|
+||Client2 sends the following requests: |
+||NEGOTIATE; SESSION_SETUP; TREE_CONNECT.|
+||Server responds successfully.|
+||Client2 sends CREATE request to the same file with client1, and same AppInstanceId, and without DH2Q create context.|
+||Client2 create fails with SHARING_VIOLATION for Windows Server 2012 and Windows Server 2012 R2, but opens successfully for all others.|
+||Client sends another WRITE request.|
+||Client1 gets SUCCESS for Windows Server 2012 and Windows Server 2012 R2, but fails with FILE_CLOSED for all others.|
 ||Tear down client1.|
 ||Tear down client2.|
 |**Cleanup**||
@@ -4559,6 +4642,37 @@ If the server disconnect the connection, the reconnect will be successful.
 ||LOGOFF|
 |**Cluster Involved Scenario**|**NO**|
 
+|||
+|---|---|
+|**Test ID**|DurableHandleV2_Reconnect_WithLeaseV1_WithDifferentFileName|
+|**Description**|Test reconnect with DurableHandleV2 and LeaseV1 context, but the file name is different will fail with STATUS_INVALID_PARAMETER.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV2 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV2 and LeaseV1 create context but to with a different filename|
+||Server sends STATUS_INVALID_PARAMETER response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
 
 |||
 |---|---|
@@ -4651,6 +4765,27 @@ If the server disconnect the connection, the reconnect will be successful.
 ||Server sends READ response|
 ||Client sends CLOSE request|
 ||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV2_WithLeaseV2_WithoutHandleCaching|
+|**Description**|Test no durable handle is granted if requesting with DurableHandleV2 and LeaseV2 context, but SMB2_LEASE_HANDLE_CACHING bit is not set in LeaseState.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV2 and LeaseV2 create context but without SMB2_LEASE_HANDLE_CACHING|
+||Server sends CREATE response|
+||Verify that DurableHandle is not granted|
 ||Client sends TREE_DISCONNECT request|
 ||Server sends TREE_DISCONNECT response|
 ||Client sends LOGOFF request|
@@ -5407,6 +5542,14 @@ Scenario see section [Scenario](#3.1.6.1).
 ||Verify that server sets Connection.SigningAlgorithmCount to 1 from the response.|
 |**Cleanup**||
 
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to a unsupported value: 0x0004.|
+||Verify that server returns a Negotiate response, setting SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to "NONE".|
+|**Cleanup**||
 
 |||
 |---|---|
@@ -7783,7 +7926,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 |||
 |---|---|
-| **Test ID**              | SWNRegistrationEx\_InvalidIpAddress                                                   |
+| **Test ID**              | SWNRegistrationEx\_InvalidShareName                                                   |
 | **Description**         | Register with WitnessrRegisterEx and invalid sharename.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |

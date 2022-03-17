@@ -1,16 +1,12 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdp;
+
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdprfx;
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
+using System.Drawing;
 
 namespace Microsoft.Protocols.TestSuites.Rdpei
 {
@@ -27,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// Initializes the RdpeiUtility class.
         /// </summary>
         /// <param name="tSite">Instance of ITestSite.</param>
-        public static void Initialized(ITestSite tSite)
+        public static void Initialize(ITestSite tSite)
         {
             if (Site == null)
             {

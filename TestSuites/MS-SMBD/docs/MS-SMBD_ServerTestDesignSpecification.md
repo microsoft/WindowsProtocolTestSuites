@@ -1650,6 +1650,182 @@ In this test suite, there is no requirement captured. So “Requirements covered
 |  **Requirements Covered**| N/A| 
 |  **Cleanup**| N/A| 
 
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_ReadLargeFile_AES_GMAC**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can read file with large size over RDMA channel with AES_GMAC signing| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session with SigningAlgorithm AES_GMAC and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxReadSize** for RDMA Write.| 
+| | Create SMB2 READ Request with RDMA Channel Information. The SMB2 READ request will make server RDMA write **large size** data to client.| 
+| | Send SMB2 READ Request over SMBD Data Transfer.| 
+| | Verify server return SMB2 READ Response with STATUS_SUCCESS.| 
+| | Verify READ Response contains valid RDMA_TRANSFORM structure.| 
+| | Verify READ Response contains valid RDMA_CRYPTO_TRANSFORM with SMB2_RDMA_CRYPTO_SIGNING| 
+|  **Requirements Covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_ReadLargeFile_AES_CMAC**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can read file with large size over RDMA channel with AES_CMAC signing| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session with SigningAlgorithm AES_CMAC and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxReadSize** for RDMA Write.| 
+| | Create SMB2 READ Request with RDMA Channel Information. The SMB2 READ request will make server RDMA write **large size** data to client.| 
+| | Send SMB2 READ Request over SMBD Data Transfer.| 
+| | Verify server return SMB2 READ Response with STATUS_SUCCESS.| 
+| | Verify READ Response contains valid RDMA_TRANSFORM structure.| 
+| | Verify READ Response contains valid RDMA_CRYPTO_TRANSFORM with SMB2_RDMA_CRYPTO_SIGNING| 
+|  **Requirements Covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_AES_GMAC**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel with AES_GMAC signing| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session with SigningAlgorithm AES_GMAC and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures. The SMB2 WRITE request will make server RDMA read **large size** data from client.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_SUCCESS.| 
+| | Register memory with size smaller of **Smb2 Negotiated MaxReadSize** and **SMB2 Negotiated MaxWriteSize** for RDMA write.| 
+| | Create SMB2 READ Request package with RDMA Channel Information.| 
+| | Send SMB2 READ Request SMBD Data Transfer.| 
+| | Verify server returned SMB2 READ Response with STATUS_SUCCESS.| 
+| | Verify read content is the same with written content.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_AES_CMAC**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel with AES_CMAC signing| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session with SigningAlgorithm AES_CMAC and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures. The SMB2 WRITE request will make server RDMA read **large size** data from client.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_SUCCESS.| 
+| | Register memory with size smaller of **Smb2 Negotiated MaxReadSize** and **SMB2 Negotiated MaxWriteSize** for RDMA write.| 
+| | Create SMB2 READ Request package with RDMA Channel Information.| 
+| | Send SMB2 READ Request SMBD Data Transfer.| 
+| | Verify server returned SMB2 READ Response with STATUS_SUCCESS.| 
+| | Verify read content is the same with written content.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_FlagsSignedNotSet_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 write fails over RDMA channel when Session isn't setup with Signing and the Data is signed| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session **without** SigningAlgorithm and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_INVALID_PARAMETER.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_SigningStructure_EncryptionId_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 write fails over RDMA channel when Session is setup with SMB2_RDMA_TRANSFORM_ENCRYPTION but SMB2_RDMA_TRANSFORM_TYPE_SIGNING is the selected TransformType| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session with SigningAlgorithm and Encryption, and SMB2_RDMA_TRANSFORM_ENCRYPTION as the only selected RDMA_TRANSFORM Negotiate capability and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, and SMB2_RDMA_TRANSFORM_TYPE_SIGNING as the TransformType.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_INVALID_PARAMETER.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_InvalidSignature_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 write fails over RDMA channel when an invalid signature is sent| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session with SigningAlgorithm and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Modify signature to an invalid value.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_INVALID_SIGNATURE.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_NoTransformIds_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 write fails over RDMA channel when no RDMATransformId is created with the Connection| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session with SigningAlgorithm, but with NO RDMATransformId and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_INVALID_PARAMETER.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_ZeroTransformCount_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 write fails over RDMA channel when TransformCount is set to 0| 
+|  **Prerequisites**| N/A| 
+|  **Test Execution Steps**| Connect to server over RDMA.| 
+| | SMBD negotiate with peer.| 
+| | Establish SMB2 session with SigningAlgorithm and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures.| 
+| | Ensure TransformCount in SMB2_RDMA_TRANSFORM is 0.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_INVALID_PARAMETER.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
 #### <a name="_Toc427489518"/>Smb2Multichannel
 
 | &#32;| &#32; |

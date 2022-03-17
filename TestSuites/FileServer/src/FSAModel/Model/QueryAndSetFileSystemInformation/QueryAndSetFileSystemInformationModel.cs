@@ -245,7 +245,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                             return MessageStatus.INVALID_PARAMETER;
                         }
 
-                        if (!gisQuotasSupported)
+                        if (!gIsQuotasSupported)
                         {
                             Helper.CaptureRequirement(7803, @"[In FileFsControlInformation,Pseudocode for the operation is as follows:] 
                                 If Open.File.Volume.IsQuotasSupported is FALSE, the operation MUST be failed with STATUS_VOLUME_NOT_UPGRADED");
@@ -283,7 +283,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                             return MessageStatus.INVALID_PARAMETER;
                         }
 
-                        if (!gisObjectIDsSupported)
+                        if (!gIsObjectIDsSupported)
                         {
                             Helper.CaptureRequirement(4812, @"[In FileFsObjectIdInformation,Pseudocode for the operation is as follows:] 
                                 If Open.File.Volume.IsObjectIDsSupported is FALSE, the operation MUST be failed with STATUS_VOLUME_NOT_UPGRADED.");

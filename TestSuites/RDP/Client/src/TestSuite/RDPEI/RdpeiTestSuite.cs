@@ -1,17 +1,17 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei;
-using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.Protocols.TestSuites.Rdpei
 {
@@ -25,6 +25,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         private RdpedycServer rdpedycServer;
         private bool isManagedAdapter;
         private bool isInteractiveAdapter;
+        private bool? isClientSupportRDPEI;
         private TouchContactStateMachine stateMachine;
 
         #endregion
@@ -49,14 +50,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
         protected override void TestInitialize()
         {
-            VerifyInteractiveOrDeviceNeededRdpeiTestCase();
+            VerifyDeviceNeededRdpeiTestCase();
 
             base.TestInitialize();
 
             this.rdpeiSUTControlAdapter = this.TestSite.GetAdapter<IRdpeiSUTControlAdapter>();
             this.rdpeiSUTControlAdapter.Reset();
             this.rdpbcgrAdapter.TurnVerificationOff(TurnOffRDPEIVerification);
-            RdpeiUtility.Initialized(this.TestSite);
+            RdpeiUtility.Initialize(this.TestSite);
 
             isManagedAdapter = Site.Config.GetAdapterConfig("IRdpeiSUTControlAdapter").GetType().Name.Equals("ManagedAdapterConfig");
             isInteractiveAdapter = Site.Config.GetAdapterConfig("IRdpeiSUTControlAdapter").GetType().Name.Equals("InteractiveAdapterConfig");
@@ -133,46 +134,32 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             rdpedycServer = new RdpedycServer(this.rdpbcgrAdapter.ServerStack, this.rdpbcgrAdapter.SessionContext);
             rdpedycServer.ExchangeCapabilities(waitTime);
             rdpeiServer = new RdpeiServer(rdpedycServer);
-
-        }
-
-        //Stop RDP connection.
-        private void StopRDPConnection()
-        {
-            TriggerClientDisconnectAll();
-
-            this.rdpbcgrAdapter.Reset();
-            this.rdpeiServer.Reset();
         }
 
         /// <summary>
-        /// Inconclude the interactive test cases.
+        /// Inconclude the test cases requiring a touch device.
         /// </summary>
-        private void VerifyInteractiveOrDeviceNeededRdpeiTestCase()
+        private void VerifyDeviceNeededRdpeiTestCase()
         {
-            var isInteractiveTestCase = IsInteractiveRdpeiTestCase();
+            if (!isClientSupportRDPEI.HasValue)
+            {
+                if (PtfPropUtility.GetPtfPropertyValue(BaseTestSite, "SupportRDPEI", out string stringVal) && bool.TryParse(stringVal, out var booleanVal))
+                {
+                    isClientSupportRDPEI = booleanVal;
+                }
+                else
+                {
+                    isClientSupportRDPEI = false;
+                }
+            }
+
             var isDeviceNeededTestCase = IsDeviceNeededRdpeiTestCase();
-            var isInteractiveAdapter = Site.Config.GetAdapterConfig("IRdpSutControlAdapter").GetType().Name == "InteractiveAdapterConfig";
-            if (isInteractiveTestCase && !isInteractiveAdapter)
+            if (isDeviceNeededTestCase && !isClientSupportRDPEI.Value)
             {
-                Site.Assume.Inconclusive("The RDPEI case requires interactive operation.");
-            }
-            if (isDeviceNeededTestCase && !isInteractiveAdapter)
-            {
-                Site.Assume.Inconclusive("The RDPEI case requires device operation.");
+                Site.Assume.Inconclusive("The RDPEI case requires a functional touch device.");
             }
         }
-        /// <summary>
-        /// Determine whether the executing Rdpei test case is interactive or not
-        /// </summary>
-        /// <returns>The executing Rdpei test case is interactive or not</returns>
-        private bool IsInteractiveRdpeiTestCase()
-        {
-            var testName = this.TestContext.TestName;
-            var method = GetType().GetMethod(testName);
-            var attrs = method.GetCustomAttributes<TestCategoryAttribute>();
-            return attrs.Any(attr => attr.TestCategories.Contains("Interactive"));
-        }
+
         /// <summary>
         /// Determine whether the executing Rdpei test case needs device
         /// </summary>
@@ -195,10 +182,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             Site.Assert.IsNotNull(pdu.header, "The header of RDPINPUT_CS_READY_PDU should not be null.");
             Site.Assert.AreEqual(pdu.header.eventId, EventId_Values.EVENTID_CS_READY, "The eventId in the header of RDPINPUT_CS_READY_PDU is expected to be EVENTID_CS_READY.");
             Site.Assert.AreEqual(pdu.header.pduLength, pdu.Length(), "The length of the RDPINPUT_CS_READY_PDU message is expected to be the same with the pduLength in header.");
-            bool verifyProtocolVersion = pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V100 || pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V101
-                || pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V200;
-            Site.Assert.IsTrue(verifyProtocolVersion, "The protocolVersion in RDPINPUT_CS_READY_PDU is expected to be RDPINPUT_PROTOCOL_V1.");
-
+            bool verifyProtocolVersion = pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V100 ||
+                pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V101 ||
+                pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V200 ||
+                pdu.protocolVersion == RDPINPUT_CS_READY_ProtocolVersion.RDPINPUT_PROTOCOL_V300;
+            Site.Log.Add(LogEntryKind.Debug, $"The protocolVersion in RDPINPUT_CS_READY_PDU is {pdu.protocolVersion}.");
+            Site.Assert.IsTrue(verifyProtocolVersion, "The protocolVersion in RDPINPUT_CS_READY_PDU is expected to be one of the RDPINPUT_PROTOCOL versions.");
         }
 
         public void VerifyRdpInputDismissHoveringContactPdu(RDPINPUT_DISMISS_HOVERING_CONTACT_PDU pdu)
@@ -228,22 +217,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             foreach (RDPINPUT_TOUCH_FRAME f in pdu.frames)
             {
                 Site.Assert.AreEqual((int)f.contactCount.ToUShort(), f.contacts.Length, "The size of the array contacts in RDPINPUT_TOUCH_FRAME is expected to be the same with the contactCount .");
-                foreach (RDPINPUT_CONTACT_DATA d in f.contacts)
+                foreach (RDPINPUT_TOUCH_CONTACT d in f.contacts)
                 {
-                    if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_CONTACTRECT_PRESENT))
+                    Site.Log.Add(LogEntryKind.Debug, $"x: {d.x.ToInt()}, y: {d.y.ToInt()}");
+                    if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_CONTACTRECT_PRESENT))
                     {
-                        Site.Assert.IsNotNull(d.contactRectBottom, "The contactRectBottom is not expected to be null when flag CONTACT_DATA_CONTACTRECT_PRESENT in filedsPresent is set.");
-                        Site.Assert.IsNotNull(d.contactRectTop, "The contactRectTop is not expected to be null when flag CONTACT_DATA_CONTACTRECT_PRESENT in filedsPresent is set.");
-                        Site.Assert.IsNotNull(d.contactRectLeft, "The contactRectLeft is not expected to be null when flag CONTACT_DATA_CONTACTRECT_PRESENT in filedsPresent is set.");
-                        Site.Assert.IsNotNull(d.contactRectRight, "The contactRectRight is not expected to be null when flag CONTACT_DATA_CONTACTRECT_PRESENT in filedsPresent is set.");
+                        Site.Assert.IsNotNull(d.contactRectBottom, "The contactRectBottom is not expected to be null when flag TOUCH_CONTACT_CONTACTRECT_PRESENT in filedsPresent is set.");
+                        Site.Assert.IsNotNull(d.contactRectTop, "The contactRectTop is not expected to be null when flag TOUCH_CONTACT_CONTACTRECT_PRESENT in filedsPresent is set.");
+                        Site.Assert.IsNotNull(d.contactRectLeft, "The contactRectLeft is not expected to be null when flag TOUCH_CONTACT_CONTACTRECT_PRESENT in filedsPresent is set.");
+                        Site.Assert.IsNotNull(d.contactRectRight, "The contactRectRight is not expected to be null when flag TOUCH_CONTACT_CONTACTRECT_PRESENT in filedsPresent is set.");
                     }
-                    if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_ORIENTATION_PRESENT))
+                    if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_ORIENTATION_PRESENT))
                     {
-                        Site.Assert.IsNotNull(d.orientation, "The orientation is not expected to be null when flag CONTACT_DATA_ORIENTATION_PRESENT in filedsPresent is set.");
+                        Site.Assert.IsNotNull(d.orientation, "The orientation is not expected to be null when flag TOUCH_CONTACT_ORIENTATION_PRESENT in filedsPresent is set.");
                     }
-                    if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_PRESSURE_PRESENT))
+                    if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_PRESSURE_PRESENT))
                     {
-                        Site.Assert.IsNotNull(d.pressure, "The orientation is not expected to be null when flag CONTACT_DATA_PRESSURE_PRESENT in filedsPresent is set.");
+                        Site.Assert.IsNotNull(d.pressure, "The orientation is not expected to be null when flag TOUCH_CONTACT_PRESSURE_PRESENT in filedsPresent is set.");
                     }
 
                     Site.Assert.IsTrue(Enum.IsDefined(typeof(ValidStateFlagCombinations), d.contactFlags.ToUInt()), "The value of contactFlags does not contain a valid combination of the contact state flags.");
@@ -276,22 +266,22 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                 foreach (RDPINPUT_TOUCH_FRAME f in pdu.frames)
                 {
                     Site.Assert.AreEqual((int)f.contactCount.ToUShort(), f.contacts.Length, "The size of the array contacts in RDPINPUT_TOUCH_FRAME is expected to be the same with the contactCount .");
-                    foreach (RDPINPUT_CONTACT_DATA d in f.contacts)
+                    foreach (RDPINPUT_TOUCH_CONTACT d in f.contacts)
                     {
-                        if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_CONTACTRECT_PRESENT))
+                        if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_CONTACTRECT_PRESENT))
                         {
-                            Site.Assert.IsNotNull(d.contactRectBottom, "The contactRectBottom is not expected to be null when flag CONTACT_DATA_CONTACTRECT_PRESENT in filedsPresent is set.");
-                            Site.Assert.IsNotNull(d.contactRectTop, "The contactRectTop is not expected to be null when flag CONTACT_DATA_CONTACTRECT_PRESENT in filedsPresent is set.");
-                            Site.Assert.IsNotNull(d.contactRectLeft, "The contactRectLeft is not expected to be null when flag CONTACT_DATA_CONTACTRECT_PRESENT in filedsPresent is set.");
-                            Site.Assert.IsNotNull(d.contactRectRight, "The contactRectRight is not expected to be null when flag CONTACT_DATA_CONTACTRECT_PRESENT in filedsPresent is set.");
+                            Site.Assert.IsNotNull(d.contactRectBottom, "The contactRectBottom is not expected to be null when flag TOUCH_CONTACT_CONTACTRECT_PRESENT in filedsPresent is set.");
+                            Site.Assert.IsNotNull(d.contactRectTop, "The contactRectTop is not expected to be null when flag TOUCH_CONTACT_CONTACTRECT_PRESENT in filedsPresent is set.");
+                            Site.Assert.IsNotNull(d.contactRectLeft, "The contactRectLeft is not expected to be null when flag TOUCH_CONTACT_CONTACTRECT_PRESENT in filedsPresent is set.");
+                            Site.Assert.IsNotNull(d.contactRectRight, "The contactRectRight is not expected to be null when flag TOUCH_CONTACT_CONTACTRECT_PRESENT in filedsPresent is set.");
                         }
-                        if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_ORIENTATION_PRESENT))
+                        if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_ORIENTATION_PRESENT))
                         {
-                            Site.Assert.IsNotNull(d.orientation, "The orientation is not expected to be null when flag CONTACT_DATA_ORIENTATION_PRESENT in filedsPresent is set.");
+                            Site.Assert.IsNotNull(d.orientation, "The orientation is not expected to be null when flag TOUCH_CONTACT_ORIENTATION_PRESENT in filedsPresent is set.");
                         }
-                        if (((RDPINPUT_CONTACT_DATA_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_CONTACT_DATA_FieldsPresent.CONTACT_DATA_PRESSURE_PRESENT))
+                        if (((RDPINPUT_TOUCH_CONTACT_FieldsPresent)(d.fieldsPresent.ToUShort())).HasFlag(RDPINPUT_TOUCH_CONTACT_FieldsPresent.TOUCH_CONTACT_PRESSURE_PRESENT))
                         {
-                            Site.Assert.IsNotNull(d.pressure, "The orientation is not expected to be null when flag CONTACT_DATA_PRESSURE_PRESENT in filedsPresent is set.");
+                            Site.Assert.IsNotNull(d.pressure, "The orientation is not expected to be null when flag TOUCH_CONTACT_PRESSURE_PRESENT in filedsPresent is set.");
                         }
 
                         Site.Assert.IsTrue(Enum.IsDefined(typeof(ValidStateFlagCombinations), d.contactFlags.ToUInt()), "The value of contactFlags does not contain a valid combination of the contact state flags.");
@@ -377,7 +367,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             return pdu;
         }
 
-        public void SendRdpInvalidPdu(RDPINPUT_INVALID_PDU pdu)
+        public void SendRdpInputInvalidPdu(RDPINPUT_INVALID_PDU pdu)
         {
             byte[] data = PduMarshaler.Marshal(pdu);
 

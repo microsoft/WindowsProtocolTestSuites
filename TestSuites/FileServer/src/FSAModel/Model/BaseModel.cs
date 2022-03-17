@@ -225,14 +225,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// </summary>
         /// Disable warning CA2211, because this action confuses with the actual model design if modify it.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static bool gisQuotasSupported;
+        public static bool gIsQuotasSupported;
 
         /// <summary>
         /// get if ObjectIDs is supported
         /// </summary>
         /// Disable warning CA2211, because this action confuses with the actual model design if modify it.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static bool gisObjectIDsSupported;
+        public static bool gIsObjectIDsSupported;
 
         #endregion
 
@@ -300,7 +300,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         #region get if gOpenGenerateShortNames
 
         /// <summary>
-        /// The call part of the method GetIFQuotasSupported which is used to
+        /// The call part of the method GetOpenGenerateShortNames which is used to
         /// get if ObjectIDs is supported.
         /// This is a call-return pattern
         /// </summary>
@@ -310,7 +310,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         }
 
         /// <summary>
-        /// The return part of the method GetIFQuotasSupported which is used to 
+        /// The return part of the method GetOpenGenerateShortNames which is used to 
         /// get if ObjectIDs is supported.
         /// This is a call-returns pattern. 
         /// </summary>
@@ -328,25 +328,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         /// </summary>
         /// Disable warning CA2211, because this action confuses with the actual model design if modify it.
         [SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible")]
-        public static bool gIsOpenListContains;
+        public static bool gOpenListContains;
 
-        /// <summary>
-        /// Call function GetIsOpenListContains.
+        /// <summary>GetIfOpenListContains
+        /// Call function GetIfOpenListContains.
         /// </summary>
-        [Rule(Action = "call GetIsOpenListContains(out _)")]
-        public static void CallGetIsOpenListContains()
+        [Rule(Action = "call GetIfOpenListContains(out _)")]
+        public static void CallGetIfOpenListContains()
         {
 
         }
 
         /// <summary>
-        /// Return the result of function GetIsOpenListContains.
+        /// Return the result of function GetIfOpenListContains.
         /// </summary>
-        /// <param name="IsOpenListContains">A flag</param>
-        [Rule(Action = "return GetIsOpenListContains(out IsOpenListContains)")]
-        public static void ReturnGetIsOpenListContains(bool IsOpenListContains)
+        /// <param name="OpenListContains">A flag</param>
+        [Rule(Action = "return GetIfOpenListContains(out OpenListContains)")]
+        public static void ReturnGetIfOpenListContains(bool OpenListContains)
         {
-            gIsOpenListContains = IsOpenListContains;
+            gOpenListContains = OpenListContains;
         }
 
         //Search DestinationDirectory.File.DirectoryList for an ExistingLink where ExistingLink.Name 
@@ -496,25 +496,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         #region get if Quotas is Supported
 
         /// <summary>
-        /// The call part of the method GetIFQuotasSupported which is used to
+        /// The call part of the method GetIfQuotasSupported which is used to
         /// get if Quotas is supported.
         /// This is a call-return pattern
         /// </summary>
-        [Rule(Action = "call GetIFQuotasSupported(out _)")]
-        public static void CallGetIFQuotasSupported()
+        [Rule(Action = "call GetIfQuotasSupported(out _)")]
+        public static void CallGetIfQuotasSupported()
         {
         }
 
         /// <summary>
-        /// The return part of the method GetIFQuotasSupported which is used to 
+        /// The return part of the method GetIfQuotasSupported which is used to 
         /// get if Quotas is supported.
         /// This is a call-returns pattern. 
         /// </summary>
         /// <param name="isQuotasSupported">true: if Quotas is supported</param>
-        [Rule(Action = "return GetIFQuotasSupported(out isQuotasSupported)")]
-        public static void ReturnGetIFQuotasSupported(bool isQuotasSupported)
+        [Rule(Action = "return GetIfQuotasSupported(out isQuotasSupported)")]
+        public static void ReturnGetIfQuotasSupported(bool isQuotasSupported)
         {
-            gisQuotasSupported = isQuotasSupported;
+            gIsQuotasSupported = isQuotasSupported;
         }
 
         #endregion
@@ -522,25 +522,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         #region get if ObjectIDs is supported
 
         /// <summary>
-        /// The call part of the method GetIFQuotasSupported which is used to
+        /// The call part of the method GetIfObjectIDsSupported which is used to
         /// get if ObjectIDs is supported.
         /// This is a call-return pattern
         /// </summary>
-        [Rule(Action = "call GetIFObjectIDsSupported(out _)")]
-        public static void CallGetIFObjectIDsSupported()
+        [Rule(Action = "call GetIfObjectIDsSupported(out _)")]
+        public static void CallGetIfObjectIDsSupported()
         {
         }
 
         /// <summary>
-        /// The return part of the method GetIFQuotasSupported which is used to 
+        /// The return part of the method GetIfObjectIDsSupported which is used to 
         /// get if ObjectIDs is supported.
         /// This is a call-returns pattern. 
         /// </summary>
         /// <param name="isObjectIDsSupported">true: if ObjectIDs is supported</param>
-        [Rule(Action = "return GetIFObjectIDsSupported(out isObjectIDsSupported)")]
-        public static void ReturnGetIFObjectIDsSupported(bool isObjectIDsSupported)
+        [Rule(Action = "return GetIfObjectIDsSupported(out isObjectIDsSupported)")]
+        public static void ReturnGetIfObjectIDsSupported(bool isObjectIDsSupported)
         {
-            gisObjectIDsSupported = isObjectIDsSupported;
+            gIsObjectIDsSupported = isObjectIDsSupported;
         }
 
         #endregion
