@@ -413,44 +413,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
         /// Expect a RDPEUDP2 packet.
         /// </summary>
         /// <param name="timeout">The timeout for waiting the incoming packet.</param>
-        /// <param name="filter">The filter to filter expected packet.</param>
-        /// <returns>The expected RDPEUDP2 packet.</returns>
-        public IEnumerable<Rdpeudp2Packet> ExpectPackets(TimeSpan timeout, Func<Rdpeudp2Packet, bool> filter)
-        {
-            DateTime endtime = DateTime.Now + timeout;
-            int count = 0;
-
-            while (DateTime.Now < endtime)
-            {
-                lock (unprocessedPacketBuffer)
-                {
-                    for (int i = 0; i < unprocessedPacketBuffer.Count; i++)
-                    {
-                        Rdpeudp2Packet eudp2Packet = unprocessedPacketBuffer[i];
-                        if (filter(eudp2Packet))
-                        {
-                            unprocessedPacketBuffer.RemoveAt(i);
-                            count++;
-                            yield return eudp2Packet;
-                        }
-                        if(count == 1)
-                        {
-                            yield break;
-                        }
-                    }
-                }
-
-                // If not received a packet, wait a while.
-                Thread.Sleep(Rdpeudp2SocketConfig.ReceivingInterval);
-            }
-
-            yield return null;
-        }
-
-        /// <summary>
-        /// Expect a RDPEUDP2 packet.
-        /// </summary>
-        /// <param name="timeout">The timeout for waiting the incoming packet.</param>
         /// <returns>The expected RDPEUDP2 packet.</returns>
         public Rdpeudp2Packet ExpectPacket(TimeSpan timeout)
         {
@@ -503,16 +465,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
         public Rdpeudp2Packet ExpectAckVecPacket(TimeSpan timeout)
         {
             return ExpectPacket(timeout, packet => packet.Header.Flags.HasFlag(Rdpeudp2PacketHeaderFlags.ACKVEC) && packet.ACKVEC.HasValue);
-        }
-
-        /// <summary>
-        /// Expect an ACKVEC packet.
-        /// </summary>
-        /// <param name="timeout">The timeout for waiting the incoming packet.</param>
-        /// <returns>The expected ACKVEC packet.</returns>
-        public IEnumerable<Rdpeudp2Packet> ExpectAckVecPackets(TimeSpan timeout)
-        {
-            return ExpectPackets(timeout, packet => packet.Header.Flags.HasFlag(Rdpeudp2PacketHeaderFlags.ACKVEC) && packet.ACKVEC.HasValue);
         }
 
         /// <summary>

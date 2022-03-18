@@ -523,16 +523,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         /// </summary>
         /// <param name="dataList">List of data to be sent with the order.</param>
         /// <returns>The a list of valid sequenced RDPEUDP2 packets.</returns>
-        private Dictionary<int, Rdpeudp2Packet> GetNextValidUdp2PacketList(Dictionary<int, byte[]> dataList)
+        private List<Rdpeudp2Packet> GetNextValidUdp2PacketList(List<byte[]> dataList)
         {
-            var packetList = new Dictionary<int, Rdpeudp2Packet>();
+            var packetList = new List<Rdpeudp2Packet>();
 
-            for (int i = 1; i <= 3; i++)
+            foreach (byte[] b in dataList)
             {
-                var encryptedData = GetEncryptedData(rdpeudp2TransportMode, dataList[i]);
+                var encryptedData = GetEncryptedData(rdpeudp2TransportMode, b);
                 var packet = rdpeudpSocketR.Rdpeudp2Handler.CreateDataPacket(encryptedData);
 
-                packetList.Add(i, packet);
+                packetList.Add(packet);
             }
 
             return packetList;

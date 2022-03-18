@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpeudp
 {
@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("Verify that the RDPUDP2 Packet sent and an acknowlegdement is received as shared in Section 4.1 of the RDPEUDP2 document")]
-        public void S3_DataTransfer_v2_ClientReceiveData()
+        public void S3_DataTransfer_V2_ClientReceiveData()
         {
             CheckSecurityProtocolForMultitransport();
 
@@ -114,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("Verify behaviour of client when missing packet is detected as shared in Section 4.3 of the RDPEUDP2 document")]
-        public void S3_DataTransfer_v2_AcknowledgeLostPacket()
+        public void S3_DataTransfer_V2_AcknowledgeLostPacket()
         {
             CheckSecurityProtocolForMultitransport();
 
@@ -135,11 +135,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             "RDPEMT tunnel creation failed");
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepares multiple RDPUDP2 Packets according to the creation instructions in section 4.1.1 of the RDPEUDP2 document.");
-            var dataList = new Dictionary<int, byte[]>()
+            var dataList = new List<byte[]>()
             {
-                { 1, GetRandomByteData()},
-                { 2, GetRandomByteData()},
-                { 3, GetRandomByteData()}
+                {GetByteData()},
+                {GetByteData()},
+                {GetByteData()}
             };
 
             var nextUdpPacket = this.GetNextValidUdp2PacketList(dataList);
@@ -167,12 +167,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             Site.Assert.IsNotNull(ackPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
         }
 
-        private byte[] GetRandomByteData()
+        private byte[] GetByteData()
         {
             Random random = new Random();
             byte[] bytes = new byte[1000];
 
-            random.NextBytes(bytes);
+            bytes = Enumerable.Repeat((byte)0x20, 1000).ToArray();
 
             return bytes;
         }
