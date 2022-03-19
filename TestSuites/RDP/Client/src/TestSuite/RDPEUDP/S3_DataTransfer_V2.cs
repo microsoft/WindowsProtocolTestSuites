@@ -146,8 +146,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
 
             //Send first and third packet to simulate missing second packet.
             this.TestSite.Log.Add(LogEntryKind.Comment, "According to section 4.3.1, only the first and the last packet according to the data sequence is sent to the reciever. Allowing the receiver to assume the middle packet is lost.");
-            this.SendPacket(nextUdpPacket[1]);
-            this.SendPacket(nextUdpPacket[3]);
+            this.SendPacket(nextUdpPacket[0]);
+            this.SendPacket(nextUdpPacket[2]);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Receiver to send in an acknowledgement vector, showing that an RDPUDP2 Packet is missing. Section 4.3.2");
             var ackVECPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPacket(this.waitTime);
