@@ -155,13 +155,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             var BaseSeqNum = ackVECPacket.ACKVEC.Value.BaseSeqNum;
 
             Site.Assert.IsNotNull(ackVECPacket, "Client should send an ACKVEC packet to acknowledge the presence of a lost packet. Transport mode is {0}.", rdpeudp2TransportMode);
-            Site.Assert.AreEqual<ushort>(nextUdpPacket[2].DataHeader.Value.DataSeqNum, BaseSeqNum, $"The DataSeqNum({nextUdpPacket[2].DataHeader.Value.DataSeqNum}) of the missing packet must be equal to the BaseSeqNum({BaseSeqNum}) of the Acknowledgement Vector, showing the sequence number of the missing packet. Section 4.3.2, number 3");
+            Site.Assert.AreEqual<ushort>(nextUdpPacket[1].DataHeader.Value.DataSeqNum, BaseSeqNum, $"The DataSeqNum({nextUdpPacket[1].DataHeader.Value.DataSeqNum}) of the missing packet must be equal to the BaseSeqNum({BaseSeqNum}) of the Acknowledgement Vector, showing the sequence number of the missing packet. Section 4.3.2, number 3");
 
             //Send second packet and confirm acknowledgement receipt
-            this.SendPacket(nextUdpPacket[2]);
+            this.SendPacket(nextUdpPacket[1]);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expect an acknowledge packet showing the receipt of missing RDPUDP2 Packet.");
-            var ackPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckPacket(this.waitTime, nextUdpPacket[2].DataHeader.Value.DataSeqNum);
+            var ackPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckPacket(this.waitTime, nextUdpPacket[1].DataHeader.Value.DataSeqNum);
             var dataSeqNum = ackPacket.ACK.Value.SeqNum;
             this.TestSite.Log.Add(LogEntryKind.Debug, $"The recvied ACK packet is to acknowledge DataSeqNum {dataSeqNum}.");
             Site.Assert.IsNotNull(ackPacket, "Client should send an ACK to acknowledge the receipt of data packet. Transport mode is {0}.", rdpeudp2TransportMode);
