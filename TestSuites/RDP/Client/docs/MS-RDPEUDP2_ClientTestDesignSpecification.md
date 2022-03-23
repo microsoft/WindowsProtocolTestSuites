@@ -141,7 +141,7 @@ There is 1 scenario defined in the MS-RDPEUDP2 client test suite for verifying t
 
 |  **Scenario**|  **Priority**|  **Test Approach**|  **Description**| 
 | -------------| -------------| -------------| ------------- |
-| S3_DataTransfer_v2| 0| Traditional| Verify data transfer of RDPUDP Packet 2 over RDP-UDP connection.| 
+| S3_DataTransfer_V2| 0| Traditional| Verify data transfer of RDPUDP Packet 2 over RDP-UDP connection.| 
 
 _Table 2-1 MS-RDPEUDP Test Suite Scenarios_
 
@@ -216,7 +216,7 @@ The following table shows the number of test cases for each scenario.
 
 |  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
 | -------------| -------------| -------------| -------------| -------------| ------------- |
-| S3_DataTransfer_v2| 4| 1| 3| 0| 0| 
+| S3_DataTransfer_V2| 4| 1| 3| 0| 0| 
 
 ### <a name="_Toc350342313"/>Test Cases Description 
 The test suite is a synthetic RDP server. In the following descriptions, all instances of the term “Test Suite” can be understood as the RDP server.
@@ -244,7 +244,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_DataTransfer_v2**| | 
 | -------------| ------------- |
-|  **Test ID**| S3_DataTransfer_v2_ClientReceiveData| 
+|  **Test ID**| S3_DataTransfer_V2_ClientReceiveData| 
 |  **Priority**| BVT| 
 |  **Description** | Verify the RDP client can acknowledge the receipt of data from RDP-UDP connection| 
 |  **Prerequisites**| N/A| 
@@ -259,7 +259,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_DataTransfer_v2**| | 
 | -------------| ------------- |
-|  **Test ID**| S3_DataTransfer_v2_AcknowledgeLostPacket| 
+|  **Test ID**| S3_DataTransfer_V2_AcknowledgeLostPacket| 
 |  **Priority**| P0| 
 |  **Description** | Verify the RDP client will send a ACK to acknowledge the package loss when detect a package loss in a reliable connection| 
 |  **Prerequisites**| N/A| 
@@ -276,7 +276,7 @@ The common prerequisites and clean requirements are not listed in any of the tes
 
 |  **S3_DataTransfer_v2**| | 
 | -------------| ------------- |
-|  **Test ID**| S3_DataTransfer_v2_DataPacketWithACK| 
+|  **Test ID**| S3_DataTransfer_V2_DataPacketWithACK| 
 |  **Priority**| P0| 
 |  **Description** | Verify that the final OnWire version of the RDP2 Packet sent is evaluated to a specific output as shared in Section 4.4.6 of the RDPEUDP2 document| 
 |  **Prerequisites**| N/A| 
