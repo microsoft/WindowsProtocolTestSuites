@@ -934,6 +934,11 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             Smb2Crypto.SignByteArray(cryptoInfoTable[sessionId], original, out nonce, out signature, Smb2Role.Client, smb2Command, messageId);
         }
 
+        public void EncryptByteArray(byte[] original, out byte[] encrypted, out byte[] nonce, out byte[] signature)
+        {
+            Smb2Crypto.EncryptByteArray(cryptoInfoTable[sessionId], original, out encrypted, out nonce, out signature, Smb2Role.Client);
+        }
+
         #endregion
     }
 }

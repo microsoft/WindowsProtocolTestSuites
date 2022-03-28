@@ -406,5 +406,73 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                 signature = Array.Empty<byte>();
             }
         }
+
+        private static void CipherEncrypt(
+            dynamic cipher,
+            int nonceLength,
+            byte[] original,
+            out byte[] encrypted,
+            out byte[] nonce,
+            out byte[] signature)
+        {
+            encrypted = new byte[original.Length];
+            signature = new byte[16];
+            byte[] nonceGenerator = new byte[16];
+
+            Buffer.BlockCopy(Guid.NewGuid().ToByteArray(), 0, nonceGenerator, 0, nonceLength);
+            var nonceGuid = new Guid(nonceGenerator);
+            nonce = nonceGuid.ToByteArray().Take(nonceLength).ToArray();
+
+            using (cipher)
+            {
+                cipher.Encrypt(
+                    nonceGuid.ToByteArray().Take(nonceLength).ToArray(),
+                    original,
+                    encrypted,
+                    signature);
+            }
+        }
+
+        public static void EncryptByteArray(
+            Smb2CryptoInfo cryptoInfo,
+            byte[] original,
+            out byte[] encrypted,
+            out byte[] nonce,
+            out byte[] signature,
+            Smb2Role role)
+        {
+            byte[] key = role == Smb2Role.Server ? cryptoInfo.ServerOutKey : cryptoInfo.ServerInKey;
+
+            dynamic cipher;
+            int nonceLength;
+
+            if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_CCM)
+            {
+                cipher = new AesCcm(key);
+                nonceLength = Smb2Consts.AES128CCM_Nonce_Length;
+            }
+            else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_GCM)
+            {
+                cipher = new AesGcm(key);
+                nonceLength = Smb2Consts.AES128GCM_Nonce_Length;
+            }
+            else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_CCM)
+            {
+                cipher = new AesCcm(key);
+                nonceLength = Smb2Consts.AES256CCM_Nonce_Length;
+            }
+            else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_GCM)
+            {
+                cipher = new AesGcm(key);
+                nonceLength = Smb2Consts.AES256GCM_Nonce_Length;
+            }
+            else
+            {
+                throw new InvalidOperationException(String.Format(
+                    "Invalid encryption algorithm is set in Smb2CryptoInfo when encrypting: {0}", cryptoInfo.CipherId));
+            }
+
+            CipherEncrypt(cipher, nonceLength, original, out encrypted, out nonce, out signature);
+        }
     }
 }
