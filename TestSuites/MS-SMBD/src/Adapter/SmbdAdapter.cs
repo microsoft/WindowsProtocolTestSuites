@@ -475,5 +475,9 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             client.SignByteArray(original, out nonce, out signature, smb2Command);
         }
 
+        public void EncryptByteArray(byte[] original, out byte[] encrypted, out byte[] nonce, out byte[] signature)
+        {
+            client.EncryptByteArray(original, out encrypted, out nonce, out signature);
+        }
     }
 }
