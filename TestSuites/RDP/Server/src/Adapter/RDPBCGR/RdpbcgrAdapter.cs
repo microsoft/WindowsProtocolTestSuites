@@ -1532,6 +1532,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             }
             Site.Assert.Fail("Timeout when waiting server send Server_Save_Session_Info_Pdu to notify user logon. ReceivedLogon is {0}, Received Cookie is {1}.", receivedLogon, receivedCookie);
         }
+
         #endregion Expect Methods
 
         #region Verify Capability
