@@ -21,7 +21,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("RDPEUDP2")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
-        [Description("Verify that the RDPUDP2 Packet sent and an acknowlegdement is received as shared in Section 4.1 of the RDPEUDP2 document")]
+        [Description("Verify that the RDPUDP2 Packet sent and an acknowlegdement is received as shared in the Sending Data Packets Without Packet Loss or Reordering section of the RDPEUDP2 document")]
         public void S3_DataTransfer_V2_ClientReceiveData()
         {
             CheckSecurityProtocolForMultitransport();
@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("RDPEUDP2")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
-        [Description("Verify that the final OnWire version of the RDPUDP2 Packet sent is evaluated to a specific output as shared in Section 4.4.6 of the RDPEUDP2 document")]
+        [Description("Verify that the final OnWire version of the RDPUDP2 Packet sent is evaluated to a specific output as shared in the Data Example Sending Data Packet piggybacked with ACK section of the RDPEUDP2 document")]
         public void S3_DataTransfer_V2_DataPacketWithAck()
         {
             CheckSecurityProtocolForMultitransport();
@@ -113,7 +113,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         [TestCategory("RDPEUDP2")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
-        [Description("Verify behaviour of client when missing packet is detected as shared in Section 4.3 of the RDPEUDP2 document")]
+        [Description("Verify behaviour of client when missing packet is detected as shared in the Sending Data Packets with One Packet Lost in the Middle section of the RDPEUDP2 document")]
         public void S3_DataTransfer_V2_AcknowledgeLostPacket()
         {
             CheckSecurityProtocolForMultitransport();
