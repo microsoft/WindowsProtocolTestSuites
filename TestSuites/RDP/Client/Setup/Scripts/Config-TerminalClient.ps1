@@ -257,7 +257,7 @@ Write-Host "Creating task to change username of Server back to a valid username.
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN CredentialManager_InvalidAccount_Reverse /TR "powershell $dataPath\CredentialManager_InvalidAccount_Reverse.ps1" /IT /F
 
 #-----------------------------------------------------
-# Edit registery.
+# Edit registry.
 #-----------------------------------------------------
 Write-Host "Change Registry, Add a default user for Server"
 New-Item -type Directory HKCU:\Software\Microsoft\"Terminal Server Client"\Servers -Force
@@ -281,20 +281,17 @@ if($driverComputerIP -ne $driverComputerName)
 # To avoid warning dialog
 New-ItemProperty HKCU:\Software\Microsoft\"Terminal Server Client"\LocalDevices $driverComputerName -value 588 -PropertyType DWORD -Force
 
-#-----------------------------------------------------
-# Edit registery.
+# Set Maximum Disconnection Timeout
+New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Name "MaxDisconnectionTime" -Value 60000 -PropertyType DWord -Force
+
 # Disable TLS 1.0 for client
-#-----------------------------------------------------
 Write-Host "Disable TLS 1.0 for client."
 New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -Force | Out-Null
 New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -name 'Enabled' -value 0 -PropertyType 'DWord' -Force | Out-Null
 New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Client' -name 'DisabledByDefault' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
 Write-Host 'TLS 1.0 has been disabled.'
 
-#-----------------------------------------------------
-# Edit registery.
 # Enable TLS 1.1 and TLS 1.2 for client
-#-----------------------------------------------------
 Write-Host "Change Registry, force client to use TLS 1.0"
 New-Item -type Directory HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.1" -Force
 New-Item -type Directory HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\"TLS 1.1"\Client -Force
