@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             TimeSpan.FromSeconds(0.5),
             "RDPEMT tunnel creation failed");
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepare one RDPUDP2 Packet with the packet values given in section 4.4 of the RDPEUDP2 document.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepare one RDPUDP2 Packet with the packet values given in the Data Example Sending Data Packet piggybacked with ACK section of the RDPEUDP2 document.");
             var nextUdpPacket = this.GetNextValidUdp2Packet();
             this.TestSite.Log.Add(LogEntryKind.Debug, $"The DataSeqNum of next valid RDPEUDP2 packet is {nextUdpPacket.DataHeader.Value.DataSeqNum}.");
             this.TestSite.Log.Add(LogEntryKind.Debug, $"The ACK payload of next valid RDPEUDP2 packet is to acknowledge {nextUdpPacket.ACK.Value.SeqNum}.");
@@ -85,7 +85,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             TimeSpan.FromSeconds(0.5),
             "RDPEMT tunnel creation failed");
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepare one RDPUDP2 Packet with the packet values given in section 4.4 of the RDPEUDP2 document.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepare one RDPUDP2 Packet with the packet values given in the Data Example Sending Data Packet piggybacked with ACK section of the RDPEUDP2 document.");
             var nextUdpPacket = this.GetNextValidUdp2Packet();
             this.TestSite.Log.Add(LogEntryKind.Debug, $"The DataSeqNum of next valid RDPEUDP2 packet is {nextUdpPacket.DataHeader.Value.DataSeqNum}.");
             this.TestSite.Log.Add(LogEntryKind.Debug, $"The ACK payload of next valid RDPEUDP2 packet is to acknowledge {nextUdpPacket.ACK.Value.SeqNum}.");
@@ -134,7 +134,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             TimeSpan.FromSeconds(0.5),
             "RDPEMT tunnel creation failed");
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepares multiple RDPUDP2 Packets according to the creation instructions in section 4.1.1 of the RDPEUDP2 document.");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "In the RDP-UDP connection, test suite prepares multiple RDPUDP2 Packets according to the creation instructions in the On the Sender when sending the packet section of the RDPEUDP2 document.");
             var dataList = new List<byte[]>()
             {
                 {GetByteData()},
@@ -149,7 +149,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
             this.SendPacket(nextUdpPackets[0]);
             this.SendPacket(nextUdpPackets[2]);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Receiver to send in an acknowledgement vector, showing that an RDPUDP2 Packet is missing. Section 4.3.2");
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Expect a RDPUDP2 Receiver to send in an acknowledgement vector, showing that an RDPUDP2 Packet is missing. Sending Data Packets with One Packet Lost in the Middle Section");
             var ackVECPacket = rdpeudpSocketR.Rdpeudp2Handler.ExpectAckVecPacket(this.waitTime);
 
             var BaseSeqNum = ackVECPacket.ACKVEC.Value.BaseSeqNum;
