@@ -519,6 +519,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpeudp
         }
 
         /// <summary>
+        /// Get the an odd list of valid sequenced RDPEUDP2 packet.
+        /// </summary>
+        /// <param name="dataList">List of data to be sent with the order.</param>
+        /// <returns>The a list of valid sequenced RDPEUDP2 packets.</returns>
+        private List<Rdpeudp2Packet> GetNextValidUdp2PacketList(List<byte[]> dataList)
+        {
+            var packetList = new List<Rdpeudp2Packet>();
+
+            foreach (byte[] b in dataList)
+            {
+                var encryptedData = GetEncryptedData(rdpeudp2TransportMode, b);
+                var packet = rdpeudpSocketR.Rdpeudp2Handler.CreateDataPacket(encryptedData);
+
+                packetList.Add(packet);
+            }
+
+            return packetList;
+        }
+
+        /// <summary>
         /// Get the encrypted data from the TLS tunnel established with the RpdemtServer.
         /// </summary>
         /// <param name="udpTransportMode">Transport mode: Reliable or Lossy.</param>
