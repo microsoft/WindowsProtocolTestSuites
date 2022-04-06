@@ -1670,7 +1670,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
             InnerResponseChecker(checker, header, ioCtlResponse);
 
-            networkInfoResponses = Smb2Utility.UnmarshalNetworkInterfaceInfoResponse(respOutput);
+            if (status == Smb2Status.STATUS_SUCCESS)
+            {
+                networkInfoResponses = Smb2Utility.UnmarshalNetworkInterfaceInfoResponse(respOutput);
+            }
+            else
+            {
+                networkInfoResponses = null;
+            }
+
             return status;
         }
 
