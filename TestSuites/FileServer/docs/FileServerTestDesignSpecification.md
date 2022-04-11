@@ -72,6 +72,7 @@
 		* [ SMB2Basic\_Query\_FileNormalizedNameInformation\_DataFile](#3.1.57)
 		* [ SMB2Basic\_Query\_FileNormalizedNameInformation\_DirectoryFile](#3.1.58)
         * [ Compression](#3.1.59)
+        * [ NetworkInterfaceInfo](#3.1.60)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -95,6 +96,7 @@
 		* [ OperateOneFileFromTwoNodes](#3.2.20)
 		* [ MixedOplockLease](#3.2.21)
 		* [ Compression](#3.2.22)
+		* [ NetworkInterfaceInfo](#3.2.23)
 	* [SMB2 Feature Combination](#3.3)
 		* [ MultipleChannelWithReplay](#3.3.1)
 		* [ MultipleChannelWithEncryption](#3.3.2)
@@ -217,8 +219,8 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 99         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2658       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 100         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2661       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -3351,6 +3353,33 @@ This is used to test SMB2 common user scenarios.
 |                          | 3.  Client read the data just written by sending READ request with SMB2_READFLAG_REQUEST_COMPRESSED specified for multiple times until the end of the file.| 
 |                          | 4.  Verifies the READ response is unchained and compressed with supported SUT compression and data read out are equal to the written one. | 
 |                          | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+
+#### <a name="3.1.60"> NetworkInterfaceInfo
+
+##### <a name="3.1.60.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify whether server can return available network interfaces. |
+| **Message Sequence**          | 1.  Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT|
+|                               | 2.  Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO. |
+|                               | 4.  Verifies the IOCTL response has appropriate NETWORK_INTERFACE_INFO structure| 
+|                               | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.60.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_NetworkInterfaceInfo_QuerySuccessful |
+| **Description** | Test that quering network interface returns NETWORK_INTERFACE_INFO structure. |
+| **Prerequisites** | The server implements dialect 3.11 and FSCTL_QUERY_NETWORK_INTERFACE_INFO. |
+| **Test Execution Steps** | 1.  Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT;|
+|                          | 2.  Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO. |
+|                          | 3.  Verifies the IOCTL response contains NETWORK_INTERFACE_INFO_Response. |
+|                          | 4.  Tear down the client by sending the following requests: TREE\_DISCONNECT; LOG\_OFF. |
 | **Cleanup**              ||
 
 ### <a name="3.2">SMB2 Feature Test
@@ -7436,6 +7465,98 @@ Scenario see [Scenario](#3.1.57).
 |                          | 2.  Client sends a compressed message with invalid Repetitions in compression pattern payload V1. |
 |                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
 | **Cleanup**              ||
+
+
+#### <a name="3.2.23"> NETWORK_INTERFACE_INFO
+
+This feature is to call IOCTL request with FSCTL\_QUERY\_NETWORK\_INTERFACE\_INFO to retrieve list of network interfaces from server.
+
+##### <a name="3.2.23.1"> Model
+
+Will not cover this feature in model.
+
+##### <a name="3.2.23.2"> Traditional Case
+
+Scenario see section [Scenario](#3.1.60.1)
+
+|||
+|---|---|
+|**Test ID**|NetworkInterfaceInfo_Query_ReturnsErrorStatus|
+|**Description**|Test that quering network interface returns error code when it fails.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO using invalid treeId to ask server to send list of network interfaces.|
+||Server sends IOCTL response|
+||Verify that IOCTL response status is STATUS_NETWORK_NAME_DELETED.|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+|||
+
+
+|||
+|---|---|
+|**Test ID**|NetworkInterfaceInfo_Query_ReturnsIPv4IPv6|
+|**Description**|Test that network interface info has IPv4 and IPv6.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO to ask server to send list of network interfaces.|
+||Server sends IOCTL response|
+||Verify that NETWORK_INTERFACE_INFO_Response contains IPv4 and IPv6 family.|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+|||
+
+
+|||
+|---|---|
+|**Test ID**|NetworkInterfaceInfo_ChangeConnection_BindCurrentSession|
+|**Description**|Test that current session is binded to new connection when different server IP is connected by client.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO to ask server to send list of network interfaces.|
+||Server sends IOCTL response|
+||Verify that NETWORK_INTERFACE_INFO_Response contains alternate IP address |
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends NEGOTIATE request using alternate IP address|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||Verify that alternate channel SessionId matches main channel SessionId|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+|||
 
 ### <a name="3.3">SMB2 Feature Combination
 

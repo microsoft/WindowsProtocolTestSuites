@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestCategory(TestCategories.Smb30)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [Description("Test that quering network interface returns error code when it fails")]
-        public void NetworkInterfaceInfo_Query_ReturnErrorStatus()
+        public void NetworkInterfaceInfo_Query_ReturnsErrorStatus()
         {
             uint treeId;
 
