@@ -127,6 +127,13 @@ Before running a test suite, you need do either of below:
 * Download the test suite archive you want to run from [Releases](https://github.com/microsoft/WindowsProtocolTestSuites/releases), and extract it to some path you have access.
 * Build the test suite according to [Build a test suite](#build).
 
+On MacOS, the FileServer test suite requires openssl due to that the FileServer test suite uses [AesCcm and AesGcm classes](https://docs.microsoft.com/en-us/dotnet/standard/security/cross-platform-cryptography#aes-ccm-and-aes-gcm-on-macos), so please install openssl and set the environment variable as following before you run test suite on MacOS,
+```
+brew install openssl@1.1
+export DYLD_LIBRARY_PATH="/usr/local/opt/openssl@1.1/lib:$DYLD_LIBRARY_PATH"
+```
+**Note:** If you get the error "algorithm 'aesgcm' is not supported on this platform", that means dotnet cannot load AesGcm class from libcrypto.1.1.dylib on your Mac OS. Once you install openssl@1.1 on your MacOS the crypto library location is /usr/local/Cellar/openssl@1.1/1.1.1m/lib/libcrypto.1.1.dylib and the /usr/local/opt/openssl linked to the /usr/local/Cellar/openssl@1.1/1.1.1m directory by default.
+
 ### Run test suite by batch
 
 In the `Batch` folder under root path of the test suite, there are several scripts you can use to launch tests.
