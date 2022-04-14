@@ -132,7 +132,9 @@ On macOS, the FileServer test suite uses [AesCcm and AesGcm classes](https://doc
 brew install openssl@1.1
 export DYLD_LIBRARY_PATH="/usr/local/opt/openssl@1.1/lib:$DYLD_LIBRARY_PATH"
 ```
-**Note:** If you get the error "algorithm 'aesgcm' is not supported on this platform", that means dotnet cannot load AesGcm class from libcrypto.1.1.dylib on your macOS, then you need to check whether its location is in your `DYLD_LIBRARY_PATH` environment variable or not. Once you install OpenSSL 1.1 on your macOS the crypto library location is `/usr/local/Cellar/openssl@1.1/1.1.1m/lib/libcrypto.1.1.dylib` and `/usr/local/opt/openssl` links to the `/usr/local/Cellar/openssl@1.1/1.1.1m` directory by default.
+**Note:**
+1. If `brew` is not installed on your macOS, you can install it according to [brew](https://brew.sh/).
+2. If you get the error "algorithm 'aesgcm' is not supported on this platform", that means dotnet cannot load AesGcm class from libcrypto.1.1.dylib on your macOS, then you need to check whether its location is in your `DYLD_LIBRARY_PATH` environment variable or not. Once you install OpenSSL 1.1 on your macOS the crypto library location is `/usr/local/Cellar/openssl@1.1/1.1.1m/lib/libcrypto.1.1.dylib` and `/usr/local/opt/openssl` links to the `/usr/local/Cellar/openssl@1.1/1.1.1m` directory by default.
 
 ### Run test suite by batch
 
