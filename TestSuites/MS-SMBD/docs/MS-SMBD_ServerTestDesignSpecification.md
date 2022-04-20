@@ -2132,6 +2132,150 @@ In this test suite, there is no requirement captured. So “Requirements covered
 |  **Requirements covered**| N/A| 
 |  **Cleanup**| N/A| 
 
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseSignatureLength_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted if the RDMA_CRYPTO_TRANSFORM SignatureLength is greater than 16 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Signature greater than 16.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseNonceLength_AES128CCM_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted with AES128_CCM fails if the RDMA_CRYPTO_TRANSFORM NonceLength is greater than 11 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm AES128_CCM and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Nonce greater than 11.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseNonceLength_AES128GCM_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted with AES128_GCM fails if the RDMA_CRYPTO_TRANSFORM NonceLength is greater than 12 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm AES128_GCM and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Nonce greater than 12.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseNonceLength_AES256CCM_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted with AES256_CCM fails if the RDMA_CRYPTO_TRANSFORM NonceLength is greater than 11 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm AES256_CCM and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Nonce greater than 11.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseNonceLength_AES256GCM_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted with AES256_GCM fails if the RDMA_CRYPTO_TRANSFORM NonceLength is greater than 12 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm AES256_GCM and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Nonce greater than 12.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_DecreaseNonceLength_AES128CCM_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted with AES128_CCM fails if the RDMA_CRYPTO_TRANSFORM NonceLength is less than 11 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm AES128_CCM and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Nonce less than 11.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_DecreaseNonceLength_AES128GCM_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted with AES128_GCM fails if the RDMA_CRYPTO_TRANSFORM NonceLength is less than 12 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm AES128_GCM and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Nonce less than 12.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_DecreaseNonceLength_AES256CCM_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted with AES256_CCM fails if the RDMA_CRYPTO_TRANSFORM NonceLength is less than 11 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm AES256_CCM and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Nonce less than 11.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Smb2OverRdma**| | 
+|  **Test ID**|  **Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_DecreaseNonceLength_AES256GCM_Fails**| 
+|  **Priority**| P1| 
+|  **Description** | Verify SMB2 can write file with large size over RDMA channel encrypted with AES256_GCM fails if the RDMA_CRYPTO_TRANSFORM NonceLength is less than 12 bytes| 
+|  **Prerequisites**| N/A| 
+| | Establish SMB2 session with EncryptionAlgorithm AES256_GCM and open file.| 
+| | Register memory with size **Smb2 Negotiated MaxWriteSize** for RDMA read.| 
+| | Copy file content into registered memory.| 
+| | Create SMB2 WRITE Request package with RDMA Channel Information containing SMB2_RDMA_TRANSFORM and SMB2_RDMA_CRYPTO_TRANSFORM structures, with SMB2_RDMA_CRYPTO_TRANSFORM Nonce less than 12.| 
+| | Send SMB2 WRITE Request over SMBD Data Transfer.| 
+| | Verify server returned SMB2 WRITE Response with STATUS_AUTH_TAG_MISMATCH.| 
+|  **Requirements covered**| N/A| 
+|  **Cleanup**| N/A| 
+
 #### <a name="_Toc427489518"/>Smb2Multichannel
 
 | &#32;| &#32; |
