@@ -30,7 +30,7 @@
     <!-- Domain of the tested RDP Server -->
     <Property name="RDP.ServerDomain" value=""/>
     <!-- Computer name or IP of the tested RDP Server-->
-    <Property name="RDP.ServerName" value="192.168.172.1"/>
+    <Property name="RDP.ServerName" value="RDPClientLinux"/>
     <!-- Port of RDP service on RDP Server-->
     <Property name="RDP.ServerPort" value="3389"/>
     <!--The user name of local host (RDP server). -->
@@ -38,7 +38,7 @@
     <!--The logon password of "RDP.ServerUserName". -->
     <Property name="RDP.ServerUserPassword" value="Password01!"/>
     <!-- Computer name or IP of the driver computer-->
-    <Property name="RDP.ClientName" value="192.168.172.101"/>
+    <Property name="RDP.ClientName" value="172.24.183.182"/>
 
     <!-- Whether verify RDPBCGR message received -->
     <Property name="VerifyRdpbcgrMessages" value="True">
