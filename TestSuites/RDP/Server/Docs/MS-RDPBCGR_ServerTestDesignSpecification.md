@@ -802,6 +802,11 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Requirements Covered**| N/A|
 |  **Cleanup**| N/A|
 
+
+#### Diagram For S4_Output_PositiveTest_LargePointer_FastPathOutput and S4_Output_NegativeTest_LargePointer_FastPathOutput Test Cases Below
+
+![RDP_Large_Pointer.png](./image/RDP_ServerTestDesignSpecification/RDP_Large_Pointer.png)
+
 #### S4_Output_PositiveTest_LargePointer_FastPathOutput
 
 | &#32;| &#32; |
