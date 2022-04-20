@@ -233,6 +233,137 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 shouldAlignBuffer: false);
         }
 
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted fails " +
+            "if the RDMA_CRYPTO_TRANSFORM SignatureLength is greater than 16 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseSignatureLength_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                channel: Channel_Values.CHANNEL_RDMA_TRANSFORM,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
+                shouldIncreaseSignature: true);
+        }
+
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted with AES128_CCM fails " +
+            "if the RDMA_CRYPTO_TRANSFORM NonceLength is greater than 11 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseNonceLength_AES128CCM_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                channel: Channel_Values.CHANNEL_RDMA_TRANSFORM,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES128_CCM,
+                shouldIncreaseNonce: true);
+        }
+
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted with AES128_GCM fails " +
+            "if the RDMA_CRYPTO_TRANSFORM NonceLength is greater than 12 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseNonceLength_AES128GCM_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
+                shouldIncreaseNonce: true);
+        }
+
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted with AES256_CCM fails " +
+            "if the RDMA_CRYPTO_TRANSFORM NonceLength is greater than 11 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseNonceLength_AES256CCM_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                channel: Channel_Values.CHANNEL_RDMA_TRANSFORM,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES256_CCM,
+                shouldIncreaseNonce: true);
+        }
+
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted with AES256_GCM fails " +
+            "if the RDMA_CRYPTO_TRANSFORM NonceLength is greater than 12 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_IncreaseNonceLength_AES256GCM_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES256_GCM,
+                shouldIncreaseNonce: true);
+        }
+
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted with AES128_CCM fails " +
+            "if the RDMA_CRYPTO_TRANSFORM NonceLength is less than 11 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_DecreaseNonceLength_AES128CCM_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                channel: Channel_Values.CHANNEL_RDMA_TRANSFORM,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES128_CCM,
+                shouldDecreaseNonce: true);
+        }
+
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted with AES128_GCM fails " +
+            "if the RDMA_CRYPTO_TRANSFORM NonceLength is less than 12 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_DecreaseNonceLength_AES128GCM_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
+                shouldDecreaseNonce: true);
+        }
+
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted with AES256_CCM fails " +
+            "if the RDMA_CRYPTO_TRANSFORM NonceLength is less than 11 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_DecreaseNonceLength_AES256CCM_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                channel: Channel_Values.CHANNEL_RDMA_TRANSFORM,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES256_CCM,
+                shouldDecreaseNonce: true);
+        }
+
+        [TestMethod()]
+        [TestCategory("Encryption")]
+        [TestCategory("Smb2OverRdmaChannel")]
+        [Description("Verify SMB2 can write file with large size over RDMA channel encrypted with AES256_GCM fails " +
+            "if the RDMA_CRYPTO_TRANSFORM NonceLength is less than 12 bytes")]
+        public void Smb2OverRdmaChannelTransform_Encryption_WriteLargeFile_DecreaseNonceLength_AES256GCM_Fails()
+        {
+            Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_ENCRYPTION };
+            WriteOverRdma_Encryption(
+                smb2RdmaTransformIds: smb2RdmaTransformIds,
+                encryptionAlgorithm: EncryptionAlgorithm.ENCRYPTION_AES256_GCM,
+                shouldDecreaseNonce: true);
+        }
+
         #endregion
 
         #region Common Methods
@@ -332,7 +463,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             bool addEncryptionTransform = false,
             bool addSigningTransform = false,
             bool shouldAlignBuffer = true,
-            SigningAlgorithm[] signingAlgorithms = null)
+            SigningAlgorithm[] signingAlgorithms = null,
+            bool shouldIncreaseSignature = false,
+            bool shouldIncreaseNonce = false,
+            bool shouldDecreaseNonce = false)
         {
             var isFailedTest = false;
             string fileName = CreateRandomFileName();
@@ -357,6 +491,29 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             // SMB2 Write file
             byte[] fileContent = Encoding.ASCII.GetBytes(Smb2Utility.CreateRandomStringInByte((int)writeSize));
             smbdAdapter.EncryptByteArray(fileContent, out byte[] encrypted, out byte[] nonce, out byte[] signature);
+
+            if (shouldDecreaseNonce)
+            {
+                byte[] newNonce = new byte[nonce.Length - 1];
+                Array.Copy(nonce, 0, newNonce, 0, newNonce.Length);
+                nonce = newNonce;
+            }
+
+            if (shouldIncreaseNonce)
+            {
+                byte[] newNonce = new byte[nonce.Length + 1];
+                Array.Copy(nonce, 0, newNonce, 1, nonce.Length);
+                newNonce[0] = nonce[0];
+                nonce = newNonce;
+            }
+
+            if (shouldIncreaseSignature)
+            {
+                byte[] newSignature = new byte[signature.Length + 1];
+                Array.Copy(signature, 0, newSignature, 1, signature.Length);
+                newSignature[0] = signature[0];
+                signature = newSignature;
+            }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send each write request according SMB2 write file limit. with operationCount == " + operationCount);
             for (int i = 0; i < operationCount; ++i)
@@ -489,6 +646,16 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                         status,
                         "Server MUST return STATUS_INVALID_PARAMETER if SMB_DIRECT_BUFFER_DESCRIPTOR_V1 structures " +
                         "don't begin at the first 8-byte aligned offset");
+                    isFailedTest = true;
+                }
+                else if (shouldIncreaseSignature || shouldIncreaseNonce || shouldDecreaseNonce)
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        NtStatus.STATUS_AUTH_TAG_MISMATCH,
+                        status,
+                        "The Server MUST fail the request with STATUS_AUTH_TAG_MISMATCH if SignatureLength field is greater than 16, " +
+                        "Connection.CipherId is AES-128-CCM or AES-256-CCM and NonceLength field is not equal to 11 or " +
+                        "Connection.CipherId is AES-128-GCM or AES-256-GCM and NonceLength field is not equal to 12.");
                     isFailedTest = true;
                 }
                 else
