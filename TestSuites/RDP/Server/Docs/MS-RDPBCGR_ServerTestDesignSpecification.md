@@ -819,7 +819,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Test Execution Steps**| Initiate and complete an RDP connection with SUT. In Capability Exchange phase, Test Suite advised support fast-path output in TS_GENERAL_CAPABILITYSET.|
 | | Test suite sends command to the server through the RDP SUT Control Agent to adjust the size of the pointer not greater than 384X384 (and less than specified in the client TS_LARGE_POINTER_CAPABILITYSET), and wait to receive confirmation of completion.|
 | | On the driver, listen for the TS_FP_UPDATE_PDU (and specifically TS_FP_LARGEPOINTERATTRIBUTE within the PDU).|
-| | Check TS_FP_LARGEPOINTERATTRIBUTE within the PDU to confirm the change in size was correctly communicated to the driver. The test passes if it is commuicated.|
+| | Check TS_FP_LARGEPOINTERATTRIBUTE within the PDU to confirm the change in size was correctly communicated to the driver. The test passes if it is communicated.|
 | | Test suite sends command to the server through the RDP SUT Control Agent to reverse the pointer size adjustment.|
 | | Test suite close the connection.|
 | | Test suite logs which structures are verified.|
