@@ -22,4 +22,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent.Message
         SUCCESS = 0x00000000,
     }
 
+    /// <summary>
+    /// Payload type of SUT_Control_Request_Message with commandId: START_RDP_CONNECTIO
+    /// </summary>
+    public enum RDP_Connect_Payload_Type : uint
+    {
+        RDP_FILE = 0x0000,
+        PARAMETERS_STRUCT = 0x0001
+    }
 }
