@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -539,6 +540,42 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.Site.Log.Add(LogEntryKind.Comment, "Expect RDP server drop this connection.");
             bool disconnected = rdpbcgrAdapter.ExpectDisconnetion(testConfig.timeout);
             Site.Assert.IsTrue(disconnected, "SUT should disconnect the connection when receiving Server Shutdown Request before logon.");
+            #endregion Test Code
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("BVT")]
+        [TestCategory("RDP7.0")]
+        [TestCategory("RDPBCGR")]
+        [Description(@"This test case is used to verify the messages and behaviors of the disconnection sequence initiated by SUT, before user logon.")]
+        public void SUT_Test()
+        {
+            #region Test Steps
+            //1. Initiate an RDP connection to RDP server (SUT) and complete the Connection Initiation phase, Basic Setting Exchange phase, and Channel Connection phase.
+            //2. Test suite sends a Shutdown Request PDU to initiate a disconnection sequence.
+            //3. Expect SUT close the connection.
+            #endregion Test Steps
+
+            #region Test Code
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
+            rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
+
+            string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
+            rdpbcgrAdapter.EstablishRDPConnection(testConfig.requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
+                false, // Is reconnect
+                true,  // Is auto logon
+                supportFastPathInput: true,
+                supportFastPathOutput: true);
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Increase pointer size.");
+            PointerIncreaseSize();
+            Thread.Sleep(5000);
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Wait a period to receive and verify all fast-path update PDUs received ");
+            rdpbcgrAdapter.ExpectPointerAttributeOutputs(testConfig.timeout);
+
             #endregion Test Code
         }
     }

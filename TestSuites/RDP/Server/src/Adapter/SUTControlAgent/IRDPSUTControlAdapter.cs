@@ -1,11 +1,6 @@
 ﻿using Microsoft.Protocols.TestTools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent
+namespace Microsoft.Protocols.TestSuites.Rdp
 {
     /// <summary>
     /// The interface of IRDPSUTControlAdapter, which defines public methods
