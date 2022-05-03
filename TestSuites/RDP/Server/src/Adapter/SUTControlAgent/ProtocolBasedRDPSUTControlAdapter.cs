@@ -2,21 +2,18 @@
 using Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent.Message;
 using Microsoft.Protocols.TestTools;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent
+namespace Microsoft.Protocols.TestSuites.Rdp
 {
     public class ProtocolBasedRDPSUTControlAdapter : ManagedAdapterBase, IRDPSUTControlAdapter
     {
 
         #region variables
 
-        const string interfaceFullName = "Microsoft.Protocols.TestSuites.Rdp.IRdpSutControlAdapter";
+        const string interfaceFullName = "Microsoft.Protocols.TestSuites.Rdp.IRDPSUTControlAdapter";
         const string basicRDPFileString = "session bpp:i:32\nconnection type:i:6\nauthentication level:i:0\nuse redirection server name:i:1\n";
 
         private bool isClientSupportCompression = false;
@@ -29,13 +26,80 @@ namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent
         #endregion variables
 
         /// <summary>
+        /// Get IP address of local host
+        /// </summary>
+        /// <returns>string for local IP address</returns>
+        private string GetLocalIP()
+        {
+            foreach (IPAddress ip in Dns.GetHostAddresses(Dns.GetHostName()))
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Initialize this adapter
+        /// </summary>
+        /// <param name="testSite"></param>
+        public override void Initialize(ITestSite testSite)
+        {
+            base.Initialize(testSite);
+
+            controlHandler = SUTControlProtocolHandler.GetInstance(testSite);
+            // Initiate local IP
+            string proxyIP;
+            PtfPropUtility.GetPtfPropertyValue(testSite, "ProxyIP", out proxyIP);
+            if (string.IsNullOrEmpty(proxyIP))
+            {
+                rdpServerIP = GetLocalIP();
+            }
+            else
+            {
+                rdpServerIP = proxyIP;
+            }
+
+            // Initiate local port
+            try
+            {
+                string localPortString;
+                PtfPropUtility.GetPtfPropertyValue(testSite, "ServerPort", out localPortString);
+                localPort = ushort.Parse(localPortString);
+            }
+            catch
+            {
+                localPort = 0;
+            }
+
+            // Initiate Connect payload type
+            bool clientSupportRDPFile;
+            PtfPropUtility.GetPtfPropertyValue(testSite, "ClientSupportRDPFile", out clientSupportRDPFile, new string[] { RdpPtfGroupNames.SUTControl });
+
+            if (clientSupportRDPFile)
+            {
+                connectPayloadType = RDP_Connect_Payload_Type.RDP_FILE;
+            }
+            else
+            {
+                connectPayloadType = RDP_Connect_Payload_Type.PARAMETERS_STRUCT;
+            }
+
+            PtfPropUtility.GetPtfPropertyValue(testSite, "SupportCompression", out isClientSupportCompression);
+        }
+
+
+        /// <summary>
         /// This method is used to trigger an increase in the size of the pointer on the server.
         /// </summary>
         /// <param name="caseName">Name of test case</param>
         /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
         public int PointerIncreaseSize(string caseName)
         {
-            return OpertateSUTControl(caseName, (ushort)RDPSUTControlCommand.ENLARGE_POINTER);
+            return OperateSUTControl(caseName, (ushort)RDPSUTControlCommand.ENLARGE_POINTER);
         }
 
         /// <summary>
@@ -45,7 +109,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent
         /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
         public int PointerReverseToDefaultSize(string caseName)
         {
-            return OpertateSUTControl(caseName, (ushort)RDPSUTControlCommand.SHRINK_POINTER);
+            return OperateSUTControl(caseName, (ushort)RDPSUTControlCommand.SHRINK_POINTER);
         }
 
         /// <summary>
@@ -87,7 +151,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent
         /// <param name="caseName">Name of test case</param>
         /// <param name="RDPSUTControlCommand">RDP SUT Control Command to be executed</param>
         /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
-        private int OpertateSUTControl(string caseName, ushort RDPSUTControlCommand)
+        private int OperateSUTControl(string caseName, ushort RDPSUTControlCommand)
         {
             // Get help message
             string helpMessage = GetHelpMessage(interfaceFullName);
@@ -99,8 +163,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent
             SUTControlRequestMessage requestMessage = new SUTControlRequestMessage(SUTControl_TestsuiteId.RDP_TESTSUITE, RDPSUTControlCommand, caseName, reqId, helpMessage, payload);
 
             //Send the request and get response if necessary
-            byte[] resposePayload = null;
-            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
+            byte[] responsePayload = null;
+            return controlHandler.OperateSUTControl(requestMessage, false, out responsePayload);
         }
     }
 }

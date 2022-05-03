@@ -463,6 +463,57 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
         /// <summary>
+        /// Expect and verifies fast-path output events during a specific timespan
+        /// </summary>
+        /// <param name="timeout"></param>
+        public void ExpectPointerAttributeOutputs(TimeSpan timeout)
+        {
+            Dictionary<string, bool> receiveStatics = new Dictionary<string, bool>();
+            DateTime endtime = DateTime.Now + timeout;
+            while (timeout.TotalMilliseconds > 0)
+            {
+                TS_FP_UPDATE_PDU pdu = ExpectPacket<TS_FP_UPDATE_PDU>(timeout);
+                if (pdu != null)
+                {
+                    foreach (TS_FP_UPDATE update in pdu.fpOutputUpdates)
+                    {
+                        if (update is TS_FP_POINTERPOSATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_POINTERPOSATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_COLORPOINTERATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_COLORPOINTERATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_POINTERATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_POINTERATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_CACHEDPOINTERATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_CACHEDPOINTERATTRIBUTE"] = true;
+                        }
+                    }
+                }
+                timeout = endtime - DateTime.Now;
+            }
+            string log = "Received TS_FP_UPDATE_PDU structures: ";
+            foreach (string structName in receiveStatics.Keys)
+            {
+                log += "" + structName + "\n";
+            }
+            Site.Log.Add(LogEntryKind.Comment, log);
+        }
+
+        /// <summary>
         /// Used to verify whether a RDP connection is still exist. 
         /// This function can only be used after RDP connection established and user logon.
         ///  Send a Shutdown Request PDU to the server.
