@@ -92,7 +92,6 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.Site.Log.Add(LogEntryKind.Comment, "Increase pointer size.");
             PointerIncreaseSize();
-            //Thread.Sleep(5000);
 
             this.Site.Log.Add(LogEntryKind.Comment, "Wait a period to receive and verify all fast-path update PDUs received ");
             rdpbcgrAdapter.ExpectPointerAttributeOutputs(testConfig.timeout);
