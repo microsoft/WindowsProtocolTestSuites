@@ -463,7 +463,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         }
 
         /// <summary>
-        /// Expect and verifies fast-path output events during a specific timespan
+        /// Expect and verifies pointer PDU from fast-path output events during a specific timespan
         /// </summary>
         /// <param name="timeout"></param>
         public void ExpectPointerAttributeOutputs(TimeSpan timeout)
@@ -473,6 +473,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             while (timeout.TotalMilliseconds > 0)
             {
                 TS_FP_UPDATE_PDU pdu = ExpectPacket<TS_FP_UPDATE_PDU>(timeout);
+
                 if (pdu != null)
                 {
                     foreach (TS_FP_UPDATE update in pdu.fpOutputUpdates)
@@ -501,8 +502,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
                         {
                             receiveStatics["TS_FP_CACHEDPOINTERATTRIBUTE"] = true;
                         }
+                        else if (update is TS_FP_LARGEPOINTERATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_LARGEPOINTERATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_UPDATE)
+                        {
+                            if(update.updateHeader.updateCode == updateCode_Values.FASTPATH_UPDATETYPE_POINTER
+                                || update.updateHeader.updateCode == updateCode_Values.FASTPATH_UPDATETYPE_LARGE_POINTER)
+                            {
+                                var val = update.updateHeader.updateCode;
+                            }
+
+                            receiveStatics["TS_FP_UPDATE"] = true;
+                        }
                     }
                 }
+
                 timeout = endtime - DateTime.Now;
             }
             string log = "Received TS_FP_UPDATE_PDU structures: ";
