@@ -44,13 +44,33 @@ namespace RDPSUTControlAgent
                         {
                             foreach(var registryValue in ExtraLargeDefaultPointerRegistrySet())
                             {
-                                key.SetValue(registryValue.Key, registryValue.Value);
+                                if (registryValue.Key == "CursorBaseSize")
+                                {
+                                    key.SetValue(registryValue.Key, 100, RegistryValueKind.DWord);
+                                }
+                                else
+                                {
+                                    key.SetValue(registryValue.Key, registryValue.Value);
+                                }
                             }
                             
                             key.Close();
                         }
 
+                        //Effect Pointer size change on screen
                         PointerManager.EffectChange();
+
+                        //Move Pointer
+                        PointerManager.POINT p = new PointerManager.POINT(830, 760);
+                        PointerManager.POINT p2 = new PointerManager.POINT(830, 762);
+
+                        IntPtr handle = IntPtr.Zero;
+
+                        PointerManager.ClientToScreen(handle, ref p);
+                        PointerManager.SetCursorPos(p.x, p.y);
+
+                        PointerManager.ClientToScreen(handle, ref p2);
+                        PointerManager.SetCursorPos(p2.x, p2.y);
 
                         resultCode = (uint)SUTControl_ResultCode.SUCCESS;
 
@@ -62,7 +82,14 @@ namespace RDPSUTControlAgent
                         {
                             foreach (var registryValue in DefaultPointerRegistrySet())
                             {
-                                key.SetValue(registryValue.Key, registryValue.Value);
+                                if (registryValue.Key == "CursorBaseSize")
+                                {
+                                    key.SetValue(registryValue.Key, 20, RegistryValueKind.DWord);
+                                }
+                                else
+                                {
+                                    key.SetValue(registryValue.Key, registryValue.Value);
+                                }                             
                             }
 
                             key.Close();
@@ -93,6 +120,7 @@ namespace RDPSUTControlAgent
             Dictionary<string, string> pointerRegistrySet = new Dictionary<string, string>();
 
             pointerRegistrySet[""] = "Windows Default";
+            pointerRegistrySet["CursorBaseSize"] = "20";
             pointerRegistrySet["AppStarting"] = "%SystemRoot%\\cursors\\aero_working.ani";
             pointerRegistrySet["Arrow"] = "%SystemRoot%\\cursors\\aero_arrow.cur";
             pointerRegistrySet["Hand"] = "%SystemRoot%\\cursors\\aero_link.cur";
@@ -116,7 +144,8 @@ namespace RDPSUTControlAgent
         {
             Dictionary<string, string> pointerRegistrySet = new Dictionary<string, string>();
 
-            pointerRegistrySet[""] = "Windows Default (extra large)";
+            pointerRegistrySet[""] = "Windows Default (extra large)"; //
+            pointerRegistrySet["CursorBaseSize"] = "100";
             pointerRegistrySet["AppStarting"] = "%SystemRoot%\\cursors\\aero_working_xl.ani";
             pointerRegistrySet["Arrow"] = "%SystemRoot%\\cursors\\aero_arrow_xl.cur";
             pointerRegistrySet["Hand"] = "%SystemRoot%\\cursors\\aero_link_xl.cur";
