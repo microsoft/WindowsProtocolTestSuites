@@ -93,6 +93,7 @@ namespace RDPSUTControlAgent
             Dictionary<string, string> pointerRegistrySet = new Dictionary<string, string>();
 
             pointerRegistrySet[""] = "Windows Default";
+            pointerRegistrySet["CursorBaseSize"] = "20";
             pointerRegistrySet["AppStarting"] = "%SystemRoot%\\cursors\\aero_working.ani";
             pointerRegistrySet["Arrow"] = "%SystemRoot%\\cursors\\aero_arrow.cur";
             pointerRegistrySet["Hand"] = "%SystemRoot%\\cursors\\aero_link.cur";
@@ -116,7 +117,8 @@ namespace RDPSUTControlAgent
         {
             Dictionary<string, string> pointerRegistrySet = new Dictionary<string, string>();
 
-            pointerRegistrySet[""] = "Windows Default (extra large)";
+            pointerRegistrySet[""] = "Windows Default (extra large)"; //
+            pointerRegistrySet["CursorBaseSize"] = "100";
             pointerRegistrySet["AppStarting"] = "%SystemRoot%\\cursors\\aero_working_xl.ani";
             pointerRegistrySet["Arrow"] = "%SystemRoot%\\cursors\\aero_arrow_xl.cur";
             pointerRegistrySet["Hand"] = "%SystemRoot%\\cursors\\aero_link_xl.cur";
