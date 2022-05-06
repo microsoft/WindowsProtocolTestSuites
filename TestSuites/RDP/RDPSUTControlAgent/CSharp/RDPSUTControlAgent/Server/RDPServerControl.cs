@@ -57,7 +57,20 @@ namespace RDPSUTControlAgent
                             key.Close();
                         }
 
+                        //Effect Pointer size change on screen
                         PointerManager.EffectChange();
+
+                        //Move Pointer
+                        PointerManager.POINT p = new PointerManager.POINT(830, 760);
+                        PointerManager.POINT p2 = new PointerManager.POINT(830, 762);
+
+                        IntPtr handle = IntPtr.Zero;
+
+                        PointerManager.ClientToScreen(handle, ref p);
+                        PointerManager.SetCursorPos(p.x, p.y);
+
+                        PointerManager.ClientToScreen(handle, ref p2);
+                        PointerManager.SetCursorPos(p2.x, p2.y);
 
                         resultCode = (uint)SUTControl_ResultCode.SUCCESS;
 

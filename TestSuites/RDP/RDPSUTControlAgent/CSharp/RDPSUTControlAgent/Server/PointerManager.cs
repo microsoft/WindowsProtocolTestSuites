@@ -7,6 +7,27 @@ namespace RDPSUTControlAgent
     {
         [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
         public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, uint pvParam, uint fWinIni);
+
+        [DllImport("User32.Dll")]
+        public static extern long SetCursorPos(int x, int y);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int x;
+            public int y;
+
+            public POINT(int X, int Y)
+            {
+                x = X;
+                y = Y;
+            }
+        }
+
+        [DllImport("User32.Dll")]
+        public static extern bool ClientToScreen(IntPtr hWnd, ref POINT point);
+
+
         private static readonly uint SPI_SETCURSORS = 0x0057;
         private static readonly uint SPIF_UPDATEINIFILE = 0x01;
         private static readonly uint SPIF_SENDCHANGE = 0x02;
@@ -16,5 +37,4 @@ namespace RDPSUTControlAgent
             SystemParametersInfo(SPI_SETCURSORS, 0, 0, SPIF_UPDATEINIFILE | SPIF_SENDCHANGE);
         }
     }
-
 }
