@@ -3388,6 +3388,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
                             update = ParseTsFpPointerAttribute(update);
                             break;
 
+                        //Fast-Path Large Pointer Update
+                        case updateCode_Values.FASTPATH_UPDATETYPE_LARGE_POINTER:
+                            update = ParseTsFpLargePointerAttribute(update);
+                            break;
+
                         default:
                             throw new FormatException(ConstValue.ERROR_MESSAGE_ENUM_UNRECOGNIZED);
                     }
@@ -3900,6 +3905,62 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             int index = 0;
 
             attribute.newPointerUpdateData = ParseTsPointerAttribute(updateData, ref index);
+
+            // Check if data length exceeded expectation
+            VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+
+            return attribute;
+        }
+
+        /// <summary>
+        /// Parse TS_FP_LARGEPOINTERATTRIBUTE
+        /// </summary>
+        /// <param name="update">The TS_FP_UPDATE instance.</param>
+        /// <returns>TS_FP_LARGEPOINTERATTRIBUTE</returns>
+        private TS_FP_LARGEPOINTERATTRIBUTE ParseTsFpLargePointerAttribute(
+           TS_FP_UPDATE update
+            )
+        {
+            var attribute = new TS_FP_LARGEPOINTERATTRIBUTE();
+
+            attribute.Clone(update);
+
+            var updateData = attribute.GetUpdateData();
+
+            int index = 0;
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: xorBpp
+            attribute.xorBpp = ParseUInt16(updateData, ref index, false);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: cacheIndex
+            attribute.cacheIndex = ParseUInt16(updateData, ref index, false);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: hotSpot
+            attribute.hotSpot = ParseTsPoint16(updateData, ref index);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: width
+            attribute.width = ParseUInt16(updateData, ref index, false);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: height
+            attribute.height = ParseUInt16(updateData, ref index, false);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: lengthAndMask
+            attribute.lengthAndMask = ParseUInt32(updateData, ref index, false);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: lengthXorMask
+            attribute.lengthXorMask = ParseUInt32(updateData, ref index, false);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: xorMaskData
+            attribute.xorMaskData = GetBytes(updateData, ref index, (int)attribute.lengthXorMask);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: andMaskData
+            attribute.andMaskData = GetBytes(updateData, ref index, (int)attribute.lengthAndMask);
+
+            // TS_FP_LARGEPOINTERATTRIBUTE: pad
+            if (index < updateData.Length)
+            {
+                attribute.pad = ParseByte(updateData, ref index);
+            }
 
             // Check if data length exceeded expectation
             VerifyDataLength(updateData.Length, index, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);

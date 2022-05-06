@@ -94,7 +94,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 TestSite.Assert.Fail("Resizing the pointer failed");
             }
-
         }
 
         /// <summary>
