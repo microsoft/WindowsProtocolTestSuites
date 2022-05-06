@@ -44,7 +44,14 @@ namespace RDPSUTControlAgent
                         {
                             foreach(var registryValue in ExtraLargeDefaultPointerRegistrySet())
                             {
-                                key.SetValue(registryValue.Key, registryValue.Value);
+                                if (registryValue.Key == "CursorBaseSize")
+                                {
+                                    key.SetValue(registryValue.Key, 100, RegistryValueKind.DWord);
+                                }
+                                else
+                                {
+                                    key.SetValue(registryValue.Key, registryValue.Value);
+                                }
                             }
                             
                             key.Close();
@@ -62,7 +69,14 @@ namespace RDPSUTControlAgent
                         {
                             foreach (var registryValue in DefaultPointerRegistrySet())
                             {
-                                key.SetValue(registryValue.Key, registryValue.Value);
+                                if (registryValue.Key == "CursorBaseSize")
+                                {
+                                    key.SetValue(registryValue.Key, 20, RegistryValueKind.DWord);
+                                }
+                                else
+                                {
+                                    key.SetValue(registryValue.Key, registryValue.Value);
+                                }                             
                             }
 
                             key.Close();
