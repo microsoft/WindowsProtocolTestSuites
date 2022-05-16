@@ -111,6 +111,8 @@ namespace RDPSUTControlAgent
                         try
                         {
                             Run_TaskScheduler_Task("CredentialManager_InvalidAccount_Reverse");
+                            // Wait scheduled job need some seconds to complete to avoid next rdp connection failure.
+                            Thread.Sleep(5000);
                             resultCode = (uint)SUTControl_ResultCode.SUCCESS;
                         }
                         catch (Exception e)
