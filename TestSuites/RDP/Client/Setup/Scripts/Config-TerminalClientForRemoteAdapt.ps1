@@ -123,6 +123,14 @@ if ($workgroupDomain.ToUpper() -eq "DOMAIN")
     $taskUser = "$domainName\$taskUser"
 }
 
+New-Item -Path $dataPath\CredentialManager_InvalidAccount.ps1 -ItemType File  -Force
+New-Item -Path $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 -ItemType File  -Force
+
+"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}\${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
+"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerIP}`" /user:`"${driverComputerName}\${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
+"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}\${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding UTF8
+"cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerIP}`" /user:`"${driverComputerName}\${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding UTF8
+
 Write-Host "Allow RDP connecting to unkown publisher for $driverComputerName..."
 cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client" /v "AuthenticationLevelOverride" /t "REG_DWORD" /d 0 /f
 cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client\LocalDevices" /v $driverComputerIP /t REG_DWORD /d 76 /F
@@ -144,6 +152,12 @@ cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN TriggerNetworkFailure /TR "
 
 Write-Host "Creating task to close all RDP agents of terminal client..."
 cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN DisconnectAllAgents /TR "$dataPath\DisconnectAllAgents.bat" /IT /F
+
+Write-Host "Creating task to change username of Server to an invalid username..."
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN CredentialManager_Invalid /TR "powershell $dataPath\CredentialManager_InvalidAccount.ps1" /IT /F
+
+Write-Host "Creating task to change username of Server back to a valid username..."
+cmd /c schtasks /Create /RU $taskUser /SC Weekly /TN CredentialManager_InvalidAccount_Reverse /TR "powershell $dataPath\CredentialManager_InvalidAccount_Reverse.ps1" /IT /F
 
 #-----------------------------------------------------
 # Edit registery.
