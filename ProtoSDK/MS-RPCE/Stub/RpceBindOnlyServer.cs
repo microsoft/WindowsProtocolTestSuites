@@ -17,7 +17,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
         internal readonly ushort IF_VERS_MAJOR = 1;
         internal readonly ushort IF_VERS_MINOR = 0;
 
-        
+
         // RPC interface handle
         private IntPtr pRpcIfHandle;
 
@@ -80,7 +80,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
                 MIN_CALL_THREADS,
                 NativeMethods.RPC_C_LISTEN_MAX_CALLS_DEFAULT,
                 DONT_WAIT);
-            if (status != NativeMethods.RPC_S_OK 
+            if (status != NativeMethods.RPC_S_OK
                 && status != NativeMethods.RPC_S_ALREADY_LISTENING)
             {
                 throw new InvalidOperationException(
@@ -117,19 +117,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Networking.Rpce
             }
 
             // Release unmanaged resources.
-            NativeMethods.RpcMgmtStopServerListening(IntPtr.Zero);
-
-            if (pRpcIfHandle != IntPtr.Zero)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                const uint WAIT_FOR_CALLS_TO_COMPLETE = 1; // TRUE
+                NativeMethods.RpcMgmtStopServerListening(IntPtr.Zero);
 
-                NativeMethods.RpcServerUnregisterIf(
-                    pRpcIfHandle, 
-                    IntPtr.Zero,
-                    WAIT_FOR_CALLS_TO_COMPLETE);
+                if (pRpcIfHandle != IntPtr.Zero)
+                {
+                    const uint WAIT_FOR_CALLS_TO_COMPLETE = 1; // TRUE
 
-                Marshal.FreeHGlobal(pRpcIfHandle);
-                pRpcIfHandle = IntPtr.Zero;
+                    NativeMethods.RpcServerUnregisterIf(
+                        pRpcIfHandle,
+                        IntPtr.Zero,
+                        WAIT_FOR_CALLS_TO_COMPLETE);
+
+                    Marshal.FreeHGlobal(pRpcIfHandle);
+                    pRpcIfHandle = IntPtr.Zero;
+                }
             }
         }
 
