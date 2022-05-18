@@ -2740,13 +2740,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <returns>An NTSTATUS code that specifies the result.</returns>
         public MessageStatus FsCtlSetIntegrityInfo(FSCTL_SET_INTEGRITY_INFORMATION_BUFFER inputBuffer, uint inputBufferSize)
         {
-            byte[] outbuffer = new byte[0];
-            byte[] inputBufferBytes = new byte[0];
+            byte[] inputBufferBytes;
 
-            FsccFsctlSetIntegrityInformationRequestPacket fsccPacket = new FsccFsctlSetIntegrityInformationRequestPacket();
-            fsccPacket.Payload = inputBuffer;
+            FsccFsctlSetIntegrityInformationRequestPacket fsccPacket = new()
+            {
+                Payload = inputBuffer
+            };
 
-            uint inputBufferLength = (uint)TypeMarshal.ToBytes<FSCTL_SET_INTEGRITY_INFORMATION_BUFFER>(inputBuffer).Length;
+            uint inputBufferLength = (uint)TypeMarshal.ToBytes(inputBuffer).Length;
             if (inputBufferSize < inputBufferLength)
             {
                 // For some negative test cases, they want to provide a smaller input buffer size than sizeof(FSCTL_SET_INTEGRITY_INFORMATION_BUFFER),
@@ -2761,11 +2762,51 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 inputBufferBytes = fsccPacket.ToBytes();
             }
 
-            MessageStatus returnedStatus = this.transAdapter.IOControl(
+            MessageStatus returnedStatus = transAdapter.IOControl(
                 (uint)FsControlCommand.FSCTL_SET_INTEGRITY_INFORMATION,
                 inputBufferSize,
                 inputBufferBytes,
-                out outbuffer);
+                out _);
+
+            return returnedStatus;
+        }
+
+        #endregion
+
+        #region 2.1.5.9.34   FSCTL_SET_INTEGRITY_INFORMATION_EX
+
+        /// <summary>
+        /// Implementation of FSCTL_SET_INTEGRITY_INFORMATION_EX
+        /// </summary>
+        /// <param name="inputBuffer">An array of bytes containing an FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX structure indicating the requested integrity state of the directory or file.</param>
+        /// <param name="inputBufferSize">The number of bytes in InputBuffer.</param>
+        /// <returns>An NTSTATUS code that specifies the result.</returns>
+        public MessageStatus FsCtlSetIntegrityInfoEx(FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX inputBuffer, uint inputBufferSize)
+        {
+            byte[] inputBufferBytes;
+
+            FsccFsctlSetIntegrityInformationExRequestPacket fsccPacket = new() { Payload = inputBuffer };
+
+            uint inputBufferLength = (uint)TypeMarshal.ToBytes(inputBuffer).Length;
+            if (inputBufferSize < inputBufferLength)
+            {
+                // For some negative test cases, they want to provide a smaller input buffer size than sizeof(FSCTL_SET_INTEGRITY_INFORMATION_BUFFER),
+                // and expect server return STATUS_INVALID_PARAMETER.
+                // So here we copy a smaller size of data to inputBufferBytes which will be sent to server through IOCtl request.
+                byte[] fsccPacketBytes = fsccPacket.ToBytes();
+                inputBufferBytes = new byte[inputBufferSize];
+                Array.Copy(fsccPacket.ToBytes(), inputBufferBytes, fsccPacketBytes.Length - (inputBufferLength - inputBufferSize));
+            }
+            else
+            {
+                inputBufferBytes = fsccPacket.ToBytes();
+            }
+
+            MessageStatus returnedStatus = transAdapter.IOControl(
+                (uint)FsControlCommand.FSCTL_SET_INTEGRITY_INFORMATION_EX,
+                inputBufferSize,
+                inputBufferBytes,
+                out _);
 
             return returnedStatus;
         }
@@ -6050,8 +6091,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
             else
             {
-                string comments = string.Format("expected '{0}', actual '{1}' which is not equal to STATUS_SUCCESS. ({2})", expected.ToString(), actual.ToString(), context);
-                this.site.Assert.AreNotEqual(MessageStatus.SUCCESS, actual, comments);
+                /// All error codes are equivalent.
+                if (expected == MessageStatus.SUCCESS || actual == MessageStatus.SUCCESS)
+                {
+                    TestManagerHelpers.AssertAreEqual(manager, expected, actual, context);
+                }
             }
         }
 
