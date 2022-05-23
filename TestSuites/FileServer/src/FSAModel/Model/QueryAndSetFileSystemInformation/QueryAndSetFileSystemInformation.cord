@@ -38,13 +38,13 @@ machine QueryFileSystemInformationScenario() : QueryFileSystemInformationConfig
             |
             (
                 GetIfImplementQueryFileFsControlInformation;
-                GetIFQuotasSupported;
+                GetIfQuotasSupported;
                 QueryFileSystemInfo(FileSystemInfoClass.File_FsControlInformation, _, out _)
             )
             |
             (
                 GetIfImplementQueryFileFsObjectIdInformation;
-                GetIFObjectIDsSupported;
+                GetIfObjectIDsSupported;
                 QueryFileSystemInfo(FileSystemInfoClass.File_FsObjectId_Information, _, out _)
             )
 

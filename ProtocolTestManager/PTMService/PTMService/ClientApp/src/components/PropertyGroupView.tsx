@@ -30,7 +30,7 @@ interface ChoosablePropertyProps {
   onValueChange: (property: Property) => void
 }
 
-function CommonProperty(props: CommonPropertyProps): ReactElement {
+function CommonProperty (props: CommonPropertyProps): ReactElement {
   return (
     <TooltipHost
       style={{ alignSelf: 'center' }}
@@ -39,6 +39,7 @@ function CommonProperty(props: CommonPropertyProps): ReactElement {
       delay={TooltipDelay.zero}>
       <TextField
         key={props.property.Key ?? props.property.Name}
+        ariaLabel={`Input a value for ${props.property.Name}`}
         style={{ alignSelf: 'stretch', minWidth: 480 }}
         value={props.property.Value}
         onChange={(_, newValue) => props.onValueChange({ ...props.property, Value: newValue! })}
@@ -47,7 +48,7 @@ function CommonProperty(props: CommonPropertyProps): ReactElement {
   )
 }
 
-function ChoosableProperty(props: ChoosablePropertyProps): ReactElement {
+function ChoosableProperty (props: ChoosablePropertyProps): ReactElement {
   const dropdownOptions = props.property.Choices.map(choice => {
     return {
       key: choice.toLowerCase(),
@@ -64,6 +65,7 @@ function ChoosableProperty(props: ChoosablePropertyProps): ReactElement {
       <Dropdown
         key={props.property.Key ?? props.property.Name}
         style={{ alignSelf: 'center', minWidth: 480 }}
+        ariaLabel={`Select an option for ${props.property.Name}`}
         placeholder='Select an option'
         defaultSelectedKey={props.property.Value?.toLowerCase()}
         options={dropdownOptions}
@@ -73,7 +75,7 @@ function ChoosableProperty(props: ChoosablePropertyProps): ReactElement {
   )
 }
 
-function PropertyName(props: PropertyNameProps): ReactElement {
+function PropertyName (props: PropertyNameProps): ReactElement {
   const { latestProperty, property } = props
   if (latestProperty === undefined || latestProperty.Value === property.Value) {
     return (

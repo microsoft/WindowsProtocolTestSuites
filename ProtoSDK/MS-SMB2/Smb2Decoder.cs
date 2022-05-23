@@ -8,7 +8,6 @@ using System.Security.Cryptography;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common;
-using System.Text;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -67,6 +66,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             set
             {
                 checkEncrypt = value;
+            }
+        }
+
+        public Dictionary<ulong, Smb2CryptoInfo> CryptoInfoTable
+        {
+            get
+            {
+                return cryptoInfoTable;
+            }
+            set
+            {
+                cryptoInfoTable = value;
             }
         }
 

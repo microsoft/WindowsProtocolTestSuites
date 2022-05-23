@@ -345,8 +345,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             List<string> hiddenProp = new List<string>();
             // Task name for SUT control adapter
             hiddenProp.Add("RDPConnectWithNegotiationApproach_Task");
+            hiddenProp.Add("RDPConnectWithNegotiationApproachInvalidAccount_Task");
             hiddenProp.Add("RDPConnectWithDirectTLS_Task");
             hiddenProp.Add("RDPConnectWithDirectCredSSP_Task");
+            hiddenProp.Add("RDPConnectWithDirectCredSSPInvalidAccount_Task");
             hiddenProp.Add("RDPConnectWithNegotiationApproachFullScreen_Task");
             hiddenProp.Add("RDPConnectWithDirectTLSFullScreen_Task");
             hiddenProp.Add("RDPConnectWithDirectCredSSPFullScreen_Task");
@@ -357,6 +359,9 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             hiddenProp.Add("TriggerSingleTouchPositionEvent_Task");
             hiddenProp.Add("TriggerContinuousTouchEvent_Task");
             hiddenProp.Add("TriggerTouchHoverEvent_Task");
+            hiddenProp.Add("TriggerCloseRDPWindow_Task");
+            hiddenProp.Add("CredentialManagerAddInvalidAccount_Task");
+            hiddenProp.Add("CredentialManagerReverseInvalidAccount_Task");
             hiddenProp.Add("MaximizeRDPClientWindow_Task");
 
             // Image configure for RDPEDISP

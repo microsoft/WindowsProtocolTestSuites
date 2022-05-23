@@ -6,6 +6,6 @@ import { Spinner, SpinnerSize } from '@fluentui/react'
 export function LoadingPanel () {
   return (<div style={{ marginTop: 20, marginLeft: 20, float: 'left' }}>
         <Spinner size={SpinnerSize.large} />
-        <p style={{ color: '#fa8c16' }}>Loading...</p>
+        <p style={{ color: '#ab5f0e' }}>Loading...</p>
     </div>)
 }

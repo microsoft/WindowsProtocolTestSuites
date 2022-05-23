@@ -66,6 +66,7 @@ export function TestSuiteIntroduction (props: any) {
     }
   }
   const iframeUrl = `./api/testsuite/${testSuiteInfo.selectedTestSuite.Id}/userguide/index.html`
+  const ariaLabel = `User guide for ${documentTitle}`
   return (
         <StepPanel leftNav={wizard} isLoading={testSuiteInfo.isLoading} errorMsg={testSuiteInfo.errorMsg}>
             <Stack horizontal style={{ paddingLeft: 10, paddingRight: 10 }} >
@@ -76,7 +77,7 @@ export function TestSuiteIntroduction (props: any) {
                 <LoadingPanel />
             }
             {testSuiteInfo.errorMsg == undefined &&
-                <iframe id="UserGuide" style={{ border: 'aliceblue', height: winSize.height - 190, width: 100 + '%', overflowY: 'auto' }} src={iframeUrl} onLoad={pageLoaded} />
+                <iframe id="UserGuide" aria-label={ariaLabel} role="none" style={{ border: 'aliceblue', height: winSize.height - 190, width: 100 + '%', overflowY: 'auto' }} src={iframeUrl} onLoad={pageLoaded} />
             }
             {testSuiteInfo.errorMsg == undefined &&
                 <div className='buttonPanel'>

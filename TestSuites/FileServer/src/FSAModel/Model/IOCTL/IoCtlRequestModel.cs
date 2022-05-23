@@ -45,7 +45,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
             IsImplement_FSCTL_DELETE_OBJECT_ID = isImplemented;
             IsImplement_FSCTL_SET_OBJECT_ID = isImplemented;
 
-            gisObjectIDsSupported = isImplemented;
+            gIsObjectIDsSupported = isImplemented;
         }
 
         #endregion
@@ -131,19 +131,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
         static bool openHasManageVolPrivilege;
 
         /// <summary>
-        /// Call of function GetopenHasManageVolPrivilege
+        /// Call of function GetOpenHasManageVolPrivilege
         /// </summary>
-        [Rule(Action = "call GetopenHasManageVolPrivilege(out _ )")]
-        public static void CallGetopenHasManageVolPrivilege()
+        [Rule(Action = "call GetOpenHasManageVolPrivilege(out _ )")]
+        public static void CallGetOpenHasManageVolPrivilege()
         {
         }
 
         /// <summary>
-        /// Return of function GetopenHasManageVolPrivilege
+        /// Return of function GetOpenHasManageVolPrivilege
         /// </summary>
         /// <param name="isSupported">A flag</param>
-        [Rule(Action = "return GetopenHasManageVolPrivilege(out isSupported)")]
-        public static void ReturnGetopenHasManageVolPrivilege(bool isSupported)
+        [Rule(Action = "return GetOpenHasManageVolPrivilege(out isSupported)")]
+        public static void ReturnGetOpenHasManageVolPrivilege(bool isSupported)
         {
             openHasManageVolPrivilege = isSupported;
         }
@@ -243,7 +243,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                     If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.<16>");
                 return MessageStatus.INVALID_DEVICE_REQUEST;
             }
-            if (!gisObjectIDsSupported)
+            if (!gIsObjectIDsSupported)
             {
                 Helper.CaptureRequirement(4993, @"[In FSCTL_CREATE_OR_GET_OBJECT_ID ] Pseudocode for the operation is as follows:
                     If Open.File.Volume.IsObjectIDsSupported is FALSE, the operation MUST be failed with STATUS_VOLUME_NOT_UPGRADED.");
@@ -285,7 +285,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 return MessageStatus.INVALID_DEVICE_REQUEST;
             }
 
-            if (!gisObjectIDsSupported)
+            if (!gIsObjectIDsSupported)
             {
                 Helper.CaptureRequirement(4997, @"[In FSCTL_DELETE_OBJECT_ID ] Pseudocode for the operation is as follows:
                     If Open.File.Volume.IsObjectIDsSupported is FALSE, the operation MUST be failed with STATUS_VOLUME_NOT_UPGRADED.");
@@ -1345,7 +1345,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                             return MessageStatus.INVALID_PARAMETER;
                         }
 
-                        if (!gisObjectIDsSupported)
+                        if (!gIsObjectIDsSupported)
                         {
                             Helper.CaptureRequirement(4327, @"[ In FSCTL_SET_OBJECT_ID,Pseudocode for the operation is as follows:] 
                                 If Open.File.Volume.IsObjectIDsSupported is FALSE, the operation MUST be failed with STATUS_VOLUME_NOT_UPGRADED.");
@@ -1387,7 +1387,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                             return MessageStatus.INVALID_PARAMETER;
                         }
 
-                        if (!gisObjectIDsSupported)
+                        if (!gIsObjectIDsSupported)
                         {
                             Helper.CaptureRequirement(4327, @"[ In FSCTL_SET_OBJECT_ID,Pseudocode for the operation is as follows:] 
                                 If Open.File.Volume.IsObjectIDsSupported is FALSE, the operation MUST be failed with STATUS_VOLUME_NOT_UPGRADED.");

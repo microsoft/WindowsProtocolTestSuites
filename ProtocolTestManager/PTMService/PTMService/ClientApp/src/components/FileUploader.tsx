@@ -136,6 +136,7 @@ export function FileUploader(props: FileUploaderProp): ReactElement {
             />
             <IconButton
               className="icon"
+              aria-label="Browse File"
               iconProps={{ iconName: 'DocumentSet' }}
               disabled={props.disabled}
               onClick={onIconClick}

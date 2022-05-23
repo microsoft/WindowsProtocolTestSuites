@@ -1546,5 +1546,30 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
             return nonce;
         }
+
+        /// <summary>
+        /// Computes nonce used in signing messages when AES-GMAC signing algorithm is in use
+        /// </summary>
+        /// <param name="messageId"></param>
+        /// <param name="decodeRole"></param>
+        /// <returns></returns>
+        public static byte[] ComputeNonce(UInt64 messageId, Smb2Role decodeRole, Smb2Command smb2Command)
+        {
+            var nonce = new byte[12];
+            BitConverter.GetBytes(messageId).CopyTo(nonce, 0);
+
+            // Set least significant bit to 0 if sender is a client or otherwise
+            if (decodeRole.Equals(Smb2Role.Server))
+            {
+                nonce[nonce.Length - 1] = 1;
+            }
+            // If the message is SMB2 CANCEL request, the penultimate bit is set to 1
+            if (smb2Command.Equals(Smb2Command.CANCEL))
+            {
+                nonce[nonce.Length - 2] = 1;
+            }
+
+            return nonce;
+        }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
@@ -26,6 +27,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
         private uint treeId;
         private FILEID fileId;
         private OplockLevel_Values oplockLevelOnOpen;
+        private AutoResetEvent notificationReceived;
         private FileOperationDelegate fileOperationInvoker;
 
         #endregion
@@ -37,6 +39,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             base.Initialize(testSite);
 
             usedTestClients = new Stack<Smb2FunctionalClient>();
+            notificationReceived = new AutoResetEvent(false);
         }
 
         public override void Reset()
@@ -56,6 +59,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
 
             testClient = null;
             usedTestClients = new Stack<Smb2FunctionalClient>();
+            notificationReceived = new AutoResetEvent(false);
 
             base.Reset();
         }
@@ -201,8 +205,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
             oplockLevelOnOpen = grantedTmp;
 
             fileOperationInvoker = new FileOperationDelegate(FileOperation);
-            var task = Task.Run(() => fileOperationInvoker.Invoke(fileOperation, fileName));
-            task.Wait(500);// Assume that notification will arrive in .5 sec if there's any
+            Task.Run(() => fileOperationInvoker.Invoke(fileOperation, fileName));
+
+            if (!notificationReceived.WaitOne(testConfig.Timeout))
+            {
+                notificationReceived.Reset();
+            }
         }
 
         public void OplockBreakAcknowledgementRequest(OplockVolatilePortion volatilePortion, OplockPersistentPortion persistentPortion, OplockLevel_Values oplockLevel)
@@ -264,6 +272,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Oplock
                 true,
                 BitConverter.ToUInt64(header.Signature, 0) == 0 && BitConverter.ToUInt64(header.Signature, 8) == 0,
                 "The SMB2 Oplock Break Notification is sent to the client. The message MUST NOT be signed, as specified in section 3.3.4.1.1");
+
+            notificationReceived.Set();
 
             OplockBreakNotification(packet.OplockLevel);
         }

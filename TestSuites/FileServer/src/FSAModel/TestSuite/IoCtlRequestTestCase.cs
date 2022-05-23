@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         
         public delegate void GetAdministratorDelegate1(bool isGet);
         
-        public delegate void GetopenHasManageVolPrivilegeDelegate1(bool isSupported);
+        public delegate void GetOpenHasManageVolPrivilegeDelegate1(bool isSupported);
         
         public delegate void GetRestoreAccessDelegate1(bool isHas);
         
@@ -64,7 +64,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         
         static System.Reflection.MethodBase GetAdministratorInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetAdministrator", typeof(bool).MakeByRefType());
         
-        static System.Reflection.MethodBase GetopenHasManageVolPrivilegeInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetopenHasManageVolPrivilege", typeof(bool).MakeByRefType());
+        static System.Reflection.MethodBase GetOpenHasManageVolPrivilegeInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetOpenHasManageVolPrivilege", typeof(bool).MakeByRefType());
         #endregion
         
         #region Adapter Instances
@@ -14780,11 +14780,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.BeginTest("IoCtlRequestTestCaseS38");
             this.Manager.Comment("reaching state \'S38\'");
             bool temp1138;
-            this.Manager.Comment("executing step \'call GetopenHasManageVolPrivilege(out _)\'");
-            this.IFSAAdapterInstance.GetopenHasManageVolPrivilege(out temp1138);
-            this.Manager.AddReturn(GetopenHasManageVolPrivilegeInfo, null, temp1138);
+            this.Manager.Comment("executing step \'call GetOpenHasManageVolPrivilege(out _)\'");
+            this.IFSAAdapterInstance.GetOpenHasManageVolPrivilege(out temp1138);
+            this.Manager.AddReturn(GetOpenHasManageVolPrivilegeInfo, null, temp1138);
             this.Manager.Comment("reaching state \'S39\'");
-            int temp1159 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS38GetopenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS38GetopenHasManageVolPrivilegeChecker1)));
+            int temp1159 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS38GetOpenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS38GetOpenHasManageVolPrivilegeChecker1)));
             if ((temp1159 == 0)) {
                 this.Manager.Comment("reaching state \'S161\'");
                 bool temp1139;
@@ -15049,9 +15049,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         
-        private void IoCtlRequestTestCaseS38GetopenHasManageVolPrivilegeChecker(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S39");
+        private void IoCtlRequestTestCaseS38GetOpenHasManageVolPrivilegeChecker(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S39");
         }
         
         private void IoCtlRequestTestCaseS38GetObjectFunctionalityChecker(bool isImplemented) {
@@ -15064,9 +15064,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S237");
         }
         
-        private void IoCtlRequestTestCaseS38GetopenHasManageVolPrivilegeChecker1(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S39");
+        private void IoCtlRequestTestCaseS38GetOpenHasManageVolPrivilegeChecker1(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S39");
         }
         
         private void IoCtlRequestTestCaseS38GetObjectFunctionalityChecker2(bool isImplemented) {
@@ -16090,11 +16090,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.BeginTest("IoCtlRequestTestCaseS40");
             this.Manager.Comment("reaching state \'S40\'");
             bool temp1254;
-            this.Manager.Comment("executing step \'call GetopenHasManageVolPrivilege(out _)\'");
-            this.IFSAAdapterInstance.GetopenHasManageVolPrivilege(out temp1254);
-            this.Manager.AddReturn(GetopenHasManageVolPrivilegeInfo, null, temp1254);
+            this.Manager.Comment("executing step \'call GetOpenHasManageVolPrivilege(out _)\'");
+            this.IFSAAdapterInstance.GetOpenHasManageVolPrivilege(out temp1254);
+            this.Manager.AddReturn(GetOpenHasManageVolPrivilegeInfo, null, temp1254);
             this.Manager.Comment("reaching state \'S41\'");
-            int temp1275 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS40GetopenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS40GetopenHasManageVolPrivilegeChecker1)));
+            int temp1275 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS40GetOpenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS40GetOpenHasManageVolPrivilegeChecker1)));
             if ((temp1275 == 0)) {
                 this.Manager.Comment("reaching state \'S163\'");
                 bool temp1255;
@@ -16359,9 +16359,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         
-        private void IoCtlRequestTestCaseS40GetopenHasManageVolPrivilegeChecker(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S41");
+        private void IoCtlRequestTestCaseS40GetOpenHasManageVolPrivilegeChecker(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S41");
         }
         
         private void IoCtlRequestTestCaseS40GetObjectFunctionalityChecker(bool isImplemented) {
@@ -16374,9 +16374,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S239");
         }
         
-        private void IoCtlRequestTestCaseS40GetopenHasManageVolPrivilegeChecker1(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S41");
+        private void IoCtlRequestTestCaseS40GetOpenHasManageVolPrivilegeChecker1(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S41");
         }
         
         private void IoCtlRequestTestCaseS40GetObjectFunctionalityChecker2(bool isImplemented) {
@@ -16401,11 +16401,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.BeginTest("IoCtlRequestTestCaseS42");
             this.Manager.Comment("reaching state \'S42\'");
             bool temp1276;
-            this.Manager.Comment("executing step \'call GetopenHasManageVolPrivilege(out _)\'");
-            this.IFSAAdapterInstance.GetopenHasManageVolPrivilege(out temp1276);
-            this.Manager.AddReturn(GetopenHasManageVolPrivilegeInfo, null, temp1276);
+            this.Manager.Comment("executing step \'call GetOpenHasManageVolPrivilege(out _)\'");
+            this.IFSAAdapterInstance.GetOpenHasManageVolPrivilege(out temp1276);
+            this.Manager.AddReturn(GetOpenHasManageVolPrivilegeInfo, null, temp1276);
             this.Manager.Comment("reaching state \'S43\'");
-            int temp1297 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS42GetopenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS42GetopenHasManageVolPrivilegeChecker1)));
+            int temp1297 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS42GetOpenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS42GetOpenHasManageVolPrivilegeChecker1)));
             if ((temp1297 == 0)) {
                 this.Manager.Comment("reaching state \'S165\'");
                 bool temp1277;
@@ -16673,9 +16673,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         
-        private void IoCtlRequestTestCaseS42GetopenHasManageVolPrivilegeChecker(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S43");
+        private void IoCtlRequestTestCaseS42GetOpenHasManageVolPrivilegeChecker(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S43");
         }
         
         private void IoCtlRequestTestCaseS42GetObjectFunctionalityChecker(bool isImplemented) {
@@ -16688,9 +16688,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S241");
         }
         
-        private void IoCtlRequestTestCaseS42GetopenHasManageVolPrivilegeChecker1(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S43");
+        private void IoCtlRequestTestCaseS42GetOpenHasManageVolPrivilegeChecker1(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S43");
         }
         
         private void IoCtlRequestTestCaseS42GetObjectFunctionalityChecker2(bool isImplemented) {
@@ -16715,11 +16715,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.BeginTest("IoCtlRequestTestCaseS44");
             this.Manager.Comment("reaching state \'S44\'");
             bool temp1298;
-            this.Manager.Comment("executing step \'call GetopenHasManageVolPrivilege(out _)\'");
-            this.IFSAAdapterInstance.GetopenHasManageVolPrivilege(out temp1298);
-            this.Manager.AddReturn(GetopenHasManageVolPrivilegeInfo, null, temp1298);
+            this.Manager.Comment("executing step \'call GetOpenHasManageVolPrivilege(out _)\'");
+            this.IFSAAdapterInstance.GetOpenHasManageVolPrivilege(out temp1298);
+            this.Manager.AddReturn(GetOpenHasManageVolPrivilegeInfo, null, temp1298);
             this.Manager.Comment("reaching state \'S45\'");
-            int temp1319 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS44GetopenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS44GetopenHasManageVolPrivilegeChecker1)));
+            int temp1319 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS44GetOpenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS44GetOpenHasManageVolPrivilegeChecker1)));
             if ((temp1319 == 0)) {
                 this.Manager.Comment("reaching state \'S167\'");
                 bool temp1299;
@@ -16986,9 +16986,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         
-        private void IoCtlRequestTestCaseS44GetopenHasManageVolPrivilegeChecker(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S45");
+        private void IoCtlRequestTestCaseS44GetOpenHasManageVolPrivilegeChecker(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S45");
         }
         
         private void IoCtlRequestTestCaseS44GetObjectFunctionalityChecker(bool isImplemented) {
@@ -17001,9 +17001,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S243");
         }
         
-        private void IoCtlRequestTestCaseS44GetopenHasManageVolPrivilegeChecker1(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S45");
+        private void IoCtlRequestTestCaseS44GetOpenHasManageVolPrivilegeChecker1(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S45");
         }
         
         private void IoCtlRequestTestCaseS44GetObjectFunctionalityChecker2(bool isImplemented) {
@@ -17028,11 +17028,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.BeginTest("IoCtlRequestTestCaseS46");
             this.Manager.Comment("reaching state \'S46\'");
             bool temp1320;
-            this.Manager.Comment("executing step \'call GetopenHasManageVolPrivilege(out _)\'");
-            this.IFSAAdapterInstance.GetopenHasManageVolPrivilege(out temp1320);
-            this.Manager.AddReturn(GetopenHasManageVolPrivilegeInfo, null, temp1320);
+            this.Manager.Comment("executing step \'call GetOpenHasManageVolPrivilege(out _)\'");
+            this.IFSAAdapterInstance.GetOpenHasManageVolPrivilege(out temp1320);
+            this.Manager.AddReturn(GetOpenHasManageVolPrivilegeInfo, null, temp1320);
             this.Manager.Comment("reaching state \'S47\'");
-            int temp1341 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS46GetopenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetopenHasManageVolPrivilegeInfo, null, new GetopenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS46GetopenHasManageVolPrivilegeChecker1)));
+            int temp1341 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS46GetOpenHasManageVolPrivilegeChecker)), new ExpectedReturn(IoCtlRequestTestCase.GetOpenHasManageVolPrivilegeInfo, null, new GetOpenHasManageVolPrivilegeDelegate1(this.IoCtlRequestTestCaseS46GetOpenHasManageVolPrivilegeChecker1)));
             if ((temp1341 == 0)) {
                 this.Manager.Comment("reaching state \'S169\'");
                 bool temp1321;
@@ -17302,9 +17302,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         
-        private void IoCtlRequestTestCaseS46GetopenHasManageVolPrivilegeChecker(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S47");
+        private void IoCtlRequestTestCaseS46GetOpenHasManageVolPrivilegeChecker(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S47");
         }
         
         private void IoCtlRequestTestCaseS46GetObjectFunctionalityChecker(bool isImplemented) {
@@ -17317,9 +17317,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S245");
         }
         
-        private void IoCtlRequestTestCaseS46GetopenHasManageVolPrivilegeChecker1(bool isSupported) {
-            this.Manager.Comment("checking step \'return GetopenHasManageVolPrivilege/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetopenHasManageVolPrivilege, state S47");
+        private void IoCtlRequestTestCaseS46GetOpenHasManageVolPrivilegeChecker1(bool isSupported) {
+            this.Manager.Comment("checking step \'return GetOpenHasManageVolPrivilege/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetOpenHasManageVolPrivilege, state S47");
         }
         
         private void IoCtlRequestTestCaseS46GetObjectFunctionalityChecker2(bool isImplemented) {

@@ -68,6 +68,7 @@
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
         * [CreateFile_InvalidColon](#Scenario-CreateFile_InvalidColon)
         * [CreateFile_BackSlash](#Scenario-CreateFile_BackSlash)
+        * [CreateFile_FindAllFiles](#Scenario-CreateFile_FindAllFiles)
 * [Traditional Test Case Design](#Traditional-Test-Case-Design)
     * [Test cases for CommonAlgorithm](#Test-cases-for-CommonAlgorithm)
         * [NotingFileModified](#NotingFileModified)
@@ -317,6 +318,48 @@
             * [BVT_QueryDirectory_FileIdFullDirectoryInformation](#BVT_QueryDirectory_FileIdFullDirectoryInformation)
             * [BVT_QueryDirectory_FileBothDirectoryInformation](#BVT_QueryDirectory_FileBothDirectoryInformation)
             * [BVT_QueryDirectory_FileIdBothDirectoryInformation](#BVT_QueryDirectory_FileIdBothDirectoryInformation)
+            * [BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_SpecialCase_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_SpecialCase_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_WildCard_QuestionMark](#BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_WildCard_QuestionMark)
+            * [BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_AsteriskInStringWildCard](#BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_AsteriskInStringWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_STAR_WildCard](#BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_STAR_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_QM_WildCard](#BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_QM_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_DOT_WildCard](#BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_DOT_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_SpecialCase_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_SpecialCase_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_WildCard_QuestionMark](#BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_WildCard_QuestionMark)
+            * [BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskInStringWildCard](#BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskInStringWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_STAR_WildCard](#BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_STAR_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_QM_WildCard](#BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_QM_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_DOT_WildCard](#BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_DOT_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_SpecialCase_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_SpecialCase_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_WildCard_QuestionMark](#BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_WildCard_QuestionMark)
+            * [BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_AsteriskInStringWildCard](#BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_AsteriskInStringWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_STAR_WildCard](#BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_STAR_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_QM_WildCard](#BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_QM_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_DOT_WildCard](#BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_DOT_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_SpecialCase_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_SpecialCase_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_WildCard_QuestionMark](#BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_WildCard_QuestionMark)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskInStringWildCard](#BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskInStringWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_STAR_WildCard](#BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_STAR_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_QM_WildCard](#BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_QM_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_DOT_WildCard](#BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_DOT_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_SpecialCase_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_SpecialCase_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_WildCard_QuestionMark](#BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_WildCard_QuestionMark)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_AsteriskInStringWildCard](#BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_AsteriskInStringWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_STAR_WildCard](#BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_STAR_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_QM_WildCard](#BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_QM_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_DOT_WildCard](#BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_DOT_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileNamesInformation_SpecialCase_AsteriskWildCard](#BVT_QueryDirectoryBySearchPattern_FileNamesInformation_SpecialCase_AsteriskWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileNamesInformation_WildCard_QuestionMark](#BVT_QueryDirectoryBySearchPattern_FileNamesInformation_WildCard_QuestionMark)
+            * [BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskInStringWildCard](#BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskInStringWildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_STAR_WildCard](#BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_STAR_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_QM_WildCard](#BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_QM_WildCard)
+            * [BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_DOT_WildCard](#BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_DOT_WildCard)
     * [Test cases for File and Directory Leasing](#Test-cases-for-File-And-Directory-Leasing)
         * [Compare Lease Keys](#CompareLeaseKeys)
             * [Comparing_Same_File_LeaseKeysV1](#Comparing_Same_File_LeaseKeysV1)
@@ -329,6 +372,18 @@
     * [Test cases for Other Scenarios](#Test-cases-for-Other-Scenarios)
         * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#CreateFile_InvalidStreamName)
+        * [CreateFile_BackSlash](#CreateFile_BackSlash)
+            * [CreateDirectory_EndWithBackSlash](#CreateDirectory_EndWithBackSlash)
+            * [CreateFile_EndWithInvalidBackSlash](#CreateFile_EndWithInvalidBackSlash)
+            * [CreateFile_WithDoubleBackSlashInMiddle](#CreateFile_WithDoubleBackSlashInMiddle)
+        * [CreateFile_InvalidColon](#CreateFile_InvalidColon)
+            * [CreateDirectory_InvalidColon](#CreateDirectory_InvalidColon)
+            * [CreateFile_InvalidColon](#CreateFile_InvalidColon)
+        * [FindAllFiles](#FindAllFiles)
+            * [CreateFile_CheckNoFilesFound](#CreateFile_CheckNoFilesFound)
+            * [CreateFile_CheckSingleFileFound](#CreateFile_CheckSingleFileFound)
+            * [CreateFile_CheckSubDirAndSingleFileFound](#CreateFile_CheckSubDirAndSingleFileFound)
+            * [CreateFile_CheckMultipleFilesFound](#CreateFile_CheckMultipleFilesFound)
 * [MBT Test Design](#MBT-Test-Design)
     * [Model Design](#Model-Design)
     * [Adapter Design](#Adapter-Design)
@@ -386,7 +441,7 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 170 test cases in total:
+There are 221 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
@@ -398,7 +453,8 @@ There are 170 test cases in total:
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
 | Scenarios for CommonAlgorithm | 1 | 8 (8) |
-| Other Scenarios | 3 | 6 (0) |
+| Scenarios for Query Directory | 1 | 51 (48) |
+| Other Scenarios | 4 | 10 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
 
@@ -1295,6 +1351,18 @@ There are 343 test cases in total:
 | | Test object: DirectoryFile, DataFile|
 | Message Sequence| Create a directory or data file with back slash contained in file name.|
 | | Verify server response for supported file systems.|
+
+#### <a name="Scenario-CreateFile_FindAllFiles"/>CreateFile_FindAllFiles
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test finding all files under a directory|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DirectoryFile, DataFile|
+| Message Sequence| Create a directory|
+| | Create file(s) under the directory|
+| | Query the directory|
+| | Verify that all files existing in the directory are returned|
 
 ## <a name="Traditional-Test-Case-Design"/>Traditional Test Case Design
 
@@ -4640,6 +4708,552 @@ There are 343 test cases in total:
 | | Query the created directory with FileIdBothDirectoryInformation|
 | | Verify each entry of the response|
 
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileBothDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_SpecialCase_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_SpecialCase_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileBothDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_WildCard_QuestionMark"/>BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_WildCard_QuestionMark
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation and check if FileName is in expression ? (Question Mark) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileBothDirectoryInformation and check if FileName is in expression special case ? (Question Mark) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_AsteriskInStringWildCard"/>BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_AsteriskInStringWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileBothDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_STAR_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_STAR_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileBothDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_QM_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_QM_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileBothDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_DOT_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileBothDirectoryInformation_DOS_DOT_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileBothDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileBothDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_SpecialCase_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_SpecialCase_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_WildCard_QuestionMark"/>BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_WildCard_QuestionMark
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileDirectoryInformation and check if FileName is in expression ? (Question Mark) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileDirectoryInformation and check if FileName is in expression special case ? (Question Mark) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskInStringWildCard"/>BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_AsteriskInStringWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_STAR_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_STAR_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_QM_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_QM_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_DOT_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileDirectoryInformation_DOS_DOT_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileFullDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_SpecialCase_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_SpecialCase_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileFullDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_WildCard_QuestionMark"/>BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_WildCard_QuestionMark
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation and check if FileName is in expression ? (Question Mark) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileFullDirectoryInformation and check if FileName is in expression special case ? (Question Mark) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_AsteriskInStringWildCard"/>BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_AsteriskInStringWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileFullDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_STAR_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_STAR_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileFullDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_QM_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_QM_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileFullDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_DOT_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileFullDirectoryInformation_DOS_DOT_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileFullDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileFullDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdBothDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_SpecialCase_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_SpecialCase_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdBothDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_WildCard_QuestionMark"/>BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_WildCard_QuestionMark
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation and check if FileName is in expression ? (Question Mark) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdBothDirectoryInformation and check if FileName is in expression special case ? (Question Mark) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskInStringWildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_AsteriskInStringWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdBothDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_STAR_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_STAR_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdBothDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_QM_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_QM_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdBothDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_DOT_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdBothDirectoryInformation_DOS_DOT_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdBothDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdBothDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdFullDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_SpecialCase_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_SpecialCase_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdFullDirectoryInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_WildCard_QuestionMark"/>BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_WildCard_QuestionMark
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation and check if FileName is in expression ? (Question Mark) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdFullDirectoryInformation and check if FileName is in expression special case ? (Question Mark) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_AsteriskInStringWildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_AsteriskInStringWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdFullDirectoryInformation and check if FileName is in expression \* (Asterisk) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_STAR_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_STAR_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdFullDirectoryInformation and check if FileName is in expression < (DOS Star) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_QM_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_QM_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdFullDirectoryInformation and check if FileName is in expression > (DOS QM) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_DOT_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileIdFullDirectoryInformation_DOS_DOT_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileIdFullDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileIdFullDirectoryInformation and check if FileName is in expression " (DOS DOT) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileNamesInformation and check if FileName is in expression \* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileNamesInformation and check if FileName is in expression \* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileNamesInformation_SpecialCase_AsteriskWildCard"/>BVT_QueryDirectoryBySearchPattern_FileNamesInformation_SpecialCase_AsteriskWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileNamesInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileNamesInformation and check if FileName is in expression special case \*.\* (Asterisk) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileNamesInformation_WildCard_QuestionMark"/>BVT_QueryDirectoryBySearchPattern_FileNamesInformation_WildCard_QuestionMark
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileNamesInformation and check if FileName is in expression ? (Question Mark) wild card.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileNamesInformation and check if FileName is in expression special case ? (Question Mark) wild card|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskInStringWildCard"/>BVT_QueryDirectoryBySearchPattern_FileNamesInformation_AsteriskInStringWildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileNamesInformation and check if FileName is in expression \* (Asterisk) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileNamesInformation and check if FileName is in expression \* (Asterisk) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_STAR_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_STAR_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileNamesInformation and check if FileName is in expression < (DOS Star) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileNamesInformation and check if FileName is in expression < (DOS Star) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_QM_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_QM_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileNamesInformation and check if FileName is in expression > (DOS QM) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileNamesInformation and check if FileName is in expression > (DOS QM) wild card in string|
+| | Verify each entry of the response|
+
+##### <a name="BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_DOT_WildCard"/>BVT_QueryDirectoryBySearchPattern_FileNamesInformation_DOS_DOT_WildCard
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory and a file and then query the directory info with FileInfoClass FileNamesInformation and check if FileName is in expression " (DOS DOT) wild card in string.|
+| | Test environment: NTFS, ReFS, FAT32|
+| Message Sequence| Create a directory in share|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Create a file under the newly created directory folder|
+| | Verify server returns with **STATUS_SUCCESS** for supported file system|
+| | Query the created directory with FileNamesInformation and check if FileName is in expression " (DOS DOT) wild card in string|
+| | Verify each entry of the response|
+
 ### <a name="Test-cases-for-File-And-Directory-Leasing"/>Test cases for File and Directory Leasing
 
 #### <a name="CompareLeaseKeys"/>Compare Lease Keys
@@ -4794,6 +5408,55 @@ There are 343 test cases in total:
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a file with double backslash in the middle.|
 | | Verify server returns with **STATUS_OBJECT_PATH_NOT_FOUND** for supported file system|
+
+#### <a name="CreateFile_FindAllFiles"/>CreateFile_FindAllFiles
+
+##### <a name="CreateFile_CheckNoFilesFound"/>CreateFile_CheckNoFilesFound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory file and confirm that FoundFiles count is zero|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create a directory|
+| | Query the directory|
+| | Verify that no file is returned|
+
+##### <a name="CreateFile_CheckSingleFileFound"/>CreateFile_CheckSingleFileFound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a data file under a directory file and confirm that FoundFiles count is one|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create a directory|
+| | Create a file under the directory|
+| | Query the directory|
+| | Verify that only the created file is returned|
+
+##### <a name="CreateFile_CheckSubDirAndSingleFileFound"/>CreateFile_CheckSubDirAndSingleFileFound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a data file under a subdirectory and confirm FoundFiles count|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create a root directory|
+| | Create a directory file as subdirectory under the root directory|
+| | Create a data file under the subdirectory|
+| | Query the root directory|
+| | Verify that number of files returned is 2|
+
+##### <a name="CreateFile_CheckMultipleFilesFound"/>CreateFile_CheckMultipleFilesFound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a data file under a subdirectory and verify FoundFiles count for the root directory and subdirectory|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create a root directory|
+| | Create a directory file as subdirectory under the directory|
+| | Create a data file under the subdirectory|
+| | Query the root directory|
+| | Query the subdirectory|
+| | Verify that number of files returned by root directory is 2|
+| | Verify that number of files returned by subdirectory is 1|
 
 ## <a name="MBT-Test-Design"/>MBT Test Design
 

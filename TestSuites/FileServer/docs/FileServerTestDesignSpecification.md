@@ -68,8 +68,11 @@
 		* [ QueryDir\_Reopen\_OnDir](#3.1.53)
 		* [ QueryDir\_Reopen\_OnFile](#3.1.54)
 		* [ Query\_Quota\_Info](#3.1.55)
-		* [ BVT\_SMB2Basic\_Query\_FileAllInformation](#3.1.56)
-        * [ Compression](#3.1.57)
+		* [ SMB2Basic\_Query\_FileAllInformation](#3.1.56)
+		* [ SMB2Basic\_Query\_FileNormalizedNameInformation\_DataFile](#3.1.57)
+		* [ SMB2Basic\_Query\_FileNormalizedNameInformation\_DirectoryFile](#3.1.58)
+        * [ Compression](#3.1.59)
+        * [ NetworkInterfaceInfo](#3.1.60)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -93,6 +96,7 @@
 		* [ OperateOneFileFromTwoNodes](#3.2.20)
 		* [ MixedOplockLease](#3.2.21)
 		* [ Compression](#3.2.22)
+		* [ NetworkInterfaceInfo](#3.2.23)
 	* [SMB2 Feature Combination](#3.3)
 		* [ MultipleChannelWithReplay](#3.3.1)
 		* [ MultipleChannelWithEncryption](#3.3.2)
@@ -215,8 +219,8 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 97         | SMB2 common scenarios.                                                                                            |
-| SMB2 Feature Test        | 2645       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
+| SMB2 BVT                 | 100         | SMB2 common scenarios.                                                                                            |
+| SMB2 Feature Test        | 2661       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
 | Server Failover Test     | 48         | Test server failover for MS-SMB2, MS-SWN and MS-FSRVP                                                             |
@@ -1269,129 +1273,6 @@ This is used to test SMB2 common user scenarios.
 ||Server sends LOGOFF response|
 |**Cleanup**||
 
-|||
-|---|---|
-|**Test ID**|DurableHandleV1_Reconnect_WithDifferentLeaseKey|
-|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context but with a different LeaseKey. |
-|**Prerequisites**||
-|**Test Execution Steps**|Client sends NEGOTIATE request|
-||Server sends NEGOTIATE response|
-||Client sends SESSION_SETUP request|
-||Server sends SESSION_SETUP response|
-||According to the status code of last step, client may send more SESSION_SETUP request as needed|
-||Client sends TREE_CONNECT request|
-||Server sends TREE_CONNECT response|
-||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
-||Server sends CREATE response|
-||Client sends WRITE request|
-||Server sends WRITE response|
-||Client disconnect|
-||Create another client and the following requests are sent via this client|
-||Client sends NEGOTIATE request|
-||Server sends NEGOTIATE response|
-||Client sends SESSION_SETUP request|
-||Server sends SESSION_SETUP response|
-||According to the status code of last step, client may send more SESSION_SETUP request as needed|
-||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1 create context but with different Lease key|
-||Server sends CREATE response|
-||Client sends TREE_DISCONNECT request|
-||Server sends TREE_DISCONNECT response|
-||Client sends LOGOFF request|
-||Server sends LOGOFF response|
-|**Cleanup**||
-
-|||
-|---|---|
-|**Test ID**|DurableHandleV1_Reconnect_WithInvalidCreateContexts|
-|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context and invalid create request contexts. |
-|**Prerequisites**||
-|**Test Execution Steps**|Client sends NEGOTIATE request|
-||Server sends NEGOTIATE response|
-||Client sends SESSION_SETUP request|
-||Server sends SESSION_SETUP response|
-||According to the status code of last step, client may send more SESSION_SETUP request as needed|
-||Client sends TREE_CONNECT request|
-||Server sends TREE_CONNECT response|
-||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
-||Server sends CREATE response|
-||Client sends WRITE request|
-||Server sends WRITE response|
-||Client disconnect|
-||Create another client and the following requests are sent via this client|
-||Client sends NEGOTIATE request|
-||Server sends NEGOTIATE response|
-||Client sends SESSION_SETUP request|
-||Server sends SESSION_SETUP response|
-||According to the status code of last step, client may send more SESSION_SETUP request as needed|
-||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1 create context but with same Lease key and invalid lease|
-||Server sends CREATE response|
-||Client sends TREE_DISCONNECT request|
-||Server sends TREE_DISCONNECT response|
-||Client sends LOGOFF request|
-||Server sends LOGOFF response|
-|**Cleanup**||
-
-|||
-|---|---|
-|**Test ID**|DurableHandleV1_Reconnect_WithDifferentClientGuid|
-|**Description**|TTest reconnect with DurableHandleV1 and LeaseV1 context and different client guid. |
-|**Prerequisites**||
-|**Test Execution Steps**|Client sends NEGOTIATE request|
-||Server sends NEGOTIATE response|
-||Client sends SESSION_SETUP request|
-||Server sends SESSION_SETUP response|
-||According to the status code of last step, client may send more SESSION_SETUP request as needed|
-||Client sends TREE_CONNECT request|
-||Server sends TREE_CONNECT response|
-||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
-||Server sends CREATE response|
-||Client sends WRITE request|
-||Server sends WRITE response|
-||Client disconnect|
-||Create another client with different client guid and the following requests are sent via this client|
-||Client sends NEGOTIATE request|
-||Server sends NEGOTIATE response|
-||Client sends SESSION_SETUP request|
-||Server sends SESSION_SETUP response|
-||According to the status code of last step, client may send more SESSION_SETUP request as needed|
-||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1|
-||Server sends CREATE response|
-||Client sends TREE_DISCONNECT request|
-||Server sends TREE_DISCONNECT response|
-||Client sends LOGOFF request|
-||Server sends LOGOFF response|
-|**Cleanup**||
-
-|||
-|---|---|
-|**Test ID**|DurableHandleV1_Reconnect_WitInvalidOplock|
-|**Description**|TTest reconnect with DurableHandleV1 and different oplock lease level. |
-|**Prerequisites**||
-|**Test Execution Steps**|Client sends NEGOTIATE request|
-||Server sends NEGOTIATE response|
-||Client sends SESSION_SETUP request|
-||Server sends SESSION_SETUP response|
-||According to the status code of last step, client may send more SESSION_SETUP request as needed|
-||Client sends TREE_CONNECT request|
-||Server sends TREE_CONNECT response|
-||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context with oplock level set to OPLOCK_LEVEL_LEASE|
-||Server sends CREATE response|
-||Client sends WRITE request|
-||Server sends WRITE response|
-||Client disconnect|
-||Create another client with different client guid and the following requests are sent via this client|
-||Client sends NEGOTIATE request|
-||Server sends NEGOTIATE response|
-||Client sends SESSION_SETUP request|
-||Server sends SESSION_SETUP response|
-||According to the status code of last step, client may send more SESSION_SETUP request as needed|
-||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and oplock level set to OPLOCK_LEVEL_LEASE|
-||Server sends CREATE response|
-||Client sends TREE_DISCONNECT request|
-||Server sends TREE_DISCONNECT response|
-||Client sends LOGOFF request|
-||Server sends LOGOFF response|
-|**Cleanup**||
 
 |||
 |---|---|
@@ -3247,7 +3128,7 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-#### <a name="3.1.56"> BVT\_SMB2Basic\_Query\_FileAllInformation
+#### <a name="3.1.56"> SMB2Basic\_Query\_FileAllInformation
 
 ##### <a name="3.1.56.1"> Scenario
 
@@ -3277,10 +3158,70 @@ This is used to test SMB2 common user scenarios.
 |                          | LOGOFF |
 | **Cleanup**              ||
 
-
-#### <a name="3.1.57"> Compression
+#### <a name="3.1.57"> SMB2Basic\_Query\_FileNormalizedNameInformation\_DataFile
 
 ##### <a name="3.1.57.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Test whether server can handle QUERY requests to a data file for FileNormalizedNameInformation correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries FileNormalizedNameInformation by sending QUERY\_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.57.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_FileNormalizedNameInformation\_DataFile |
+| **Description** | Verify whether server can handle QUERY requests to a file for FileNormalizedNameInformation correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+#### <a name="3.1.58"> SMB2Basic\_Query\_FileNormalizedNameInformation\_DirectoryFile
+
+##### <a name="3.1.58.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Test whether server can handle QUERY requests to a directory file for FileNormalizedNameInformation correctly. |
+| **Message Sequence**          | 1.  Start a client to create a file by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE.|
+|                               | 2.  Client queries FileNormalizedNameInformation by sending QUERY\_INFO request. |
+|                               | 3.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.58.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_Query\_FileNormalizedNameInformation\_DirectoryFile |
+| **Description** | Verify whether server can handle QUERY requests to a file for FileNormalizedNameInformation correctly. |
+| **Prerequisites** ||
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (File)|
+|                          | QUERY\_INFO(SMB2\_0\_INFO\_FILE) |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
+| **Cleanup**              ||
+
+
+#### <a name="3.1.59"> Compression
+
+##### <a name="3.1.59.1"> Scenario
 
 |||
 |---|---|
@@ -3292,7 +3233,7 @@ This is used to test SMB2 common user scenarios.
 |                               | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
 | **Cluster Involved Scenario** | **NO** |
 
-##### <a name="3.1.57.2"> Test Case
+##### <a name="3.1.59.2"> Test Case
 
 |||
 |---|---|
@@ -3415,6 +3356,32 @@ This is used to test SMB2 common user scenarios.
 | **Cleanup**              ||
 
 
+#### <a name="3.1.60"> NetworkInterfaceInfo
+
+##### <a name="3.1.60.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify whether server can return available network interfaces. |
+| **Message Sequence**          | 1.  Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT|
+|                               | 2.  Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO. |
+|                               | 4.  Verifies the IOCTL response has appropriate NETWORK_INTERFACE_INFO structure| 
+|                               | 5.  Tear down the client by sending the following requests: CLOSE; TREE\_DISCONNECT; LOG\_OFF. |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.60.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT_NetworkInterfaceInfo_QuerySuccessful |
+| **Description** | Test that quering network interface returns NETWORK_INTERFACE_INFO structure. |
+| **Prerequisites** | The server implements dialect 3.11 and FSCTL_QUERY_NETWORK_INTERFACE_INFO. |
+| **Test Execution Steps** | 1.  Start a client by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT;|
+|                          | 2.  Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO. |
+|                          | 3.  Verifies the IOCTL response contains NETWORK_INTERFACE_INFO_Response. |
+|                          | 4.  Tear down the client by sending the following requests: TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
 ### <a name="3.2">SMB2 Feature Test
 
 Test scenarios are prioritized and designed based on customer interests and SMB3 new features.
@@ -3512,6 +3479,28 @@ Scenario see [Scenario](#3.1.13.1)
 ||Server responses successfully.|
 ||Client2 sends CREATE request to the same file with client1, and same AppInstanceId, and without DH2Q create context. Client2 should create the open successfully.|
 ||The first client sends another WRITE request and gets failure because the open is closed.|
+||Tear down client1.|
+||Tear down client2.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|AppInstanceId_Smb302|
+|**Description**|The case is designed to test if the server implements dialect 3.02, and when client fails over to a new client, check if the Open is closed.|
+|**Prerequisites**|The server implements dialect 3.02.|
+|**Test Execution Steps**|Client1 sends NEGOTIATE request with dialect 3.02 and gets NEGOTIATE response also with dialect 3.02.|
+||Client1 sends the following requests: SESSION_SETUP; TREE_CONNECT.|
+||Server responds successfully.|
+||Client1 sends CREATE request with the context SMB2_CREATE_APP_INSTANCE_ID, without DH2Q create context.|
+||Server responds successfully.|
+||Client2 sends the following requests: |
+||NEGOTIATE; SESSION_SETUP; TREE_CONNECT.|
+||Server responds successfully.|
+||Client2 sends CREATE request to the same file with client1, and same AppInstanceId, and without DH2Q create context.|
+||Client2 create fails with SHARING_VIOLATION for Windows Server 2012 and Windows Server 2012 R2, but opens successfully for all others.|
+||Client sends another WRITE request.|
+||Client1 gets SUCCESS for Windows Server 2012 and Windows Server 2012 R2, but fails with FILE_CLOSED for all others.|
 ||Tear down client1.|
 ||Tear down client2.|
 |**Cleanup**||
@@ -4682,6 +4671,37 @@ If the server disconnect the connection, the reconnect will be successful.
 ||LOGOFF|
 |**Cluster Involved Scenario**|**NO**|
 
+|||
+|---|---|
+|**Test ID**|DurableHandleV2_Reconnect_WithLeaseV1_WithDifferentFileName|
+|**Description**|Test reconnect with DurableHandleV2 and LeaseV1 context, but the file name is different will fail with STATUS_INVALID_PARAMETER.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV2 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV2 and LeaseV1 create context but to with a different filename|
+||Server sends STATUS_INVALID_PARAMETER response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
 
 |||
 |---|---|
@@ -4782,6 +4802,102 @@ If the server disconnect the connection, the reconnect will be successful.
 
 |||
 |---|---|
+|**Test ID**|DurableHandleV2_WithLeaseV2_WithoutHandleCaching|
+|**Description**|Test no durable handle is granted if requesting with DurableHandleV2 and LeaseV2 context, but SMB2_LEASE_HANDLE_CACHING bit is not set in LeaseState.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV2 and LeaseV2 create context but without SMB2_LEASE_HANDLE_CACHING|
+||Server sends CREATE response|
+||Verify that DurableHandle is not granted|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_WithLeaseV1_WithDifferentFileName|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context, but the file name is different. |
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_INVALID_PARAMETER|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_WithLeaseV1_WithoutHandleCaching|
+|**Description**|Test no durable handle is granted if requesting with DurableHandleV1 and LeaseV1 context, but SMB2_LEASE_HANDLE_CACHING bit is not set in LeaseState.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context but without SMB2_LEASE_HANDLE_CACHING|
+||Server sends CREATE response|
+||Verify that DurableHandle is not granted|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_ReOpenFromDiffClient|
+|**Description**|Verify that whether opening a file will fail if a previous client already had the persistent handle to this file.|
+|**Prerequisites**||
+|**Test Execution Steps**|SMB2 Negotiate with SUT|
+||SMB2 Session Setup|
+||SMB2 Tree Connect to Share|
+||SMB2 Create with CREATE_DURABLE_HANDLE_REQUEST_V2 context (Persistent Flag is set)|
+||Disconnect|
+||SMB2 Negotiate with SUT using new Client Guid|
+||SMB2 Session Setup|
+||SMB2 Tree Connect to the same Share|
+||SMB2 Create with same file name|
+||Verify the Create Response with Status STATUS_FILE_NOT_AVAILABLE |
+
+
+|||
+|---|---|
 |**Test ID**|DurableHandleV2_WithLeaseV1AndV2_WithDifferentLeaseKey|
 |**Description**|Test reconnect with DurableHandleV2, LeaseV1 and LeaseV2 context, but with different LeaseKey|
 |**Prerequisites**||
@@ -4813,21 +4929,367 @@ If the server disconnect the connection, the reconnect will be successful.
 ||Server sends LOGOFF response|
 |**Cleanup**||
 
+
 |||
 |---|---|
-|**Test ID**|PersistentHandle_ReOpenFromDiffClient|
-|**Description**|Verify that whether opening a file will fail if a previous client already had the persistent handle to this file.|
+|**Test ID**|DurableHandleV1_Reconnect_IncludeCreateDurableHandle|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context and include create durable request. |
 |**Prerequisites**||
-|**Test Execution Steps**|SMB2 Negotiate with SUT|
-||SMB2 Session Setup|
-||SMB2 Tree Connect to Share|
-||SMB2 Create with CREATE_DURABLE_HANDLE_REQUEST_V2 context (Persistent Flag is set)|
-||Disconnect|
-||SMB2 Negotiate with SUT using new Client Guid|
-||SMB2 Session Setup|
-||SMB2 Tree Connect to the same Share|
-||SMB2 Create with same file name|
-||Verify the Create Response with Status STATUS_FILE_NOT_AVAILABLE |
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1 create context and include create durable request.|
+||Server sends CREATE response with status STATUS_SUCCESS|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request| 
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_IncludeRequestV2|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context including SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1 create context including Smb2CreateDurableHandleRequestV2|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_INVALID_PARAMETER|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_IncludeReconnectV2|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context including SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1 create context including SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_INVALID_PARAMETER|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_WithoutFileIdPersistent|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context without FileId.Persistent.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1 create without FileId.Persistent|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_OBJECT_NAME_NOT_FOUND|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_WithDifferentLeaseKey|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context but with a different LeaseKey|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1 but different lease key|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_OBJECT_NAME_NOT_FOUND|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_LeaseIsNull|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context when Open.Lease is Null|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_OBJECT_NAME_NOT_FOUND|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_SessionIsNotNull|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context when Open.Session is not NULL|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client does not disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 and LeaseV1|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_OBJECT_NAME_NOT_FOUND|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_WithoutRequestLease|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context without SMB2_CREATE_REQUEST_LEASE|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client does not disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 without SMB2_CREATE_REQUEST_LEASE|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_OBJECT_NAME_NOT_FOUND|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_WithDifferentClientGuid|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context and different client guid.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client does not disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleReconnectV1 with different client GUID|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_OBJECT_NAME_NOT_FOUND|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_WithoutDurableHandle|
+|**Description**|Test reconnect with LeaseV1 context without DurableHandleV1|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with LeaseV1 create context excluding DurableHandleV1|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client does not disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with LeaseV1 excluding DurableHandleReconnectV1|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_OBJECT_NAME_NOT_FOUND|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV1_Reconnect_WithDifferentDurableOwner|
+|**Description**|Test reconnect with DurableHandleV1 and LeaseV1 context and different client credential account.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1 create context |
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client does not disconnect|
+||Create another client with different credential account and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request for exclusive open with DurableHandleV1 and LeaseV1|
+||Server sends CREATE response|
+||Verify that the server fail request with STATUS_ACCESS_DENIED|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
 
 
 #### <a name="3.2.8">Leasing
@@ -5562,6 +6024,14 @@ Scenario see section [Scenario](#3.1.6.1).
 ||Verify that server sets Connection.SigningAlgorithmCount to 1 from the response.|
 |**Cleanup**||
 
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported|
+|**Description**|This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.|
+|**Prerequisites**|The server implements dialect 3.11 and compression feature.|
+|**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_COMPRESSION_CAPABILITIES context and set CompressionAlgorithms to a unsupported value: 0x0004.|
+||Verify that server returns a Negotiate response, setting SMB2_COMPRESSION_CAPABILITIES negotiate response context with CompressionAlgorithmCount set to 1 and CompressionAlgorithms set to "NONE".|
+|**Cleanup**||
 
 |||
 |---|---|
@@ -6996,6 +7466,98 @@ Scenario see [Scenario](#3.1.57).
 |                          | 3.  Verifies the SMB2 connection is closed by SUT. | 
 | **Cleanup**              ||
 
+
+#### <a name="3.2.23"> NETWORK_INTERFACE_INFO
+
+This feature is to call IOCTL request with FSCTL\_QUERY\_NETWORK\_INTERFACE\_INFO to retrieve list of network interfaces from server.
+
+##### <a name="3.2.23.1"> Model
+
+Will not cover this feature in model.
+
+##### <a name="3.2.23.2"> Traditional Case
+
+Scenario see section [Scenario](#3.1.60.1)
+
+|||
+|---|---|
+|**Test ID**|NetworkInterfaceInfo_Query_ReturnsErrorStatus|
+|**Description**|Test that quering network interface returns error code when it fails.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO using invalid treeId to ask server to send list of network interfaces.|
+||Server sends IOCTL response|
+||Verify that IOCTL response status is STATUS_NETWORK_NAME_DELETED.|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+|||
+
+
+|||
+|---|---|
+|**Test ID**|NetworkInterfaceInfo_Query_ReturnsIPv4IPv6|
+|**Description**|Test that network interface info has IPv4 and IPv6.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO to ask server to send list of network interfaces.|
+||Server sends IOCTL response|
+||Verify that NETWORK_INTERFACE_INFO_Response contains IPv4 and IPv6 family.|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+|||
+
+
+|||
+|---|---|
+|**Test ID**|NetworkInterfaceInfo_ChangeConnection_BindCurrentSession|
+|**Description**|Test that current session is binded to new connection when different server IP is connected by client.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO to ask server to send list of network interfaces.|
+||Server sends IOCTL response|
+||Verify that NETWORK_INTERFACE_INFO_Response contains alternate IP address |
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends NEGOTIATE request using alternate IP address|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||Verify that alternate channel SessionId matches main channel SessionId|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+|||
+
 ### <a name="3.3">SMB2 Feature Combination
 
 Following scenarios extend “SMB2 Feature Test” by adding more complex message sequence in test.
@@ -7938,7 +8500,7 @@ Following scenarios extend “SMB2 Feature Test” by adding more complex messag
 
 |||
 |---|---|
-| **Test ID**              | SWNRegistrationEx\_InvalidIpAddress                                                   |
+| **Test ID**              | SWNRegistrationEx\_InvalidShareName                                                   |
 | **Description**         | Register with WitnessrRegisterEx and invalid sharename.                               |
 | **Prerequisites**        |                                                                                   |
 | **Test Execution Steps** | 1.  GetClusterResourceOwner                                                       |

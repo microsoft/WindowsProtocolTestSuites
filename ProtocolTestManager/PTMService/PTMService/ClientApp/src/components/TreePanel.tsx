@@ -14,11 +14,11 @@ interface TreePanelProps {
   selectAction: (data: SelectedRuleGroup) => void
 }
 
-const getGroup = (rules: Rule[], parent: string): Node[] => {
+const getGroups = (rules: Rule[], parent: string): Node[] => {
   return rules.map(rule => {
     const curr = parent ? `${parent}.${rule.Name}` : rule.Name
     if (rule.Rules != null) {
-      return { className: 'treeNode', value: curr, label: rule.DisplayName, categories: rule.Categories, children: getGroup(rule.Rules, curr) }
+      return { className: 'treeNode', value: curr, label: rule.DisplayName, categories: rule.Categories, children: getGroups(rule.Rules, curr) }
     }
     if (rule.MappingRules != null) {
       const hiddenNodes = rule.MappingRules.map(node => {
@@ -31,8 +31,8 @@ const getGroup = (rules: Rule[], parent: string): Node[] => {
   })
 }
 
-const createGroupItems = (rules: Rule[]): any[] => {
-  const groups: any[] = getGroup(rules, AllNode.value)
+const createGroupItems = (rules: Rule[]): Node[] => {
+  const groups = getGroups(rules, AllNode.value)
   return [
     {
       value: AllNode.value, label: AllNode.label, children: groups
@@ -51,6 +51,7 @@ const getItems = (rules: Rule[], parent: string): string[] => {
   })
   return results
 }
+
 const getExpanded = (rules: Rule[]): string[] => {
   const groups: string[] = getItems(rules, AllNode.value)
   return groups.concat(AllNode.value)
@@ -58,25 +59,37 @@ const getExpanded = (rules: Rule[]): string[] => {
 
 export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
   const data = createGroupItems(props.rules)
-  const expandedNode = getExpanded(props.rules)
+  const expandedNodes = getExpanded(props.rules)
   const [checked, setChecked] = useState<string[]>(props.checked)
-  const [expanded, setExpanded] = useState<string[]>(expandedNode)
+  const [expanded, setExpanded] = useState<string[]>(expandedNodes)
 
   useEffect(() => {
-    if (JSON.stringify(checked) != JSON.stringify(props.checked)) {
+    if (JSON.stringify(checked) !== JSON.stringify(props.checked)) {
       const data = { Name: props.groupName, Selected: checked }
       props.selectAction(data)
     }
   }, [checked])
 
   useEffect(() => {
-    if (JSON.stringify(checked) != JSON.stringify(props.checked)) {
+    if (JSON.stringify(checked) !== JSON.stringify(props.checked)) {
       setChecked(props.checked)
     }
   }, [props.checked])
 
+  useEffect(() => {
+    const childLists = document.getElementsByClassName('ms-List')
+    if (childLists.length > 0) {
+      for (let index = 0; index < childLists.length; index++) {
+        const childList = childLists.item(index)
+        if (childList?.id?.includes('GroupedListSection') ?? false) {
+          childList?.removeAttribute('role')
+        }
+      }
+    }
+  })
+
   return (
-        <div style={{ border: '1px solid rgba(0, 0, 0, 0.35)', padding: 5 + 'px' }}>
+        <div style={{ border: '1px solid rgba(0, 0, 0, 0.35)', padding: '5px' }}>
             <CheckboxTree nodes={data}
                 checked={checked}
                 expanded={expanded}
@@ -84,11 +97,11 @@ export const TreePanel: FunctionComponent<TreePanelProps> = (props) => {
                 onExpand={expanded => setExpanded(expanded)}
                 showNodeIcon={false}
                 icons={{
-                  check: <Icon iconName="CheckboxComposite" />,
-                  uncheck: <Icon iconName="Checkbox" />,
-                  halfCheck: <i className="ms-Icon ms-Icon--CheckboxIndeterminateCombo" />,
-                  expandClose: <Icon iconName="CaretHollow" />,
-                  expandOpen: <Icon iconName="CaretSolid" />
+                  check: <Icon aria-label='Checked' iconName="CheckboxComposite" />,
+                  uncheck: <Icon aria-label='Not checked' iconName="Checkbox" />,
+                  halfCheck: <i aria-label='Partially checked' role='img' className="ms-Icon ms-Icon--CheckboxIndeterminateCombo" />,
+                  expandClose: <Icon aria-label='Collapsed' iconName="CaretHollow" />,
+                  expandOpen: <Icon aria-label='Expanded' iconName="CaretSolid" />
                 }} />
         </div>
   )

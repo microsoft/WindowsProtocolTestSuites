@@ -882,14 +882,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         #region 3.1.5.19   Server Requests Canceling an Operation
 
         /// <summary>
-        /// Implement CancelinganOperation Interface
+        /// Implement CancelingAnOperation Interface
         /// Server requests to cancel an Operation
         /// This method is called by 3.1.5.7, and the scenario is in Scenario16_ByteRangeLock
         /// </summary>
         /// <param name="ioRequest">An implementation-specific identifier that is unique for each 
         /// outstanding IO operation. See [MS-CIFS] section 3.3.5.51.</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
-        MessageStatus CancelinganOperation(IORequest ioRequest);
+        MessageStatus CancelingAnOperation(IORequest ioRequest);
 
         #endregion
 
@@ -950,7 +950,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// To get whether open has manage.vol.privilege
         /// </summary>
         /// <param name="isSupported">True: if open has manage.vol.privilege.</param>
-        void GetopenHasManageVolPrivilege(out bool isSupported);
+        void GetOpenHasManageVolPrivilege(out bool isSupported);
 
         /// <summary>
         /// Get is restore has access
@@ -975,7 +975,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// defined in 3.1.5.17
         /// </summary>
         /// <param name="openListContains">True: if Open.ListContains</param>
-        void GetIsOpenListContains(out bool openListContains);
+        void GetIfOpenListContains(out bool openListContains);
 
         /// <summary>
         /// To get whether the link, through which file is opened, is found
@@ -993,13 +993,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// To get whether Quotas is supported.
         /// </summary>
         /// <param name="isQuotasSupported">True: if Quotas is supported</param>
-        void GetIFQuotasSupported(out bool isQuotasSupported);
+        void GetIfQuotasSupported(out bool isQuotasSupported);
 
         /// <summary> 
         /// To get whether ObjectIDs is supported.
         /// </summary>
         /// <param name="isObjectIDsSupported">True: if ObjectIDs is supported</param>
-        void GetIFObjectIDsSupported(out bool isObjectIDsSupported);
+        void GetIfObjectIDsSupported(out bool isObjectIDsSupported);
 
         /// <summary>
         /// Check if requirement R507 is implemented

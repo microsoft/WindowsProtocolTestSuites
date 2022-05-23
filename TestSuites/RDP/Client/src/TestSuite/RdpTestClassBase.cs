@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
@@ -50,7 +51,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool isWindowsImplementation = true;
         protected bool DropConnectionForInvalidRequest = true;
         protected bool bVerifyRdpbcgrMessage;
-        protected bool isclientSupportPersistentBitmapCache = false;
+        protected bool isClientSupportPersistentBitmapCache = false;
         protected ushort payloadLength = 15992; //payload length for RDP_BW_PAYLOAD and RDP_BW_STOP
         protected int payloadNum = 10;//How many RDP_BW_PAYLOAD will be sent
 
@@ -59,6 +60,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool TurnOffRDPEIVerification;
         protected bool TurnOffRDPEUSBVerification;
         protected bool TurnOffRDPRFXVerification;
+        protected bool invalidCredentialSet = false;
 
         // Variable for SUT display verification
         protected bool verifySUTDisplay = false;
@@ -221,7 +223,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             return null;
         }
 
-        protected void TriggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false)
+        protected void TriggerClientRDPConnect(EncryptedProtocol enProtocol, bool fullScreen = false, bool invalidCredentials = false)
         {
             int iResult;
             string strMethod = null;
@@ -232,7 +234,15 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 case EncryptedProtocol.NegotiationCredSsp:
                 case EncryptedProtocol.NegotiationTls:
                     {
-                        if (fullScreen)
+                        if (invalidCredentials)
+                        {
+                            iResult = 0;
+                            CredentialManagerAddInvalidAccount();
+                            // Will delay for five seconds as 12R2 is slower to execute Account Name change
+                            Thread.Sleep(5000);
+                            iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachInvalidAccount(this.TestContext.TestName);
+                        }
+                        else if (fullScreen)
                         {
                             iResult = this.sutControlAdapter.RDPConnectWithNegotiationApproachFullScreen(this.TestContext.TestName);
                         }
@@ -247,10 +257,23 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 // direct approach
                 case EncryptedProtocol.DirectCredSsp:
                     {
-                        if (fullScreen)
+                        if (invalidCredentials)
+                        {
+                            iResult = 0;
+                            CredentialManagerAddInvalidAccount();
+                            // Will delay for five seconds as 12R2 is slower to execute Account Name change
+                            Thread.Sleep(5000);
+                            iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPInvalidAccount(this.TestContext.TestName);
+                        }
+                        else if (fullScreen)
+                        {
                             iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSPFullScreen(this.TestContext.TestName);
+                        }
                         else
+                        {
                             iResult = this.sutControlAdapter.RDPConnectWithDirectCredSSP(this.TestContext.TestName);
+                        }
+
                         strMethod = "RDPConnectWithDirectCredSSP";
                     }
                     break;
@@ -667,9 +690,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     TS_BITMAPCACHE_CAPABILITYSET_REV2 bitmapCacheV2 = (TS_BITMAPCACHE_CAPABILITYSET_REV2)cap;
                     if ((bitmapCacheV2.CacheFlags & CacheFlags_Values.PERSISTENT_KEYS_EXPECTED_FLAG) != 0)
                     {
-                        isclientSupportPersistentBitmapCache = true;
+                        isClientSupportPersistentBitmapCache = true;
                     }
-
                 }
             }
         }
@@ -752,6 +774,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             try
             {
                 iResult = sutControlAdapter?.TriggerClientDisconnectAll(this.TestContext.TestName);
+
+                if (invalidCredentialSet)
+                {
+                    CredentialManagerReverseInvalidAccount();
+                }
             }
             catch (Exception ex)
             {
@@ -764,6 +791,67 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 TestSite.Log.Add(LogEntryKind.Debug, "The result of TriggerClientDisconnectAll is {0}.", iResult);
             }
+        }
+
+        /// <summary>
+        /// Trigger Change Of Stored Credentials To Invalid User Account.
+        /// </summary>
+        public void CredentialManagerAddInvalidAccount()
+        {
+            int? iResult;
+
+            try
+            {
+                iResult = sutControlAdapter?.CredentialManagerAddInvalidAccount(this.TestContext.TestName);
+                invalidCredentialSet = true;
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during CredentialManagerAddInvalidAccount(): {0}.", ex);
+                TestSite.Assert.Fail("Adding an invalid credential failed");
+                return;
+            }
+
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of CredentialManagerAddInvalidAccount is {0}.", iResult);
+            }
+
+            if (iResult < 0)
+            {
+                TestSite.Assert.Fail("Adding an invalid credential failed"); ;
+            }
+        }
+
+        /// <summary>
+        /// Trigger Change Of Stored Credentials To Valid User Account.
+        /// </summary>
+        public void CredentialManagerReverseInvalidAccount()
+        {
+            int? iResult;
+
+            try
+            {
+                iResult = sutControlAdapter?.CredentialManagerReverseInvalidAccount(this.TestContext.TestName);
+                invalidCredentialSet = false;
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during CredentialManagerReverseInvalidAccount(): {0}.", ex);
+                TestSite.Assert.Fail("Removing the invalid credential failed");
+                return;
+            }
+
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of CredentialManagerReverseInvalidAccount is {0}.", iResult);
+            }
+
+            if (iResult < 0)
+            {
+                TestSite.Assert.Fail("Removing the invalid credential failed");
+            }
+
         }
 
         /// <summary>

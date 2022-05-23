@@ -7158,6 +7158,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk
         STATUS_HMAC_NOT_SUPPORTED = 0xC000A001,
 
         /// <summary>
+        /// MessageId: STATUS_AUTH_TAG_MISMATCH
+        /// MessageText:
+        /// The computed authentication tag did not match the input authentication tag.
+        /// </summary>
+        STATUS_AUTH_TAG_MISMATCH = 0xC000A002,
+
+        /// <summary>
         /// MessageId: STATUS_IPSEC_QUEUE_OVERFLOW
         /// MessageText:
         /// The IPSEC queue overflowed.

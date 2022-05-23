@@ -784,7 +784,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test reconnect with DurableHandleV2, LeaseV1 and LeaseV2 context, but with different LeaseKey.")]
         public void DurableHandleV2_WithLeaseV1AndV2_WithDifferentLeaseKey()
         {
-            DurableHandleV2_Reconnect_WithLeaseV2();
+            DurableHandleV2_Reconnect_ObjectNotFound();
         }
         #endregion
 
@@ -930,7 +930,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             clientAfterDisconnection.Disconnect();
         }
 
-        private void DurableHandleV2_Reconnect_WithLeaseV2()
+        private void DurableHandleV2_Reconnect_ObjectNotFound()
         {
             #region Check Applicability
             TestConfig.CheckDialect(DialectRevision.Smb30);
@@ -948,56 +948,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 LogEntryKind.Comment,
                 "Client connects to server and opens file with a durable handle");
 
-            uint treeIdBeforeDisconnection;
-            Connect(
-                DialectRevision.Smb30,
-                clientBeforeDisconnection,
-                clientGuid,
-                testConfig.AccountCredential,
-                ConnectShareType.BasicShareWithoutAssert,
-                out treeIdBeforeDisconnection,
-                null);
-
             Guid createGuid = Guid.NewGuid();
             Guid leaseKey = Guid.NewGuid();
             LeaseStateValues leaseState = LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING | LeaseStateValues.SMB2_LEASE_WRITE_CACHING;
             FILEID fileIdBeforeDisconnection;
             Smb2CreateContextResponse[] serverCreateContexts = null;
-            status = clientBeforeDisconnection.Create(
-                treeIdBeforeDisconnection,
-                fileName,
-                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
-                out fileIdBeforeDisconnection,
-                out serverCreateContexts,
-                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
-                new Smb2CreateContextRequest[] {
-                    new Smb2CreateDurableHandleRequestV2
-                    {
-                         CreateGuid = createGuid,
-                         Flags = 0,
-                    },
-                    new Smb2CreateRequestLease
-                    {
-                        LeaseKey = leaseKey,
-                        LeaseState = leaseState,
-                    }
-                },
-                shareAccess: ShareAccess_Values.NONE,
-                checker: (header, response) =>
-                {
-                    BaseTestSite.Assert.AreEqual(
-                        Smb2Status.STATUS_SUCCESS,
-                        header.Status,
-                        "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
-                    CheckCreateContextResponses(
-                        serverCreateContexts,
-                        new DefaultDurableHandleV2ResponseChecker(
-                            BaseTestSite,
-                            0,
-                            uint.MaxValue));
-                });
+            uint treeIdBeforeDisconnection;
 
-            status = clientBeforeDisconnection.Write(treeIdBeforeDisconnection, fileIdBeforeDisconnection, content);
+            Connect_To_Server_WithDurableHandleV2(fileName, content, createGuid, clientGuid, leaseKey, leaseState, out treeIdBeforeDisconnection, out fileIdBeforeDisconnection, out serverCreateContexts);
+
             #endregion
 
             clientBeforeDisconnection.Disconnect();
@@ -1044,14 +1003,66 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
             BaseTestSite.Assert.AreEqual(
                     Smb2Status.STATUS_OBJECT_NAME_NOT_FOUND, status,
-                    "[MS-SMB2] Section 3.3.5.9.7 The SMB2_CREATE_REQUEST_LEASE_V2 create context is also present in the request, Connection.Dialect belongs to the SMB 3.x dialect family, the server supports directory leasing, Open.Lease is not NULL, and Open.Lease.LeaseKey does not match the LeaseKey provided in the SMB2_CREATE_REQUEST_LEASE_V2 create context." +
-                    "the server MUST fail the request with STATUS_OBJECT_NAME_NOT_FOUND.");
+                    "[MS-SMB2] Section 3.3.5.9.7  If any of the following conditions is TRUE, the server MUST fail the request with STATUS_OBJECT_NAME_NOT_FOUND: " +
+                    "The SMB2_CREATE_REQUEST_LEASE_V2 create context is also present in the request, Connection.Dialect belongs to the SMB 3.x dialect family," +
+                    "the server supports directory leasing, Open.Lease is not NULL, and Open.Lease.LeaseKey does not match the LeaseKey provided " +
+                    "in the SMB2_CREATE_REQUEST_LEASE_V2 create context.");
 
             #endregion
 
             clientAfterDisconnection.TreeDisconnect(treeIdAfterDisconnection);
             clientAfterDisconnection.LogOff();
             clientAfterDisconnection.Disconnect();
+        }
+
+        private void Connect_To_Server_WithDurableHandleV2(string fileName, string content, Guid createGuid, Guid clientGuid, Guid leaseKey, LeaseStateValues leaseState, 
+            out uint treeIdBeforeDisconnection, out FILEID fileIdBeforeDisconnection, out Smb2CreateContextResponse[] serverCreateContexts)
+        {
+            Smb2CreateContextResponse[] serverCreateContextsResponse = null;
+            Connect(
+                DialectRevision.Smb30,
+                clientBeforeDisconnection,
+                clientGuid,
+                testConfig.AccountCredential,
+                ConnectShareType.BasicShareWithoutAssert,
+                out treeIdBeforeDisconnection,
+                null);
+
+            status = clientBeforeDisconnection.Create(
+                treeIdBeforeDisconnection,
+                fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out fileIdBeforeDisconnection,
+                out serverCreateContextsResponse,
+                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                new Smb2CreateContextRequest[] {
+                    new Smb2CreateDurableHandleRequestV2
+                    {
+                         CreateGuid = createGuid,
+                         Flags = 0,
+                    },
+                    new Smb2CreateRequestLease
+                    {
+                        LeaseKey = leaseKey,
+                        LeaseState = leaseState,
+                    }
+                },
+                shareAccess: ShareAccess_Values.NONE,
+                checker: (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "{0} should be successful, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                    CheckCreateContextResponses(
+                        serverCreateContextsResponse,
+                        new DefaultDurableHandleV2ResponseChecker(
+                            BaseTestSite,
+                            0,
+                            uint.MaxValue));
+                });
+            serverCreateContexts = serverCreateContextsResponse;
+            status = clientBeforeDisconnection.Write(treeIdBeforeDisconnection, fileIdBeforeDisconnection, content);
         }
         #endregion
     }

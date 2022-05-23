@@ -1,12 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -64,6 +61,71 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             //Expect SUT send Client MCS Connect Initial PDU.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client MCS Connect Initial PDU.");
             this.rdpbcgrAdapter.ExpectPacket<Client_MCS_Connect_Initial_Pdu_with_GCC_Conference_Create_Request>(waitTime);
+
+            #endregion
+        }
+
+        [TestMethod]
+        [Priority(0)]
+        [TestCategory("BVT")]
+        [TestCategory("RDP7.0")]
+        [TestCategory("RDPBCGR")]
+        [TestCategory("BasicRequirement")]
+        [TestCategory("BasicFeature")]
+        [Description(@"This test case tests: 1) The verification of the credentials (Username) to confirm a connection could not be initiated.")]
+        public void BVT_ConnectionTest_ConnectionInitiation_InvalidAccount_PositiveTest()
+        {
+            #region Test Description
+            /* 
+             This test case tests:
+             1) The correctness of Client X.224 Connection Request PDU.
+             2) SUT can process the valid Server X.224 Connection Confirm PDU correctly.
+
+             Test Execution Steps:
+             1.	Trigger SUT to initiate a RDP connection with sending a Client X.224 Connection Request PDU.
+             2.	Verify the received Client X.224 Connection Request PDU and respond a valid Server X.224 Connection Confirm PDU.
+             3.	Test Suite expects SUT continue the connection sequence with sending a Client MCS Connect Initial PDU 
+                with GCC Conference Create Request. 
+            */
+            #endregion
+
+            #region Test Sequence
+            if(transportProtocol != EncryptedProtocol.DirectCredSsp && transportProtocol != EncryptedProtocol.NegotiationCredSsp)
+            {
+                this.TestSite.Assume.Inconclusive("This case requires using CredSSP encrypted protocol");
+            }
+
+            //Start RDP listening.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening with transport protocol: {0}", transportProtocol.ToString());
+            this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
+
+            #region Trigger client to initiate a RDP connection
+            //Trigger client to initiate a RDP connection.
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Triggering SUT to initiate a RDP connection to server.");
+            TriggerClientRDPConnect(transportProtocol, false, true);
+            #endregion
+
+            if (transportProtocol == EncryptedProtocol.DirectCredSsp)
+            {
+                //Expect the transport layer connection request.
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start a transport layer connection request (TCP).");
+                this.rdpbcgrAdapter.ExpectTransportConnectionForInvalidAccount(RDPSessionType.Normal);
+            }
+
+            if (transportProtocol == EncryptedProtocol.NegotiationCredSsp)
+            {
+                //Expect the transport layer connection request.
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to start a transport layer connection request (TCP).");
+                this.rdpbcgrAdapter.ExpectTransportConnection(RDPSessionType.Normal);
+
+                //Expect SUT send a Client X.224 Connection Request PDU.
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client X.224 Connection Request PDU");
+                this.rdpbcgrAdapter.ExpectPacket<Client_X_224_Connection_Request_Pdu>(waitTime);
+
+                //Respond a Server X.224 Connection Confirm PDU.
+                this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Server X.224 Connection Confirm PDU to SUT. Selected protocol: {0}; Extended Client Data supported: false", selectedProtocol.ToString());
+                this.rdpbcgrAdapter.Server_X_224_Connection_Confirm(selectedProtocol, false, true, NegativeType.None, invalidAccount: true);
+            }
 
             #endregion
         }
@@ -602,7 +664,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Server Control Granted Control PDU to SUT.");
             this.rdpbcgrAdapter.ServerControlGrantedControl();
 
-            if (this.isclientSupportPersistentBitmapCache)
+            if (this.isClientSupportPersistentBitmapCache)
             {
                 //Expect a Client Persistent Key List PDU.
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client Persistent Key List PDU.");
@@ -760,7 +822,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.rdpbcgrAdapter.ServerControlGrantedControl();
 
 
-            if (this.isclientSupportPersistentBitmapCache)
+            if (this.isClientSupportPersistentBitmapCache)
             {
                 //Expect a Client Persistent Key List PDU.
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client Persistent Key List PDU.");
@@ -918,7 +980,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.rdpbcgrAdapter.ServerControlGrantedControl();
 
 
-            if (this.isclientSupportPersistentBitmapCache)
+            if (this.isClientSupportPersistentBitmapCache)
             {
                 //Expect a Client Persistent Key List PDU.
                 this.TestSite.Log.Add(LogEntryKind.Comment, "Expecting SUT to send a Client Persistent Key List PDU.");

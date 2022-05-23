@@ -27,7 +27,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         // For RDPEDISP SUT Control Adapter
         DISPLAY_UPDATE_RESOLUTION = 0x0201,
         DISPLAY_UPDATE_MONITORS = 0x0202,
-        DISPLAY_FULLSCREEN = 0x0203
+        DISPLAY_FULLSCREEN = 0x0203,
+
+        // For Credential Manager
+        CREDENTIAL_MANAGER_ADD_INVALID_ACCOUNT = 0x0006,
+        CREDENTIAL_MANAGER_REVERSE_INVALID_ACCOUNT = 0x0007,
     }
 
     /// <summary>

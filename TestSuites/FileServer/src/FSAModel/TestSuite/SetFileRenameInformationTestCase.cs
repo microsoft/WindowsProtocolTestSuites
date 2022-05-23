@@ -28,11 +28,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         }
         
         #region Expect Delegates
-        public delegate void GetIsOpenListContainsDelegate1(bool openListContains);
+        public delegate void GetIfOpenListContainsDelegate1(bool openListContains);
         #endregion
         
         #region Event Metadata
-        static System.Reflection.MethodBase GetIsOpenListContainsInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetIsOpenListContains", typeof(bool).MakeByRefType());
+        static System.Reflection.MethodBase GetIfOpenListContainsInfo = TestManagerHelpers.GetMethodInfo(typeof(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.IFSAAdapter), "GetIfOpenListContains", typeof(bool).MakeByRefType());
         #endregion
         
         #region Adapter Instances
@@ -79,11 +79,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S18\'");
             bool temp0;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp0);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp0);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp0);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp0);
             this.Manager.Comment("reaching state \'S27\'");
-            int temp5 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS0GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS0GetIsOpenListContainsChecker1)));
+            int temp5 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS0GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS0GetIsOpenListContainsChecker1)));
             if ((temp5 == 0)) {
                 this.Manager.Comment("reaching state \'S36\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp1;
@@ -159,13 +159,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         }
         
         private void SetFileRenameInformationTestCaseS0GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S27");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S27");
         }
         
         private void SetFileRenameInformationTestCaseS0GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S27");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S27");
         }
         #endregion
         
@@ -185,11 +185,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S23\'");
             bool temp6;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp6);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp6);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp6);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp6);
             this.Manager.Comment("reaching state \'S32\'");
-            int temp11 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS10GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS10GetIsOpenListContainsChecker1)));
+            int temp11 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS10GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS10GetIsOpenListContainsChecker1)));
             if ((temp11 == 0)) {
                 this.Manager.Comment("reaching state \'S46\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp7;
@@ -265,13 +265,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         }
         
         private void SetFileRenameInformationTestCaseS10GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S32");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S32");
         }
         
         private void SetFileRenameInformationTestCaseS10GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S32");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S32");
         }
         #endregion
         
@@ -291,11 +291,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S24\'");
             bool temp12;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp12);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp12);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp12);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp12);
             this.Manager.Comment("reaching state \'S33\'");
-            int temp17 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS12GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS12GetIsOpenListContainsChecker1)));
+            int temp17 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS12GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS12GetIsOpenListContainsChecker1)));
             if ((temp17 == 0)) {
                 this.Manager.Comment("reaching state \'S48\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp13;
@@ -375,13 +375,13 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
         }
         
         private void SetFileRenameInformationTestCaseS12GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S33");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S33");
         }
         
         private void SetFileRenameInformationTestCaseS12GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S33");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S33");
         }
         #endregion
         
@@ -401,11 +401,11 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S25\'");
             bool temp18;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp18);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp18);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp18);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp18);
             this.Manager.Comment("reaching state \'S34\'");
-            int temp23 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS14GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS14GetIsOpenListContainsChecker1)));
+            int temp23 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS14GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS14GetIsOpenListContainsChecker1)));
             if ((temp23 == 0)) {
                 this.Manager.Comment("reaching state \'S50\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp19;
@@ -485,13 +485,13 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
         }
         
         private void SetFileRenameInformationTestCaseS14GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S34");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S34");
         }
         
         private void SetFileRenameInformationTestCaseS14GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S34");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S34");
         }
         #endregion
         
@@ -511,11 +511,11 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S26\'");
             bool temp24;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp24);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp24);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp24);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp24);
             this.Manager.Comment("reaching state \'S35\'");
-            int temp29 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS16GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS16GetIsOpenListContainsChecker1)));
+            int temp29 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS16GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS16GetIsOpenListContainsChecker1)));
             if ((temp29 == 0)) {
                 this.Manager.Comment("reaching state \'S52\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp25;
@@ -595,13 +595,13 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
         }
         
         private void SetFileRenameInformationTestCaseS16GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S35");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S35");
         }
         
         private void SetFileRenameInformationTestCaseS16GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S35");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S35");
         }
         #endregion
         
@@ -621,11 +621,11 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S19\'");
             bool temp30;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp30);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp30);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp30);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp30);
             this.Manager.Comment("reaching state \'S28\'");
-            int temp35 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS2GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS2GetIsOpenListContainsChecker1)));
+            int temp35 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS2GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS2GetIsOpenListContainsChecker1)));
             if ((temp35 == 0)) {
                 this.Manager.Comment("reaching state \'S38\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp31;
@@ -701,13 +701,13 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
         }
         
         private void SetFileRenameInformationTestCaseS2GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S28");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S28");
         }
         
         private void SetFileRenameInformationTestCaseS2GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S28");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S28");
         }
         #endregion
         
@@ -727,11 +727,11 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S20\'");
             bool temp36;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp36);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp36);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp36);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp36);
             this.Manager.Comment("reaching state \'S29\'");
-            int temp41 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS4GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS4GetIsOpenListContainsChecker1)));
+            int temp41 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS4GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS4GetIsOpenListContainsChecker1)));
             if ((temp41 == 0)) {
                 this.Manager.Comment("reaching state \'S40\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp37;
@@ -807,13 +807,13 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
         }
         
         private void SetFileRenameInformationTestCaseS4GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S29");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S29");
         }
         
         private void SetFileRenameInformationTestCaseS4GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S29");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S29");
         }
         #endregion
         
@@ -833,11 +833,11 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S21\'");
             bool temp42;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp42);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp42);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp42);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp42);
             this.Manager.Comment("reaching state \'S30\'");
-            int temp47 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS6GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS6GetIsOpenListContainsChecker1)));
+            int temp47 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS6GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS6GetIsOpenListContainsChecker1)));
             if ((temp47 == 0)) {
                 this.Manager.Comment("reaching state \'S42\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp43;
@@ -913,13 +913,13 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
         }
         
         private void SetFileRenameInformationTestCaseS6GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S30");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S30");
         }
         
         private void SetFileRenameInformationTestCaseS6GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S30");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S30");
         }
         #endregion
         
@@ -939,11 +939,11 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S22\'");
             bool temp48;
-            this.Manager.Comment("executing step \'call GetIsOpenListContains(out _)\'");
-            this.IFSAAdapterInstance.GetIsOpenListContains(out temp48);
-            this.Manager.AddReturn(GetIsOpenListContainsInfo, null, temp48);
+            this.Manager.Comment("executing step \'call GetIfOpenListContains(out _)\'");
+            this.IFSAAdapterInstance.GetIfOpenListContains(out temp48);
+            this.Manager.AddReturn(GetIfOpenListContainsInfo, null, temp48);
             this.Manager.Comment("reaching state \'S31\'");
-            int temp53 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS8GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIsOpenListContainsInfo, null, new GetIsOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS8GetIsOpenListContainsChecker1)));
+            int temp53 = this.Manager.ExpectReturn(this.QuiescenceTimeout, true, new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS8GetIsOpenListContainsChecker)), new ExpectedReturn(SetFileRenameInformationTestCase.GetIfOpenListContainsInfo, null, new GetIfOpenListContainsDelegate1(this.SetFileRenameInformationTestCaseS8GetIsOpenListContainsChecker1)));
             if ((temp53 == 0)) {
                 this.Manager.Comment("reaching state \'S44\'");
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp49;
@@ -1019,13 +1019,13 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
         }
         
         private void SetFileRenameInformationTestCaseS8GetIsOpenListContainsChecker(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out False]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIsOpenListContains, state S31");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out False]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, openListContains, "openListContains of GetIfOpenListContains, state S31");
         }
         
         private void SetFileRenameInformationTestCaseS8GetIsOpenListContainsChecker1(bool openListContains) {
-            this.Manager.Comment("checking step \'return GetIsOpenListContains/[out True]\'");
-            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIsOpenListContains, state S31");
+            this.Manager.Comment("checking step \'return GetIfOpenListContains/[out True]\'");
+            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, openListContains, "openListContains of GetIfOpenListContains, state S31");
         }
         #endregion
     }
