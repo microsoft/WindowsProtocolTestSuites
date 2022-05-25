@@ -1,4 +1,4 @@
-trigger: none 
+trigger: none
 
 variables:
   - group: Build Variables
@@ -11,8 +11,8 @@ resources:
       ref: AzurePipelines-main
 
 
-pool: 
-  vmImage: windows-2019
+pool:
+  vmImage: windows-2022
 
 jobs:
 - job:
@@ -25,8 +25,8 @@ jobs:
 
 - job:
   displayName: Build RDPSUTControlAgent (Java, CSharp, Python)
-  pool: 
-    vmImage: windows-2019
+  pool:
+    vmImage: windows-2022
   workspace:
     clean: false
   timeoutInMinutes: 0

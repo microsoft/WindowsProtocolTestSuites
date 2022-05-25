@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net5.0</targetframework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -12,7 +12,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter</RootNamespace>
     <OldToolsVersion>4.0</OldToolsVersion>
@@ -52,6 +52,6 @@
     <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
   </ItemGroup>
 </Project>

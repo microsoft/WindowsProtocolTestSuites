@@ -1,7 +1,7 @@
 stages:
   - stage: Build_Test_Suite
     pool:
-      vmImage: windows-2019
+      vmImage: windows-2022
     jobs:
       - job:
         displayName: Build Test Suite
@@ -44,7 +44,7 @@ stages:
               PathtoPublish: CommonScripts
               ArtifactName: CommonScripts
             condition: succeededOrFailed()
-         
+
       - job:
         displayName: Build RDP SUT Control Agents
         workspace:

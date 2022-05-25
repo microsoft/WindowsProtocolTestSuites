@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -11,7 +11,7 @@
     <OutputPath>bin\fxcop\</OutputPath>
     <DefineConstants>FXCOP;TRACE</DefineConstants>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
@@ -72,8 +72,7 @@
     <Content Include="MixedOplockLease\MixedOplockLease.cord" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
   </ItemGroup>
 </Project>

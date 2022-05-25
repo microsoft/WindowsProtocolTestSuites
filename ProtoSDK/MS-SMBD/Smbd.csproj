@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <targetframework>net5.0</targetframework>
+    <targetframework>net6.0</targetframework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd</RootNamespace>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd</AssemblyName>
@@ -63,9 +63,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-  </ItemGroup>
+
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />

@@ -4,7 +4,7 @@
 Param(
     [string]$Configuration="Release",
     [string]$OutDir
-) 
+)
 
 Write-Host =============================================
 Write-Host     Start to build Kerberos Test Suite
@@ -13,7 +13,7 @@ Write-Host =============================================
 $InvocationPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $TestSuiteRoot = "$InvocationPath/../../../"
 
-if ([string]::IsNullOrEmpty($OutDir)) { 
+if ([string]::IsNullOrEmpty($OutDir)) {
     $OutDir = "$TestSuiteRoot/drop/TestSuites/Kerberos"
 }
 
@@ -30,7 +30,7 @@ Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination
 
 New-Item -ItemType Directory $OutDir/Scripts -Force
 Copy-Item  "$TestSuiteRoot/TestSuites/Kerberos/Setup/Scripts/*" -Destination "$OutDir/Scripts/" -Recurse -Force
-foreach ($curr in $CommonScripts) { 
+foreach ($curr in $CommonScripts) {
     Copy-Item  "$TestSuiteRoot/CommonScripts/$curr" -Destination "$OutDir/Scripts/" -Recurse -Force
 }
 

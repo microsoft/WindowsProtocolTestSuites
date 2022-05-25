@@ -1,4 +1,4 @@
-trigger: none 
+trigger: none
 
 variables:
   - group: External Repo Variables
@@ -13,8 +13,8 @@ resources:
 jobs:
 - job:
   displayName: Verify Pull Requests
-  pool: 
-    vmImage: windows-2019
+  pool:
+    vmImage: windows-2022
   workspace:
     clean: false
   timeoutInMinutes: 0
