@@ -5,7 +5,7 @@
 .SYNOPSIS
 	Install prerequisite tools
 .DESCRIPTION
-	This Powershell script is used to download and install prerequisite software dependencies for test suites. 
+	This Powershell script is used to download and install prerequisite software dependencies for test suites.
 	It contains one parameter "Category", which is the name of test suite and you can find it in PrerequisitesConfig.xml.
 .PARAMETER Category
 	The Category is used to specify which set of tools need to be downloaded and installed, based on different test suite names, such as "FileServer", Categories are defined in PrerequisitesConfig.xml
@@ -40,7 +40,7 @@ Param
 )
 
 Function CheckInternetConnection{
-  
+
 	Try
 	{
 		$status = Test-Connection -ComputerName "www.microsoft.com" -count 5 -Quiet
@@ -55,7 +55,7 @@ Function CheckInternetConnection{
 Function CheckCategory{
 
 	Write-Host "Reading Prerequisites Configure file..."
-	[xml]$toolXML = Get-Content -Path $ConfigPath 
+	[xml]$toolXML = Get-Content -Path $ConfigPath
 
 	# Check if Category exists.
 	$CategoryItem = $toolXML.Dependency.$Category.tool;
@@ -87,9 +87,9 @@ Function CheckIfAppInstalled
 			'HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
 		)
 	}
-	
+
 	$app = Get-ItemProperty $regpath | .{process{if($_.DisplayName -and $_.UninstallString) { $_ } }} | Where-Object {$_.DisplayName -match $AppName} | Select DisplayName, DisplayVersion -First 1
-	
+
 	if($app)
 	{
 		if($Compatible)
@@ -124,11 +124,11 @@ Function CheckIfVSExtensionInstalled
 	}
 
 	# Search the dll name in the extension folder of VS installation path.
-	# If the dll name can be found, then the extension is installed.  
+	# If the dll name can be found, then the extension is installed.
 
 	foreach ($path in $VSInstallationPaths)
 	{
-		if ($AppName -match "2019" -and $path -match "2019")
+		if ($AppName -match "2022" -and $path -match "2022")
 		{
 			$DllPath = Get-ChildItem -Path $path\Common7\IDE\Extensions -Filter $DllName -Recurse
 			if(-not $DllPath)
@@ -136,9 +136,9 @@ Function CheckIfVSExtensionInstalled
 				Write-Host "$AppName is not installed in $path" -ForegroundColor Yellow
 				return $false
 			}
-			else 
+			else
 			{
-				Write-Host "$AppName is already installed in $path"	
+				Write-Host "$AppName is already installed in $path"
 			}
 		}
 	}
@@ -192,8 +192,8 @@ Function GetDownloadTools{
 		[string]$DpConfigPath,
 		[string]$ToolCategory
 	)
-	   
-	[xml]$toolXML = Get-Content -Path $DpConfigPath   
+
+	[xml]$toolXML = Get-Content -Path $DpConfigPath
 
 	$tools = New-Object System.Collections.ArrayList;
 
@@ -211,10 +211,10 @@ Function GetDownloadTools{
 		$tool.URL = $item.url
 		$tool.InstallFileName = $item.InstallFileName
 		$tool.DllName = $item.DllName
-		
+
 		$tool.NeedRestart = $false
 		$tool.BackwardCompatible = $true
-		
+
 		if($item.NeedRestart)
 		{
 			$tool.NeedRestart = [bool]$item.NeedRestart;
@@ -297,11 +297,11 @@ Function DownloadAndInstallApplication
 	{
 		Write-Host "Mounting ISO image";
 		$OutputPath = MountISOAndGetAppPath -AppName $AppItem.InstallFileName -ISOPath $OutputPath
-		Write-Host $OutputPath        
-	}    
-			
+		Write-Host $OutputPath
+	}
+
 	# start to Install file
-	
+
 	$content = "Installing " + $AppItem.Name + ". Please wait..."
 	Write-Host $content
 
@@ -327,8 +327,8 @@ Function DownloadAndInstallApplication
 	{
 		$failedList += $AppItem.Name
 		$content = "Install " + $AppItem.Name +" failed, Error Code:" + $ExitCode
-		Write-Host "ERROR $ExitCode"; 
-	}    
+		Write-Host "ERROR $ExitCode";
+	}
 }
 
 # Find the Visual Studio installation path of a specific version
@@ -341,7 +341,7 @@ Function FindSpecificVersionOfVisualStudio
 
 	[string[]]$VSPath = $VSInstallationPaths | Where-Object{$_ -match $Version}
 
-	# VS extension can be installed on all the same versions of the Visual studio ( For example, 2019 Enterprise, 2019 Professional ) at one time. 		
+	# VS extension can be installed on all the same versions of the Visual studio ( For example, 2022 Enterprise, 2022 Professional ) at one time.
 	# So only one path is enough.
 	return $VSPath[0]
 }
@@ -358,21 +358,21 @@ Function DownloadAndInstallVsExtension
 	DownloadApplication -AppItem $AppItem -OutputPath $OutputPath
 
 	# start to Install file
-	
+
 	$content = "Installing " + $AppItem.Name + ". Please wait..."
 	Write-Host $content
 
 	$FLAGS  = $AppItem.Arguments
 
-	if ($AppItem -match "2019") 
+	if ($AppItem -match "2022")
 	{
-		$path = FindSpecificVersionOfVisualStudio -Version 2019 -VSInstallationPaths $VSInstallationPaths	
+		$path = FindSpecificVersionOfVisualStudio -Version 2022 -VSInstallationPaths $VSInstallationPaths
 	}
 	else
 	{
 		$failedList += $AppItem.Name
-		$content = "Install " + $AppItem.Name +" failed, we only support install Visual Studio 2019 extensions now."
-		Write-Host "ERROR $content"; 
+		$content = "Install " + $AppItem.Name +" failed, we only support install Visual Studio 2022 extensions now."
+		Write-Host "ERROR $content";
 	}
 
 	$ExitCode = (Start-Process -FILEPATH "$path\Common7\IDE\vsixinstaller.exe" -ArgumentList "$OutputPath $FLAGS" -Wait -PassThru).ExitCode
@@ -391,7 +391,7 @@ Function DownloadAndInstallVsExtension
 	{
 		$failedList += $AppItem.Name
 		$content = "Install " + $AppItem.Name +" failed, Error Code:" + $ExitCode
-		Write-Host "ERROR $content"; 
+		Write-Host "ERROR $content";
 	}
 }
 
@@ -418,13 +418,13 @@ Function GetVSInstallationPaths
 	$VSInstallationPaths = cmd /c "`"$VSWherePath`" -format value -property installationPath"
 	if ($VSInstallationPaths)
 	{
-		Write-Host "Installation path of Visual Studio is $VSInstallationPaths." 
-		return $VSInstallationPaths			
+		Write-Host "Installation path of Visual Studio is $VSInstallationPaths."
+		return $VSInstallationPaths
 	}
 	else
 	{
 		Write-Host "Did not find installation path of Visual Studio." -ForegroundColor Yellow
-		return $null				
+		return $null
 	}
 }
 
@@ -457,7 +457,7 @@ $psVer = [int] $PSVersionTable.PSVersion.Major
 
 if($psVer -lt 4)
 {
-	Write-Host "Powershell 4 or later is required for Github downloading." -ForegroundColor Red 
+	Write-Host "Powershell 4 or later is required for Github downloading." -ForegroundColor Red
 	Write-Host "Please install WMF 4.0 from https://www.microsoft.com/en-us/download/details.aspx?id=40855 before running this script."  -ForegroundColor Yellow
 	exit
 }
@@ -511,7 +511,7 @@ foreach($item in $downloadList)
 			if($result) {
 				Write-Host "$($item.Name) is installed successfully." -ForegroundColor Green
 			}
-			else 
+			else
 			{
 				$failedList += $item.Name
 				Write-Host "Failed to install $($item.Name)!" -ForegroundColor Red
@@ -526,7 +526,7 @@ foreach($item in $downloadList)
 				$content = "Application: " +$item.AppName + " is not installed"
 
 				Write-Host $content -ForegroundColor Yellow
-		
+
 				$content = "Downloading file " + $item.Name + ". Please wait..."
 				Write-Host $content
 				$outputPath = $tempFolder + "\" + $item.FileName
@@ -583,7 +583,7 @@ foreach($item in $downloadList)
 				$content = "VsExtension: " +$item.AppName + " is not installed"
 
 				Write-Host $content -ForegroundColor Yellow
-		
+
 				$content = "Downloading file " + $item.Name + ". Please wait..."
 				Write-Host $content
 				$outputPath = $tempFolder + "\" + $item.FileName
@@ -610,7 +610,7 @@ foreach($item in $downloadList)
 		}
 	}
 
-	
+
 }
 if($downloadList -is [array]) {
 	$downloadList.Clear();

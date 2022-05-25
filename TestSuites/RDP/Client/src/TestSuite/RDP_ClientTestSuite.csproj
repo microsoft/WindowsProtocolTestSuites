@@ -1,18 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <AssemblyName>RDP_ClientTestSuite</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestSuites.Rdp</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +36,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
-  
+
   <ItemGroup>
     <_CopyItems Include="$(TargetDir)\*.*" />
     <_TestDataFiles Include="$(ProjectDir)TestData\*.*" />
@@ -52,7 +53,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
- 
+
   <Target Name="CustomBeforeBuild" AfterTargets="AfterBuild">
     <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\RDP\Client\" />
   </Target>
