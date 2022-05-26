@@ -1,0 +1,13 @@
+bin\Debug\WinViewer.exe
+bin\Debug\WinViewer.pdb
+bin\Debug\Interop.RDPCOMAPILib.dll
+bin\Debug\AxInterop.RDPCOMAPILib.dll
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Interop.RDPCOMAPILib.dll
+obj\Debug\AxInterop.RDPCOMAPILib.dll
+obj\Debug\WinViewer.csproj.ResolveComReference.cache
+obj\Debug\WinViewer.WinViewer.resources
+obj\Debug\WinViewer.Properties.Resources.resources
+obj\Debug\WinViewer.csproj.GenerateResource.Cache
+obj\Debug\WinViewer.exe
+obj\Debug\WinViewer.pdb

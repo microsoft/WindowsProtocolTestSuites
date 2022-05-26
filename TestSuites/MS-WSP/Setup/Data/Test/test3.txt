@@ -1,0 +1,26 @@
+[Components]
+aspnet = off
+complusnetwork = off
+dtcnetwork = off
+bitsserverextensionsisapi = off
+bitsserverextensionsmanager = off
+iis_common = on
+iis_ftp = off
+fp_extensions = off
+iis_inetmgr = on
+iis_nntp = off
+iis_smtp = off
+iis_asp = off
+iis_internetdataconnector = off
+sakit_web = off
+tswebclient = off
+iis_serversideincludes = off
+iis_webdav = on
+iis_www = on
+appsrv_console = on
+
+[NetOptionalComponents]
+
+[InternetServer]
+PathFTPRoot=E:\Inetpub\Ftproot
+PathWWWRoot=E:\Inetpub\Wwwroot

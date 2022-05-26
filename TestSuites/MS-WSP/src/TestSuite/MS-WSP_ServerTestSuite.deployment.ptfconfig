@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+  <Properties>
+    <Property name="ServerComputerName" value="SutComputer">
+      <Description>
+        IP/MachineName of the server under test.
+      </Description>
+    </Property>
+
+    <Property name="UserName" value="Administrator">
+      <Description>
+        Name of the user to access the server under test.
+      </Description>
+    </Property>
+
+    <Property name="Password" value="Password01!">
+      <Description>
+        Password of the user to access the server under test.
+      </Description>
+    </Property>
+
+    <Property name="DomainName" value="">
+      <Description>
+        Name of the domain under test.
+      </Description>
+    </Property>
+
+    <Property name="SupportedSecurityPackage" value="Ntlm">
+      <Choice>Negotiate,Kerberos,Ntlm</Choice>
+      <Description>
+        Supported security packages, should be one of them.
+      </Description>
+    </Property>
+
+    <Property name="UseServerGssToken" value="true">
+      <Choice>true,false</Choice>
+      <Description>
+        If this property is set to true, the client will use server-initiated SPNEGO authentication.
+        Otherwise, client-initiated SPNEGO will be used.
+        Only applicable when SupportedSecurityPackage is set to Negotiate.
+      </Description>
+    </Property>
+
+    <Property name="SMB2ClientTimeout" value="120">
+      <Description>
+        Timeout in seconds of the underlying SMB2Client used for named pipe transport and other purposes.
+      </Description>
+    </Property>
+
+    <Property name="ServerOSVersion" value="Win7">
+      <Choice>Win2003,Win2008,Win7,Other</Choice>
+      <Description>
+        Version of the server OS, should be one of them.
+      </Description>
+    </Property>
+
+    <Property name="SharedPath" value="C:\Test\Data\Test">
+      <Description>
+        Path to shared folder on the server under test.
+      </Description>
+    </Property>
+
+    <Property name="ShareName" value="Test">
+      <Description>
+        Name of the share on the server under test.
+      </Description>
+    </Property>
+
+    <Property name="ClientName" value="DriverComputer">
+      <Description>
+        Name of the client machine initiating MS-WSP request messages.
+      </Description>
+    </Property>
+
+    <Property name="CatalogName" value="Windows\SystemIndex">
+      <Description>
+        Name of the catalog to be searched.
+      </Description>
+    </Property>
+
+    <Property name="LanguageLocale" value="EN">
+      <Description>
+        Name of the default language locale of all queries.
+      </Description>
+    </Property>
+
+    <Property name="LcidValue" value="1033">
+      <Description>
+        LCID value of the default language locale of all queries.
+      </Description>
+    </Property>
+
+    <Property name="ServerOffset" value="64">
+      <Choice>32,64</Choice>
+      <Description>
+        Specify the machine architecture of the server under test.
+        Whether it is 64 bit or 32 bit.
+      </Description>
+    </Property>
+
+    <Property name="ClientOffset" value="64">
+      <Choice>32,64</Choice>
+      <Description>
+        Specify the machine architecture of the WSP client.
+        Whether it is 64 bit or 32 bit.
+      </Description>
+    </Property>
+
+    <Property name="IsServerWindows" value="true">
+      <Choice>true,false</Choice>
+      <Description>
+        Specify whether the server under test is a Windows or Non-Windows sever.
+        This is required for Windows specific requirement validations.
+      </Description>
+    </Property>
+
+    <Property name="IsWDSInstalled" value="true">
+      <Choice>true,false</Choice>
+      <Description>
+        Specify whether Windows Desktop Search is installed on Windows Server under test.
+        Only applicable when 'IsServerWindows' is set to true.
+      </Description>
+    </Property>
+
+    <Property name="ServerVersion" value="67328">
+      <Description>
+        Please specify the version number (uint) of the server
+        Windows Server:
+        Windows 2003 32 it must be 265     (with Windows Desktop Search Installed)
+        Windows 2008 32 it must be 258     (without Windows Desktop Search)
+        Windows 2003 64 it must be 65801   (with Windows Desktop Search Installed)
+        Windows 2008 64 it must be 65794   (without Windows Desktop Search)
+        Windows 2008R2 64 it must be 67328 (without Windows Desktop Search)
+        For Non-Windows Server:
+        The value should be less than 0x00010000 for 32 bit server.
+        The value should be greater than or equal to 0x00010000 for 64 bit server.
+      </Description>
+    </Property>
+
+    <Property name="ClientVersion" value="67328">
+      <Description>
+        Please specify the version number (uint) of  32 bit client
+        For Windows XP 32 it must be 265 (with Windows Desktop Search Installed)
+        Vista 32 it must be 258          (without Windows Desktop Search)
+        Windows 7 32 it must be 1792     (without Windows Desktop Search)
+        Please specify the version number (uint) of  64 bit client
+        For Windows XP 64 it must be 65801 (with Windows Desktop Search Installed)
+        Vista 64 it must be 65794     (without Windows Desktop Search)
+        Windows 7 64 it must be 67328 (without Windows Desktop Search)
+      </Description>
+    </Property>
+
+    <Property name="QueryPath" value="file://SutComputer/Test/">
+      <Description>
+        It specifies the search scope (Path of the network folder to be searched).
+        Please specify this value with computer name or IP address of the server.
+      </Description>
+    </Property>
+
+    <Property name="QueryText" value="test">
+      <Description>
+        It specifies the search query (Text to be present in name of searched files).
+      </Description>
+    </Property>
+
+    <!--File names to be used in model based test cases.-->
+    <Property name="NewFile1" value="File1.txt">
+      <Description>
+        The file name of NewFile1.
+      </Description>
+    </Property>
+    <Property name="NewFile2" value="File2.txt">
+      <Description>
+        The file name of NewFile2.
+      </Description>
+    </Property>
+    <Property name="ExistFile1" value="ExistFile1.txt">
+      <Description>
+        The file name of ExistFile1.
+      </Description>
+    </Property>
+    <Property name="ExistFile2" value="ExistFile2.txt">
+      <Description>
+        The file name of ExistFile2.
+      </Description>
+    </Property>
+    <Property name="ExistFile3" value="ExistFile3.txt">
+      <Description>
+        The file name of ExistFile3.
+      </Description>
+    </Property>
+    <Property name="ExistFile4" value="ExistFile4.txt">
+      <Description>
+        The file name of ExistFile4.
+      </Description>
+    </Property>
+
+    <!--File size values of the files in Data\CraeteQuery_Size.-->
+    <Property name="Test1Size" value="1124">
+      <Description>
+        The file size of test1.bin which is the file with a size in the middle of the following 3 files.
+      </Description>
+    </Property>
+    <Property name="Test27Size" value="30">
+      <Description>
+        The file size of test27.bin which is the smallest file of the 3 files.
+      </Description>
+    </Property>
+    <Property name="Test132Size" value="3868">
+      <Description>
+        The file size of test132.bin which is the largest file of the 3 files.
+      </Description>
+    </Property>
+
+    <!--File size values of the files in Data\CreateQuery_CFullPropSpec.-->
+    <Property name="Document1Size" value="23552">
+      <Description>
+        The file size of document1.doc.
+      </Description>
+    </Property>
+    <Property name="Document2Size" value="43520">
+      <Description>
+        The file size of document2.ppt.
+      </Description>
+    </Property>
+    <!---->
+    <Property name="Document3Size" value="32256">
+      <Description>
+        The file size of document3.xls.
+      </Description>
+    </Property>
+
+    <!--File size values of the files in Data\FetchValue.-->
+    <Property name="DocumentSize" value="45568">
+      <Description>
+        The file size of document.doc.
+      </Description>
+    </Property>
+
+    <!--Properties used in CPMFetchValue scenario.-->
+    <Property name="CbChunk" value="38">
+      <Description>
+        If the CbChunk value is large enough, it retrieves all the value in a single response.
+        Otherwise it is fetched in fragments.
+        Use value 4096 (4KB) for retrieval with a single response.
+        Otherwise use a value large enough for CPMFetchValueIn message but small to retrieval with a single reponse.
+        HINT: CbChunk around 40 is sufficient for retrieve values in fragments.
+      </Description>
+    </Property>
+
+    <!-- Properties used in CPMConnect scenario,-->
+    <Property name="PropertySet_One_DBProperties" value="2,7,4,3">
+      <Description>
+        DB property IDs to be set in the PropertySet1 field of CPMConnectIn message.
+      </Description>
+    </Property>
+    <Property name="PropertySet_Two_DBProperties" value="2">
+      <Description>
+        DB property IDs to be set in the PropertySet2s field of CPMConnectIn message.
+      </Description>
+    </Property>
+    <!-- Property sets used to form the aPropertySets field of CPMConnectIn message.-->
+    <Property name="Array_PropertySet_One_Guid" value="AA6EE6B0-E828-11D0-B23E-00AA0047FC01">
+      <Description>
+        The property set GUID of the 1st element of the aPropertySets field in a CPMConnectIn message.
+      </Description>
+    </Property>
+    <Property name="Array_PropertySet_One_DBProperties" value="2,3,4,5,6,7">
+      <Description>
+        Property IDs to be set in the 1st element of the aPropertySets field in a CPMConnectIn message.
+      </Description>
+    </Property>
+    <Property name="Array_PropertySet_Two_Guid" value="A7AC77ED-F8D7-11CE-A798-0020F8008025">
+      <Description>
+        The property set GUID of the 2nd element of the aPropertySets field in a CPMConnectIn message.
+      </Description>
+    </Property>
+    <Property name="Array_PropertySet_Two_DBProperties" value="2,3,4,5,6,8,14,10,12,13">
+      <Description>
+        Property IDs to be set in the 2nd element of the aPropertySets field in a CPMConnectIn message.
+      </Description>
+    </Property>
+    <Property name="Array_PropertySet_Three_Guid" value="AFAFACA5-B5D1-11D0-8C62-00C04FC2DB8D">
+      <Description>
+        The property set GUID of the 3rd element of the aPropertySets field in a CPMConnectIn message.
+      </Description>
+    </Property>
+    <Property name="Array_PropertySet_Three_DBProperties" value="2">
+      <Description>
+        Property IDs to be set in the 3rd element of the aPropertySets field in a CPMConnectIn message.
+      </Description>
+    </Property>
+    <Property name="Array_PropertySet_Four_Guid" value="A9BD1526-6A80-11D0-8C9D-0020AF1D740E">
+      <Description>
+        The property set GUID of the 4th element of the aPropertySets field in a CPMConnectIn message.
+      </Description>
+    </Property>
+    <Property name="Array_PropertySet_Four_DBProperties" value="3,4,2">
+      <Description>
+        Property IDs to be set in the 4th element of the aPropertySets field in a CPMConnectIn message.
+      </Description>
+    </Property>
+
+    <!--Property set GUID and property ID that specifies query work ID.-->
+    <Property name="WorkIdPropertyGuid" value="49691C90-7E17-101A-A91C-08002B2ECDA9">
+      <Description>
+        The property set GUID that specifies query work ID.
+      </Description>
+    </Property>
+    <Property name="WorkId" value="5">
+      <Description>
+        The property ID that specifies query work ID.
+      </Description>
+    </Property>
+
+    <!--Properties used in CPMGetRows scenario.-->
+    <Property name="ClientBase" value="63513800">
+      <Description>
+        The default value of _ulClientBase field of CPMGetRowsIn message.
+      </Description>
+    </Property>
+    <Property name="BufferSize" value="4096">
+      <Description>
+        The default value of _cbReadBuffer field of CPMGetRowsIn message.
+      </Description>
+    </Property>
+    <Property name="RowsToTransfer" value="20">
+      <Description>
+        The default value of _cRowsToTransfer field of CPMGetRowsIn message.
+      </Description>
+    </Property>
+    <Property name="EType" value="1">
+      <Description>
+        The default value of eType field of CPMGetRowsIn message.
+      </Description>
+    </Property>
+  </Properties>
+</TestSite>

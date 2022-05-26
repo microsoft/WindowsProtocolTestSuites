@@ -1,0 +1,5 @@
+[Components]
+aspnet = on
+complusnetwork = on
+dtcnetwork = on
+appsrv_console = on

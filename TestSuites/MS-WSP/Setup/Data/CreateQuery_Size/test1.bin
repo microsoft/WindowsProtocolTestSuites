@@ -1,0 +1,34 @@
+if (WScript.Arguments.length < 2)
+{
+    WScript.Echo("Usage: bitsvdir virtual_directory local_directory");
+    WScript.Quit(1);
+}
+
+VirtualDirectoryName = WScript.Arguments(0);
+LocalDirectoryName = WScript.Arguments(1);
+
+ServerObj = GetObject("IIS://LocalHost/W3SVC/1/ROOT");
+VirtualDir = ServerObj.Create("IIsWebVirtualDir", VirtualDirectoryName );
+
+VirtualDir.Path = LocalDirectoryName;
+VirtualDir.AppIsolated = 0;
+VirtualDir.AccessScript = true;
+VirtualDir.AccessRead = false;
+VirtualDir.AccessWrite = false;
+VirtualDir.SetInfo();
+
+//Set BITS specific IIS configuration settings
+VirtualDir.EnableBITSUploads();
+VirtualDir.BITSMaximumUploadSize = "4294967296";
+VirtualDir.SetInfo();
+
+WScript.Echo( "Created virtual directory " + VirtualDirectoryName + 
+              " with a local directory of " + LocalDirectoryName );
+WScript.Quit( 0 ); 
+
+To change the previous example to upload the data to a server application, add the following code before SetInfo.
+
+
+ Copy Code 
+VirtualDir.BITSServerNotificationType = 1;
+VirtualDir.BITSServerNotificationURL = "http://myserver/mypath/myasp.asp"; 

@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <DefineSolutionProperties>false</DefineSolutionProperties>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>3.5</ProductVersion>
+    <ProjectGuid>{19ecda75-b299-425c-a130-7013de44b82b}</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>MS-WSP-TestSuite-ServerEP</OutputName>
+    <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'fxcop|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>fxcop</DefineConstants>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <SuppressSpecificWarnings>1055</SuppressSpecificWarnings>
+    <SuppressIces>ICE30</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <!--Deployment WXS files-->
+    <Compile Include="DependencyCheckWarningDlg.wxs" />
+    <Compile Include="MS-WSP-TestSuite-ServerEP.wxs" />
+    <Compile Include="TestSuiteMiscFiles.wxs" />
+    <Compile Include="TestSuitePtfconfigFiles.wxs" />
+    <Compile Include="TestSuitePrivacyStatementDlg.wxs" />
+    <Compile Include="TestSuitePrivacyStatementLowMsiVersionDlg.wxs" />
+    <Compile Include="TestSuiteProduct.wxs" />
+    <Compile Include="CommonBatch.wxs" />
+    <!--Test Suite WXS files-->
+    <Compile Include="TestSuiteBinFiles.wxs" />
+    <Compile Include="TestSuiteBatchFiles.wxs" />
+    <Compile Include="TestSuiteScripts.wxs" />
+    <Compile Include="TestSuiteDataFiles.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>$(WIX)\bin\WixVSExtension.dll</HintPath>
+      <Name>WixVSExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WIX)\bin\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WIX)\bin\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Asn1Base\Asn1Base.csproj">
+      <Name>Asn1Base</Name>
+      <Project>{deda188c-c97e-4968-bc31-594925631e9f}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Common\Common.csproj">
+      <Name>Common</Name>
+      <Project>{fe653643-6342-4300-871e-683c7ba31494}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\CryptoLib\CryptoLib.csproj">
+      <Name>CryptoLib</Name>
+      <Project>{bf6afaf0-7592-467f-ad5c-18429d854057}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj">
+      <Name>FileAccessService</Name>
+      <Project>{ab191b32-b12d-42cb-976d-cea2c5bad8be}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Messages\Messages.csproj">
+      <Name>Messages</Name>
+      <Project>{75544419-3f4e-4308-a676-165f45c1462e}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj">
+      <Name>Nlmp</Name>
+      <Project>{5e53e71e-52d1-4bf0-99c0-608437ec446c}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj">
+      <Name>Smb2</Name>
+      <Project>{C7F08825-D3C9-4DDD-9BA3-06733B1ABE36}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\Sspi\Sspi.csproj">
+      <Name>Sspi</Name>
+      <Project>{d0cb354b-2cd3-49c1-8eca-2f6ebadbccee}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-SPNG\Spng.csproj">
+      <Name>Spng</Name>
+      <Project>{16B76101-C213-4C61-91E6-BF0FF92BE2C0}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj">
+      <Name>SspiLib</Name>
+      <Project>{E64BF20F-11D2-49F6-A25B-F4378AB38180}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\SspiService\SspiService.csproj">
+      <Name>SspiService</Name>
+      <Project>{1FC8C336-EF82-4F7C-9532-AB8AB268916E}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\KerberosLib\KerberosLib.csproj">
+      <Name>KerberosLib</Name>
+      <Project>{F1EDA208-50B6-4501-A9D8-D18D3434D587}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj">
+      <Name>TransportStack</Name>
+      <Project>{967d976a-c792-4893-9235-14615ae1ff58}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\WSP.csproj">
+      <Name>WSP</Name>
+      <Project>{724F1968-83F4-4F34-A3E2-7F5C9E795294}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-XCA\XCA.csproj">
+      <Name>XCA</Name>
+      <Project>{0D99C631-C7E5-4EF7-9773-20906F31BEF2}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLLOCATION</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\Adapter\MS-WSP_ServerAdapter.csproj">
+      <Name>MS-WSP_ServerAdapter</Name>
+      <Project>{88ACDF6A-978C-4B03-96DD-3F6BF1E4A9C9}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSuite\MS-WSP_ServerTestSuite.csproj">
+      <Name>MS-WSP_ServerTestSuite</Name>
+      <Project>{69E2A5FF-3537-4A43-BA9A-64C1452777B7}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UiText.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>$(WIX)\bin\WixVSExtension.dll</HintPath>
+      <Name>WixVSExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WIX)\bin\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WIX)\bin\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+
+  <Target Name="GenDeployWxsFile" DependsOnTargets="ResolveWixExtensionReferences" BeforeTargets="Compile">
+    <!--Test Suite WXS files-->
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" -out TestSuiteBinFiles.wxs -template fragment -gg -cg TESTSUITE_BIN_FILES -dr TESTSUITE_BIN_DIR -var wix.TESTSUITE_BIN_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir ..\Batch -out TestSuiteBatchFiles.wxs -template fragment -gg -cg TESTSUITE_BATCH_FILES -dr TESTSUITE_BATCH_DIR -var wix.TESTSUITE_BATCH_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Scripts" -out TestSuiteScripts.wxs -template fragment -gg -cg TESTSUITE_SCRIPTS_FILES -dr TESTSUITE_SCRIPTS_DIR -var wix.TESTSUITE_SCRIPTS_DIR -sreg -sfrag -srd' />
+    <Exec Command='"$(WIX)\bin\heat.exe" dir "$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data" -out TestSuiteDataFiles.wxs -template fragment -gg -cg TESTSUITE_DATA_FILES -dr TESTSUITE_DATA_DIR -var wix.TESTSUITE_DATA_DIR -sreg -sfrag -srd' />
+    <Exec Command="&quot;$(WIX)\bin\heat.exe&quot; dir &quot;$(TestSuiteRoot)\common&quot; -out CommonBatch.wxs -template fragment -gg -cg COMMON_BATCH_FILES -dr TESTSUITE_COMMON_SCRIPTS_DIR -var wix.TESTSUITE_COMMON_SCRIPTS_DIR -sreg -sfrag -srd" />
+  </Target>
+  <Target Name="AfterBuild">
+    <Copy SourceFiles="$(TargetDir)en-us\$(TargetFileName)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\deploy\" />
+  </Target>
+  <ItemGroup>
+    <WSPDataFiles Include="..\..\Setup\Data\**\*.*" />
+    <WSPScriptFiles Include="..\..\Setup\Scripts\*" />
+    <AdapterScriptFiles Include="..\Adapter\SUTControlAdapter\*.ps1" />
+  </ItemGroup>
+  <Target Name="CopyFilesToBin" BeforeTargets="GenDeployWxsFile">
+    <Copy SourceFiles="@(WSPDataFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Data\%(RecursiveDir)" />
+    <Copy SourceFiles="@(WSPScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Scripts" />
+    <Copy SourceFiles="@(AdapterScriptFiles)" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+    <Copy SourceFiles="..\ServerLocalTestRun.testrunconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+    <Copy SourceFiles="..\TestSuite\MS-WSP_ServerTestSuite.deployment.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+    <Copy SourceFiles="..\TestSuite\MS-WSP_ServerTestSuite.ptfconfig" DestinationFolder="$(TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+  </Target>
+
+</Project>

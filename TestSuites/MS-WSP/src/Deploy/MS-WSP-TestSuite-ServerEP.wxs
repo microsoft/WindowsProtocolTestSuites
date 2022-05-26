@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define TESTSUITE_NAME=MS-WSP?>
+<?define TESTSUITE_ENDPOINT=Server?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+	
+  <Product Id="*" 
+           Name="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite" 
+           Language="1033" 
+           Version="$(env.TESTSUITE_VERSION)" 
+           Manufacturer="Microsoft Corporation" 
+           UpgradeCode="4216D0F5-645C-4563-B302-01501A871A45">
+		
+    
+    <Package Id="*" 
+             InstallScope="perMachine"
+             InstallPrivileges="elevated"
+             Description="Microsoft $(var.TESTSUITE_NAME) $(var.TESTSUITE_ENDPOINT) Endpoint Test Suite v$(env.TESTSUITE_VERSION)"
+             Manufacturer="Microsoft Corporation"
+             InstallerVersion="300"
+             Compressed="yes" />
+    
+		<Media Id="1" Cabinet="TestSuite_AllInOne.cab" EmbedCab="yes" />
+
+    <MajorUpgrade DowngradeErrorMessage ="A later version of [ProductName] is already installed. Setup will now exit." />
+
+    <Feature Id="TestSuiteFeatures" Level="1" ConfigurableDirectory="TESTSUITE_ROOT_DIR" />
+
+    <WixVariable Id="TESTSUITE_NAME" Value="$(var.TESTSUITE_NAME)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_ENDPOINT" Value="$(var.TESTSUITE_ENDPOINT)" Overridable="no" />
+    <WixVariable Id="TESTSUITE_VERSION" Value="$(env.TESTSUITE_VERSION)" Overridable="no" />
+
+    <WixVariable Id="PROTOSDK_DROP_DIR" Value="$(env.TestSuiteRoot)\drop\ProtoSDK\Bin" />
+    <WixVariable Id="TESTSUITE_BATCH_DIR" Value="..\Batch" />
+    <WixVariable Id="TESTSUITE_BIN_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-WSP\Bin" />
+    <WixVariable Id="TESTSUITE_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-WSP\Scripts" />
+    <WixVariable Id="TESTSUITE_DATA_DIR" Value="$(env.TestSuiteRoot)\drop\TestSuites\MS-WSP\Data" />
+    <WixVariable Id="TESTSUITE_COMMON_SCRIPTS_DIR" Value="$(env.TestSuiteRoot)\common" />
+
+    <!-- The scripts are supposed to be cmd scripts, no parameter. -->
+    <!-- The scripts exist in drop\TestSuite\MS-WSP\Server\scripts directory. -->
+    <WixVariable Id="CONFIG_TESTSUITE_SCRIPT" Value="Config-TestSuite.cmd" />
+    <WixVariable Id="CONFIG_SUT_SCRIPT" Value="Config-SUT.cmd" />
+    <!-- Config Domain is not used in MS-WSP -->
+    <!-- <WixVariable Id="CONFIG_DOMAIN_SCRIPT" Value="Config-Domain.cmd" /> -->
+    <!-- The script should exist in drop\TestSuite\MS-WSP\Server\batch directory. -->
+    <WixVariable Id="RUN_TESTS_COMMAND" Value="RunAllTestCases.cmd" />
+    <!-- Keep for future use -->
+    <!--WixVariable Id="RUN_BY_CATEGORY_COMMAND" Value="RunTestCasesByCategory.cmd" /-->
+
+    <WixVariable Id="SET_MS_TEST_PATH" Value="setMSTestPath.cmd" />
+    <WixVariable Id="SET_VS_PATH"      Value="setVsPath.cmd" />
+    <WixVariable Id="SET_VS_2017_PATH" Value="setVs2017Path.cmd" />
+    
+    <DirectoryRef Id="TESTSUITE_ROOT_DIR">
+      <Component Id="LICENSE.rtf" Guid="{C64FDD1E-01ED-4158-B481-5AEDCC83C7CC}">
+        <File Id="LICENSE.rtf" Source="LICENSE.rtf" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- TODO: If needs to import merge modules, uncomment or add related lines in TestSuiteImportMergeModules.wxs -->
+
+    <!-- TODO: Source code and files in drop folder are automatically installed. -->
+    <!-- If want to install other files (like documents, test results, etc.), update TestSuiteMiscFiles.wxs -->
+    <!-- Make sure following files are installed: Binaries, source code, scripts, PDB, documents. -->
+    
+  </Product>
+</Wix>

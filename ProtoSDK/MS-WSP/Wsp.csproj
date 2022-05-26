@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp</AssemblyName>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <ProjectReference Include="..\MS-SMB2\Smb2.csproj" />
+    <ProjectReference Include="..\SspiLib\SspiLib.csproj" />
+    <ProjectReference Include="..\SspiService\SspiService.csproj" />
+  </ItemGroup>
+
+</Project>
