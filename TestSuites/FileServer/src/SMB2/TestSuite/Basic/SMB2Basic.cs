@@ -72,7 +72,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         private CHANGE_NOTIFY_Response receivedChangeNotify;
         private Packet_Header receivedChangeNotifyHeader;
         private FILE_NOTIFY_INFORMATION[] receivedFileNotifyInfo;
-        private ManualResetEvent changeNotificationReceived = new ManualResetEvent(false);
+        private AutoResetEvent changeNotificationReceived = new AutoResetEvent(false);
         #endregion
 
         #region Test Initialize and Cleanup
