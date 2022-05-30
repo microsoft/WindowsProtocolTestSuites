@@ -244,12 +244,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         FSCTL_SET_INTEGRITY_INFORMATION = 0x9C280,
 
         /// <summary>
-        /// The FSCTL_SET_INTEGRITY_INFORMATION_EX Request message requests that the server set the integrity state of
-        /// the file or directory associated with the handle on which this FSCTL was invoked.
-        /// </summary>
-        FSCTL_SET_INTEGRITY_INFORMATION_EX = 0x90380,
-
-        /// <summary>
         /// This message sets the object identifier for the file or directory associated with the handle on which this 
         ///   FSCTL was invoked. The message contains a FILE_OBJECTID_BUFFER (section 2.1.3) data element. Either a  
         /// Type 1 or a Type 2 buffer is valid. 
@@ -3675,11 +3669,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         CHECKSUM_TYPE_NONE = 0x0000,
 
         /// <summary>
-        /// The file or directory is configured to use a CRC32 checksum to provide integrity.
-        /// </summary>
-        CHECKSUM_TYPE_CRC32 = 0x0001,
-
-        /// <summary>
         /// The file or directory is configured to use a CRC64 checksum to provide integrity.
         /// </summary>
         CHECKSUM_TYPE_CRC64 = 0x0002,
@@ -3772,7 +3761,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// </summary>
         FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF = 0x00000001
     }
-
     /// <summary>
     /// The FSCTL_SET_INTEGRITY_INFORMATION Request message requests that the server set the integrity state 
     /// of the file or directory associated with the handle on which this FSCTL was invoked.
@@ -3797,110 +3785,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     }
     #endregion
 
-    #region FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX
-
-    /// <summary>
-    /// EnableIntegrity for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX.
-    /// This field MUST be one of the following values:
-    /// </summary>
-    public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY : byte
-    {
-        /// <summary>
-        /// The file or directory is set to not use integrity.
-        /// </summary>
-        DISABLE_INTEGRITY = 0x00,
-
-        /// <summary>
-        /// The file or directory is set to provide integrity using 
-        /// CRC32 or CRC64 checksum.
-        /// </summary>
-        ENABLE_INTEGRITY = 0x01,
-    }
-
-    /// <summary>
-    /// KeepIntegrityStateUnchanged for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX.
-    /// This field MUST be one of the following values:
-    /// </summary>
-    public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED : byte
-    {
-        /// <summary>
-        /// The file or directory integrity state should change 
-        /// based on the EnableIntegrity parameter.
-        /// </summary>
-        CHANGE_INTEGRITY = 0x00,
-
-        /// <summary>
-        /// The file or directory integrity state must not change.
-        /// </summary>
-        KEEP_INTEGRITY = 0x01,
-    }
-
-    /// <summary>
-    /// Flags for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX.
-    /// A 32-bit unsigned integer that contains zero or more of the following flag values. 
-    /// Flag values that are unspecified in the following table SHOULD be set to 0 and MUST be ignored.
-    /// </summary>
-    public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS : uint
-    {
-        NONE = 0,
-
-        /// <summary>
-        /// When set, if a checksum does not match, the associated I/O operation will not be failed.
-        /// </summary>
-        FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF = 0x00000001
-    }
-
-    /// <summary>
-    /// Version for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX.
-    /// This field MUST be set to 1.
-    /// </summary>
-    public enum FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_VERSION : byte
-    {
-        /// <summary>
-        /// Only value. 
-        /// </summary>
-        V1 = 1
-    }
-
-    /// <summary>
-    /// The FSCTL_SET_INTEGRITY_INFORMATION_EX Request message requests that the server set the 
-    /// integrity state of the file or directory associated with the handle on which this FSCTL was 
-    /// invoked.
-    /// </summary>
-    public partial struct FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX
-    {
-        /// <summary>
-        /// 1 byte. See enum.
-        /// </summary>
-        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_ENABLEINTEGRITY EnableIntegrity;
-
-        /// <summary>
-        /// 1 byte. See enum.
-        /// </summary>
-        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_KEEPINTEGRITYSTATEUNCHANGED KeepIntegrityStateUnchanged;
-
-        /// <summary>
-        /// 2 bytes. A 16-bit reserved value. This field MUST be set to zero and MUST be ignored.
-        /// </summary>
-        public ushort Reserved1;
-
-        /// <summary>
-        /// 4 bytes. See enum.
-        /// </summary>
-        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_FLAGS Flags;
-
-        /// <summary>
-        /// 1 byte. See enum.
-        /// </summary>
-        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX_VERSION Version;
-
-        /// <summary>
-        /// A 56-bit reserved value. This field MUST be set to zero and MUST be ignored.
-        /// </summary>
-        [StaticSize(7, StaticSizeMode.Elements)]
-        public byte[] Reserved2;
-    }
-    #endregion
 
     /// <summary>
     /// [MS-SMB2] 2.2.37.1   SMB2_QUERY_QUOTA_INFO
