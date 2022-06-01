@@ -1,0 +1,9 @@
+cscript.exe .\adsutil.vbs enum w3svc/1/root
+.\adsutil.vbs set W3SVC/1/root/WDVRN_PROP/accesswrite "true" -S:wipro-w2k3
+.\adsutil.vbs set W3SVC/1/root/WDVRN_PROP/accesssource "true" -S:wipro-w2k3
+
+.\adsutil.vbs set W3SVC/1/root/WDVRN_DELETE/accesswrite "true" -S:wipro-w2k3
+.\adsutil.vbs set W3SVC/1/root/WDVRN_DELETE/accesssource "true" -S:wipro-w2k3
+
+.\adsutil.vbs set W3SVC/1/root/WDVRN_DEL_NOROOT/accesswrite "true" -S:wipro-w2k3
+.\adsutil.vbs set W3SVC/1/root/WDVRN_DEL_NOROOT/accesssource "true" -S:wipro-w2k3

@@ -479,6 +479,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         public void FsaInitial()
         {
+            if (testConfig.IsGlobalEncryptDataEnabled)
+            {
+                if (testConfig.IsGlobalRejectUnencryptedAccessEnabled && TestConfig.MaxSmbVersionClientSupported < Smb2.DialectRevision.Smb30)
+                {
+                    Site.Assert.Inconclusive("When IsGlobalRejectUnencryptedAccessEnabled is true, it won't allow unencrypted accesses from clients that do not support SMB 3.0 and above.");
+                }
+            }
+
             this.transAdapter.Initialize(this.isWindows);
         }
 

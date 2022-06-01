@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PchcStack", "MS-PCHC\Shared
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PccrrStack", "MS-PCCRR\Shared\PccrrStack\PccrrStack.csproj", "{E740266B-2CDF-43A8-9F24-EE6FF55149EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PccrdStack", "ms-pccrd\Shared\PccrdStack\PccrdStack.csproj", "{6CDA2C3E-F9CE-4A18-A06C-818C3C779C35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PccrdStack", "MS-PCCRD\Shared\PccrdStack\PccrdStack.csproj", "{6CDA2C3E-F9CE-4A18-A06C-818C3C779C35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WsDiscovery", "ms-pccrd\Shared\WsDiscovery\WsDiscovery.csproj", "{334C9601-ABF7-4830-9793-8F9259D0D7EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WsDiscovery", "MS-PCCRD\Shared\WsDiscovery\WsDiscovery.csproj", "{334C9601-ABF7-4830-9793-8F9259D0D7EB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonStack", "COMMON\CommonStack\CommonStack.csproj", "{F3CA3AD9-94A6-4FE1-BA05-0C798E477673}"
 EndProject

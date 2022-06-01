@@ -10,23 +10,23 @@ $vswherePath = foreach ($programPath in @($env:ProgramFiles, ${env:ProgramFiles(
 }
 
 if($vswherePath -eq $null) {
-    Write-Host "please make sure you have installed Visual Studio 2019 or later"
+    Write-Host "please make sure you have installed Visual Studio 2022 or later"
     exit 1
 }
 
-$vsoutput = & $vswherePath -format json 
-$jsonoutput = $vsoutput | ConvertFrom-Json 
+$vsoutput = & $vswherePath -format json
+$jsonoutput = $vsoutput | ConvertFrom-Json
 
-$vs2019Path= $jsonoutput| Where-Object installationVersion -like '16.*'
-if($vs2019Path -eq $null) {
-    Write-Host "please make sure you have installed Visual Studio 2019 or later"
+$vs2022Path= $jsonoutput| Where-Object installationVersion -like '17.*'
+if($vs2022Path -eq $null) {
+    Write-Host "please make sure you have installed Visual Studio 2022 or later"
     exit 1
 }
 
-$vsPath = $vs2019Path.installationPath
+$vsPath = $vs2022Path.installationPath
 if(!(Test-Path "$vsPath\MSBuild"))
 {
-    Write-Host "could not find MSBuild.exe, please make sure you have installed "C# and Visual Basic Roslyn compilers" in Visual Studio 2019 or later."
+    Write-Host "could not find MSBuild.exe, please make sure you have installed `"C# and Visual Basic Roslyn compilers`" in Visual Studio 2022 or later."
     exit 1
 }
 
@@ -37,7 +37,7 @@ $buildToolPath = Get-ChildItem "$vsPath\MSBuild\*" | ForEach-Object {
 }
 
 if($buildToolPath -eq $null) {
-    Write-Host "could not find MSBuild.exe, please make sure you have installed "C# and Visual Basic Roslyn compilers" in Visual Studio 2019 or later."
+    Write-Host "could not find MSBuild.exe, please make sure you have installed `"C# and Visual Basic Roslyn compilers`" in Visual Studio 2022 or later."
     exit 1
 }
 return $buildToolPath

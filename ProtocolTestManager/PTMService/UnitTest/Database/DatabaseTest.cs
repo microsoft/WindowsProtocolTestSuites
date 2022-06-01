@@ -7,8 +7,10 @@ using Microsoft.Protocols.TestManager.PTMService.Abstractions.Database;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestManager.PTMService.UnitTest
@@ -36,11 +38,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest
         [TestInitialize]
         public void TestInitialize()
         {
-            File.Copy("ptmservice.test.db", "ptmservice.test.running.db", true);
-
+            long timeStamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+            var dbName = $"ptmservice.test.running{timeStamp}.db";
+            File.Copy("ptmservice.test.db", dbName, true);
+            Thread.Sleep(1000);
             var services = new ServiceCollection();
 
-            services.AddPTMServiceDbContext("Data Source = ptmservice.test.running.db");
+            services.AddPTMServiceDbContext($"Data Source = {dbName}");
 
             services.AddRepositoryPool();
 

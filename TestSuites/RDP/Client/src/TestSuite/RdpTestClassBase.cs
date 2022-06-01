@@ -817,7 +817,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 TestSite.Log.Add(LogEntryKind.Debug, "The result of CredentialManagerAddInvalidAccount is {0}.", iResult);
             }
 
-            if (iResult != 0)
+            if (iResult < 0)
             {
                 TestSite.Assert.Fail("Adding an invalid credential failed"); ;
             }
@@ -847,7 +847,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 TestSite.Log.Add(LogEntryKind.Debug, "The result of CredentialManagerReverseInvalidAccount is {0}.", iResult);
             }
 
-            if (iResult != 0)
+            if (iResult < 0)
             {
                 TestSite.Assert.Fail("Removing the invalid credential failed");
             }

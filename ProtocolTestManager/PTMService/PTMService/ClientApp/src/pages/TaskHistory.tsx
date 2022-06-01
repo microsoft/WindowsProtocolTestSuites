@@ -23,7 +23,7 @@ import { AppState } from '../store/configureStore'
 
 type NumberValueKeysOf<T> = { [P in keyof T]-?: T[P] extends number ? P : never }[keyof T]
 
-function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>> (items: TItem[], keyName: NumberValueKeysOf<TItem>) {
+function getDict<TItem extends Pick<TItem, NumberValueKeysOf<TItem>>>(items: TItem[], keyName: NumberValueKeysOf<TItem>) {
   return items.reduce((dict: { [key: number]: TItem }, item) => {
     const keyValue: number = item[keyName]
     dict[keyValue] = item
@@ -221,7 +221,7 @@ const renderStatus = (status: TestResultState) => {
   return <div style={{ color: getTestResultStateColor(status), fontSize: 'large' }}>{status}</div>
 }
 
-export function TaskHistory (props: any) {
+export function TaskHistory(props: any) {
   const winSize = useWindowSize()
 
   const history = useHistory()
@@ -260,6 +260,22 @@ export function TaskHistory (props: any) {
 
     return () => clearInterval(interval)
   }, [dispatch])
+
+  useEffect(() => {
+    const pageNumbers = document.getElementsByClassName("ms-Pagination-pageNumber")
+    if (pageNumbers.length > 0) {
+      for (let index = 0; index < pageNumbers.length; index++) {
+        const pageNumber = pageNumbers.item(index)
+        if (pageNumber) {
+          const selectedValue = pageNumber.getAttribute("aria-selected")
+          pageNumber.removeAttribute("aria-selected")
+          if (selectedValue) {
+            pageNumber.setAttribute("data-selected", selectedValue)
+          }
+        }
+      }
+    }
+  })
 
   const onDialogAbortButtonClick = () => {
     if (testResultToAbort !== undefined) {
@@ -417,7 +433,7 @@ export function TaskHistory (props: any) {
               : testResults.pageCount > 0
                 ? <div>
                   <Spinner size={SpinnerSize.medium} />
-                  <p style={{ color: '#fa8c16' }}>Loading...</p>
+                  <p style={{ color: '#ab5f0e' }}>Loading...</p>
                 </div>
                 : <p>There are no results found currently.</p>
           }

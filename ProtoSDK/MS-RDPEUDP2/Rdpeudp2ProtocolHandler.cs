@@ -471,7 +471,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
         /// Expect a Data packet.
         /// </summary>
         /// <param name="timeout">The timeout for waiting the incoming packet.</param>
-        /// <returns>The expected ACKVEC packet.</returns>
+        /// <returns>The expected DATA packet.</returns>
         public Rdpeudp2Packet ExpectDataPacket(TimeSpan timeout)
         {
             return ExpectPacket(timeout, packet => packet.Header.Flags.HasFlag(Rdpeudp2PacketHeaderFlags.DATA) && packet.DataHeader.HasValue && packet.DataBody.HasValue);
@@ -715,7 +715,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp2
         /// <returns>Return true if the packet was successfully sent.</returns>
         public bool SendAckPacket()
         {
-            if (processedPackets.Count > 0)
+            if (!processedPackets.Any())
             {
                 return false;
             }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net5.0</targetframework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Samr</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Samr</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -13,7 +13,7 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\MS-RPCE\Rpce.csproj" />
   </ItemGroup>

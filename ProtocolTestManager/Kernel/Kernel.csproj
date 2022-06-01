@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net5.0</targetframework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Microsoft.Protocols.TestManager.Kernel</RootNamespace>
     <AssemblyName>Microsoft.Protocols.TestManager.Kernel</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.IO.Packaging" Version="4.7.0" />
-    <PackageReference Include="System.Text.Json" Version="5.0.0-preview.7.20364.11" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.IO.Packaging" Version="6.0.0" />
+    <PackageReference Include="System.Text.Json" Version="6.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />

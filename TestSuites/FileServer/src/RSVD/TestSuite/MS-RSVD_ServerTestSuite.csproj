@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.RSVD.TestSuite</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
@@ -20,14 +20,11 @@
     <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+	  <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
   </ItemGroup>
   <ItemGroup>
     <None Update="MS-RSVD_ServerTestSuite.deployment.ptfconfig">

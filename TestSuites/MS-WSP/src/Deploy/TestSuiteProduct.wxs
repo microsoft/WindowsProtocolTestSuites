@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?define VS17H=1 ?><!-- If need check Visual Studio 2017 Or Higher version" -->
+<?define PTF=1 ?><!-- If need check Protocol Test Framework version" -->
+<?define SE=1 ?><!-- If need check Spec Explorer 2010" -->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+
+    <!-- Properties for "Add or Remove Program Entries" -->
+    <SetProperty Id="PTF_BUILDVERSION" Value="$(env.PTF_VERSION)" Before="AppSearch" />
+    <SetProperty Id="ARPCOMMENTS" Value="[ProductName] v[ProductVersion]" Before="AppSearch" />
+    <Property Id="ARPCONTACT">Microsoft Winterop Engineering Team</Property>
+    <!--Disables the Modify button in MaintenanceTypeDlg-->
+    <Property Id="ARPNOMODIFY" Value="1" />
+
+    <!-- Search for saved TARGET_ENDPOINT, and assign to the actual property if uninstall/repair. -->
+    <Property Id="SAVED_TARGET_ENDPOINT">
+      <RegistrySearch Id="LoadTargetEndpoint"
+                      Root="HKLM"
+                      Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                      Name="TargetEndpoint"
+                      Type="raw" />
+    </Property>
+
+    <SetProperty Id="TARGET_ENDPOINT" After="AppSearch" Value="[SAVED_TARGET_ENDPOINT]">
+      Installed
+    </SetProperty>
+
+    <Component Id="SaveTargetEndpoint" Guid="*" Directory="TESTSUITE_ROOT_DIR">
+      <RegistryValue Id="SaveTargetEndpoint"
+                     Root="HKLM"
+                     Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                     Name="TargetEndpoint"
+                     Type="string"
+                     Value="[TARGET_ENDPOINT]" />
+    </Component>
+
+
+    <!-- Show License in a dialog. -->
+    <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+
+
+    <!-- UI -->
+    <UIRef Id="WixUI_FeatureTree" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+    <UI>
+       <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
+      <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
+
+      <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">Not Installed</Publish>
+      <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="1">
+        <![CDATA[(($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR NOT VSInstalled)]]>
+      </Publish>
+      <Publish Dialog="TestSuitePrivacyStatementDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2">
+        <![CDATA[NOT ((($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR NOT VSInstalled))]]>
+      </Publish>
+      <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementDlg"><![CDATA[VersionMsi >= "5.00"]]></Publish>
+
+      <Publish Dialog="TestSuitePrivacyStatementLowMsiVersionDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg" Order="2">Not Installed</Publish>
+      <Publish Dialog="TestSuitePrivacyStatementLowMsiVersionDlg" Control="Next" Event="NewDialog" Value="DependencyCheckWarningDlg" Order="1">
+        <![CDATA[(($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR VSInstalled)]]>
+      </Publish>
+      <Publish Dialog="TestSuitePrivacyStatementLowMsiVersionDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="2">
+        <![CDATA[NOT ((($(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)) OR ($(var.SE) AND NOT SPEC_EXPLORER_INSTALLED) OR VSInstalled))]]>
+      </Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
+      <Publish Dialog="DependencyCheckWarningDlg" Control="Back" Event="NewDialog" Value="TestSuitePrivacyStatementLowMsiVersionDlg"><![CDATA[VersionMsi < "5.00"]]></Publish>
+
+      <!-- Optional Warning Dialog. -->
+
+      <Publish Dialog="DependencyCheckWarningDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+      <Publish Dialog="MaintenanceTypeDlg" Control="ChangeButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+    </UI>
+
+  <!-- Dependency List -->
+  <SetProperty Id="VS2017_VSTA2017_Higher" After="AppSearch" Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;">
+        <![CDATA[$(var.VS17H)]]>
+    </SetProperty>
+	<SetProperty Id="SPEC_EXPLORER" After="AppSearch" Value=" • Microsoft Spec Explorer 2010.&#xA;">
+        <![CDATA[$(var.SE)]]>
+    </SetProperty>
+	<SetProperty Id="PTF_BuildVersion" After="AppSearch" Value=" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;">
+        <![CDATA[$(var.PTF)]]>
+    </SetProperty>
+	
+    <!-- Visual Studio dependency check-->
+    <PropertyRef Id="VS2017_ROOT_FOLDER" />
+    <PropertyRef Id="VS2019_ROOT_FOLDER" />
+    <Property Id="VSTEST">
+      <DirectorySearch Id="Vs2019VsTestSearch" Path="[VS2019_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
+        <FileSearch Name="vstest.console.exe" />
+      </DirectorySearch>
+      <DirectorySearch Id="Vs2017VsTestSearch" Path="[VS2017_ROOT_FOLDER]\Common7\IDE\CommonExtensions\Microsoft\TestWindow\">
+        <FileSearch Name="vstest.console.exe" />
+      </DirectorySearch>
+    </Property>
+
+    <!-- Check if VS17 or higher version-->
+    <InstallUISequence>
+      <Custom Action="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2017ORHigher" After="AppSearch">
+        <![CDATA[$(var.VS17H) AND NOT (VSTEST)]]>
+      </Custom>
+    </InstallUISequence>
+
+    <CustomAction Id="SET_VSTEST_AGENT_OR_VS_NOT_INSTALLED_WARNING_TEXT_2017ORHigher"
+                  Property="VSTEST_AGENT_NOT_INSTALLED_WARNING_TEXT"
+                  Value=" • Microsoft Visual Studio, version 2017 or higher.&#xA;" />
+
+	<!-- SET Spec Explorer Warning Message-->
+    <CustomAction Id="SET_SE_NOT_INSTALLED_WARNING_TEXT"
+                  Property="SE_NOT_INSTALLED_WARNING_TEXT"
+                  Value=" • Microsoft Spec Explorer 2010.&#xA;" />
+    
+    <InstallUISequence>
+      <Custom Action="SET_SE_NOT_INSTALLED_WARNING_TEXT" After="AppSearch">
+        <![CDATA[$(var.SE) AND NOT SPEC_EXPLORER_INSTALLED]]>
+      </Custom>
+    </InstallUISequence>
+	
+	<!-- SET PTF Version Warning Message-->
+	  <Property Id="PTFVERSION">
+      <RegistrySearch Id="PTFVersion64Search" Root="HKLM" Win64="yes" Key="SOFTWARE\Wow6432Node\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
+      </RegistrySearch>
+      <RegistrySearch Id="PTFVersionSearch" Root="HKLM" Key="SOFTWARE\Microsoft\ProtocolTestFramework" Name="PTFVersion" Type="raw">
+      </RegistrySearch>
+    </Property>
+    <CustomAction Id="SET_PTF_NOT_INSTALLED_WARNING_TEXT"
+                  Property="PTF_NOT_INSTALLED_WARNING_TEXT"
+                  Value =" • Microsoft Protocol Test Framework [PTF_BUILDVERSION].&#xA;" />
+    
+    <InstallUISequence>
+      <Custom Action="SET_PTF_NOT_INSTALLED_WARNING_TEXT" After="AppSearch">
+        <![CDATA[$(var.PTF) AND NOT (PTFVERSION AND PTFVERSION << PTF_BUILDVERSION)]]>
+      </Custom>
+    </InstallUISequence>
+	
+    <!-- Spec Explorer dependency check-->
+    <Property Id="SPEC_EXPLORER_INSTALLED">
+      <DirectorySearch Id="SeSearch" Path="[ProgramFilesFolder]Spec Explorer 2010" Depth="1">
+        <FileSearch Name="SpecExplorer.exe"
+                    Languages="0" />
+    </DirectorySearch>
+    </Property>
+	
+    <SetProperty Id="VSInstalled" After="AppSearch" Value="1">
+        <![CDATA[VSTEST]]>
+    </SetProperty>
+	
+    <!-- Directory structure -->
+    <SetDirectory Id="WindowsVolumeDir" Value="[WindowsVolume]" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <Directory Id="WindowsVolumeDir">
+        <Directory Id="ProtocolTestDir" Name="MicrosoftProtocolTests">
+          <Directory Id="TestSuiteNameDir" Name="!(wix.TESTSUITE_NAME)">
+            <Directory Id="TestSuiteEndpointDir" Name="!(wix.TESTSUITE_ENDPOINT)-Endpoint">
+              <!-- Protocol Code Directory -->
+              <Directory Id="TESTSUITE_ROOT_DIR" Name="!(wix.TESTSUITE_VERSION)">
+                <Directory Id="TESTSUITE_BATCH_DIR" Name="Batch" />
+                <Directory Id="TESTSUITE_BIN_DIR" Name="Bin" >
+                  <Directory Id="PROTOCOLSDK_BIN_DIR" Name="." />
+                </Directory>
+                <Directory Id="TESTSUITE_SCRIPTS_DIR" Name="Scripts" />
+                <Directory Id="TESTSUITE_COMMON_SCRIPTS_DIR" Name="Batch" />
+                <Directory Id="TESTSUITE_DATA_DIR" Name="Data"/>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramFilesFolder" />
+
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="TestSuiteProgramsMenuFolder"
+                   Name="!(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP Test Suite" />
+      </Directory>
+
+      <Directory Id="DesktopFolder" />
+
+    </Directory>
+
+
+    <!-- Shortcuts -->
+    <DirectoryRef Id="TestSuiteProgramsMenuFolder">
+
+      <!-- License and Uninstall shortcuts -->
+      <Component Id="GeneralShortcuts" Guid="*">
+
+        <Shortcut Id="EulaShortcut"
+                  Name="LICENSE"
+                  Description="Open end user license agreement"
+                  Target="[TESTSUITE_ROOT_DIR]LICENSE.rtf"
+                  WorkingDirectory="TESTSUITE_ROOT_DIR"/>
+
+        <Shortcut Id="UninstallProductShortcut"
+                  Name="Uninstall"
+                  Description="Uninstall the test suite"
+                  Target="[System64Folder]msiexec.exe"
+                  Arguments="/x [ProductCode]"/>
+
+        <RemoveFolder Id="TestSuiteProgramsMenuFolder" On="uninstall" />
+        <RegistryValue Id="GeneralShortcutsKeyPath"
+                       Root="HKCU"
+                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                       Name="Installed"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+
+      <Component Id="TestSuiteShortcuts" Guid="*">
+        <Shortcut Id="OpenTestSuiteDirShortcut"
+                  Name="Open Test Suite Directory"
+                  Description="Open root directory of the test suite"
+                  Target="[WindowsFolder]explorer.exe"
+                  Arguments="."
+                  WorkingDirectory="TESTSUITE_ROOT_DIR"/>
+        <Shortcut Id="RunTestCasesShortcut"
+                  Name="Run Test Cases"
+                  Description="Run all test cases in the test suite"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_TESTS_COMMAND)"
+                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
+        <RegistryValue Id="TestSuiteShortcutsKeyPath"
+                       Root="HKCU"
+                       Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                       Name="TestSuite"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>      
+
+    </DirectoryRef>
+
+    <!-- Desktop shortcuts -->
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcuts" Guid="*">
+        <Shortcut Id="OpenTestSuiteDirShortcut_Desktop"
+                  Name="Open !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP Test Suite Directory"
+                  Description="Open root directory of the test suite"
+                  Target="[WindowsFolder]explorer.exe"
+                  Arguments="."
+                  WorkingDirectory="TESTSUITE_ROOT_DIR"/>
+        <Shortcut Id="RunTestCasesShortcut_Desktop"
+                  Name="Run !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-EP Test Cases"
+                  Description="Run all test cases in the test suite"
+                  Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_TESTS_COMMAND)"
+                  WorkingDirectory="TESTSUITE_BATCH_DIR" />
+                  <!-- Keep for future use -->
+        <!--Shortcut Id="RunByCategoryShortcut_Desktop"
+                 Name="Run !(wix.TESTSUITE_NAME) !(wix.TESTSUITE_ENDPOINT)-Test Cases By Category"
+                 Description="Run test cases by category in the test suite"
+                 Target="[TESTSUITE_BATCH_DIR]!(wix.RUN_BY_CATEGORY_COMMAND)"
+                 WorkingDirectory="TESTSUITE_BATCH_DIR" /-->
+
+        <RegistryValue Id="TestSuiteShortcutsKeyPath_Desktop"
+                        Root="HKCU"
+                        Key="SOFTWARE\Microsoft\ProtocolTestSuites\!(wix.TESTSUITE_NAME)-!(wix.TESTSUITE_ENDPOINT)-!(wix.TESTSUITE_VERSION)"
+                        Name="Desktop"
+                        Type="integer"
+                        Value="1"
+                        KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+
+    <!-- Query existing PowerShell execution policy. -->
+    <Property Id="EXISTING_POWERSHELL_EXECUTIONPOLICY">
+      <RegistrySearch Id="SearchPowerShellExecutionPolicy"
+                     Root="HKLM"
+                     Key="SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell"
+                     Name="ExecutionPolicy"
+                     Type="raw" />
+    </Property>
+
+    <!-- Set PowerShell execution policy to RemoteSigned. -->
+    <Component Id="SetPowerShellExecutionPolicyToRemoteSigned" Guid="*" Directory="TESTSUITE_ROOT_DIR">
+      <RegistryValue Id="SetPowerShellExecutionPolicyToRemoteSigned"
+                     Root="HKLM"
+                     Key="SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell"
+                     Name="ExecutionPolicy"
+                     Value="RemoteSigned"
+                     Type="string" />
+      <!-- If PowerShell Execution Policy is Unrestricted now, don't need to set it. -->
+      <Condition><![CDATA[EXISTING_POWERSHELL_EXECUTIONPOLICY<>"Unrestricted"]]></Condition>
+    </Component>
+
+
+    <!-- Features -->
+    <FeatureRef Id="TestSuiteFeatures">
+      <ComponentRef Id="LICENSE.rtf" />
+      <ComponentRef Id="GeneralShortcuts" />
+      <ComponentRef Id="SetPowerShellExecutionPolicyToRemoteSigned" />
+      <ComponentRef Id="SaveTargetEndpoint" />
+      <ComponentRef Id="TestSuiteShortcuts" />
+      <ComponentRef Id="DesktopShortcuts" />
+      <ComponentGroupRef Id="COMMON_BATCH_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_BATCH_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_BIN_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_SCRIPTS_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_DATA_FILES" />
+      <ComponentGroupRef Id="TESTSUITE_MISC_FILES"/>
+      <ComponentGroupRef Id="TESTSUITE_PTFCONFIG_FILES"/> 
+    </FeatureRef>
+  </Fragment>
+</Wix>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net5.0</targetframework>
+    <targetframework>net6.0</targetframework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Messages</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Messages</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

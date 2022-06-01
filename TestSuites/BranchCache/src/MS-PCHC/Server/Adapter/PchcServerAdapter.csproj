@@ -1,11 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
     <RunCodeAnalysis>false</RunCodeAnalysis>
@@ -37,8 +34,5 @@
     <ProjectReference Include="..\..\..\MS-PCCRR\Shared\PccrrStack\PccrrStack.csproj" />
     <ProjectReference Include="..\..\..\MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj" />
     <ProjectReference Include="..\..\Shared\PchcStack\PchcStack.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

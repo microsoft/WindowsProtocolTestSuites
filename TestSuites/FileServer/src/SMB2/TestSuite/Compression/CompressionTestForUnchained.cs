@@ -22,7 +22,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can compress WRITE request and READ response using unchained compression.")]
         public void BVT_SMB2Compression_Unchained()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             SMB2UnchainedCompression_Variant(false);
         }
@@ -34,7 +34,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can compress WRITE request and READ response using unchained compression for large file.")]
         public void BVT_SMB2Compression_Unchained_LargeFile()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             SMB2UnchainedCompression_Variant(true);
         }

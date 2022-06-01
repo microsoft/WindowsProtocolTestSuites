@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 	<AssemblyName>FileServerPlugin</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestManager.FileServerPlugin</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Management" Version="5.0.0" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

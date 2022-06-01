@@ -68,6 +68,7 @@
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
         * [CreateFile_InvalidColon](#Scenario-CreateFile_InvalidColon)
         * [CreateFile_BackSlash](#Scenario-CreateFile_BackSlash)
+        * [CreateFile_FindAllFiles](#Scenario-CreateFile_FindAllFiles)
 * [Traditional Test Case Design](#Traditional-Test-Case-Design)
     * [Test cases for CommonAlgorithm](#Test-cases-for-CommonAlgorithm)
         * [NotingFileModified](#NotingFileModified)
@@ -371,6 +372,18 @@
     * [Test cases for Other Scenarios](#Test-cases-for-Other-Scenarios)
         * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#CreateFile_InvalidStreamName)
+        * [CreateFile_BackSlash](#CreateFile_BackSlash)
+            * [CreateDirectory_EndWithBackSlash](#CreateDirectory_EndWithBackSlash)
+            * [CreateFile_EndWithInvalidBackSlash](#CreateFile_EndWithInvalidBackSlash)
+            * [CreateFile_WithDoubleBackSlashInMiddle](#CreateFile_WithDoubleBackSlashInMiddle)
+        * [CreateFile_InvalidColon](#CreateFile_InvalidColon)
+            * [CreateDirectory_InvalidColon](#CreateDirectory_InvalidColon)
+            * [CreateFile_InvalidColon](#CreateFile_InvalidColon)
+        * [FindAllFiles](#FindAllFiles)
+            * [CreateFile_CheckNoFilesFound](#CreateFile_CheckNoFilesFound)
+            * [CreateFile_CheckSingleFileFound](#CreateFile_CheckSingleFileFound)
+            * [CreateFile_CheckSubDirAndSingleFileFound](#CreateFile_CheckSubDirAndSingleFileFound)
+            * [CreateFile_CheckMultipleFilesFound](#CreateFile_CheckMultipleFilesFound)
 * [MBT Test Design](#MBT-Test-Design)
     * [Model Design](#Model-Design)
     * [Adapter Design](#Adapter-Design)
@@ -441,7 +454,7 @@ There are 221 test cases in total:
 | Scenarios for FileAccess | 1 | 2 (0) |
 | Scenarios for CommonAlgorithm | 1 | 8 (8) |
 | Scenarios for Query Directory | 1 | 51 (48) |
-| Other Scenarios | 3 | 6 (0) |
+| Other Scenarios | 4 | 10 (0) |
 
 ### <a name="MBT-Test-cases"/>MBT Test cases
 
@@ -1338,6 +1351,18 @@ There are 343 test cases in total:
 | | Test object: DirectoryFile, DataFile|
 | Message Sequence| Create a directory or data file with back slash contained in file name.|
 | | Verify server response for supported file systems.|
+
+#### <a name="Scenario-CreateFile_FindAllFiles"/>CreateFile_FindAllFiles
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test finding all files under a directory|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DirectoryFile, DataFile|
+| Message Sequence| Create a directory|
+| | Create file(s) under the directory|
+| | Query the directory|
+| | Verify that all files existing in the directory are returned|
 
 ## <a name="Traditional-Test-Case-Design"/>Traditional Test Case Design
 
@@ -5383,6 +5408,55 @@ There are 343 test cases in total:
 | | Test environment: NTFS, ReFS, FAT32|
 | Message Sequence| Create a file with double backslash in the middle.|
 | | Verify server returns with **STATUS_OBJECT_PATH_NOT_FOUND** for supported file system|
+
+#### <a name="CreateFile_FindAllFiles"/>CreateFile_FindAllFiles
+
+##### <a name="CreateFile_CheckNoFilesFound"/>CreateFile_CheckNoFilesFound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a directory file and confirm that FoundFiles count is zero|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create a directory|
+| | Query the directory|
+| | Verify that no file is returned|
+
+##### <a name="CreateFile_CheckSingleFileFound"/>CreateFile_CheckSingleFileFound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a data file under a directory file and confirm that FoundFiles count is one|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create a directory|
+| | Create a file under the directory|
+| | Query the directory|
+| | Verify that only the created file is returned|
+
+##### <a name="CreateFile_CheckSubDirAndSingleFileFound"/>CreateFile_CheckSubDirAndSingleFileFound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a data file under a subdirectory and confirm FoundFiles count|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create a root directory|
+| | Create a directory file as subdirectory under the root directory|
+| | Create a data file under the subdirectory|
+| | Query the root directory|
+| | Verify that number of files returned is 2|
+
+##### <a name="CreateFile_CheckMultipleFilesFound"/>CreateFile_CheckMultipleFilesFound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| Create a data file under a subdirectory and verify FoundFiles count for the root directory and subdirectory|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create a root directory|
+| | Create a directory file as subdirectory under the directory|
+| | Create a data file under the subdirectory|
+| | Query the root directory|
+| | Query the subdirectory|
+| | Verify that number of files returned by root directory is 2|
+| | Verify that number of files returned by subdirectory is 1|
 
 ## <a name="MBT-Test-Design"/>MBT Test Design
 

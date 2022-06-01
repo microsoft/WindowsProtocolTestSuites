@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net5.0</targetframework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -15,9 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="5.0.1" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="6.0.1" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\SspiLib\SspiLib.csproj" />
     <ProjectReference Include="..\TransportStack\TransportStack.csproj" />

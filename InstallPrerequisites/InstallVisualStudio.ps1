@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-# Check or install Visual Studio 2019 Community
+# Check or install Visual Studio 2022 Community
 
 param (
 	[ValidateSet("Check", "Install")]
@@ -9,10 +9,10 @@ param (
 	[string]$DownloadedArtifact	# Path to the downloaded Visual Studio 2017 Community installer
 )
 
-Function CheckAndModify-VS2019OrLater {
+Function CheckAndModify-VS2022OrLater {
 
-	Write-Host "Checking whether Visual Studio 2019 or later is installed or not..."
-	
+	Write-Host "Checking whether Visual Studio 2022 or later is installed or not..."
+
 	if ([IntPtr]::Size -eq 4)  # 32-bit
 	{
 		$VSWherePath = "${env:ProgramFiles}\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -28,7 +28,7 @@ Function CheckAndModify-VS2019OrLater {
 
 	if ($VSWherePathExisted -eq $false)
 	{
-		Write-Host "Visual Studio 2019 or later is not installed in your computer."	-ForegroundColor Yellow
+		Write-Host "Visual Studio 2022 or later is not installed in your computer."	-ForegroundColor Yellow
 		return $false
 	}
 
@@ -37,29 +37,29 @@ Function CheckAndModify-VS2019OrLater {
 
 	if ($VSInstallationPaths -eq $null)
 	{
-		Write-Host "Visual Studio 2019 or later is not installed in your computer." -ForegroundColor Yellow
-		return $false			
+		Write-Host "Visual Studio 2022 or later is not installed in your computer." -ForegroundColor Yellow
+		return $false
 	}
 
-	if (($VSDisplayNames -Match '2019').Count -eq 0)
+	if (($VSDisplayNames -Match '2022').Count -eq 0)
 	{
-		Write-Host "Visual Studio 2019 or later is not installed in your computer." -ForegroundColor Yellow
-		return $false			
+		Write-Host "Visual Studio 2022 or later is not installed in your computer." -ForegroundColor Yellow
+		return $false
 	}
 
 	for($i = 0; $i -lt $VSInstallationPaths.Count; $i++)
 	{
 		$VSDisplayName = $VSDisplayNames[$i]
-		Write-Host "$VSDisplayName is already installed. Modifying the components..." 
+		Write-Host "$VSDisplayName is already installed. Modifying the components..."
 		$VSInstallationPath = $VSInstallationPaths[$i]
-		$ExitCode = (Start-Process -FilePath "$currentPath\InstallVisualStudio.cmd" -ArgumentList "`"$VsInstallerPath`" modify `"$VSInstallationPath`"" -Wait -PassThru).ExitCode	
+		$ExitCode = (Start-Process -FilePath "$currentPath\InstallVisualStudio.cmd" -ArgumentList "`"$VsInstallerPath`" modify `"$VSInstallationPath`"" -Wait -PassThru).ExitCode
 		if($ExitCode -eq 0) {
 			Write-Host "The necessary Visual Studio components are installed successfully." -ForegroundColor Green
 		}
-		else 
+		else
 		{
 			Write-Host "Failed to install the necessary components for $VSDisplayName. ExitCode is $ExitCode" -ForegroundColor Yellow
-		}	
+		}
 	}
 
 	return $true
@@ -68,7 +68,7 @@ Function CheckAndModify-VS2019OrLater {
 $currentPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
 # The path where the Visual Studio will be installed
-$VSInstallationPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community"
+$VSInstallationPath = "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community"
 
 Function Install-VisualStudio {
 	try {
@@ -81,14 +81,14 @@ Function Install-VisualStudio {
 		}
 	}
 	catch {
-		Write-Host "Install Visual Studio 2019 Community failed: $_" -ForegroundColor Red
+		Write-Host "Install Visual Studio 2022 Community failed: $_" -ForegroundColor Red
 		return $false
 	}
 }
 
 switch($Action) {
 	"Check" {
-		$isInstalled = CheckAndModify-VS2019OrLater
+		$isInstalled = CheckAndModify-VS2022OrLater
 		return $isInstalled
 	}
 

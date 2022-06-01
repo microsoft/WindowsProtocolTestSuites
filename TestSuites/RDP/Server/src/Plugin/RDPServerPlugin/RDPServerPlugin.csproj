@@ -4,7 +4,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestManager.RDPServerPlugin</RootNamespace>
     <AssemblyName>RDPServerPlugin</AssemblyName>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <DocFiles Include="Docs\*.*"/>
-    <IconFiles Include="Icons\*.*"/>
+    <DocFiles Include="Docs\*.*" />
+    <IconFiles Include="Icons\*.*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,8 +42,8 @@
   </ItemGroup>
 
   <Target Name="CopyCustomContent" AfterTargets="Publish">
-    <Copy SourceFiles="@(DocFiles)" DestinationFolder="$(PublishDir)Docs"/>
-    <Copy SourceFiles="@(IconFiles)" DestinationFolder="$(PublishDir)Icons"/>
+    <Copy SourceFiles="@(DocFiles)" DestinationFolder="$(PublishDir)Docs" />
+    <Copy SourceFiles="@(IconFiles)" DestinationFolder="$(PublishDir)Icons" />
   </Target>
 
 </Project>

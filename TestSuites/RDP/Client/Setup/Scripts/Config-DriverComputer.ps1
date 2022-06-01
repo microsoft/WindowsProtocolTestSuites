@@ -302,14 +302,19 @@ Write-Host  "TurnOff FileReadonly for $DepPtfConfig due to Execution Console..."
 .\TurnOff-FileReadonly.ps1 $DepPtfConfig
 
 #-----------------------------------------------------
-# Edit registery.
-# Disable TLS 1.0 for Server
+# Edit registry.
 #-----------------------------------------------------
+
+# Disable TLS 1.0 for Server
 Write-Host "Disable TLS 1.0 for Server."
 New-Item 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -Force | Out-Null
 New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -name 'Enabled' -value 0 -PropertyType 'DWord' -Force | Out-Null
 New-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.0\Server' -name 'DisabledByDefault' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
 Write-Host 'TLS 1.0 has been disabled.'
+
+# Set Maximum Disconnection Timeout
+New-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -Name "MaxDisconnectionTime" -Value 60000 -PropertyType DWord -Force
+
 
 #-----------------------------------------------------
 # Create task to detect whether the SUT Adapter works

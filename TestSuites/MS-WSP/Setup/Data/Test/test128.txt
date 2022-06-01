@@ -1,0 +1,641 @@
+The following list is a list of files available with Microsoft Visual Studio 2008 for redistribution under the Visual Studio 2008 license.  If the Microsoft software you have licensed is not Visual Studio 2008, only the files that are installed by the Microsoft software may be redistributed under such license.
+
+_____________________________________________________________
+
+Visual C++ Runtime files
+
+Subject to the license terms for the software, you may redistribute the .EXE files (unmodified) listed below. 
+These files can be run as prerequisites during installation.
+
+vcredist_x86.exe
+
+vcredist_x64.exe 
+
+vcredist_IA64.exe
+
+ 
+
+
+Subject to the license terms for the software, you may redistribute MSM files listed below unmodified as a part of your installation package:
+ 
+Microsoft_VC90_ATL_x86.msm
+
+policy_9_0_Microsoft_VC90_ATL_x86.msm
+
+Microsoft_VC90_ATL_x86_ia64.msm
+
+policy_9_0_Microsoft_VC90_ATL_x86_ia64.msm
+
+Microsoft_VC90_ATL_x86_x64.msm
+
+policy_9_0_Microsoft_VC90_ATL_x86_x64.msm
+
+Microsoft_VC90_CRT_x86.msm
+
+policy_9_0_Microsoft_VC90_CRT_x86.msm
+
+Microsoft_VC90_CRT_x86_ia64.msm
+    
+policy_9_0_Microsoft_VC90_CRT_x86_ia64.msm
+   
+Microsoft_VC90_CRT_x86_x64.msm
+    
+policy_9_0_Microsoft_VC90_CRT_x86_x64.msm
+   
+Microsoft_VC90_MFC_x86.msm
+    
+policy_9_0_Microsoft_VC90_MFC_x86.msm
+    
+Microsoft_VC90_MFC_x86_ia64.msm
+   
+policy_9_0_Microsoft_VC90_MFC_x86_ia64.msm
+
+Microsoft_VC90_MFC_x86_x64.msm
+   
+policy_9_0_Microsoft_VC90_MFC_x86_x64.msm
+  
+Microsoft_VC90_MFCLOC_x86.msm
+  
+policy_9_0_Microsoft_VC90_MFCLOC_x86.msm
+   
+Microsoft_VC90_MFCLOC_x86_ia64.msm
+ 
+policy_9_0_Microsoft_VC90_MFCLOC_x86_ia64.msm
+ 
+Microsoft_VC90_MFCLOC_x86_x64.msm
+ 
+policy_9_0_Microsoft_VC90_MFCLOC_x86_x64.msm
+
+Microsoft_VC90_OpenMP_x86.msm
+ 
+policy_9_0_Microsoft_VC90_OpenMP_x86.msm
+      
+Microsoft_VC90_OpenMP_x86_ia64.msm
+        
+policy_9_0_Microsoft_VC90_OpenMP_x86_ia64.msm
+    
+Microsoft_VC90_OpenMP_x86_x64.msm
+    
+policy_9_0_Microsoft_VC90_OpenMP_x86_x64.msm
+    
+
+For your convenience, we have provided the following folders for use when redistributing VC++ runtime files. Subject to the license terms for the software, you may redistribute the folder (unmodified) in the application local folder as a sub-folder with no change to the folder name. You may also redistribute all the files (*.dll and *.manifest) within a folder, listed below the folder for your convenience, as an entire set. 
+
+\VC\redist\x86\Microsoft.VC90.ATL\
+ atl90.dll
+ Microsoft.VC90.ATL.manifest
+
+\VC\redist\ia64\Microsoft.VC90.ATL\
+ atl90.dll
+ Microsoft.VC90.ATL.manifest
+
+\VC\redist\amd64\Microsoft.VC90.ATL\
+ atl90.dll
+ Microsoft.VC90.ATL.manifest
+
+\VC\redist\x86\Microsoft.VC90.CRT\
+ msvcm90.dll
+ msvcp90.dll
+ msvcr90.dll
+ Microsoft.VC90.CRT.manifest
+
+\VC\redist\ia64\Microsoft.VC90.CRT\
+ msvcm90.dll
+ msvcp90.dll
+ msvcr90.dll
+ Microsoft.VC90.CRT.manifest
+
+\VC\redist\amd64\Microsoft.VC90.CRT\
+ msvcm90.dll
+ msvcp90.dll
+ msvcr90.dll
+ Microsoft.VC90.CRT.manifest
+
+\VC\redist\x86\Microsoft.VC90.MFC\
+ mfc90.dll
+ mfc90u.dll
+ mfcm90.dll
+ mfcm90u.dll
+ Microsoft.VC90.MFC.manifest
+
+\VC\redist\ia64\Microsoft.VC90.MFC\
+ mfc90.dll
+ mfc90u.dll
+ mfcm90.dll
+ mfcm90u.dll
+ Microsoft.VC90.MFC.manifest
+
+\VC\redist\amd64\Microsoft.VC90.MFC\
+ mfc90.dll
+ mfc90u.dll
+ mfcm90.dll
+ mfcm90u.dll
+ Microsoft.VC90.MFC.manifest
+
+\VC\redist\x86\Microsoft.VC90.MFCLOC\
+ mfc90chs.dll
+ mfc90cht.dll
+ mfc90enu.dll
+ mfc90esp.dll
+ mfc90deu.dll
+ mfc90fra.dll
+ mfc90ita.dll
+ mfc90jpn.dll
+ mfc90kor.dll
+ Microsoft.VC90.MFCLOC.manifest
+
+\VC\redist\ia64\Microsoft.VC90.MFCLOC\
+ mfc90chs.dll
+ mfc90cht.dll
+ mfc90enu.dll
+ mfc90esp.dll
+ mfc90deu.dll
+ mfc90fra.dll
+ mfc90ita.dll
+ mfc90jpn.dll
+ mfc90kor.dll
+ Microsoft.VC90.MFCLOC.manifest
+
+\VC\redist\amd64\Microsoft.VC90.MFCLOC\
+ mfc90chs.dll
+ mfc90cht.dll
+ mfc90enu.dll
+ mfc90esp.dll
+ mfc90deu.dll
+ mfc90fra.dll
+ mfc90ita.dll
+ mfc90jpn.dll
+ mfc90kor.dll
+ Microsoft.VC90.MFCLOC.manifest
+
+\VC\redist\x86\Microsoft.VC90.OpenMP\
+ vcomp90.dll
+ Microsoft.VC90.OpenMP.manifest
+
+\VC\redist\amd64\Microsoft.VC90.OpenMP\
+ vcomp90.dll
+ Microsoft.VC90.OpenMP.manifest
+
+\VC\redist\ia64\Microsoft.VC90.OpenMP\
+ vcomp90.dll
+ Microsoft.VC90.OpenMP.manifest
+
+Subject to the license terms for the software, the following files can be redistributed with your application in your application local folder or by deploying into the Global Assembly Cache (GAC):
+
+mfcmifc80.dll
+
+Subject to the license terms of the software, one or more of the *.*.pdb files listed below may be redistributed for the sole purpose of debugging your applications. 
+
+atl90.i386.pdb      
+atl90.AMD64.pdb      
+atl90.IA64.pdb      
+      
+msvcm90.i386.pdb      
+msvcm90.AMD64.pdb      
+msvcm90.IA64.pdb      
+      
+msvcp90.i386.pdb      
+msvcp90.AMD64.pdb      
+msvcp90.IA64.pdb      
+      
+msvcr90.i386.pdb      
+msvcr90.AMD64.pdb      
+msvcr90.IA64.pdb      
+      
+mfc90.i386.pdb      
+mfc90.AMD64.pdb      
+mfc90.IA64.pdb      
+      
+mfc90u.i386.pdb      
+mfc90u.AMD64.pdb      
+mfc90u.IA64.pdb      
+      
+mfcm90.i386.pdb      
+mfcm90.AMD64.pdb      
+mfcm90.IA64.pdb      
+      
+mfcm90u.i386.pdb      
+mfcm90u.AMD64.pdb      
+mfcm90u.IA64.pdb
+
+vcomp90.i386.pdb
+vcomp90.AMD64.pdb
+vcomp90.IA64.pdb
+      
+_____________________________________________________________
+
+Smart Device Files
+
+Subject to the license terms for the software, the following files may be distributed, however, these files are intended only for use with Windows Mobile and Windows CE based devices and may only be distributed with Smart device applications:  
+
+Supported processor types are: armv4, armv4i, mipsii, mipsii_fp, mipsiv, mipsiv_fp, sh4, x86
+
+Folder path for the file location is: \VC\ce\dll\[processor-type-name]
+
+msvcr90.dll
+atl90.dll
+MFC90CHS.DLL
+MFC90CHT.DLL
+MFC90DEU.DLL
+MFC90ENU.DLL
+MFC90ESP.DLL
+MFC90FRA.DLL
+MFC90ITA.DLL
+MFC90JPN.DLL
+MFC90KOR.DLL
+MFC90U.DLL
+
+Following pdb files may be distributed for debugging purposes only
+
+Folder path for the file location is: \VC\ce\dll\[processor-type-name]
+
+msvcr90.pdb
+atl90.pdb
+mfc90u.pdb
+
+ 
+
+_____________________________________________________________
+
+.NET Framework 
+
+Subject to the license terms for the software, the following .EXE files may be distributed unmodified:
+
+dotNetFx35setup.exe
+
+For your convenience, we have provided the following folders for use when redistributing .NET Framework runtime files. Subject to the license terms for the software, you may redistribute the folder (unmodified) in the application local folder as a sub-folder with no change to the folder name. You may also redistribute all the files within a folder, listed below the folder for your convenience, as an entire set.
+
+wcu\dotNetFramework 
+ dotNetFx35setup.exe
+
+wcu\dotNetFramework\dotNetFX20\ 
+ ASPNET.msp
+ ASPNET_64.msp
+ clr.msp
+ clr_64.msp
+ crt.msp
+ crt_64.msp
+ dw.msp
+ dw_64.msp
+ Netfx20a_x64.msi
+ Netfx20a_x86.msi
+ NetFX_CA.msp
+ NetFX_Core.msp
+ NetFX_Core_64.msp
+ NetFX_Other.msp
+ NetFX_Other_64.msp
+ prexp.msp
+ winforms.msp
+ winforms_64.msp
+
+wcu\dotNetFramework\dotNetFX30\ 
+ Netfx30a_x64.msi
+ Netfx30a_x86.msi
+ RGB9RAST_x64.msi
+ RGB9RAST_x86.msi
+ WCF.msp
+ WCF_64.msp
+ WCS.msp
+ WCS_64.msp
+ WF.msp
+ WF_32.msp
+ WF_64.msp
+ WIC_x64_enu.exe
+ WIC_x86_enu.exe
+ WPF1.msp
+ WPF1_64.msp
+ WPF2.msp
+ WPF2_32.msp
+ WPF2_64.msp
+ WPF_Other.msp
+ WPF_Other_32.msp
+ WPF_Other_64.msp
+ XPS.msp
+ XPSEPSC-amd64-en-US.exe
+ XPSEPSC-x86-en-US.exe
+
+wcu\dotNetFramework\dotNetFX30\x64\ 
+ msxml6.msi
+
+wcu\dotNetFramework\dotNetFX30\x86\ 
+ msxml6.msi
+
+wcu\dotNetFramework\dotNetFX35\x64\ 
+ netfx35_x64.exe
+
+wcu\dotNetFramework\dotNetFX35\x86\ 
+ netfx35_x86.exe
+
+wcu\dotNetFramework\dotNetMSP\x64\ 
+ NetFX2.0-KB110806-v6000-x64.msu
+
+wcu\dotNetFramework\dotNetMSP\x64\ 
+ NetFX3.0-KB929300-v6000-x64.msu
+
+wcu\dotNetFramework\dotNetMSP\x86\ 
+ NetFX2.0-KB110806-v6000-x86.msu
+
+wcu\dotNetFramework\dotNetMSP\x86\ 
+ NetFX3.0-KB929300-v6000-x86.msu
+
+dotnetfx3.exe
+
+dotnetfx.exe
+
+enabledotnet3.exe
+
+
+
+
+_____________________________________________________________
+
+
+.NET Compact Framework Files
+
+For your convenience, we have provided the following installation package (*.MSI) for use when redistributing the .NET Compact Framework dlls. Subject to the license terms for the software, you may redistribute the MSI (unmodified) or one or more of the separate files listed below:
+
+.NET Compact Framework V2:
+
+NETCFSetupv2.msi
+ NETCFv2.ppc.armv4.cab
+ NETCFv2.wm.armv4i.cab
+ NETCFv2.wce5.sh4.cab
+ NETCFv2.wce5.mipsii.cab
+ NETCFv2.wce5.mipsiv.cab
+ NETCFv2.wce5.armv4i.cab
+ NETCFv2.wce5.x86.cab
+ System_SR_CHS.CAB
+ System_SR_CHS_wm.cab
+ System_SR_CHT.CAB
+ System_SR_CHT_wm.cab
+ System_SR_DE.CAB
+ System_SR_DE_wm.cab
+ System_SR_ENU.CAB
+ System_SR_ENU_wm.cab
+ System_SR_ES.CAB
+ System_SR_ES_wm.cab
+ System_SR_FR.CAB
+ System_SR_FR_wm.cab
+ System_SR_IT.CAB
+ System_SR_IT_wm.cab
+ System_SR_JA.CAB
+ System_SR_JA_wm.cab
+ System_SR_KO.CAB
+ System_SR_KO_wm.cab
+ System_SR_pt-BR.CAB
+ System_SR_pt-BR_wm.cab
+
+For your convenience, we have provided the following installation package (*.MSI) for use when redistributing the .NET Compact Framework dlls. Subject to the license terms for the software, you may redistribute the MSI (unmodified) or one or more of the separate files listed below:
+
+.NET Compact Framework V3.5:
+
+NETCFSetupv35.msi
+ NETCFv35.wm.armv4i.cab
+ NETCFv35.ppc.armv4.cab
+ NETCFv35.wce.x86.cab
+ NETCFv35.wce.sh4.cab
+ NETCFv35.wce.mipsiv.cab
+ NETCFv35.wce.mipsii.cab
+ NETCFv35.wce.armv4.cab
+ NETCFv35.Messages.DE.cab
+ NETCFv35.Messages.DE.wm.cab
+ NETCFv35.Messages.EN.cab
+ NETCFv35.Messages.EN.wm.cab
+ NETCFv35.Messages.ES.cab
+ NETCFv35.Messages.ES.wm.cab
+ NETCFv35.Messages.FR.cab
+ NETCFv35.Messages.FR.wm.cab
+ NETCFv35.Messages.IT.cab
+ NETCFv35.Messages.IT.wm.cab
+ NETCFv35.Messages.JA.cab
+ NETCFv35.Messages.JA.wm.cab
+ NETCFv35.Messages.KO.cab
+ NETCFv35.Messages.KO.wm.cab
+ NETCFv35.Messages.zh-CHS.cab
+ NETCFv35.Messages.zh-CHS.wm.cab
+ NETCFv35.Messages.zh-CHT.cab
+ NETCFv35.Messages.zh-CHT.wm.cab
+
+
+_____________________________________________________________
+
+SQL Server Express Files
+
+Subject to the license terms for the software, the following .EXE files may be distributed unmodified:
+
+SQLExpr.exe
+SQLExpr32.exe
+
+_____________________________________________________
+
+Runtime Components
+
+Subject to the license terms for the software, the following files may be distributed unmodified:
+
+Windows Installer 2.0 (InstMSIA.exe/InstMSIW.exe)   
+Windows Installer 3.1 (WindowsInstaller-KB893803-v2-x86.exe)
+msstdfmt.dll
+vs_piaredist.exe 
+
+_____________________________________________________
+
+Images
+
+One or more of the files located in the .zip file below may be distributed subject to the license terms for the software and the additional use terms described in the .zip file. 
+
+VS2008ImageLibrary.zip
+
+_____________________________________________________
+
+Visual Studio Tools for Office Files
+
+Subject to the license terms for the software, the following .EXE files may be distributed unmodified:
+
+vstor.exe
+vstor30.exe
+vstolp20.exe
+vstor_lp_ar_30.exe
+
+vstor_lp_da_30.exe
+
+vstor_lp_de_30.exe
+
+vstor_lp_es_30.exe
+
+vstor_lp_fi_30.exe
+
+vstor_lp_fr_30.exe
+
+vstor_lp_he_30.exe
+
+vstor_lp_it_30.exe
+
+vstor_lp_ja_30.exe
+
+vstor_lp_ko_30.exe
+
+vstor_lp_nb-NO_30.exe
+
+vstor_lp_nl_30.exe
+
+vstor_lp_pl_30.exe
+
+vstor_lp_pt-BR_30.exe
+
+vstor_lp_ru_30.exe
+
+vstor_lp_sv_30.exe
+
+vstor_lp_zh-CHS_30.exe
+
+vstor_lp_zh-CHT_30.exe
+
+vstor_lp_zh-HK_30.exe
+
+
+ 
+
+_____________________________________________________
+
+Windows SDK Files
+
+Subject to the license terms for the software, the following files may be distributed unmodified:
+
+MageUI.exe
+Mage.exe
+Makecert.exe
+ad1.lib
+amstrmid.lib
+certidl.lib
+CiUuid.lib
+clfsmgmt.lib
+daouuid.lib
+DtcHelp.lib
+format.lib
+gpmuuid.lib
+Htmlhelp.lib
+KSGuid.lib
+ksuser.lib
+MiniDump.lib
+MMC.lib
+muiload.lib
+odbccp32.lib
+PEnter.lib
+PhotoAcquireUID.lib
+ScrnSave.lib
+ScrnSavW.lib
+strsafe.lib
+taskschd.lib
+unicows.lib
+Uuid.lib
+WindowsSideShowGuids.lib
+xaSwitch.lib
+
+____________________________________________
+
+Report Viewer files
+
+Subject to the license terms for the software, the following .EXE files may be distributed unmodified:
+
+ReportViewer.exe
+ReportViewer-lp.exe
+
+_____________________________________________________________
+
+Visual Basic PowerPacks files
+
+Subject to the license terms for the software, the following .EXE files may be distributed unmodified:
+
+VisualBasicPowerPacksSetup.exe
+
+_____________________________________________________________
+
+SQL Server Compact Files
+
+The listed .msi files each install its enclosed components to a specific location on the destination computer.  This helps to ensure serviceability and technical support.  The .dll files enclosed in these .msi files are also available separately in this redist.txt.  However, distributions of these separate .dlls may result in issues of serviceability.  For more details, please see http://go.microsoft.com/fwlink/?LinkId=94589:
+
+SSCERuntime-ENU.msi
+SSCERuntime-DEU.msi
+SSCERuntime-FRA.msi
+SSCERuntime-JPN.msi
+SSCERuntime-RUS.msi
+SSCERuntime-ESN.msi
+SSCERuntime-ITA.msi
+SSCERuntime-KOR.msi
+SSCERuntime-CHT.msi
+SSCERuntime-CHS.msi
+sqlcese35.dll
+sqlceqp35.dll
+sqlceoledb35.dll
+sqlceca35.dll
+sqlceme35.dll
+sqlcecompact35.dll
+sqlceer35en.dll
+sqlceer35cn.dll/sqlceer35zh-CHS.dll
+sqlceer35de.dll 
+sqlceer35es.dll 
+sqlceer35fr.dll 
+sqlceer35it.dll 
+sqlceer35ja.dll 
+sqlceer35ko.dll 
+sqlceer35tw.dll/sqlceer35zh-CHT.dll 
+sqlceer35ru.dll
+System.Data.SqlServerCe.dll
+
+Microsoft Synchronization Services for ADO.Net v1.0
+
+---------------------------------------------------------------------------------
+
+Microsoft.Synchronization.Data.dll
+Microsoft.Synchronization.Data.Server.dll
+Microsoft.Synchronization.Data.SqlServerCe.dll
+Microsoft.Synchronization.Data.resources.dll
+
+The listed .cab files each install its enclosed components to a specific location on the destination mobile device.  This helps to ensure serviceability and technical support.  The .dll and exe files enclosed in these .cab files are also available separately in this redist.txt.  However, distributions of these separate .dlls and exes may result in issues of serviceability.  For more details, please see http://go.microsoft.com/fwlink/?LinkId=94589
+
+sqlcese35.dll
+sqlceqp35.dll
+sqlceoledb35.dll
+sqlceca35.dll
+sqlceme35.dll
+sqlcecompact35.dll
+sqlceer35en.dll 
+sqlceer35cn.dll/sqlceer35zh-CHS.dll
+sqlceer35de.dll
+sqlceer35es.dll 
+sqlceer35fr.dll
+sqlceer35it.dll 
+sqlceer35ja.dll 
+sqlceer35ko.dll 
+sqlceer35tw.dll/sqlceer35zh-CHT.dll
+sqlceer35ru.dll
+System.Data.SqlServerCe.dll
+System.Data.SqlClient.dll
+isqlw35.exe
+upgrade.exe
+dbnetlib.dll
+
+language: CHS, CHT, DE, ENU, ES, FR, IT, JA, KO, RU
+device: ppc, phone
+platform: wce4, wce5
+processor: armv4, armv4i, mipsii, mipsii_fp, mipsiv, mipsiv_fp, sh4, x86
+
+sql.dev.[language].[device].[platform].[processor].CAB
+sql.dev.[language].[platform].[processor].CAB
+sql.[device].[platform].[processor].CAB
+sql.[platform].[processor].CAB
+sqlce.[device].[platform].[processor].CAB
+sqlce.[platform].[processor].CAB
+sqlce.repl.[device].[platform].[processor].CAB
+sqlce.repl.[platform].[processor].CAB
+sqlce.dev.[language].[device].[platform].[processor].CAB
+sqlce.dev.[language].[platform].[processor].CAB
+_____________________________________________________________
+
+Crystal Reports Files
+
+Subject to the license terms for the software, the following .MSI files may be distributed unmodified:
+
+CRRedist2008_x86.msi
+CRRedist2008_x64.msi
+CRRedist2008_ia64.msi

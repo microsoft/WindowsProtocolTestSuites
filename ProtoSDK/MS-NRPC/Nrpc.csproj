@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net5.0</targetframework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Security.Nrpc</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

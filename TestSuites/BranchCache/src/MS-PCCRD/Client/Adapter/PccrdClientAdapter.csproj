@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisRules></CodeAnalysisRules>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release'">
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\CaptureCode\PccrdBothRoleCaptureCode.cs">
+      <Link>PccrdBothRoleCaptureCode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\Logger.cs">
+      <Link>Logger.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\COMMON\CommonStack\CommonStack.csproj" />
+    <ProjectReference Include="..\..\..\COMMON\ReqConfigUtility\ReqConfigUtility.csproj" />
+    <ProjectReference Include="..\..\Shared\PccrdStack\PccrdStack.csproj" />
+    <ProjectReference Include="..\..\Shared\WsDiscovery\WsDiscovery.csproj" />
+  </ItemGroup>
+</Project>

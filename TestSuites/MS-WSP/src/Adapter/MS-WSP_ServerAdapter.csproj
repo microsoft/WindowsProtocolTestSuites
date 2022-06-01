@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>MS-WSP_ServerAdapter</AssemblyName>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Wsp.Adapter</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+      <Link>SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj" />
+    <ProjectReference Include="..\..\..\..\ProtoSDK\MS-WSP\Wsp.csproj" />
+  </ItemGroup>
+
+</Project>

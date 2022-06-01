@@ -63,20 +63,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         #region Check IsGlobalEncryptDataEnabled
 
         /// <summary>
-        /// Check compressed packet only allow unencrypted access for clients that do not support SMB 3.0 when IsGlobalEncryptDataEnabled is true and IsGlobalRejectUnencryptedAccessEnabled is false,
-        /// or IsGlobalEncryptDataEnabled is false
+        /// Check compression test case applicability for EncryptData SMB server configuration. 
+        /// Unencrypted accesses from clients that do not support SMB 3.0 and above are allowed when IsGlobalEncryptDataEnabled is true and IsGlobalRejectUnencryptedAccessEnabled is false.
+        /// Or unencrypted accesses from any clients are allowed when IsGlobalEncryptDataEnabled is false.
         /// </summary>
-        private void CheckCompressedPacketForGlobalEncryptDataEnabled()
+        private void CheckCompressionTestCaseApplicabilityForGlobalEncryptData(string reason = null)
         {
             if (testConfig.IsGlobalEncryptDataEnabled)
             {
                 if (testConfig.IsGlobalRejectUnencryptedAccessEnabled)
                 {
-                    Site.Assert.Inconclusive("This test case is for compressed packet or chained compressed packet and not applicable to encrypted packet.");
+                    if (string.IsNullOrEmpty(reason))
+                    {
+                        Site.Assert.Inconclusive("This test case is for compressed packets or chained compressed packets and not applicable to encrypted packets.");
+                    }
+                    else
+                    {
+                        Site.Assert.Inconclusive(reason);
+                    }
                 }
                 else
                 {
-                    BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionClientSupported < DialectRevision.Smb30, "When IsGlobalRejectUnencryptedAccessEnabled is false, it will allow unencrypted access for clients that do not support SMB 3.0.");
+                    BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionClientSupported < DialectRevision.Smb30, "When IsGlobalRejectUnencryptedAccessEnabled is false, it will allow unencrypted accesses from clients that do not support SMB 3.0 and above.");
                 }
             }
         }
@@ -157,7 +165,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can handle compressed WRITE request correctly using supported compression algorithms.")]
         public void SMB2Compression_CompressedWriteRequest()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             SMB2Compression_Variant(CompressionTestVariant.CompressibleWrite);
         }
@@ -169,7 +177,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can compress read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible.")]
         public void SMB2Compression_CompressibleReadResponse()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             SMB2Compression_Variant(CompressionTestVariant.CompressibleRead);
         }
@@ -181,7 +189,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server will not compress read request if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is incompressible.")]
         public void SMB2Compression_IncompressibleReadResponse()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             SMB2Compression_Variant(CompressionTestVariant.IncompressibleRead);
         }
@@ -228,7 +236,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can handle compressed large file WRITE request correctly using supported compression algorithms.")]
         public void SMB2Compression_CompressedWriteRequest_LargeFile()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             SMB2Compression_Variant(CompressionTestVariant.CompressibleWrite, isLargeFile: true);
         }
@@ -240,7 +248,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server can compress large file read request correctly if SMB2_READFLAG_REQUEST_COMPRESSED is specified in request and response is compressible.")]
         public void SMB2Compression_CompressibleReadResponse_LargeFile()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             SMB2Compression_Variant(CompressionTestVariant.CompressibleRead, isLargeFile: true);
         }
@@ -254,7 +262,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server will disconnect the connection if it received a compressed message with invalid length.")]
         public void SMB2Compression_InvalidCompressedPacketLength()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             Action<Smb2Packet> processedPacketModifier = packet =>
             {
@@ -281,7 +289,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server will disconnect the connection if the ProtocolId in the decompressed message is invalid.")]
         public void SMB2Compression_InvalidDecompressedProtocolId()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             Action<Smb2Packet> unprocessedPacketModifier = packet =>
             {
@@ -310,7 +318,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to test whether server will disconnect the connection if the CompressionAlgorithm in the compressed message is invalid.")]
         public void SMB2Compression_InvalidCompressionAlgorithm()
         {
-            CheckCompressedPacketForGlobalEncryptDataEnabled();
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData();
 
             Action<Smb2Packet> processedPacketModifier = packet =>
             {
@@ -389,17 +397,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         private void BasicSMB2Compression(CompressionAlgorithm compressionAlgorithm, bool isLargeFile = false)
         {
-            if (testConfig.IsGlobalEncryptDataEnabled)
-            {
-                if (testConfig.IsGlobalRejectUnencryptedAccessEnabled)
-                {
-                    Site.Assert.Inconclusive("This test case is handled in BasicSMB2Compression_Encrypted related cases.");
-                }
-                else
-                {
-                    BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionClientSupported < DialectRevision.Smb30, "When IsGlobalRejectUnencryptedAccessEnabled is false, it will allow unencrypted access for clients that do not support SMB 3.0.");
-                }
-            }
+            CheckCompressionTestCaseApplicabilityForGlobalEncryptData($"This test case is handled in {nameof(BasicSMB2Compression_Encrypted)} related cases.");
 
             CheckCompressionAndEncryptionApplicability(compressionAlgorithm);
             var compressionAlgorithms = new CompressionAlgorithm[] { compressionAlgorithm };
@@ -833,7 +831,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     {
                         // For ChainedCompressibleRead or ChainedCompressibleWritePatternV1AtEnd, we need to append some data which can be compressed with PatternV1.
                         var test256Bytes = commonCompressibleData.Take(256).ToArray();
-                        var newCommonCompressibleData = Enumerable.Repeat(test256Bytes, 4*1024-1).SelectMany(b => b).ToArray();
+                        var newCommonCompressibleData = Enumerable.Repeat(test256Bytes, 4 * 1024 - 1).SelectMany(b => b).ToArray();
                         testData = GenerateByteArray(newCommonCompressibleData, exampleTestData[CompressionAlgorithm.Pattern_V1]);
                     }
                     else if (variant == CompressionTestVariant.ChainedCompressibleWritePatternV1AtFrontAndEnd)
