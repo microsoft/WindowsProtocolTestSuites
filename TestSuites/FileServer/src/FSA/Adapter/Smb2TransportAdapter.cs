@@ -356,10 +356,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 encryptionAlgs
                 );
             packetHeader = negotiateResponse.Header;
-            if (testConfig.IsGlobalEncryptDataEnabled && testConfig.IsGlobalRejectUnencryptedAccessEnabled)
-            {
-                site.Assert.Inconclusive("Test case is not applicable when both IsGlobalEncryptDataEnabled and IsGlobalRejectUnencryptedAccessEnabled set to true.");
-            }
             testConfig.CheckNegotiateContext(negotiateRequest, negotiateResponse);
 
             return (MessageStatus)status;
@@ -803,7 +799,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             )
         {
             QUERY_DIRECTORY_Response responsePayload;
-            QUERY_DIRECTORY_Request_Flags_Values restartScanFlag = 
+            QUERY_DIRECTORY_Request_Flags_Values restartScanFlag =
                 restartScan ? QUERY_DIRECTORY_Request_Flags_Values.RESTART_SCANS : QUERY_DIRECTORY_Request_Flags_Values.NONE;
 
             uint status = this.smb2Client.QueryDirectory(
@@ -849,7 +845,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool returnSingleEntry,
             uint fileIndex,
             string fileNamePattern,
-            out byte[] outBuffer            
+            out byte[] outBuffer
             )
         {
             QUERY_DIRECTORY_Response responsePayload;
@@ -873,7 +869,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 out outBuffer,
                 out packetHeader,
                 out responsePayload);
-           
+
             return (MessageStatus)status;
         }
 
