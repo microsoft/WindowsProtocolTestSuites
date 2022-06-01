@@ -5,9 +5,6 @@
     <AssemblyName>MS-PCCRTP_ServerAdapter</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRules></CodeAnalysisRules>
@@ -26,9 +23,6 @@
     <Compile Include="..\..\Shared\Logger.cs">
       <Link>Logger.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\COMMON\CommonStack\CommonStack.csproj" />

@@ -2,7 +2,9 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Protocol.TestSuites.Kerberos.TestSuite</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Kerberos_ServerTestSuite.deployment.ptfconfig">

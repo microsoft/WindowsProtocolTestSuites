@@ -5,9 +5,6 @@
     <RootNamespace>Microsoft.Protocols.TestSuites.Pccrd</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRules></CodeAnalysisRules>
@@ -15,9 +12,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release'">
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
@@ -35,8 +29,5 @@
     <ProjectReference Include="..\..\Shared\PccrdStack\PccrdStack.csproj" />
     <ProjectReference Include="..\..\Shared\WsDiscovery\WsDiscovery.csproj" />
     <ProjectReference Include="..\..\..\COMMON\ReqConfigUtility\ReqConfigUtility.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestSuites.BranchCache</RootNamespace>
     <AssemblyName>BranchCache_TestSuite</AssemblyName>
@@ -28,7 +28,7 @@
     <ProjectReference Include="..\COMMON\CommonStack\CommonStack.csproj" />
     <ProjectReference Include="..\MS-PCCRC\Shared\PccrcStack\PccrcStack.csproj" />
     <ProjectReference Include="..\MS-PCCRC_Tool\Source\MS-PCCRC_TestTool\MS-PCCRC_TestTool.csproj" />
-    <ProjectReference Include="..\ms-pccrd\Shared\PccrdStack\PccrdStack.csproj" />
+    <ProjectReference Include="..\MS-PCCRD\Shared\PccrdStack\PccrdStack.csproj" />
     <ProjectReference Include="..\MS-PCCRD\Shared\WsDiscovery\WsDiscovery.csproj" />
     <ProjectReference Include="..\MS-PCCRR\Shared\PccrrStack\PccrrStack.csproj" />
     <ProjectReference Include="..\MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj" />

@@ -4,9 +4,6 @@
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRules></CodeAnalysisRules>
@@ -37,8 +34,5 @@
     <ProjectReference Include="..\..\..\MS-PCCRR\Shared\PccrrStack\PccrrStack.csproj" />
     <ProjectReference Include="..\..\..\MS-PCCRTP\Shared\PccrtpStack\PccrtpStack.csproj" />
     <ProjectReference Include="..\..\Shared\PchcStack\PchcStack.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 </Project>

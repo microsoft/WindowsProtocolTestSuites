@@ -2,12 +2,10 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.BranchCache.Pccrd</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRules></CodeAnalysisRules>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -15,27 +13,13 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release'">
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\CaptureCode\PccrdBothRoleCaptureCode.cs">
-      <Link>PccrdBothRoleCaptureCode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\Logger.cs">
-      <Link>Logger.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\COMMON\CommonStack\CommonStack.csproj" />
-    <ProjectReference Include="..\..\..\COMMON\ReqConfigUtility\ReqConfigUtility.csproj" />
-    <ProjectReference Include="..\..\Shared\PccrdStack\PccrdStack.csproj" />
-    <ProjectReference Include="..\..\Shared\WsDiscovery\WsDiscovery.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\WsDiscovery\WsDiscovery.csproj" />
   </ItemGroup>
 </Project>
