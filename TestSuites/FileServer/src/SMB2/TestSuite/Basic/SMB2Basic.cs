@@ -195,6 +195,72 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.FileAccess)]
+        [Description("This test case is designed to verify that If the connection is over QUIC, server sends correct response when a named pipe is opened.")]
+        public void BVT_SMB2Basic_QuicTransport_OpenNamedPipe()
+        {
+            if(TestConfig.UnderlyingTransport != Smb2TransportType.Quic)
+            {
+                BaseTestSite.Assert.Inconclusive("Underlying transport must be QUIC");
+            }
+
+            uint returnedstatus;
+            uint expectedStatus = Smb2Status.STATUS_ACCESS_DENIED;
+            if (TestConfig.AllowNamedPipeAccessOverQUIC)
+            {
+                expectedStatus = Smb2Status.STATUS_OBJECT_NAME_NOT_FOUND;
+            }
+
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Start a client to create a file by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+            returnedstatus = client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            returnedstatus = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+
+            //Tree connect with share type as PIPE
+            uint treeId1;
+            uncSharePath = "\\\\" + TestConfig.SutComputerName + "\\IPC$";
+            returnedstatus = client1.TreeConnect(uncSharePath, out treeId1,
+                checker: (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        ShareType_Values.SHARE_TYPE_PIPE,
+                        response.ShareType,
+                        "Share type should be SMB2_SHARE_TYPE_PIPE, actually server returns {0}", response.ShareType);
+                });
+
+            //Open a named pipe
+            FILEID fileId;
+            returnedstatus = client1.Create(
+                treeId1,
+                "random",
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out fileId,
+                out _, checker: (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                       expectedStatus,
+                        header.Status,
+                       "If the connection is over QUIC, AllowNamedPipeAccessOverQUIC is FALSE, and a named pipe is " +
+                       "being opened, the server MUST fail the request with STATUS_ACCESS_DENIED");
+                });
+
+            if(returnedstatus == Smb2Status.STATUS_SUCCESS)
+            {
+                client1.Close(treeId1, fileId);
+            }
+
+            client1.TreeDisconnect(treeId1);
+            client1.LogOff();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.QueryAndSetFileInfo)]
         [Description("This test case is designed to test whether server can handle QUERY and SET requests to a file correctly.")]

@@ -44,6 +44,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public SMB2_COMPRESSION_CAPABILITIES? NegotiateContext_COMPRESSION;
 
         /// <summary>
+        /// Indicates server supports transport capabilities.
+        /// </summary>
+        public SMB2_TRANSPORT_CAPABILITIES? NegotiateContext_TRANSPORT;
+
+        /// <summary>
         /// Indicates which signing algorithms the server supports.
         /// </summary>
         public SMB2_SIGNING_CAPABILITIES? NegotiateContext_SIGNING;
@@ -98,6 +103,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_RDMA_TRANSFORM_CAPABILITIES>(NegotiateContext_RDMA.Value)).ToArray();
             }
 
+            if (NegotiateContext_TRANSPORT != null)
+            {
+                Smb2Utility.Align8(ref messageData);
+                messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_TRANSPORT_CAPABILITIES>(NegotiateContext_TRANSPORT.Value)).ToArray();
+            }
+
             return messageData;
         }
 
@@ -115,6 +126,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             this.NegotiateContext_PREAUTH = null;
             this.NegotiateContext_SIGNING = null;
             this.NegotiateContext_RDMA = null;
+            this.NegotiateContext_TRANSPORT = null;
             this.Header = TypeMarshal.ToStruct<Packet_Header>(data, ref consumedLen);
 
             byte[] tempData = data.Skip(consumedLen).ToArray();
@@ -163,6 +175,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     if (this.NegotiateContext_RDMA != null) throw new Exception("More than one SMB2_RDMA_TRANSFORM_CAPABILITIES are present.");
                     this.NegotiateContext_RDMA = TypeMarshal.ToStruct<SMB2_RDMA_TRANSFORM_CAPABILITIES>(data, ref consumedLen);
+                }
+                else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_TRANSPORT_CAPABILITIES)
+                {
+                    if (this.NegotiateContext_TRANSPORT != null) throw new Exception("More than one SMB2_TRANSPORT_CAPABILITIES are present.");
+                    this.NegotiateContext_TRANSPORT = TypeMarshal.ToStruct<SMB2_TRANSPORT_CAPABILITIES>(data, ref consumedLen);
                 }
                 else
                 {

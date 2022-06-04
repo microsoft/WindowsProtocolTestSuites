@@ -165,8 +165,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             out int expectedLength
             )
         {
-            //tcp transport will prefix 4 bytes length in the beginning. and netbios won't do this.
-            if (transportType == Smb2TransportType.Tcp)
+            //tcp and quic transport will prefix 4 bytes length in the beginning. and netbios won't do this.
+            if (transportType == Smb2TransportType.Tcp || transportType == Smb2TransportType.Quic)
             {
                 if (messageBytes.Length < Smb2Consts.TcpPrefixedLenByteCount)
                 {

@@ -270,8 +270,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             bool isIpv4 = this.ipVersion == IpVersion.Ipv6 ? false : true;
             IPAddress serverIp = FsaUtility.GetIpAddress(this.serverName, isIpv4);
-            this.site.Log.Add(LogEntryKind.Debug, "Connect to server {0} over TCP.", serverIp.ToString());
-            this.smb2Client.ConnectOverTCP(serverIp);
+
+            switch(testConfig.UnderlyingTransport)
+            {
+                case Smb2TransportType.Tcp:
+                    this.site.Log.Add(LogEntryKind.Debug, "Connect to server {0} over TCP.", serverIp.ToString());
+                    this.smb2Client.ConnectOverTCP(serverIp);
+                    break;
+                case Smb2TransportType.Quic:
+                    this.site.Log.Add(LogEntryKind.Debug, "Connect to server {0} over Quic.", this.serverName);
+                    this.smb2Client.ConnectOverQuic(this.serverName, serverIp, this.testConfig.TransportPort);
+                    break;
+                default:
+                    break;
+
+            }
 
             MessageStatus status = MessageStatus.SUCCESS;
             status = this.Negotiate();

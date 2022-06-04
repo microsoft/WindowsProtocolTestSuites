@@ -109,5 +109,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
 
             testDirectories.Add(string.Format(@"{0}\{1}", share, directoryName));
         }
+
+        public virtual void CheckTestOverQUIC()
+        {
+            List<string> testList = new List<string> {
+                "ResilientHandleDurableTestCaseS2039", "ResilientHandleDurableTestCaseS3307", "ResilientHandleDurableTestCaseS2123",
+                "ResilientHandleDurableTestCaseS1856", "ResilientHandleDurableTestCaseS3056", "ResilientHandleDurableTestCaseS1753",
+                "ResilientHandleBasicTestCaseS2454", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS464", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS303",
+                "ResilientHandleDurableTestCaseS3502", "ResilientHandleBasicTestCaseS536", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS387",
+                "ResilientHandleBasicTestCaseS2246", "ResilientHandleDurableTestCaseS2743", "ResilientHandleBasicTestCaseS1109", "DurableHandleV2PreparedWithLeaseV2ReconnectTestCaseS318",
+                "ResilientOpenScavengerTimer_ReconnectBeforeTimeout", 
+                 "AppInstanceIdTestCaseS26", "AppInstanceIdTestCaseS561", "AppInstanceIdTestCaseS566", "AppInstanceIdTestCaseS46",
+                 "AppInstanceIdTestCaseS591", "AppInstanceIdTestCaseS54", "AppInstanceIdTestCaseS586"
+            };
+            if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName))
+                Site.Assert.Inconclusive("Ignoring test {0} over QUIC", CurrentTestCaseName);
+
+        }
     }
 }

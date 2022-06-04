@@ -73,6 +73,7 @@
 		* [ SMB2Basic\_Query\_FileNormalizedNameInformation\_DirectoryFile](#3.1.58)
         * [ Compression](#3.1.59)
         * [ NetworkInterfaceInfo](#3.1.60)
+		* [ SMB2Basic\_QuicTransport\_OpenNamedPipe](#3.1.61)
 	* [SMB2 Feature Test](#3.2)
 		* [ AppInstanceId](#3.2.1)
 		* [ AppInstanceVersion](#3.2.2)
@@ -219,7 +220,7 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 100         | SMB2 common scenarios.                                                                                            |
+| SMB2 BVT                 | 101         | SMB2 common scenarios.                                                                                            |
 | SMB2 Feature Test        | 2664       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
@@ -3445,6 +3446,37 @@ This is used to test SMB2 common user scenarios.
 |                          | 2.  Client sends IOCTL request with FSCTL_QUERY_NETWORK_INTERFACE_INFO. |
 |                          | 3.  Verifies the IOCTL response contains NETWORK_INTERFACE_INFO_Response. |
 |                          | 4.  Tear down the client by sending the following requests: TREE\_DISCONNECT; LOG\_OFF. |
+| **Cleanup**              ||
+
+
+#### <a name="3.1.61"> SMB2Basic\_QuicTransport\_OpenNamedPipe
+
+##### <a name="3.1.61.1"> Scenario
+
+|||
+|---|---|
+| **Description**               | Verify open named pipe over QUIC is handled correctly.|
+| **Message Sequence**          | 1.  Start a client to create a named pipe by sending the following requests: 1. NEGOTIATE; 2. SESSION\_SETUP; 3. TREE\_CONNECT; 4. CREATE. |
+|                               | 2.  Client starts to create a named pipe by sending CREATE request. |
+|                               | 3.  Tear down the client by sending the following requests: 1. CLOSE; 2. TREE\_DISCONNECT; 3. LOG\_OFF |
+| **Cluster Involved Scenario** | **NO** |
+
+##### <a name="3.1.61.2"> Test Case
+
+|||
+|---|---|
+| **Test ID** | BVT\_SMB2Basic\_QuicTransport\_OpenNamedPipe |
+| **Description** | Test if the connection is over QUIC, server sends correct response when a named pipe is opened. |
+| **Prerequisites** |The server implements dialect 3.11 and underlying transport is QUIC|
+| **Test Execution Steps** | Create Client |
+|                          | NEGOTIATE |
+|                          | SESSION\_SETUP |
+|                          | TREE\_CONNECT|
+|                          | CREATE (NamedPipe)|
+|                          | if AllowNamedPipeAccessOverQUIC is TRUE expect STATUS\_SUCCESS else expect STATUS\_ACCESS\_DENIED in CREATE response |
+|                          | CLOSE |
+|                          | TREE\_DISCONNECT |
+|                          | LOGOFF |
 | **Cleanup**              ||
 
 ### <a name="3.2">SMB2 Feature Test

@@ -775,22 +775,32 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         #region Connecting and Disconnect
 
-        public void ConnectOverNetbios(string serverName)
+        public void ConnectOverNetbios(string serverName, ushort serverPort = 445)
         {
-            Connect(Smb2TransportType.NetBios, serverName, Environment.MachineName, null, null);
+            Connect(Smb2TransportType.NetBios, serverName, Environment.MachineName, null, null, serverPort);
         }
 
-        public void ConnectOverTCP(IPAddress serverIp)
+        public void ConnectOverTCP(IPAddress serverIp, ushort serverPort = 445)
         {
-            Connect(Smb2TransportType.Tcp, null, null, serverIp, null);
+            Connect(Smb2TransportType.Tcp, null, null, serverIp, null, serverPort);
         }
 
-        public void ConnectOverTCP(IPAddress serverIp, IPAddress clientIp)
+        public void ConnectOverQuic(string serverName, IPAddress serverIp, ushort serverPort = 443)
         {
-            Connect(Smb2TransportType.Tcp, null, null, serverIp, clientIp);
+            Connect(Smb2TransportType.Quic, serverName, null, serverIp, null, serverPort);
         }
 
-        private void Connect(Smb2TransportType transportType, string serverName, string clientName, IPAddress serverIp, IPAddress clientIp)
+        public void ConnectOverTCP(IPAddress serverIp, IPAddress clientIp, ushort serverPort = 445)
+        {
+            Connect(Smb2TransportType.Tcp, null, null, serverIp, clientIp, serverPort);
+        }
+
+        public void ConnectOverQuic(string serverName, IPAddress serverIP, IPAddress clientIP, ushort serverPort = 443)
+        {
+            Connect(Smb2TransportType.Quic, serverName, null, serverIP, clientIP, serverPort);
+        }
+
+        private void Connect(Smb2TransportType transportType, string serverName, string clientName, IPAddress serverIp, IPAddress clientIp, ushort serverPort)
         {
             this.transportType = transportType;
             decoder.TransportType = transportType;
@@ -804,7 +814,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     {
                         LocalIpAddress = clientIp,
                         RemoteIpAddress = serverIp,
-                        RemoteIpPort = 445,
+                        RemoteIpPort = (int)serverPort,
                         Type = StackTransportType.Tcp,
                         Timeout = this.timeout,
                         BufferSize = Smb2Consts.MaxTcpBufferSize,
@@ -819,6 +829,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                         RemoteNetbiosName = serverName,
                         Type = StackTransportType.Netbios,
                         BufferSize = Smb2Consts.MaxNetbiosBufferSize,
+                    };
+                    break;
+                case Smb2TransportType.Quic:
+                    transportConfig = new SocketTransportConfig
+                    {
+                        LocalIpAddress = clientIp,
+                        RemoteIpAddress = serverIp,
+                        TargetName = serverName,
+                        RemoteIpPort = (int)serverPort,
+                        Type = StackTransportType.Quic,
+                        Timeout = this.timeout,
+                        BufferSize = Smb2Consts.MaxQuicBufferSize
                     };
                     break;
             }
@@ -1112,7 +1134,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
              SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
              bool addDefaultEncryption = false,
-             SigningAlgorithm[] signingAlgorithms = null
+             SigningAlgorithm[] signingAlgorithms = null,
+             bool addTransportCapabilities = false
          )
         {
             request = new Smb2NegotiateRequestPacket();
@@ -1147,7 +1170,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
                 request.PayLoad.NegotiateContextCount++;
             }
-
+            
             if (encryptionAlgs != null)
             {
                 SMB2_ENCRYPTION_CAPABILITIES encryptionCap = new SMB2_ENCRYPTION_CAPABILITIES();
@@ -1203,6 +1226,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 rdmaTransformCapabilities.Header.DataLength = (ushort)rdmaTransformCapabilities.GetDataLength();
 
                 request.NegotiateContext_RDMA = rdmaTransformCapabilities;
+                request.PayLoad.NegotiateContextCount++;
+            }
+
+            if (addTransportCapabilities)
+            {
+                var transportCapabilities = new SMB2_TRANSPORT_CAPABILITIES();
+                transportCapabilities.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_TRANSPORT_CAPABILITIES;
+                transportCapabilities.Flags = SMB2_TRANSPORT_CAPABILITIES_Flags.SMB2_ACCEPT_TRANSPORT_LEVEL_SECURITY;
+                transportCapabilities.Header.DataLength = (ushort)(transportCapabilities.GetDataLength());
+                request.NegotiateContext_TRANSPORT = transportCapabilities;
+                
                 request.PayLoad.NegotiateContextCount++;
             }
 
@@ -1285,13 +1319,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
              SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
              SMB2_NETNAME_NEGOTIATE_CONTEXT_ID netNameContext = null,
              bool addDefaultEncryption = false,
-             SigningAlgorithm[] signingAlgorithms = null
+             SigningAlgorithm[] signingAlgorithms = null,
+             bool addTransportCapabilities = false
          )
         {
             Smb2NegotiateRequestPacket request;
             Smb2NegotiateResponsePacket response;
             Negotiate(creditCharge, creditRequest, flags, messageId, dialects, securityMode, capabilities, clientGuid, out selectedDialect, out gssToken, out request, out response,
-                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, rdmaTransformIds, compressionFlags, netNameContext, addDefaultEncryption, signingAlgorithms);
+                channelSequence, preauthHashAlgs, encryptionAlgs, compressionAlgorithms, rdmaTransformIds, compressionFlags, netNameContext, addDefaultEncryption, signingAlgorithms, addTransportCapabilities);
 
             responseHeader = response.Header;
             responsePayload = response.PayLoad;

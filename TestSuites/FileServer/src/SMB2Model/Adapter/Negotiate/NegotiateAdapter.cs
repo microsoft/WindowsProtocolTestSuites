@@ -80,8 +80,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Negotiate
                     Site.Log.Add(LogEntryKind.Debug, "Connect to server {0} over NetBios", testConfig.SutComputerName);
                     smb2Client.ConnectOverNetbios(testConfig.SutComputerName);
                     break;
+                case Smb2TransportType.Quic:
+                    Site.Assert.IsTrue(
+                        testConfig.SutIPAddress != null && testConfig.SutIPAddress != System.Net.IPAddress.None,
+                        "Server IP should not be empty when transport type is QUIC.");
+                    Site.Log.Add(LogEntryKind.Debug, "Connect to server {0} over QUIC", testConfig.SutIPAddress.ToString());
+                    smb2Client.ConnectOverQuic(testConfig.SutComputerName, testConfig.SutIPAddress);
+                    break;
                 default:
-                    Site.Assert.Fail("The transport type is {0}, but currently only Tcp and NetBIOS are supported.", testConfig.UnderlyingTransport);
+                    Site.Assert.Fail("The transport type is {0}, but currently only Tcp, Quic and NetBIOS are supported.", testConfig.UnderlyingTransport);
                     break;
             }
             smb2Client.Disconnected += new Action(OnServerDisconnected);

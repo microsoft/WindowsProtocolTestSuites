@@ -43,6 +43,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// </summary>
         private TimeSpan timeout;
 
+        /// <summary>
+        /// the targetName used by Quic.
+        /// </summary>
+        private string targetName;
+
         #endregion
 
         #region Properties
@@ -143,6 +148,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             set
             {
                 this.timeout = value;
+            }
+        }
+
+        /// <summary>
+        /// get/set the target name, only for QuicClientTransport.
+        /// </summary>
+        public string TargetName
+        {
+            get
+            {
+                return this.targetName;
+            }
+            set
+            {
+                this.targetName = value;
             }
         }
 

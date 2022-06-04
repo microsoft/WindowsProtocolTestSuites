@@ -45,6 +45,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public ushort TransportPort
+        {
+            get
+            {
+                return ushort.Parse( GetProperty("TransportPort"));
+            }
+        }
+
         public AccountCredential AccountCredential
         {
             get
@@ -183,6 +191,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             get
             {
                 return Boolean.Parse(GetProperty("DisableEncryptionOverSecureTransport"));
+            }
+        }
+
+        public bool AllowNamedPipeAccessOverQUIC
+        {
+            get
+            {
+                return Boolean.Parse(GetProperty("AllowNamedPipeAccessOverQUIC"));
             }
         }
 

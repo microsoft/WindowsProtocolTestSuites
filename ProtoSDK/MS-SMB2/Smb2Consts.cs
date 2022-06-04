@@ -24,6 +24,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public const int MaxNetbiosBufferSize = 65535;
 
         /// <summary>
+        /// Max QUIC buffer size.
+        /// </summary>
+        public const int MaxQuicBufferSize = 65535;
+
+        /// <summary>
         /// The max names underlying netbios transport can use.
         /// </summary>
         public const int MaxNames = 30;

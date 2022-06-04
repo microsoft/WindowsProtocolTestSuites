@@ -343,6 +343,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             client.ConnectOverTCP(serverIp);
         }
 
+        public void ConnectToServerOverQuic(string serverName, IPAddress serverIp, ushort serverPort)
+        {
+            client.ConnectOverQuic(serverName, serverIp, serverPort);
+        }
+
         public void ConnectToServerOverTCP(IPAddress serverIp, IPAddress clientIp)
         {
             client.ConnectOverTCP(serverIp, clientIp);
@@ -351,6 +356,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public void ConnectToServerOverNetbios(string serverName)
         {
             client.ConnectOverNetbios(serverName);
+        }
+
+        public void ConnectToServerOverQuic(string serverName, IPAddress serverIp, IPAddress clientIp, ushort serverPort)
+        {
+            client.ConnectOverQuic(serverName, serverIp, clientIp, serverPort);
         }
 
         public void ConnectToServer(Smb2TransportType transportType, string serverName, IPAddress serverIp, IPAddress clientIp = null)
@@ -376,8 +386,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     this.baseTestSite.Log.Add(LogEntryKind.Debug, "Connect to server {0} over NetBios", serverName);
                     ConnectToServerOverNetbios(serverName);
                     break;
+                case Smb2TransportType.Quic:
+                    this.baseTestSite.Assert.IsTrue(
+                        serverIp != null && serverIp != IPAddress.None,
+                        "serverIp should not be empty when transport type is Quic.");
+                    if (clientIp != null && clientIp != IPAddress.None)
+                    {
+                        this.baseTestSite.Log.Add(LogEntryKind.Debug, "Connect to server {0} over QUIC from IP {1} to IP {2}", serverName, clientIp.ToString(), serverIp.ToString());
+                    }
+                    else
+                    {
+                        this.baseTestSite.Log.Add(LogEntryKind.Debug, "Connect to server {0} with IP address {1} over QUIC", serverName, serverIp.ToString());
+                    }
+                    ConnectToServerOverQuic(serverName, serverIp, this.testConfig.TransportPort);
+                    break;
                 default:
-                    this.baseTestSite.Assert.Fail("The transport type is {0}, but currently only Tcp and NetBIOS are supported.", transportType);
+                    this.baseTestSite.Assert.Fail("The transport type is {0}, but currently only Tcp, Quic and NetBIOS are supported.", transportType);
                     break;
             }
         }
@@ -486,7 +510,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool? ifAddGLOBAL_CAP_ENCRYPTION = null,
             bool addDefaultEncryption = false,
-            bool addNetNameConetxtID = false
+            bool addNetNameConetxtID = false,
+            bool addTransportCapabilities = false
             )
         {
             if (isSmb1NegotiateEnabled)
@@ -572,7 +597,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     ifHandleRejectUnencryptedAccessSeparately: ifHandleRejectUnencryptedAccessSeparately,
                     ifAddGLOBAL_CAP_ENCRYPTION: ifAddGLOBAL_CAP_ENCRYPTION.Value,
                     addDefaultEncryption: addDefaultEncryption,
-                    addNetNameConetxtID: addNetNameConetxtID
+                    addNetNameConetxtID: addNetNameConetxtID,
+                    addTransportCapabilities: addTransportCapabilities
                     );
         }
 
@@ -586,7 +612,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool ifHandleRejectUnencryptedAccessSeparately = false,
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
             bool addDefaultEncryption = false,
-            bool addNetNameConetxtID = false
+            bool addNetNameConetxtID = false,
+            bool addTransportCapabilities = false
            )
         {
             PreauthIntegrityHashID[] preauthHashAlgs = null;
@@ -597,13 +624,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0)
             {
                 preauthHashAlgs = new PreauthIntegrityHashID[] { PreauthIntegrityHashID.SHA_512 };
-                encryptionAlgs = ((capabilityValue != null && capabilityValue.Value.HasFlag(Capabilities_Values.GLOBAL_CAP_ENCRYPTION)) || ifAddGLOBAL_CAP_ENCRYPTION) ?
-                    new EncryptionAlgorithm[]
-                    {
-                        EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
-                        EncryptionAlgorithm.ENCRYPTION_AES128_CCM
-                    }
-                    : null;
+                if (!addTransportCapabilities)
+                {
+                    encryptionAlgs = ((capabilityValue != null && capabilityValue.Value.HasFlag(Capabilities_Values.GLOBAL_CAP_ENCRYPTION)) || ifAddGLOBAL_CAP_ENCRYPTION) ?
+                        new EncryptionAlgorithm[]
+                        {
+                            EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
+                            EncryptionAlgorithm.ENCRYPTION_AES128_CCM
+                        }
+                        : null;
+                }
                 if (addNetNameConetxtID)
                 {
                     netNameContext.Header.ContextType = SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_NETNAME_NEGOTIATE_CONTEXT_ID;
@@ -612,6 +642,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     netNameContext.Header.DataLength = netNameContext.GetDataLength();
                 }
             }
+
+            int totalEncryptionAlgs = 0;
+            if (encryptionAlgs != null) { totalEncryptionAlgs = encryptionAlgs.Length; }
+            baseTestSite.Log.Add(LogEntryKind.TestStep, $"Total encryption algorithms added: {totalEncryptionAlgs}");
 
             return NegotiateWithContexts
             (
@@ -629,7 +663,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 ifHandleRejectUnencryptedAccessSeparately,
                 ifAddGLOBAL_CAP_ENCRYPTION,
                 addDefaultEncryption,
-                addNetNameConetxtID
+                addNetNameConetxtID,
+                addTransportCapabilities: addTransportCapabilities
             );
         }
 
@@ -649,6 +684,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
             bool addDefaultEncryption = false,
             bool addNetNameContextId = false,
+            bool addTransportCapabilities = false,
             SigningAlgorithm[] signingAlgorithms = null,
             ResponseChecker<Smb2NegotiateResponsePacket> responseChecker = null
             )
@@ -713,7 +749,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                compressionFlags: compressionFlags,
                addDefaultEncryption: addDefaultEncryption,
                netNameContext: netNameContext,
-               signingAlgorithms: signingAlgorithms
+               signingAlgorithms: signingAlgorithms,
+               addTransportCapabilities: addTransportCapabilities
                );
 
             if (!ifHandleRejectUnencryptedAccessSeparately)
@@ -3162,6 +3199,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 else
                     sspiClientGss.Initialize(null);
             }
+
             uint status;
             ulong messageId;
             ushort creditCharge;

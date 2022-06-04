@@ -70,6 +70,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public SMB2_SIGNING_CAPABILITIES? NegotiateContext_SIGNING;
 
         /// <summary>
+        /// Indicates client supports transport capabilities.
+        /// </summary>
+        public SMB2_TRANSPORT_CAPABILITIES? NegotiateContext_TRANSPORT;
+
+        /// <summary>
         /// Indicate whether RDMA transforms is supported when data is sent over RDMA.
         /// </summary>
         public SMB2_RDMA_TRANSFORM_CAPABILITIES? NegotiateContext_RDMA;
@@ -122,6 +127,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 Smb2Utility.Align8(ref messageData);
                 messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_RDMA_TRANSFORM_CAPABILITIES>(NegotiateContext_RDMA.Value)).ToArray();
+            }
+
+            if (NegotiateContext_TRANSPORT != null)
+            {
+                Smb2Utility.Align8(ref messageData);
+                messageData = messageData.Concat(TypeMarshal.ToBytes<SMB2_TRANSPORT_CAPABILITIES>(NegotiateContext_TRANSPORT.Value)).ToArray();
             }
 
             return messageData;
@@ -186,6 +197,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_RDMA_TRANSFORM_CAPABILITIES)
                 {
                     this.NegotiateContext_RDMA = TypeMarshal.ToStruct<SMB2_RDMA_TRANSFORM_CAPABILITIES>(data, ref consumedLen);
+                }
+                else if (contextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_TRANSPORT_CAPABILITIES)
+                {
+                    this.NegotiateContext_TRANSPORT = TypeMarshal.ToStruct<SMB2_TRANSPORT_CAPABILITIES>(data, ref consumedLen);
                 }
             }
 

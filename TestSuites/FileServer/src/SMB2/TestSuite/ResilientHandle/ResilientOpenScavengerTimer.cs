@@ -132,6 +132,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.ResilientHan
             TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_DURABLE_HANDLE_RECONNECT);
             #endregion
 
+            if(this.testConfig.UnderlyingTransport == Smb2TransportType.Quic)
+            {
+                BaseTestSite.Assert.Inconclusive("Ignoring test case on QUIC transport");
+            }
+
             Smb2FunctionalClient prepareClient = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
 
             uint timeoutInSecond = testConfig.MaxResiliencyTimeoutInSecond / 2;

@@ -76,6 +76,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Resilient
 
             // Resilient only applies only to servers that implement the SMB 2.1 or the SMB 3.x dialect family.
             testConfig.CheckDialect(DialectRevision.Smb21);
+            base.CheckTestOverQUIC();
         }
 
         public void PrepareOpen(ModelDialectRevision clientMaxDialect, DurableHandle durableHandle)

@@ -32,5 +32,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         /// Netbios transport
         /// </summary>
         Netbios = 0x04,
+
+        /// <summary>
+        /// QUIC transport
+        /// </summary>
+        Quic = 0x05,
     }
 }

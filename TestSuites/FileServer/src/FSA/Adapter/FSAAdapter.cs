@@ -392,7 +392,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.transAdapter.Domain = testConfig.DomainName;
             this.transAdapter.IPVersion = this.ipVersion;
             this.transAdapter.Password = testConfig.UserPassword;
-            this.transAdapter.Port = 445;
+            this.transAdapter.Port = testConfig.TransportPort;
+            
             this.transAdapter.ServerName = testConfig.SutComputerName;
             this.transAdapter.ShareName = this.shareName;
             this.transAdapter.UserName = testConfig.UserName;
@@ -488,8 +489,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
 
             this.transAdapter.Initialize(this.isWindows);
+            CheckTestOverQUIC();
         }
 
+        private void CheckTestOverQUIC()
+        {
+            List<string> testList = new List<string> {
+                "IoCtlRequestTestCaseS56", "IoCtlRequestTestCaseS64", "IoCtlRequestTestCaseS62", "IoCtlRequestTestCaseS58", "IoCtlRequestTestCaseS66",
+                "IoCtlRequestTestCaseS68", "IoCtlRequestTestCaseS70", "IoCtlRequestTestCaseS74", "IoCtlRequestTestCaseS60", "IoCtlRequestTestCaseS72"
+            };
+            if (testConfig.UnderlyingTransport == Smb2.Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName))
+                Site.Assert.Inconclusive("Ignoring test {0} over QUIC", CurrentTestCaseName);
+
+        }
         #endregion
 
         #region 3.1.5   Higher-Layer Triggered Events

@@ -185,7 +185,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 try
                 {
                     client = new Smb2FunctionalClient(testConfig.Timeout, testConfig, Site);
-                    client.ConnectToServer(Smb2TransportType.Tcp, serverName, ip);
+                    client.ConnectToServer(testConfig.UnderlyingTransport, serverName, ip);
                     status = client.Negotiate(
                         Smb2Utility.GetDialects(testConfig.MaxSmbVersionSupported),
                         true,
@@ -194,7 +194,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     {
                         continue;
                     }
-
                     status = client.SessionSetup(testConfig.DefaultSecurityPackage, serverName, testConfig.AccountCredential, false, checker: (header, response) => { });
                     if (status != Smb2Status.STATUS_SUCCESS)
                     {

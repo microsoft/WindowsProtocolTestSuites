@@ -87,6 +87,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Handle
             handleConfig = c;
 
             Site.Log.Add(LogEntryKind.Debug, handleConfig.ToString());
+            base.CheckTestOverQUIC();
         }
 
         public void OpenRequest(

@@ -4865,6 +4865,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The Data field contains a list of RDMA transforms, as specified in section 2.2.3.1.6
         /// </summary>
         SMB2_RDMA_TRANSFORM_CAPABILITIES = 0x0007,
+
+        /// <summary>
+        /// The Data field contains transport capabilities, as specified in section 2.2.3.1.5
+        /// </summary>
+        SMB2_TRANSPORT_CAPABILITIES = 0x0006,
     }
 
     /// <summary>
@@ -5128,6 +5133,43 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         AES_GMAC = 0x0002,
     }
+
+    /// <summary>
+    /// The SMB2_TRANSPORT_CAPABILITIES context is specified in an SMB2 NEGOTIATE request to indicate transport capabilities over which the connection is made.
+    /// </summary>
+    public struct SMB2_TRANSPORT_CAPABILITIES
+    {
+        /// <summary>
+        /// Negotiate context header.
+        /// </summary>
+        public SMB2_NEGOTIATE_CONTEXT_Header Header;
+
+        /// <summary>
+        /// This field MUST contain zero or more of SMB2_TRANSPORT_CAPABILITIES Flags.
+        /// </summary>
+        [StaticSize(4)]
+        public SMB2_TRANSPORT_CAPABILITIES_Flags Flags;
+
+        /// <summary>
+        /// Get the data length of the structure.
+        /// </summary>
+        /// <returns>The data length of the SMB2_TRANSPORT_CAPABILITIES negotiate context.</returns>
+        public int GetDataLength()
+        {
+            int dataLength = sizeof(SMB2_TRANSPORT_CAPABILITIES_Flags);
+            return dataLength;
+        }
+    }
+
+    /// <summary>
+    /// SMB2_TRANSPORT_CAPABILITIES Flags.
+    /// </summary>
+    [Flags()]
+    public enum SMB2_TRANSPORT_CAPABILITIES_Flags : uint
+    {
+        SMB2_ACCEPT_TRANSPORT_LEVEL_SECURITY = 0x00000001,
+    }
+
 
     public struct SMB2_SIGNING_CAPABILITIES
     {

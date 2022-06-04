@@ -26,6 +26,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// RDMA transport
         /// </summary>
         Rdma,
+
+        /// <summary>
+        /// QUIC transport
+        /// </summary>
+        Quic,
     }
 
     /// <summary>

@@ -159,7 +159,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             switch (transportConfig.Type)
             {
                 case StackTransportType.Tcp:
-
                     if (transportConfig.Role == Role.Client)
                     {
                         this.transport = new TcpClientTransport(transportConfig, decodePacketCallback);
@@ -210,6 +209,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
                     else
                     {
                         this.transport = new UdpClientTransport(transportConfig, decodePacketCallback);
+                    }
+
+                    break;
+
+                case StackTransportType.Quic:
+                    if(transportConfig.Role == Role.Server)
+                    {
+                        this.transport = new QuicServerTransport(transportConfig, decodePacketCallback);
+                    }
+                    else if (transportConfig.Role == Role.Client)
+                    {
+                        this.transport = new QuicClientTransport(transportConfig, decodePacketCallback);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException(
+                            "Role is invalid for transport type is Quic, it must be Server or Client.");
                     }
 
                     break;

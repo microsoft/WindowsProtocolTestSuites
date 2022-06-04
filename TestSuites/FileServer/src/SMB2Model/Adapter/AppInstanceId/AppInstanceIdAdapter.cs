@@ -54,6 +54,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.AppInstan
             testConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_APP_INSTANCE_ID);
 
             dialectRevision = ModelUtility.GetModelDialectRevision(testConfig.MaxSmbVersionSupported);
+
+            base.CheckTestOverQUIC();
         }
 
         public void PrepareOpen(
