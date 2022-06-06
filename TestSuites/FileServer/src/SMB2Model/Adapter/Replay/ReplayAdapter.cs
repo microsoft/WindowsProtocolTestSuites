@@ -477,7 +477,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.Replay
             replayConfig = c;
 
             testConfig.CheckDialect(DialectRevision.Smb30);
-
+            base.CheckTestOverQUIC();
             Site.Log.Add(LogEntryKind.Debug, c.ToString());
         }
 

@@ -120,7 +120,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
                 "ResilientHandleBasicTestCaseS2246", "ResilientHandleDurableTestCaseS2743", "ResilientHandleBasicTestCaseS1109", "DurableHandleV2PreparedWithLeaseV2ReconnectTestCaseS318",
                 "ResilientOpenScavengerTimer_ReconnectBeforeTimeout", 
                  "AppInstanceIdTestCaseS26", "AppInstanceIdTestCaseS561", "AppInstanceIdTestCaseS566", "AppInstanceIdTestCaseS46",
-                 "AppInstanceIdTestCaseS591", "AppInstanceIdTestCaseS54", "AppInstanceIdTestCaseS586"
+                 "AppInstanceIdTestCaseS591", "AppInstanceIdTestCaseS54", "AppInstanceIdTestCaseS586",
+                 "ReplayCreateDurableHandleV2TestCaseS1163", "ReplayCreateDurableHandleV2TestCaseS176", "ReplayCreateDurableHandleV2TestCaseS758"
             };
             if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName))
                 Site.Assert.Inconclusive("Ignoring test {0} over QUIC", CurrentTestCaseName);
