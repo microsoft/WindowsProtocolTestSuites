@@ -21,6 +21,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
         [Description("Check if the server supports AbortShadowCopySet after calling StartShadowCopySet.")]
         public void VSSAbortShadowCopySet_Started()
         {
+            CheckDriverSupportsNRPC();
             List<string> shareUncPaths = new List<string>();
             shareUncPaths.Add(@"\\" + TestConfig.SutComputerName + @"\" + TestConfig.BasicFileShare);
             TestShadowCopySet((ulong)FsrvpContextValues.FSRVP_CTX_BACKUP | (ulong)FsrvpShadowCopyAttributes.FSRVP_ATTR_AUTO_RECOVERY,
@@ -35,6 +36,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
         [Description("Check if the server supports AbortShadowCopySet after calling AddShadowCopySet.")]
         public void VSSAbortShadowCopySet_Added()
         {
+            CheckDriverSupportsNRPC();
             List<string> shareUncPaths = new List<string>();
             shareUncPaths.Add(@"\\" + TestConfig.SutComputerName + @"\" + TestConfig.BasicFileShare);
             TestShadowCopySet((ulong)FsrvpContextValues.FSRVP_CTX_BACKUP | (ulong)FsrvpShadowCopyAttributes.FSRVP_ATTR_AUTO_RECOVERY,
@@ -49,6 +51,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
         [Description("Check if the server responses with FSRVP_E_BAD_STATE when calling AbortShadowCopySet after called RecoveryCompleteShadowCopySet.")]
         public void VSSAbortShadowCopySet_Recovered()
         {
+            CheckDriverSupportsNRPC();
             List<string> shareUncPaths = new List<string>();
             shareUncPaths.Add(@"\\" + TestConfig.SutComputerName + @"\" + TestConfig.BasicFileShare);
             TestShadowCopySet((ulong)FsrvpContextValues.FSRVP_CTX_BACKUP | (ulong)FsrvpShadowCopyAttributes.FSRVP_ATTR_AUTO_RECOVERY,

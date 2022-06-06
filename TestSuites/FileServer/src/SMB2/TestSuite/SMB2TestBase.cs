@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 {
@@ -80,6 +81,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 {
                     BaseTestSite.Assert.Fail("The response {0} should not exist.", checker.ResponseType);
                 }
+            }
+        }
+
+        protected void CheckDriverSupportsNRPC()
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                BaseTestSite.Assert.Inconclusive("This test is not yet supported on Non-Windows Driver Computers");
             }
         }
 

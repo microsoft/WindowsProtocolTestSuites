@@ -93,6 +93,11 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
         /// Windows Server 2022
         /// </summary>
         WindowsServer2022 = 0x10000011,
+
+        /// <summary>
+        /// Windows Server 2022 v22H2
+        /// </summary>
+        WindowsServerV22H2 = 0x10000012,
     }
 
     /// <summary>

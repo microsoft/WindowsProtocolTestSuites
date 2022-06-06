@@ -69,6 +69,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         {
             #region Check Applicability
             TestConfig.CheckIOCTL(CtlCode_Values.FSCTL_SRV_ENUMERATE_SNAPSHOTS);
+            if(TestConfig.Platform >= Platform.WindowsServer2022)
+            {
+                BaseTestSite.Assert.Inconclusive("The test case is not applicable on this version of Windows Server");
+            }
             #endregion
 
             uint treeId;

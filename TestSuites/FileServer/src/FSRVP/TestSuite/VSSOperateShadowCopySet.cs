@@ -153,6 +153,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSRVP.TestSuite
         [Description("Check if the server supports the VSS provider to create a writable snapshot for remote files.")]
         public void BVT_VSSOperateShadowCopySet_WritableSnapshot_SingleNode()
         {
+            CheckDriverSupportsNRPC();
             List<string> shareUncPaths = new List<string>();
             shareUncPaths.Add(@"\\" + TestConfig.SutComputerName + @"\" + TestConfig.BasicFileShare);
             TestShadowCopySet((ulong)FsrvpContextValues.FSRVP_CTX_BACKUP | (ulong)FsrvpShadowCopyAttributes.FSRVP_ATTR_AUTO_RECOVERY,
