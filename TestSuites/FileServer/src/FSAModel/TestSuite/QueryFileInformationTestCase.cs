@@ -707,14 +707,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     "PORTED.");
             this.Manager.Comment("reaching state \'S319\'");
             this.Manager.Comment("checking step \'return QueryFileInfoPart1/[out NotSet,out OutputBuffer(AccessFlags" +
-                    "=None,Revision=0)]:INVALID_INFO_CLASS\'");
+                    "=None,Revision=0)]:STATUS_NOT_SUPPORTED\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount)(0)), temp42, "byteCount of QueryFileInfoPart1, state S319");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
                             "AccessFlags",
                             "Revision"}, new object[] {
                             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
                             0u}), temp43, "outputBuffer of QueryFileInfoPart1, state S319");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_INFO_CLASS, temp44, "return of QueryFileInfoPart1, state S319");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.NOT_SUPPORTED, temp44, "return of QueryFileInfoPart1, state S319");
             this.Manager.Comment("reaching state \'S363\'");
             this.Manager.EndTest();
         }
@@ -1002,14 +1002,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     "TED.");
             this.Manager.Comment("reaching state \'S323\'");
             this.Manager.Comment("checking step \'return QueryFileInfoPart1/[out NotSet,out OutputBuffer(AccessFlags" +
-                    "=None,Revision=0)]:INVALID_INFO_CLASS\'");
+                    "=None,Revision=0)]:STATUS_NOT_SUPPORTED\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount)(0)), temp62, "byteCount of QueryFileInfoPart1, state S323");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
                             "AccessFlags",
                             "Revision"}, new object[] {
                             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
                             0u}), temp63, "outputBuffer of QueryFileInfoPart1, state S323");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_INFO_CLASS, temp64, "return of QueryFileInfoPart1, state S323");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.NOT_SUPPORTED, temp64, "return of QueryFileInfoPart1, state S323");
             this.Manager.Comment("reaching state \'S367\'");
             this.Manager.EndTest();
         }
@@ -1152,14 +1152,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     "PORTED.");
             this.Manager.Comment("reaching state \'S325\'");
             this.Manager.Comment("checking step \'return QueryFileInfoPart1/[out NotSet,out OutputBuffer(AccessFlags" +
-                    "=None,Revision=0)]:INVALID_INFO_CLASS\'");
+                    "=None,Revision=0)]:STATUS_NOT_SUPPORTED\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount)(0)), temp72, "byteCount of QueryFileInfoPart1, state S325");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
                             "AccessFlags",
                             "Revision"}, new object[] {
                             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
                             0u}), temp73, "outputBuffer of QueryFileInfoPart1, state S325");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_INFO_CLASS, temp74, "return of QueryFileInfoPart1, state S325");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.NOT_SUPPORTED, temp74, "return of QueryFileInfoPart1, state S325");
             this.Manager.Comment("reaching state \'S369\'");
             this.Manager.EndTest();
         }
@@ -2938,14 +2938,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     "ED.");
             this.Manager.Comment("reaching state \'S346\'");
             this.Manager.Comment("checking step \'return QueryFileInfoPart1/[out NotSet,out OutputBuffer(AccessFlags" +
-                    "=None,Revision=0)]:INVALID_INFO_CLASS\'");
+                    "=None,Revision=0)]:STATUS_NOT_SUPPORTED\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount)(0)), temp187, "byteCount of QueryFileInfoPart1, state S346");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
                             "AccessFlags",
                             "Revision"}, new object[] {
                             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
                             0u}), temp188, "outputBuffer of QueryFileInfoPart1, state S346");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_INFO_CLASS, temp189, "return of QueryFileInfoPart1, state S346");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.NOT_SUPPORTED, temp189, "return of QueryFileInfoPart1, state S346");
             this.Manager.Comment("reaching state \'S390\'");
             this.Manager.EndTest();
         }
@@ -3236,14 +3236,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     "enumeration class, see section 3.1.5.5.3.");
             this.Manager.Comment("reaching state \'S349\'");
             this.Manager.Comment("checking step \'return QueryFileInfoPart1/[out NotSet,out OutputBuffer(AccessFlags" +
-                    "=None,Revision=0)]:INVALID_INFO_CLASS\'");
+                    "=None,Revision=0)]:STATUS_NOT_SUPPORTED\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount)(0)), temp207, "byteCount of QueryFileInfoPart1, state S349");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
                             "AccessFlags",
                             "Revision"}, new object[] {
                             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
                             0u}), temp208, "outputBuffer of QueryFileInfoPart1, state S349");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_INFO_CLASS, temp209, "return of QueryFileInfoPart1, state S349");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.NOT_SUPPORTED, temp209, "return of QueryFileInfoPart1, state S349");
             this.Manager.Comment("reaching state \'S393\'");
             this.Manager.EndTest();
         }
@@ -3381,14 +3381,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Checkpoint("[In FileNameInformation]This operation MUST be failed with STATUS_NOT_SUPPORTED.");
             this.Manager.Comment("reaching state \'S351\'");
             this.Manager.Comment("checking step \'return QueryFileInfoPart1/[out NotSet,out OutputBuffer(AccessFlags" +
-                    "=None,Revision=0)]:INVALID_INFO_CLASS\'");
+                    "=None,Revision=0)]:STATUS_NOT_SUPPORTED\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount)(0)), temp217, "byteCount of QueryFileInfoPart1, state S351");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
                             "AccessFlags",
                             "Revision"}, new object[] {
                             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
                             0u}), temp218, "outputBuffer of QueryFileInfoPart1, state S351");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_INFO_CLASS, temp219, "return of QueryFileInfoPart1, state S351");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.NOT_SUPPORTED, temp219, "return of QueryFileInfoPart1, state S351");
             this.Manager.Comment("reaching state \'S395\'");
             this.Manager.EndTest();
         }

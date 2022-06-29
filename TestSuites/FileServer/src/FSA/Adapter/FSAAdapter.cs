@@ -4172,14 +4172,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 }
             }
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileInfoPart1(this.fileSystem, fileInfoClass, outputBufferSize, ref byteCount, ref outputBuffer, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundQueryFileInfoPart1(this.fileSystem, fileInfoClass, outputBufferSize, ref byteCount, ref outputBuffer, returnedStatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileInfoPart1(this.fileSystem, fileInfoClass, outputBufferSize, ref byteCount, ref outputBuffer, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkAroundQueryFileInfoPart1(this.fileSystem, fileInfoClass, outputBufferSize, ref byteCount, ref outputBuffer, returnedStatus, site);
+            //}
 
             return returnedStatus;
         }
