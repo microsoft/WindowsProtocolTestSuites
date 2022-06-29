@@ -1962,61 +1962,61 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 randomFile,
                 out outBuffer);
 
-            if (fileNamePattern == FileNamePattern.Empty
-                && !restartScan && isNoRecordsReturned && !isOutBufferSizeLess
-                && outBufferSize == OutBufferSmall.FileFullDirectoryInformation)
-            {
-                return MessageStatus.NO_SUCH_FILE;
-            }
+            //if (fileNamePattern == FileNamePattern.Empty
+            //    && !restartScan && isNoRecordsReturned && !isOutBufferSizeLess
+            //    && outBufferSize == OutBufferSmall.FileFullDirectoryInformation)
+            //{
+            //    return MessageStatus.NO_SUCH_FILE;
+            //}
 
-            if (fileNamePattern == FileNamePattern.NotEmpty_LengthIsNotAMultipleOf4
-                && !restartScan && isNoRecordsReturned && isOutBufferSizeLess
-                && outBufferSize == OutBufferSmall.None)
-            {
-                return MessageStatus.INFO_LENGTH_MISMATCH;
-            }
+            //if (fileNamePattern == FileNamePattern.NotEmpty_LengthIsNotAMultipleOf4
+            //    && !restartScan && isNoRecordsReturned && isOutBufferSizeLess
+            //    && outBufferSize == OutBufferSmall.None)
+            //{
+            //    return MessageStatus.INFO_LENGTH_MISMATCH;
+            //}
 
-            if (isOutBufferSizeLess)
-            {
-                switch (outBufferSize)
-                {
-                    case OutBufferSmall.FileBothDirectoryInformation:
-                        {
-                            return MessageStatus.INFO_LENGTH_MISMATCH;
-                        }
-                    case OutBufferSmall.FileDirectoryInformation:
-                        {
-                            return MessageStatus.INFO_LENGTH_MISMATCH;
-                        }
-                    case OutBufferSmall.FileFullDirectoryInformation:
-                        {
-                            return MessageStatus.INFO_LENGTH_MISMATCH;
-                        }
-                    case OutBufferSmall.FileIdBothDirectoryInformation:
-                        {
-                            return MessageStatus.INFO_LENGTH_MISMATCH;
-                        }
-                    case OutBufferSmall.FileIdFullDirectoryInformation:
-                        {
-                            return MessageStatus.INFO_LENGTH_MISMATCH;
-                        }
-                    case OutBufferSmall.FileNamesInformation:
-                        {
-                            return MessageStatus.INFO_LENGTH_MISMATCH;
-                        }
-                    default:
-                        break;
-                }
-            }
+            //if (isOutBufferSizeLess)
+            //{
+            //    switch (outBufferSize)
+            //    {
+            //        case OutBufferSmall.FileBothDirectoryInformation:
+            //            {
+            //                return MessageStatus.INFO_LENGTH_MISMATCH;
+            //            }
+            //        case OutBufferSmall.FileDirectoryInformation:
+            //            {
+            //                return MessageStatus.INFO_LENGTH_MISMATCH;
+            //            }
+            //        case OutBufferSmall.FileFullDirectoryInformation:
+            //            {
+            //                return MessageStatus.INFO_LENGTH_MISMATCH;
+            //            }
+            //        case OutBufferSmall.FileIdBothDirectoryInformation:
+            //            {
+            //                return MessageStatus.INFO_LENGTH_MISMATCH;
+            //            }
+            //        case OutBufferSmall.FileIdFullDirectoryInformation:
+            //            {
+            //                return MessageStatus.INFO_LENGTH_MISMATCH;
+            //            }
+            //        case OutBufferSmall.FileNamesInformation:
+            //            {
+            //                return MessageStatus.INFO_LENGTH_MISMATCH;
+            //            }
+            //        default:
+            //            break;
+            //    }
+            //}
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryDirectoryInfo(fileNamePattern, isNoRecordsReturned, isOutBufferSizeLess, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundQueryDirectoryInfo(isNoRecordsReturned, isOutBufferSizeLess, returnedStatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryDirectoryInfo(fileNamePattern, isNoRecordsReturned, isOutBufferSizeLess, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkAroundQueryDirectoryInfo(isNoRecordsReturned, isOutBufferSizeLess, returnedStatus, site);
+            //}
 
             return returnedStatus;
         }
