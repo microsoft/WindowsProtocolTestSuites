@@ -652,7 +652,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         /// <summary>
         /// This bit SHOULD be set to 0 and the server MUST fail the request with 
-        /// a STATUS_INVALID_PARAMETER error if this bit is set.
+        /// a STATUS_NOT_SUPPORTED error if this bit is set.
         /// </summary>
         RESERVE_OPFILTER = 0x00100000,
 

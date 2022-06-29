@@ -541,7 +541,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S26
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
@@ -583,8 +583,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
                     If CreateOptions.COMPLETE_IF_OPLOCKED && CreateOptions.FILE_RESERVE_OPFILTER.");
             this.Manager.Comment("reaching state \'S169\'");
-            this.Manager.Comment("checking step \'return OpenExistingFile/INVALID_PARAMETER\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp21, "return of OpenExistingFile, state S169");
+            this.Manager.Comment("checking step \'return OpenExistingFile/STATUS_NOT_SUPPORTED\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.NOT_SUPPORTED, temp21, "return of OpenExistingFile, state S169");
             this.Manager.Comment("reaching state \'S201\'");
             this.Manager.EndTest();
         }
