@@ -22,6 +22,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         void FsaInitial();
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// The FileSystem of current volume.
+        /// </summary>
+        FileSystem FileSystem { get; }
+
+        #endregion
+
         #region 3.1.5   Higher-Layer Triggered Events
 
         #region 3.1.5.1   Server Requests an Open of a File

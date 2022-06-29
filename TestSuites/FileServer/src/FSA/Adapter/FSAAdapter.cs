@@ -393,7 +393,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.transAdapter.IPVersion = this.ipVersion;
             this.transAdapter.Password = testConfig.UserPassword;
             this.transAdapter.Port = testConfig.TransportPort;
-            
+
             this.transAdapter.ServerName = testConfig.SutComputerName;
             this.transAdapter.ShareName = this.shareName;
             this.transAdapter.UserName = testConfig.UserName;
@@ -480,6 +480,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         public void FsaInitial()
         {
+            ExecuteFSAEarlyChecks();
+
+            this.transAdapter.Initialize(this.isWindows);
+        }
+
+        private void ExecuteFSAEarlyChecks()
+        {
+            CheckGlobalEncryptDataCompatibility();
+            CheckSISRelatedTest();
+            CheckIncompatibleTestOverQUIC();
+        }
+
+        private void CheckGlobalEncryptDataCompatibility()
+        {
             if (testConfig.IsGlobalEncryptDataEnabled)
             {
                 if (testConfig.IsGlobalRejectUnencryptedAccessEnabled && TestConfig.MaxSmbVersionClientSupported < Smb2.DialectRevision.Smb30)
@@ -487,20 +501,48 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     Site.Assert.Inconclusive("When IsGlobalRejectUnencryptedAccessEnabled is true, it won't allow unencrypted accesses from clients that do not support SMB 3.0 and above.");
                 }
             }
-
-            this.transAdapter.Initialize(this.isWindows);
-            CheckTestOverQUIC();
         }
 
-        private void CheckTestOverQUIC()
+        private static readonly HashSet<string> sisRelatedTestNames = new HashSet<string>
         {
-            List<string> testList = new List<string> {
-                "IoCtlRequestTestCaseS56", "IoCtlRequestTestCaseS64", "IoCtlRequestTestCaseS62", "IoCtlRequestTestCaseS58", "IoCtlRequestTestCaseS66",
-                "IoCtlRequestTestCaseS68", "IoCtlRequestTestCaseS70", "IoCtlRequestTestCaseS74", "IoCtlRequestTestCaseS60", "IoCtlRequestTestCaseS72"
-            };
-            if (testConfig.UnderlyingTransport == Smb2.Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName))
-                Site.Assert.Inconclusive("Ignoring test {0} over QUIC", CurrentTestCaseName);
+            "IoCtlRequestTestCaseS128",
+            "IoCtlRequestTestCaseS130",
+            "IoCtlRequestTestCaseS132",
+            "IoCtlRequestTestCaseS134",
+            "IoCtlRequestTestCaseS136",
+            "IoCtlRequestTestCaseS138",
+            "IoCtlRequestTestCaseS140"
+        };
 
+        private void CheckSISRelatedTest()
+        {
+            if (testConfig.IsWindowsPlatform && sisRelatedTestNames.Contains(CurrentTestCaseName))
+            {
+                Site.Assert.Inconclusive("Single Instance Storage is an optional feature available in the following versions of Windows Server: Windows Storage Server 2003 R2 operating system, Standard Edition, Windows Storage Server 2008, and Windows Storage Server 2008 R2.\n" +
+                    "Single Instance Storage is not supported directly by any of the Windows file systems but is implemented as a file system filter.");
+            }
+        }
+
+        private static readonly HashSet<string> quicIncompatibleTestNames = new HashSet<string>
+        {
+            "IoCtlRequestTestCaseS56",
+            "IoCtlRequestTestCaseS64",
+            "IoCtlRequestTestCaseS62",
+            "IoCtlRequestTestCaseS58",
+            "IoCtlRequestTestCaseS66",
+            "IoCtlRequestTestCaseS68",
+            "IoCtlRequestTestCaseS70",
+            "IoCtlRequestTestCaseS74",
+            "IoCtlRequestTestCaseS60",
+            "IoCtlRequestTestCaseS72"
+        };
+
+        private void CheckIncompatibleTestOverQUIC()
+        {
+            if (testConfig.UnderlyingTransport == Smb2.Smb2TransportType.Quic && quicIncompatibleTestNames.Contains(CurrentTestCaseName))
+            {
+                Site.Assert.Inconclusive("Ignoring test {0} over QUIC", CurrentTestCaseName);
+            }
         }
         #endregion
 
@@ -3859,14 +3901,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                inbuffer,
                out outbuffer);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsctlSisCopy(fileSystem, bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsctlSisCopyFile(fileSystem, bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundFsctlSisCopy(fileSystem, bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkAroundFsctlSisCopyFile(fileSystem, bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
+            //}
 
             return returnedStatus;
         }
