@@ -161,8 +161,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S12
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -208,8 +209,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S14
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -302,8 +304,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S18
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
