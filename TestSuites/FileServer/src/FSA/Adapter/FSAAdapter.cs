@@ -1359,6 +1359,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                         throw new InvalidOperationException("Close file fails.");
                     }
                 }
+
+                site.Assert.AreEqual<MessageStatus>(MessageStatus.SUCCESS, returnedStatus, "return of CreateFile");
             }
 
             returnedStatus = transAdapter.CreateFile(
@@ -1370,14 +1372,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 (uint)createDisposition,
                 out createAction);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOpen, fileAttribute, desiredFileAttribute, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOpen, fileAttribute, desiredFileAttribute, returnedStatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOpen, fileAttribute, desiredFileAttribute, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOpen, fileAttribute, desiredFileAttribute, returnedStatus, site);
+            //}
 
             /*
              * Work around for test cases only designed for NTFS and ReFS:
