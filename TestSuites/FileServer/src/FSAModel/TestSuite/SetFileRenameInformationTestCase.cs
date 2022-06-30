@@ -327,8 +327,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     of the InputBuffer.FileName field (that is, the total length of InputBuffer as given in InputBufferLength 
 is insufficient to contain the fixed-size fields of InputBuffer plus the length of InputBuffer.FileName).");
                 this.Manager.Comment("reaching state \'S102\'");
-                this.Manager.Comment("checking step \'return SetFileRenameInfo/MEDIA_WRITE_PROTECTED\'");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.MEDIA_WRITE_PROTECTED, temp14, "return of SetFileRenameInfo, state S102");
+                this.Manager.Comment("checking step \'return SetFileRenameInfo/STATUS_INVALID_PARAMETER\'");
+                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp14, "return of SetFileRenameInfo, state S102");
                 this.Manager.Comment("reaching state \'S120\'");
                 goto label2;
             }
@@ -363,8 +363,8 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
                     of the InputBuffer.FileName field (that is, the total length of InputBuffer as given in InputBufferLength 
 is insufficient to contain the fixed-size fields of InputBuffer plus the length of InputBuffer.FileName).");
                 this.Manager.Comment("reaching state \'S103\'");
-                this.Manager.Comment("checking step \'return SetFileRenameInfo/MEDIA_WRITE_PROTECTED\'");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.MEDIA_WRITE_PROTECTED, temp16, "return of SetFileRenameInfo, state S103");
+                this.Manager.Comment("checking step \'return SetFileRenameInfo/STATUS_INVALID_PARAMETER\'");
+                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp16, "return of SetFileRenameInfo, state S103");
                 this.Manager.Comment("reaching state \'S121\'");
                 goto label2;
             }
@@ -437,8 +437,8 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
                     of the InputBuffer.FileName field (that is, the total length of InputBuffer as given in InputBufferLength 
 is insufficient to contain the fixed-size fields of InputBuffer plus the length of InputBuffer.FileName).");
                 this.Manager.Comment("reaching state \'S104\'");
-                this.Manager.Comment("checking step \'return SetFileRenameInfo/MEDIA_WRITE_PROTECTED\'");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.MEDIA_WRITE_PROTECTED, temp20, "return of SetFileRenameInfo, state S104");
+                this.Manager.Comment("checking step \'return SetFileRenameInfo/STATUS_INVALID_PARAMETER\'");
+                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp20, "return of SetFileRenameInfo, state S104");
                 this.Manager.Comment("reaching state \'S122\'");
                 goto label3;
             }
@@ -473,8 +473,8 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
                     of the InputBuffer.FileName field (that is, the total length of InputBuffer as given in InputBufferLength 
 is insufficient to contain the fixed-size fields of InputBuffer plus the length of InputBuffer.FileName).");
                 this.Manager.Comment("reaching state \'S105\'");
-                this.Manager.Comment("checking step \'return SetFileRenameInfo/MEDIA_WRITE_PROTECTED\'");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.MEDIA_WRITE_PROTECTED, temp22, "return of SetFileRenameInfo, state S105");
+                this.Manager.Comment("checking step \'return SetFileRenameInfo/STATUS_INVALID_PARAMETER\'");
+                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp22, "return of SetFileRenameInfo, state S105");
                 this.Manager.Comment("reaching state \'S123\'");
                 goto label3;
             }
@@ -547,8 +547,8 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
                     of the InputBuffer.FileName field (that is, the total length of InputBuffer as given in InputBufferLength 
 is insufficient to contain the fixed-size fields of InputBuffer plus the length of InputBuffer.FileName).");
                 this.Manager.Comment("reaching state \'S106\'");
-                this.Manager.Comment("checking step \'return SetFileRenameInfo/MEDIA_WRITE_PROTECTED\'");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.MEDIA_WRITE_PROTECTED, temp26, "return of SetFileRenameInfo, state S106");
+                this.Manager.Comment("checking step \'return SetFileRenameInfo/STATUS_INVALID_PARAMETER\'");
+                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp26, "return of SetFileRenameInfo, state S106");
                 this.Manager.Comment("reaching state \'S124\'");
                 goto label4;
             }
@@ -583,8 +583,8 @@ is insufficient to contain the fixed-size fields of InputBuffer plus the length 
                     of the InputBuffer.FileName field (that is, the total length of InputBuffer as given in InputBufferLength 
 is insufficient to contain the fixed-size fields of InputBuffer plus the length of InputBuffer.FileName).");
                 this.Manager.Comment("reaching state \'S107\'");
-                this.Manager.Comment("checking step \'return SetFileRenameInfo/MEDIA_WRITE_PROTECTED\'");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.MEDIA_WRITE_PROTECTED, temp28, "return of SetFileRenameInfo, state S107");
+                this.Manager.Comment("checking step \'return SetFileRenameInfo/STATUS_INVALID_PARAMETER\'");
+                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp28, "return of SetFileRenameInfo, state S107");
                 this.Manager.Comment("reaching state \'S125\'");
                 goto label4;
             }
