@@ -1232,6 +1232,59 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             FileAttribute fileAttribute,
             FileAttribute desiredFileAttribute)
         {
+            return OpenExistingFile(
+                shareAccess,
+                desiredAccess,
+                streamFoundType,
+                symbolicLinkType,
+                openFileType,
+                fileNameStatus,
+                existingOpenModeCreateOption,
+                existOpenShareModeShareAccess,
+                existOpenDesiredAccess,
+                createOption,
+                createDisposition,
+                streamTypeNameToOpen,
+                fileAttribute,
+                desiredFileAttribute,
+                keepOpen: false);
+        }
+
+        /// <summary>
+        /// Implement OpenExistingFile method
+        /// </summary>
+        /// <param name="shareAccess">A bitmask indicating sharing access for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="desiredAccess">A bitmask indicating desired access for the open, as specified in [MS-SMB2] section 2.2.13.1.</param>
+        /// <param name="streamFoundType">Indicate if the stream is found or not.</param>
+        /// <param name="symbolicLinkType">Indicate if it is symbolic link or not.</param>
+        /// <param name="openFileType">Open.File.FileType</param>
+        /// <param name="fileNameStatus">File name status</param>
+        /// <param name="existingOpenModeCreateOption">The Existing File's Create Option.</param>
+        /// <param name="existOpenShareModeShareAccess">A bitmask indicating sharing access for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="existOpenDesiredAccess">A bitmask indicating desired access for the open, as specified in [MS-SMB2] section 2.2.13.1.</param>
+        /// <param name="createOption">create options</param>
+        /// <param name="createDisposition">The desired disposition for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="streamTypeNameToOpen">the name of stream type to open</param>
+        /// <param name="fileAttribute">A bitmask of file attributes for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="desiredFileAttribute">A bitmask of desired file attributes for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <returns>An NTSTATUS code that specifies the result.</returns>
+        public MessageStatus OpenExistingFile(
+            ShareAccess shareAccess,
+            FileAccess desiredAccess,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus,
+            CreateOptions existingOpenModeCreateOption,
+            ShareAccess existOpenShareModeShareAccess,
+            FileAccess existOpenDesiredAccess,
+            CreateOptions createOption,
+            CreateDisposition createDisposition,
+            StreamTypeNameToOpen streamTypeNameToOpen,
+            FileAttribute fileAttribute,
+            FileAttribute desiredFileAttribute,
+            bool keepOpen)
+        {
 
             bool streamFound = (streamFoundType == StreamFoundType.StreamIsFound);
             bool isSymbolicLink = (symbolicLinkType == SymbolicLinkType.IsSymbolicLink);
@@ -1351,7 +1404,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     (uint)CreateDisposition.OPEN_IF,
                     out createAction);
 
-                if (returnedStatus == MessageStatus.SUCCESS)
+                if (returnedStatus == MessageStatus.SUCCESS && (!keepOpen))
                 {
                     returnedStatus = this.transAdapter.CloseFile();
                     if (returnedStatus != MessageStatus.SUCCESS)

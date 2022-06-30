@@ -98,6 +98,42 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             StreamTypeNameToOpen streamTypeNameToOpen,
             FileAttribute fileAttribute,
             FileAttribute desiredFileAttribute);
+
+        /// <summary>
+        /// Implement OpenExistingFile Interface
+        /// </summary>
+        /// <param name="shareAccess">A bitmask indicates sharing access for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="desiredAccess">A bitmask indicates desired access for the open, as specified in [MS-SMB2] section 2.2.13.1.</param>
+        /// <param name="streamFoundType">Indicate if the stream is found or not.</param>
+        /// <param name="symbolicLinkType">Indicate if it is symbolic link or not.</param>
+        /// <param name="openFileType">Indicate file type of the file to be opened</param>
+        /// <param name="fileNameStatus">File name status</param>
+        /// <param name="existingOpenModeCreateOption">The option of existing file's create.</param>
+        /// <param name="existOpenShareModeShareAccess">A bitmask indicates sharing access for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="existOpenDesiredAccess">A bitmask indicates desired access for the open, as specified in [MS-SMB2] section 2.2.13.1.</param>
+        /// <param name="createOption">Create options</param>
+        /// <param name="createDisposition">The desired disposition for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="streamTypeNameToOpen">The name of the stream type to be opened</param>
+        /// <param name="fileAttribute">A bitmask of file attributes for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="desiredFileAttribute">A bitmask of desired file attributes for the open, as specified in [MS-SMB2] section 2.2.13.</param>
+        /// <param name="keepOpen">Keep the open of the existing file.</param>
+        /// <returns>An NTSTATUS code that specifies the result.</returns>
+        MessageStatus OpenExistingFile(
+            ShareAccess shareAccess,
+            FileAccess desiredAccess,
+            StreamFoundType streamFoundType,
+            SymbolicLinkType symbolicLinkType,
+            FileType openFileType,
+            FileNameStatus fileNameStatus,
+            CreateOptions existingOpenModeCreateOption,
+            ShareAccess existOpenShareModeShareAccess,
+            FileAccess existOpenDesiredAccess,
+            CreateOptions createOption,
+            CreateDisposition createDisposition,
+            StreamTypeNameToOpen streamTypeNameToOpen,
+            FileAttribute fileAttribute,
+            FileAttribute desiredFileAttribute,
+            bool keepOpen);
         #endregion
 
         #region OpenFileinitial
