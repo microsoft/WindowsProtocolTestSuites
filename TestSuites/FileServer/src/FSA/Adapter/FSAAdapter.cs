@@ -1543,15 +1543,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //When outBuffer is null, byteRead is 0
             byteRead = ((buffer == null) ? 0 : buffer.Length);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundReadFile(gOpenMode, byteCount, returnedStatus, site);
-                byteRead = SMB2_TDIWorkaround.WorkaroundReadFileForByteRead(gOpenMode, byteCount, byteRead, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundReadFile(byteOffset, byteCount, returnedStatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundReadFile(gOpenMode, byteCount, returnedStatus, site);
+            //    byteRead = SMB2_TDIWorkaround.WorkaroundReadFileForByteRead(gOpenMode, byteCount, byteRead, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkAroundReadFile(byteOffset, byteCount, returnedStatus, site);
+            //}
 
             return returnedStatus;
         }
