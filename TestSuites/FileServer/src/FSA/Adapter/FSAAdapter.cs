@@ -755,14 +755,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             gOpenGrantedAccess = returnedStatus == MessageStatus.SUCCESS ? desiredAccess : FileAccess.None;
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundCreateFile(fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkaroundCreateFile(fileSystem, fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundCreateFile(fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkaroundCreateFile(fileSystem, fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
+            //}
 
             /*
              * Work around for test cases only designed for NTFS and ReFS:
@@ -5016,14 +5016,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            if (this.transport == Transport.SMB)
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundSetFilePositionInfo(inputBufferSize, currentByteOffset, returnedStatus, this.site);
-            }
-            else
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkAroundSetFilePositionInfo(inputBufferSize, currentByteOffset, returnedStatus, this.site);
-            }
+            //if (this.transport == Transport.SMB)
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkAroundSetFilePositionInfo(inputBufferSize, currentByteOffset, returnedStatus, this.site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkAroundSetFilePositionInfo(inputBufferSize, currentByteOffset, returnedStatus, this.site);
+            //}
             return returnedStatus;
         }
         #endregion
