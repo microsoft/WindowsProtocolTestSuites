@@ -4475,14 +4475,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //Call the QuerySecurityInformation method
             MessageStatus returnedStatus = transAdapter.QuerySecurityInformation(maxOutPutSize, (uint)securityInformation, out outBuffer);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundQuerySecurityInfo(isByteCountGreater, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkaroundQuerySecurityInfo(isByteCountGreater, returnedStatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundQuerySecurityInfo(isByteCountGreater, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkaroundQuerySecurityInfo(isByteCountGreater, returnedStatus, site);
+            //}
 
             //Set the revision field
             if (returnedStatus == MessageStatus.SUCCESS)
