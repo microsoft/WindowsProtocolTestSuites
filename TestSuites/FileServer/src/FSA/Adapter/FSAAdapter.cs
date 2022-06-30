@@ -4854,7 +4854,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             FileLinkInformation fileInfo = new FileLinkInformation();
             List<byte> byteList = new List<byte>();
 
-            fileInfo.FileName = inputNameInvalid ? (new byte[] { (byte)'a', (byte)'$', (byte)'b', (byte)']' }) : (new byte[] { (byte)'a', (byte)'\\', (byte)'b', (byte)' ' });
+            var fileName = inputNameInvalid ? "a$b]" : "a\\b";
+            var fileNameBytes = Encoding.Unicode.GetBytes(fileName);
+            fileInfo.FileName = fileNameBytes;
             fileInfo.FileNameLength = (uint)fileInfo.FileName.Length;
             fileInfo.ReplaceIfExists = (byte)(replaceIfExist ? 1 : 0);
             //Assign 7 byte to Reserved according to FSCC 2.4.21
@@ -4873,14 +4875,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundSetFileLinkInfo(inputNameInvalid, replaceIfExist, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundSetFileLinkInfo(inputNameInvalid, replaceIfExist, returnedStatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundSetFileLinkInfo(inputNameInvalid, replaceIfExist, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkAroundSetFileLinkInfo(inputNameInvalid, replaceIfExist, returnedStatus, site);
+            //}
             return returnedStatus;
         }
 
