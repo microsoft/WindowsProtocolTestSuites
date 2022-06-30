@@ -4751,13 +4751,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             fileInfo.NextEntryOffset = 0;
             fileInfo.Flags = FILE_FULL_EA_INFORMATION_FLAGS.NONE;
             fileInfo.EaValue = new byte[] { 0 };
-            fileInfo.EaName = new byte[1];
+            fileInfo.EaName = new byte[] { (byte)'A', 0 };
             fileInfo.EaValueLength = 1;
 
             switch (eAValidate)
             {
                 case EainInputBuffer.EaNameNotWellForm:
-                    fileInfo.EaName = new byte[] { (byte)'+', (byte)'<' };
+                    fileInfo.EaName = new byte[] { (byte)'+', (byte)'<', 0 };
                     //Set EaNameLength to be 2, which is an invalid value
                     fileInfo.EaNameLength = 2;
                     break;
@@ -4784,14 +4784,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundSetFileFullEaInfo(eAValidate, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundSetFileFullEaInfo(eAValidate, returnedStatus, this.site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundSetFileFullEaInfo(eAValidate, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkAroundSetFileFullEaInfo(eAValidate, returnedStatus, this.site);
+            //}
             return returnedStatus;
         }
 
