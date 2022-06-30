@@ -1017,11 +1017,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         SHARING_VIOLATION = 0xC0000043,
 
         /// <summary>
-        /// The instruction at 0x%08lx referenced memory at 0x%08lx. The memory could not be %s.
-        /// </summary>
-        ACCESS_VIOLATION = 0xC0000005,
-
-        /// <summary>
         /// There are no more files
         /// </summary>
         NO_MORE_FILES = 0x80000006,

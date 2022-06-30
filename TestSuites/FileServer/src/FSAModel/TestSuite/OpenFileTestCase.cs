@@ -1245,8 +1245,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                             If FileTypeToOpen is DirectoryFile:If CreateDisposition is FILE_OPEN then:]
                             If this [Perform sharing access checks as described in section 3.1.5.1.2.2.]fails, the request MUST be failed with the same status.");
             this.Manager.Comment("reaching state \'S183\'");
-            this.Manager.Comment("checking step \'return OpenExistingFile/ACCESS_VIOLATION\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.ACCESS_VIOLATION, temp55, "return of OpenExistingFile, state S183");
+            this.Manager.Comment("checking step \'return OpenExistingFile/SHARING_VIOLATION\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.SHARING_VIOLATION, temp55, "return of OpenExistingFile, state S183");
             this.Manager.Comment("reaching state \'S215\'");
             this.Manager.EndTest();
         }
@@ -1301,8 +1301,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                             If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
                             If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.");
             this.Manager.Comment("reaching state \'S184\'");
-            this.Manager.Comment("checking step \'return OpenExistingFile/ACCESS_VIOLATION\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.ACCESS_VIOLATION, temp57, "return of OpenExistingFile, state S184");
+            this.Manager.Comment("checking step \'return OpenExistingFile/SHARING_VIOLATION\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.SHARING_VIOLATION, temp57, "return of OpenExistingFile, state S184");
             this.Manager.Comment("reaching state \'S216\'");
             this.Manager.EndTest();
         }

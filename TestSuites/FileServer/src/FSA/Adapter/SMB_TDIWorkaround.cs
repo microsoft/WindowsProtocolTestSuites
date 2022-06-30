@@ -837,7 +837,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 existOpenDesiredAccess == FileAccess.FILE_LIST_DIRECTORY &&
                 createOption == CreateOptions.DIRECTORY_FILE)
             {
-                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(375, MessageStatus.ACCESS_VIOLATION, returnedStatus, site);
+                returnedStatus = FsaUtility.TransferExpectedResult<MessageStatus>(375, MessageStatus.SHARING_VIOLATION, returnedStatus, site);
             }
             else if (!streamFound && !isSymbolicLink && openFileType == FileType.DataFile &&
                 existingOpenModeCreateOption == CreateOptions.NON_DIRECTORY_FILE &&
