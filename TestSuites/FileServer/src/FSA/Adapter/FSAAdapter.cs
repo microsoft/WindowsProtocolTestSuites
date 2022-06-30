@@ -1710,6 +1710,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 (uint)(CreateDisposition.OPEN_IF),
                 out createAction);
 
+            site.Assert.AreEqual<MessageStatus>(MessageStatus.SUCCESS, returnedStatus, "return of CreateFile");
+
             if (isDirectoryNotRight)
             {
                 randomFile = this.ComposeRandomFileName();
@@ -1724,7 +1726,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 randomFile,
                 out outBuffer);
 
-            returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileObjectIdInfo(this.isObjectIDsSupported, fileNamePattern, restartScan, isDirectoryNotRight, isOutPutBufferNotEnough, returnedStatus, site);
+            //returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileObjectIdInfo(this.isObjectIDsSupported, fileNamePattern, restartScan, isDirectoryNotRight, isOutPutBufferNotEnough, returnedStatus, site);
 
             return returnedStatus;
         }
@@ -1836,6 +1838,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 (uint)(CreateDisposition.OPEN_IF),
                 out createAction);
 
+            site.Assert.AreEqual<MessageStatus>(MessageStatus.SUCCESS, returnedStatus, "return of CreateFile");
+
             if (isDirectoryNotRight)
             {
                 randomFile = this.ComposeRandomFileName();
@@ -1850,7 +1854,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 randomFile,
                 out outBuffer);
 
-            returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileReparsePointInfo(this.fileSystem, fileNamePattern, restartScan, isDirectoryNotRight, isOutPutBufferNotEnough, returnedStatus, site);
+            //returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileReparsePointInfo(this.fileSystem, fileNamePattern, restartScan, isDirectoryNotRight, isOutPutBufferNotEnough, returnedStatus, site);
 
             return returnedStatus;
         }
