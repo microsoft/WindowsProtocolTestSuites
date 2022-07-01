@@ -1603,22 +1603,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             bytesWritten = (long)outLength;
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundWriteFile(byteOffset, this.isVolumeReadonly, byteCount, ref bytesWritten, returnedStatus, site);
+            //}
+            //else
+            //{
+            //    returnedStatus = SMB_TDIWorkaround.WorkAroundWriteFile(gOpenMode, returnedStatus, site);
+            if (returnedStatus == MessageStatus.SUCCESS)
             {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundWriteFile(byteOffset, this.isVolumeReadonly, byteCount, ref bytesWritten, returnedStatus, site);
+                //bytesWritten = SMB_TDIWorkaround.WorkAroundWriteFileOut(byteOffset, this.isVolumeReadonly, byteCount, bytesWritten, site);
             }
             else
             {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundWriteFile(gOpenMode, returnedStatus, site);
-                if (returnedStatus == MessageStatus.SUCCESS)
-                {
-                    bytesWritten = SMB_TDIWorkaround.WorkAroundWriteFileOut(byteOffset, this.isVolumeReadonly, byteCount, bytesWritten, site);
-                }
-                else
-                {
-                    bytesWritten = 0;
-                }
+                bytesWritten = 0;
             }
+            //}
             return returnedStatus;
         }
 
