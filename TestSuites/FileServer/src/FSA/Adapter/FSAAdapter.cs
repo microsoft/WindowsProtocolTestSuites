@@ -5337,10 +5337,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             )
         {
             bool isReturnStatus = false;
-            FileShortNameInformation fileInfo = new FileShortNameInformation();
-            List<byte> byteList = new List<byte>();
-            string inputFileName = this.ComposeRandomFileName();
 
+            string inputFileName = this.ComposeRandomFileName();
             switch (inputBufferFileName)
             {
                 case InputBufferFileName.StartWithBackSlash:
@@ -5363,13 +5361,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
             }
 
+            FileShortNameInformation fileInfo = new FileShortNameInformation();
             fileInfo.FileName = Encoding.Unicode.GetBytes(inputFileName);
-            fileInfo.FileNameLength = (uint)ASCIIEncoding.Unicode.GetByteCount(inputFileName);
+            fileInfo.FileNameLength = (uint)fileInfo.FileName.Length;
 
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.FileNameLength));
-            byteList.AddRange(fileInfo.FileName);
+            byte[] inputBuffer = TypeMarshal.ToBytes<FileShortNameInformation>(fileInfo);
 
-            MessageStatus returnedstatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_SHORTNAME_INFORMATION, byteList.ToArray());
+            MessageStatus returnedstatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_SHORTNAME_INFORMATION, inputBuffer);
 
             //If no exception is thrown in SetFileInformation, server response status.
             isReturnStatus = true;
