@@ -489,6 +489,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             CheckGlobalEncryptDataCompatibility();
             CheckSISRelatedTest();
+            CheckShortNameRelatedTest();
             CheckIncompatibleTestOverQUIC();
         }
 
@@ -520,6 +521,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 Site.Assert.Inconclusive("Single Instance Storage is an optional feature available in the following versions of Windows Server: Windows Storage Server 2003 R2 operating system, Standard Edition, Windows Storage Server 2008, and Windows Storage Server 2008 R2.\n" +
                     "Single Instance Storage is not supported directly by any of the Windows file systems but is implemented as a file system filter.");
+            }
+        }
+
+        private static readonly HashSet<string> shortNameRelatedTestNames = new HashSet<string>
+        {
+            "QueryFileInformationTestCaseS68"
+        };
+
+        private void CheckShortNameRelatedTest()
+        {
+            if (!this.isShortNameSupported && shortNameRelatedTestNames.Contains(CurrentTestCaseName))
+            {
+                Site.Assert.Inconclusive($"Short name is not suppoerted on {this.fileSystem}.");
             }
         }
 
@@ -4100,18 +4114,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                         byteCount = ByteCount.SizeofFILE_ACCESS_INFORMATION;
                         if (outBuffer.Length >= sizeFileAccessInfo)
                         {
-                            if (gOpenGrantedAccess == FileAccess.GENERIC_ALL)
-                            {
-                                // [MS-SMB2] 2.2.13   SMB2 CREATE Request
-                                // GENERIC_ALL indicates a request for all the access flags that are previously listed except MAXIMUM_ALLOWED and ACCESS_SYSTEM_SECURITY.
-                                // However, if set to GENERIC_ALL when create, the actual FileAccess granted is separated to FILE_LIST_DIRECTORY, FILE_ADD_FILE, etc.
-                                // The model cannot handle such condition, so transfer to FileAccess.None to make model cases passed.                                
-                                outputBuffer.AccessFlags = FileAccess.None;
-                            }
-                            else
-                            {
-                                outputBuffer.AccessFlags = (FileAccess)(BitConverter.ToUInt32(outBuffer, 0));
-                            }
+                            //if (gOpenGrantedAccess == FileAccess.GENERIC_ALL)
+                            //{
+                            //    // [MS-SMB2] 2.2.13   SMB2 CREATE Request
+                            //    // GENERIC_ALL indicates a request for all the access flags that are previously listed except MAXIMUM_ALLOWED and ACCESS_SYSTEM_SECURITY.
+                            //    // However, if set to GENERIC_ALL when create, the actual FileAccess granted is separated to FILE_LIST_DIRECTORY, FILE_ADD_FILE, etc.
+                            //    // The model cannot handle such condition, so transfer to FileAccess.None to make model cases passed.                                
+                            //    outputBuffer.AccessFlags = FileAccess.None;
+                            //}
+                            //else
+                            //{
+                            outputBuffer.AccessFlags = (FileAccess)(BitConverter.ToUInt32(outBuffer, 0));
+                            //}
                         }
                         break;
 
