@@ -5476,7 +5476,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             MessageStatus returnedStatus = transAdapter.SetSecurityInformation((uint)securityInformation, informationBuffer);
 
             //Workaround for the current issue
-            returnedStatus = SMB2_TDIWorkaround.WorkaroundSetSecurityInfo(fileSystem, securityInformation, ownerSidEnum, returnedStatus, site);
+            //returnedStatus = SMB2_TDIWorkaround.WorkaroundSetSecurityInfo(fileSystem, securityInformation, ownerSidEnum, returnedStatus, site);
 
             return returnedStatus;
         }
