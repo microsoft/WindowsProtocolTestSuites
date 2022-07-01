@@ -490,7 +490,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             CheckGlobalEncryptDataCompatibility();
             CheckSISRelatedTest();
             CheckShortNameRelatedTest();
-            CheckExtenedAttributeRelatedTest();
+            CheckExtendedAttributeRelatedTest();
+            CheckFileLinkInfoRelatedTest();
             CheckIncompatibleTestOverQUIC();
         }
 
@@ -546,11 +547,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             "SetFileFullEaInformationTestCaseS6"
         };
 
-        private void CheckExtenedAttributeRelatedTest()
+        private void CheckExtendedAttributeRelatedTest()
         {
             if (!this.isExtendedAttributeSupported && eaRelatedTestNames.Contains(CurrentTestCaseName))
             {
-                Site.Assert.Inconclusive($"Extened attribute is not suppoerted on {this.fileSystem}.");
+                Site.Assert.Inconclusive($"Extended attribute is not suppoerted on {this.fileSystem}.");
+            }
+        }
+
+        private static readonly HashSet<string> fileLinkInfoTestNames = new HashSet<string>
+        {
+            "SetFileLinkInformationTestCaseS0",
+            "SetFileLinkInformationTestCaseS2",
+            "SetFileLinkInformationTestCaseS4",
+            "SetFileLinkInformationTestCaseS6"
+        };
+
+        private void CheckFileLinkInfoRelatedTest()
+        {
+            if (!this.isFileLinkInfoSupported && fileLinkInfoTestNames.Contains(CurrentTestCaseName))
+            {
+                Site.Assert.Inconclusive($"Hard link to a file is not suppoerted on {this.fileSystem}.");
             }
         }
 
@@ -4878,25 +4895,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             )
         {
             bool isReturnStatus = false;
-            FileLinkInformation fileInfo = new FileLinkInformation();
-            List<byte> byteList = new List<byte>();
-
-            var fileName = inputNameInvalid ? "a$b]" : "a\\b";
-            var fileNameBytes = Encoding.Unicode.GetBytes(fileName);
-            fileInfo.FileName = fileNameBytes;
-            fileInfo.FileNameLength = (uint)fileInfo.FileName.Length;
+            var fileName = inputNameInvalid ? "a<b*" : this.ComposeRandomFileName(8);
+            FILE_LINK_INFORMATION_TYPE_SMB2 fileInfo = new FILE_LINK_INFORMATION_TYPE_SMB2();
             fileInfo.ReplaceIfExists = (byte)(replaceIfExist ? 1 : 0);
-            //Assign 7 byte to Reserved according to FSCC 2.4.21
             fileInfo.Reserved = new byte[7];
-            fileInfo.RootDirectory = FileLinkInformation_RootDirectory_Values.V1;
+            fileInfo.RootDirectory = (byte)FileLinkInformation_RootDirectory_Values.V1;
+            fileInfo.FileName = Encoding.Unicode.GetBytes(fileName);
+            fileInfo.FileNameLength = (uint)fileInfo.FileName.Length;
 
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.ReplaceIfExists));
-            byteList.AddRange(fileInfo.Reserved);
-            byteList.AddRange(BitConverter.GetBytes((ulong)fileInfo.RootDirectory));
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.FileNameLength));
-            byteList.AddRange(fileInfo.FileName);
+            byte[] inputBuffer = TypeMarshal.ToBytes<FILE_LINK_INFORMATION_TYPE_SMB2>(fileInfo);
 
-            MessageStatus returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_LINK_INFORMATION, byteList.ToArray());
+            MessageStatus returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
+
+            if (!replaceIfExist && returnedStatus == MessageStatus.SUCCESS)
+            {
+                returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
+            }
 
             //If no exception is thrown in SetFileInformation, server response status.
             isReturnStatus = true;
