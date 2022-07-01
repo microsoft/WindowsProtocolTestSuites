@@ -492,6 +492,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             CheckShortNameRelatedTest();
             CheckExtendedAttributeRelatedTest();
             CheckFileLinkInfoRelatedTest();
+            CheckStreamRenameRelatedTest();
             CheckIncompatibleTestOverQUIC();
         }
 
@@ -544,35 +545,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
         }
 
-        private static readonly HashSet<string> eaRelatedTestNames = new HashSet<string>
-        {
-            "SetFileFullEaInformationTestCaseS0",
-            "SetFileFullEaInformationTestCaseS2",
-            "SetFileFullEaInformationTestCaseS4",
-            "SetFileFullEaInformationTestCaseS6"
-        };
-
         private void CheckExtendedAttributeRelatedTest()
         {
-            if (!this.isExtendedAttributeSupported && eaRelatedTestNames.Contains(CurrentTestCaseName))
+            if (!this.isExtendedAttributeSupported && CurrentTestCaseName.StartsWith("SetFileFullEaInformationTestCase"))
             {
                 Site.Assert.Inconclusive($"Extended attribute is not suppoerted on {this.fileSystem}.");
             }
         }
 
-        private static readonly HashSet<string> fileLinkInfoTestNames = new HashSet<string>
-        {
-            "SetFileLinkInformationTestCaseS0",
-            "SetFileLinkInformationTestCaseS2",
-            "SetFileLinkInformationTestCaseS4",
-            "SetFileLinkInformationTestCaseS6"
-        };
-
         private void CheckFileLinkInfoRelatedTest()
         {
-            if (!this.isFileLinkInfoSupported && fileLinkInfoTestNames.Contains(CurrentTestCaseName))
+            if (!this.isFileLinkInfoSupported && CurrentTestCaseName.StartsWith("SetFileLinkInformationTestCase"))
             {
                 Site.Assert.Inconclusive($"Hard link to a file is not suppoerted on {this.fileSystem}.");
+            }
+        }
+
+        private void CheckStreamRenameRelatedTest()
+        {
+            if (!(this.isAlternateDataStreamSupported && this.isStreamRenameSupported) && CurrentTestCaseName.StartsWith("SetFileStreamRenameInformationTestCase"))
+            {
+                Site.Assert.Inconclusive($"Alternate data stream and stream rename are not suppoerted on {this.fileSystem}.");
             }
         }
 
@@ -5297,7 +5290,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 isReturnStatus = true;
                 this.VerifyServerSetFsInfo(isReturnStatus);
 
-                returnedStatus = SMB_TDIWorkaround.WrokAroundStreamRename(this.fileSystem, newStreamNameFormat, streamTypeNameFormat, replaceIfExists, returnedStatus, site);
+                //returnedStatus = SMB_TDIWorkaround.WrokAroundStreamRename(this.fileSystem, newStreamNameFormat, streamTypeNameFormat, replaceIfExists, returnedStatus, site);
             }
             else
             {
@@ -5316,7 +5309,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 isReturnStatus = true;
                 this.VerifyServerSetFsInfo(isReturnStatus);
 
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundStreamRename(this.fileSystem, newStreamNameFormat, streamTypeNameFormat, replaceIfExists, returnedStatus, site);
+                //returnedStatus = SMB2_TDIWorkaround.WorkaroundStreamRename(this.fileSystem, newStreamNameFormat, streamTypeNameFormat, replaceIfExists, returnedStatus, site);
             }
 
             return returnedStatus;

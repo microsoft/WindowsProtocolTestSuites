@@ -130,10 +130,10 @@
       <Property name="WhichFileSystemSupport_QueryFileQuotaInformation" value="NTFS" />
       <Property name="WhichFileSystemSupport_ObjectIdIoCtlRequest" value="NTFS" />
       <Property name="WhichFileSystemSupport_OpenHasManageVolumeAccess" value="NTFS;REFS" />
-      <Property name="WhichFileSystemSupport_StreamRename" value="NTFS;" />
-      <Property name="WhichFileSystemSupport_StreamSnapshotManagement" value="REFS;" />
+      <Property name="WhichFileSystemSupport_StreamRename" value="NTFS" />
+      <Property name="WhichFileSystemSupport_StreamSnapshotManagement" value="REFS" />
       <Property name="WhichFileSystemSupport_MarkHandle" value="NTFS;REFS" />
-      <Property name="WhichFileSystemSupport_RedundantStorage" value="REFS;" />
+      <Property name="WhichFileSystemSupport_RedundantStorage" value="REFS" />
       <Property name="WhichFileSystemSupport_AlternateDataStream" value="NTFS;REFS" />
 
       <Property name="NTFS_ClusterSizeInKB" value="4">
