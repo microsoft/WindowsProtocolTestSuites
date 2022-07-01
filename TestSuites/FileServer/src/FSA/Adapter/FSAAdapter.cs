@@ -1949,7 +1949,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                         break;
 
                     case OutBufferSmall.FileNamesInformation:
-                        fileInfoClass = FileInfoClass.FILE_NAME_INFORMATION;
+                        fileInfoClass = FileInfoClass.FILE_NAMES_INFORMATION;
                         break;
 
                     default:

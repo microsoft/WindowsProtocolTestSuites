@@ -249,7 +249,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Checkpoint("MS-FSA_R2373");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
                     Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
-                    If Create.FILE_SYNCHRONOUS_IO_NONALERT&& !DesiredAccess.SYNCHRONIZE.");
+                    If Create.FILE_SYNCHRONOUS_IO_NONALERT && !DesiredAccess.SYNCHRONIZE.");
             this.Manager.Comment("reaching state \'S163\'");
             this.Manager.Comment("checking step \'return OpenExistingFile/INVALID_PARAMETER\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp7, "return of OpenExistingFile, state S163");
