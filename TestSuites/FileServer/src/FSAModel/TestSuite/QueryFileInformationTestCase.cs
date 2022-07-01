@@ -2559,12 +2559,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("reaching state \'S341\'");
             this.Manager.Comment("checking step \'return QueryFileInfoPart1/[out SizeofFILE_ATTRIBUTE_TAG_INFORMATIO" +
                     "N,out OutputBuffer(AccessFlags=None,Revision=0)]:SUCCESS\'");
-            //TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount.SizeofFILE_ATTRIBUTE_TAG_INFORMATION, temp162, "byteCount of QueryFileInfoPart1, state S341");
-            //TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
-            //                "AccessFlags",
-            //                "Revision"}, new object[] {
-            //                Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
-            //                0u}), temp163, "outputBuffer of QueryFileInfoPart1, state S341");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ByteCount.SizeofFILE_ATTRIBUTE_TAG_INFORMATION, temp162, "byteCount of QueryFileInfoPart1, state S341");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
+                            "AccessFlags",
+                            "Revision"}, new object[] {
+                            Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
+                            0u}), temp163, "outputBuffer of QueryFileInfoPart1, state S341");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus)(0)), temp164, "return of QueryFileInfoPart1, state S341");
             this.Manager.Comment("reaching state \'S385\'");
             this.Manager.EndTest();
