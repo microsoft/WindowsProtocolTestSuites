@@ -4758,16 +4758,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             )
         {
             bool isReturnStatus = false;
-            List<byte> byteList = new List<byte>();
-            FileFullEaInformation fileInfo = new FileFullEaInformation();
-
             //Initail fileInfo structure according to FSCC 2.4.15
-            fileInfo.EaNameLength = 1;
+            string eaName = this.ComposeRandomFileName(8);
+            string eaValue = this.ComposeRandomFileName(8);
+            FileFullEaInformation fileInfo = new FileFullEaInformation();
             fileInfo.NextEntryOffset = 0;
             fileInfo.Flags = FILE_FULL_EA_INFORMATION_FLAGS.NONE;
-            fileInfo.EaValue = new byte[] { 0 };
-            fileInfo.EaName = new byte[] { (byte)'A', 0 };
-            fileInfo.EaValueLength = 1;
+            fileInfo.EaNameLength = (byte)eaName.Length;
+            fileInfo.EaValueLength = (ushort)eaValue.Length;
+            fileInfo.EaName = Encoding.ASCII.GetBytes(eaName + "\0");
+            fileInfo.EaValue = Encoding.ASCII.GetBytes(eaValue);
 
             switch (eAValidate)
             {
@@ -4786,14 +4786,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
             }
 
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.NextEntryOffset));
-            byteList.AddRange(BitConverter.GetBytes((byte)fileInfo.Flags));
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.EaNameLength));
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.EaValueLength));
-            byteList.AddRange(fileInfo.EaName);
-            byteList.AddRange(fileInfo.EaValue);
+            byte[] inputBuffer = TypeMarshal.ToBytes<FileFullEaInformation>(fileInfo);
 
-            MessageStatus returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_FULLEA_INFORMATION, byteList.ToArray());
+            MessageStatus returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_FULLEA_INFORMATION, inputBuffer);
 
             //If no exception is thrown in SetFileInformation, server response status.
             isReturnStatus = true;

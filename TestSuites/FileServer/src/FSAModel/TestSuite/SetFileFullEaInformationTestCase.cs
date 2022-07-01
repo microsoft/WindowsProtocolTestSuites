@@ -139,15 +139,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             temp3 = this.IFSAAdapterInstance.SetFileFullEaInfo(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.EainInputBuffer)(0)));
             this.Manager.Checkpoint("MS-FSA_R2926");
             this.Manager.Checkpoint("[In FileFullEaInformation,Pseudocode for the operation is as follows:]\r\n         " +
-                    "           For each Ea in InputBuffer:If Ea.EaName is not well-formed as per [MS" +
-                    "-FSCC] 2.4.15, the operation MUST be failed with STATUS_INVALID_EA_NAME.");
-            this.Manager.Checkpoint("MS-FSA_R2927");
-            this.Manager.Checkpoint(@"[In FileFullEaInformation, Pseudocode for the operation is as follows:
-                    For each Ea in InputBuffer:] If Ea.Flags does not contain a valid set of flags as per [MS-FSCC] 2.4.15, 
-                    the operation MUST be failed with STATUS_INVALID_EA_NAME.");
+                    "           If the object store supports security and FileInfoClass is FileFullEaInformation and the EA buffer in the Buffer field is not in a valid format, the server MUST fail the request with STATUS_EA_LIST_INCONSISTENT.");
             this.Manager.Comment("reaching state \'S21\'");
-            this.Manager.Comment("checking step \'return SetFileFullEaInfo/INVALID_EA_NAME\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_EA_NAME, temp3, "return of SetFileFullEaInfo, state S21");
+            this.Manager.Comment("checking step \'return SetFileFullEaInfo/STATUS_EA_LIST_INCONSISTENT\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.EA_LIST_INCONSISTENT, temp3, "return of SetFileFullEaInfo, state S21");
             this.Manager.Comment("reaching state \'S25\'");
             this.Manager.EndTest();
         }
@@ -237,15 +232,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             temp7 = this.IFSAAdapterInstance.SetFileFullEaInfo(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.EainInputBuffer)(1)));
             this.Manager.Checkpoint("MS-FSA_R2926");
             this.Manager.Checkpoint("[In FileFullEaInformation,Pseudocode for the operation is as follows:]\r\n         " +
-                    "           For each Ea in InputBuffer:If Ea.EaName is not well-formed as per [MS" +
-                    "-FSCC] 2.4.15, the operation MUST be failed with STATUS_INVALID_EA_NAME.");
-            this.Manager.Checkpoint("MS-FSA_R2927");
-            this.Manager.Checkpoint(@"[In FileFullEaInformation, Pseudocode for the operation is as follows:
-                    For each Ea in InputBuffer:] If Ea.Flags does not contain a valid set of flags as per [MS-FSCC] 2.4.15, 
-                    the operation MUST be failed with STATUS_INVALID_EA_NAME.");
+                    "           If the object store supports security and FileInfoClass is FileFullEaInformation and the EA buffer in the Buffer field is not in a valid format, the server MUST fail the request with STATUS_EA_LIST_INCONSISTENT.");
             this.Manager.Comment("reaching state \'S23\'");
-            this.Manager.Comment("checking step \'return SetFileFullEaInfo/INVALID_EA_NAME\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_EA_NAME, temp7, "return of SetFileFullEaInfo, state S23");
+            this.Manager.Comment("checking step \'return SetFileFullEaInfo/STATUS_EA_LIST_INCONSISTENT\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.EA_LIST_INCONSISTENT, temp7, "return of SetFileFullEaInfo, state S23");
             this.Manager.Comment("reaching state \'S27\'");
             this.Manager.EndTest();
         }
