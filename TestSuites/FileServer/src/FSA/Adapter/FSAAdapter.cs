@@ -490,6 +490,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             CheckGlobalEncryptDataCompatibility();
             CheckSISRelatedTest();
             CheckShortNameRelatedTest();
+            CheckExtenedAttributeRelatedTest();
             CheckIncompatibleTestOverQUIC();
         }
 
@@ -534,6 +535,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             if (!this.isShortNameSupported && shortNameRelatedTestNames.Contains(CurrentTestCaseName))
             {
                 Site.Assert.Inconclusive($"Short name is not suppoerted on {this.fileSystem}.");
+            }
+        }
+
+        private static readonly HashSet<string> eaRelatedTestNames = new HashSet<string>
+        {
+            "SetFileFullEaInformationTestCaseS0",
+            "SetFileFullEaInformationTestCaseS2",
+            "SetFileFullEaInformationTestCaseS4",
+            "SetFileFullEaInformationTestCaseS6"
+        };
+
+        private void CheckExtenedAttributeRelatedTest()
+        {
+            if (!this.isExtendedAttributeSupported && eaRelatedTestNames.Contains(CurrentTestCaseName))
+            {
+                Site.Assert.Inconclusive($"Extened attribute is not suppoerted on {this.fileSystem}.");
             }
         }
 
