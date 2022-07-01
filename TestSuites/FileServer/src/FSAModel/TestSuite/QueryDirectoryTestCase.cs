@@ -779,7 +779,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S28
-        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]

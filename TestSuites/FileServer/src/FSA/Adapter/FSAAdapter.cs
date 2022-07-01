@@ -1907,8 +1907,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case FileNamePattern.NotValidFilenameComponent:
-                    //According to section 2.1.5 in [MS-FSCC], the characters " \ / [ ] : | < > + = ; , * ? are inlegal.
-                    randomFile = "<+>";
+                    //According to section 2.1.5 in [MS-FSCC], the characters " \ / : | < > * ? are inlegal.
+                    //Permitted wildcards: " * < > ?
+                    randomFile = "<|>";
                     break;
 
                 case FileNamePattern.Empty:
