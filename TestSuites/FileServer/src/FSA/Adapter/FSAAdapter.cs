@@ -528,7 +528,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         private static readonly HashSet<string> shortNameRelatedTestNames = new HashSet<string>
         {
-            "QueryFileInformationTestCaseS68"
+            "QueryFileInformationTestCaseS68",
+            "SetFileShortNameInformationTestCaseS0",
+            "SetFileShortNameInformationTestCaseS2",
+            "SetFileShortNameInformationTestCaseS4",
+            "SetFileShortNameInformationTestCaseS6",
+            "SetFileShortNameInformationTestCaseS8"
         };
 
         private void CheckShortNameRelatedTest()
@@ -5370,14 +5375,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedstatus = SMB2_TDIWorkaround.WorkaroundSetFileShortNameInfo(inputBufferFileName, returnedstatus, site);
-            }
-            else
-            {
-                returnedstatus = SMB_TDIWorkaround.WorkArondSetFileShortNameInfo(inputBufferFileName, returnedstatus, site);
-            }
+            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
+            //{
+            //    returnedstatus = SMB2_TDIWorkaround.WorkaroundSetFileShortNameInfo(inputBufferFileName, returnedstatus, site);
+            //}
+            //else
+            //{
+            //    returnedstatus = SMB_TDIWorkaround.WorkArondSetFileShortNameInfo(inputBufferFileName, returnedstatus, site);
+            //}
             return returnedstatus;
         }
 
