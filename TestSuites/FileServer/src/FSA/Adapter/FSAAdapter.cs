@@ -354,7 +354,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isRedundantMedia = testConfig.GetProperty("WhichFileSystemSupport_RedundantStorage").Contains(this.fileSystem.ToString());
             this.isStreamSnapshotManagementImplemented = testConfig.GetProperty("WhichFileSystemSupport_StreamSnapshotManagement").Contains(this.fileSystem.ToString());
             this.isAlternateDataStreamSupported = testConfig.GetProperty("WhichFileSystemSupport_AlternateDataStream").Contains(this.fileSystem.ToString());
-            this.isSingleInstanceStorageSupported = testConfig.GetProperty("WhichFileSystemSupport_SingleInstanceStorage").Contains(this.FileSystem.ToString());
+            this.isSingleInstanceStorageSupported = testConfig.GetProperty("WhichFileSystemSupport_SingleInstanceStorage", false).Contains(this.FileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
