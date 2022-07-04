@@ -5459,19 +5459,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             SecurityInformation securityInformation,
             OwnerSid ownerSidEnum)
         {
-            byte[] informationBuffer = null;
-            _RawSecurityDescriptor ReceivedSD = new _RawSecurityDescriptor(" ");
-
-            ReceivedSD.Owner = new _SID(testConfig.GetProperty("SDOwner"));
+            _SID? owner = new _SID(testConfig.GetProperty("SDOwner"));
             if (ownerSidEnum == OwnerSid.OpenFileSecDesOwnerIsNull)
             {
-                ReceivedSD.Owner = null;
+                owner = null;
             }
 
-            informationBuffer = new byte[ReceivedSD.Size];
+            var sd = DtypUtility.CreateSecurityDescriptor(SECURITY_DESCRIPTOR_Control.SelfRelative, owner, null, null, null);
+            var informationBuffer = DtypUtility.EncodeSecurityDescriptor(sd);
 
-            //Read the data from index 0.
-            ReceivedSD.GetBinaryForm(informationBuffer, 0);
             MessageStatus returnedStatus = transAdapter.SetSecurityInformation((uint)securityInformation, informationBuffer);
 
             //Workaround for the current issue

@@ -271,7 +271,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             bool isIpv4 = this.ipVersion == IpVersion.Ipv6 ? false : true;
             IPAddress serverIp = FsaUtility.GetIpAddress(this.serverName, isIpv4);
 
-            switch(testConfig.UnderlyingTransport)
+            switch (testConfig.UnderlyingTransport)
             {
                 case Smb2TransportType.Tcp:
                     this.site.Log.Add(LogEntryKind.Debug, "Connect to server {0} over TCP.", serverIp.ToString());
@@ -1278,8 +1278,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 this.sessionId,
                 this.treeId,
                 SET_INFO_Request_InfoType_Values.SMB2_0_INFO_SECURITY,
-                (byte)securityInformation,
-                SET_INFO_Request_AdditionalInformation_Values.NONE,
+                0,
+                (SET_INFO_Request_AdditionalInformation_Values)securityInformation,
                 this.fileId,
                 buffer,
                 out packetHeader,
