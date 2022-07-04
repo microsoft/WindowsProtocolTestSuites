@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             status = WriteNewFile(bytesToWrite, out bytesWritten);
 
             //Step 5: Read some bytes from the Alternate Data Stream <Stream1> in the file
-            bytesToRead = 2048;
+            bytesToRead = 1;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Read the stream from offset: 0 and length: " + bytesToRead.ToString(), ++testStep);
             status = this.fsaAdapter.ReadFile(0, bytesToRead, out bytesRead);
             this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status, "If IsUnbuffered is TRUE & (ByteOffset >= 0), the operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions: (1) (ByteOffset % Open.File.Volume.LogicalBytesPerSector) is not zero. (2) (ByteCount % Open.File.Volume.LogicalBytesPerSector) is not zero.");
