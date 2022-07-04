@@ -55,6 +55,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isRedundantMedia;
         private bool isStreamSnapshotManagementImplemented;
         private bool isAlternateDataStreamSupported;
+        private bool isSingleInstanceStorageSupported;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -353,6 +354,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isRedundantMedia = testConfig.GetProperty("WhichFileSystemSupport_RedundantStorage").Contains(this.fileSystem.ToString());
             this.isStreamSnapshotManagementImplemented = testConfig.GetProperty("WhichFileSystemSupport_StreamSnapshotManagement").Contains(this.fileSystem.ToString());
             this.isAlternateDataStreamSupported = testConfig.GetProperty("WhichFileSystemSupport_AlternateDataStream").Contains(this.fileSystem.ToString());
+            this.isSingleInstanceStorageSupported = testConfig.GetProperty("WhichFileSystemSupport_SingleInstanceStorage").Contains(this.FileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
@@ -520,7 +522,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         private void CheckSISRelatedTest()
         {
-            if (testConfig.IsWindowsPlatform && sisRelatedTestNames.Contains(CurrentTestCaseName))
+            if (!this.isSingleInstanceStorageSupported && sisRelatedTestNames.Contains(CurrentTestCaseName))
             {
                 Site.Assert.Inconclusive("Single Instance Storage is an optional feature available in the following versions of Windows Server: Windows Storage Server 2003 R2 operating system, Standard Edition, Windows Storage Server 2008, and Windows Storage Server 2008 R2.\n" +
                     "Single Instance Storage is not supported directly by any of the Windows file systems but is implemented as a file system filter.");

@@ -135,6 +135,7 @@
       <Property name="WhichFileSystemSupport_MarkHandle" value="NTFS;REFS" />
       <Property name="WhichFileSystemSupport_RedundantStorage" value="REFS" />
       <Property name="WhichFileSystemSupport_AlternateDataStream" value="NTFS;REFS" />
+      <Property name="WhichFileSystemSupport_SingleInstanceStorage" value="" />
 
       <Property name="NTFS_ClusterSizeInKB" value="4">
         <Description>
