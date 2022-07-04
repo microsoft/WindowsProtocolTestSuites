@@ -5345,7 +5345,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case InputBufferFileName.Empty:
-                    inputFileName = String.Empty;
+                    inputFileName = string.Empty;
                     break;
 
                 case InputBufferFileName.EqualLinkShortName:
@@ -5360,7 +5360,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             fileInfo.FileName = Encoding.Unicode.GetBytes(inputFileName);
             fileInfo.FileNameLength = (uint)fileInfo.FileName.Length;
 
-            byte[] inputBuffer = TypeMarshal.ToBytes<FileShortNameInformation>(fileInfo);
+            byte[] inputBuffer = (inputFileName == string.Empty) ? BitConverter.GetBytes(0u) : TypeMarshal.ToBytes<FileShortNameInformation>(fileInfo);
 
             MessageStatus returnedstatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_SHORTNAME_INFORMATION, inputBuffer);
 
