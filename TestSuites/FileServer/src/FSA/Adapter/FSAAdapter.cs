@@ -803,6 +803,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             gOpenGrantedAccess = returnedStatus == MessageStatus.SUCCESS ? desiredAccess : FileAccess.None;
 
+            site.Log.Add(LogEntryKind.Debug, $"CreateFile returned {returnedStatus} for creating file {randomFile}");
+
             //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
             //{
             //    returnedStatus = SMB2_TDIWorkaround.WorkaroundCreateFile(fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
@@ -1955,7 +1957,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case FileNamePattern.NotValidFilenameComponent:
-                    //According to section 2.1.5 in [MS-FSCC], the characters " \ / : | < > * ? are inlegal.
+                    //According to section 2.1.5 in [MS-FSCC], the characters " \ / : | < > * ? are illegal.
                     //Permitted wildcards: " * < > ?
                     randomFile = "<|>";
                     break;
@@ -5313,6 +5315,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
                 //returnedStatus = SMB2_TDIWorkaround.WorkaroundStreamRename(this.fileSystem, newStreamNameFormat, streamTypeNameFormat, replaceIfExists, returnedStatus, site);
             }
+
+            site.Log.Add(LogEntryKind.Debug, $"SetFileInformation returned {returnedStatus} for renaming the stream to {newStreamName}");
 
             return returnedStatus;
         }
