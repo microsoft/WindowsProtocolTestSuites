@@ -4223,7 +4223,7 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile (Data) and write 1024 bytes to the file|
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Read the bytes from the Alternate Data Streams created on this file|
-| | Verify server return with **STATUS_INVALID_PARAMETER** for supported file system|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
 | | Read the bytes from the Alternate Data Streams created on this file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|
@@ -4237,7 +4237,7 @@ There are 343 test cases in total:
 | Message Sequence| CreateFile (Directory) |
 | | Create an Alternate Data Stream and write 2048 bytes to the stream|
 | | Read the bytes from the Alternate Data Streams created on this file|
-| | Verify server return with **STATUS_INVALID_PARAMETER** for supported file system|
+| | Verify server return with **STATUS_SUCCESS** for supported file system|
 | | Create another Alternate Data Stream and write 4096 bytes to the stream|
 | | Read the bytes from the Alternate Data Streams created on this file|
 | | Verify server return with **STATUS_SUCCESS** for supported file system|

@@ -87,14 +87,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             status = this.fsaAdapter.CreateFile(
                         fileName + ":" + streamName1 + ":$DATA",
                         FileAttribute.NORMAL,
-                        CreateOptions.NON_DIRECTORY_FILE | CreateOptions.NO_INTERMEDIATE_BUFFERING,
+                        CreateOptions.NON_DIRECTORY_FILE,
                         FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE,
                         CreateDisposition.OPEN_IF);
             this.fsaAdapter.AssertIfNotSuccess(status, "Create Alternate Data Stream operation failed");
 
             //Step 4: Write some bytes into the Alternate Data Stream <Stream1> in the file
-            bytesToWrite = 64 * 1024;
+            bytesToWrite = 2048;
             bytesWritten = 0;
             streamList.Add(":" + streamName1 + ":$DATA", bytesToWrite);
 
@@ -102,10 +102,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             status = WriteNewFile(bytesToWrite, out bytesWritten);
 
             //Step 5: Read some bytes from the Alternate Data Stream <Stream1> in the file
-            bytesToRead = 1;
+            bytesToRead = (int)bytesWritten;
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "{0}. Read the stream from offset: 0 and length: " + bytesToRead.ToString(), ++testStep);
             status = this.fsaAdapter.ReadFile(0, bytesToRead, out bytesRead);
-            this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status, "If IsUnbuffered is TRUE & (ByteOffset >= 0), the operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions: (1) (ByteOffset % Open.File.Volume.LogicalBytesPerSector) is not zero. (2) (ByteCount % Open.File.Volume.LogicalBytesPerSector) is not zero.");
+            this.fsaAdapter.AssertIfNotSuccess(status, "Read data from stream operation failed.");
 
             //Step 6: Create another Alternate Data Stream <Stream2> in the newly created file
             string streamName2 = this.fsaAdapter.ComposeRandomFileName(8);
