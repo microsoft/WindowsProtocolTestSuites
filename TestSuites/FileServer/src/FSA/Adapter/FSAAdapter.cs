@@ -56,6 +56,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isStreamSnapshotManagementImplemented;
         private bool isAlternateDataStreamSupported;
         private bool isSingleInstanceStorageSupported;
+        private bool isObjectSecurityBasedOnAccessControlListsSupported;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -355,6 +356,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isStreamSnapshotManagementImplemented = testConfig.GetProperty("WhichFileSystemSupport_StreamSnapshotManagement").Contains(this.fileSystem.ToString());
             this.isAlternateDataStreamSupported = testConfig.GetProperty("WhichFileSystemSupport_AlternateDataStream").Contains(this.fileSystem.ToString());
             this.isSingleInstanceStorageSupported = testConfig.GetProperty("WhichFileSystemSupport_SingleInstanceStorage", false).Contains(this.FileSystem.ToString());
+            this.isObjectSecurityBasedOnAccessControlListsSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectSecurityBasedOnAccessControlLists").Contains(this.FileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
@@ -495,6 +497,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             CheckExtendedAttributeRelatedTest();
             CheckFileLinkInfoRelatedTest();
             CheckStreamRenameRelatedTest();
+            CheckSecurityInfoRelatedTest();
             CheckIncompatibleTestOverQUIC();
         }
 
@@ -568,6 +571,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             if (!(this.isAlternateDataStreamSupported && this.isStreamRenameSupported) && CurrentTestCaseName.StartsWith("SetFileStreamRenameInformationTestCase"))
             {
                 Site.Assert.Inconclusive($"Alternate data stream and stream rename are not suppoerted on {this.fileSystem}.");
+            }
+        }
+
+        private void CheckSecurityInfoRelatedTest()
+        {
+            if (!this.isObjectSecurityBasedOnAccessControlListsSupported && CurrentTestCaseName.StartsWith("SetSecurityInformationTestCase"))
+            {
+                Site.Assert.Inconclusive($"Object security based on Access Control Lists is not supported on {this.FileName}.");
             }
         }
 
