@@ -104,8 +104,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S10
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]

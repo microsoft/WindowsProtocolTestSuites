@@ -429,8 +429,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetIfImplementQueryFileReparsePointInformation, state S108");
         }
         #endregion
-        
+
         #region Test Starting in S18
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -715,8 +716,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetIfImplementQueryFileReparsePointInformation, state S111");
         }
         #endregion
-        
+
         #region Test Starting in S24
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -779,6 +781,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S28
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
