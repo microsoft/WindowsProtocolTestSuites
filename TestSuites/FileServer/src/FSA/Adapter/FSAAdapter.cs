@@ -816,15 +816,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             site.Log.Add(LogEntryKind.Debug, $"CreateFile returned {returnedStatus} for creating file {randomFile}");
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundCreateFile(fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkaroundCreateFile(fileSystem, fileNameStatus, createOption, desiredAccess, openFileType, desiredFileAttribute, returnedStatus, site);
-            //}
-
             /*
              * Work around for test cases only designed for NTFS and ReFS:
              * Make assertion in the adapter, then convert the return code according to the test case.
@@ -1433,15 +1424,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 (uint)createDisposition,
                 out createAction);
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOpen, fileAttribute, desiredFileAttribute, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkaroundOpenExistingFile(shareAccess, desiredAccess, streamFound, isSymbolicLink, openFileType, fileNameStatus, existingOpenModeCreateOption, existOpenShareModeShareAccess, existOpenDesiredAccess, createOption, createDisposition, streamTypeNameToOpen, fileAttribute, desiredFileAttribute, returnedStatus, site);
-            //}
-
             /*
              * Work around for test cases only designed for NTFS and ReFS:
              * Make assertion in the adapter, then convert the return code according to the test case.
@@ -1604,16 +1586,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //When outBuffer is null, byteRead is 0
             byteRead = ((buffer == null) ? 0 : buffer.Length);
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundReadFile(gOpenMode, byteCount, returnedStatus, site);
-            //    byteRead = SMB2_TDIWorkaround.WorkaroundReadFileForByteRead(gOpenMode, byteCount, byteRead, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkAroundReadFile(byteOffset, byteCount, returnedStatus, site);
-            //}
-
             return returnedStatus;
         }
 
@@ -1650,22 +1622,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             bytesWritten = (long)outLength;
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundWriteFile(byteOffset, this.isVolumeReadonly, byteCount, ref bytesWritten, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkAroundWriteFile(gOpenMode, returnedStatus, site);
-            if (returnedStatus == MessageStatus.SUCCESS)
-            {
-                //bytesWritten = SMB_TDIWorkaround.WorkAroundWriteFileOut(byteOffset, this.isVolumeReadonly, byteCount, bytesWritten, site);
-            }
-            else
+            if (returnedStatus != MessageStatus.SUCCESS)
             {
                 bytesWritten = 0;
             }
-            //}
+
             return returnedStatus;
         }
 
@@ -1786,8 +1747,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 fileIndex,
                 randomFile,
                 out outBuffer);
-
-            //returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileObjectIdInfo(this.isObjectIDsSupported, fileNamePattern, restartScan, isDirectoryNotRight, isOutPutBufferNotEnough, returnedStatus, site);
 
             return returnedStatus;
         }
@@ -1915,8 +1874,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 randomFile,
                 out outBuffer);
 
-            //returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileReparsePointInfo(this.fileSystem, fileNamePattern, restartScan, isDirectoryNotRight, isOutPutBufferNotEnough, returnedStatus, site);
-
             return returnedStatus;
         }
 
@@ -2027,62 +1984,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 fileIndex,
                 randomFile,
                 out outBuffer);
-
-            //if (fileNamePattern == FileNamePattern.Empty
-            //    && !restartScan && isNoRecordsReturned && !isOutBufferSizeLess
-            //    && outBufferSize == OutBufferSmall.FileFullDirectoryInformation)
-            //{
-            //    return MessageStatus.NO_SUCH_FILE;
-            //}
-
-            //if (fileNamePattern == FileNamePattern.NotEmpty_LengthIsNotAMultipleOf4
-            //    && !restartScan && isNoRecordsReturned && isOutBufferSizeLess
-            //    && outBufferSize == OutBufferSmall.None)
-            //{
-            //    return MessageStatus.INFO_LENGTH_MISMATCH;
-            //}
-
-            //if (isOutBufferSizeLess)
-            //{
-            //    switch (outBufferSize)
-            //    {
-            //        case OutBufferSmall.FileBothDirectoryInformation:
-            //            {
-            //                return MessageStatus.INFO_LENGTH_MISMATCH;
-            //            }
-            //        case OutBufferSmall.FileDirectoryInformation:
-            //            {
-            //                return MessageStatus.INFO_LENGTH_MISMATCH;
-            //            }
-            //        case OutBufferSmall.FileFullDirectoryInformation:
-            //            {
-            //                return MessageStatus.INFO_LENGTH_MISMATCH;
-            //            }
-            //        case OutBufferSmall.FileIdBothDirectoryInformation:
-            //            {
-            //                return MessageStatus.INFO_LENGTH_MISMATCH;
-            //            }
-            //        case OutBufferSmall.FileIdFullDirectoryInformation:
-            //            {
-            //                return MessageStatus.INFO_LENGTH_MISMATCH;
-            //            }
-            //        case OutBufferSmall.FileNamesInformation:
-            //            {
-            //                return MessageStatus.INFO_LENGTH_MISMATCH;
-            //            }
-            //        default:
-            //            break;
-            //    }
-            //}
-
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryDirectoryInfo(fileNamePattern, isNoRecordsReturned, isOutBufferSizeLess, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkAroundQueryDirectoryInfo(isNoRecordsReturned, isOutBufferSizeLess, returnedStatus, site);
-            //}
 
             return returnedStatus;
         }
@@ -3969,15 +3870,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                inbuffer,
                out outbuffer);
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundFsctlSisCopy(fileSystem, bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkAroundFsctlSisCopyFile(fileSystem, bufferSize, inputBuffer, isCOPYFILE_SIS_LINKTrue, isIsEncryptedTrue, returnedStatus, site);
-            //}
-
             return returnedStatus;
         }
 
@@ -4161,18 +4053,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                         byteCount = ByteCount.SizeofFILE_ACCESS_INFORMATION;
                         if (outBuffer.Length >= sizeFileAccessInfo)
                         {
-                            //if (gOpenGrantedAccess == FileAccess.GENERIC_ALL)
-                            //{
-                            //    // [MS-SMB2] 2.2.13   SMB2 CREATE Request
-                            //    // GENERIC_ALL indicates a request for all the access flags that are previously listed except MAXIMUM_ALLOWED and ACCESS_SYSTEM_SECURITY.
-                            //    // However, if set to GENERIC_ALL when create, the actual FileAccess granted is separated to FILE_LIST_DIRECTORY, FILE_ADD_FILE, etc.
-                            //    // The model cannot handle such condition, so transfer to FileAccess.None to make model cases passed.                                
-                            //    outputBuffer.AccessFlags = FileAccess.None;
-                            //}
-                            //else
-                            //{
                             outputBuffer.AccessFlags = (FileAccess)(BitConverter.ToUInt32(outBuffer, 0));
-                            //}
                         }
                         break;
 
@@ -4237,15 +4118,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                         break;
                 }
             }
-
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundQueryFileInfoPart1(this.fileSystem, fileInfoClass, outputBufferSize, ref byteCount, ref outputBuffer, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkAroundQueryFileInfoPart1(this.fileSystem, fileInfoClass, outputBufferSize, ref byteCount, ref outputBuffer, returnedStatus, site);
-            //}
 
             return returnedStatus;
         }
@@ -4536,15 +4408,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             //Call the QuerySecurityInformation method
             MessageStatus returnedStatus = transAdapter.QuerySecurityInformation(maxOutPutSize, (uint)securityInformation, out outBuffer);
-
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundQuerySecurityInfo(isByteCountGreater, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkaroundQuerySecurityInfo(isByteCountGreater, returnedStatus, site);
-            //}
 
             //Set the revision field
             if (returnedStatus == MessageStatus.SUCCESS)
@@ -4841,14 +4704,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundSetFileFullEaInfo(eAValidate, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkAroundSetFileFullEaInfo(eAValidate, returnedStatus, this.site);
-            //}
             return returnedStatus;
         }
 
@@ -4929,14 +4784,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundSetFileLinkInfo(inputNameInvalid, replaceIfExist, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkAroundSetFileLinkInfo(inputNameInvalid, replaceIfExist, returnedStatus, site);
-            //}
             return returnedStatus;
         }
 
@@ -5070,14 +4917,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            //if (this.transport == Transport.SMB)
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkAroundSetFilePositionInfo(inputBufferSize, currentByteOffset, returnedStatus, this.site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkAroundSetFilePositionInfo(inputBufferSize, currentByteOffset, returnedStatus, this.site);
-            //}
             return returnedStatus;
         }
         #endregion
@@ -5173,14 +5012,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedStatus = SMB2_TDIWorkaround.WorkaroundSetFileRenameInfo(inputBufferFileNameLength, returnedStatus, site);
-            //}
-            //else
-            //{
-            //    returnedStatus = SMB_TDIWorkaround.WorkaroundSetFileRenameInfo(inputBufferFileNameLength, returnedStatus, site);
-            //}
             return returnedStatus;
         }
 
@@ -5304,8 +5135,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 //If no exception is thrown in SetFileInformation, server response status.
                 isReturnStatus = true;
                 this.VerifyServerSetFsInfo(isReturnStatus);
-
-                //returnedStatus = SMB_TDIWorkaround.WrokAroundStreamRename(this.fileSystem, newStreamNameFormat, streamTypeNameFormat, replaceIfExists, returnedStatus, site);
             }
             else
             {
@@ -5323,8 +5152,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 //If no exception is thrown in SetFileInformation, server response status.
                 isReturnStatus = true;
                 this.VerifyServerSetFsInfo(isReturnStatus);
-
-                //returnedStatus = SMB2_TDIWorkaround.WorkaroundStreamRename(this.fileSystem, newStreamNameFormat, streamTypeNameFormat, replaceIfExists, returnedStatus, site);
             }
 
             site.Log.Add(LogEntryKind.Debug, $"SetFileInformation returned {returnedStatus} for renaming the stream to {newStreamName}");
@@ -5383,14 +5210,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
 
-            //if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            //{
-            //    returnedstatus = SMB2_TDIWorkaround.WorkaroundSetFileShortNameInfo(inputBufferFileName, returnedstatus, site);
-            //}
-            //else
-            //{
-            //    returnedstatus = SMB_TDIWorkaround.WorkArondSetFileShortNameInfo(inputBufferFileName, returnedstatus, site);
-            //}
             return returnedstatus;
         }
 
@@ -5480,9 +5299,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             var informationBuffer = DtypUtility.EncodeSecurityDescriptor(sd);
 
             MessageStatus returnedStatus = transAdapter.SetSecurityInformation((uint)securityInformation, informationBuffer);
-
-            //Workaround for the current issue
-            //returnedStatus = SMB2_TDIWorkaround.WorkaroundSetSecurityInfo(fileSystem, securityInformation, ownerSidEnum, returnedStatus, site);
 
             return returnedStatus;
         }
