@@ -47,7 +47,7 @@ if (Test-Path "$configPath") {
     if(![string]::IsNullOrEmpty($coreSetting.regressiontype) -and ($coreSetting.regressiontype -eq "Azure")){
         $SignalFileFullPath = "$env:SystemDrive\PostScript.Completed.signal"
     }
-    $domain = $driverComputerSetting.domain
+    $domain = $sutSetting.domain
     $userName = $coreSetting.username
     $userPwd = $coreSetting.password
     $sutName = $sutSetting.name
