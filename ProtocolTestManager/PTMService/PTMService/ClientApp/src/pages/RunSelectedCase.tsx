@@ -411,10 +411,10 @@ export function RunSelectedCase (props: StepWizardProps) {
         </Fabric>
         <div className='buttonPanel'>
           <Stack horizontal horizontalAlign='end' tokens={StackGap10}>
-            <PrimaryButton text={getRunAllButtonText()} disabled={selectedTestCases.isPosting || filterInfo.listSelectedCases.length === 0} onClick={onRunAllCasesClick} />
-            <PrimaryButton style={{ width: 240 }} text={getRunSelectedButtonText()} disabled={selectedTestCases.isPosting || selectedItems.length === 0} onClick={onRunSelectedCasesClick} />
-            <ContextualMenuControl text="Import/Export Playlist" shouldFocusOnMount={true} menuItems={getMenuItems()} />
             <PrimaryButton text='Previous' disabled={selectedTestCases.isPosting} onClick={() => wizardProps.previousStep()} />
+            <ContextualMenuControl text="Import/Export Playlist" shouldFocusOnMount={true} menuItems={getMenuItems()} />
+            <PrimaryButton style={{ width: 240 }} text={getRunSelectedButtonText()} disabled={selectedTestCases.isPosting || selectedItems.length === 0} onClick={onRunSelectedCasesClick} />
+            <PrimaryButton text={getRunAllButtonText()} disabled={selectedTestCases.isPosting || filterInfo.listSelectedCases.length === 0} onClick={onRunAllCasesClick} />
           </Stack>
         </div>
       </Stack>
