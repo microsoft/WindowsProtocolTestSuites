@@ -1,4 +1,7 @@
-﻿using Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent.Handler;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent.Handler;
 using Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent.Message;
 using Microsoft.Protocols.TestTools;
 using System;

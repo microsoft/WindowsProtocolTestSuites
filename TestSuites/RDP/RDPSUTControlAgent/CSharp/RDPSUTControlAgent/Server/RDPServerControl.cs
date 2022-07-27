@@ -120,6 +120,7 @@ namespace RDPSUTControlAgent
 
         private Dictionary<string, string> DefaultPointerRegistrySet()
         {
+            //Set Pointer Registry Values To Default
             Dictionary<string, string> pointerRegistrySet = new Dictionary<string, string>();
 
             pointerRegistrySet[""] = "Windows Default";
@@ -145,6 +146,7 @@ namespace RDPSUTControlAgent
 
         private Dictionary<string, string> ExtraLargeDefaultPointerRegistrySet()
         {
+            //Set Pointer Registry Values To Extra Large Set (Works only on Windows 11)
             Dictionary<string, string> pointerRegistrySet = new Dictionary<string, string>();
 
             pointerRegistrySet[""] = "Windows Default (extra large)"; //

@@ -543,6 +543,5 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             #endregion Test Code
         }
 
-        
     }
 }
