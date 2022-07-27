@@ -79,6 +79,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter.CreditMgm
                 IsMultiCreditSupportedOnServer = testConfig.IsMultiCreditSupported
             };
 
+            base.CheckTestOverQUICOnLinux();
             config = c;
 
             Site.Log.Add(LogEntryKind.Debug, c.ToString());

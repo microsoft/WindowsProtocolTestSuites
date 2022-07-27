@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
@@ -69,6 +70,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         /// </summary>
         private void CheckCompressionTestCaseApplicabilityForGlobalEncryptData(string reason = null)
         {
+            CheckTestOverQUIConLinux();
             if (testConfig.IsGlobalEncryptDataEnabled)
             {
                 if (testConfig.IsGlobalRejectUnencryptedAccessEnabled)
@@ -86,6 +88,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 {
                     BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionClientSupported < DialectRevision.Smb30, "When IsGlobalRejectUnencryptedAccessEnabled is false, it will allow unencrypted accesses from clients that do not support SMB 3.0 and above.");
                 }
+            }
+        }
+
+        private void CheckTestOverQUIConLinux()
+        {
+            List<string> testList = new List<string> {
+                 "SMB2Compression_LZNT1_LargeFile", "SMB2Compression_CompressedWriteRequest_LargeFile", "SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFront_LargeFile",
+                 "SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtEnd_LargeFile", "SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFrontAndEnd_LargeFile"
+            };
+
+            if (TestConfig.UnderlyingTransport == Smb2TransportType.Quic && RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && testList.Contains(CurrentTestCaseName))
+            {
+                BaseTestSite.Assert.Inconclusive("Ignoring test {0} when transport is QUIC and driver is Linux", CurrentTestCaseName);
             }
         }
         #endregion

@@ -330,7 +330,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         {
             //Using DNS EndPoint instead of IP because SmbOverQuic certificate is issued using DNS name
             EndPoint targetEndPoint = new DnsEndPoint(this.socketConfig.TargetName, this.socketConfig.RemoteIpPort);
-            return new QuicConnection(targetEndPoint, GetSslClientAuthenticationOptions());
+            this.localEndPoint = new IPEndPoint(this.socketConfig.LocalIpAddress, this.socketConfig.LocalIpPort);
+            return new QuicConnection(targetEndPoint, GetSslClientAuthenticationOptions(), this.localEndPoint as IPEndPoint);
         }
 
         private void SendConnectionRequest()
