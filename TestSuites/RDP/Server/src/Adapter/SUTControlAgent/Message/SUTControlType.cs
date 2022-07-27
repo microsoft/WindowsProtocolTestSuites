@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent.Message
     }
 
     /// <summary>
-    /// Payload type of SUT_Control_Request_Message with commandId: START_RDP_CONNECTIO
+    /// Payload type of SUT_Control_Request_Message with commandId: START_RDP_CONNECTION
     /// </summary>
     public enum RDP_Connect_Payload_Type : uint
     {
