@@ -13,8 +13,6 @@ namespace RDPSUTControlAgent
 
         static void Main(string[] args)
         {
-            PointerManager.EffectChange();
-
             foreach (var s in args)
             {
                 if (s.StartsWith("/"))
