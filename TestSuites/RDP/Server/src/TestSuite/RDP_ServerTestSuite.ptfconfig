@@ -10,7 +10,7 @@
     <Property name="Version" value="1.0" />
 	  <Group name="SUTControl">
 		  <!--IP addresses or host name of SUT control Agent, seperated by ";"-->
-		  <Property name="AgentAddress" value="RDPClientLinux:4488">
+		  <Property name="AgentAddress" value="RDPServer2022:4488">
 			  <Description>Address for SUT control Agent.</Description>
 		  </Property>
 		  <!-- Transport type of SUT control protocol, TCP or UDP-->

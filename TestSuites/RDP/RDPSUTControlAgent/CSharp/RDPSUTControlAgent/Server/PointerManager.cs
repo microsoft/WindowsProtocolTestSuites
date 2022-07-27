@@ -1,11 +1,14 @@
-﻿using System;
+﻿// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace RDPSUTControlAgent
 {
     public static class PointerManager
     {
-        [DllImport("user32.dll", EntryPoint = "SystemParametersInfo")]
+        [DllImport("User32.dll", EntryPoint = "SystemParametersInfo")]
         public static extern bool SystemParametersInfo(uint uiAction, uint uiParam, uint pvParam, uint fWinIni);
 
         [DllImport("User32.Dll")]

@@ -1190,9 +1190,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         #endregion Constants: Values for Bit Operations
 
         #region Constants: Error Messages
-        internal const string ERROR_MESSAGE_DATA_LENGTH_EXCEEDED = "[Decode Error] data length invalid exception.";
-        internal const string ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT =
-            "[Decode Error] data length inconsistent with expectation.";
+        internal const string ERROR_MESSAGE_DATA_LENGTH_EXCEEDED = "[Decode Error] data length exceeded exception.";
+        internal const string ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT = "[Decode Error] data length inconsistent with expectation.";
         internal const string ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE = "[Decode Error] data index out of range.";
         internal const string ERROR_MESSAGE_DATA_NULL_REF = "[Decode Error] data is of null-referenced.";
         internal const string ERROR_MESSAGE_ENUM_UNRECOGNIZED = "[Decode Error] unrecognized enum value.";

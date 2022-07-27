@@ -30,7 +30,7 @@
     <!-- Domain of the tested RDP Server -->
     <Property name="RDP.ServerDomain" value=""/>
     <!-- Computer name or IP of the tested RDP Server-->
-    <Property name="RDP.ServerName" value="RDPClientLinux"/>
+    <Property name="RDP.ServerName" value="RDPServer2022"/>
     <!-- Port of RDP service on RDP Server-->
     <Property name="RDP.ServerPort" value="3389"/>
     <!--The user name of local host (RDP server). -->
