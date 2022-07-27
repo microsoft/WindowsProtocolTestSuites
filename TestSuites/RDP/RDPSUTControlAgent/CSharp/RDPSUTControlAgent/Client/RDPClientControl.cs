@@ -15,8 +15,7 @@ using System.Threading;
 
 namespace RDPSUTControlAgent
 {
-    public delegate void PostFunction();
-    public class RDPClientControl
+    public class RDPClientControl : IRDPControl
     {
         public static uint WaitSeconds = 5;
         public static PostFunction PostOperation = null;
@@ -25,7 +24,7 @@ namespace RDPSUTControlAgent
         /// </summary>
         /// <param name="requestMessage"></param>
         /// <returns></returns>
-        public static SUT_Control_Response_Message ProcessCommand(SUT_Control_Request_Message requestMessage)
+        public SUT_Control_Response_Message ProcessCommand(SUT_Control_Request_Message requestMessage)
         {
             PostOperation = null;
             if (requestMessage == null)

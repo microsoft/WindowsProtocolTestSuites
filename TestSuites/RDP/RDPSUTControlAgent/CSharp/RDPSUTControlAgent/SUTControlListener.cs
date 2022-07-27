@@ -91,7 +91,15 @@ namespace RDPSUTControlAgent
                         if (requestMessage.Decode(receivedDataList.ToArray(), ref index))
                         {
                             Console.WriteLine("Receive command: " + (RDPSUTControl_CommandId)requestMessage.commandId);
-                            SUT_Control_Response_Message response= RDPClientControl.ProcessCommand(requestMessage);
+
+                            IRDPControl IRDPControlInstance;
+                            
+                            if ((RDPSUTControl_CommandId)requestMessage.commandId < RDPSUTControl_CommandId.COMMAND_DEMACATION)
+                                IRDPControlInstance = new RDPClientControl();
+                            else
+                                IRDPControlInstance = new RDPServerControl();
+
+                            SUT_Control_Response_Message response= IRDPControlInstance.ProcessCommand(requestMessage);
                             byte[] sendData = response.Encode();
                             stream.Write(sendData, 0, sendData.Length);
                             break;

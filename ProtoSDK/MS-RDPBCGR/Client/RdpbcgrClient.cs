@@ -234,7 +234,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             bool supportAutoReconnect = true,
             bool supportFastPathInput = false,
             bool supportFastPathOutput = false,
-            bool supportSVCCompression = false)
+            bool supportSVCCompression = false,
+            bool support384PointerSize = false)
         {
             Collection<ITsCapsSet> capabilitySets = new Collection<ITsCapsSet>();
 
@@ -521,7 +522,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             TS_MULTIFRAGMENTUPDATE_CAPABILITYSET multiFragmentCapabilitySet =
                 new TS_MULTIFRAGMENTUPDATE_CAPABILITYSET();
             multiFragmentCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_MULTIFRAGMENTUPDATE;
-            multiFragmentCapabilitySet.MaxRequestSize = ConstValue.MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE;
+            multiFragmentCapabilitySet.MaxRequestSize = support384PointerSize ? ConstValue.MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE_FOR_LARGEPOINTER : ConstValue.MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE;
             multiFragmentCapabilitySet.lengthCapability = (ushort)Marshal.SizeOf(multiFragmentCapabilitySet);
 
             capabilitySets.Add(multiFragmentCapabilitySet);
@@ -530,8 +531,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region Populating Large Pointer Capability Set
             TS_LARGE_POINTER_CAPABILITYSET largePointerCapabilitySet = new TS_LARGE_POINTER_CAPABILITYSET();
             largePointerCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_LARGE_POINTER;
-            largePointerCapabilitySet.largePointerSupportFlags =
-                largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96;
+            largePointerCapabilitySet.largePointerSupportFlags = support384PointerSize ? 
+                largePointerSupportFlags_Values.LARGE_POINTER_FLAG_384x384 : largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96;
             largePointerCapabilitySet.lengthCapability = sizeof(ushort) + sizeof(ushort) + sizeof(ushort);
 
             capabilitySets.Add(largePointerCapabilitySet);

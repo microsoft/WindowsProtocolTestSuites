@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpele;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -541,5 +542,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Site.Assert.IsTrue(disconnected, "SUT should disconnect the connection when receiving Server Shutdown Request before logon.");
             #endregion Test Code
         }
+
+        
     }
 }

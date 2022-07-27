@@ -53,7 +53,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool supportFastPathOutput = false,
             bool supportSurfaceCommands = false,
             bool supportSVCCompression = false,
-            bool supportRemoteFXCodec = false)
+            bool supportRemoteFXCodec = false,
+            bool support384PointerSize = false)
         {
             #region logging
             string requestProtocolString = "PROTOCOL_RDP_FLAG";
@@ -184,7 +185,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             Server_Demand_Active_Pdu demandActivePdu = ExpectPacket<Server_Demand_Active_Pdu>(testConfig.timeout);
             Site.Assert.IsNotNull(demandActivePdu, "Expecting a Server Demand Active PDU.");
             
-            SendClientConfirmActivePDU(NegativeType.None, supportAutoReconnect, supportFastPathInput, supportFastPathOutput, supportSurfaceCommands, supportSVCCompression, supportRemoteFXCodec);
+            SendClientConfirmActivePDU(NegativeType.None, supportAutoReconnect, supportFastPathInput, supportFastPathOutput, supportSurfaceCommands, supportSVCCompression, supportRemoteFXCodec, support384PointerSize);
             
             #endregion
 
@@ -459,6 +460,73 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             {
                 log += "" + structName+ "\n";
             }
+            Site.Log.Add(LogEntryKind.Comment, log);
+        }
+
+        /// <summary>
+        /// Expect and verifies pointer PDU from fast-path output events during a specific timespan
+        /// </summary>
+        /// <param name="timeout"></param>
+        public void ExpectPointerAttributeOutputs(TimeSpan timeout, bool CheckLargePointerPDU = false)
+        {
+            Dictionary<string, bool> receiveStatics = new Dictionary<string, bool>();
+            DateTime endtime = DateTime.Now + timeout;
+            while (timeout.TotalMilliseconds > 0)
+            {
+                TS_FP_UPDATE_PDU pdu = ExpectPacket<TS_FP_UPDATE_PDU>(timeout);
+
+                if (pdu != null)
+                {
+                    foreach (TS_FP_UPDATE update in pdu.fpOutputUpdates)
+                    {
+                        if (update is TS_FP_POINTERPOSATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_POINTERPOSATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_SYSTEMPOINTERHIDDENATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_SYSTEMPOINTERDEFAULTATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_COLORPOINTERATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_COLORPOINTERATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_POINTERATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_POINTERATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_CACHEDPOINTERATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_CACHEDPOINTERATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_LARGEPOINTERATTRIBUTE)
+                        {
+                            receiveStatics["TS_FP_LARGEPOINTERATTRIBUTE"] = true;
+                        }
+                        else if (update is TS_FP_UPDATE)
+                        {
+                            receiveStatics["TS_FP_UPDATE"] = true;
+                        }
+                    }
+                }
+                timeout = endtime - DateTime.Now;
+            }
+
+            string log = "Received TS_FP_UPDATE_PDU structures: ";
+            foreach (string structName in receiveStatics.Keys)
+            {
+                log += "" + structName + "\n";
+            }
+
+            if (CheckLargePointerPDU)
+            {
+                Site.Assert.IsTrue(receiveStatics.ContainsKey("TS_FP_LARGEPOINTERATTRIBUTE"), "Pass Test If Large Pointer Attribute PDU is sent by the server");
+            }
+
             Site.Log.Add(LogEntryKind.Comment, log);
         }
 

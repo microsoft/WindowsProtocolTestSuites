@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using System.Threading;
 
 namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 {
@@ -60,6 +61,79 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             this.Site.Log.Add(LogEntryKind.Comment, "Wait a period to receive and verify all fast-path update PDUs received ");
             rdpbcgrAdapter.ExpectFastpathOutputs(testConfig.timeout);
+
+            #endregion Test Code
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("BVT")]
+        [TestCategory("RDP7.0")]
+        [TestCategory("RDPBCGR")]
+        [Description(@"This test case is used to verify the message sent to the driver by SUT when there is a change to the pointer size.")]
+        public void S4_Output_PointerSize_FastPathOutput()
+        {
+            #region Test Steps
+            //1. Initiate an RDP connection to RDP server (SUT) and complete the Connection Initiation phase, Basic Setting Exchange phase, and Channel Connection phase.
+            //2. Adjust pointer size
+            //3. Expect PDU showing the pointer size has been changed.
+            #endregion Test Steps
+
+            #region Test Code
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
+            rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
+
+            string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
+            rdpbcgrAdapter.EstablishRDPConnection(testConfig.requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
+                false, // Is reconnect
+                true,  // Is auto logon
+                supportFastPathInput: true,
+                supportFastPathOutput: true);
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Increase pointer size.");
+            PointerIncreaseSize();
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Wait a period to receive and verify all fast-path update PDUs received ");
+            rdpbcgrAdapter.ExpectPointerAttributeOutputs(testConfig.timeout);
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Reverse to pointer default size.");
+            PointerReverseToDefaultSize();
+            #endregion Test Code
+        }
+
+        [TestMethod]
+        [Priority(1)]
+        [TestCategory("BVT")]
+        [TestCategory("RDP7.0")]
+        [TestCategory("RDPBCGR")]
+        [Description(@"This test case is used to verify the message sent to the driver by SUT when there is a change to the pointer size.")]
+        public void S4_Output_LargePointerCapability_FastPathOutput()
+        {
+            #region Test Steps
+            //1. Initiate an RDP connection to RDP server (SUT) and complete the Connection Initiation phase, Basic Setting Exchange phase, and Channel Connection phase.
+            //2. Adjust pointer size
+            //3. Expect PDU showing the pointer size has been changed.
+            #endregion Test Steps
+
+            #region Test Code
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
+            rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
+
+            string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
+            rdpbcgrAdapter.EstablishRDPConnection(testConfig.requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
+                false, // Is reconnect
+                true,  // Is auto logon
+                supportFastPathInput: true,
+                supportFastPathOutput: true,
+                support384PointerSize: true);
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Increase pointer size.");
+            PointerIncreaseSize();
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Wait a period to receive and verify all fast-path update PDUs received.");
+            rdpbcgrAdapter.ExpectPointerAttributeOutputs(testConfig.timeout, true);
 
             #endregion Test Code
         }

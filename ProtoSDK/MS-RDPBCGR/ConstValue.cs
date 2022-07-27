@@ -633,7 +633,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// The value of MaxRequestSize field of section 2.2.7.2.6 Multifragment Update 
         /// Capability Set (TS_MULTIFRAGMENTUPDATE_CAPABILITYSET).
         /// </summary>
-        internal const uint MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE = 0x00005008;
+        internal const uint MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE = 0x000094A7;
+
+        /// <summary>
+        /// The value of MaxRequestSize field of section 2.2.7.2.6 Multifragment Update 
+        /// Capability Set (TS_MULTIFRAGMENTUPDATE_CAPABILITYSET).
+        /// </summary>
+        internal const uint MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE_FOR_LARGEPOINTER = 0x0009482B;
 
         /// <summary>
         /// The sourceDescriptor field of 2.2.1.13.2.1 Confirm Active PDU Data (TS_CONFIRM_ACTIVE_PDU).
@@ -1185,8 +1191,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         #region Constants: Error Messages
         internal const string ERROR_MESSAGE_DATA_LENGTH_EXCEEDED = "[Decode Error] data length exceeded exception.";
-        internal const string ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT =
-            "[Decode Error] data length inconsistent with expectation.";
+        internal const string ERROR_MESSAGE_DATA_LENGTH_INCONSISTENT = "[Decode Error] data length inconsistent with expectation.";
         internal const string ERROR_MESSAGE_DATA_INDEX_OUT_OF_RANGE = "[Decode Error] data index out of range.";
         internal const string ERROR_MESSAGE_DATA_NULL_REF = "[Decode Error] data is of null-referenced.";
         internal const string ERROR_MESSAGE_ENUM_UNRECOGNIZED = "[Decode Error] unrecognized enum value.";
