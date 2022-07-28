@@ -102,7 +102,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
         public int PointerIncreaseSize(string caseName)
         {
-            return OperateSUTControl(caseName, (ushort)RDPSUTControlCommand.ENLARGE_POINTER);
+            return OperateSUTControl(caseName, (ushort)RDPSUTControlCommand.ENLARGE_POINTER_SIZE);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
         public int PointerReverseToDefaultSize(string caseName)
         {
-            return OperateSUTControl(caseName, (ushort)RDPSUTControlCommand.SHRINK_POINTER);
+            return OperateSUTControl(caseName, (ushort)RDPSUTControlCommand.REVERT_POINTER_SIZE);
         }
 
         /// <summary>

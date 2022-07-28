@@ -41,7 +41,7 @@ namespace RDPSUTControlAgent
             {
                 switch (commandId)
                 {
-                    case RDPSUTControl_CommandId.ENLARGE_POINTER:
+                    case RDPSUTControl_CommandId.ENLARGE_POINTER_SIZE:
                         key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Cursors",true);
                         if (key != null)
                         {
@@ -79,7 +79,7 @@ namespace RDPSUTControlAgent
 
                         break;
 
-                    case RDPSUTControl_CommandId.SHRINK_POINTER:
+                    case RDPSUTControl_CommandId.REVERT_POINTER_SIZE:
                         key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Cursors", true);
                         if (key != null)
                         {

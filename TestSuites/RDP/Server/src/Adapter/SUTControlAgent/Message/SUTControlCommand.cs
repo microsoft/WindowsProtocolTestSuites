@@ -10,7 +10,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent.Message
     public enum RDPSUTControlCommand : ushort
     {
         // For RDP SUT Control Command
-        ENLARGE_POINTER = 0x0101,
-        SHRINK_POINTER = 0x0102,
+        ENLARGE_POINTER_SIZE = 0x0101,
+        REVERT_POINTER_SIZE = 0x0102,
     }
 }
