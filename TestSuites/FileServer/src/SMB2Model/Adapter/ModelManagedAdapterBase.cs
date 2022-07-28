@@ -1,13 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
-using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
-using System.Linq;
+using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
@@ -111,31 +109,61 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
             testDirectories.Add(string.Format(@"{0}\{1}", share, directoryName));
         }
 
+        private static readonly HashSet<string> incompatibleTestNamesOverQUIC = new HashSet<string>()
+        {
+            "AppInstanceIdTestCaseS26",
+            "AppInstanceIdTestCaseS46",
+            "AppInstanceIdTestCaseS54",
+            "AppInstanceIdTestCaseS561",
+            "AppInstanceIdTestCaseS566",
+            "AppInstanceIdTestCaseS586",
+            "AppInstanceIdTestCaseS591",
+            "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS303",
+            "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS387",
+            "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS464",
+            "DurableHandleV2PreparedWithLeaseV2ReconnectTestCaseS318",
+            "ReplayCreateDurableHandleV2TestCaseS1163",
+            "ReplayCreateDurableHandleV2TestCaseS176",
+            "ReplayCreateDurableHandleV2TestCaseS758",
+            "ResilientHandleBasicTestCaseS1109",
+            "ResilientHandleBasicTestCaseS2246",
+            "ResilientHandleBasicTestCaseS2454",
+            "ResilientHandleBasicTestCaseS536",
+            "ResilientHandleDurableTestCaseS1753",
+            "ResilientHandleDurableTestCaseS1856",
+            "ResilientHandleDurableTestCaseS2039",
+            "ResilientHandleDurableTestCaseS2123",
+            "ResilientHandleDurableTestCaseS2743",
+            "ResilientHandleDurableTestCaseS3056",
+            "ResilientHandleDurableTestCaseS3307",
+            "ResilientHandleDurableTestCaseS3502",
+            "ResilientOpenScavengerTimer_ReconnectBeforeTimeout"
+        };
+
         public virtual void CheckTestOverQUIC()
         {
-            List<string> testList = new List<string> {
-                "ResilientHandleDurableTestCaseS2039", "ResilientHandleDurableTestCaseS3307", "ResilientHandleDurableTestCaseS2123",
-                "ResilientHandleDurableTestCaseS1856", "ResilientHandleDurableTestCaseS3056", "ResilientHandleDurableTestCaseS1753",
-                "ResilientHandleBasicTestCaseS2454", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS464", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS303",
-                "ResilientHandleDurableTestCaseS3502", "ResilientHandleBasicTestCaseS536", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS387",
-                "ResilientHandleBasicTestCaseS2246", "ResilientHandleDurableTestCaseS2743", "ResilientHandleBasicTestCaseS1109", "DurableHandleV2PreparedWithLeaseV2ReconnectTestCaseS318",
-                "ResilientOpenScavengerTimer_ReconnectBeforeTimeout",
-                 "AppInstanceIdTestCaseS26", "AppInstanceIdTestCaseS561", "AppInstanceIdTestCaseS566", "AppInstanceIdTestCaseS46",
-                 "AppInstanceIdTestCaseS591", "AppInstanceIdTestCaseS54", "AppInstanceIdTestCaseS586",
-                 "ReplayCreateDurableHandleV2TestCaseS1163", "ReplayCreateDurableHandleV2TestCaseS176", "ReplayCreateDurableHandleV2TestCaseS758"
-            };
-            if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName))
+            if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && incompatibleTestNamesOverQUIC.Contains(CurrentTestCaseName))
+            {
                 Site.Assert.Inconclusive("Ignoring test {0} over QUIC", CurrentTestCaseName);
+            }
         }
+
+        private static readonly HashSet<string> incompatibleTestNamesOverQUICOnLinux = new HashSet<string>
+        {
+            "CreditMgmtTestCaseS1011",
+            "CreditMgmtTestCaseS1066",
+            "CreditMgmtTestCaseS1080",
+            "CreditMgmtTestCaseS216",
+            "CreditMgmtTestCaseS462",
+            "CreditMgmtTestCaseS578"
+        };
 
         public virtual void CheckTestOverQUICOnLinux()
         {
-            List<string> testList = new List<string> {
-                 "CreditMgmtTestCaseS1011", "CreditMgmtTestCaseS1066", "CreditMgmtTestCaseS216",
-                 "CreditMgmtTestCaseS1080", "CreditMgmtTestCaseS462", "CreditMgmtTestCaseS578"
-            };
-            if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && incompatibleTestNamesOverQUICOnLinux.Contains(CurrentTestCaseName) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
                 Site.Assert.Inconclusive("Ignoring test {0} over QUIC on Linux", CurrentTestCaseName);
+            }
         }
     }
 }

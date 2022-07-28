@@ -578,7 +578,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             if (!this.isObjectSecurityBasedOnAccessControlListsSupported && CurrentTestCaseName.StartsWith("SetSecurityInformationTestCase"))
             {
-                Site.Assert.Inconclusive($"Object security based on Access Control Lists is not supported on {this.FileName}.");
+                Site.Assert.Inconclusive($"Object security based on Access Control Lists is not supported on {this.fileSystem}.");
             }
         }
 
