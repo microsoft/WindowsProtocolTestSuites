@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
 {
@@ -118,14 +119,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
                 "ResilientHandleBasicTestCaseS2454", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS464", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS303",
                 "ResilientHandleDurableTestCaseS3502", "ResilientHandleBasicTestCaseS536", "DurableHandleV1PreparedWithBatchOplockReconnectTestCaseS387",
                 "ResilientHandleBasicTestCaseS2246", "ResilientHandleDurableTestCaseS2743", "ResilientHandleBasicTestCaseS1109", "DurableHandleV2PreparedWithLeaseV2ReconnectTestCaseS318",
-                "ResilientOpenScavengerTimer_ReconnectBeforeTimeout", 
+                "ResilientOpenScavengerTimer_ReconnectBeforeTimeout",
                  "AppInstanceIdTestCaseS26", "AppInstanceIdTestCaseS561", "AppInstanceIdTestCaseS566", "AppInstanceIdTestCaseS46",
                  "AppInstanceIdTestCaseS591", "AppInstanceIdTestCaseS54", "AppInstanceIdTestCaseS586",
                  "ReplayCreateDurableHandleV2TestCaseS1163", "ReplayCreateDurableHandleV2TestCaseS176", "ReplayCreateDurableHandleV2TestCaseS758"
             };
             if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName))
                 Site.Assert.Inconclusive("Ignoring test {0} over QUIC", CurrentTestCaseName);
+        }
 
+        public virtual void CheckTestOverQUICOnLinux()
+        {
+            List<string> testList = new List<string> {
+                 "CreditMgmtTestCaseS1011", "CreditMgmtTestCaseS1066", "CreditMgmtTestCaseS216",
+                 "CreditMgmtTestCaseS1080", "CreditMgmtTestCaseS462", "CreditMgmtTestCaseS578"
+            };
+            if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                Site.Assert.Inconclusive("Ignoring test {0} over QUIC on Linux", CurrentTestCaseName);
         }
     }
 }
