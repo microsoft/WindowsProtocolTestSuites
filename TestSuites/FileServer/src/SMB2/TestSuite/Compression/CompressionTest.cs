@@ -58,7 +58,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 }
             }
 
-
             base.TestCleanup();
         }
 
@@ -73,8 +72,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
 
         private void CheckTestOverQUICOnLinux()
         {
-
-
             if (TestConfig.UnderlyingTransport == Smb2TransportType.Quic && RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && incompatibleCompressionTestNames.Contains(CurrentTestCaseName))
             {
                 BaseTestSite.Assert.Inconclusive("Ignoring test {0} when transport is QUIC and driver is Linux", CurrentTestCaseName);
