@@ -111,6 +111,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return fileSystem; }
         }
 
+        public Platform Platform
+        {
+            get { return this.testConfig.Platform; }
+        }
+
         public uint ReFSVersion
         {
             get { return reFSVersion; }
@@ -801,6 +806,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 {
                     randomFile = randomFile + "::$TEST";
                 }
+            }
+
+            if (desiredFileAttribute == FileAttribute.REPARSE_POINT && createOption == CreateOptions.OPEN_REPARSE_POINT)
+            {
+                randomFile = testConfig.GetProperty("ReparsePointFile");
             }
 
             MessageStatus returnedStatus = transAdapter.CreateFile(
@@ -2002,10 +2012,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             MessageStatus returnedStatus = this.transAdapter.FlushCachedData();
 
-            if (this.transport == Transport.SMB)
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFlushCachedData(this.isVolumeReadonly, returnedStatus, site);
-            }
             return returnedStatus;
         }
         #endregion
@@ -2054,10 +2060,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 failImmediately
                 );
 
-            if (this.transport == Transport.SMB)
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkaroundByteRangeLock(gStreamType, gLockIsConflicted, returnedStatus, site);
-            }
             return returnedStatus;
         }
         #endregion
@@ -2073,11 +2075,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             MessageStatus returnedStatus = transAdapter.UnlockByteRange(
                 (ulong)this.gLockOffset,
                 (ulong)this.gLockLength);
-
-            if (this.transport == Transport.SMB)
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkaroundByteRangeUnlock(gStreamType, gLockIsConflicted, returnedStatus, site);
-            }
 
             return returnedStatus;
         }
@@ -2230,15 +2227,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 this.transBufferSize,
                 fsccPacket.ToBytes(),
                 out outbuffer);
-
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlDeleteReparsePoint(fileSystem, reparseTag, reparseGuidEqualOpenGuid, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlDeleteReparsePoint(fileSystem, reparseTag, reparseGuidEqualOpenGuid, returnedStatus, site);
-            }
 
             return returnedStatus;
         }
@@ -2608,19 +2596,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 isBytesReturnedSet = false;
             }
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlForEasyRequest(this.fileSystem, requestType, bufferSize, this.isVolumeReadonly, fileVolUsnAct, ref isBytesReturnedSet, ref isOutputBufferSizeReturn, returnedStatus, site);
-            }
-            else
-            {
-                if (returnedStatus != MessageStatus.INVALID_DEVICE_REQUEST)
-                {
-                    returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlForEasyRequest(this.fileSystem, requestType, bufferSize, isVolumeReadonly, fileVolUsnAct, returnedStatus, site);
-                    isBytesReturnedSet = SMB_TDIWorkaround.WorkAroundFsCtlForEasyRequestBool(this.fileSystem, requestType, bufferSize, isVolumeReadonly, fileVolUsnAct, isBytesReturnedSet, ref isOutputBufferSizeReturn, returnedStatus, site);
-                }
-            }
-
             return returnedStatus;
         }
 
@@ -2695,17 +2670,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 {
                     return returnedStatus;
                 }
-            }
-
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                isBytesReturnedSet = SMB2_TDIWorkaround.WorkaroundFsCtlGetReparsePoint(bufferSize, openFileReparseTag, isBytesReturnedSet, ref returnedStatus, site);
-            }
-            else
-            {
-                isBytesReturnedSet = SMB_TDIWorkaround.WorkAroundFsCtlGetReparsePoint(bufferSize, openFileReparseTag, isBytesReturnedSet, site);
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlGetReparsePointStatus(bufferSize, openFileReparseTag, returnedStatus, site);
-            }
+            }           
 
             return returnedStatus;
         }
@@ -2962,15 +2927,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 isBytesReturnedSet = false;
             }
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlGetRetrivalPoints(bufferSize, isStartingVcnNegative, isStartingVcnGreatThanAllocationSize, isElementsNotAllCopied, ref isBytesReturnedSet, returnedStatus, site);
-            }
-            else
-            {
-                isBytesReturnedSet = SMB_TDIWorkaround.WorkAroundFsCtlGetRetrivalPoints(bufferSize, isStartingVcnNegative, isStartingVcnGreatThanAllocationSize, isElementsNotAllCopied, isBytesReturnedSet, site);
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlGetRetrivalPointsStatus(bufferSize, isStartingVcnNegative, isStartingVcnGreatThanAllocationSize, returnedStatus, site);
-            }
             return returnedStatus;
         }
         #endregion
@@ -3075,11 +3031,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 {
                     return returnedStatus;
                 }
-            }
-
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlQueryAllocatedRanges(bufferSize, returnedStatus, ref isBytesReturnedSet, site);
             }
 
             return returnedStatus;
@@ -3200,14 +3151,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 }
             }
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlReadFileUSNData(bufferSize, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlReadFileUSNData(bufferSize, returnedStatus, site);
-            }
             return returnedStatus;
         }
 
@@ -3419,15 +3362,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 bufferSize == BufferSize.LessThanENCRYPTION_BUFFER ? new byte[1] : byteList.ToArray(),
                 out outbuffer);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetEncrypion(fileSystem, isIsCompressedTrue, encryptionOpteration, bufferSize, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetEncryption(fileSystem, isIsCompressedTrue, encryptionOpteration, bufferSize, returnedStatus, site);
-            }
-
             return returnedStatus;
         }
 
@@ -3533,14 +3467,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 inbuffer,
                 out outbuffer);
 
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetObjID(requestType, bufferSize, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetObjID(requestType, bufferSize, returnedStatus, site);
-            }
             return returnedStatus;
         }
 
@@ -3609,15 +3535,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 this.transBufferSize,
                 inbuffer,
                 out outbuffer);
-
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetReparsePoint(fileSystem, inputReparseTag, bufferSize, isReparseGUIDNotEqual, isFileReparseTagNotEqualInputBufferReparseTag, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetReparsePoint(fileSystem, inputReparseTag, isReparseGUIDNotEqual, isFileReparseTagNotEqualInputBufferReparseTag, returnedStatus, site);
-            }
 
             return returnedStatus;
         }
@@ -3767,14 +3684,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 isImplemented = true;
                 this.VerifyFsctlSetZeroData(isImplemented);
-            }
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundFsCtlSetZeroData(fileSystem, bufferSize, inputBuffer, isIsDeletedTrue, isConflictDetected, returnedStatus, this.site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundFsCtlSetZeroData(fileSystem, bufferSize, inputBuffer, isIsDeletedTrue, isConflictDetected, returnedStatus, site);
             }
 
             return returnedStatus;
@@ -3972,15 +3881,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 completionFilter,
                 out outBuffer);
 
-
-            if (this.transport == Transport.SMB2 || this.transport == Transport.SMB3)
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkaroundChangeNotificationForDir(allEntriesFitBufSize, returnedStatus, site);
-            }
-            else
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundChangeNotificationForDir(allEntriesFitBufSize, returnedStatus, site);
-            }
             return returnedStatus;
         }
         #endregion
@@ -4338,15 +4238,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
             #endregion
 
-            if (this.transport == Transport.SMB)
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkAroundQueryFileSystemInfo(fileInfoClass, outBufSmall, returnedStatus, ref byteCount, site);
-            }
-            else
-            {
-                returnedStatus = SMB2_TDIWorkaround.WorkAroundQueryFileSystemInfo(fileInfoClass, outBufSmall, returnedStatus, ref byteCount, site);
-            }
-
             return returnedStatus;
         }
 
@@ -4478,10 +4369,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //If no exception is thrown in SetFileInformation, server response status.
             isReturnStatus = true;
             this.VerifyServerSetFsInfo(isReturnStatus);
-            if (this.transport == Transport.SMB)
-            {
-                returnedStatus = SMB_TDIWorkaround.WorkaroundMethodSetFileAllocOrObjIdInfo(fileInfoClass, isInputBufAllocGreater, returnedStatus, this.site);
-            }
+
             return returnedStatus;
         }
 

@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
     using System.Reflection;
     using Microsoft.Protocols.TestTools;
     using Microsoft.Protocols.TestTools.Messages.Runtime;
+    using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class IoCtlRequestTestCase : PtfTestClassBase {
@@ -170,13 +171,26 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                             this.Manager.Checkpoint("MS-FSA_R4721");
                             this.Manager.Checkpoint("[In FSCTL_SET_ZERO_ON_DEALLOCATION] If the object store does not implement this f" +
                                     "unctionality, \r\n                                the operation MUST be failed wit" +
-                                    "h STATUS_INVALID_DEVICE_REQUEST.<51>");
+                                    "h STATUS_INVALID_DEVICE_REQUEST.<138>");
+                            this.Manager.Checkpoint("<138> Section 2.1.5.9.40: This is only implemented by the NTFS file system and FAT32 file system on Windows 10 v1511, Windows Server 2016 and subsequent");
                             this.Manager.Comment("reaching state \'S2368\'");
-                            this.Manager.Comment("checking step \'return FsCtlForEasyRequest/[out False,out False]:INVALID_DEVICE_RE" +
+                            var filesystem = this.IFSAAdapterInstance.FileSystem;
+                            var platform = this.IFSAAdapterInstance.Platform;
+                            if ((filesystem == Adapter.FileSystem.FAT32 || filesystem == Adapter.FileSystem.NTFS) && (platform >= Platform.WindowsServer2016 || platform >= Platform.Windows10V21H1))
+                            {
+                                this.Manager.Comment("checking step \'return FsCtlForEasyRequest/[out True,out True]:SUCESS\'");
+                                TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, temp5, "isBytesReturnedSet of FsCtlForEasyRequest, state S2368");
+                                TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, temp6, "isOutputBufferSizeReturn of FsCtlForEasyRequest, state S2368");
+                                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.SUCCESS, temp7, "return of FsCtlForEasyRequest, state S2368");
+                            }
+                            else
+                            {
+                                this.Manager.Comment("checking step \'return FsCtlForEasyRequest/[out False,out False]:INVALID_DEVICE_RE" +
                                     "QUEST\'");
-                            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, temp5, "isBytesReturnedSet of FsCtlForEasyRequest, state S2368");
-                            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, temp6, "isOutputBufferSizeReturn of FsCtlForEasyRequest, state S2368");
-                            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_DEVICE_REQUEST, temp7, "return of FsCtlForEasyRequest, state S2368");
+                                TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, temp5, "isBytesReturnedSet of FsCtlForEasyRequest, state S2368");
+                                TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, temp6, "isOutputBufferSizeReturn of FsCtlForEasyRequest, state S2368");
+                                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_DEVICE_REQUEST, temp7, "return of FsCtlForEasyRequest, state S2368");
+                            }     
                             this.Manager.Comment("reaching state \'S2528\'");
                             goto label0;
                         }
@@ -2353,6 +2367,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS102() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS102");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem == Adapter.FileSystem.NTFS)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS.");
+            }
             this.Manager.Comment("reaching state \'S102\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -2801,6 +2820,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS106() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS106");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem == Adapter.FileSystem.NTFS)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS.");
+            }
             this.Manager.Comment("reaching state \'S106\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -3071,10 +3095,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     this.Manager.Checkpoint("MS-FSA_R4331");
                     this.Manager.Checkpoint("[ In FSCTL_SET_REPARSE_POINT] If the object store does not implement this functio" +
                             "nality, \r\n                    the operation MUST be failed with STATUS_INVALID_D" +
-                            "EVICE_REQUEST.<46>");
+                            "EVICE_REQUEST.<132>");
+                    this.Manager.Checkpoint("<132> Section 2.1.5.9.37: This is only implemented by the ReFS and NTFS file systems. The FAT32 file system will return STATUS_IO_REPARSE_DATA_INVALID");
                     this.Manager.Comment("reaching state \'S1516\'");
-                    this.Manager.Comment("checking step \'return FsCtlSetReparsePoint/INVALID_DEVICE_REQUEST\'");
-                    TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_DEVICE_REQUEST, temp247, "return of FsCtlSetReparsePoint, state S1516");
+                    this.Manager.Comment("checking step \'return FsCtlSetReparsePoint/IO_REPARSE_DATA_INVALID\'");
+                    TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.IO_REPARSE_DATA_INVALID, temp247, "return of FsCtlSetReparsePoint, state S1516");
                     this.Manager.Comment("reaching state \'S1840\'");
                     goto label42;
                 }
@@ -3247,6 +3272,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS110() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS110");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S110\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -3471,6 +3501,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS112() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS112");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S112\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -3519,10 +3554,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     this.Manager.Checkpoint("MS-FSA_R4331");
                     this.Manager.Checkpoint("[ In FSCTL_SET_REPARSE_POINT] If the object store does not implement this functio" +
                             "nality, \r\n                    the operation MUST be failed with STATUS_INVALID_D" +
-                            "EVICE_REQUEST.<46>");
+                            "EVICE_REQUEST.<132>");
+                    this.Manager.Checkpoint("<132> Section 2.1.5.9.37: This is only implemented by the ReFS and NTFS file systems. The FAT32 file system will return STATUS_IO_REPARSE_DATA_INVALID");
                     this.Manager.Comment("reaching state \'S1524\'");
-                    this.Manager.Comment("checking step \'return FsCtlSetReparsePoint/INVALID_DEVICE_REQUEST\'");
-                    TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_DEVICE_REQUEST, temp275, "return of FsCtlSetReparsePoint, state S1524");
+                    this.Manager.Comment("checking step \'return FsCtlSetReparsePoint/IO_REPARSE_DATA_INVALID\'");
+                    TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.IO_REPARSE_DATA_INVALID, temp275, "return of FsCtlSetReparsePoint, state S1524");
                     this.Manager.Comment("reaching state \'S1848\'");
                     goto label48;
                 }
@@ -3694,6 +3730,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS114() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS114");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S114\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -3918,6 +3959,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS116() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS116");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S116\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -5619,6 +5665,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS120() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS120");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS or REFS");
+            }
             this.Manager.Comment("reaching state \'S120\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -6075,6 +6126,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS122() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS122");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S122\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -6531,6 +6587,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS124() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS124");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S124\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -8849,13 +8910,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                             this.Manager.Checkpoint("MS-FSA_R5803");
                             this.Manager.Checkpoint("[In FSCTL_FILESYSTEM_GET_STATISTICS] If the object store does not implement \r\n   " +
                                     "                             this functionality, the operation MUST be failed wi" +
-                                    "th STATUS_INVALID_DEVICE_REQUEST. <23>");
+                                    "th STATUS_INVALID_DEVICE_REQUEST. <88>");
+                            this.Manager.Checkpoint("<88> Section 2.1.5.9.7: This is only implemented by the ReFS, NTFS, FAT, FAT32, and exFAT file systems.");
                             this.Manager.Comment("reaching state \'S2480\'");
-                            this.Manager.Comment("checking step \'return FsCtlForEasyRequest/[out False,out False]:INVALID_DEVICE_RE" +
-                                    "QUEST\'");
-                            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, temp647, "isBytesReturnedSet of FsCtlForEasyRequest, state S2480");
-                            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, temp648, "isOutputBufferSizeReturn of FsCtlForEasyRequest, state S2480");
-                            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_DEVICE_REQUEST, temp649, "return of FsCtlForEasyRequest, state S2480");
+                            this.Manager.Comment("checking step \'return FsCtlForEasyRequest/[out True,out False]:SUCCESS\'");
+                            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, temp647, "isBytesReturnedSet of FsCtlForEasyRequest, state S2480");
+                            TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, temp648, "isOutputBufferSizeReturn of FsCtlForEasyRequest, state S2480");
+                            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.SUCCESS, temp649, "return of FsCtlForEasyRequest, state S2480");
                             this.Manager.Comment("reaching state \'S2640\'");
                             goto label125;
                         }
@@ -13451,6 +13512,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS26() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS26");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S26\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -13672,6 +13738,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS28() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS28");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S28\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -13892,6 +13963,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS30() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS30");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S30\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -14118,6 +14194,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS32() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS32");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S32\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -14338,6 +14419,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS34() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS34");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S34\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -14558,6 +14644,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS36() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS36");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem != Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            }
             this.Manager.Comment("reaching state \'S36\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -17342,6 +17433,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS48() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS48");
+            //var filesystem = this.IFSAAdapterInstance.FileSystem;
+            //if (filesystem != Adapter.FileSystem.FAT32)
+            //{
+            //    Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            //}
             this.Manager.Comment("reaching state \'S48\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -17495,7 +17591,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     this.Manager.Comment("executing step \'call CreateFile(REPARSE_POINT,NON_DIRECTORY_FILE,NULL,GENERIC_WRI" +
                             "TE,FILE_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DataFile,PathNameVal" +
                             "id)\'");
-                    temp1355 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
+                    temp1355 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.OPEN_REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
                     this.Manager.Checkpoint("MS-FSA_R405");
                     this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
                         Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
@@ -17515,7 +17611,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp1357;
                     this.Manager.Comment("executing step \'call FsCtlGetReparsePoint(LessThanREPARSE_DATA_BUFFER,NON_MICROSO" +
                             "FT_RANGE_TAG,out _)\'");
-                    temp1357 = this.IFSAAdapterInstance.FsCtlGetReparsePoint(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize.LessThanREPARSE_DATA_BUFFER, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ReparseTag.NON_MICROSOFT_RANGE_TAG, out temp1356);
+                    temp1357 = this.IFSAAdapterInstance.FsCtlGetReparsePoint(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize.BufferSizeSuccess, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ReparseTag.NON_MICROSOFT_RANGE_TAG, out temp1356);
                     this.Manager.Checkpoint("MS-FSA_R1090");
                     this.Manager.Checkpoint(@"[In FSCTL_GET_REPARSE_POINT,Pseudocode for the operation is as follows:
                 Phase 3 : Return the reparse data]Upon successful completion of the operation, the object store MUST return:BytesReturned set to the number of bytes written to OutputBuffer.");
@@ -17584,6 +17680,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS50() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS50");
+            //var filesystem = this.IFSAAdapterInstance.FileSystem;
+            //if (filesystem != Adapter.FileSystem.FAT32)
+            //{
+            //    Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            //}
             this.Manager.Comment("reaching state \'S50\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -17734,10 +17835,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                 if ((temp1376 == 1)) {
                     this.Manager.Comment("reaching state \'S695\'");
                     Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp1373;
-                    this.Manager.Comment("executing step \'call CreateFile(REPARSE_POINT,NON_DIRECTORY_FILE,NULL,GENERIC_WRI" +
+                    this.Manager.Comment("executing step \'call CreateFile(REPARSE_POINT,OPEN_REPARSE_POINT,NULL,GENERIC_WRI" +
                             "TE,FILE_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DataFile,PathNameVal" +
                             "id)\'");
-                    temp1373 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
+                    temp1373 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.OPEN_REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
                     this.Manager.Checkpoint("MS-FSA_R405");
                     this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
                         Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
@@ -18056,6 +18157,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS54() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS54");
+            //var filesystem = this.IFSAAdapterInstance.FileSystem;
+            //if (filesystem != Adapter.FileSystem.FAT32)
+            //{
+            //    Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+            //}
             this.Manager.Comment("reaching state \'S54\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -18209,7 +18315,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     this.Manager.Comment("executing step \'call CreateFile(REPARSE_POINT,NON_DIRECTORY_FILE,NULL,GENERIC_WRI" +
                             "TE,FILE_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DataFile,PathNameVal" +
                             "id)\'");
-                    temp1409 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
+                    temp1409 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.OPEN_REPARSE_POINT, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
                     this.Manager.Checkpoint("MS-FSA_R405");
                     this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
                         Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
@@ -19645,6 +19751,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS62() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS62");
+            var filesystem = this.IFSAAdapterInstance.FileSystem;
+            if (filesystem == Adapter.FileSystem.FAT32)
+            {
+                Site.Assert.Inconclusive("Disabled on FAT32.");
+            }
             this.Manager.Comment("reaching state \'S62\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -20629,11 +20740,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                 temp1602 = this.IFSAAdapterInstance.FsCtlReadFileUSNData(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize.LessThanRecordLength, out temp1601);
                 this.Manager.Checkpoint("MS-FSA_R3873");
                 this.Manager.Checkpoint("[In FSCTL_READ_FILE_USN_DATA]If OutputBufferSize is less than RecordLength, \r\n   " +
-                        "                 the operation MUST be failed with STATUS_INFO_LENGTH_MISMATCH.");
+                        "                 the operation MUST be failed with STATUS_BUFFER_TOO_SMALL.");
                 this.Manager.Comment("reaching state \'S961\'");
-                this.Manager.Comment("checking step \'return FsCtlReadFileUSNData/[out False]:INFO_LENGTH_MISMATCH\'");
+                this.Manager.Comment("checking step \'return FsCtlReadFileUSNData/[out False]:BUFFER_TOO_SMALL\'");
                 TestManagerHelpers.AssertAreEqual<bool>(this.Manager, false, temp1601, "isBytesReturnedSet of FsCtlReadFileUSNData, state S961");
-                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INFO_LENGTH_MISMATCH, temp1602, "return of FsCtlReadFileUSNData, state S961");
+                TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.BUFFER_TOO_SMALL, temp1602, "return of FsCtlReadFileUSNData, state S961");
                 this.Manager.Comment("reaching state \'S1235\'");
                 goto label277;
             }
@@ -22337,8 +22448,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S268");
         }
         #endregion
-        
+
         #region Test Starting in S92
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -22446,8 +22558,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S269");
         }
         #endregion
-        
+
         #region Test Starting in S94
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -22554,8 +22667,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S270");
         }
         #endregion
-        
+
         #region Test Starting in S96
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -22663,8 +22777,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isImplemented, "isImplemented of GetObjectFunctionality, state S271");
         }
         #endregion
-        
+
         #region Test Starting in S98
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
