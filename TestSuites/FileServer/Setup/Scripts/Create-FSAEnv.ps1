@@ -161,6 +161,12 @@ CreateShareFolderForFSA -Path "K:" -FolderName "SMBReFSShare"
 CreateShareFolderForFSA -Path "J:" -FolderName "SMBFAT32Share"
 
 #----------------------------------------------------------------------------
+# Enable LastAccessTime update
+#----------------------------------------------------------------------------
+ Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name NtfsDisableLastAccessUpdate 0 
+ Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name RefsDisableLastAccessUpdate 0 
+
+#----------------------------------------------------------------------------
 # Ending
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Completed setup FSA ENV."

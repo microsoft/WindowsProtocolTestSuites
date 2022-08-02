@@ -14,6 +14,7 @@
 * [Traditional Test Scenarios Design](#Traditional-Test-Scenarios-Design)
     * [Scenarios for CommonAlgorithm](#Scenarios-for-CommonAlgorithm)
         * [Algorithm_Noting_FileModified](#Algorithm_Noting_FileModified)
+        * [Algorithm_Noting_FileAccessed](#Algorithm_Noting_FileAccessed)
     * [Scenarios for FileInformation](#Scenarios-for-FileInformation)
         * [FileInfo_IsCompressionSupported](#FileInfo_IsCompressionSupported)
         * [FileInfo_IsEASupported](#FileInfo_IsEASupported)
@@ -76,9 +77,13 @@
             * [Algorithm_NotingFileModified_Dir_LastModificationTime](#Algorithm_NotingFileModified_Dir_LastModificationTime)
             * [Algorithm_NotingFileModified_File_LastChangeTime](#Algorithm_NotingFileModified_File_LastChangeTime)
             * [Algorithm_NotingFileModified_Dir_LastChangeTime](#Algorithm_NotingFileModified_Dir_LastChangeTime)
+            * [Algorithm_NotingFileModified_File_LastAccessTime](#Algorithm_NotingFileModified_File_LastAccessTime)
             * [Algorithm_NotingFileModified_Dir_LastAccessTime](#Algorithm_NotingFileModified_Dir_LastAccessTime)
             * [Algorithm_NotingFileModified_File_Archive](#Algorithm_NotingFileModified_File_Archive)
             * [Algorithm_NotingFileModified_Dir_Archive](#Algorithm_NotingFileModified_Dir_Archive)
+        * [NotingFileAccessed](#NotingFileAccessed)
+            * [Algorithm_NotingFileAccessed_File_LastAccessTime](#Algorithm_NotingFileAccessed_File_LastAccessTime)
+            * [Algorithm_NotingFileAccessed_Dir_LastAccessTime](#Algorithm_NotingFileAccessed_Dir_LastAccessTime)
     * [Test cases for FileInformation](#Test-cases-for-FileInformation)
         * [IsEASupported](#IsEASupported)
             * [FileInfo_Set_FileFullEaInformation_File_IsEASupported](#FileInfo_Set_FileFullEaInformation_File_IsEASupported)
@@ -452,7 +457,7 @@ There are 221 test cases in total:
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
 | Scenarios for FileAccess | 1 | 2 (0) |
-| Scenarios for CommonAlgorithm | 1 | 8 (8) |
+| Scenarios for CommonAlgorithm | 2 | 11 (11) |
 | Scenarios for Query Directory | 1 | 51 (48) |
 | Other Scenarios | 4 | 10 (0) |
 
@@ -499,6 +504,20 @@ There are 343 test cases in total:
 | | Modify file|
 | | Verify LastWriteTime, LastChangeTime and LastAccessTime is set to current system time|
 | | Verify Archive attribute is set to true|
+
+#### <a name="Algorithm_Noting_FileAccessed"/>Algorithm_Noting_FileAccessed
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is updated by File System when file is accessed.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, the LastAccessTime is set to current system time.|
+| Message Sequence| CreateFile.|
+| | Read file|
+| | Verify LastAccessTime is set to current system time|
 
 ### <a name="Scenarios-for-FileInformation"/>Scenarios for FileInformation
 
@@ -1412,6 +1431,16 @@ There are 343 test cases in total:
 | | Create file into directory|
 | | Verify LastChangeTimeBeforeFileModified is less than LastChangeTimeAfterFileModified|
 
+##### <a name="Algorithm_NotingFileModified_File_LastAccessTime"/>Algorithm_NotingFileModified_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is updated by different file systems when file is modified.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write data into file|
+| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileModified|
+
 ##### <a name="Algorithm_NotingFileModified_Dir_LastAccessTime"/>Algorithm_NotingFileModified_Dir_LastAccessTime
 
 | &#32;| &#32; |
@@ -1442,6 +1471,34 @@ There are 343 test cases in total:
 | | Create file into directory|
 | | Verify Archive is true|
 
+
+#### <a name="NotingFileAccessed"/>NotingFileAccessed
+
+##### <a name="Algorithm_NotingFileAccessed_File_LastAccessTime"/>Algorithm_NotingFileAccessed_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is updated by different file systems when file is read.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write to file|
+| | Query FileBasicInformation and store LastAccessTimeBeforeFileAccessed|
+| | Read file|
+| | Query FileBasicInformation and store LastAccessTimeAfterFileAccessed|
+| | Verify LastAccessTimeBeforeFileAccessed is less than LastAccessTimeAfterFileAccessed|
+
+##### <a name="Algorithm_NotingFileAccessed_Dir_LastAccessTime"/>Algorithm_NotingFileAccessed_Dir_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if LastAccessTime is updated by different file systems when directory is read.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | Write files in directory|
+| | Query FileBasicInformation and store LastAccessTimeBeforeFileAccessed|
+| | Query files in directory|
+| | Query FileBasicInformation and store LastAccessTimeAfterFileAccessed|
+| | Verify LastAccessTimeBeforeFileModified is less than LastAccessTimeAfterFileAccessed|
 ### <a name="Test-cases-for-FileInformation"/>Test cases for FileInformation
 
 #### <a name="IsEASupported"/>IsEASupported

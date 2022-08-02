@@ -38,6 +38,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
+        public void Algorithm_NotingFileModified_File_LastAccessTime()
+        {
+            FileAttributes attributesBeforeFileModified;
+            FileAttributes attributesAfterFileModified;
+            Algorithm_Noting_FileModified(FileType.DataFile, out attributesBeforeFileModified, out attributesAfterFileModified);
+            TestLastAccessTime(attributesBeforeFileModified.lastAccessTime, attributesAfterFileModified.lastAccessTime);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.CommonAlgorithm)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Try to write to file and check if file system consistent with [MS-FSA] section 2.1.4.17")]
         public void Algorithm_NotingFileModified_File_LastChangeTime()
         {
             FileAttributes attributesBeforeFileModified;
