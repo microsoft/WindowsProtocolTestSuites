@@ -2370,7 +2370,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem == Adapter.FileSystem.NTFS)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS. If InputBufferSize is not equal to sizeof(ObjectId.ExtendedInfo) (48 bytes), the operation MUST be failed with STATUS_INVALID_PARAMETER");
             }
             this.Manager.Comment("reaching state \'S102\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -2821,10 +2821,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         public void IoCtlRequestTestCaseS106() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS106");
             var filesystem = this.IFSAAdapterInstance.FileSystem;
-            if (filesystem == Adapter.FileSystem.NTFS)
-            {
-                Site.Assert.Inconclusive("Disabled on NTFS.");
-            }
             this.Manager.Comment("reaching state \'S106\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -2988,11 +2984,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                     this.Manager.Checkpoint("[ In FSCTL_SET_OBJECT_ID]Upon successful completion of the operation, \r\n         " +
                             "                   the object store MUST return:Status set to STATUS_SUCCESS.");
                     this.Manager.Checkpoint("MS-FSA_R1187");
-                    this.Manager.Checkpoint("[ In FSCTL_SET_OBJECT_ID]On completion, the object store MUST return:\r\n          " +
-                            "                  Status ¨C An NTSTATUS code that specifies the result.");
+                    this.Manager.Checkpoint("[ In FSCTL_SET_OBJECT_ID]If Open.GrantedAccess contains neither FILE_WRITE_DATA nor FILE_WRITE_ATTRIBUTES, the operation MUST be failed with STATUS_ACCESS_DENIED.");
                     this.Manager.Comment("reaching state \'S1515\'");
-                    this.Manager.Comment("checking step \'return FsCtlSetObjID/SUCCESS\'");
-                    TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus)(0)), temp241, "return of FsCtlSetObjID, state S1515");
+                    this.Manager.Comment("checking step \'return FsCtlSetObjID/STATUS_ACCESS_DENIED\'");
+                    TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.ACCESS_DENIED, temp241, "return of FsCtlSetObjID, state S1515");
                     this.Manager.Comment("reaching state \'S1839\'");
                     goto label40;
                 }
@@ -3275,7 +3270,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS. If the requst is FsccFsctlSetReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S110\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -3504,7 +3499,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS. If the requst is FsccFsctlSetReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S112\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -3733,7 +3728,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS. If the requst is FsccFsctlSetReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S114\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -3962,7 +3957,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS. If the requst is FsccFsctlSetReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S116\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -5668,7 +5663,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS or REFS");
+                Site.Assert.Inconclusive("Disabled on NTFS or REFS, no lock is sent before");
             }
             this.Manager.Comment("reaching state \'S120\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -6129,7 +6124,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.No delete is sent before");
             }
             this.Manager.Comment("reaching state \'S122\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -6590,7 +6585,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS. No delete is sent before.");
             }
             this.Manager.Comment("reaching state \'S124\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -13515,7 +13510,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.If the requst is FsccFsctlDeleteReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S26\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -13741,7 +13736,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.If the requst is FsccFsctlDeleteReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S28\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -13966,7 +13961,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.If the requst is FsccFsctlDeleteReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S30\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -14197,7 +14192,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.If the requst is FsccFsctlDeleteReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S32\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -14422,7 +14417,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.If the requst is FsccFsctlDeleteReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S34\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -14647,7 +14642,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem != Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
+                Site.Assert.Inconclusive("Disabled on NTFS and REFS.If the requst is FsccFsctlDeleteReparsePointRequestPacket, it always fail with INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S36\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -17433,11 +17428,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS48() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS48");
-            //var filesystem = this.IFSAAdapterInstance.FileSystem;
-            //if (filesystem != Adapter.FileSystem.FAT32)
-            //{
-            //    Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
-            //}
             this.Manager.Comment("reaching state \'S48\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -17680,11 +17670,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS50() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS50");
-            //var filesystem = this.IFSAAdapterInstance.FileSystem;
-            //if (filesystem != Adapter.FileSystem.FAT32)
-            //{
-            //    Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
-            //}
             this.Manager.Comment("reaching state \'S50\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -18157,11 +18142,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void IoCtlRequestTestCaseS54() {
             this.Manager.BeginTest("IoCtlRequestTestCaseS54");
-            //var filesystem = this.IFSAAdapterInstance.FileSystem;
-            //if (filesystem != Adapter.FileSystem.FAT32)
-            //{
-            //    Site.Assert.Inconclusive("Disabled on NTFS and REFS.");
-            //}
             this.Manager.Comment("reaching state \'S54\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
             this.IFSAAdapterInstance.FsaInitial();
@@ -19754,7 +19734,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             var filesystem = this.IFSAAdapterInstance.FileSystem;
             if (filesystem == Adapter.FileSystem.FAT32)
             {
-                Site.Assert.Inconclusive("Disabled on FAT32.");
+                Site.Assert.Inconclusive("Disabled on FAT32.If the size of StartingVcnBuffer is less than sizeof (STARTING_VCN_INPUT_BUFFER), the operation MUST be failed with STATUS_INVALID_PARAMETER.");
             }
             this.Manager.Comment("reaching state \'S62\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");
@@ -22450,6 +22430,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S92
+        // the sharefolder is not supported encrytion.
         [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
@@ -22560,6 +22541,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S94
+        // the sharefolder is not supported encrytion.
         [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
@@ -22669,6 +22651,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S96
+        // the sharefolder is not supported encrytion.
         [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
@@ -22779,6 +22762,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S98
+        // the sharefolder is not supported encrytion.
         [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
