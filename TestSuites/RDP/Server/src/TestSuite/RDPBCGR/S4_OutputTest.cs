@@ -70,7 +70,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
-        [Description(@"This test case is used to verify the message sent to the driver by SUT when there is a change to the pointer size.")]
+        [Description(@"This test case is used to verify the message sent to the driver by SUT when there is a change in the pointer size (96x96).")]
         public void S4_Output_PointerSize_FastPathOutput()
         {
             #region Test Steps
@@ -107,7 +107,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         [TestCategory("BVT")]
         [TestCategory("RDP7.0")]
         [TestCategory("RDPBCGR")]
-        [Description(@"This test case is used to verify the message sent to the driver by SUT when there is a change to the pointer size.")]
+        [Description(@"This test case is used to verify the message sent to the driver by SUT when there is a change to the large pointer size (384x384).")]
         public void S4_Output_LargePointerCapability_FastPathOutput()
         {
             #region Test Steps
