@@ -22430,7 +22430,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S92
-        // the sharefolder is not supported encrytion.
+        // Encryption is not supported by the share folder
         [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
@@ -22541,7 +22541,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S94
-        // the sharefolder is not supported encrytion.
+        // Encryption is not supported by the share folder
         [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
@@ -22651,7 +22651,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S96
-        // the sharefolder is not supported encrytion.
+        // Encryption is not supported by the share folder
         [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
@@ -22762,7 +22762,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         #endregion
 
         #region Test Starting in S98
-        // the sharefolder is not supported encrytion.
+        // Encryption is not supported by the share folder
         [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
