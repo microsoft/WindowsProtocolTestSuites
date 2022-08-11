@@ -5,6 +5,7 @@ using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiService;
+using Microsoft.Protocols.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1020,12 +1021,26 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
 
         private void FetchPlatformInfo(ref DetectionInfo info)
         {
-            ManagementObjectCollection resultCollection = QueryWmiObject(SUTName, "SELECT * FROM Win32_OperatingSystem", info.userName, info.password);
-            foreach (ManagementObject result in resultCollection)
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                info.platform = ConvertPlatform(result["Version"].ToString(), result["BuildNumber"].ToString());
-                logWriter.AddLog(DetectLogLevel.Information, "Platform: " + info.platform);
-                break;
+                ManagementObjectCollection resultCollection = QueryWmiObject(SUTName, "SELECT * FROM Win32_OperatingSystem", info.userName, info.password);
+                foreach (ManagementObject result in resultCollection)
+                {
+                    info.platform = ConvertPlatform(result["Version"].ToString(), result["BuildNumber"].ToString());
+                    logWriter.AddLog(DetectLogLevel.Information, "Platform: " + info.platform);
+                    break;
+                }
+            }
+            else 
+            {
+                var session = new PSRemotingSession(SUTName, info.userName);
+                var results = session.Invoke(@"Get-CimInstance -Namespace ""root\cimv2"" -Query ""SELECT * FROM Win32_OperatingSystem""");
+                foreach (var result in results)
+                {
+                    info.platform = ConvertPlatform(result["Version"].ToString(), result["BuildNumber"].ToString());
+                    logWriter.AddLog(DetectLogLevel.Information, "Platform: " + info.platform);
+                    break;
+                }
             }
         }
 
