@@ -54,8 +54,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.CleanupTestManager();
         }
         #endregion
-        
+
         #region Test Starting in S0
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -71,9 +72,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S10\'");
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp0;
-            this.Manager.Comment("executing step \'call CreateFile(NORMAL,NON_DIRECTORY_FILE,NULL,GENERIC_WRITE,FILE" +
+            this.Manager.Comment("executing step \'call CreateFile(NORMAL,(NON_DIRECTORY_FILE | DELETE_ON_CLOSE | OPEN_FOR_BACKUP_INTENT),NULL,(GENERIC_WRITE | DELETE),FILE" +
                     "_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DataFile,PathNameValid)\'");
-            temp0 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
+            temp0 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.DELETE_ON_CLOSE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.OPEN_FOR_BACKUP_INTENT), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.DELETE), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
             this.Manager.Checkpoint("MS-FSA_R405");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
                         Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
@@ -103,8 +104,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S2
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -120,9 +122,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S11\'");
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp2;
-            this.Manager.Comment("executing step \'call CreateFile(NORMAL,NON_DIRECTORY_FILE,NULL,GENERIC_WRITE,FILE" +
+            this.Manager.Comment("executing step \'call CreateFile(NORMAL,(NON_DIRECTORY_FILE | DELETE_ON_CLOSE | OPEN_FOR_BACKUP_INTENT),NULL,(GENERIC_WRITE | DELETE),FILE" +
                     "_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DataFile,PathNameValid)\'");
-            temp2 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
+            temp2 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.DELETE_ON_CLOSE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.OPEN_FOR_BACKUP_INTENT), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.DELETE), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
             this.Manager.Checkpoint("MS-FSA_R405");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
                         Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
@@ -169,9 +171,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S12\'");
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp4;
-            this.Manager.Comment("executing step \'call CreateFile(NORMAL,NON_DIRECTORY_FILE,NULL,GENERIC_WRITE,FILE" +
+            this.Manager.Comment("executing step \'call CreateFile(NORMAL,(NON_DIRECTORY_FILE | OPEN_FOR_BACKUP_INTENT),NULL,(GENERIC_WRITE | DELETE),FILE" +
                     "_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DataFile,PathNameValid)\'");
-            temp4 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
+            temp4 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.OPEN_FOR_BACKUP_INTENT), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.DELETE), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
             this.Manager.Checkpoint("MS-FSA_R405");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
                         Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
@@ -218,9 +220,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S13\'");
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp6;
-            this.Manager.Comment("executing step \'call CreateFile(NORMAL,NON_DIRECTORY_FILE,NULL,GENERIC_WRITE,FILE" +
+            this.Manager.Comment("executing step \'call CreateFile(NORMAL,(NON_DIRECTORY_FILE | OPEN_FOR_BACKUP_INTENT),NULL,(GENERIC_WRITE | DELETE),FILE" +
                     "_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DataFile,PathNameValid)\'");
-            temp6 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
+            temp6 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.OPEN_FOR_BACKUP_INTENT), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.DELETE), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
             this.Manager.Checkpoint("MS-FSA_R405");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
                         Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:
@@ -249,8 +251,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S8
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -266,9 +269,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("checking step \'return FsaInitial\'");
             this.Manager.Comment("reaching state \'S14\'");
             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp8;
-            this.Manager.Comment("executing step \'call CreateFile(NORMAL,NON_DIRECTORY_FILE,NULL,GENERIC_WRITE,FILE" +
+            this.Manager.Comment("executing step \'call CreateFile(NORMAL,(NON_DIRECTORY_FILE | DELETE_ON_CLOSE | OPEN_FOR_BACKUP_INTENT),NULL,(GENERIC_WRITE | DELETE),FILE" +
                     "_SHARE_WRITE,OPEN_IF,StreamIsFound,IsNotSymbolicLink,DataFile,PathNameValid)\'");
-            temp8 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
+            temp8 = this.IFSAAdapterInstance.CreateFile(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.DELETE_ON_CLOSE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.OPEN_FOR_BACKUP_INTENT), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, (Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.GENERIC_WRITE | Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.DELETE), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess.FILE_SHARE_WRITE, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(0)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.PathNameValid);
             this.Manager.Checkpoint("MS-FSA_R405");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File , Pseudocode for the operation is as follows:
                         Phase 6 -- Location of file:] Pseudocode for this search:For i = 1 to n-1:

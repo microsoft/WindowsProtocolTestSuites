@@ -189,7 +189,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Send invalid SnapshotNameLength FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect NTSTATUS is INVALID_PARAMETER.")]
-        public void FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshortNameLengthZero()
+        public void FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshotNameLengthZero()
         {
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST, 

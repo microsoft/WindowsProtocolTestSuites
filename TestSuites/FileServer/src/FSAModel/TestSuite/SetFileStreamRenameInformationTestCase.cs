@@ -581,8 +581,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetIfStreamRenameIsSupported, state S184");
         }
         #endregion
-        
+
         #region Test Starting in S2
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -840,8 +841,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetIfStreamRenameIsSupported, state S186");
         }
         #endregion
-        
+
         #region Test Starting in S24
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -928,8 +930,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetIfStreamRenameIsSupported, state S187");
         }
         #endregion
-        
+
         #region Test Starting in S26
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -1689,8 +1692,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetIfStreamRenameIsSupported, state S195");
         }
         #endregion
-        
+
         #region Test Starting in S42
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -2627,8 +2631,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             TestManagerHelpers.AssertAreEqual<bool>(this.Manager, true, isSupported, "isSupported of GetIfStreamRenameIsSupported, state S205");
         }
         #endregion
-        
+
         #region Test Starting in S62
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]

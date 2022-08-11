@@ -448,16 +448,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Checkpoint("MS-FSA_R2799");
             this.Manager.Checkpoint("[In Server Requests a Query of Security Information,Pseudocode for the operation " +
                     "is as follows:]If ByteCount is greater than OutputBufferSize, the operation MUST" +
-                    " be failed with STATUS_BUFFER_OVERFLOW.");
+                    " be failed with STATUS_BUFFER_TOO_SMALL.");
             this.Manager.Comment("reaching state \'S61\'");
             this.Manager.Comment("checking step \'return QuerySecurityInfo/[out OutputBuffer(AccessFlags=None,Revisi" +
-                    "on=0)]:BUFFER_OVERFLOW\'");
+                    "on=0)]:STATUS_BUFFER_TOO_SMALL\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(this.Manager, this.Make<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.OutputBuffer>(new string[] {
                             "AccessFlags",
                             "Revision"}, new object[] {
                             Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.None,
                             0u}), temp19, "outputBuffer of QuerySecurityInfo, state S61");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.BUFFER_OVERFLOW, temp20, "return of QuerySecurityInfo, state S61");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.BUFFER_TOO_SMALL, temp20, "return of QuerySecurityInfo, state S61");
             this.Manager.Comment("reaching state \'S73\'");
             this.Manager.EndTest();
         }

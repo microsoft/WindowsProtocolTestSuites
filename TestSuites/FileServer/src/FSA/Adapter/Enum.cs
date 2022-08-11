@@ -652,7 +652,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         /// <summary>
         /// This bit SHOULD be set to 0 and the server MUST fail the request with 
-        /// a STATUS_INVALID_PARAMETER error if this bit is set.
+        /// a STATUS_NOT_SUPPORTED error if this bit is set.
         /// </summary>
         RESERVE_OPFILTER = 0x00100000,
 
@@ -1015,11 +1015,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// A file cannot be opened because the share access flags are incompatible
         /// </summary>
         SHARING_VIOLATION = 0xC0000043,
-
-        /// <summary>
-        /// The instruction at 0x%08lx referenced memory at 0x%08lx. The memory could not be %s.
-        /// </summary>
-        ACCESS_VIOLATION = 0xC0000005,
 
         /// <summary>
         /// There are no more files

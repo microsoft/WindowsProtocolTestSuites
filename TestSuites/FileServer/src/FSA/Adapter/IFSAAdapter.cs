@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
@@ -20,6 +21,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// 3. The client connects to a share on server.
         /// </summary>
         void FsaInitial();
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The FileSystem of current volume.
+        /// </summary>
+        FileSystem FileSystem { get; }
+
+        /// <summary>
+        /// Get Platform.
+        /// </summary>
+        Platform Platform { get; }
         #endregion
 
         #region 3.1.5   Higher-Layer Triggered Events

@@ -161,8 +161,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S12
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -208,8 +209,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S14
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -247,7 +249,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Checkpoint("MS-FSA_R2373");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
                     Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
-                    If Create.FILE_SYNCHRONOUS_IO_NONALERT&& !DesiredAccess.SYNCHRONIZE.");
+                    If Create.FILE_SYNCHRONOUS_IO_NONALERT && !DesiredAccess.SYNCHRONIZE.");
             this.Manager.Comment("reaching state \'S163\'");
             this.Manager.Comment("checking step \'return OpenExistingFile/INVALID_PARAMETER\'");
             TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp7, "return of OpenExistingFile, state S163");
@@ -302,8 +304,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S18
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -538,7 +541,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S26
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
@@ -577,11 +580,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             temp21 = this.IFSAAdapterInstance.OpenExistingFile(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.Normal, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions)(1048832u)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL);
             this.Manager.Checkpoint("MS-FSA_R375");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File ,Pseudocode for the operation is as follows:
-                    Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+                    Phase 1 - Parameter Validation:]The operation MUST be failed with STATUS_NOT_SUPPORTED under any of the following conditions:
                     If CreateOptions.COMPLETE_IF_OPLOCKED && CreateOptions.FILE_RESERVE_OPFILTER.");
             this.Manager.Comment("reaching state \'S169\'");
-            this.Manager.Comment("checking step \'return OpenExistingFile/INVALID_PARAMETER\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp21, "return of OpenExistingFile, state S169");
+            this.Manager.Comment("checking step \'return OpenExistingFile/STATUS_NOT_SUPPORTED\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.NOT_SUPPORTED, temp21, "return of OpenExistingFile, state S169");
             this.Manager.Comment("reaching state \'S201\'");
             this.Manager.EndTest();
         }
@@ -621,14 +624,16 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.Comment("executing step \'call OpenExistingFile(FILE_SHARE_READ,FILE_ADD_SUBDIRECTORY,Strea" +
                     "mIsNotFound,IsNotSymbolicLink,DataFile,Normal,NON_DIRECTORY_FILE,FILE_SHARE_READ" +
                     ",FILE_LIST_DIRECTORY,NO_INTERMEDIATE_BUFFERING,OPEN_IF,NULL,NORMAL,NORMAL)\'");
-            temp23 = this.IFSAAdapterInstance.OpenExistingFile(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess)(1)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.FILE_ADD_SUBDIRECTORY, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.Normal, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess)(1)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NO_INTERMEDIATE_BUFFERING, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL);
+            temp23 = this.IFSAAdapterInstance.OpenExistingFile(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess)(1)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess.FILE_APPEND_DATA, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamFoundType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.SymbolicLinkType)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileType)(0)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileNameStatus.Normal, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NON_DIRECTORY_FILE, ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.ShareAccess)(1)), ((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAccess)(1)), Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateOptions.NO_INTERMEDIATE_BUFFERING, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.CreateDisposition.OPEN_IF, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.StreamTypeNameToOpen.NULL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.FileAttribute.NORMAL);
             this.Manager.Checkpoint("MS-FSA_R376");
             this.Manager.Checkpoint(@"[In Application Requests an Open of a File ,Phase 1 - Parameter Validation:]
-                    The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:
+                    The operation MUST be failed with ACCESS_DENIED under any of the following conditions:
                     If CreateOptions.FILE_NO_INTERMEDIATE_BUFFERING && DesiredAccess.FILE_APPEND_DATA.");
+            this.Manager.Checkpoint("If CreateOptions includes FILE_NO_INTERMEDIATE_BUFFERING, the server MUST set FILE_APPEND_DATA to zero in the DesiredAccess field in the request.");
+            this.Manager.Checkpoint("If DesiredAccess is zero, or if any of the bits in the mask 0x0CE0FE00 are set, the operation MUST be failed with STATUS_ACCESS_DENIED.");
             this.Manager.Comment("reaching state \'S170\'");
-            this.Manager.Comment("checking step \'return OpenExistingFile/INVALID_PARAMETER\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.INVALID_PARAMETER, temp23, "return of OpenExistingFile, state S170");
+            this.Manager.Comment("checking step \'return OpenExistingFile/ACCESS_DENIED\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.ACCESS_DENIED, temp23, "return of OpenExistingFile, state S170");
             this.Manager.Comment("reaching state \'S202\'");
             this.Manager.EndTest();
         }
@@ -1190,8 +1195,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S52
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -1240,14 +1246,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                             If FileTypeToOpen is DirectoryFile:If CreateDisposition is FILE_OPEN then:]
                             If this [Perform sharing access checks as described in section 3.1.5.1.2.2.]fails, the request MUST be failed with the same status.");
             this.Manager.Comment("reaching state \'S183\'");
-            this.Manager.Comment("checking step \'return OpenExistingFile/ACCESS_VIOLATION\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.ACCESS_VIOLATION, temp55, "return of OpenExistingFile, state S183");
+            this.Manager.Comment("checking step \'return OpenExistingFile/SHARING_VIOLATION\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.SHARING_VIOLATION, temp55, "return of OpenExistingFile, state S183");
             this.Manager.Comment("reaching state \'S215\'");
             this.Manager.EndTest();
         }
         #endregion
-        
+
         #region Test Starting in S54
+        [Microsoft.VisualStudio.TestTools.UnitTesting.Ignore()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Model)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Fsa)]
@@ -1296,8 +1303,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                             If OpenFileType is DirectoryFile:If CreateDisposition is FILE_OPEN_IF then:]
                             If this[Perform access checks as described in section 3.1.5.1.2.1.] fails, the request MUST be failed with the same status.");
             this.Manager.Comment("reaching state \'S184\'");
-            this.Manager.Comment("checking step \'return OpenExistingFile/ACCESS_VIOLATION\'");
-            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.ACCESS_VIOLATION, temp57, "return of OpenExistingFile, state S184");
+            this.Manager.Comment("checking step \'return OpenExistingFile/SHARING_VIOLATION\'");
+            TestManagerHelpers.AssertAreEqual<Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus>(this.Manager, Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus.SHARING_VIOLATION, temp57, "return of OpenExistingFile, state S184");
             this.Manager.Comment("reaching state \'S216\'");
             this.Manager.EndTest();
         }

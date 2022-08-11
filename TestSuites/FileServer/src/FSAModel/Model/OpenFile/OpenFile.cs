@@ -744,7 +744,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 if ((existOpenShareModeShareAccess & ShareAccess.FILE_SHARE_READ) == 0 &&
                     (openDesiredAccess & FileAccess.FILE_READ_DATA) != 0)
                 {
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If ExistingOpen.SharingMode.FILE_SHARE_READ is FALSE and Open.DesiredAccess contains 
@@ -754,9 +754,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 {
                     Helper.CaptureRequirement(650, @"[In Algorithm to Check Sharing Access to an Existing Stream or Directory,
                         Pseudocode for these checks is as follows,For each ExistingOpen in Open.File.OpenList:If ExistingOpen.Stream equals Open.Stream, 
-                        then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+                        then return STATUS_SHARING_VIOLATION under any of the following conditions:]
                         If ExistingOpen.SharingMode.FILE_SHARE_WRITE is FALSE and Open.DesiredAccess contains  FILE_EXECUTE.");
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If ExistingOpen.SharingMode.FILE_SHARE_WRITE is FALSE and Open.DesiredAccess contains 
@@ -764,7 +764,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 if ((existOpenShareModeShareAccess & ShareAccess.FILE_SHARE_WRITE) == 0 &&
                     (openDesiredAccess & FileAccess.FILE_WRITE_DATA) != 0)
                 {
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If ExistingOpen.SharingMode.FILE_SHARE_WRITE is FALSE and Open.DesiredAccess contains 
@@ -772,14 +772,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 if ((existOpenShareModeShareAccess & ShareAccess.FILE_SHARE_WRITE) == 0 &&
                     (openDesiredAccess & FileAccess.FILE_APPEND_DATA) != 0)
                 {
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If ExistingOpen.SharingMode.FILE_SHARE_DELETE is FALSE and Open.DesiredAccess contains DELETE.
                 if ((existOpenShareModeShareAccess & ShareAccess.FILE_SHARE_DELETE) == 0 &&
                     (openDesiredAccess & FileAccess.DELETE) != 0)
                 {
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If Open.SharingMode.FILE_SHARE_READ is FALSE and ExistingOpen.DesiredAccess contains 
@@ -787,7 +787,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 if ((gOpenSharingMode & ShareAccess.FILE_SHARE_READ) == 0 &&
                     (existOpenDesiredAccess & FileAccess.FILE_READ_DATA) != 0)
                 {
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If Open.SharingMode.FILE_SHARE_READ is FALSE and ExistingOpen.DesiredAccess contains 
@@ -795,7 +795,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 if ((gOpenSharingMode & ShareAccess.FILE_SHARE_READ) == 0 &&
                     (existOpenDesiredAccess & FileAccess.FILE_EXECUTE) != 0)
                 {
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If Open.SharingMode.FILE_SHARE_WRITE is FALSE and ExistingOpen.DesiredAccess 
@@ -805,9 +805,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 {
                     Helper.CaptureRequirement(653, @"[In Algorithm to Check Sharing Access to an Existing Stream or Directory,
                         Pseudocode for these checks is as follows,For each ExistingOpen in Open.File.OpenList:If ExistingOpen.Stream equals Open.Stream, 
-                        then return STATUS_ACCESS_VIOLATION under any of the following conditions:]
+                        then return STATUS_SHARING_VIOLATION under any of the following conditions:]
                         If Open.SharingMode.FILE_SHARE_WRITE is FALSE and ExistingOpen.DesiredAccess contains  FILE_WRITE_DATA .");
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If Open.SharingMode.FILE_SHARE_WRITE is FALSE and ExistingOpen.DesiredAccess 
@@ -815,14 +815,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                 if ((gOpenSharingMode & ShareAccess.FILE_SHARE_WRITE) == 0 &&
                     (existOpenDesiredAccess & FileAccess.FILE_APPEND_DATA) != 0)
                 {
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
 
                 //If Open.SharingMode.FILE_SHARE_READ is FALSE and ExistingOpen.DesiredAccess contains DELETE.
                 if ((gOpenSharingMode & ShareAccess.FILE_SHARE_READ) != 0 &&
                     (existOpenDesiredAccess & FileAccess.DELETE) == 0)
                 {
-                    return MessageStatus.ACCESS_VIOLATION;
+                    return MessageStatus.SHARING_VIOLATION;
                 }
             }
 
