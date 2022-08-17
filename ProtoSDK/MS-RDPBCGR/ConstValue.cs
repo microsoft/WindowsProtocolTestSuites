@@ -631,14 +631,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
 
         /// <summary>
         /// The value of MaxRequestSize field of section 2.2.7.2.6 Multifragment Update 
-        /// For LARGE_POINTER_FLAG_96x96 (0x00000001), the MaxRequestSize field MUST be set to at least 38,055 bytes
+        /// For LARGE_POINTER_FLAG_96x96 (0x00000001), the MaxRequestSize field MUST be set to at least 38,055 bytes (0x94A7) 
         /// Capability Set (TS_MULTIFRAGMENTUPDATE_CAPABILITYSET).
         /// </summary>
         internal const uint MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE = 0x000094A7;
 
         /// <summary>
         /// The value of MaxRequestSize field of section 2.2.7.2.6 Multifragment Update 
-        /// For LARGE_POINTER_FLAG_384x384 (0x00000002), the MaxRequestSize MUST be set to at least 608,299 bytes
+        /// For LARGE_POINTER_FLAG_384x384 (0x00000002), the MaxRequestSize MUST be set to at least 608,299 bytes (0x0009482B)
         /// Capability Set (TS_MULTIFRAGMENTUPDATE_CAPABILITYSET).
         /// </summary>
         internal const uint MULTIFRAGMENT_CAP_MAX_REQUEST_SIZE_FOR_LARGEPOINTER = 0x0009482B;
