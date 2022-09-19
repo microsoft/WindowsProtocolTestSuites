@@ -106,6 +106,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         }
 
         /// <summary>
+        /// This method is used to trigger movement of the pointer on the server.
+        /// </summary>
+        /// <param name="caseName">Name of test case</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        public int PointerTriggerMotion(string caseName)
+        {
+            return OperateSUTControl(caseName, (ushort)RDPSUTControlCommand.CHANGE_POINTER_POSITION);
+        }
+
+        /// <summary>
         /// This method is used to reverse the pointer to its default size on the server.
         /// </summary>
         /// <param name="caseName">Name of test case</param>

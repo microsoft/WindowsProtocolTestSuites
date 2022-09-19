@@ -22,6 +22,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         int PointerIncreaseSize(string caseName);
 
         /// <summary>
+        /// This method is used to trigger movement of the pointer on the server.
+        /// </summary>
+        /// <param name="caseName">Name of test case</param>
+        /// <returns>Return value 1 indicates the operation is succesful, otherwise, failed.</returns>
+        [MethodHelp("Initiate the movement of the pointer.\r\n\r\n" +
+                    "Note: please finish the operation in 10 seconds otherwise the case will fail with timeout.")]
+        [DefaultValue("1")]
+        int PointerTriggerMotion(string caseName);
+
+        /// <summary>
         /// This method is used to reverse the pointer to its default size on the server.
         /// </summary>
         /// <param name="caseName">Name of test case</param>

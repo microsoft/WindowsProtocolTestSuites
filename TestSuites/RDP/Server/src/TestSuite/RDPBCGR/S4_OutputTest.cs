@@ -118,6 +118,33 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             #region Test Code
 
+            EnlargePointer();
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
+            rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
+
+            string[] SVCNames = new string[] { RdpConstValue.SVCNAME_RDPEDYC };
+            rdpbcgrAdapter.EstablishRDPConnection(testConfig.requestProtocol, SVCNames, CompressionType.PACKET_COMPR_TYPE_RDP61,
+                false, // Is reconnect
+                true,  // Is auto logon
+                supportFastPathInput: true,
+                supportFastPathOutput: true,
+                support384PointerSize: true);
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Move pointer.");
+            PointerTriggerMotion();
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Wait a period to receive and verify all fast-path update PDUs received.");
+            rdpbcgrAdapter.ExpectPointerAttributeOutputs(testConfig.timeout, true);
+
+            this.Site.Log.Add(LogEntryKind.Comment, "Reverse to pointer default size.");
+            PointerReverseToDefaultSize();
+
+            #endregion Test Code
+        }
+
+        private void EnlargePointer()
+        {
             this.Site.Log.Add(LogEntryKind.Comment, "Establish transport connection with RDP Server, encrypted protocol is {0}.", testConfig.transportProtocol.ToString());
             rdpbcgrAdapter.ConnectToServer(testConfig.transportProtocol);
 
@@ -132,10 +159,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             this.Site.Log.Add(LogEntryKind.Comment, "Increase pointer size.");
             PointerIncreaseSize();
 
-            this.Site.Log.Add(LogEntryKind.Comment, "Wait a period to receive and verify all fast-path update PDUs received.");
-            rdpbcgrAdapter.ExpectPointerAttributeOutputs(testConfig.timeout, true);
-
-            #endregion Test Code
+            rdpbcgrAdapter.Disconnect();
         }
     }
 }

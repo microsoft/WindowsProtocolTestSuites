@@ -97,6 +97,35 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         }
 
         /// <summary>
+        /// Move the Pointer To Different PositionOn Server.
+        /// </summary>
+        public void PointerTriggerMotion()
+        {
+            int? iResult;
+
+            try
+            {
+                iResult = sutControlAdapter?.PointerTriggerMotion(this.TestContext.TestName);
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during PointerTriggerMotion(): {0}.", ex);
+                TestSite.Assert.Fail("moving the pointer failed");
+                return;
+            }
+
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of PointerTriggerMotion is {0}.", iResult);
+            }
+
+            if (iResult != 1)
+            {
+                TestSite.Assert.Fail("moving the pointer failed");
+            }
+        }
+
+        /// <summary>
         /// Trigger Resizing Of Pointer On Server To Normal Size.
         /// </summary>
         public void PointerReverseToDefaultSize()

@@ -12,5 +12,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp.SUTControlAgent.Message
         // For RDP SUT Control Command
         ENLARGE_POINTER_SIZE = 0x0101,
         REVERT_POINTER_SIZE = 0x0102,
+        CHANGE_POINTER_POSITION = 0x0103,
     }
 }
