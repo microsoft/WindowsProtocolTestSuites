@@ -63,9 +63,16 @@ namespace RDPSUTControlAgent
                         //Effect Pointer size change on screen
                         PointerManager.EffectChange();
 
+                        resultCode = (uint)SUTControl_ResultCode.SUCCESS;
+
+                        break;
+
+                    case RDPSUTControl_CommandId.MOVE_POINTER:
                         //Move Pointer
                         PointerManager.POINT p = new PointerManager.POINT(830, 760);
                         PointerManager.POINT p2 = new PointerManager.POINT(830, 762);
+                        PointerManager.POINT p3 = new PointerManager.POINT(830, 764);
+                        PointerManager.POINT p4 = new PointerManager.POINT(830, 766);
 
                         IntPtr handle = IntPtr.Zero;
 
@@ -74,6 +81,12 @@ namespace RDPSUTControlAgent
 
                         PointerManager.ClientToScreen(handle, ref p2);
                         PointerManager.SetCursorPos(p2.x, p2.y);
+
+                        PointerManager.ClientToScreen(handle, ref p2);
+                        PointerManager.SetCursorPos(p3.x, p3.y);
+
+                        PointerManager.ClientToScreen(handle, ref p2);
+                        PointerManager.SetCursorPos(p4.x, p4.y);
 
                         resultCode = (uint)SUTControl_ResultCode.SUCCESS;
 

@@ -19,6 +19,7 @@ namespace RDPSUTControlAgent
         COMMAND_DEMACATION = 0x0100,
         ENLARGE_POINTER_SIZE = 0x0101,
         REVERT_POINTER_SIZE = 0x0102,
+        MOVE_POINTER = 0x0103,
     }
 
     [Flags]
