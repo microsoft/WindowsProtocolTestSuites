@@ -12,6 +12,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+	<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.5">
+		<ExcludeAssets>runtime</ExcludeAssets>
+	</PackageReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEDISP\Rdpedisp.csproj" />
     <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj" />

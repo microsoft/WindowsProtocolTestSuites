@@ -637,7 +637,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                  StepIndex = stepId;
                  SetDetectStepCurrentStatus(status);
-             }, token);
+             }, token, TestSuite.StorageRoot.AbsolutePath);
             latestDetectorInstanceId = context.Id;
 
             detectTask = new Task(() =>

@@ -35,15 +35,21 @@ namespace Microsoft.Protocols.TestManager.Detector
         }
 
         /// <summary>
+        /// Path to the test suite installation directory.
+        /// </summary>
+        public string TestSuitePath { get; }
+
+        /// <summary>
         /// Notify StepStatusChanged
         /// </summary>
         public StepStatusChangedHandler StepStatusChanged { get; private set; }
 
-        public DetectContext(StepStatusChangedHandler stepHandler, CancellationToken token)
+        public DetectContext(StepStatusChangedHandler stepHandler, CancellationToken token, string path)
         {
             Id = Guid.NewGuid().ToString();
             StepStatusChanged = stepHandler;
             Token = token;
+            TestSuitePath = path;
         }
     }
 }

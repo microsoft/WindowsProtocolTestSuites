@@ -227,7 +227,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 if (context.Token.IsCancellationRequested)
                     return false;
 
-                using (var detector = new RDPDetector(detectionInfo, logWriter))
+                using (var detector = new RDPDetector(detectionInfo, logWriter, context.TestSuitePath))
                 {
                     if (!detector.DetectRDPFeature())
                     {

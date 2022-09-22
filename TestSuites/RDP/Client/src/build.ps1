@@ -33,6 +33,13 @@ $TargetDir = "$PluginDir/doc"
 New-Item -ItemType Directory $TargetDir -Force
 Copy-Item "$TestSuiteRoot/TestSuites/RDP/Client/src/Plugin/RDPClientPlugin/Docs/*" -Destination $TargetDir -Recurse -Force
 
+$TargetDir = "$PluginDir/SUTControlAdapter"
+New-Item -ItemType Directory $TargetDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/RDP/Client/src/Plugin/RDPClientPlugin/SUTControlAdapter/*" -Destination $TargetDir -Recurse -Force
+
+$TargetDir = "$PluginDir/ShellSUTControlAdapter"
+New-Item -ItemType Directory $TargetDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/RDP/Client/src/Plugin/RDPClientPlugin/ShellSUTControlAdapter/*" -Destination $TargetDir -Recurse -Force
 
 New-Item -ItemType Directory $OutDir/Batch -Force
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force

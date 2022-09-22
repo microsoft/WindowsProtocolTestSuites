@@ -15,6 +15,8 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using System.IO;
 using System.Diagnostics;
+using System.Management.Automation;
+using System.Management.Automation.Runspaces;
 
 namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
@@ -65,12 +67,12 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         #endregion Variables
         #region Constructor
 
-        public RDPDetector(DetectionInfo detectInfo, DetectLogger logger)
+        public RDPDetector(DetectionInfo detectInfo, DetectLogger logger, string testSuitePath)
         {
             this.detectInfo = detectInfo;
             this.logWriter = logger;
 
-            string rdpClientRoute = Path.Combine("..", "etc", "RDP-Client");
+            string rdpClientRoute = Path.Combine(testSuitePath, "Plugin");
 
             SUTControlScriptLocation = Path.Combine(rdpClientRoute, "SUTControlAdapter");
 
@@ -731,6 +733,18 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             return rtnValue;
         }
 
+        private void SetPTFVariables(
+            SessionStateProxy proxy)
+        {
+            //set all properties as variables
+            var testsiteConfigureValues = GetTestSiteConfigureValues();
+            foreach (KeyValuePair<string, string> kvp in testsiteConfigureValues)
+            {
+                proxy.SetVariable(kvp.Key, kvp.Value);
+            }
+
+        }
+
         /// <summary>
         /// Execute a powershell script file
         /// </summary>
@@ -738,87 +752,37 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         /// <returns></returns>
         private int ExecutePowerShellCommand(string scriptFile)
         {
-            string scriptPath = SUTControlScriptLocation + scriptFile;
+            string scriptPath = Path.Combine(SUTControlScriptLocation, scriptFile);
+            logWriter.AddLog(DetectLogLevel.Information, scriptPath);
+            string scriptContent = string.Format(". \"{0}\"", Path.GetFullPath(scriptPath + ".ps1"));
+            logWriter.AddLog(DetectLogLevel.Information, scriptContent);
 
-            Assembly sysMgmtAutoAssembly = null;
-            BindingFlags flag = BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod;
+            Runspace runspace = RunspaceFactory.CreateRunspace();
+            runspace.Open();
+
+            Pipeline pipeline = runspace.CreatePipeline();
+
+            pipeline.Commands.AddScript("Set-ExecutionPolicy -Scope Process RemoteSigned");
+            pipeline.Commands.AddScript("cd " + SUTControlScriptLocation);
+            pipeline.Commands.AddScript(scriptContent);
+
+            SessionStateProxy sessionStateProxy = runspace.SessionStateProxy;
+            sessionStateProxy.Path.SetLocation(Path.GetDirectoryName(scriptPath));
+            SetPTFVariables(sessionStateProxy);
+            logWriter.AddLog(DetectLogLevel.Information, sessionStateProxy.GetVariable("PtfProp_SUTName").ToString());
+            
             try
             {
-                sysMgmtAutoAssembly = Assembly.Load(SystemManagementAutomationAssemblyNameV3);
+               pipeline.Invoke();
             }
-            catch { }
-            // If loading System.Management.Automation, Version=3.0.0.0 failed, try Version=1.0.0.0
-            if (sysMgmtAutoAssembly == null)
+            catch (RuntimeException ex)
             {
-                try
-                {
-                    sysMgmtAutoAssembly = Assembly.Load(SystemManagementAutomationAssemblyNameV1);
-                }
-                catch
-                {
-                    throw new InvalidOperationException("Can not find system management automation assembly from GAC." +
-                                                        "Please make sure your PowerShell installation is valid." +
-                                                        "Or you need to reinstall PowerShell.");
-                }
+                string errorMessage = ex.Message;
+                string traceInfo = ex.ErrorRecord.InvocationInfo.PositionMessage;
+                string ptfAdFailureMessage = string.Format(
+                    "Exception thrown in PowerShell Adapter: {0} {1}", errorMessage, traceInfo);
+                logWriter.AddLog(DetectLogLevel.Error, ptfAdFailureMessage);
             }
-
-            Type runspaceConfigurationType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.RunspaceConfiguration");
-            object runspaceConfigurationInstance = runspaceConfigurationType.InvokeMember("Create", BindingFlags.InvokeMethod, null, null, null);
-
-            Type runspaceFactoryType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.RunspaceFactory");
-            Type runspaceType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.Runspace");
-
-            object runspaceInstance = runspaceFactoryType.InvokeMember("CreateRunspace", BindingFlags.InvokeMethod, null, null, new object[] { runspaceConfigurationInstance });
-
-            runspaceType.InvokeMember("Open", flag, null, runspaceInstance, null);
-
-            Type sessionStateProxyType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.SessionStateProxy");
-            object proxyInstance = runspaceType.InvokeMember(
-                    "SessionStateProxy",
-                    BindingFlags.GetProperty,
-                    null,
-                    runspaceInstance,
-                    null);
-
-            // Set Variables
-            MethodInfo methodSetVariable = sessionStateProxyType.GetMethod(
-                "SetVariable",
-                BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod,
-                null,
-                new Type[] { typeof(string), typeof(object) },
-                null
-                );
-
-            var testsiteConfigureValues = GetTestSiteConfigureValues();
-            foreach (KeyValuePair<string, string> kvp in testsiteConfigureValues)
-            {
-                methodSetVariable.Invoke(proxyInstance, new object[] { kvp.Key, kvp.Value });
-            }
-
-            Type pipelineType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.Pipeline");
-            object pipelineInstance = runspaceType.InvokeMember(
-                    "CreatePipeline", flag, null, runspaceInstance, null);
-
-            Type RunspaceInvokeType = sysMgmtAutoAssembly.GetType("System.Management.Automation.RunspaceInvoke");
-            object scriptInvoker = Activator.CreateInstance(RunspaceInvokeType);
-            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            RunspaceInvokeType.InvokeMember("Invoke", flag, null, scriptInvoker, new object[] { "Set-ExecutionPolicy Unrestricted" });
-
-            object CommandCollectionInstance = pipelineType.InvokeMember("Commands", BindingFlags.GetProperty, null, pipelineInstance, null);
-            Type CommandCollectionType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.CommandCollection");
-
-            CommandCollectionType.InvokeMember(
-                "AddScript", flag, null, CommandCollectionInstance, new object[] { "cd " + SUTControlScriptLocation });
-
-            Type CommandType = sysMgmtAutoAssembly.GetType("System.Management.Automation.Runspaces.Command");
-            object myCommand = Activator.CreateInstance(CommandType, scriptPath);
-            CommandCollectionType.InvokeMember(
-                "Add", flag, null, CommandCollectionInstance, new object[] { myCommand });
-
-            pipelineType.InvokeMember("Invoke", flag, null, pipelineInstance, null);
-
-            runspaceType.InvokeMember("Close", flag, null, runspaceInstance, null);
-
 
             return 0;
         }
@@ -946,6 +910,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private Dictionary<string, string> GetTestSiteConfigureValues()
         {
+            WriteConfigValuesToLog();
             return new Dictionary<string, string>()
                     {
                         { "PtfProp_SUTName",detectInfo.SUTName},
@@ -963,6 +928,22 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                         { "PtfProp_TriggerInputEvents_Task",DetectorUtil.GetPropertyValue("TriggerInputEvents_Task")},
 
                     };
+        }
+
+        private void WriteConfigValuesToLog()
+        {
+            logWriter.AddLog(DetectLogLevel.Information, "SUT Name => " +  detectInfo.SUTName);
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_SUTName => " + detectInfo.SUTName);
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_SUTUserName => " + detectInfo.UserNameInTC);
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_SUTUserPassword => " + detectInfo.UserPwdInTC);
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_RDPConnectWithNegotiationApproachFullScreen_Task => " + DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationApproachFullScreen_Task"));
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_RDPConnectWithDirectCredSSPFullScreen_Task => " + DetectorUtil.GetPropertyValue("RDPConnectWithDirectCredSSPFullScreen_Task"));
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_RDPConnectWithDirectCredSSP_Task => " + DetectorUtil.GetPropertyValue("RDPConnectWithDirectCredSSP_Task"));
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_RDPConnectWithNegotiationApproach_Task => " + DetectorUtil.GetPropertyValue("RDPConnectWithNegotiationApproach_Task"));
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_TriggerClientDisconnectAll_Task => " + DetectorUtil.GetPropertyValue("TriggerClientDisconnectAll_Task"));
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_TriggerClientAutoReconnect_Task => " + DetectorUtil.GetPropertyValue("TriggerClientAutoReconnect_Task"));
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_SUTSystemDrive => " + DetectorUtil.GetPropertyValue("SUTSystemDrive"));
+            logWriter.AddLog(DetectLogLevel.Information, "PtfProp_TriggerInputEvents_Task => " + DetectorUtil.GetPropertyValue("TriggerInputEvents_Task"));
         }
 
         #endregion Methods
