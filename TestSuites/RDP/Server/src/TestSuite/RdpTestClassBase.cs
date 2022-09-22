@@ -13,7 +13,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         #region Adapter Instances
 
         protected TestConfig testConfig;
-
+        protected IRDPSUTControlAdapter sutControlAdapter;
         #endregion
 
         #region Class Initialization and Cleanup
@@ -30,11 +30,19 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         }
         #endregion
 
+        protected ITestSite TestSite
+        {
+            get
+            {
+                return BaseTestSite;
+            }
+        }
+
         #region Test Initialization and Cleanup
         protected override void TestInitialize()
         {
             testConfig = new TestConfig(Site);
-
+            this.sutControlAdapter = this.TestSite.GetAdapter<IRDPSUTControlAdapter>();
             CheckPlatformCompatibility();
         }
 
@@ -58,5 +66,93 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
         }
         #endregion
+
+        /// <summary>
+        /// Trigger Resizing Of Pointer On Server To Larger Size.
+        /// </summary>
+        public void PointerIncreaseSize()
+        {
+            int? iResult;
+
+            try
+            {
+                iResult = sutControlAdapter?.PointerIncreaseSize(this.TestContext.TestName);
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during PointerIncreaseSize(): {0}.", ex);
+                TestSite.Assert.Fail("Resizing the pointer failed");
+                return;
+            }
+
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of PointerIncreaseSize is {0}.", iResult);
+            }
+
+            if (iResult != 1)
+            {
+                TestSite.Assert.Fail("Resizing the pointer failed");
+            }
+        }
+
+        /// <summary>
+        /// Move the Pointer To Different PositionOn Server.
+        /// </summary>
+        public void PointerTriggerMotion()
+        {
+            int? iResult;
+
+            try
+            {
+                iResult = sutControlAdapter?.PointerTriggerMotion(this.TestContext.TestName);
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during PointerTriggerMotion(): {0}.", ex);
+                TestSite.Assert.Fail("moving the pointer failed");
+                return;
+            }
+
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of PointerTriggerMotion is {0}.", iResult);
+            }
+
+            if (iResult != 1)
+            {
+                TestSite.Assert.Fail("moving the pointer failed");
+            }
+        }
+
+        /// <summary>
+        /// Trigger Resizing Of Pointer On Server To Normal Size.
+        /// </summary>
+        public void PointerReverseToDefaultSize()
+        {
+            int? iResult;
+
+            try
+            {
+                iResult = sutControlAdapter?.PointerReverseToDefaultSize(this.TestContext.TestName);
+            }
+            catch (Exception ex)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "Exception happened during PointerReverseToDefaultSize(): {0}.", ex);
+                TestSite.Assert.Fail("Resizing the pointer to the default size failed");
+                return;
+            }
+
+            if (iResult != null)
+            {
+                TestSite.Log.Add(LogEntryKind.Debug, "The result of PointerReverseToDefaultSize is {0}.", iResult);
+            }
+
+            if (iResult != 1)
+            {
+                TestSite.Assert.Fail("Resizing the pointer to the default size failed");
+            }
+
+        }
     }
 }

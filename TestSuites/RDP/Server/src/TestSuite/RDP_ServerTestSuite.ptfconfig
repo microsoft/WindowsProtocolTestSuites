@@ -8,11 +8,32 @@
     <Property name="TestName" value="RDP Server Endpoint Test" />
     <Property name="ProtocolName" value="RDP" />
     <Property name="Version" value="1.0" />
+	  <Group name="SUTControl">
+		  <!--IP addresses or host name of SUT control Agent, seperated by ";"-->
+		  <Property name="AgentAddress" value="RDPServer2022:4488">
+			  <Description>Address for SUT control Agent.</Description>
+		  </Property>
+		  <!-- Transport type of SUT control protocol, TCP or UDP-->
+		  <Property name="TransportType" value="TCP">
+			  <Choice>TCP, UDP</Choice>
+			  <Description>Transport type of SUT control protocol, TCP or UDP.</Description>
+		  </Property>
+		  <!--Whether RDP client can use .rdp file to establish RDP connection-->
+		  <Property name="ClientSupportRDPFile" value="true">
+			  <Choice>true, false</Choice>
+			  <Description>Whether RDP client can use .rdp file to establish RDP connection.</Description>
+		  </Property>
+		  <!-- Whether all the request need a response, if false, only response is only needed when some data need to be transfered from agent-->
+		  <Property name="AlwaysNeedResponse" value="true">
+			  <Choice>true, false</Choice>
+			  <Description>Whether all the request need a response, if false, only response is only needed when some data need to be transfered from agent.</Description>
+		  </Property>
+	  </Group>
   </Properties>
 
   <Adapters>
     <!-- SUT Control Adapters-->
-
+	  <Adapter xsi:type="managed" name="IRDPSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRDPSUTControlAdapter"/>
   </Adapters>
 
   <TestLog defaultprofile="Verbose">

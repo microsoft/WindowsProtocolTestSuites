@@ -49,8 +49,8 @@
     <!-- SUT Control Adapters-->
     <!-- Basic RDP SUT Control Adapters -->
     <!--<Adapter xsi:type="interactive" name="IRdpSutControlAdapter" />-->
-	<Adapter xsi:type="powershell" name="IRdpSutControlAdapter" scriptdir=".\SUTControlAdapter" />
-    <!--<Adapter xsi:type="managed" name="IRdpSutControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpSUTControlAdapter"/>-->
+	<!--<Adapter xsi:type="powershell" name="IRdpSutControlAdapter" scriptdir=".\SUTControlAdapter" />-->
+    <Adapter xsi:type="managed" name="IRdpSutControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdp.ProtocolBasedRdpSUTControlAdapter"/>
     <!-- RDPEI SUT Control Adapters -->
     <!--<Adapter xsi:type="interactive" name="IRdpeiSUTControlAdapter"/>-->
     <!--<Adapter xsi:type="managed" name="IRdpeiSUTControlAdapter" adaptertype="Microsoft.Protocols.TestSuites.Rdpei.RdpeiSUTControlAdapter"/>-->

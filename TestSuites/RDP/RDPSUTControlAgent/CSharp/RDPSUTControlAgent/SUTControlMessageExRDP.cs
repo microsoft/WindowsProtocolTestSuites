@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace RDPSUTControlAgent
@@ -16,7 +15,11 @@ namespace RDPSUTControlAgent
         BASIC_INPUT = 0x0004,
         SCREEN_SHOT = 0x0005,
         CREDENTIAL_MANAGER_ADD_INVALID_ACCOUNT = 0x0006,
-        CREDENTIAL_MANAGER_REVERSE_INVALID_ACCOUNT = 0x0007
+        CREDENTIAL_MANAGER_REVERSE_INVALID_ACCOUNT = 0x0007,
+        COMMAND_DEMACATION = 0x0100,
+        ENLARGE_POINTER_SIZE = 0x0101,
+        REVERT_POINTER_SIZE = 0x0102,
+        MOVE_POINTER = 0x0103,
     }
 
     [Flags]

@@ -535,7 +535,7 @@ The following table shows the number of test cases for each scenario.
 | S1_Connection| 8| 8| 8| 0|
 | S2_AutoReconnect| 1| 1| 1| 0|
 | S3_Input| 2| 2| 2| 0|
-| S4_Output| 1| 1| 1| 0|
+| S4_Output| 3| 3| 3| 0|
 | S5_StaticVirtualChannel| 1| 1| 1| 0|
 | S6_AutoDetect| 1| 1| 1| 0|
 | S7_MultitransportBootstrapping| 1| 1| 1| 0|
@@ -797,6 +797,49 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | Fast-Path Color Pointer Update|
 | | Fast-Path Cached Pointer Update|
 | | Fast-Path New Pointer Update|
+| | Test suite close the connection.|
+| | Test suite logs which structures are verified.|
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
+
+
+#### Diagram For S4_Output_PointerSize_FastPathOutput and S4_Output_LargePointerCapability_FastPathOutput Test Cases Below
+
+![RDP_Large_Pointer.png](./image/RDP_ServerTestDesignSpecification/RDP_Large_Pointer.png)
+
+#### S4_Output_PointerSize_FastPathOutput
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **S7_FastPathOutput**| |
+|  **Test ID**| S4_Output_PointerSize_FastPathOutput|
+|  **Priority**| P0|
+|  **Description** | This test case is used to check that the SUT can send large pointer change through fast-path output message correctly. |
+|  **Prerequisites**|  |
+|  **Test Execution Steps**| Initiate and complete an RDP connection with SUT. In Capability Exchange phase, Test Suite advised support fast-path output in TS_GENERAL_CAPABILITYSET.|
+| | Test suite sends command to the server through the RDP SUT Control Agent to adjust the size of the pointer not greater than 384X384 (and less than specified in the client TS_LARGE_POINTER_CAPABILITYSET), and wait to receive confirmation of completion.|
+| | On the driver, listen for the TS_FP_UPDATE_PDU (and specifically TS_FP_POINTERPOSATTRIBUTE within the PDU).|
+| | Check TS_FP_POINTERPOSATTRIBUTE within the PDU to confirm the change in size was correctly communicated to the driver. The test passes if it is communicated.|
+| | Test suite sends command to the server through the RDP SUT Control Agent to reverse the pointer size adjustment.|
+| | Test suite close the connection.|
+| | Test suite logs which structures are verified.|
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
+
+#### S4_Output_LargePointerCapability_FastPathOutput
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **S7_FastPathOutput**| |
+|  **Test ID**| S4_Output_LargePointerCapability_FastPathOutput|
+|  **Priority**| P0|
+|  **Description** | This test case is used to check that the SUT can send large pointer change through fast-path output message correctly. |
+|  **Prerequisites**|  |
+|  **Test Execution Steps**| Initiate and complete an RDP connection with SUT. In Capability Exchange phase, Test Suite advised support fast-path output in TS_GENERAL_CAPABILITYSET.|
+| | Test suite sends command to the server through the RDP SUT Control Agent to adjust the size of the pointer greater than 384X384, and wait to receive confirmation of completion.|
+| | On the driver, listen for the TS_FP_UPDATE_PDU (and specifically TS_FP_LARGEPOINTERATTRIBUTE within the PDU).|
+| | Check TS_FP_LARGEPOINTERATTRIBUTE within the PDU to confirm the change in size was correctly communicated to the driver. The test passes if it is communicated.|
+| | Test suite sends command to the server through the RDP SUT Control Agent to reverse the pointer size adjustment.|
 | | Test suite close the connection.|
 | | Test suite logs which structures are verified.|
 |  **Requirements Covered**| N/A|

@@ -769,10 +769,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
             bool supportFastPathOutput,
             bool supportSurfaceCommands,
             bool supportSVCCompression,
-            bool supportRemoteFXCodec)
+            bool supportRemoteFXCodec,
+            bool support384PointerSize = false)
         {
             // Create capability sets
-            var caps = rdpbcgrClientStack.CreateCapabilitySets(supportAutoReconnect, supportFastPathInput, supportFastPathOutput, supportSVCCompression);
+            var caps = rdpbcgrClientStack.CreateCapabilitySets(supportAutoReconnect, supportFastPathInput, supportFastPathOutput, supportSVCCompression, support384PointerSize);
 
             var surfaceCommandsCapabilitySet = RdpbcgrCapSet.CreateSurfaceCommandsCapabilitySet(supportSurfaceCommands);
 
