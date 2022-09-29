@@ -78,10 +78,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 3: Verify test result
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Verify returned NTStatus code.");
+            if(this.fsaAdapter.IsHardLinksSupported == false)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.NOT_SUPPORTED, status,
+                "If Open.File.Volume.IsHardLinksSupported is FALSE, the operation MUST be failed with STATUS_NOT_SUPPORTED.");
+                return;
+            }
+            
             if (this.fsaAdapter.FileSystem == FileSystem.FAT32)
             {
                 this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_DEVICE_REQUEST, status,
-                "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVIeCE_REQUEST.");
+                "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.");
                 return;
             }
 

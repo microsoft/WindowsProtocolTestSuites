@@ -57,6 +57,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isAlternateDataStreamSupported;
         private bool isSingleInstanceStorageSupported;
         private bool isObjectSecurityBasedOnAccessControlListsSupported;
+        private bool isHardLinksSupported;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -189,6 +190,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         public bool IsStreamSnapshotManagementImplemented
         {
             get { return isStreamSnapshotManagementImplemented; }
+        }
+
+        public bool IsHardLinksSupported
+        {
+            get { return isHardLinksSupported; }
         }
 
         public uint ClusterSizeInKB
@@ -362,12 +368,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isAlternateDataStreamSupported = testConfig.GetProperty("WhichFileSystemSupport_AlternateDataStream").Contains(this.fileSystem.ToString());
             this.isSingleInstanceStorageSupported = testConfig.GetProperty("WhichFileSystemSupport_SingleInstanceStorage", false).Contains(this.FileSystem.ToString());
             this.isObjectSecurityBasedOnAccessControlListsSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectSecurityBasedOnAccessControlLists").Contains(this.FileSystem.ToString());
-
+            
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
 
             this.systemPageSizeInKB = uint.Parse(testConfig.GetProperty("SystemPageSizeInKB"));
             this.isVolumeReadonly = bool.Parse(testConfig.GetProperty("IsVolumeReadonly"));
+            this.isHardLinksSupported = bool.Parse(testConfig.GetProperty("IsHardLinksSupported"));
 
             //Error Code Handling
             this.isErrorCodeMappingRequired = bool.Parse(testConfig.GetProperty("IsErrorCodeMappingRequired"));
