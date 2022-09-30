@@ -239,9 +239,126 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         #endregion
 
+        #region FsCtl_Set_IntegrityInformation_InvalidParameter
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a file with Flags set as INVALID value, check if server responses correctly.")]
+        public void FsCtl_Set_IntegrityInformation_File_Flag_Invalid()
+        {
+            string condition = "InputBuffer.Flags is non-zero and InputBuffer.Flags.FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is FALSE.";
+            FsCtl_Set_IntegrityInformation_CheckSumEnforcement(FileType.DataFile, condition, validFlag: false);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a directory where Flags set as INVALID value, check if server responses correctly.")]
+        public void FsCtl_Set_IntegrityInformation_Dir_Flag_Invalid()
+        {
+            string condition = "InputBuffer.Flags is non-zero and InputBuffer.Flags.FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is FALSE.";
+            FsCtl_Set_IntegrityInformation_CheckSumEnforcement(FileType.DirectoryFile, condition, validFlag: false);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a file with ChecksumAlgorithm as CHECKSUM_TYPE_NONE and FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is TRUE, check if server responses correctly.")]
+        public void FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_None()
+        {
+            string condition = "InputBuffer.ChecksumAlgorithm == CHECKSUM_TYPE_NONE and InputBuffer.Flags\nFSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is TRUE.";
+            FsCtl_Set_IntegrityInformation_CheckSumEnforcement(FileType.DataFile, condition, algorithm: FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_NONE);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a directory with ChecksumAlgorithm as CHECKSUM_TYPE_NONE and FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is TRUE, check if server responses correctly.")]
+        public void FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_None()
+        {
+            string condition = "InputBuffer.ChecksumAlgorithm == CHECKSUM_TYPE_NONE and InputBuffer.Flags\nFSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is TRUE.";
+            FsCtl_Set_IntegrityInformation_CheckSumEnforcement(FileType.DirectoryFile, condition, algorithm: FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_NONE);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a file with ChecksumAlgorithm as CHECKSUM_TYPE_UNCHANGED and FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is TRUE, check if server responses correctly.")]
+        public void FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_Unchanged()
+        {
+            string condition = "InputBuffer.ChecksumAlgorithm == CHECKSUM_TYPE_UNCHANGED, \nOpen.Stream.CheckSumAlgorithm == CHECKSUM_TYPE_NONE, and InputBuffer.Flags\nFSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is TRUE.";
+            FsCtl_Set_IntegrityInformation_CheckSumEnforcement(FileType.DataFile, condition, algorithm: FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_UNCHANGED);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION request to a file with ChecksumAlgorithm as CHECKSUM_TYPE_UNCHANGED and FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is TRUE, check if server responses correctly.")]
+        public void FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_Unchanged()
+        {
+            string condition = "InputBuffer.ChecksumAlgorithm == CHECKSUM_TYPE_UNCHANGED, \nOpen.Stream.CheckSumAlgorithm == CHECKSUM_TYPE_NONE, and InputBuffer.Flags\nFSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF is TRUE.";
+            FsCtl_Set_IntegrityInformation_CheckSumEnforcement(FileType.DirectoryFile, condition, algorithm: FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_UNCHANGED);
+        }
+        #endregion
+
         #endregion
 
         #region Test Case Utility
+
+        private void FsCtl_Set_IntegrityInformation_CheckSumEnforcement(FileType fileType, string condition, bool validFlag = true, FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM algorithm = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_CHECKSUMALGORITHM.CHECKSUM_TYPE_CRC64)
+        {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
+            MessageStatus status;
+
+            //Step 1: Create file
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
+            status = this.fsaAdapter.CreateFile(fileType);
+
+            //Step 2: FSCTL request FSCTL_SET_INTEGRITY_INFORMATION
+            FSCTL_SET_INTEGRITY_INFORMATION_BUFFER integrityInfo = new FSCTL_SET_INTEGRITY_INFORMATION_BUFFER();
+            integrityInfo.ChecksumAlgorithm = algorithm;            
+
+            if(validFlag)
+            {
+                integrityInfo.Flags = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_FLAGS.FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF;
+            }
+            else
+            {
+                integrityInfo.Flags = FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_FLAGS.INVALID;
+            }
+
+            uint inputBufferSize = (uint)TypeMarshal.ToBytes<FSCTL_SET_INTEGRITY_INFORMATION_BUFFER>(integrityInfo).Length;
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. FSCTL request FSCTL_SET_INTEGRITY_INFORMATION.");
+            status = this.fsaAdapter.FsCtlSetIntegrityInfo(integrityInfo, inputBufferSize);
+
+            //Step 3: Verify test result
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Verify returned NTStatus code.");
+            if (!IsCurrentTransportSupportIntegrity(status)) return;
+
+            if (this.fsaAdapter.IsIntegritySupported == false)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_DEVICE_REQUEST, status, "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.");
+            }
+            else
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status, "The operation MUST be failed with STATUS_INVALID_PARAMETER under any of the following conditions:\n"+condition);
+            }
+            
+        }
 
         private void FsCtl_Set_IntegrityInformation_IsIntegritySupported(FileType fileType)
         {

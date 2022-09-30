@@ -208,6 +208,12 @@
             * [FsCtl_Set_IntegrityInformation_Dir_WriteProtected](#FsCtl_Set_IntegrityInformation_Dir_WriteProtected)
             * [FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm (2TCs)](#FsCtl_Set_IntegrityInformation_File_ChecksumAlgorithm-2TCs)
             * [FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm(2TCs)](#FsCtl_Set_IntegrityInformation_Dir_ChecksumAlgorithm-2TCs)
+            * [FsCtl_Set_IntegrityInformation_File_Flag_Invalid](#FsCtl_Set_IntegrityInformation_File_Flag_Invalid)
+            * [FsCtl_Set_IntegrityInformation_Dir_Flag_Invalid](#FsCtl_Set_IntegrityInformation_Dir_Flag_Invalid)
+            * [FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_None](#FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_None)
+            * [FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_None](#FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_None)
+            * [FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_Unchanged](#FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_Unchanged)
+            * [FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_Unchanged](#FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_Unchanged)
         * [IsOffloadReadSupported](#IsOffloadReadSupported)
             * [FsCtl_Offload_Read_File_IsOffloadSupported (BVT)](#FsCtl_Offload_Read_File_IsOffloadSupported-BVT)
         * [IsOffloadWriteSupported](#IsOffloadWriteSupported)
@@ -452,7 +458,7 @@ There are 221 test cases in total:
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 8 | 51 (25) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
-| Scenarios for FsControlRequest | 13 | 83 (26) |
+| Scenarios for FsControlRequest | 13 | 89 (26) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
@@ -3299,6 +3305,106 @@ There are 343 test cases in total:
 | | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with InputBuffer.ChecksumAlgorithm set to **CHECKSUM_TYPE_UNCHANGED**|
 | | FSCTL request with FSCTL_GET_INTEGRITY_INFORMATION|
 | | Assert.AreEqual(**CHECKSUM_TYPE_CRC64**, OutputBuffer.CheckSumAlgorithm);|
+
+##### <a name="FsCtl_Set_IntegrityInformation_File_Flag_Invalid"/>FsCtl_Set_IntegrityInformation_File_Flag_Invalid
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case|  **FsCtl_Set_IntegrityInformation_File_Flag_Invalid**|
+| Description| Set integrity information with invalid Flag value, check if server responds correctly.|
+| | Note: Only **ReFS** supports integrity|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with InputBuffer.Flags set to invalid value|
+| | If (IsIntegritySupported == False) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
+| | } |
+
+##### <a name="FsCtl_Set_IntegrityInformation_Dir_Flag_Invalid"/>FsCtl_Set_IntegrityInformation_Dir_Flag_Invalid
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case|  **FsCtl_Set_IntegrityInformation_Dir_Flag_Invalid**|
+| Description| Set integrity information with invalid Flag value, check if server responds correctly.|
+| | Note: Only **ReFS** supports integrity|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with InputBuffer.Flags set to invalid value|
+| | If (IsIntegritySupported == False) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
+| | } |
+
+##### <a name="FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_None"/>FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_None
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case|  **FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_None**|
+| Description| Send FSCTL_SET_INTEGRITY_INFORMATION request to a file with ChecksumAlgorithm as CHECKSUM_TYPE_NONE and Flags as FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF, check if server responses correctly.|
+| | Note: Only **ReFS** supports integrity|
+| | Test environment: FAT32, NTFS, ReFS|
+| | To cover CHECKSUM_TYPE_NONE and FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF|
+| Message Sequence| CreateFile (DataFile)|
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with ChecksumAlgorithm as CHECKSUM_TYPE_NONE and Flags as FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF|
+| | If (IsIntegritySupported == False) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
+| | } |
+
+##### <a name="FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_None"/>FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_None
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case|  **FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_None**|
+| Description| Send FSCTL_SET_INTEGRITY_INFORMATION request to a directory with ChecksumAlgorithm as CHECKSUM_TYPE_NONE and Flags as FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF, check if server responses correctly.|
+| | Note: Only **ReFS** supports integrity|
+| | Test environment: FAT32, NTFS, ReFS|
+| | To cover CHECKSUM_TYPE_NONE and FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with ChecksumAlgorithm as CHECKSUM_TYPE_NONE and Flags as FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF|
+| | If (IsIntegritySupported == False) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
+| | } |
+
+##### <a name="FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_Unchanged"/>FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_Unchanged
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case|  **FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_Unchanged**|
+| Description| Send FSCTL_SET_INTEGRITY_INFORMATION request to a file with ChecksumAlgorithm as CHECKSUM_TYPE_NONE and Flags FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF, check if server responses correctly.|
+| | Note: Only **ReFS** supports integrity|
+| | Test environment: FAT32, NTFS, ReFS|
+| | To cover CHECKSUM_TYPE_UNCHANGED and FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF|
+| Message Sequence| CreateFile (DataFile)|
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with ChecksumAlgorithm as CHECKSUM_TYPE_UNCHANGED and Flags as FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF|
+| | If (IsIntegritySupported == False) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
+| | } |
+
+##### <a name="FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_Unchanged"/>FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_Unchanged
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case|  **FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_Unchanged**|
+| Description| Send FSCTL_SET_INTEGRITY_INFORMATION request to a directory with ChecksumAlgorithm as CHECKSUM_TYPE_NONE and Flags FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF, check if server responses correctly.|
+| | Note: Only **ReFS** supports integrity|
+| | Test environment: FAT32, NTFS, ReFS|
+| | To cover CHECKSUM_TYPE_UNCHANGED and FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | FSCTL request FSCTL_SET_INTEGRITY_INFORMATION with ChecksumAlgorithm as CHECKSUM_TYPE_UNCHANGED and Flags as FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF|
+| | If (IsIntegritySupported == False) {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_DEVICE_REQUEST**, ActualResult);|
+| | } else {|
+| | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
+| | } |
 
 #### <a name="IsOffloadReadSupported"/>IsOffloadReadSupported
 

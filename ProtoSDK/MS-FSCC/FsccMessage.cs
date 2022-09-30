@@ -3759,7 +3759,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// When set, if a checksum does not match, the associated I/O operation will not be failed.
         /// </summary>
-        FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF = 0x00000001
+        FSCTL_INTEGRITY_FLAG_CHECKSUM_ENFORCEMENT_OFF = 0x00000001,
+
+        INVALID = 2
     }
     /// <summary>
     /// The FSCTL_SET_INTEGRITY_INFORMATION Request message requests that the server set the integrity state 
