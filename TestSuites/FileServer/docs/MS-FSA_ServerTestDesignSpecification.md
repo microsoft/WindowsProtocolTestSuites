@@ -26,6 +26,9 @@
         * [FileInfo_FileAccessInformationSupported](#FileInfo_FileAccessInformationSupported)
         * [FileInfo_SetFileBasicInformationSupported](#FileInfo_SetFileBasicInformationSupported)
         * [FileInfo_CreationTime](#FileInfo_CreationTime)
+        * [FileInfo_Set_FileBasicInformation_Timestamp_Zero](#FileInfo_Set_FileBasicInformation_Timestamp_Zero)
+        * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne)
+        * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo](#FileInfo_Set_FileBasicInformaiton_Timestamp_MinusTwo)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
         * [FsInfo_IsObjectIdSupported](#FsInfo_IsObjectIdSupported)
@@ -154,6 +157,39 @@
             * [FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileBothDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime)
+        * [FileInfo_Set_FileBasicInformation_Timestamp_Zero](#FileInfo_Set_FileBasicInformation_Timestamp_Zero)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastAccessTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastAccessTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastAccessTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastAccessTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_CreationTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_CreationTime)
+        * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_LastAccessTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_LastAccessTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_LastAccessTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_LastAccessTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_CreationTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_CreationTime)
+        * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo](#FileInfo_Set_FileBasicInformaiton_Timestamp_MinusTwo)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastAccessTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastAccessTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_CreationTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_CreationTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_LastAccessTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_LastAccessTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_LastAccessTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_LastAccessTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_LastWriteTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_ChangeTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_CreationTime)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_CreationTime)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
@@ -456,7 +492,7 @@ There are 221 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 8 | 51 (25) |
+| Scenarios for FileInformation | 11 | 81 (32) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 89 (26) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -690,6 +726,55 @@ There are 343 test cases in total:
 | | Modify file|
 | | Verify CreationTime is not changed|
 
+#### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting timestamps value to 0 is handled by different File Systems.|
+| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, timestamp is not changed if value is set to 0.|
+| Message Sequence| CreateFile.|
+| | Set timestamp to value 0|
+| | Verify timestamp attribute is not changed|
+
+#### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting timestamps value to -1 is handled by different File Systems.|
+| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, timestamp is not changed if IO operation is performed after timestamp value is set to -1|
+| Message Sequence| CreateFile.|
+| | Set timestamp to value -1|
+| | Modify file|
+| | Verify timestamp attribute is not changed|
+
+#### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting timestamps value  to -2 is handled by different File Systems.|
+| | Note: **Only** NTFS, ReFS support value -2 for timestamps|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FileInfoClass: FileBasicInformation|
+| | If supported, timestamp is set to current time if IO operation is performed after timestamp value is set to -1 and subsquently -2 |
+| Message Sequence| CreateFile.|
+| | Set timestamp to value -1|
+| | Modify file|
+| | Verify timestamp attribute is not changed|
+| | Set timestamp to value -2|
+| | Modify file|
+| | Verify timestamp attribute is set to current time|
 ### <a name="Scenarios-for-FileSystemInformation"/>Scenarios for FileSystemInformation
 
 #### <a name="FsInfo_FileFsAttributeInformation"/>FsInfo_FileFsAttributeInformation
@@ -2356,6 +2441,399 @@ There are 343 test cases in total:
 | | Create file into directory |
 | | Query CreationTime |
 | | Verify CreationTime was not changed |
+
+#### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting ChangeTime value to 0 is handled by different file systems for directory|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query ChangeTime |
+| | Set ChangeTime to 0 |
+| | Query ChangeTime |
+| | Verify ChangeTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastWriteTime value to 0 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query LastWriteTime |
+| | Set LastWriteTime to 0 |
+| | Query LastWriteTime |
+| | Verify LastWriteTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastWriteTime value to 0 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query LastWriteTime |
+| | Set LastWriteTime to 0 |
+| | Query LastWriteTime |
+| | Verify LastWriteTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastAccessTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastAccessTime value to 0 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query LastAccessTime |
+| | Set LastAccessTime to 0 |
+| | Query LastAccessTime |
+| | Verify LastAccessTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastAccessTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastAccessTime value to 0 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query LastAccessTime |
+| | Set LastAccessTime to 0 |
+| | Query LastAccessTime |
+| | Verify LastAccessTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting CreationTime value to 0 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Set CreationTime to 0 |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting CreationTime value to 0 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Set CreationTime to 0 |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+#### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting ChangeTime value to -1 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query ChangeTime |
+| | Set ChangeTime to -1 |
+| | Write to file |
+| | Query ChangeTime |
+| | Verify ChangeTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting ChangeTime value to -1 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query ChangeTime |
+| | Set ChangeTime to -1 |
+| | Write to file |
+| | Query ChangeTime |
+| | Verify ChangeTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastWriteTime value to -1 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query LastWriteTime |
+| | Set LastWriteTime to -1 |
+| | Write to file |
+| | Query LastWriteTime |
+| | Verify LastWriteTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastWriteTime value to -1 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query LastWriteTime |
+| | Set LastWriteTime to -1 |
+| | Write to file |
+| | Query LastWriteTime |
+| | Verify LastWriteTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_LastAccessTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastAccessTime value to -1 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query LastAccessTime |
+| | Set LastAccessTime to -1 |
+| | Write to file |
+| | Query LastAccessTime |
+| | Verify LastAccessTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_LastAccessTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastAccessTime value to -1 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query LastAccessTime |
+| | Set LastAccessTime to -1 |
+| | Write to file |
+| | Query LastAccessTime |
+| | Verify LastAccessTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting CreationTime value to -1 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Set CreationTime to -1 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting CreationTime value to -1 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query CreationTime |
+| | Set CreationTime to -1 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+#### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting ChangeTime value to -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query ChangeTime |
+| | Set ChangeTime to -1 |
+| | Write to file |
+| | Query ChangeTime |
+| | Verify ChangeTime was not changed |
+| | Set ChangeTime to -2 |
+| | Write to file |
+| | Query ChangeTime |
+| | Verify ChangeTime was updated to current time |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting ChangeTime value to -2 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query ChangeTime |
+| | Set ChangeTime to -1 |
+| | Write to AlternativeDataStream |
+| | Query ChangeTime |
+| | Verify ChangeTime was not changed |
+| | Set ChangeTime to -2 |
+| | Write to AlternativeDataStream |
+| | Query ChangeTime |
+| | Verify ChangeTime was updated to current time |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastWriteTime value to -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query LastWriteTime |
+| | Set LastWriteTime to -1 |
+| | Write to file |
+| | Query LastWriteTime |
+| | Verify LastWriteTime was not changed |
+| | Set LastWriteTime to -2 |
+| | Write to file |
+| | Query LastWriteTime |
+| | Verify LastWriteTime was updated to current time |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastWriteTime value to -2 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query LastWriteTime |
+| | Set LastWriteTime to -1 |
+| | Write to AlternateDataStream |
+| | Query LastWriteTime |
+| | Verify LastWriteTime was not changed |
+| | Set LastWriteTime to -2 |
+| | Write to AlternateDataStream |
+| | Query LastWriteTime |
+| | Verify LastWriteTime was updated to current time |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastAccessTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastAccessTime value to -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query LastAccessTime |
+| | Set LastAccessTime to -1 |
+| | Write to file |
+| | Query LastAccessTime |
+| | Verify LastAccessTime was not changed |
+| | Set LastAccessTime to -2 |
+| | Write to file |
+| | Query LastAccessTime |
+| | Verify LastAccessTime was updated to current time |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting CreationTime value to -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Set CreationTime to -1 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+| | Set CreationTime to -2 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed  |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting CreationTime value to -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query CreationTime |
+| | Set CreationTime to -1 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+| | Set CreationTime to -2 |
+| | Write to file |
+| | Query CreationTime |
+| | Verify CreationTime was not changed |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_LastAccessTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastAccessTime value less than -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Set LastAccessTime to -3 |
+| | Verify STATUS_INVALID_PARAMETER is returned |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_LastAccessTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_LastAccessTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastAccessTime value less than -2 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Set LastAccessTime to -3 |
+| | Verify STATUS_INVALID_PARAMETER is returned |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastWriteTime value less than -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Set LastWriteTime to -3 |
+| | Verify STATUS_INVALID_PARAMETER is returned |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_LastWriteTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_LastWriteTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting LastAccessTime value less than -2 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Set LastWriteTime to -3 |
+| | Verify STATUS_INVALID_PARAMETER is returned |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting ChangeTime value less than -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Set ChangeTime to -3 |
+| | Verify STATUS_INVALID_PARAMETER is returned |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting ChangeTime value less than -2 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Set ChangeTime to -3 |
+| | Verify STATUS_INVALID_PARAMETER is returned |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting CreationTime value less than -2 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Set CreationTime to -3 |
+| | Verify STATUS_INVALID_PARAMETER is returned |
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_CreationTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting CreationTime value less than -2 is handled by different file systems for directory file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Set CreationTime to -3 |
+| | Verify STATUS_INVALID_PARAMETER is returned |
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
 
