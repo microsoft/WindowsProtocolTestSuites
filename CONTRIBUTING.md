@@ -18,7 +18,7 @@ Before you send out the pull request, you must:
 
 Your pull request should:
 
-* Include a description of what your change intends to do. Have clear commit messages, e.g. "Add feature", "Fix issue", "Add test cases for protocol"
+* Include a description of what your change intends to do. Have clear commit messages, e.g., "Add feature", "Fix issue", "Add test cases for protocol"
 * Follow the code conventions of the existing code.
 * Include the update to the specific document if you add new cases or new configurations.
 	* If a new test case is added to a test suite, the corresponding test design specification must be updated.
