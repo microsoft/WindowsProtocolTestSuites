@@ -703,7 +703,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                             CapsVersions.RDPGFX_CAPVERSION_103, 
                             CapsVersions.RDPGFX_CAPVERSION_104, 
                             CapsVersions.RDPGFX_CAPVERSION_105, 
-                            CapsVersions.RDPGFX_CAPVERSION_106, 
+                            CapsVersions.RDPGFX_CAPVERSION_106,
+                            CapsVersions.RDPGFX_CAPVERSION_107,
                             adv.capsSets[index].version, 
                             index);
                         break;
