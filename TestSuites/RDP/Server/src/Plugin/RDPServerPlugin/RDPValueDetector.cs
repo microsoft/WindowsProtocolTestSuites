@@ -147,6 +147,9 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
 
                 logWriter.AddLog(DetectLogLevel.Information, "Detect Client HostName...");
 
+                config = new Configs();
+                config.LoadDefaultValues();
+                
                 // set config if properties changed
                 config.ServerName = properties[RDPValueDetector.ServerName];
                 config.ServerDomain = properties[RDPValueDetector.ServerDomain];

@@ -19,10 +19,17 @@ if ([string]::IsNullOrEmpty($OutDir)) {
 
 $CommonScripts ="Disable_Firewall.ps1","Enable-WinRM.ps1","Set-AutoLogon.ps1","RestartAndRunFinish.ps1","RestartAndRun.ps1","TurnOff-FileReadonly.ps1"
 
-
 if(Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
+
+$PluginDir = "$OutDir/Plugin"
+New-Item -ItemType Directory $PluginDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/RDP/Server/src/Plugin/RDPServerPlugin/*.xml" -Destination $PluginDir -Recurse -Force
+
+$TargetDir = "$PluginDir/doc"
+New-Item -ItemType Directory $TargetDir -Force
+Copy-Item "$TestSuiteRoot/TestSuites/RDP/Server/src/Plugin/RDPServerPlugin/Docs/*" -Destination $TargetDir -Recurse -Force
 
 New-Item -ItemType Directory $OutDir/Batch -Force
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Server/src/Batch/*" -Destination "$OutDir/Batch/" -Recurse -Force
