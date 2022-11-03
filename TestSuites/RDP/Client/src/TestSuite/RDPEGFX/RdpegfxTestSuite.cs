@@ -257,13 +257,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                     {
                         this.isH264AVC420Supported = true;
                     }
-                    else if (capSet.version == CapsVersions.RDPGFX_CAPVERSION_10
+                    else if ((capSet.version == CapsVersions.RDPGFX_CAPVERSION_10
                         || capSet.version == CapsVersions.RDPGFX_CAPVERSION_102
                         || capSet.version == CapsVersions.RDPGFX_CAPVERSION_103
                         || capSet.version == CapsVersions.RDPGFX_CAPVERSION_104
                         || capSet.version == CapsVersions.RDPGFX_CAPVERSION_105
                         || capSet.version == CapsVersions.RDPGFX_CAPVERSION_106
-
+                        || capSet.version == CapsVersions.RDPGFX_CAPVERSION_107)
                         && (flag & CapsFlags.RDPGFX_CAPS_FLAG_AVC_DISABLED) == 0)
                     {
                         this.isH264AVC420Supported = true;
