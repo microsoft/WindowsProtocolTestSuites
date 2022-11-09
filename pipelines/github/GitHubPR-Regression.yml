@@ -109,7 +109,7 @@ stages:
     dependsOn: Build_Test_Suite
     condition: and(succeeded(), eq(variables['test.runRegression'], true))
     pool:
-      name: Azure Agents
+      name: GitHubPRESPool
     jobs:
       - job:
         displayName: Run Regression
