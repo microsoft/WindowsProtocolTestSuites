@@ -66,7 +66,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             Total = testResult.Total;
 
-            Total = testResult.NotRun;
+            NotRun = testResult.NotRun;
 
             Passed = testResult.Passed;
 

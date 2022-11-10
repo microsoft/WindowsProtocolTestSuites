@@ -52,22 +52,22 @@ const DefaultNavSteps: StepNavItemInfo[] = [
     IsEnabled: false
   },
   {
-    Caption: 'Filter Test Case',
+    Caption: 'Filter Test Cases',
     TargetStep: RunSteps.FILTER_TEST_CASE,
     IsEnabled: false
   },
   {
-    Caption: 'Configure Test Case',
+    Caption: 'Configure Test Cases',
     TargetStep: RunSteps.CONFIGURE_TEST_CASE,
     IsEnabled: false
   },
   {
-    Caption: 'Configure Adapter',
+    Caption: 'Configure Adapters',
     TargetStep: RunSteps.CONFIGURE_ADAPTER,
     IsEnabled: false
   },
   {
-    Caption: 'Run Selected Test Case',
+    Caption: 'Run Selected Test Cases',
     TargetStep: RunSteps.RUN_SELECTED_TEST_CASE,
     IsEnabled: false
   }
