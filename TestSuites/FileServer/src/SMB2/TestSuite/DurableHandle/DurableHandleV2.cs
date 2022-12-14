@@ -154,6 +154,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     {
                         LeaseKey = leaseKey,
                         LeaseState = leaseState,
+                        Epoch = GetCreateResponseEpoch(serverCreateContexts),
                     }
                 },
                 shareAccess: ShareAccess_Values.NONE);
@@ -331,6 +332,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     {
                         LeaseKey = leaseKey,
                         LeaseState = leaseState,
+                        Epoch = GetCreateResponseEpoch(serverCreateContexts),
                     }
                 },
                 shareAccess: ShareAccess_Values.NONE,
@@ -789,6 +791,29 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         #endregion
 
         #region private method
+
+        private ushort GetCreateResponseEpoch(Smb2CreateContextResponse[] createContextResponses)
+        {
+            ushort leaseEpoch = 0;
+
+            if(createContextResponses != null)
+            {
+                foreach(Smb2CreateContextResponse response in createContextResponses)
+                {
+                    if(response is Smb2CreateResponseLeaseV2)
+                    {
+                        //If Connection.Dialect belongs to the SMB 3.x dialect family, the Epoch field MUST be set to 
+                        //File.LeaseEpoch of the file being opened.
+                        Smb2CreateResponseLeaseV2 clientResponseLease = response as Smb2CreateResponseLeaseV2;
+                        leaseEpoch = clientResponseLease.Epoch;
+                        break;
+                    }
+                }
+            }
+            
+            return leaseEpoch;
+        }
+
         private void DurableHandleV2_Reconnect_WithLeaseV1(bool sameFileName, bool persistent = false)
         {
             #region Check Applicability
@@ -987,7 +1012,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 new Smb2CreateRequestLeaseV2
                 {
                     LeaseKey = Guid.NewGuid(),
-                    LeaseState = leaseState
+                    LeaseState = leaseState,
+                    Epoch = GetCreateResponseEpoch(serverCreateContexts),
                 }
             };
             status = clientAfterDisconnection.Create(
