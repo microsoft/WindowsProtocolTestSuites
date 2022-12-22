@@ -244,7 +244,12 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Adts.Samr
         /// <summary>
         /// Specify that requested operation doesn't complete successfully.
         /// </summary>
-        STATUS_ERROR = 0xFFFFF, 
+        STATUS_ERROR = 0xFFFFF,
+
+        /// <summary>
+        /// Specify that an invalid parameter was passed to a service or function
+        /// </summary>
+        STATUS_INVALID_PARAMETER = 0xC000000D,
 
         /// <summary>
         /// Specify that requester has requested access to an object, but has not 
