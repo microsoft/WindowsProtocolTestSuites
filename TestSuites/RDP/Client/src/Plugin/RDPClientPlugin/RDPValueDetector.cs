@@ -310,6 +310,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
             caseList.Add(CreateRule("Specific Requirements.DeviceNeeded", false));
             caseList.Add(CreateRule("Specific Requirements.Interactive", false));
+            caseList.Add(CreateRule("Specific Requirements.NoDeviceNeeded", true));
+            caseList.Add(CreateRule("Specific Requirements.NonInteractive", true));            
 
             caseList.Add(CreateRule("Enable Supported Feature.AutoReconnect", detectionInfo.IsSupportAutoReconnect));
             caseList.Add(CreateRule("Enable Supported Feature.FastPathInput", true));
@@ -324,6 +326,9 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 bothSupportSVCAndEFS = true;
             }
             caseList.Add(CreateRule("Enable Supported Feature.StaticVirtualChannel", bothSupportSVCAndEFS));
+
+            caseList.Add(CreateRule("Enable Supported Feature.BasicRequirement", true));
+            caseList.Add(CreateRule("Enable Supported Feature.BasicFeature", true));
 
             return caseList;
         }

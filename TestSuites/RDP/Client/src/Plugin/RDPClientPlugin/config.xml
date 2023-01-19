@@ -108,6 +108,14 @@
       <Rule name = "RDSTLSAuthentication">
         <Category name = "RDSTLSAuthentication"/>
       </Rule>
+
+      <Rule name = "BasicRequirement">
+        <Category name = "BasicRequirement"/>
+      </Rule>
+
+      <Rule name = "BasicFeature">
+        <Category name = "BasicFeature"/>
+      </Rule>            
     </Group>
 
     <Group name="Specific Requirements" type="Remover">
@@ -118,6 +126,14 @@
       <Rule name = "DeviceNeeded">
         <Category name = "DeviceNeeded"/>
       </Rule>
+
+      <Rule name = "NonInteractive">
+        <Category name = "!Interactive"/>
+      </Rule>
+
+      <Rule name = "NoDeviceNeeded">
+        <Category name = "!DeviceNeeded"/>
+      </Rule>      
     </Group>
   </ConfigCaseRule>
 </Config>
