@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Security.Authentication;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -33,7 +34,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public requestedProtocols_Values requestProtocol;
         public Version rdpVersion;
         public bool isEDYCSupported;
-
+        public string windowsOSVersion;
+        public int windowsOSBuildNumber = 0;
         public bool isELESupported;
         public bool issueTemporaryLicenseForTheFirstTime;
 
@@ -112,6 +114,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             PtfPropUtility.GetBoolPtfProperty(Site, "RDPEDYCSupported", out isEDYCSupported);
             PtfPropUtility.GetBoolPtfProperty(Site, "RDPELESupported", out isELESupported);
             PtfPropUtility.GetBoolPtfProperty(Site, "IssueTemporaryLicenseForTheFirstTime", out issueTemporaryLicenseForTheFirstTime);
+            
+            PtfPropUtility.GetStringPtfProperty(Site, "RDP.WindowsVersion", out windowsOSVersion);
+            string stringBuildNumber = windowsOSVersion.Split(":")[1].Trim();
+            int.TryParse(stringBuildNumber, out windowsOSBuildNumber);
 
             if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.Version", out tempStr))
             {
@@ -202,6 +208,18 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 AssumeFailForInvalidPtfProp("RDP.Security.Protocol");
             }
 
+            if (windowsOSVersion.Contains("Microsoft Windows Server") && windowsOSBuildNumber >= 19042)
+            {
+                requestProtocol = requestedProtocols_Values.PROTOCOL_SSL_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_FLAG | requestedProtocols_Values.PROTOCOL_HYBRID_EX;
+                if (isNegotiationBased)
+                {
+                    transportProtocol = EncryptedProtocol.NegotiationCredSsp;
+                }
+                else
+                {
+                    transportProtocol = EncryptedProtocol.DirectCredSsp;
+                }
+            }
             #endregion
         }
 

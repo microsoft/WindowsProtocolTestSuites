@@ -96,6 +96,9 @@
     <!--The timeout used for multiple transport based on RDPEUDP.-->
     <Property name="MultiTransportTimeout" value="70"/>
 
+    <!--The timeout used for multiple transport based on RDPEUDP.-->
+    <Property name="RDP.WindowsVersion" value="Windows Server 2000"/>
+    
   </Properties>
   <Adapters>
   </Adapters>

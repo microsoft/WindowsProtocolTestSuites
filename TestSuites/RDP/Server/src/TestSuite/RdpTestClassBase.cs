@@ -57,7 +57,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         private void CheckPlatformCompatibility()
         {
             // Check CredSSP, which is currently only supported on Windows.
-            if (testConfig.transportProtocol == EncryptedProtocol.NegotiationCredSsp || testConfig.transportProtocol == EncryptedProtocol.DirectCredSsp)
+            if (testConfig.transportProtocol == EncryptedProtocol.NegotiationCredSsp || 
+                testConfig.transportProtocol == EncryptedProtocol.DirectCredSsp)
             {
                 if (!OperatingSystem.IsWindows())
                 {
@@ -66,6 +67,18 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
         }
         #endregion
+
+        /// <summary>
+        /// Check For Compatibility Of Operating System For Large Pointer Through Fast Path (Only Available From Server 2022).
+        /// </summary>
+        public void LargePointerCompatibility()
+        {
+            if (testConfig.windowsOSVersion.Contains("Windows Server") &&
+                testConfig.windowsOSBuildNumber < 20000)
+            {
+                BaseTestSite.Assume.Inconclusive("Large pointer capability is only supported on Windows Server 2022.");
+            }
+        }
 
         /// <summary>
         /// Trigger Resizing Of Pointer On Server To Larger Size.

@@ -43,6 +43,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 {
                     name = "RDP.Security.Protocol";
                 }
+                else if (String.Compare(p.Name.ToLower(), "windowsversion") == 0)
+                {
+                    name = "RDP.WindowsVersion";
+                }
                 else if (String.Compare(p.Name.ToLower(), "negotiation") == 0)
                 {
                     name = "RDP.Security.Negotiation";
@@ -83,6 +87,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
                 else if ((String.Compare(p.Name.ToLower(), "securityprotocol") == 0))
                 {
                     name = "RDP.Security.Protocol";
+                }
+                else if ((String.Compare(p.Name.ToLower(), "windowsversion") == 0))
+                {
+                    name = "RDP.WindowsVersion";
                 }
                 else if ((String.Compare(p.Name.ToLower(), "negotiation") == 0))
                 {

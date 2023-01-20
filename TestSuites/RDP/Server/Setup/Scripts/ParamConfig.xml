@@ -1,0 +1,23 @@
+<Parameters>
+	<Parameter Name="LogPath" Value=".\..\Logs" Comment="If no log file path specified, this value should be used." />
+	<Parameter Name="LogFile" Value=".\..\Logs\Config-DriverComputer.ps1.log" Comment="If no log file specified, this value should be used." />
+	<Parameter Name="userNameInTC" Value="Administrator" Comment="User name in terminal client." />
+	<Parameter Name="userPwdInTC" Value="Password01!" Comment="User password in terminal client." />
+	<Parameter Name="CredSSPUser" Value="Administrator" Comment="User name used in CredSSP authentication. Should be a memeber of RDP User Group on Drive Computer." />
+	<Parameter Name="CredSSPPwd" Value="Password01!" Comment="User password of CredSSPUser." />
+	<Parameter Name="domainName" Value="contoso.com" Comment="Domain Name in test environment." />
+	<Parameter Name="dcComputerName" Value="DC01" Comment="The machine name of DC." />
+	<Parameter Name="tcComputerName" Value="SUT01" Comment="The machine name or ip address of terminal client." />
+	<Parameter Name="driverComputerName" Value="DriverComputer" Comment="The machine name or ip address of driver computer." />
+	<Parameter Name="RDPListeningPort" Value="3389" Comment="The listening port of driver computer." />
+	<Parameter Name="ipVersion" Value="IPv4" Comment="The ip version used in test enviornment, can be IPv4 or IPv6." />
+	<Parameter Name="securityProtocol" Value="TLS" Comment="The security protocol used to establish RDP connection, can be TLS, CredSSP, or RDP." />
+	<Parameter Name="negotiationBasedApproach" Value="True" Comment="Whether the connection sequence is Negotiation-Based Approach or Direct Approach." />
+	<Parameter Name="osVersion" Value="Windows" Comment="The operating system of terminal client.It can be set to Windows or NonWindows." />
+	<Parameter Name="RDPVersion" Value="8.1" Comment="The version of the RDP intends to test, it should be one of 7.0, 7.1, 8.0, 8.1." />
+	<Parameter Name="workgroupDomain" Value="Workgroup" Comment="Indicates the test environment is in Domain or Workgroup." />
+	<Parameter Name="tcSystemDrive" Value="C" Comment="The system drive of terminal client. A example is C." />
+	<Parameter Name="compressionInTC" Value="No" Comment="Whether compression is used in terminal client" />
+	<Parameter Name="agentPort" Value="4488" Comment="The listening port of SUT Agent." />
+	<Parameter Name="agentRemoteClient" Value="mstsc" Comment="The RDP client name used by SUT Agent, e. g. mstsc or xfreerdp." />
+</Parameters>

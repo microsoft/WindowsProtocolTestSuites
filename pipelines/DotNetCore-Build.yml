@@ -30,6 +30,6 @@ jobs:
   workspace:
     clean: false
   timeoutInMinutes: 0
-  condition: and(succeeded(), eq(variables['test.testSuiteName'], 'RDPClient'))
+  condition: and(succeeded(), or(eq(variables['test.testSuiteName'], 'RDPClient'), eq(variables['test.testSuiteName'], 'RDPServer')))
   steps:
   - template: pipelines/build/DotNetCore-Build-RDPSUTControlAgent-steps.yml@template
