@@ -25,6 +25,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             AddResultItem(ref protocolItems, "MS-RDPEI", detectionInfo.IsSupportRDPEI);
             AddResultItem(ref protocolItems, "MS-RDPEMT", detectionInfo.IsSupportRDPEMT);
             AddResultItem(ref protocolItems, "MS-RDPEUDP", detectionInfo.IsSupportRDPEUDP);
+            AddResultItem(ref protocolItems, "MS-RDPEUDP2", detectionInfo.IsSupportRDPEUDP2);
             AddResultItem(ref protocolItems, "MS-RDPEUSB", detectionInfo.IsSupportRDPEUSB);
             AddResultItem(ref protocolItems, "MS-RDPEVOR", detectionInfo.IsSupportRDPEVOR);
             AddResultItem(ref protocolItems, "MS-RDPRFX", detectionInfo.IsSupportRDPRFX);

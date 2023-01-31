@@ -44,6 +44,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public bool? IsSupportRDPEFS;
         public bool? IsSupportRDPRFX;
         public bool? IsSupportRDPEUDP;
+        public bool? IsSupportRDPEUDP2;
         public bool? IsSupportRDPEMT;
 
         public string RdpVersion;

@@ -303,6 +303,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
             caseList.Add(CreateRule("Protocol.RDPEMT", isSupportMultitransport));
             caseList.Add(CreateRule("Protocol.RDPEUDP", isSupportMultitransport));
+            caseList.Add(CreateRule("Protocol.RDPEUDP2", detectionInfo.IsSupportRDPEUDP2));
             caseList.Add(CreateRule("Protocol.RDPEUSB", detectionInfo.IsSupportRDPEUSB));
             caseList.Add(CreateRule("Protocol.RDPEVOR", detectionInfo.IsSupportRDPEVOR));
 

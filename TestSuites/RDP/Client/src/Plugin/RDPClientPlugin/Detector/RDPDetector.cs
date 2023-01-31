@@ -17,6 +17,8 @@ using System.IO;
 using System.Diagnostics;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpeudp;
+using System.Security.Policy;
 
 namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 {
@@ -65,6 +67,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public readonly string SUTShellControlScriptLocation;
 
         #endregion Variables
+        
         #region Constructor
 
         public RDPDetector(DetectionInfo detectInfo, DetectLogger logger, string testSuitePath)
@@ -261,22 +264,93 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 && CreateEDYCChannel(RDPDetector.RdpevorControlChannelName)
                 && CreateEDYCChannel(RDPDetector.RdpevorDataChannelName));
 
-
+            detectInfo.IsSupportRDPEMT = false;
+            detectInfo.IsSupportRDPEUDP = false;
+            detectInfo.IsSupportRDPEUDP2 = false;
             if (detectInfo.IsSupportStaticVirtualChannel != null && detectInfo.IsSupportStaticVirtualChannel.Value
                 && ((detectInfo.IsSupportTransportTypeUdpFECR != null && detectInfo.IsSupportTransportTypeUdpFECR.Value)
                 || (detectInfo.IsSupportTransportTypeUdpFECL != null && detectInfo.IsSupportTransportTypeUdpFECL.Value)))
             {
                 detectInfo.IsSupportRDPEMT = true;
                 detectInfo.IsSupportRDPEUDP = true;
+                detectInfo.IsSupportRDPEUDP2 = CheckSupportForRDPEUDP2(detectInfo);
             }
-            else
-            {
-                detectInfo.IsSupportRDPEMT = false;
-                detectInfo.IsSupportRDPEUDP = false;
-            }
+
             // Notify the UI for detecting protocol supported finished
             logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
             logWriter.AddLog(DetectLogLevel.Information, "Check specified protocols support finished.");
+        }
+
+        private bool CheckSupportForRDPEUDP2(DetectionInfo detectInfo)
+        {
+            logWriter.AddLog(DetectLogLevel.Information, "Checking for RDPEUDP2 support");
+
+            // Start UDP listening.
+            var autoHandle = false;
+            var endPoint = new IPEndPoint(IPAddress.Parse(LocalIPAddress()), detectInfo.RDPServerPort);
+            logWriter.AddLog(DetectLogLevel.Information, $"IP, Port -> {endPoint.ToString()}, {detectInfo.RDPServerPort}");
+
+            var rdpeudpServer = new RdpeudpServer(endPoint, autoHandle);
+            rdpeudpServer.UnhandledExceptionReceived += (ex) =>
+            {
+                logWriter.AddLog(DetectLogLevel.Warning, $"Unhandled exception from RdpeudpServer: {ex}");
+            }; 
+            rdpeudpServer.Start();
+
+            // Create a UDP socket.
+            uint requestId = 1;
+            var udpTransportMode = TransportMode.Reliable;
+
+            // Send a Server Initiate Multitransport Request PDU.
+            byte[] securityCookie = new byte[16];
+            Random rnd = new Random();
+            rnd.NextBytes(securityCookie);
+            Multitransport_Protocol_value requestedProtocol = Multitransport_Protocol_value.INITITATE_REQUEST_PROTOCOL_UDPFECR;
+            if (udpTransportMode == TransportMode.Lossy)
+            {
+                requestedProtocol = Multitransport_Protocol_value.INITITATE_REQUEST_PROTOCOL_UDPFECL;
+            }
+
+            Server_Initiate_Multitransport_Request_PDU requestPDU = rdpbcgrServerStack.CreateServerInitiateMultitransportRequestPDU(sessionContext, requestId, requestedProtocol, securityCookie);
+            SendPdu(requestPDU);
+
+            var sutIP = GetHostIP(detectInfo.SUTName);
+            logWriter.AddLog(DetectLogLevel.Information, $"IP 2 is {sutIP.ToString()}");
+            logWriter.AddLog(DetectLogLevel.Information, $"UDP transport mode is {udpTransportMode}");
+            RdpeudpServerSocket rdpeudpSocket = rdpeudpServer.CreateSocket(sutIP, udpTransportMode, timeout);
+            if (rdpeudpSocket == null)
+            {
+                logWriter.AddLog(DetectLogLevel.Warning, $"Failed to create a UDP socket for the Client : {endPoint.Address}"); 
+                
+                return false;
+            }             
+            
+            // Expect a SYN packet.
+            RdpeudpPacket synPacket = rdpeudpSocket.ExpectSynPacket(timeout);
+            if (synPacket == null)
+            {
+                logWriter.AddLog(DetectLogLevel.Warning, "Timeout when waiting for the SYN packet"); 
+                
+                return false;
+            }
+            else
+            {
+                // Verify the SYN packet.
+                //Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported. 
+                if (synPacket.SynDataEx == null)
+                {
+                    logWriter.AddLog(DetectLogLevel.Information, "SynDataEx is null. RDPEUDP2 not supported");
+
+                    return false;
+                }
+                else
+                {
+                    //Supported.
+                    logWriter.AddLog(DetectLogLevel.Information, "SynDataEx available. RDPEUDP2 supported");
+
+                    return true;
+                }
+            }
         }
 
         private void SetRdpVersion()
