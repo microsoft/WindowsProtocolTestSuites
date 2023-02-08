@@ -79,7 +79,7 @@ export function ConfigureTestCase (props: StepWizardProps) {
                 propertyGroups.propertyGroups.map((propertyGroup, index) => {
                   return (
                     <div key={index} style={{ alignSelf: 'start' }}>
-                      <Link style={{ fontSize: 'large', fontWeight: 'bold', color: propertyGroups.editingPropertyGroupIndex === index ? '#0078D4' : '#737271' }}
+                      <Link style={{ fontSize: 'large', fontWeight: 'bold', color: propertyGroups.editingPropertyGroupIndex === index ? '#005A9E' : '#525251' }}
                         disabled={propertyGroups.editingPropertyGroupIndex === index}
                         onClick={() => onEditingPropertyGroupChange(index)}>
                         {propertyGroup.Name}

@@ -180,20 +180,20 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
 const getTestCaseStateColor = (kind: TestCaseState | 'Total') => {
   switch (kind) {
     case 'Passed':
-      return 'green'
+      return '#005700'
 
     case 'Failed':
-      return '#e50000'
+      return '#8A0000'
 
     case 'Inconclusive':
-      return 'orange'
+      return '#7A5000'
 
     case 'NotRun':
-      return 'grey'
+      return '#545454'
 
     case 'Total':
     default:
-      return 'black'
+      return '#000000'
   }
 }
 
@@ -204,16 +204,16 @@ const renderCount = (kind: TestCaseState | 'Total', count: number | undefined) =
 const getTestResultStateColor = (kind: TestResultState) => {
   switch (kind) {
     case 'Created':
-      return 'grey'
+      return '#525252'
 
     case 'Running':
-      return 'black'
+      return '#000000'
 
     case 'Finished':
-      return 'green'
+      return '#006600'
 
     case 'Failed':
-      return '#e50000'
+      return '#B30000'
   }
 }
 

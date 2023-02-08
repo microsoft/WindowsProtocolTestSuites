@@ -89,11 +89,11 @@ const lineHeader = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[(?<kind>\w+)\]/
 
 const getLineBackgroundColor = (kind: string) => {
   if (kind.includes('Failed')) {
-    return 'red'
+    return '#FF9E9E'
   } else if (kind.includes('Inconclusive')) {
-    return 'yellow'
+    return '#FFFF00'
   } else if (kind.includes('Succeeded')) {
-    return '#008c00'
+    return '#61FF61'
   }
 
   return 'transparent'

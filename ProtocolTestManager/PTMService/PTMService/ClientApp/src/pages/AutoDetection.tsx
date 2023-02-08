@@ -37,11 +37,11 @@ import { DetectionResultActions } from '../actions/DetectionResultAction'
 
 const getStyle = (status: DetectionStepStatus): CSSProperties => {
   if (status === 'Failed' || status === 'Cancelled') {
-    return { paddingLeft: 5, color: '#e50000' }
+    return { paddingLeft: 5, color: '#a30000' }
   } else if (status === 'Finished') {
-    return { paddingLeft: 5, color: 'green' }
+    return { paddingLeft: 5, color: '#006100' }
   } else if (status === 'Detecting' || status === 'Canceling') {
-    return { paddingLeft: 5, color: 'blue' }
+    return { paddingLeft: 5, color: '#0000ff' }
   } else {
     return { paddingLeft: 5 }
   }
