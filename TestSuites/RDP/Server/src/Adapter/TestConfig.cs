@@ -116,7 +116,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             PtfPropUtility.GetBoolPtfProperty(Site, "IssueTemporaryLicenseForTheFirstTime", out issueTemporaryLicenseForTheFirstTime);
             
             PtfPropUtility.GetStringPtfProperty(Site, "RDP.WindowsVersion", out windowsOSVersion);
-            string stringBuildNumber = windowsOSVersion.Split(":")[1].Trim();
+
+            //Default Windows Server 2000 Build Number
+            string stringBuildNumber = "2195";
+            var versionSplitArray = windowsOSVersion.Split(":");
+
+            if (versionSplitArray.Length > 1)
+            {
+                stringBuildNumber = versionSplitArray[1].Trim();
+            }
+
             int.TryParse(stringBuildNumber, out windowsOSBuildNumber);
 
             if (PtfPropUtility.GetStringPtfProperty(Site, "RDP.Version", out tempStr))
