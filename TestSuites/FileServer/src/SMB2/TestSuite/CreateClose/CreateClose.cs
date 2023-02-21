@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
@@ -47,6 +48,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             sharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
+            CheckTestOverQUIC();
         }
 
         protected override void TestCleanup()
@@ -60,6 +62,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                 client2.Disconnect();
             }
             base.TestCleanup();
+        }
+
+        private void CheckTestOverQUIC()
+        {
+            List<string> testList = new List<string> {
+                 "CreateClose_InvalidSymbolicLink", "CreateClose_SymbolicLinkAtLast", "CreateClose_SymbolicLinkInMiddle"
+            };
+
+            if (TestConfig.UnderlyingTransport == Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName))
+            {
+                BaseTestSite.Assert.Inconclusive("Ignoring test {0} when transport is QUIC", CurrentTestCaseName);
+            }
         }
         #endregion
 
@@ -115,7 +129,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                 FileNameType.ExistedValidFileName,
                 true); //Valid AccessMask
         }
-
+        
         [TestMethod]
         [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.CreateClose)]
@@ -166,7 +180,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                 FileNameType.InvalidSymbolicLink,
                 true); //Valid AccessMask
         }
-
+        
         [TestMethod]
         [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.CreateClose)]

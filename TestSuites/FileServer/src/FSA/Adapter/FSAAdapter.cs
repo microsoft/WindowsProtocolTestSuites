@@ -415,7 +415,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.transAdapter.UserName = testConfig.UserName;
             this.transAdapter.Timeout = testConfig.Timeout;
             this.transAdapter.Reset();
-
             CleanTestFiles();
         }
 
@@ -605,7 +604,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             "IoCtlRequestTestCaseS70",
             "IoCtlRequestTestCaseS74",
             "IoCtlRequestTestCaseS60",
-            "IoCtlRequestTestCaseS72"
+            "IoCtlRequestTestCaseS72",
+            "IoCtlRequestTestCaseS54",
+            "IoCtlRequestTestCaseS48",
+            "IoCtlRequestTestCaseS50"
         };
 
         private void CheckIncompatibleTestOverQUIC()
