@@ -6971,7 +6971,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.10 clients
         /// </summary>
-        V13 = 0x0008000F
+        V13 = 0x0008000F,
+
+        /// <summary>
+        /// RDP 10.11 clients
+        /// </summary>
+        V14 = 0x00080010
     }
 
     /// <summary>
@@ -7227,6 +7232,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// Indicates that the client supports the Heartbeat PDU (section 2.2.16.1).
         /// </summary>
         RNS_UD_CS_SUPPORT_HEARTBEAT_PDU = 0x0400,
+
+        /// <summary>
+        /// Indicates that the client supports skipping the MCS Channel Join Request PDUs (section 2.2.1.8) and MCS Channel Join Confirm PDUs (section 2.2.1.9) in the Channel Connection phase of the RDP Connection Sequence (section 1.3.1.1).
+        /// </summary>
+        RNS_UD_CS_SUPPORT_SKIP_CHANNELJOIN = 0x0800,
     }
 
     /// <summary>
@@ -7925,7 +7935,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.10 servers
         /// </summary>
-        V13 = 0x0008000F
+        V13 = 0x0008000F,
+
+        /// <summary>
+        /// RDP 10.11 servers
+        /// </summary>
+        V14 = 0x00080010
     }
 
     /// <summary>

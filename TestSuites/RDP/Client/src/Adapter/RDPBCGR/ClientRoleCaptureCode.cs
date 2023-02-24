@@ -669,7 +669,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
 
             ushort earlyCapabilityFlags = (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_ERRINFO_PDU | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_WANT_32BPP_SESSION
                 | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_STATUSINFO_PDU | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_STRONG_ASYMMETRIC_KEYS | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_UNUSED | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_VALID_CONNECTION_TYPE | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_MONITOR_LAYOUT_PDU
-                | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_NETWORK_AUTODETECT | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_DYNVC_GFX_PROTOCOL | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_DYNAMIC_TIME_ZONE | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_HEARTBEAT_PDU;
+                | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_NETWORK_AUTODETECT | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_DYNVC_GFX_PROTOCOL | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_DYNAMIC_TIME_ZONE | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_HEARTBEAT_PDU | (ushort)earlyCapabilityFlags_Values.RNS_UD_CS_SUPPORT_SKIP_CHANNELJOIN;
             ushort negEarlyCapabilityFlags = (ushort)~earlyCapabilityFlags;
             isValidValue = ((ushort)core.earlyCapabilityFlags.actualData & negEarlyCapabilityFlags) == 0;
 
