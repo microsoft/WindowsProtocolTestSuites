@@ -69,7 +69,7 @@ $IsFindNode = $false
 $ifFileExist = Test-Path $sourceFileName
 if($ifFileExist -eq $true)
 {
-    attrib -R $sourceFileName
+    #attrib -R $sourceFileName
     
     [xml]$configContent = Get-Content $sourceFileName
     $PropertyNodes = $configContent.GetElementsByTagName("Property")
@@ -93,7 +93,7 @@ if($ifFileExist -eq $true)
         Throw "Config failed: Can't find the node whoes name attribute is $nodeName" 
     }
 
-    attrib +R $sourceFileName
+    #attrib +R $sourceFileName
 }
 else
 {

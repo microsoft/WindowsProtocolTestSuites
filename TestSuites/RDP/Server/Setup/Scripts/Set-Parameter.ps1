@@ -78,7 +78,7 @@ if($fileExist -eq $false)
 }
 else
 {
-    attrib.exe $sourceFileName -R
+    #attrib.exe $sourceFileName -R
     [xml]$content = Get-Content $sourceFileName
 
     if($content -eq $NULL -or $content.Parameters -eq $NULL -or $content.Parameters -eq "")
