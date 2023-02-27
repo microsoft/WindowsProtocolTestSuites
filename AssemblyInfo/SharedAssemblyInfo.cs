@@ -5,4 +5,4 @@ using System.Reflection;
 
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("Windows Protocol Test Suites")]
-[assembly: AssemblyVersion("4.22.9.0")]
+[assembly: AssemblyVersion("4.23.3.0")]
