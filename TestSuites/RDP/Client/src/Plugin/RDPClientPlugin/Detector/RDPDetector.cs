@@ -283,6 +283,8 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private bool CheckSupportForRDPEUDP2(DetectionInfo detectInfo)
         {
+            var result = false;
+
             logWriter.AddLog(DetectLogLevel.Information, "Checking for RDPEUDP2 support");
 
             // Start UDP listening.
@@ -322,35 +324,42 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             {
                 logWriter.AddLog(DetectLogLevel.Warning, $"Failed to create a UDP socket for the Client : {endPoint.Address}"); 
                 
-                return false;
+                result = false;
             }             
-            
-            // Expect a SYN packet.
-            RdpeudpPacket synPacket = rdpeudpSocket.ExpectSynPacket(timeout);
-            if (synPacket == null)
-            {
-                logWriter.AddLog(DetectLogLevel.Warning, "Timeout when waiting for the SYN packet"); 
-                
-                return false;
-            }
             else
             {
-                // Verify the SYN packet.
-                //Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported. 
-                if (synPacket.SynDataEx == null)
+                // Expect a SYN packet.
+                RdpeudpPacket synPacket = rdpeudpSocket.ExpectSynPacket(timeout);
+                if (synPacket == null)
                 {
-                    logWriter.AddLog(DetectLogLevel.Information, "SynDataEx is null. RDPEUDP2 not supported");
+                    logWriter.AddLog(DetectLogLevel.Warning, "Timeout when waiting for the SYN packet");
 
-                    return false;
+                    result = false;
                 }
                 else
                 {
-                    //Supported.
-                    logWriter.AddLog(DetectLogLevel.Information, "SynDataEx available. RDPEUDP2 supported");
+                    // Verify the SYN packet.
+                    //Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported. 
+                    if (synPacket.SynDataEx == null)
+                    {
+                        logWriter.AddLog(DetectLogLevel.Information, "SynDataEx is null. RDPEUDP2 not supported");
 
-                    return true;
+                        result = false;
+                    }
+                    else
+                    {
+                        //Supported.
+                        logWriter.AddLog(DetectLogLevel.Information, "SynDataEx available. RDPEUDP2 supported");
+
+                        result = true;
+                    }
                 }
             }
+
+            rdpeudpServer?.Stop();
+            rdpeudpSocket?.Close();
+
+            return result;
         }
 
         private void SetRdpVersion()
