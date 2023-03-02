@@ -66,7 +66,7 @@ Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/TestSuite/RDPEGFX/H264TestD
 
 Copy-Item  "$TestSuiteRoot/TestSuites/RDP/Client/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force
 
-dotnet publish "$TestSuiteRoot/TestSuites/RDP/Client/src/RDP_Client.sln" -c $Configuration -o $OutDir/Bin
+dotnet publish "$TestSuiteRoot/TestSuites/RDP/Client/src/RDP_Client.sln" -c $Configuration --property:PublishDir=$OutDir/Bin
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to build RDP Client test suite"

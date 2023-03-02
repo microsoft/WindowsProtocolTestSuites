@@ -51,13 +51,13 @@ Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/src/Data/*" -Destination "$OutD
 
 Copy-Item  "$TestSuiteRoot/TestSuites/FileServer/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force
 
-dotnet publish "$TestSuiteRoot/TestSuites/FileServer/ShareUtil/ShareUtil.sln" -c $Configuration -o $OutDir/Utils
+dotnet publish "$TestSuiteRoot/TestSuites/FileServer/ShareUtil/ShareUtil.sln" -c $Configuration --property:PublishDir=$OutDir/Utils
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to build ShareUtil tool"
     exit 1
 }
 
-dotnet publish "$TestSuiteRoot/TestSuites/FileServer/src/FileServer.sln" -c $Configuration -o $OutDir/Bin
+dotnet publish "$TestSuiteRoot/TestSuites/FileServer/src/FileServer.sln" -c $Configuration --property:PublishDir=$OutDir/Bin
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to build FileServer test suite"
     exit 1

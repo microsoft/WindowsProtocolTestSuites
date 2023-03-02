@@ -47,7 +47,7 @@ Copy-Item  "$TestSuiteRoot/TestSuites/MS-WSP/Setup/Data/*" -Destination "$OutDir
 
 Copy-Item  "$TestSuiteRoot/TestSuites/MS-WSP/src/Deploy/LICENSE.rtf" -Destination "$OutDir/LICENSE.rtf" -Recurse -Force
 
-dotnet publish "$TestSuiteRoot/TestSuites/MS-WSP/src/MS-WSP_Server.sln" -c $Configuration -o $OutDir/Bin
+dotnet publish "$TestSuiteRoot/TestSuites/MS-WSP/src/MS-WSP_Server.sln" -c $Configuration --property:PublishDir=$OutDir/Bin
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to build MS-WSP test suite"
     exit 1
