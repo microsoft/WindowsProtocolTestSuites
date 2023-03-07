@@ -651,7 +651,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endOfFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endOfFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS ||
+                this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+	        // Allocation size is implementation-specific.
+                Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize,
+                                     $"The AllocationSize of the entry should be {allocationSize}.");
+            } else {
+                // OTHERFS -- Only demand 512-byte block alignment
+                Site.Assert.AreEqual(0, (entry.FileCommonDirectoryInformation.AllocationSize & 511),
+                                     $"The AllocationSize of the entry should be block-aligned.");
+            }
+
         }
 
         /// <summary>
@@ -671,7 +682,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS ||
+                this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+	        // Allocation size is implementation-specific.
+                Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize,
+                                     $"The AllocationSize of the entry should be {allocationSize}.");
+            } else {
+                // OTHERFS -- Only demand 512-byte block alignment
+                Site.Assert.AreEqual(0, (entry.FileCommonDirectoryInformation.AllocationSize & 511),
+                                     $"The AllocationSize of the entry should be block-aligned.");
+            }
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
         }
 
@@ -692,7 +713,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS ||
+                this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+	        // Allocation size is implementation-specific.
+                Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize,
+                                     $"The AllocationSize of the entry should be {allocationSize}.");
+            } else {
+                // OTHERFS -- Only demand 512-byte block alignment
+                Site.Assert.AreEqual(0, (entry.FileCommonDirectoryInformation.AllocationSize & 511),
+                                     $"The AllocationSize of the entry should be block-aligned.");
+            }
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
         }
 
@@ -714,10 +745,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
-            Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
-            Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
-            Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS ||
+                this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+	        // Allocation size is implementation-specific.
+                Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize,
+                                     $"The AllocationSize of the entry should be {allocationSize}.");
+                Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+	        // Short name is implementation-specific.
+                Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength,
+                          $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
+                Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength),
+                                     $"The ShortName of the entry should be \"{shortName}\".");
+            } else {
+                // OTHERFS -- Only demand 512-byte block alignment
+                Site.Assert.AreEqual(0, (entry.FileCommonDirectoryInformation.AllocationSize & 511),
+                                     $"The AllocationSize of the entry should be block-aligned.");
+                Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+                // OTHERFS -- don't know what the actual short name should be.
+            }
         }
 
         /// <summary>
@@ -738,10 +784,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
-            Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
-            Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
-            Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS ||
+                this.fsaAdapter.FileSystem == FileSystem.REFS)
+            {
+	        // Allocation size is implementation-specific.
+                Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize,
+                                     $"The AllocationSize of the entry should be {allocationSize}.");
+                Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+	        // Short name is implementation-specific.
+                Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength,
+                          $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
+                Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength),
+                                     $"The ShortName of the entry should be \"{shortName}\".");
+            } else {
+                // OTHERFS -- Only demand 512-byte block alignment
+                Site.Assert.AreEqual(0, (entry.FileCommonDirectoryInformation.AllocationSize & 511),
+                                     $"The AllocationSize of the entry should be block-aligned.");
+                Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+                // OTHERFS -- don't know what the actual short name should be.
+            }
         }
 
         /// <summary>
