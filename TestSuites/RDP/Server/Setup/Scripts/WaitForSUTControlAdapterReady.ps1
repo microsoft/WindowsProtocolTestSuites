@@ -8,31 +8,6 @@ Param(
 [string]$batchPath
 )
 
-# Run Task to start RDP connection remotely
-$pwdConverted = ConvertTo-SecureString $userPassword -AsPlainText -Force
-$cred = New-Object System.Management.Automation.PSCredential $userName, $pwdConverted -ErrorAction Stop
-$tryTime = 0
-while($tryTime -lt 10){
-	Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {cmd /c schtasks /run /TN Negotiate_RDPConnect}
-	start-sleep 5
-	$process = Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {Get-Process mstsc}
-	Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {taskkill /F /IM mstsc.exe}
-	if($process -ne $null -and $process.Name -eq "mstsc"){
-		Write-Host "$sutComputerIP task scheduler ready." -foregroundcolor Green
-        cmd /C ECHO MSTSC FINISHED > $env:HOMEDRIVE\mstsc.finished.signal
-		break
-	}
-	$tryTime++
-    Write-Host "$sutComputerIP task scheduler not ready. Try again." -foregroundcolor Red
-	start-sleep 300
-}
-if($tryTime -ge 10){
-	Write-Host "$sutComputerIP task scheduler Failed." -foregroundcolor Red
-    cmd /C ECHO MSTSC ERROR > $env:HOMEDRIVE\mstsc.error.signal
-}
-
-start-sleep 30
-
 # Run a case repeatedly to ensure SUT control adapter ready
 cd $batchPath
 
@@ -57,6 +32,9 @@ while($tryTime -lt $maxRetryTimes){
     }
     $tryTime++
     Write-Host "$sutComputerIP task scheduler not ready. Try again." -foregroundcolor Red
+    $pwdConverted = ConvertTo-SecureString $userPassword -AsPlainText -Force
+    $cred = New-Object System.Management.Automation.PSCredential $userName, $pwdConverted -ErrorAction Stop
+    Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {cmd /c schtasks /run /TN CSharpAgent}
     start-sleep 120
 }
 
