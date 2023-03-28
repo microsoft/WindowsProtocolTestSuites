@@ -34,7 +34,13 @@ while($tryTime -lt $maxRetryTimes){
     Write-Host "$sutComputerIP task scheduler not ready. Try again." -foregroundcolor Red
     $pwdConverted = ConvertTo-SecureString $userPassword -AsPlainText -Force
     $cred = New-Object System.Management.Automation.PSCredential $userName, $pwdConverted -ErrorAction Stop
-    Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {cmd /c schtasks /run /TN CSharpAgent}
+    $agentName = "CSharpAgent"
+    if(Test-Path -Path $env:HOMEDRIVE\AgentName){
+        Write-Host "$($env:HOMEDRIVE)\AgentName exist." -foregroundcolor Green
+        $agentName = Get-Content -Path $env:HOMEDRIVE\AgentName
+    }
+    Write-Host "AgentName is $agentName." -foregroundcolor Green
+    Invoke-Command -ComputerName $computer -credential $cred -ScriptBlock {param([string]$agentName) cmd /c schtasks /run /TN $agentName} -ArgumentList $agentName
     start-sleep 120
 }
 
