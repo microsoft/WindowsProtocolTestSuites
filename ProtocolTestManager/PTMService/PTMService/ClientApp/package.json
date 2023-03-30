@@ -23,11 +23,9 @@
     "history": "^4.10.1",
     "react": "^16.14.0",
     "react-checkbox-tree": "^1.7.2",
-    "react-devtools": "^4.17.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "5.0.1",
     "react-step-wizard": "^5.3.9",
     "reactstrap": "^8.9.0",
     "redux-devtools-extension": "^2.13.9",
@@ -53,6 +51,8 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "nan": "^2.15.0",
+    "react-devtools": "^4.27.4",    
+    "react-scripts": "5.0.1",
     "prettier": "2.2.1"
   },
   "scripts": {
