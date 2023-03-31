@@ -121,6 +121,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <returns>The test run Id.</returns>
         int CreateTestRun(int configurationId, string[] selectedTestCases);
 
+        /// Remove a test run.
+        /// </summary>
+        /// <param name="id">The test run Id.</param>
+        void RemoveTestRun(int id);
+
         /// <summary>
         /// Get the path to a test run report.
         /// </summary>

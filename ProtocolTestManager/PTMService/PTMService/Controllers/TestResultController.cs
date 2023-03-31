@@ -245,5 +245,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 
             return result;
         }
+
+        /// <summary>
+        /// Remove an existing test result.
+        /// </summary>
+        /// <param name="id">The ID of the test result to be removed.</param>
+        /// <returns>The action result.</returns>
+        [Route("{id}")]
+        [HttpDelete]
+        public IActionResult Remove(int id)
+        {
+            PTMKernelService.RemoveTestRun(id);
+
+            return Ok();
+        }
     }
 }

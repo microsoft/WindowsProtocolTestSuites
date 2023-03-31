@@ -36,5 +36,16 @@ export const SelectedTestCasesDataSrv = {
       onError: SelectedTestCasesActions.abortRunRequestAction_Failure,
       onCompleteCallback: completeCallback
     })
+  },
+  removeRunRequest: (testResultId: number, completeCallback?: () => void): AppThunkAction<SelectedTestCasesActionTypes> => async (dispatch, getState) => {
+    await FetchService({
+      url: `api/testresult/${testResultId}`,
+      method: RequestMethod.DELETE,
+      dispatch,
+      onRequest: SelectedTestCasesActions.removeRunRequestAction_Request,
+      onComplete: SelectedTestCasesActions.removeRunRequestAction_Success,
+      onError: SelectedTestCasesActions.removeRunRequestAction_Failure,
+      onCompleteCallback: completeCallback
+    })
   }
 }

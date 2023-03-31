@@ -133,6 +133,51 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             pool.Save().Wait();
         }
 
+        public void RemoveTestRun(int id)
+        {
+            ITestRun testRun = default(ITestRun);
+            if (TestRunPool.ContainsKey(id))
+            {
+                testRun = TestRunPool[id];
+            }
+
+            if (testRun != default(ITestRun) &&
+                testRun.State != TestResultState.Running)
+            {
+                //If the test run is newly created and about to start, try aborting it first.
+                if(testRun.State == TestResultState.Created)
+                {
+                    testRun.Abort();
+                }
+
+                TestRunPool.Remove(id, out ITestRun run);
+
+                using var instance = ScopedServiceFactory.GetInstance();
+
+                var pool = instance.ScopedServiceInstance;
+                var repo = pool.Get<TestResult>();
+
+                var testResult = repo.Get(q => q.Where(item => item.Id == id)).FirstOrDefault();
+                if (testResult != null)
+                {
+                    repo.Remove(testResult);
+                    pool.Save().Wait();
+
+                    try
+                    {
+                        if (Directory.Exists(testResult.Path))
+                        {
+                            Directory.Delete(testResult.Path, true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.AddLog(LogLevel.Debug, $"Deleting {testResult.Path} failed with {ex.ToString()}");
+                    }
+                }
+            }
+        }
+
         public string GetTestRunReport(int testResultId, ReportFormat format, string[] testCases)
         {
             var testRun = GetTestRun(testResultId);

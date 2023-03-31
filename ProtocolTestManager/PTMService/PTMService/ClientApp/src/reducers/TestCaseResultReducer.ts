@@ -15,6 +15,9 @@ import {
   ABORT_RUNREQUEST_REQUEST,
   ABORT_RUNREQUEST_SUCCESS,
   ABORT_RUNREQUEST_FAILURE,
+  REMOVE_RUNREQUEST_REQUEST,
+  REMOVE_RUNREQUEST_SUCCESS,
+  REMOVE_RUNREQUEST_FAILURE,  
   SelectedTestCasesActionTypes
 } from '../actions/SelectedTestCasesAction'
 
@@ -108,6 +111,26 @@ export const getTestCaseResultReducer = (state = initialTestCaseResultState, act
       }
 
     case ABORT_RUNREQUEST_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        errorMsg: action.errorMsg
+      }
+
+    case REMOVE_RUNREQUEST_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+        errorMsg: undefined
+      }
+
+    case REMOVE_RUNREQUEST_SUCCESS:
+      return {
+        ...state,
+        isLoading: false
+      }
+
+    case REMOVE_RUNREQUEST_FAILURE:
       return {
         ...state,
         isLoading: false,

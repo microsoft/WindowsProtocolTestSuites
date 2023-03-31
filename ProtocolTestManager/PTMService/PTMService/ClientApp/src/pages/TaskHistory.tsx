@@ -41,7 +41,8 @@ interface ListColumnsProps {
   onAbort: (testResultId: number) => void
   onRerun: (testResultId: number, configurationId: number) => void,
   onViewResult: (testResultId: number) => void
-  onExportProfile: (testResultId: number) => void
+  onExportProfile: (testResultId: number) => void,
+  onRemove: (testResultId: number) => void
 }
 
 const getListColumns = (props: ListColumnsProps): IColumn[] => {
@@ -140,8 +141,8 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
     {
       key: 'Action',
       name: 'Action',
-      minWidth: 280,
-      maxWidth: 280,
+      minWidth: 380,
+      maxWidth: 380,
       isResizable: false,
       data: 'string',
       isPadded: true,
@@ -169,6 +170,17 @@ const getListColumns = (props: ListColumnsProps): IColumn[] => {
               item.Status !== 'Created'
                 ? <PrimaryButton onClick={() => { props.onViewResult(item.Id) }}>View Result</PrimaryButton>
                 : null
+            }
+            {
+                !props.isTestSuiteRemoved(item.ConfigurationId)
+                    ? <Stack horizontal tokens={StackGap10}>
+                        {
+                            item.Status !== 'Running'
+                                ? <PrimaryButton onClick={() => { props.onRemove(item.Id) }}>Remove</PrimaryButton>
+                                : null
+                        }
+                    </Stack>
+                    : null
             }
           </Stack>
         )
@@ -230,7 +242,11 @@ export function TaskHistory(props: any) {
 
   const [dialogHidden, { toggle: toggleDialogHidden }] = useBoolean(true)
 
+  const [removalDialogHidden, { toggle: toggleRemovalDialogHidden }] = useBoolean(true)
+
   const [testResultToAbort, setTestResultToAbort] = useState<TestResultOverview | undefined>(undefined)
+
+  const [testResultToRemove, setTestResultToRemove] = useState<TestResultOverview | undefined>(undefined)
 
   const [tempQuery, setTempQuery] = useState<string | undefined>(undefined)
 
@@ -285,6 +301,16 @@ export function TaskHistory(props: any) {
     }
 
     dispatch(() => toggleDialogHidden())
+  }
+
+  const onDialogRemoveButtonClick = () => {
+    if (testResultToRemove !== undefined) {
+      dispatch(SelectedTestCasesDataSrv.removeRunRequest(testResultToRemove.Id, () => {
+        dispatch(TestResultsDataSrv.listTestResults())
+      }))
+    }
+
+    dispatch(() => toggleRemovalDialogHidden())
   }
 
   const renderId = useCallback((testResultId: number) => {
@@ -381,6 +407,10 @@ export function TaskHistory(props: any) {
     },
     onExportProfile: (testResultId: number) => {
       dispatch(ProfileDataSrv.saveProfile(testResultId))
+    },
+    onRemove: (testResultId: number) => {
+      setTestResultToRemove(testResults.currentPageResults.filter(item => item.Id === testResultId)[0])
+      toggleRemovalDialogHidden()
     }
   })
 
@@ -480,6 +510,26 @@ export function TaskHistory(props: any) {
           <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onDialogAbortButtonClick} text="Abort" />
         </DialogFooter>
       </Dialog>
+
+      <Dialog
+        hidden={removalDialogHidden}
+        onDismiss={toggleRemovalDialogHidden}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: `Are you sure you want to remove this test result?`
+        }}
+        modalProps={{
+          isBlocking: true
+        }}>
+        <Stack horizontalAlign='start'>
+          {renderDialogContent(testResultToRemove)}
+        </Stack>
+        <DialogFooter>
+          <PrimaryButton onClick={toggleRemovalDialogHidden} text="Cancel" />
+          <PrimaryButton style={{ backgroundColor: '#ff4949' }} onClick={onDialogRemoveButtonClick} text="Remove" />
+        </DialogFooter>
+      </Dialog>
+
     </div>
   )
 }
