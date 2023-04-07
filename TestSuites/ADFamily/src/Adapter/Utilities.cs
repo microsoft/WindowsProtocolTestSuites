@@ -15,7 +15,6 @@ using System.Net;
 
 using Microsoft.Protocols.TestTools;
 using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.InteropServices;
 using System.Globalization;
 using Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory.Adts;
@@ -1460,14 +1459,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         /// <param name="cookieBytes">Byte array which stores cookie information</param>
         public static void StoreCookie(byte[] cookieBytes)
         {
-            BinaryFormatter formatter = new BinaryFormatter();
             FileStream fs = new FileStream(
                     "..\\..\\cookie.bin",
                     FileMode.Create
                     );
             using (fs)
             {
-                formatter.Serialize(fs, cookieBytes);
+                System.Text.Json.JsonSerializer.Serialize(fs, cookieBytes);
             }
         }
 
@@ -1477,14 +1475,13 @@ namespace Microsoft.Protocols.TestSuites.ActiveDirectory.Common
         /// <returns> Byte array which contains cookie information.</returns>
         public static byte[] RestoreCookie()
         {
-            BinaryFormatter formatter = new BinaryFormatter();
             FileStream fs = new FileStream(
                     "..\\..\\cookie.bin",
                     FileMode.Open
                     );
             using (fs)
             {
-                return (byte[])formatter.Deserialize(fs);
+                return System.Text.Json.JsonSerializer.Deserialize<byte[]>(fs);
             }
         }
 

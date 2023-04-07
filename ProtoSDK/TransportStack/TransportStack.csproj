@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net6.0</targetframework>
+    <targetframework>net7.0</targetframework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Transport</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Transport</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Platforms>AnyCPU;x86</Platforms>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,7 +24,7 @@
       <HintPath>Quic\System.Net.Quic.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
+
   <ItemGroup>
 	  <ContentWithTargetPath Include="Quic\msquic.pdb">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>

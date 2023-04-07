@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <AssemblyName>MS-SMB2_ServerTestSuite</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite</RootNamespace>
