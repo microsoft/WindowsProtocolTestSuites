@@ -3353,7 +3353,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             List<byte> byteList = new List<byte>();
 
             byteList.AddRange(BitConverter.GetBytes((UInt32)encryptionOpteration));
-            byteList.AddRange(BitConverter.GetBytes((byte)0));
+            byteList.AddRange(new byte[] { 0 });
             byteList.AddRange(new byte[3]);
 
             // According to different condition, set the buffer size value 
@@ -4369,8 +4369,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     info2.Reserved = new byte[2];
                     byteList.AddRange(BitConverter.GetBytes(info2.RequestsPerPeriod));
                     byteList.AddRange(BitConverter.GetBytes(info2.Period));
-                    byteList.AddRange(BitConverter.GetBytes(info2.RetryFailures));
-                    byteList.AddRange(BitConverter.GetBytes(info2.Discardable));
+                    byteList.AddRange(new byte[] { info2.RetryFailures });
+                    byteList.AddRange(new byte[] { info2.Discardable });
                     byteList.AddRange(info2.Reserved);
                     byteList.AddRange(BitConverter.GetBytes(info2.RequestSize));
                     byteList.AddRange(BitConverter.GetBytes(info2.NumOutstandingRequests));
@@ -4510,7 +4510,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             List<byte> byteList = new List<byte>();
 
             fileInfo.DeletePending = (byte)(fileDispositionType == FileDispositionType.IsDeletePending ? 1 : 0);
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.DeletePending));
+            byteList.AddRange(new byte[] { fileInfo.DeletePending });
 
             MessageStatus returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_DISPOSITION_INFORMATION, byteList.ToArray());
 
@@ -4904,7 +4904,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             fileInfo.Reserved = new byte[3];
             fileInfo.RootDirectory = RootDirectory_Values.V1;
 
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.ReplaceIfExists));
+            byteList.AddRange(new byte[] { fileInfo.ReplaceIfExists });
             byteList.AddRange(fileInfo.Reserved);
             byteList.AddRange(BitConverter.GetBytes((uint)fileInfo.RootDirectory));
             byteList.AddRange(BitConverter.GetBytes(fileInfo.FileNameLength));

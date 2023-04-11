@@ -539,7 +539,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     FileDispositionInformation fileDispositionInfo = new FileDispositionInformation();
                     fileDispositionInfo.DeletePending = 1;
                     List<byte> byteList = new List<byte>();
-                    byteList.AddRange(BitConverter.GetBytes(fileDispositionInfo.DeletePending));
+                    byteList.AddRange(new byte[] { fileDispositionInfo.DeletePending });
 
                     status = SetFileInformation((uint)FileInfoClass.FILE_DISPOSITION_INFORMATION, byteList.ToArray());
                     status = CloseFile();
