@@ -110,7 +110,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                         fileName,
                         FileAttribute.NORMAL,
                         createFileType,
-                        FileAccess.GENERIC_ALL,
+                        Adapter.FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE,
                         CreateDisposition.OPEN_IF);
             this.fsaAdapter.AssertIfNotSuccess(status, "Create file operation failed");
@@ -141,7 +141,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                         fileName + ":" + dataStreamName1 + ":$DATA",
                         FileAttribute.NORMAL,
                         CreateOptions.NON_DIRECTORY_FILE,
-                        FileAccess.GENERIC_ALL,
+                        Adapter.FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE,
                         CreateDisposition.OPEN_IF);
             this.fsaAdapter.AssertIfNotSuccess(status, "Create Alternate Data Stream operation failed");
@@ -175,7 +175,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                         fileName + ":" + dataStreamName2 + ":$DATA",
                         FileAttribute.NORMAL,
                         CreateOptions.NON_DIRECTORY_FILE,
-                        FileAccess.GENERIC_ALL,
+                        Adapter.FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE,
                         CreateDisposition.OPEN_IF);
             this.fsaAdapter.AssertIfNotSuccess(status, "Create Alternate Data Stream operation failed");
@@ -226,7 +226,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileDispositionInformation fileDispositionInfo = new FileDispositionInformation();
             fileDispositionInfo.DeletePending = 1;
             List<byte> byteList = new List<byte>();
-            byteList.AddRange(BitConverter.GetBytes(fileDispositionInfo.DeletePending));
+            byteList.AddRange(new byte[] { fileDispositionInfo.DeletePending });
 
             status = this.fsaAdapter.SetFileInformation(
                 FileInfoClass.FILE_DISPOSITION_INFORMATION,
@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                         fileName,
                         FileAttribute.NORMAL,
                         createFileType,
-                        FileAccess.GENERIC_ALL,
+                        Adapter.FileAccess.GENERIC_ALL,
                         ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE | ShareAccess.FILE_SHARE_DELETE,
                         CreateDisposition.OPEN_IF);
             this.fsaAdapter.AssertIfNotSuccess(status, "Create file operation failed");
