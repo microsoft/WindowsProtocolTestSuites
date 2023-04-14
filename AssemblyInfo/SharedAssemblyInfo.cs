@@ -7,4 +7,6 @@ using System.Runtime.Versioning;
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("Windows Protocol Test Suites")]
 [assembly: AssemblyVersion("4.23.3.0")]
+#if !NETSTANDARD2_0
 [assembly: RequiresPreviewFeatures]
+#endif
