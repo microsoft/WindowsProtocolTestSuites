@@ -29,9 +29,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
   </ItemGroup>
   <ItemGroup>
     <None Update="MS-FSA_ServerTestSuite.deployment.ptfconfig">
