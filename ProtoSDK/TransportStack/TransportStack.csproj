@@ -44,12 +44,15 @@
 	  </ContentWithTargetPath>
     <None Update="Quic\System.Net.Quic.deps.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>System.Net.Quic.deps.json</TargetPath>
     </None>
     <None Update="Quic\System.Net.Quic.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>System.Net.Quic.dll</TargetPath>
     </None>
     <None Update="Quic\System.Net.Quic.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>System.Net.Quic.pdb</TargetPath>
     </None>
   </ItemGroup>
 </Project>
