@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v7.0": {
-      "System.Net.Quic/1.0.0": {
+      "System.Net.Quic2/1.0.0": {
         "runtime": {
-          "System.Net.Quic.dll": {}
+          "System.Net.Quic2.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "System.Net.Quic/1.0.0": {
+    "System.Net.Quic2/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

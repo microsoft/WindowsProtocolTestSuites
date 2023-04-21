@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Net.Quic;
+using System.Net.Quic2;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {

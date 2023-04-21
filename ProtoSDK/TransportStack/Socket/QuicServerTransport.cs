@@ -4,7 +4,7 @@
 using System;
 using System.IO;
 using System.Net;
-using System.Net.Quic;
+using System.Net.Quic2;
 using System.Net.Security;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;

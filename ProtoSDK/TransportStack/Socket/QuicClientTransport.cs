@@ -3,7 +3,7 @@
 
 using System;
 using System.Net;
-using System.Net.Quic;
+using System.Net.Quic2;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Security;

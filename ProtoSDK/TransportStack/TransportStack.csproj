@@ -18,12 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="System.Net.Quic">
-      <HintPath>Quic\System.Net.Quic.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
   <ItemGroup>
 	  <ContentWithTargetPath Include="Quic\msquic.pdb">
@@ -42,6 +36,9 @@
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		  <TargetPath>libmsquic.so</TargetPath>
 	  </ContentWithTargetPath>
+	  <Reference Include="System.Net.Quic2">
+	    <HintPath>Quic\System.Net.Quic2.dll</HintPath>
+	  </Reference>
     <None Update="Quic\System.Net.Quic.deps.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>System.Net.Quic.deps.json</TargetPath>
@@ -53,6 +50,15 @@
     <None Update="Quic\System.Net.Quic.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>System.Net.Quic.pdb</TargetPath>
+    </None>
+    <None Update="Quic\System.Net.Quic2.deps.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Quic\System.Net.Quic2.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Quic\System.Net.Quic2.pdb">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>

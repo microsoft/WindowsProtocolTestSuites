@@ -3,7 +3,7 @@
 
 using System;
 using System.Net;
-using System.Net.Quic;
+using System.Net.Quic2;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
