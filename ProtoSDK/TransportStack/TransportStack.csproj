@@ -6,7 +6,6 @@
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Transport</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Platforms>AnyCPU;x86</Platforms>
-    <EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,18 +38,6 @@
 	  <Reference Include="System.Net.Quic2">
 	    <HintPath>Quic\System.Net.Quic2.dll</HintPath>
 	  </Reference>
-    <None Update="Quic\System.Net.Quic.deps.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>System.Net.Quic.deps.json</TargetPath>
-    </None>
-    <None Update="Quic\System.Net.Quic.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>System.Net.Quic.dll</TargetPath>
-    </None>
-    <None Update="Quic\System.Net.Quic.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>System.Net.Quic.pdb</TargetPath>
-    </None>
     <None Update="Quic\System.Net.Quic2.deps.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
