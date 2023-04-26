@@ -351,7 +351,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
                 DefaultCloseErrorCode = 0x0B, // Protocol-dependent error code.
 
                 // Optionally set limits for inbound streams.
-                MaxInboundUnidirectionalStreams = 10,
+                MaxInboundUnidirectionalStreams = 100,
                 MaxInboundBidirectionalStreams = 100,
 
                 // Same options as for client side SslStream.
