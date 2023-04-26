@@ -321,10 +321,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
         private SslClientAuthenticationOptions GetSslClientAuthenticationOptions()
         {
+            var policy = new System.Security.Cryptography.X509Certificates.X509ChainPolicy();
+            policy.RevocationMode = System.Security.Cryptography.X509Certificates.X509RevocationMode.NoCheck;
             return new SslClientAuthenticationOptions()
             {
                 ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
                 TargetHost = this.socketConfig.TargetName,
+                CertificateChainPolicy = policy,
             };
         }
 
