@@ -124,7 +124,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
             this.socketConfig.LocalIpPort = requiredLocalEP.Port;
 
-            SendConnectionRequest();
+            //SendConnectionRequest();
+            this.connection = this.CreateQuicConnection();
 
             this.stream = connection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).GetAwaiter().GetResult();
 
@@ -327,7 +328,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             };
         }
 
-        private async Task<QuicConnection> CreateQuicConnection()
+        private QuicConnection CreateQuicConnection()
         {
             //Using DNS EndPoint instead of IP because SmbOverQuic certificate is issued using DNS name
             EndPoint targetEndPoint = new DnsEndPoint(this.socketConfig.TargetName, this.socketConfig.RemoteIpPort);
@@ -363,23 +364,23 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             };
 
             // Initialize, configure and connect to the server.
-            var connection = await QuicConnection.ConnectAsync(clientConnectionOptions);
+            var connection = QuicConnection.ConnectAsync(clientConnectionOptions).GetAwaiter().GetResult();
             return connection;
         }
 
-        private async void SendConnectionRequest()
-        {
-            connection = await this.CreateQuicConnection();
+        //private async void SendConnectionRequest()
+        //{
+        //    connection = await this.CreateQuicConnection();
 
-            //IAsyncResult result = connection.BeginConnect(new AsyncCallback(QuicConnectionCallback), connection);
+        //    //IAsyncResult result = connection.BeginConnect(new AsyncCallback(QuicConnectionCallback), connection);
 
-            //result.AsyncWaitHandle.WaitOne(this.socketConfig.Timeout, true);
+        //    //result.AsyncWaitHandle.WaitOne(this.socketConfig.Timeout, true);
 
-            //if (!connection.Connected)
-            //{
-            //    throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, "Failed to connect to server {0}:{1} within {2} milliseconds.", this.socketConfig.RemoteIpAddress, this.socketConfig.RemoteIpPort, this.socketConfig.Timeout.TotalMilliseconds));
-            //}
-        }
+        //    //if (!connection.Connected)
+        //    //{
+        //    //    throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, "Failed to connect to server {0}:{1} within {2} milliseconds.", this.socketConfig.RemoteIpAddress, this.socketConfig.RemoteIpPort, this.socketConfig.Timeout.TotalMilliseconds));
+        //    //}
+        //}
 
         //private void QuicConnectionCallback(IAsyncResult asyncResult)
         //{
