@@ -182,7 +182,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
                 ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
                 // Callback to provide options for the incoming connections, it gets called once per each connection.
                 ConnectionOptionsCallback = (_, _, _) => ValueTask.FromResult(serverConnectionOptions)
-            }).AsTask().Result;
+            }).GetAwaiter().GetResult();
 
             QuicServerListener listener =
                 new QuicServerListener(serverListener, this, isLspHooked);

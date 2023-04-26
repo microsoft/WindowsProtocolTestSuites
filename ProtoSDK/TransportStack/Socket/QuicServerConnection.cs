@@ -110,7 +110,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
             this.connection = clientConnection;
 
-            this.stream = clientConnection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).AsTask().Result;
+            this.stream = clientConnection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).GetAwaiter().GetResult();
 
             this.thread = new ThreadManager(QuicServerConnectionReceiveLoop, Unblock);
 

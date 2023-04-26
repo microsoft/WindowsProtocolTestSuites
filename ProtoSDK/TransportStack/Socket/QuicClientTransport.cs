@@ -126,7 +126,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
             SendConnectionRequest();
 
-            this.stream = connection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).AsTask().Result;
+            this.stream = connection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).GetAwaiter().GetResult();
 
             this.thread = new ThreadManager(QuicClientReceiveLoop);
 
@@ -334,8 +334,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             this.localEndPoint = new IPEndPoint(this.socketConfig.LocalIpAddress, this.socketConfig.LocalIpPort);
             var clientConnectionOptions = new QuicClientConnectionOptions
             {
+                LocalEndPoint = (IPEndPoint)this.localEndPoint,
                 // End point of the server to connect to.
-                RemoteEndPoint = this.localEndPoint,
+                RemoteEndPoint = targetEndPoint,
 
                 // Used to abort stream if it's not properly closed by the user.
                 // See https://www.rfc-editor.org/rfc/rfc9000#section-20.2
