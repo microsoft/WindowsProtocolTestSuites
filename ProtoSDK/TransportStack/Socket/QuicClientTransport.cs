@@ -331,10 +331,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         {
             //Using DNS EndPoint instead of IP because SmbOverQuic certificate is issued using DNS name
             EndPoint targetEndPoint = new DnsEndPoint(this.socketConfig.TargetName, this.socketConfig.RemoteIpPort);
-            this.localEndPoint = new IPEndPoint(this.socketConfig.LocalIpAddress, this.socketConfig.LocalIpPort);
+            var localEP = new IPEndPoint(this.socketConfig.LocalIpAddress, this.socketConfig.LocalIpPort);
+            this.localEndPoint = localEP;
+            this.remoteEndPoint = targetEndPoint;
             var clientConnectionOptions = new QuicClientConnectionOptions
             {
-                LocalEndPoint = (IPEndPoint)this.localEndPoint,
+                LocalEndPoint = localEP,
+
                 // End point of the server to connect to.
                 RemoteEndPoint = targetEndPoint,
 
