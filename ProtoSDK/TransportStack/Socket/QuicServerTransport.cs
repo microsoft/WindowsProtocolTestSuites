@@ -4,10 +4,11 @@
 using System;
 using System.IO;
 using System.Net;
-using System.Net.Quic2;
+using System.Net.Quic;
 using System.Net.Security;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
@@ -152,7 +153,37 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             IPEndPoint actualListenedLocalEP = LspConsole.Instance.GetReplacedEndPoint(
                 this.socketConfig.Type, requiredLocalEP, out isLspHooked, out isBlocking);
 
-            QuicListener serverListener = new QuicListener(GetListenerOptions(this.socketConfig.ServerCertificate));
+            var serverConnectionOptions = new QuicServerConnectionOptions
+            {
+                // Used to abort stream if it's not properly closed by the user.
+                // See https://www.rfc-editor.org/rfc/rfc9000#section-20.2
+                DefaultStreamErrorCode = 0x0A, // Protocol-dependent error code.
+
+                // Used to close the connection if it's not done by the user.
+                // See https://www.rfc-editor.org/rfc/rfc9000#section-20.2
+                DefaultCloseErrorCode = 0x0B, // Protocol-dependent error code.
+
+                // Same options as for server side SslStream.
+                ServerAuthenticationOptions = new SslServerAuthenticationOptions
+                {
+                    // List of supported application protocols, must be the same or subset of QuicListenerOptions.ApplicationProtocols.
+                    ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
+                    // Server certificate, it can also be provided via ServerCertificateContext or ServerCertificateSelectionCallback.
+                    ServerCertificate = this.socketConfig.ServerCertificate
+                }
+            };
+
+            //QuicListener serverListener = new QuicListener(GetListenerOptions(this.socketConfig.ServerCertificate));
+            QuicListener serverListener =  QuicListener.ListenAsync(new QuicListenerOptions
+            {
+                // Listening endpoint, port 0 means any port.
+                ListenEndPoint = new IPEndPoint(IPAddress.Loopback, 0),
+                // List of all supported application protocols by this listener.
+                ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
+                // Callback to provide options for the incoming connections, it gets called once per each connection.
+                ConnectionOptionsCallback = (_, _, _) => ValueTask.FromResult(serverConnectionOptions)
+            }).AsTask().Result;
+
             QuicServerListener listener =
                 new QuicServerListener(serverListener, this, isLspHooked);
 
@@ -680,15 +711,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             QuicListenerOptions quicListenerOptions = new QuicListenerOptions()
             {
                 ListenEndPoint = new IPEndPoint(this.socketConfig.LocalIpAddress, 0),
-                ServerAuthenticationOptions = new SslServerAuthenticationOptions()
-                {
-                    ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
-                    ServerCertificate = serverCertificate
-                }
+                 ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
             };
 
-            quicListenerOptions.MaxBidirectionalStreams = MAX_BIDIRECTIONAL_STREAMS;
-            quicListenerOptions.MaxUnidirectionalStreams = MAX_UNIRECTIONAL_STREAMS;
+            quicListenerOptions.ListenBacklog = MAX_BIDIRECTIONAL_STREAMS;
+            //quicListenerOptions.MaxBidirectionalStreams = MAX_BIDIRECTIONAL_STREAMS;
+            //quicListenerOptions.MaxUnidirectionalStreams = MAX_UNIRECTIONAL_STREAMS;
 
             return quicListenerOptions;
         }

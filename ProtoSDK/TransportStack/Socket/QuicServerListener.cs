@@ -3,7 +3,7 @@
 
 using System;
 using System.Net;
-using System.Net.Quic2;
+using System.Net.Quic;
 using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
@@ -61,11 +61,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
                 => this.listener.AcceptConnectionAsync().AsTask());
 
             QuicStream serverStream = AsyncUtil.RunSync<QuicStream>(()
-                => serverConnection.AcceptStreamAsync().AsTask());
+                => serverConnection.AcceptInboundStreamAsync().AsTask());
 
             if (this.lspHooked)
             {
-                IPEndPoint actualListenedLocalEP = this.listener.ListenEndPoint as IPEndPoint;
+                IPEndPoint actualListenedLocalEP = this.listener.LocalEndPoint as IPEndPoint;
 
                 LspConsole.Instance.InterceptTraffic(this.server.SocketConfig.Type, isBlocking, requiredLocalEP, actualListenedLocalEP);
             }
@@ -128,7 +128,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
         private void Unblock()
         {
-            this.listener.Dispose();
+            this.listener.DisposeAsync();
         }
 
         #endregion

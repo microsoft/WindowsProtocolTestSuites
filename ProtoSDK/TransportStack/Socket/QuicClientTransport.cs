@@ -3,10 +3,11 @@
 
 using System;
 using System.Net;
-using System.Net.Quic2;
+using System.Net.Quic;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Security;
+using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
@@ -125,7 +126,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
             SendConnectionRequest();
 
-            this.stream = connection.OpenBidirectionalStream();
+            this.stream = connection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).AsTask().Result;
 
             this.thread = new ThreadManager(QuicClientReceiveLoop);
 
@@ -146,7 +147,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             {
                 throw new InvalidOperationException("the received thread does not initialize.");
             }
-            this.stream.Shutdown();
+            this.stream.Close();
             this.stream = null;
 
             this.thread.Dispose();
@@ -215,10 +216,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
             try
             {
-                if (!this.connection.Connected)
-                {
-                    throw new QuicConnectionAbortedException("We lost the connection", 410L);
-                }
+                //if (!this.connection.Connected)
+                //{
+                //    throw new QuicConnectionAbortedException("We lost the connection", 410L);
+                //}
 
                 if (this.stream == null)
                 {
@@ -326,43 +327,71 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             };
         }
 
-        private QuicConnection CreateQuicConnection()
+        private async Task<QuicConnection> CreateQuicConnection()
         {
             //Using DNS EndPoint instead of IP because SmbOverQuic certificate is issued using DNS name
             EndPoint targetEndPoint = new DnsEndPoint(this.socketConfig.TargetName, this.socketConfig.RemoteIpPort);
             this.localEndPoint = new IPEndPoint(this.socketConfig.LocalIpAddress, this.socketConfig.LocalIpPort);
-            return new QuicConnection(targetEndPoint, GetSslClientAuthenticationOptions(), this.localEndPoint as IPEndPoint);
-        }
-
-        private void SendConnectionRequest()
-        {
-            connection = this.CreateQuicConnection();
-
-            IAsyncResult result = connection.BeginConnect(new AsyncCallback(QuicConnectionCallback), connection);
-
-            result.AsyncWaitHandle.WaitOne(this.socketConfig.Timeout, true);
-
-            if (!connection.Connected)
+            var clientConnectionOptions = new QuicClientConnectionOptions
             {
-                throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, "Failed to connect to server {0}:{1} within {2} milliseconds.", this.socketConfig.RemoteIpAddress, this.socketConfig.RemoteIpPort, this.socketConfig.Timeout.TotalMilliseconds));
-            }
+                // End point of the server to connect to.
+                RemoteEndPoint = this.localEndPoint,
+
+                // Used to abort stream if it's not properly closed by the user.
+                // See https://www.rfc-editor.org/rfc/rfc9000#section-20.2
+                DefaultStreamErrorCode = 0x0A, // Protocol-dependent error code.
+
+                // Used to close the connection if it's not done by the user.
+                // See https://www.rfc-editor.org/rfc/rfc9000#section-20.2
+                DefaultCloseErrorCode = 0x0B, // Protocol-dependent error code.
+
+                // Optionally set limits for inbound streams.
+                MaxInboundUnidirectionalStreams = 10,
+                MaxInboundBidirectionalStreams = 100,
+
+                // Same options as for client side SslStream.
+                ClientAuthenticationOptions = GetSslClientAuthenticationOptions()
+            //new SslClientAuthenticationOptions
+            //    {
+            //        // List of supported application protocols.
+            //        ApplicationProtocols = new List<SslApplicationProtocol>() { SslApplicationProtocol.Http3 }
+            //    }
+            };
+
+            // Initialize, configure and connect to the server.
+            var connection = await QuicConnection.ConnectAsync(clientConnectionOptions);
+            return connection;
         }
 
-        private void QuicConnectionCallback(IAsyncResult asyncResult)
+        private async void SendConnectionRequest()
         {
-            QuicConnection quicConnection = (QuicConnection)asyncResult.AsyncState;
-            if (quicConnection.Connected)
-            {
-                try
-                {
-                    quicConnection.EndConnect(asyncResult);
-                }
-                catch
-                {
-                    // Swallow all exceptions thrown in a callback function.
-                }
-            }
+            connection = await this.CreateQuicConnection();
+
+            //IAsyncResult result = connection.BeginConnect(new AsyncCallback(QuicConnectionCallback), connection);
+
+            //result.AsyncWaitHandle.WaitOne(this.socketConfig.Timeout, true);
+
+            //if (!connection.Connected)
+            //{
+            //    throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, "Failed to connect to server {0}:{1} within {2} milliseconds.", this.socketConfig.RemoteIpAddress, this.socketConfig.RemoteIpPort, this.socketConfig.Timeout.TotalMilliseconds));
+            //}
         }
+
+        //private void QuicConnectionCallback(IAsyncResult asyncResult)
+        //{
+        //    QuicConnection quicConnection = (QuicConnection)asyncResult.AsyncState;
+        //    if (quicConnection.Connected)
+        //    {
+        //        try
+        //        {
+        //            quicConnection.EndConnect(asyncResult);
+        //        }
+        //        catch
+        //        {
+        //            // Swallow all exceptions thrown in a callback function.
+        //        }
+        //    }
+        //}
 
         private void QuicClientReceiveLoop()
         {

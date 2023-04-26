@@ -5,6 +5,7 @@
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Transport</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Transport</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
@@ -16,36 +17,5 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <ContentWithTargetPath Include="Quic\msquic.pdb">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		  <TargetPath>msquic.pdb</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Quic\msquic.dll">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		  <TargetPath>msquic.dll</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Quic\libmsquic.lttng.so">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		  <TargetPath>libmsquic.lttng.so</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Quic\libmsquic.so">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		  <TargetPath>libmsquic.so</TargetPath>
-	  </ContentWithTargetPath>
-	  <Reference Include="System.Net.Quic2">
-	    <HintPath>Quic\System.Net.Quic2.dll</HintPath>
-	  </Reference>
-    <None Update="Quic\System.Net.Quic2.deps.json">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Quic\System.Net.Quic2.dll">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Update="Quic\System.Net.Quic2.pdb">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

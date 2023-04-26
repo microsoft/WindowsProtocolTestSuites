@@ -3,7 +3,7 @@
 
 using System;
 using System.Net;
-using System.Net.Quic2;
+using System.Net.Quic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
@@ -101,16 +101,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
                 throw new ArgumentNullException(nameof(quicServerTransport));
             }
 
-            if (!clientConnection.Connected)
-            {
-                throw new ArgumentException($"Client has already disconnected");
-            }
+            //if (!clientConnection.Connected)
+            //{
+            //    throw new ArgumentException($"Client has already disconnected");
+            //}
 
             this.server = quicServerTransport;
 
             this.connection = clientConnection;
 
-            this.stream = clientConnection.OpenBidirectionalStream();
+            this.stream = clientConnection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).AsTask().Result;
 
             this.thread = new ThreadManager(QuicServerConnectionReceiveLoop, Unblock);
 
