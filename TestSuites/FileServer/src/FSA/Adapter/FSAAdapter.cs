@@ -564,7 +564,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             if (!this.isShortNameSupported && shortNameRelatedTestNames.Contains(CurrentTestCaseName))
             {
-                Site.Assert.Inconclusive($"Short name is not suppoerted on {this.fileSystem}.");
+                Site.Assert.Inconclusive($"Short name is not supported on {this.fileSystem}.");
             }
         }
 
@@ -572,7 +572,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             if (!this.isExtendedAttributeSupported && CurrentTestCaseName.StartsWith("SetFileFullEaInformationTestCase"))
             {
-                Site.Assert.Inconclusive($"Extended attribute is not suppoerted on {this.fileSystem}.");
+                Site.Assert.Inconclusive($"Extended attribute is not supported on {this.fileSystem}.");
             }
         }
 
@@ -580,7 +580,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             if (!this.isFileLinkInfoSupported && CurrentTestCaseName.StartsWith("SetFileLinkInformationTestCase"))
             {
-                Site.Assert.Inconclusive($"Hard link to a file is not suppoerted on {this.fileSystem}.");
+                Site.Assert.Inconclusive($"Hard link to a file is not supported on {this.fileSystem}.");
             }
         }
 
@@ -588,7 +588,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             if (!(this.isAlternateDataStreamSupported && this.isStreamRenameSupported) && CurrentTestCaseName.StartsWith("SetFileStreamRenameInformationTestCase"))
             {
-                Site.Assert.Inconclusive($"Alternate data stream and stream rename are not suppoerted on {this.fileSystem}.");
+                Site.Assert.Inconclusive($"Alternate data stream and stream rename are not supported on {this.fileSystem}.");
             }
         }
 

@@ -734,8 +734,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
             VerifyAllocationSize(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize);
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
-            Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
-            Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
+
+            if (this.fsaAdapter.IsShortNameSupported)
+            {
+                Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
+                Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
+            }
         }
 
         /// <summary>
@@ -758,8 +762,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
             VerifyAllocationSize(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize);
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
-            Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
-            Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
+
+            if (this.fsaAdapter.IsShortNameSupported)
+            {
+                Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
+                Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
+            }
         }
 
         /// <summary>
