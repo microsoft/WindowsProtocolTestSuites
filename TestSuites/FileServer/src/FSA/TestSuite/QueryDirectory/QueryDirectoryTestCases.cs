@@ -636,6 +636,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         }
 
         /// <summary>
+        /// Verify Allocation size. Some file systems (e.g. ZFS use fragments of a cluster for small files,
+        /// which ends up with file sizes lower than a cluster
+        /// </summary>
+        /// <param name="expectedSize">Expected allocation size for the test file system</param>
+        /// <param name="actualSize">Actual allocation size for the created test file</param>
+        private void VerifyAllocationSize(long expectedSize, long actualSize)
+        {
+            if (this.fsaAdapter.IsStrictAllocationSizeRequired)
+            {
+                Site.Assert.AreEqual(expectedSize, actualSize, $"The AllocationSize of the entry should be {expectedSize}.");
+            }
+            else
+            {
+                Site.Assert.AreEqual(0, actualSize & 511, $"The AllocationSize of the entry should be block-aligned.");
+            }
+        }
+
+        /// <summary>
         /// Verify FileDirectoryInformation entry
         /// </summary>
         private void VerifyFileInformation(
@@ -651,7 +669,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endOfFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endOfFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
+            VerifyAllocationSize(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize);
         }
 
         /// <summary>
@@ -671,7 +689,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
+            VerifyAllocationSize(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize);
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
         }
 
@@ -692,7 +710,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
+            VerifyAllocationSize(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize);
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
         }
 
@@ -714,7 +732,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
+            VerifyAllocationSize(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize);
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
             Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
             Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
@@ -738,7 +756,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
             Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
             Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
-            Site.Assert.AreEqual(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize, $"The AllocationSize of the entry should be {allocationSize}.");
+            VerifyAllocationSize(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize);
             Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
             Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
             Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
