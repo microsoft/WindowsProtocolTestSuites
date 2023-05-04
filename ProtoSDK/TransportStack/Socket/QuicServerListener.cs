@@ -4,10 +4,10 @@
 using System;
 using System.Net;
 using System.Net.Quic;
-using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
     internal class QuicServerListener : IDisposable
     {
         #region Fields
@@ -57,12 +57,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         {
             ValidateListenerDisposed();
 
-            QuicConnection serverConnection = AsyncUtil.RunSync<QuicConnection>(()
-                => this.listener.AcceptConnectionAsync().AsTask());
-
-            QuicStream serverStream = AsyncUtil.RunSync<QuicStream>(()
-                => serverConnection.AcceptInboundStreamAsync().AsTask());
-
             if (this.lspHooked)
             {
                 IPEndPoint actualListenedLocalEP = this.listener.LocalEndPoint as IPEndPoint;
@@ -101,25 +95,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
         private void AcceptLoop()
         {
-            while(!this.thread.ShouldExit)
+            while (!this.thread.ShouldExit)
             {
                 try
                 {
-                    QuicConnection clientConnection = AsyncUtil.RunSync<QuicConnection>(() 
-                        => this.listener.AcceptConnectionAsync().AsTask());
+                    QuicConnection quicConnection = this.listener.AcceptConnectionAsync().GetAwaiter().GetResult();
 
                     QuicServerConnection connection =
-                        this.server.AcceptClient(clientConnection, this.lspHookedLocalEP, this.lspHooked);
+                        this.server.AcceptClient(quicConnection, this.lspHookedLocalEP, this.lspHooked);
 
-                    this.server.AddEvent(connection.VisitorCreateTransportEvent(EventType.Connected, clientConnection));
+                    this.server.AddEvent(connection.VisitorCreateTransportEvent(EventType.Connected, quicConnection));
 
                     connection.Start();
                 }
-                catch(QuicException qex)
+                catch (QuicException qex)
                 {
                     this.server.AddEvent(new TransportEvent(EventType.Exception, null, qex));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     this.server.AddEvent(new TransportEvent(EventType.Exception, null, ex));
                 }

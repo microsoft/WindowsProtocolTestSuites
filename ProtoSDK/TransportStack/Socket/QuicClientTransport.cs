@@ -2,15 +2,14 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Quic;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Net.Security;
-using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
     internal class QuicClientTransport : IQuicClient, IVisitorQuicReceiveLoop
     {
         #region Fields
@@ -217,18 +216,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
             try
             {
-                //if (!this.connection.Connected)
-                //{
-                //    throw new QuicConnectionAbortedException("We lost the connection", 410L);
-                //}
-
                 if (this.stream == null)
                 {
                     throw new InvalidOperationException("Can not send message when stream is closed.");
                 }
                 this.stream.WriteAsync(message, 0, message.Length).Wait();
             }
-            catch(QuicException qex)
+            catch (QuicException)
             {
                 //Swallow exception
             }
@@ -321,19 +315,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
         private SslClientAuthenticationOptions GetSslClientAuthenticationOptions()
         {
-            var policy = new System.Security.Cryptography.X509Certificates.X509ChainPolicy();
-            policy.RevocationMode = System.Security.Cryptography.X509Certificates.X509RevocationMode.NoCheck;
             return new SslClientAuthenticationOptions()
             {
                 ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
                 TargetHost = this.socketConfig.TargetName,
-                CertificateChainPolicy = policy,
+                RemoteCertificateValidationCallback = (_, _, _, _) => true
             };
         }
 
         private QuicConnection CreateQuicConnection()
         {
-            //Using DNS EndPoint instead of IP because SmbOverQuic certificate is issued using DNS name
+            // Using DNS EndPoint instead of IP because SmbOverQuic certificate is issued using DNS name
             EndPoint targetEndPoint = new DnsEndPoint(this.socketConfig.TargetName, this.socketConfig.RemoteIpPort);
             var localEP = new IPEndPoint(this.socketConfig.LocalIpAddress, this.socketConfig.LocalIpPort);
             this.localEndPoint = localEP;
@@ -359,47 +351,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
                 // Same options as for client side SslStream.
                 ClientAuthenticationOptions = GetSslClientAuthenticationOptions()
-            //new SslClientAuthenticationOptions
-            //    {
-            //        // List of supported application protocols.
-            //        ApplicationProtocols = new List<SslApplicationProtocol>() { SslApplicationProtocol.Http3 }
-            //    }
             };
 
             // Initialize, configure and connect to the server.
             var connection = QuicConnection.ConnectAsync(clientConnectionOptions).GetAwaiter().GetResult();
             return connection;
         }
-
-        //private async void SendConnectionRequest()
-        //{
-        //    connection = await this.CreateQuicConnection();
-
-        //    //IAsyncResult result = connection.BeginConnect(new AsyncCallback(QuicConnectionCallback), connection);
-
-        //    //result.AsyncWaitHandle.WaitOne(this.socketConfig.Timeout, true);
-
-        //    //if (!connection.Connected)
-        //    //{
-        //    //    throw new TimeoutException(string.Format(CultureInfo.InvariantCulture, "Failed to connect to server {0}:{1} within {2} milliseconds.", this.socketConfig.RemoteIpAddress, this.socketConfig.RemoteIpPort, this.socketConfig.Timeout.TotalMilliseconds));
-        //    //}
-        //}
-
-        //private void QuicConnectionCallback(IAsyncResult asyncResult)
-        //{
-        //    QuicConnection quicConnection = (QuicConnection)asyncResult.AsyncState;
-        //    if (quicConnection.Connected)
-        //    {
-        //        try
-        //        {
-        //            quicConnection.EndConnect(asyncResult);
-        //        }
-        //        catch
-        //        {
-        //            // Swallow all exceptions thrown in a callback function.
-        //        }
-        //    }
-        //}
 
         private void QuicClientReceiveLoop()
         {
@@ -415,7 +372,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
                 buffer.Close();
             }
         }
-
 
         /// <summary>
         /// the method to receive message from server.

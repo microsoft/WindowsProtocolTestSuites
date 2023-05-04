@@ -7,6 +7,7 @@ using System.Net.Quic;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
     internal class QuicServerConnection : IVisitorQuicReceiveLoop, IDisposable
     {
         #region Fields
@@ -86,14 +87,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         #region Constructor
 
         public QuicServerConnection(
-            QuicConnection clientConnection, 
-            QuicServerTransport quicServerTransport, 
+            QuicConnection quicConnection,
+            QuicServerTransport quicServerTransport,
             IPEndPoint lspHookedLocalEP,
             bool isLspHooked)
         {
-            if(clientConnection == null)
+            if (quicConnection == null)
             {
-                throw new ArgumentNullException(nameof(clientConnection));
+                throw new ArgumentNullException(nameof(quicConnection));
             }
 
             if (quicServerTransport == null)
@@ -101,24 +102,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
                 throw new ArgumentNullException(nameof(quicServerTransport));
             }
 
-            //if (!clientConnection.Connected)
-            //{
-            //    throw new ArgumentException($"Client has already disconnected");
-            //}
-
             this.server = quicServerTransport;
 
-            this.connection = clientConnection;
+            this.connection = quicConnection;
 
-            this.stream = clientConnection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).GetAwaiter().GetResult();
+            this.stream = quicConnection.AcceptInboundStreamAsync().GetAwaiter().GetResult();
 
             this.thread = new ThreadManager(QuicServerConnectionReceiveLoop, Unblock);
 
             this.buffer = new BytesBuffer();
 
-            this.localEndPoint = clientConnection.LocalEndPoint as IPEndPoint;
+            this.localEndPoint = quicConnection.LocalEndPoint as IPEndPoint;
 
-            this.remoteEndPoint = clientConnection.RemoteEndPoint as IPEndPoint;
+            this.remoteEndPoint = quicConnection.RemoteEndPoint as IPEndPoint;
         }
 
         #endregion

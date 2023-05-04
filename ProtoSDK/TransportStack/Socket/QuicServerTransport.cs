@@ -2,16 +2,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Quic;
 using System.Net.Security;
-using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
     internal class QuicServerTransport : IQuicServer, IVisitorGetAnyData, IVisitorGetAnyBytes
     {
         #region Fields
@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         private SslApplicationProtocol ApplicationProtocol = new("smb");
 
         private const int MAX_BIDIRECTIONAL_STREAMS = 100;
-        private const int MAX_UNIRECTIONAL_STREAMS = 100;
+        private const int MAX_UNIDIRECTIONAL_STREAMS = 100;
 
         #endregion
 
@@ -153,7 +153,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             IPEndPoint actualListenedLocalEP = LspConsole.Instance.GetReplacedEndPoint(
                 this.socketConfig.Type, requiredLocalEP, out isLspHooked, out isBlocking);
 
-            var serverConnectionOptions = new QuicServerConnectionOptions
+            var serverConnectionOptions = new QuicServerConnectionOptions()
             {
                 // Used to abort stream if it's not properly closed by the user.
                 // See https://www.rfc-editor.org/rfc/rfc9000#section-20.2
@@ -174,7 +174,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             };
 
             //QuicListener serverListener = new QuicListener(GetListenerOptions(this.socketConfig.ServerCertificate));
-            QuicListener serverListener =  QuicListener.ListenAsync(new QuicListenerOptions
+            QuicListener serverListener = QuicListener.ListenAsync(new QuicListenerOptions
             {
                 // Listening endpoint, port 0 means any port.
                 ListenEndPoint = new IPEndPoint(IPAddress.Loopback, 0),
@@ -207,7 +207,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
             this.listeners.Keys.CopyTo(endpoints, 0);
 
-            foreach(IPEndPoint endpoint in endpoints)
+            foreach (IPEndPoint endpoint in endpoints)
             {
                 this.Stop(endpoint);
             }
@@ -494,8 +494,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             throw new NotImplementedException();
         }
 
-        
-
         public void SendPacket(object remoteEndPoint, StackPacket packet)
         {
             ValidateServerTransportState();
@@ -711,24 +709,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             QuicListenerOptions quicListenerOptions = new QuicListenerOptions()
             {
                 ListenEndPoint = new IPEndPoint(this.socketConfig.LocalIpAddress, 0),
-                 ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
+                ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
             };
 
             quicListenerOptions.ListenBacklog = MAX_BIDIRECTIONAL_STREAMS;
-            //quicListenerOptions.MaxBidirectionalStreams = MAX_BIDIRECTIONAL_STREAMS;
-            //quicListenerOptions.MaxUnidirectionalStreams = MAX_UNIRECTIONAL_STREAMS;
+            // quicListenerOptions.MaxBidirectionalStreams = MAX_BIDIRECTIONAL_STREAMS;
+            // quicListenerOptions.MaxUnidirectionalStreams = MAX_UNIDIRECTIONAL_STREAMS;
 
             return quicListenerOptions;
         }
 
-        internal QuicServerConnection AcceptClient(QuicConnection clientConnection, IPEndPoint lspHookedLocal, bool isLspHooked)
+        internal QuicServerConnection AcceptClient(QuicConnection quicConnection, IPEndPoint lspHookedLocal, bool isLspHooked)
         {
-            if (clientConnection == null)
+            if (quicConnection == null)
             {
-                throw new ArgumentNullException(nameof(clientConnection));
+                throw new ArgumentNullException(nameof(quicConnection));
             }
 
-            QuicServerConnection connection = new QuicServerConnection(clientConnection, this, lspHookedLocal, isLspHooked);
+            QuicServerConnection connection = new QuicServerConnection(quicConnection, this, lspHookedLocal, isLspHooked);
 
             IPEndPoint endpoint = connection.RemoteEndPoint;
 
