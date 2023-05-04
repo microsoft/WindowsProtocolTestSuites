@@ -173,7 +173,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
                 }
             };
 
-            //QuicListener serverListener = new QuicListener(GetListenerOptions(this.socketConfig.ServerCertificate));
             QuicListener serverListener = QuicListener.ListenAsync(new QuicListenerOptions
             {
                 // Listening endpoint, port 0 means any port.
@@ -713,8 +712,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             };
 
             quicListenerOptions.ListenBacklog = MAX_BIDIRECTIONAL_STREAMS;
-            // quicListenerOptions.MaxBidirectionalStreams = MAX_BIDIRECTIONAL_STREAMS;
-            // quicListenerOptions.MaxUnidirectionalStreams = MAX_UNIDIRECTIONAL_STREAMS;
 
             return quicListenerOptions;
         }
