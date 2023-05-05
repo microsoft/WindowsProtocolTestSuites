@@ -123,7 +123,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
             this.socketConfig.LocalIpPort = requiredLocalEP.Port;
 
-            //SendConnectionRequest();
             this.connection = this.CreateQuicConnection();
 
             this.stream = connection.OpenOutboundStreamAsync(QuicStreamType.Bidirectional).GetAwaiter().GetResult();

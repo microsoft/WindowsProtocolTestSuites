@@ -121,7 +121,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
 
         private void Unblock()
         {
-            this.listener.DisposeAsync();
+            this.listener.DisposeAsync().GetAwaiter().GetResult();
         }
 
         #endregion
