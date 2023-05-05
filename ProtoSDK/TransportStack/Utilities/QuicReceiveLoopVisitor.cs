@@ -10,6 +10,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
         TransportEvent VisitorCreateTransportEvent(EventType type, object detail);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
     internal class QuicReceiveLoopVisitor
     {
         public static void Visit(

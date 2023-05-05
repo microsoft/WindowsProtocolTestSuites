@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net6.0</targetframework>
+    <targetframework>net7.0</targetframework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Transport</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Transport</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
@@ -16,39 +17,5 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="System.Net.Quic">
-      <HintPath>Quic\System.Net.Quic.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  
-  <ItemGroup>
-	  <ContentWithTargetPath Include="Quic\msquic.pdb">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		  <TargetPath>msquic.pdb</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Quic\msquic.dll">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		  <TargetPath>msquic.dll</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Quic\libmsquic.lttng.so">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		  <TargetPath>libmsquic.lttng.so</TargetPath>
-	  </ContentWithTargetPath>
-	  <ContentWithTargetPath Include="Quic\libmsquic.so">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		  <TargetPath>libmsquic.so</TargetPath>
-	  </ContentWithTargetPath>
-    <None Update="Quic\System.Net.Quic.deps.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Quic\System.Net.Quic.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Quic\System.Net.Quic.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

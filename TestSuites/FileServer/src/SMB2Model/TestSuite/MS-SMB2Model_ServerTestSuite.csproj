@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -37,9 +37,9 @@
   <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
-	  <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+	  <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
   </ItemGroup>
   <ItemGroup>
     <None Update="MS-SMB2Model_ServerTestSuite.deployment.ptfconfig">

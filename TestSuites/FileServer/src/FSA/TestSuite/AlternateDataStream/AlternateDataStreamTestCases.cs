@@ -226,7 +226,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileDispositionInformation fileDispositionInfo = new FileDispositionInformation();
             fileDispositionInfo.DeletePending = 1;
             List<byte> byteList = new List<byte>();
-            byteList.AddRange(BitConverter.GetBytes(fileDispositionInfo.DeletePending));
+            byteList.AddRange(new byte[] { fileDispositionInfo.DeletePending });
 
             status = this.fsaAdapter.SetFileInformation(
                 FileInfoClass.FILE_DISPOSITION_INFORMATION,

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net6.0</targetframework>
+    <targetframework>net7.0</targetframework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpemt</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
