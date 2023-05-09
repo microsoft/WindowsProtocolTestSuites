@@ -41,7 +41,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             base.TestInitialize();
             uncSharePath = Smb2Utility.GetUncPath(TestConfig.SutComputerName, TestConfig.BasicFileShare);
 
-            CheckTestOverQUICOnLinux();
         }
 
         protected override void TestCleanup()
@@ -61,22 +60,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             base.TestCleanup();
         }
 
-        private static readonly HashSet<string> incompatibleCompressionTestNames = new HashSet<string>
-        {
-            "SMB2Compression_LZNT1_LargeFile",
-            "SMB2Compression_CompressedWriteRequest_LargeFile",
-            "SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFront_LargeFile",
-            "SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtEnd_LargeFile",
-            "SMB2Compression_Chained_PatternV1_CompressedWriteRequest_PatternV1AtFrontAndEnd_LargeFile"
-        };
-
-        private void CheckTestOverQUICOnLinux()
-        {
-            if (TestConfig.UnderlyingTransport == Smb2TransportType.Quic && RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && incompatibleCompressionTestNames.Contains(CurrentTestCaseName))
-            {
-                BaseTestSite.Assert.Inconclusive("Ignoring test {0} when transport is QUIC and driver is Linux", CurrentTestCaseName);
-            }
-        }
         #endregion
 
         #region Check IsGlobalEncryptDataEnabled

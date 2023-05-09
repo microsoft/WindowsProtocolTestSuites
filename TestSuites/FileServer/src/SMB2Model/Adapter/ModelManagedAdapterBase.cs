@@ -145,22 +145,5 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Adapter
             }
         }
 
-        private static readonly HashSet<string> incompatibleTestNamesOverQUICOnLinux = new HashSet<string>
-        {
-            "CreditMgmtTestCaseS1011",
-            "CreditMgmtTestCaseS1066",
-            "CreditMgmtTestCaseS1080",
-            "CreditMgmtTestCaseS216",
-            "CreditMgmtTestCaseS462",
-            "CreditMgmtTestCaseS578"
-        };
-
-        public virtual void CheckTestOverQUICOnLinux()
-        {
-            if (testConfig.UnderlyingTransport == Smb2TransportType.Quic && incompatibleTestNamesOverQUICOnLinux.Contains(CurrentTestCaseName) && RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Site.Assert.Inconclusive("Ignoring test {0} over QUIC on Linux", CurrentTestCaseName);
-            }
-        }
     }
 }
