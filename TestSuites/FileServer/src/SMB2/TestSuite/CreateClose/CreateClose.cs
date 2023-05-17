@@ -48,7 +48,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
             client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
             sharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.BasicFileShare);
-            CheckTestOverQUIC();
         }
 
         protected override void TestCleanup()
@@ -64,17 +63,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
             base.TestCleanup();
         }
 
-        private void CheckTestOverQUIC()
-        {
-            List<string> testList = new List<string> {
-                 "CreateClose_InvalidSymbolicLink", "CreateClose_SymbolicLinkAtLast", "CreateClose_SymbolicLinkInMiddle"
-            };
-
-            if (TestConfig.UnderlyingTransport == Smb2TransportType.Quic && testList.Contains(CurrentTestCaseName))
-            {
-                BaseTestSite.Assert.Inconclusive("Ignoring test {0} when transport is QUIC", CurrentTestCaseName);
-            }
-        }
         #endregion
 
         #region Test Cases
