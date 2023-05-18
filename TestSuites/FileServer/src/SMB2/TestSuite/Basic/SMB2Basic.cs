@@ -2599,8 +2599,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 QUERY_INFO_Request_Flags_Values.V1,
                 fileId1,
                 null,
-                out outputBuffer
+                out outputBuffer,
+                checker: (header, response) => { }
             );
+
+            if (status != Smb2Status.STATUS_SUCCESS)
+            {
+                if (status == Smb2Status.STATUS_NOT_SUPPORTED)
+                {
+                    BaseTestSite.Assert.Inconclusive("Query FileNormalizedNameInformation is not supported by server.");
+                }
+                else
+                {
+                    BaseTestSite.Assert.Fail("Query FileNormalizedNameInformation failed with status {0}.", status);
+                }
+            }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify outputBuffer as FileNameInformation.");
             var fileNormalizedNameInfo = TypeMarshal.ToStruct<FileNameInformation>(outputBuffer);
