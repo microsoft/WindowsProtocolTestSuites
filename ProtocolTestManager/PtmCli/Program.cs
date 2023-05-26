@@ -58,13 +58,22 @@ namespace Microsoft.Protocols.TestManager.CLI
 
                 List<TestCase> testCases;
 
-                if (String.IsNullOrEmpty(options.FilterExpression))
+                if(string.IsNullOrWhiteSpace(options.CapabilitiesSpecification))
                 {
-                    testCases = p.GetTestCases(options.SelectedOnly);
+                    if (string.IsNullOrWhiteSpace(options.FilterExpression))
+                    {
+                        testCases = p.GetTestCases(options.SelectedOnly);
+                    }
+                    else
+                    {
+                        testCases = p.GetTestCases(options.FilterExpression);
+                    }
                 }
                 else
                 {
-                    testCases = p.GetTestCases(options.FilterExpression);
+                    testCases = 
+                        p.GetTestCases(options.CapabilitiesSpecification, 
+                                       options.CapabilitiesFilterExpression);
                 }
 
                 Console.CancelKeyPress += (sender, args) =>
@@ -173,6 +182,16 @@ namespace Microsoft.Protocols.TestManager.CLI
                     Environment.Exit(-1);
                 }
             }
+
+            if (_param.ContainsKey("cspecs"))
+            {
+                if(!_param.ContainsKey("cfilter"))
+                {
+                    Console.Error.WriteLine(StringResources.ErrorMessage);
+                    Console.WriteLine(StringResources.MissingCapabilitiesFilterMessage);
+                    Environment.Exit(-1);
+                }
+            }
         }
         Utility util;
         List<TestSuiteInfo> testSuites;
@@ -272,6 +291,36 @@ namespace Microsoft.Protocols.TestManager.CLI
             var result = util.GetTestCasesByFilter(filterExpression);
 
             return result;
+        }
+
+        /// <summary>
+        /// Get test cases using a capabilities file.
+        /// </summary>
+        /// <param name="capabilitiesFilePath">The path to the capabilities file.</param>
+        /// <param name="capabilitiesFilter">Filter expression to use with the capabilities specification.</param>
+        /// <returns>The test case list.</returns>
+        public List<TestCase> GetTestCases(string capabilitiesFilePath, string capabilitiesFilter)
+        {
+            Logger.AddLog(LogLevel.Information, $"Loading test cases using the following capabilities specification file: {capabilitiesFilePath}.");
+
+            var reader =
+                CapabilitiesConfigReader.Parse(new FileInfo(capabilitiesFilePath));
+            var filters = capabilitiesFilter?.Split(',');
+
+            Logger.AddLog(LogLevel.Information, $"Using {filters.Length} capabilities specification filters.");
+
+            var testNames = reader.GetTestCases(filters);
+
+            Logger.AddLog(LogLevel.Information, $"Found {testNames.Length} matching test name(s).");
+            Logger.AddLog(LogLevel.Debug, $"The following matching test name(s) were found: {string.Join('|', testNames)}.");
+
+            var testCases = util.GetSelectedCaseList()
+                                   .Where(t => testNames.Contains(t.FullName))
+                                   .ToList();
+
+            Logger.AddLog(LogLevel.Information, $"Found {testCases.Count} matching test case(s).");
+
+            return testCases;
         }
 
         /// <summary>

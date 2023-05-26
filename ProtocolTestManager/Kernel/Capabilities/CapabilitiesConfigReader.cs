@@ -1,10 +1,9 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Protocols.TestManager.Kernel;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text;
@@ -12,10 +11,10 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
+namespace Microsoft.Protocols.TestManager.Kernel
 {
     /// <summary>
-    /// Represents a capabilities file that can be used to configure tests filtering and display and
+    /// Represents a reader for a capabilities file that can be used to configure tests filtering and display and
     /// test results grouping within PTM Service and PTM CLI.
     /// </summary>
     /// <example>
@@ -47,16 +46,16 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
     ///}
     /// </code>
     /// </example>
-    public class CapabilitiesConfig
+    public class CapabilitiesConfigReader
     {
         private readonly Dictionary<string, Dictionary<string, HashSet<string>>> testsByCategories;
 
         /// <summary>
-        /// Creates a new instance of <see cref="CapabilitiesConfig"/>.
+        /// Creates a new instance of <see cref="CapabilitiesConfigReader"/>.
         /// </summary>
         /// <param name="testsByCategories">A dictionary of test cases by groups and categories representing the inner state of the
-        /// <see cref="CapabilitiesConfig"/> file.</param>
-        private CapabilitiesConfig(Dictionary<string, Dictionary<string, HashSet<string>>> testsByCategories)
+        /// capabilities file.</param>
+        private CapabilitiesConfigReader(Dictionary<string, Dictionary<string, HashSet<string>>> testsByCategories)
         {
             this.testsByCategories = testsByCategories;
         }
@@ -180,61 +179,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                                           GetTestCases(r.group) :
                                           GetTestCases(r.group, r.category);
                           }
-            ).ToArray();
+            ).Distinct()
+             .ToArray();
         }
 
         /// <summary>
-        /// Creates a capabilities file from a test suite reference.
+        /// Creates a <see cref="CapabilitiesConfigReader"/>, given a Json document.
         /// </summary>
-        /// <param name="ptmKernelService">The <see cref="IPTMKernelService"/> instance for managing the test suite operations.</param>
-        /// <param name="testSuiteId">The Id of the test suite to create the file from.</param>
-        /// <returns>The created file in Json format.</returns>
-        /// <exception cref="InvalidOperationException">
-        /// Thrown when the given test suite does not exist or has been removed.
-        /// </exception>
-        public static JsonNode Create(IPTMKernelService ptmKernelService, int testSuiteId)
-        {
-            var testSuite = ptmKernelService.GetTestSuite(testSuiteId);
-
-            if (testSuite != default(ITestSuite) || testSuite.Removed)
-            {
-                throw new InvalidOperationException($"The test suite with the Id, {testSuiteId} has been removed.");
-            }
-
-            var testCases = testSuite.GetTestCases(filter: null);
-
-            var document = new JsonObject
-            {
-                ["capabilities"] = new JsonObject()
-                {
-                    ["metadata"] = new JsonObject
-                    {
-                        ["testsuite"] = "testSuite.Name",
-                        ["version"] = "testSuite.Version",
-                    },
-                    ["categories"] = new JsonArray(),
-                    ["testcases"] = new JsonArray(
-                                    testCases.Select(c => new JsonObject
-                                    {
-                                        ["name"] = c.Name,
-                                        ["categories"] = new JsonArray()
-                                    }).ToArray()
-                                )
-                }
-            };
-
-            return document;
-        }
-
-        /// <summary>
-        /// Creates a <see cref="CapabilitiesConfig"/>, given a Json document.
-        /// </summary>
-        /// <param name="json">The Json document to create the <see cref="CapabilitiesConfig"/> from.</param>
-        /// <returns>The created <see cref="CapabilitiesConfig"/> instance.</returns>
+        /// <param name="json">The Json document to create the <see cref="CapabilitiesConfigReader"/> from.</param>
+        /// <returns>The created <see cref="CapabilitiesConfigReader"/> instance.</returns>
         /// <exception cref="InvalidOperationException">
         /// Thrown when the given Json document does not represent a valid capabilities file.
         /// </exception>
-        public static CapabilitiesConfig Parse(JsonNode json)
+        public static CapabilitiesConfigReader Parse(JsonNode json)
         {
             var testsByCategories =
                 new Dictionary<string, Dictionary<string, HashSet<string>>>();
@@ -300,19 +257,19 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
             }
 
-            return new CapabilitiesConfig(testsByCategories);
+            return new CapabilitiesConfigReader(testsByCategories);
         }
 
         /// <summary>
-        /// Creates a <see cref="CapabilitiesConfig", given a Json string./>
+        /// Creates a <see cref="CapabilitiesConfigReader" />, given a Json string.
         /// </summary>
-        /// <param name="json">The Json string to create the <see cref="CapabilitiesConfig"/> from.</param>
-        /// <returns>The created <see cref="CapabilitiesConfig"/> instance.</returns>
+        /// <param name="json">The Json string to create the <see cref="CapabilitiesConfigReader"/> from.</param>
+        /// <returns>The created <see cref="CapabilitiesConfigReader"/> instance.</returns>
         /// <exception cref="InvalidOperationException">
-        /// Thrown when the given json string is not properly formatted or the the Json document
+        /// Thrown when the given Json string is not properly formatted or the the Json document
         /// does not represent a valid capabilities file.
         /// </exception>
-        public static CapabilitiesConfig Parse(string json)
+        public static CapabilitiesConfigReader Parse(string json)
         {
             try
             {
@@ -324,6 +281,21 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             catch (JsonException)
             {
                 throw new InvalidOperationException("The provided capabilities file is not a valid Json file.");
+            }
+        }
+
+        /// <summary>
+        /// Creates a <see cref="CapabilitiesConfigReader" />, given a path to a capabilities file.
+        /// </summary>
+        /// <param name="file">The Json string to create the <see cref="CapabilitiesConfigReader"/> from.</param>
+        /// <returns>The created <see cref="CapabilitiesConfigReader"/> instance.</returns>
+        public static CapabilitiesConfigReader Parse(FileInfo file)
+        {
+            using (var reader = file.OpenText())
+            {
+                var json = reader.ReadToEnd();
+
+                return Parse(json);
             }
         }
     }

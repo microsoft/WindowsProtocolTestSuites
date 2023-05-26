@@ -12,6 +12,7 @@ namespace Microsoft.Protocols.TestManager.CLI
             Required = true,
             HelpText = "Specifies the path of the test profile to run.")]
         public string Profile { get; set; }
+
         [Option('t', "testsuite",
             Required = true,
             HelpText = "Specifies the path of the testsuite to run.")]
@@ -26,6 +27,16 @@ namespace Microsoft.Protocols.TestManager.CLI
             Required = false,
             HelpText = "Specifies the filter expression of test cases to run.\nThis parameter overrides the test cases in profile.")]
         public string FilterExpression { get; set; }
+
+        [Option("cfile",
+            Required = false,
+            HelpText = "Specifies the path to the capabilities specification file to use.\nWhen provided, this parameter overrides the test cases in profile including the filter parameter.")]
+        public string CapabilitiesSpecification { get; set; }
+
+        [Option("cfilter",
+            Required = false,
+            HelpText = "Specifies the filter expression of test cases to run using the provided capabilities specification file.\nThis parameter is required if a capabilities specification file is provided using the cspecs parameter.")]
+        public string CapabilitiesFilterExpression { get; set; }
 
         [Option("config",
             Required = false,

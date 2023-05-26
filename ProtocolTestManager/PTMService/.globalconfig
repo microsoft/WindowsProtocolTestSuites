@@ -1,0 +1,11 @@
+﻿# Top level entry required to mark this as a global AnalyzerConfig file
+is_global = true
+
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/configuration-files
+# The RequiresPreviewFeatures is set is set in the SharedAssemblyInfo.cs file because of test suites that use the Quic .net 7.0 library which is in preview.
+# The setting below turns off error messages in PTMService that result from using shared libraries that have opted into using the preview features. PTMService does not use the preview features. 
+# The seting can be removed when the Quic library is no longer in preview. The severity can also be changed to none if the preference is to have no warnings displayed.
+
+
+# CA2252: This API requires opting into preview features
+dotnet_diagnostic.CA2252.severity = warning
