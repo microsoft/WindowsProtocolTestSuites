@@ -531,7 +531,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             #region Populating Large Pointer Capability Set
             TS_LARGE_POINTER_CAPABILITYSET largePointerCapabilitySet = new TS_LARGE_POINTER_CAPABILITYSET();
             largePointerCapabilitySet.capabilitySetType = capabilitySetType_Values.CAPSETTYPE_LARGE_POINTER;
-            largePointerCapabilitySet.largePointerSupportFlags = support384PointerSize ? 
+            largePointerCapabilitySet.largePointerSupportFlags = support384PointerSize ?
                 largePointerSupportFlags_Values.LARGE_POINTER_FLAG_384x384 : largePointerSupportFlags_Values.LARGE_POINTER_FLAG_96x96;
             largePointerCapabilitySet.lengthCapability = sizeof(ushort) + sizeof(ushort) + sizeof(ushort);
 
@@ -1240,7 +1240,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         {
             encryptedProtocol = protocol;
 #if !UT
-            tcpClient = new TcpClient(serverName.ParseIPAddress().ToString(), serverPort); //Initialize and synchronous connect
+            // Remote IPEndPoint.
+            IPEndPoint remoteEP = new IPEndPoint(serverName.ParseIPAddress(), serverPort);
+            // Initialize IPV4 socket TcpClient.
+            tcpClient = new TcpClient(AddressFamily.InterNetwork);
+            // Connect the remote IPEndPoint.
+            tcpClient.Connect(remoteEP);
             clientStream = tcpClient.GetStream();
 #endif
             // create a type of transport
