@@ -21,14 +21,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Set file basic information on directory and check if file system supports 0 timestamp for ChangeTime")]
         public void FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime()
         {
-            if (this.fsaAdapter.FileSystem == FileSystem.REFS)
-            {
-                this.TestSite.Assume.Inconclusive("0 timestamp on ChangeTime is inconlusive for directory if file system is ReFS");
-            }
-            else
-            {
-                FileInfo_Set_FileBasicInformation_Timestamp_Zero(FileType.DirectoryFile, TimestampType.ChangeTime);
-            }
+            FileInfo_Set_FileBasicInformation_Timestamp_Zero(FileType.DirectoryFile, TimestampType.ChangeTime);
+        }
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.SetFileInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Set file basic information on data file and check if file system supports 0 timestamp for ChangeTime")]
+        public void FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_ChangeTime()
+        {
+            FileInfo_Set_FileBasicInformation_Timestamp_Zero(FileType.DataFile, TimestampType.ChangeTime);
         }
 
         [TestMethod()]

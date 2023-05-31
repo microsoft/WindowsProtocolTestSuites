@@ -158,6 +158,7 @@
             * [FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileFullDirectoryInformation_Dir_CreationTime)
             * [FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime](#FileInfo_Query_FileIdGlobalTxDirectoryInformation_Dir_CreationTime)
         * [FileInfo_Set_FileBasicInformation_Timestamp_Zero](#FileInfo_Set_FileBasicInformation_Timestamp_Zero)
+            * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_ChangeTime)
             * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime)
             * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_LastWriteTime)
             * [FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastWriteTime](#FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_LastWriteTime)
@@ -492,7 +493,7 @@ There are 221 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 11 | 81 (32) |
+| Scenarios for FileInformation | 11 | 82 (32) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 89 (26) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -2443,6 +2444,18 @@ There are 343 test cases in total:
 | | Verify CreationTime was not changed |
 
 #### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero
+
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_File_ChangeTime
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if setting ChangeTime value to 0 is handled by different file systems for data file|
+| | File information class: FileBasicInformation|
+| Message Sequence| CreateFile (DataFile).|
+| | Query ChangeTime |
+| | Set ChangeTime to 0 |
+| | Query ChangeTime |
+| | Verify ChangeTime was not changed |
 
 ##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime"/>FileInfo_Set_FileBasicInformation_Timestamp_Zero_Dir_ChangeTime
 

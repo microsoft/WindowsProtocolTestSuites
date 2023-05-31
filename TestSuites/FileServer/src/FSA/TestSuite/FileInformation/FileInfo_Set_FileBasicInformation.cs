@@ -288,8 +288,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
             fileBasicInformation.ChangeTime.dwHighDateTime = (uint)(changeTime >> 32);
             fileBasicInformation.ChangeTime.dwLowDateTime = (uint)(changeTime & 0xFFFFFFFF);
-            fileBasicInformation.Reserved = 0;
-            fileBasicInformation.FileAttributes = (uint)FileAttribute.NORMAL;
             byte[] inputBuffer = TypeMarshal.ToBytes(fileBasicInformation);
             MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
 
@@ -310,8 +308,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
             fileBasicInformation.LastWriteTime.dwHighDateTime = (uint)(lastWriteTime >> 32);
             fileBasicInformation.LastWriteTime.dwLowDateTime = (uint)(lastWriteTime & 0xFFFFFFFF);
-            fileBasicInformation.Reserved = 0;
-            fileBasicInformation.FileAttributes = (uint)FileAttribute.NORMAL;
             byte[] inputBuffer = TypeMarshal.ToBytes(fileBasicInformation);
             MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
 
@@ -332,8 +328,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
             fileBasicInformation.LastAccessTime.dwHighDateTime = (uint)(lastAccessTime >> 32);
             fileBasicInformation.LastAccessTime.dwLowDateTime = (uint)(lastAccessTime & 0xFFFFFFFF);
-            fileBasicInformation.Reserved = 0;
-            fileBasicInformation.FileAttributes = (uint)FileAttribute.NORMAL;
             byte[] inputBuffer = TypeMarshal.ToBytes(fileBasicInformation);
             MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
 
@@ -354,8 +348,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileBasicInformation fileBasicInformation = new FileBasicInformation();
             fileBasicInformation.CreationTime.dwHighDateTime = (uint)(creationTime >> 32);
             fileBasicInformation.CreationTime.dwLowDateTime = (uint)(creationTime & 0xFFFFFFFF);
-            fileBasicInformation.Reserved = 0;
-            fileBasicInformation.FileAttributes = (uint)FileAttribute.NORMAL;
             byte[] inputBuffer = TypeMarshal.ToBytes(fileBasicInformation);
             MessageStatus status = this.fsaAdapter.SetFileInformation(FileInfoClass.FILE_BASIC_INFORMATION, inputBuffer);
 
