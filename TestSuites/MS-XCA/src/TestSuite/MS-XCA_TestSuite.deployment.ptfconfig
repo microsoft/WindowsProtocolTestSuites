@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
+
+	<Properties>
+		<Group name="XCA">
+			<Property name="TestDataOutputFolder" value="../TestData/Results">
+				<Description>
+					The folder where the Output files from TestData Tests will be stored
+				</Description>
+			</Property>
+
+			<Property name="UserDataCompressionInputFolder" value="../UserData/Compression">
+				<Description>
+					The folder where the input files for UserData Tests are located
+				</Description>
+			</Property>
+
+			<Property name="UserDataCompressionOutputFolder" value="">
+				<Description>
+					The folder where the Output files from UserData compression Tests will be stored. Leave blank and the results will be stored in a folder called CompressionTestResults in the same folder as the input test files
+				</Description>
+			</Property>
+
+			<Property name="UserDataDecompressionInputFolderLZ77" value="../UserData/Decompression/LZ77">
+				<Description>
+					The folder where the input files for UserData Tests are located
+				</Description>
+			</Property>
+
+			<Property name="UserDataDecompressionInputFolderLZ77Huffman" value="../UserData/Decompression/LZ77Huffman">
+				<Description>
+					The folder where the input files for UserData Tests are located
+				</Description>
+			</Property>
+
+			<Property name="UserDataDecompressionInputFolderLZNT1" value="../UserData/Decompression/LZNT1">
+				<Description>
+					The folder where the input files for UserData Tests are located
+				</Description>
+			</Property>
+
+			<Property name="UserDataDecompressionOutputFolder" value="">
+				<Description>
+					The folder where the Output files from UserData decompression Tests will be stored. Leave blank and the results will be stored in a folder called DecompressionTestResults in the same folder as the input test file
+				</Description>
+			</Property>
+
+			<Property name="DynamicDataInputFolder" value="../DynamicData">
+				<Description>
+					A folder where dynamically generated data test files will be stored.
+				</Description>
+			</Property>
+		</Group>
+		
+		<!-- Properties to setup the System (Application) Under Test -->
+		<Group name="SUT">
+			<Property name="WorkingDirectory" value="../Utils/XcaTestApp">
+				<Description>
+					Input the working directory for your Test Implementation.
+				</Description>
+			</Property>
+
+			<Property name="PLAIN_LZ77_COMPRESSION_COMMAND" value="../Utils/XcaTestApp/XcaTestApp.exe">
+				<Description>
+					The command to call to perform LZ77 compression
+				</Description>
+			</Property>
+
+			<Property name="PLAIN_LZ77_COMPRESSION_ARGUMENTS" value="-in {{InputFile}} -out {{OutputFile}} -alg 1">
+				<Description>
+					The arguments for the LZ77 compression command
+				</Description>
+			</Property>
+
+			<Property name="LZ77_HUFFMAN_COMPRESSION_COMMAND" value="../Utils/XcaTestApp/XcaTestApp.exe">
+				<Description>
+					The command to call to perform LZ77+Huffman compression
+				</Description>
+			</Property>
+
+			<Property name="LZ77_HUFFMAN_COMPRESSION_ARGUMENTS" value="-in {{InputFile}} -out {{OutputFile}} -alg 2">
+				<Description>
+					The arguments for the LZ77+Huffman compression command
+				</Description>
+			</Property>
+
+			<Property name="LZNT1_COMPRESSION_COMMAND" value="../Utils/XcaTestApp/XcaTestApp.exe">
+				<Description>
+					The command to call to perform LZNT1 compression
+				</Description>
+			</Property>
+
+			<Property name="LZNT1_COMPRESSION_ARGUMENTS" value="-in {{InputFile}} -out {{OutputFile}} -alg 3">
+				<Description>
+					The arguments for the LZNT1 compression command
+				</Description>
+			</Property>
+
+			<Property name="PLAIN_LZ77_DECOMPRESSION_COMMAND" value="../Utils/XcaTestApp/XcaTestApp.exe">
+				<Description>
+					The command to call to perform LZ77 decompression
+				</Description>
+			</Property>
+
+			<Property name="PLAIN_LZ77_DECOMPRESSION_ARGUMENTS" value="-d -in {{InputFile}} -out {{OutputFile}} -alg 1">
+				<Description>
+					The arguments for the LZ77 decompression command
+				</Description>
+			</Property>
+
+			<Property name="LZ77_HUFFMAN_DECOMPRESSION_COMMAND" value="../Utils/XcaTestApp/XcaTestApp.exe">
+				<Description>
+					The command to call to perform LZ77+Huffman decompression
+				</Description>
+			</Property>
+
+			<Property name="LZ77_HUFFMAN_DECOMPRESSION_ARGUMENTS" value="-d -in {{InputFile}} -out {{OutputFile}} -alg 2">
+				<Description>
+					The arguments for the LZ77+Huffman decompression command
+				</Description>
+			</Property>
+
+			<Property name="LZNT1_DECOMPRESSION_COMMAND" value="../Utils/XcaTestApp/XcaTestApp.exe">
+				<Description>
+					The command to call to perform LZNT1 decompression
+				</Description>
+			</Property>
+
+			<Property name="LZNT1_DECOMPRESSION_ARGUMENTS" value="-d -in {{InputFile}} -out {{OutputFile}} -alg 3">
+				<Description>
+					The arguments for the LZNT1 decompression command
+				</Description>
+			</Property>
+			
+		</Group>
+	</Properties>
+</TestSite>

@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MS-XCA_TestSuite", "TestSuite\MS-XCA_TestSuite.csproj", "{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{644A67F0-6214-42E4-81F0-639606350E71} = {644A67F0-6214-42E4-81F0-639606350E71}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtoSDK", "ProtoSDK", "{0D92B9EB-7428-42FA-97F8-14585E85D21B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xca", "..\..\..\ProtoSDK\MS-XCA\Xca.csproj", "{2A62E9AE-268D-4B38-A693-CF000459B68F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MS-XCA_Adapter", "Adapter\MS-XCA_Adapter.csproj", "{644A67F0-6214-42E4-81F0-639606350E71}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}.Debug|x86.Build.0 = Debug|Any CPU
+		{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}.Release|x86.ActiveCfg = Release|Any CPU
+		{BB359E03-7FD3-4166-B05B-C6C9F2A2D3B1}.Release|x86.Build.0 = Release|Any CPU
+		{2A62E9AE-268D-4B38-A693-CF000459B68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A62E9AE-268D-4B38-A693-CF000459B68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A62E9AE-268D-4B38-A693-CF000459B68F}.Debug|x86.ActiveCfg = Debug|x86
+		{2A62E9AE-268D-4B38-A693-CF000459B68F}.Debug|x86.Build.0 = Debug|x86
+		{2A62E9AE-268D-4B38-A693-CF000459B68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A62E9AE-268D-4B38-A693-CF000459B68F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A62E9AE-268D-4B38-A693-CF000459B68F}.Release|x86.ActiveCfg = Release|x86
+		{2A62E9AE-268D-4B38-A693-CF000459B68F}.Release|x86.Build.0 = Release|x86
+		{644A67F0-6214-42E4-81F0-639606350E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{644A67F0-6214-42E4-81F0-639606350E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{644A67F0-6214-42E4-81F0-639606350E71}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{644A67F0-6214-42E4-81F0-639606350E71}.Debug|x86.Build.0 = Debug|Any CPU
+		{644A67F0-6214-42E4-81F0-639606350E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{644A67F0-6214-42E4-81F0-639606350E71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{644A67F0-6214-42E4-81F0-639606350E71}.Release|x86.ActiveCfg = Release|Any CPU
+		{644A67F0-6214-42E4-81F0-639606350E71}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2A62E9AE-268D-4B38-A693-CF000459B68F} = {0D92B9EB-7428-42FA-97F8-14585E85D21B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {10C7F8A5-52C9-4367-9196-70D1EF4EEC77}
+	EndGlobalSection
+EndGlobal
