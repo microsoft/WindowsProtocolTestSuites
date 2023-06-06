@@ -49,6 +49,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
     /// </example>
     public class CapabilitiesConfigWriter
     {
+        public static string RemovedOrNullTestSuiteMessage(int testSuiteId) =>
+            $"The test suite with the Id, {testSuiteId} has been removed.";
+
         /// <summary>
         /// Creates a capabilities file from a test suite reference.
         /// </summary>
@@ -62,9 +65,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         {
             var testSuite = ptmKernelService.GetTestSuite(testSuiteId);
 
-            if (testSuite != default(ITestSuite) || testSuite.Removed)
+            if (testSuite == default(ITestSuite) || testSuite.Removed)
             {
-                throw new InvalidOperationException($"The test suite with the Id, {testSuiteId} has been removed.");
+                throw new InvalidOperationException(RemovedOrNullTestSuiteMessage(testSuiteId));
             }
 
             var testCases = testSuite.GetTestCases(filter: null);
@@ -75,8 +78,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     ["metadata"] = new JsonObject
                     {
-                        ["testsuite"] = "testSuite.Name",
-                        ["version"] = "testSuite.Version",
+                        ["testsuite"] = testSuite.Name,
+                        ["version"] = testSuite.Version,
                     },
                     ["groups"] = new JsonArray(),
                     ["testcases"] = new JsonArray(

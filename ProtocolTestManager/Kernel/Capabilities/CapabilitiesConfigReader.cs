@@ -48,6 +48,28 @@ namespace Microsoft.Protocols.TestManager.Kernel
     /// </example>
     public class CapabilitiesConfigReader
     {
+        public static string MissingTestSuiteOrVersionMessage =>
+            @"Test suite name and version must be specified for a capabilities file.";
+        public static string EmptyOrDuplicateGroupNameMessage(string groupName) =>
+            $"Group names cannot be empty and must be unique within the capabilities file | Group: {groupName}.";
+        public static string EmptyOrDuplicateCategoryNameMessage(string groupName, string categoryName) =>
+            $"Category names cannot be empty and must be unique within a group in capabilities file | Group: {groupName}, Category: {categoryName}.";
+        public static string EmptyTestCaseNameMessage =>
+            @"Test case names cannot be empty.";
+        public static string InvalidGroupOrCategoryMessage(string testName, string groupName, string categoryName) =>
+            $"Test, '{testName}' has an invalid group or category name | Group: {groupName}, Category: {categoryName}.";
+        public static string InvalidJsonMessage =>
+            @"The provided capabilities file is not a valid Json file.";
+        public static string EmptyTestCaseFilterGroupOrCategoryNameMessage =>
+            $"Capabilities file group or category names cannot be empty.";
+        public static string EmptyTestCaseFilterGroupNameMessage =>
+            $"Capabilities file group names cannot be empty.";
+        public static string NonExistentGroupNameMessage(string groupName) =>
+            $"Group with name '{groupName}' does not exist in this capabilities file.";
+        public static string NonExistentCategoryNameMessage(string groupName, string categoryName) =>
+            $"Category with name '{categoryName}' does not exist within the group, '{groupName}' in this capabilities file.";
+
+
         private readonly Dictionary<string, Dictionary<string, HashSet<string>>> testsByCategories;
 
         /// <summary>
@@ -108,12 +130,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             if (string.IsNullOrWhiteSpace(group))
             {
-                throw new InvalidOperationException($"Capabilities file group names cannot be empty.");
+                throw new InvalidOperationException(EmptyTestCaseFilterGroupNameMessage);
             }
 
             if (!testsByCategories.ContainsKey(group))
             {
-                throw new InvalidOperationException($"Group with name '{group}' does not exist in this capabilities file.");
+                throw new InvalidOperationException(NonExistentGroupNameMessage(group));
             }
 
             return testsByCategories[group];
@@ -149,13 +171,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             if (string.IsNullOrWhiteSpace(group) || string.IsNullOrWhiteSpace(category))
             {
-                throw new InvalidOperationException($"Capabilities file group or category names cannot be empty.");
+                throw new InvalidOperationException(EmptyTestCaseFilterGroupOrCategoryNameMessage);
             }
 
+            category = category?.Trim()?.ToLowerInvariant();
             var categories = GetCategories(group);
             if (!categories.ContainsKey(category))
             {
-                throw new InvalidOperationException($"Category with name '{category}' does not exist within the group, '{group}' in this capabilities file.");
+                throw new InvalidOperationException(NonExistentCategoryNameMessage(group, category));
             }
 
             return categories[category].ToArray();
@@ -170,7 +193,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// Thrown when the specified group or category in any of the filters is not found in the capabilities 
         /// file.
         /// </exception>
-        public string[] GetTestCases(params string[] filters)
+        public string[] GetTestCases(string[] filters)
         {
             return filters.Select(f => ParseCategoryInfo(f))
                           .SelectMany(r =>
@@ -203,7 +226,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             if (string.IsNullOrEmpty(testSuite) || string.IsNullOrEmpty(version))
             {
-                throw new InvalidOperationException("Test suite name and version must be specified for a capabilities file.");
+                throw new InvalidOperationException(MissingTestSuiteOrVersionMessage);
             }
 
             var groups = document?["groups"] as JsonArray ?? new JsonArray();
@@ -212,7 +235,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 var groupName = group?["name"]?.ToString()?.Trim()?.ToLowerInvariant();
                 if (string.IsNullOrWhiteSpace(groupName) || testsByCategories.ContainsKey(groupName))
                 {
-                    throw new InvalidOperationException($"Group names cannot be empty and must be unique within the capabilities file | Group: {groupName}.");
+                    throw new InvalidOperationException(EmptyOrDuplicateGroupNameMessage(groupName));
                 }
 
                 testsByCategories.Add(groupName, new());
@@ -223,7 +246,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     var categoryName = category["name"]?.ToString()?.Trim()?.ToLowerInvariant();
                     if (string.IsNullOrWhiteSpace(categoryName) || testsByCategories[groupName].ContainsKey(categoryName))
                     {
-                        throw new InvalidOperationException($"Category names cannot be empty and must be unique within a group in capabilities file | Group: {groupName}, Category: {categoryName}.");
+                        throw new InvalidOperationException(EmptyOrDuplicateCategoryNameMessage(groupName, categoryName));
                     }
 
                     testsByCategories[groupName].Add(categoryName, new HashSet<string>());
@@ -236,7 +259,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 var testName = testCase["name"]?.ToString()?.Trim();
                 if (string.IsNullOrWhiteSpace(testName))
                 {
-                    throw new InvalidOperationException("Test case names cannot be empty.");
+                    throw new InvalidOperationException(EmptyTestCaseNameMessage);
                 }
 
                 var testCategories = testCase["categories"] as JsonArray ?? new JsonArray();
@@ -247,7 +270,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
                     if (!testsByCategories.ContainsKey(group) || !testsByCategories[group].ContainsKey(category))
                     {
-                        throw new InvalidOperationException($"Test, '{testName}' has an invalid group or category name | Group: {group}, Category: {category}.");
+                        throw new InvalidOperationException(InvalidGroupOrCategoryMessage(testName, group, category));
                     }
 
                     if (!testsByCategories[group][category].Contains(testName))
@@ -280,7 +303,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
             catch (JsonException)
             {
-                throw new InvalidOperationException("The provided capabilities file is not a valid Json file.");
+                throw new InvalidOperationException(InvalidJsonMessage);
             }
         }
 
