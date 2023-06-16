@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 {
@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         public byte redBkg;
 
-        public CLEARCODEC_VBAR[] vBars; 
+        public CLEARCODEC_VBAR[] vBars;
     }
 
     /// <summary>
@@ -213,9 +213,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             }
         }
         // the middle 6 bits
-        public ushort shortVBarYOff   
+        public ushort shortVBarYOff
         {
-            get 
+            get
             {
                 return (ushort)((shortVBarYOnOff_x >> 8) & 0x003f);
             }
@@ -260,8 +260,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         // sigelton mode
         private static ClearCodecBandEncoder _instance;
         // use lock to make sigelton thread safe
-        private static object synclock = new object(); 
-        #endregion 
+        private static object synclock = new object();
+        #endregion
 
         #region static method
         /// <summary>
@@ -360,35 +360,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="bandBmp">The bitmap to be encoded in band layer.</param>
         /// <param name="bandRect">The band position relative to bitmap left-top edge.</param>
-        public CLEARCODEC_BAND EncodeBand(Bitmap bandBmp, ClearCodec_RECT16 bandRect)
+        public CLEARCODEC_BAND EncodeBand(SKBitmap bandBmp, ClearCodec_RECT16 bandRect)
         {
-          
+
             CLEARCODEC_BAND bandData = new CLEARCODEC_BAND();
 
-            Color bgColor = bandBmp.GetPixel(0, 0);
+            SKColor bgColor = bandBmp.GetPixel(0, 0);
 
             bandData.xStart = bandRect.left;
-            bandData.xEnd = (ushort)(bandRect.right-1);
+            bandData.xEnd = (ushort)(bandRect.right - 1);
             bandData.yStart = bandRect.top;
-            bandData.yEnd = (ushort)(bandRect.bottom-1);
+            bandData.yEnd = (ushort)(bandRect.bottom - 1);
 
-            bandData.blueBkg = bgColor.B;
-            bandData.greenBkg = bgColor.G;
-            bandData.redBkg = bgColor.R;
+            bandData.blueBkg = bgColor.Blue;
+            bandData.greenBkg = bgColor.Green;
+            bandData.redBkg = bgColor.Red;
 
             List<CLEARCODEC_VBAR> vBarList = new List<CLEARCODEC_VBAR>();
 
             // use short vbar cache miss method
             for (ushort x = 0; x < bandBmp.Width; x++)
-            {           
+            {
                 byte shortVBarYOn = 0;  // relative to top of V-Bar, won't excceed 52
                 byte shortVBarYOff = 0; // relative to top of V-Bar, won't excceed 52
 
                 // find shortVBarYOn from top
                 byte y;  // bandBmp.Height can't exceed 52 pixels
-                for ( y = 0; y < bandBmp.Height; y++)
+                for (y = 0; y < bandBmp.Height; y++)
                 {
-                    Color pixelColor = bandBmp.GetPixel(x, y);
+                    SKColor pixelColor = bandBmp.GetPixel(x, y);
                     if (!bgColor.Equals(pixelColor))
                     {
                         shortVBarYOn = (byte)y;
@@ -406,7 +406,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 // find shortVBarYOff from bottem, which is the first position for left bgcolor
                 for (y = (byte)(bandBmp.Height - 1); y > shortVBarYOn; y--)
                 {
-                    Color pixelColor = bandBmp.GetPixel(x, y);
+                    SKColor pixelColor = bandBmp.GetPixel(x, y);
                     if (!bgColor.Equals(pixelColor))
                     {
                         shortVBarYOff = (byte)(y + 1);
@@ -419,17 +419,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 {
                     shortVBarYOff = (byte)(shortVBarYOn + 1);
                 }
-               
+
                 // construct short Vbar Pixels
 
                 List<Color_RGB> shortVBarPixelList = new List<Color_RGB>();
                 for (y = shortVBarYOn; y < shortVBarYOff; y++)
                 {
-                    Color pixelColor = bandBmp.GetPixel(x, y);
+                    SKColor pixelColor = bandBmp.GetPixel(x, y);
                     Color_RGB svbarColor = new Color_RGB();
-                    svbarColor.B = pixelColor.B;
-                    svbarColor.G = pixelColor.G;
-                    svbarColor.R = pixelColor.R;
+                    svbarColor.B = pixelColor.Blue;
+                    svbarColor.G = pixelColor.Green;
+                    svbarColor.R = pixelColor.Red;
 
                     shortVBarPixelList.Add(svbarColor);
                 }
@@ -438,11 +438,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 List<Color_RGB> vBarPixelList = new List<Color_RGB>();
                 for (int k = 0; k < bandBmp.Height; k++)
                 {
-                    Color pixelColor = bandBmp.GetPixel(x, k);
+                    SKColor pixelColor = bandBmp.GetPixel(x, k);
                     Color_RGB vbarColor = new Color_RGB();
-                    vbarColor.B = pixelColor.B;
-                    vbarColor.G = pixelColor.G;
-                    vbarColor.R = pixelColor.R;
+                    vbarColor.B = pixelColor.Blue;
+                    vbarColor.G = pixelColor.Green;
+                    vbarColor.R = pixelColor.Red;
                     vBarPixelList.Add(vbarColor);
                 }
 
@@ -457,7 +457,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                     vBar.vbarCacheHit.vBarIndex = vbarIdx;
 
                     vBarList.Add(vBar);
-                            
+
                     continue;
                 }
                 else
@@ -486,22 +486,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                     shortvBarDict.Add(shortVBarPixelList, shortvBarCursor);
                     shortvBarCursor = (ushort)((shortvBarCursor + 1) % CLEARCODEC_CONST.CLEARCODEC_BAND_MAX_SHORT_VBAR_CACHE_SLOT);
                 }
-                
+
 
                 // get to here mean no vbar or short vbar cache hit
                 CLEARCODEC_VBAR vBarUncache = new CLEARCODEC_VBAR();
                 vBarUncache.type = VBAR_TYPE.SHORT_VBAR_CACHE_MISS;
-                vBarUncache.shortVbarCacheMiss.x = 0x0; 
+                vBarUncache.shortVbarCacheMiss.x = 0x0;
 
                 // pack data into vBar.shortVbarCacheMiss
                 vBarUncache.shortVbarCacheMiss.shortVBarYOn = shortVBarYOn;
                 vBarUncache.shortVbarCacheMiss.shortVBarYOff = shortVBarYOff;
-                if (shortVBarYOff > shortVBarYOn )
+                if (shortVBarYOff > shortVBarYOn)
                 {
                     vBarUncache.shortVbarCacheMiss.shortVBarPixels = shortVBarPixelList.ToArray();
                 }
 
-                vBarList.Add(vBarUncache);              
+                vBarList.Add(vBarUncache);
             }
 
             bandData.vBars = vBarList.ToArray();
@@ -516,11 +516,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="bandDict">The structure saves multiple band bitmap and position.</param>
         /// <param name="vbarCacheEnabled">if vbar or short vbar cache is used when encoding band</param>
-        public CLEARCODEC_BAND_DATA Encode(Dictionary<ClearCodec_RECT16, Bitmap> bandDict)
+        public CLEARCODEC_BAND_DATA Encode(Dictionary<ClearCodec_RECT16, SKBitmap> bandDict)
         {
             List<CLEARCODEC_BAND> bandList = new List<CLEARCODEC_BAND>();
 
-            foreach (KeyValuePair<ClearCodec_RECT16, Bitmap> band in bandDict)
+            foreach (KeyValuePair<ClearCodec_RECT16, SKBitmap> band in bandDict)
             {
                 if (band.Value == null) continue;
                 CLEARCODEC_BAND bandData = EncodeBand(band.Value, band.Key);

@@ -1,17 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkiaSharp;
+using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
@@ -46,8 +41,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages(Progressive Encoding) to client. to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, ImageQuality_Values.Midium, true, false, false);
-            
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, ImageQuality_Values.Midium, true, false, false);
+
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
@@ -88,7 +83,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages(Non-Progressive Encoding) to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -129,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending first bitmap Data Messages, progressively encoded by RemoteFX Progressive Codec, to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Midium, true, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -139,10 +134,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
-            Bitmap newBitmap = RdpegfxTestUtility.drawDiagonal(testData.RfxProgCodecImage);
+            SKBitmap newBitmap = RdpegfxTestUtility.drawDiagonal(SKImage.FromBitmap(testData.RfxProgCodecImage));
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending second bitmap Data Messages, progressively encoded by RemoteFX Progressive Codec(tile diff enabled), to client.");
-            List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, newBitmap, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(newBitmap), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Midium, true, true, true);
             fid = SendRfxProgCodecEcodedData(layerDataList2);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -183,7 +178,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending first bitmap Data Messages, non-progressively encoded by RemoteFX Progressive Codec, to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Midium, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -193,10 +188,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
-            Bitmap newBitmap = RdpegfxTestUtility.drawDiagonal(testData.RfxProgCodecImage);
+            SKBitmap newBitmap = RdpegfxTestUtility.drawDiagonal(SKImage.FromBitmap(testData.RfxProgCodecImage));
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending second bitmap Data Messages, non-progressively encoded by RemoteFX Progressive Codec(tile diff enabled), to client.");
-            List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, newBitmap, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(newBitmap), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Midium, false, true, true);
             fid = SendRfxProgCodecEcodedData(layerDataList2);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -238,8 +233,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages(Progressive Encoding) to client.");
-            Bitmap surfImage = RdpegfxTestUtility.DrawSurfImage(surf, Color.Green, testData.RfxProgCodecImage, RdpegfxTestUtility.imgPos3);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, surfImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            SKBitmap surfImage = RdpegfxTestUtility.DrawSurfImage(surf, SKColors.Green, testData.RfxProgCodecImage, RdpegfxTestUtility.imgPos3);
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(surfImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, true, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -281,8 +276,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages(Non-Progressive Encoding) to client.");
-            Bitmap surfImage = RdpegfxTestUtility.DrawSurfImage(surf, Color.Green, testData.RfxProgCodecImage, RdpegfxTestUtility.imgPos3);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, surfImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            SKBitmap surfImage = RdpegfxTestUtility.DrawSurfImage(surf, SKColors.Green, testData.RfxProgCodecImage, RdpegfxTestUtility.imgPos3);
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(surfImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -401,7 +396,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending first bitmap Data Messages, progressively encoded by RemoteFX Progressive Codec, to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, true, true, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -411,10 +406,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
-            Bitmap newBitmap = RdpegfxTestUtility.drawDiagonal(testData.RfxProgCodecImage);
+            SKBitmap newBitmap = RdpegfxTestUtility.drawDiagonal(SKImage.FromBitmap(testData.RfxProgCodecImage));
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending second bitmap Data Messages, progressively encoded by RemoteFX Progressive Codec(SubBand_Diffing disabled), to client.");
-            List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, true, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList2);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -455,7 +450,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending first bitmap Data Messages, non-progressively encoded by RemoteFX Progressive Codec, to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, true, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -465,10 +460,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Get second bitmap by adding a diagonal to first bitmap");
             // Add a diagonal to the test image and send it again, the image data should be sent in tile diff method.
-            Bitmap newBitmap = RdpegfxTestUtility.drawDiagonal(testData.RfxProgCodecImage);
+            SKBitmap newBitmap = RdpegfxTestUtility.drawDiagonal(SKImage.FromBitmap(testData.RfxProgCodecImage));
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending second bitmap Data Messages, non-progressively encoded by RemoteFX Progressive Codec(SubBand_Diffing disabled), to client.");
-            List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList2 = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList2);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -509,7 +504,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending bitmap Data Messages, progressively encoded by RemoteFX Progressive Codec (DWT doesn't use Reduce Extrapolate method), to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, true, false, false);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -550,7 +545,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending bitmap Data Messages, non-progressively encoded by RemoteFX Progressive Codec(DWT doesn't use Reduce Extrapolate method), to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, false);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -591,7 +586,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Encoded Bitmap Data Messages to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, true, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -644,7 +639,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages to the deleted surface (id: {0}) on client.", surf.Id);
-                       
+
             try
             {
                 // Delete context from inexistent surface
@@ -692,7 +687,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, true, true, false);
 
             // Test case pass if RDP connection is stopped due to inexist surface id in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with sync block length is not 12");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with sync block length is not 12");
         }
 
         [TestMethod]
@@ -836,7 +831,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to incorrect length in frame begin block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect length in frame begin block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect length in frame begin block");
         }
 
         [TestMethod]
@@ -872,7 +867,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to missed frame end block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream without frame end block.");            
+            RDPClientTryDropConnection("a Rfx Progressive stream without frame end block.");
         }
 
         [TestMethod]
@@ -909,7 +904,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             // Test case pass if RDP connection is stopped due to incorrect length in frame end block in Rfx Progressive Codec stream 
             RDPClientTryDropConnection("a Rfx Progressive stream with incorrect length in frame end block");
-            
+
         }
 
         [TestMethod]
@@ -945,7 +940,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to incorrect length in context block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect length in context block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect length in context block");
         }
 
         [TestMethod]
@@ -981,7 +976,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendRfxProgressiveCodecPduWithoutImage(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, false, true, false);
 
             // Test case pass if RDP connection is stopped due to incorrect tile size in context block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect tile size  in context block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect tile size  in context block");
         }
 
         [TestMethod]
@@ -1014,12 +1009,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with region block is before frame begin block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with region block is before frame begin block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_BeforeFrameBeginBlock);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to region block is before frame begin block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with region block is before frame begin block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with region block is before frame begin block");
         }
 
         [TestMethod]
@@ -1052,12 +1047,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with incorrect block length of region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with incorrect block length of region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_IncorrectLen);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect block length of region block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect block length of region block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect block length of region block");
         }
 
         [TestMethod]
@@ -1090,13 +1085,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with incorrect tile size in region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with incorrect tile size in region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_IncorrectTileSize);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect tile size of region block in Rfx Progressive Codec stream 
             RDPClientTryDropConnection("a Rfx Progressive stream with incorrect tile size in region block");
-            
+
         }
 
         [TestMethod]
@@ -1129,13 +1124,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with incorrect Rects Number in region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with incorrect Rects Number in region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_IncorrectRectsNumber);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect Rects Number of region block in Rfx Progressive Codec stream 
             RDPClientTryDropConnection("a Rfx Progressive stream with incorrect Rects Number in region block");
-            
+
         }
 
         [TestMethod]
@@ -1168,12 +1163,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with zero Rects Number in region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with incorrect Rects Number in region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_ZeroRectsNumber);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to zero Rects Number of region block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with 0 Rects Number in region block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with 0 Rects Number in region block");
         }
 
         [TestMethod]
@@ -1206,12 +1201,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with incorrect Quant Number in region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with incorrect Quant Number in region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_IncorrectQuantNumber);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect Quant Number of region block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect Quant  Number in region block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect Quant  Number in region block");
         }
 
         [TestMethod]
@@ -1244,12 +1239,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with zero Quant Number in region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with zero Quant Number in region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_ZeroQuantNumber);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to zero Quant Number of region block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with 0 Quant  Number in region block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with 0 Quant  Number in region block");
         }
 
         [TestMethod]
@@ -1282,12 +1277,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with incorrect ProgQuant Number in region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with incorrect ProgQuant Number in region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_IncorrectProgQuantNumber);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Midium, true, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to incorrect ProgQuant Number of region block in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect ProgQuant Number in region block");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with incorrect ProgQuant Number in region block");
         }
 
         [TestMethod]
@@ -1320,7 +1315,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with incorrect tile block number in region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with incorrect tile block number in region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_IncorrectTileBlockNumber);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
@@ -1358,13 +1353,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with invalid tile block type in region block.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with invalid tile block type (0xffff) in region block.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlock_InvalidTileBlockType);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to iinvalid tile block type of region block in Rfx Progressive Codec stream 
             RDPClientTryDropConnection("a Rfx Progressive stream with invalid tile block type in region block");
-            
+
         }
 
         [TestMethod]
@@ -1397,12 +1392,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages with mismatched region block number.");
             // Set test type to instruct egfx adapter to encode Rfx Progressive Codec stream with mismatched region block number.
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.RfxProgCodec_RegionBlockNumberMismatch);
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList, false);
 
             // Test case pass if RDP connection is stopped due to mismatched region block number in Rfx Progressive Codec stream 
-            RDPClientTryDropConnection("a Rfx Progressive stream with mismatched region block number");            
+            RDPClientTryDropConnection("a Rfx Progressive stream with mismatched region block number");
         }
 
         [TestMethod]
@@ -1433,7 +1428,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending RemoteFX Progressive Codec Data Messages");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, testData.RfxProgCodecImage, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(testData.RfxProgCodecImage), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
@@ -1459,7 +1454,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             catch (Exception ex)
             {
                 this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
-            }         
+            }
         }
 
         [TestMethod]
@@ -1515,7 +1510,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             catch (Exception ex)
             {
                 this.TestSite.Log.Add(LogEntryKind.CheckFailed, "SUT should terminate the connection, or deny the request, or ignore the request to create duplicated surface instead of throw out an exception: {0}.", ex.Message);
-            }          
+            }
         }
     }
 }

@@ -4,13 +4,13 @@ using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Drawing;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedisp
 {
     public partial class RdpedispTestSuite : RdpTestClassBase
     {
-        
+
         [TestMethod]
         [Priority(0)]
         [TestCategory("BVT")]
@@ -73,11 +73,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             RDPConnect(NotificationType.DeactivationReactivation);
 
             ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);
-                        
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopHeight, originalDesktopWidth);
-            Bitmap testImage = LoadImage();
-            this.Site.Assume.AreNotEqual<Image>(null, testImage, "Cannot load the test image");
+            SKImage testImage = SKImage.FromBitmap(LoadImage());
+            this.Site.Assume.AreNotEqual<SKImage>(null, testImage, "Cannot load the test image");
             this.rdpedispAdapter.RdprfxSendImage(testImage, originalDesktopHeight, originalDesktopWidth);
 
             // wait time to display the result and then restore the default configuration
@@ -167,12 +167,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             RDPConnect(NotificationType.DeactivationReactivation);
 
-            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);                       
-            
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT);
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopHeight, originalDesktopWidth);
-            Bitmap testImage = LoadImage();
-            this.Site.Assume.AreNotEqual<Image>(null, testImage, "Cannot load the test image");
+            SKImage testImage = SKImage.FromBitmap(LoadImage());
+            this.Site.Assume.AreNotEqual<SKImage>(null, testImage, "Cannot load the test image");
             this.rdpedispAdapter.RdprfxSendImage(testImage, originalDesktopHeight, originalDesktopWidth);
 
             rdpedycServer.Dispose();
@@ -192,11 +192,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             // TODO: Solve the conflict between rdpbcgr and rdpedyc BUG #6736 and merge two cases
             RDPConnect(NotificationType.DeactivationReactivation, false);
 
-            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED);                       
+            ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT_FLIPPED);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(originalDesktopHeight, originalDesktopWidth);
-            this.Site.Assume.AreNotEqual<Image>(null, testImage, "Cannot load the test image");
+            this.Site.Assume.AreNotEqual<SKImage>(null, testImage, "Cannot load the test image");
             this.rdpedispAdapter.RdprfxSendImage(testImage, originalDesktopHeight, originalDesktopWidth);
 
             // wait time to display the result and then restore the default configuration
@@ -239,8 +239,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             string pdpedispOrientationChange1Image;
             PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispOrientationChange1Image", out pdpedispOrientationChange1Image);
-            Bitmap instructionBitmap = new Bitmap(pdpedispOrientationChange1Image);
-            
+            SKBitmap instructionBitmap = SKBitmap.Decode(pdpedispOrientationChange1Image);
+
             SendInstruction(screenWidth, screenHeight, instructionBitmap);
 
             ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_PORTRAIT, true);
@@ -252,7 +252,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             string rdpedispOrientationChange2Image;
             PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispOrientationChange2Image", out rdpedispOrientationChange2Image);
-            instructionBitmap = new Bitmap(rdpedispOrientationChange2Image);
+            instructionBitmap = SKBitmap.Decode(rdpedispOrientationChange2Image);
             SendInstruction(screenHeight, screenWidth, instructionBitmap);
 
             ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE_FLIPPED, true);
@@ -264,7 +264,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             string rdpedispOrientationChange3Image;
             PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispOrientationChange3Image", out rdpedispOrientationChange3Image);
-            instructionBitmap = new Bitmap(rdpedispOrientationChange3Image);
+            instructionBitmap = SKBitmap.Decode(rdpedispOrientationChange3Image);
 
             SendInstruction(screenWidth, screenHeight, instructionBitmap);
 
@@ -278,7 +278,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             string rdpedispOrientationChange4Image;
             PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispOrientationChange4Image", out rdpedispOrientationChange4Image);
-            instructionBitmap = new Bitmap(rdpedispOrientationChange4Image);
+            instructionBitmap = SKBitmap.Decode(rdpedispOrientationChange4Image);
             SendInstruction(screenHeight, screenWidth, instructionBitmap);
 
             ChangeDesktopOrientation(this.TestContext.TestName, MonitorLayout_OrientationValues.ORIENTATION_LANDSCAPE, true);
@@ -288,7 +288,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
 
             string rdpedispEndImage;
             PtfPropUtility.GetPtfPropertyValue(Site, "RdpedispEndImage", out rdpedispEndImage);
-            instructionBitmap = new Bitmap(rdpedispEndImage);
+            instructionBitmap = SKBitmap.Decode(rdpedispEndImage);
             SendInstruction(screenWidth, screenHeight, instructionBitmap);
 
             // wait time to display the result and then restore the default configuration

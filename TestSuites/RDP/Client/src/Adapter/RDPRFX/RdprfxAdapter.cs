@@ -1,15 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using Microsoft.Protocols.TestSuites.Rdp;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk;
+using SkiaSharp;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace Microsoft.Protocols.TestSuites.Rdprfx
@@ -437,7 +436,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// </summary> 
         /// <param name="rects">Array of rects, if this parameter is null, will send a 64*64 rect </param>
         /// <param name="numRectsZero">A boolean varialbe to indicate whether the numRectsZero field of TS_RFX_REGION is zero</param>
-        public void SendTsRfxRegion(Rectangle[] rects = null, bool numRectsZero = false)
+        public void SendTsRfxRegion(SKRect[] rects = null, bool numRectsZero = false)
         {
             TS_RFX_REGION rfxRegion = rdprfxServer.CreateTsRfxRegion(rects, numRectsZero);
             if (this.currentTestType == RdprfxNegativeType.TsRfxRegion_InvalidRegionFlags)
@@ -467,7 +466,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="quantIdxY">Index of Y component in Quant value array</param>
         /// <param name="quantIdxCb">Index of Cb component in Quant value array</param>
         /// <param name="quantIdxCr">Index of Cr component in Quant value array</param>
-        public void SendTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, Image tileImage,
+        public void SendTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, SKImage tileImage,
             TS_RFX_CODEC_QUANT[] codecQuantVals = null, byte quantIdxY = 0, byte quantIdxCb = 0, byte quantIdxCr = 0)
         {
             this.admEntropyAlgorithm = entropy;
@@ -523,7 +522,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="quantIdxYs">Index array of Y component in Quant value array</param>
         /// <param name="quantIdxCbs">Index array of Cb component in Quant value array</param>
         /// <param name="quantIdxCrs">Index array of Cr component in Quant value array</param>
-        public void SendTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, Image[] tileImages, TILE_POSITION[] positions,
+        public void SendTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, SKImage[] tileImages, TILE_POSITION[] positions,
             TS_RFX_CODEC_QUANT[] codecQuantVals = null, byte[] quantIdxYs = null, byte[] quantIdxCbs = null, byte[] quantIdxCrs = null)
         {
             this.admEntropyAlgorithm = entropy;
@@ -587,7 +586,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="entropy">Indicates the entropy algorithm.</param>
         /// <param name="destLeft">Left bound of the frame.</param>
         /// <param name="destTop">Left bound of the frame.</param>
-        public void SendImageToClient(System.Drawing.Image image, OperationalMode opMode, EntropyAlgorithm entropy, ushort destLeft, ushort destTop)
+        public void SendImageToClient(SKImage image, OperationalMode opMode, EntropyAlgorithm entropy, ushort destLeft, ushort destTop)
         {
             if (image == null)
             {
@@ -627,7 +626,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="entropy">Indicates the entropy algorithm.</param>
         /// <param name="destLeft">Left bound of the frame.</param>
         /// <param name="destTop">Left bound of the frame.</param>
-        public void SendImageToClientWithoutEncoding(System.Drawing.Image image, ushort destLeft, ushort destTop)
+        public void SendImageToClientWithoutEncoding(SKImage image, ushort destLeft, ushort destTop)
         {
             if (image == null)
             {
@@ -636,19 +635,23 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             }
 
             TS_SURFCMD_STREAM_SURF_BITS surfStreamCmd = Create_TS_SURFCMD_STREAM_SURF_BITS(TSBitmapDataExFlags_Values.None, 0);
-            MemoryStream memoryStream = new MemoryStream();
-            image.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Bmp);
-            Byte[] byteImage = memoryStream.ToArray();
 
-            // remove the BITMAP header data at the beginning
+            var bitmap = SKBitmap.FromImage(image);
             int rgbLength = RgbTile.TileSize * RgbTile.TileSize * 4;
             Byte[] rgbArray = new Byte[rgbLength];
-            int delta = byteImage.Length - rgbLength;
-            for (int i = 0; i < rgbLength; i++)
+            var currIdx = 0;
+            for (int y = 0; y < RgbTile.TileSize; y++)
             {
-                rgbArray[i] = byteImage[delta + i];
+                for (int x = 0; x < RgbTile.TileSize; x++)
+                {
+                    var pixel = bitmap.GetPixel(x, y);
+                    rgbArray[currIdx++] = pixel.Red;
+                    rgbArray[currIdx++] = pixel.Green;
+                    rgbArray[currIdx++] = pixel.Blue;
+                    rgbArray[currIdx++] = 0;
+                }
             }
-
+            
             surfStreamCmd.bitmapData.bitmapDataLength = (uint)rgbArray.Length;
             surfStreamCmd.bitmapData.bitmapData = rgbArray;
 

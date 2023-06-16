@@ -2,9 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
 {
@@ -16,7 +16,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         /// <summary>
         /// the image object of a tile 
         /// </summary>
-        public Image image;
+        public SKImage image;
         /// <summary>
         /// the x-coordinate of leftmost of tile image
         /// </summary>
@@ -30,7 +30,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
 
     public class RdprfxTileUtils
     {
-        public static TileImage[] SplitToTileImage(Image orgImage, ushort maxWidth, ushort maxHeigth)
+        public static TileImage[] SplitToTileImage(SKImage orgImage, ushort maxWidth, ushort maxHeigth)
         {
             List<TileImage> imgList = new List<TileImage>();
             int orgWidth = orgImage.Width;
@@ -60,13 +60,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
                         destHeight = minHeigth;
                     }
 
-                    Bitmap destImg = new Bitmap(destWidth, destHeight);
-                    Graphics g = Graphics.FromImage(destImg);
-                    Rectangle destRect = new Rectangle(0, 0, destWidth, destHeight);
-                    Rectangle sourceRect = new Rectangle(xIdx * maxWidth, yIdx * maxHeigth, destWidth, destHeight);
-                    g.DrawImage(orgImage, destRect, sourceRect, GraphicsUnit.Pixel);
+                    SKBitmap destImg = new SKBitmap(destWidth, destHeight);
+                    SKCanvas canvas = new SKCanvas(destImg);
+                    SKRect destRect = new SKRect(0, 0, destWidth, destHeight);
+                    SKRect sourceRect = new SKRect(xIdx * maxWidth, yIdx * maxHeigth, destWidth + xIdx * maxWidth, destHeight + yIdx * maxHeigth);
+                    canvas.DrawImage(orgImage, sourceRect, destRect);
                     TileImage tImg = new TileImage();
-                    tImg.image = destImg;
+                    tImg.image = SKImage.FromBitmap(destImg);
                     tImg.x = xIdx * maxWidth;
                     tImg.y = yIdx * maxHeigth;
                     imgList.Add(tImg);

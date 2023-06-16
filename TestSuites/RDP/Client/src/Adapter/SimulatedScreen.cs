@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Drawing;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -25,7 +25,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
     /// This class is used to buffer information of the RemoteFX message before they are sent.
     /// </summary>
     public class RemoteFXContext
-    {        
+    {
         public TS_RFX_REGION Region;
 
         public TS_RFX_TILESET TileSet;
@@ -49,22 +49,22 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         {
             #region Vairables
 
-            private Bitmap image;
+            private SKBitmap image;
             private ushort surfaceId;
             private ushort width;
             private ushort height;
-            private List<Point> mapPoints;
+            private List<SKPoint> mapPoints;
             private SimulatedScreen screen;
             private PixelFormat pixelFormat;
 
-            private Graphics imageGraphic;            
+            private SKCanvas canvas;
 
             #endregion Variables
 
             /// <summary>
             /// Image of this surface
             /// </summary>
-            public Bitmap Image
+            public SKBitmap Image
             {
                 get
                 {
@@ -103,9 +103,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 this.height = height;
                 this.surfaceId = surfaceId;
                 this.pixelFormat = pixelFormat;
-                image = new Bitmap(width, height);
-                imageGraphic = Graphics.FromImage(image);
-                mapPoints = new List<Point>();
+                image = new SKBitmap(width, height);
+                canvas = new SKCanvas(image);
+                mapPoints = new List<SKPoint>();
             }
 
             /// <summary>
@@ -115,11 +115,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             /// <param name="y"></param>
             public void MapToOutput(int x, int y)
             {
-                mapPoints.Add(new Point(x, y));
-                Graphics g = Graphics.FromImage(screen.BaseImage);
-                g.DrawImage(this.image, x, y);
+                mapPoints.Add(new SKPoint(x, y));
+                SKCanvas canvas = new SKCanvas(screen.BaseImage);
+                canvas.DrawImage(SKImage.FromBitmap(this.image), x, y);
                 // Clean up
-                g.Dispose();
+                canvas.Dispose();
 
             }
             /// <summary>
@@ -131,11 +131,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             /// <param name="h">target height</param>
             public void MapToScaledOutput(int x, int y, int w, int h)
             {
-                mapPoints.Add(new Point(x, y));
-                Graphics g = Graphics.FromImage(screen.BaseImage);
-                g.DrawImage(this.image, x, y, w, h);
+                mapPoints.Add(new SKPoint(x, y));
+                SKCanvas canvas = new SKCanvas(screen.BaseImage);
+                canvas.DrawImage(SKImage.FromBitmap(this.image), new SKRect(x, y, x + w, y + h), new SKPaint { FilterQuality = SKFilterQuality.High });
                 // Clean up
-                g.Dispose();
+                canvas.Dispose();
             }
 
             /// <summary>
@@ -145,16 +145,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             /// <param name="x"></param>
             /// <param name="y"></param>
             /// <param name="c"></param>
-            public void SetPixel(int x, int y, Color c)
+            public void SetPixel(int x, int y, SKColor c)
             {
                 if (x < this.width && y < this.height)
                 {
                     image.SetPixel(x, y, c);
-                    foreach (Point p in mapPoints)
+                    foreach (SKPoint p in mapPoints)
                     {
                         if (p.X + x < this.screen.BaseImage.Width && p.Y + y < this.screen.BaseImage.Height)
                         {
-                            this.screen.BaseImage.SetPixel(p.X + x, p.Y + y, c);
+                            this.screen.BaseImage.SetPixel((int)(p.X + x), (int)(p.Y + y), c);
                         }
                     }
                 }
@@ -164,38 +164,37 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 if (fillRects != null && fillRects.Length > 0)
                 {
-                    Color c = Color.Black;
+                    SKColor c = SKColors.Black;
                     if (this.pixelFormat == PixelFormat.PIXEL_FORMAT_ARGB_8888)
                     {
-                        c = Color.FromArgb(fillPixel.XA, fillPixel.R, fillPixel.G, fillPixel.B);
+                        c = new SKColor(fillPixel.R, fillPixel.G, fillPixel.B, fillPixel.XA);
                     }
                     else
                     {
-                        c = Color.FromArgb(fillPixel.R, fillPixel.G, fillPixel.B);
+                        new SKColor(fillPixel.R, fillPixel.G, fillPixel.B);
                     }
-                    Brush brush = new SolidBrush(c);
-                    Rectangle[] rects = new Rectangle[fillRects.Length];
+                    SKPaint paint = new SKPaint { Color = c };
+                    SKRect[] rects = new SKRect[fillRects.Length];
                     for (int i = 0; i < fillRects.Length; i++)
                     {
-                        rects[i] = new Rectangle(fillRects[i].left, fillRects[i].top, fillRects[i].right - fillRects[i].left, fillRects[i].bottom - fillRects[i].top);
+                        rects[i] = new SKRect(fillRects[i].left, fillRects[i].top, fillRects[i].right, fillRects[i].bottom);
+                        canvas.DrawRect(rects[i], new SKPaint { Color = c });
                     }
-                    imageGraphic.FillRectangles(brush, rects);
+
 
                     if (mapPoints.Count > 0)
                     {
-                        List<Rectangle> rectList = new List<Rectangle>();
-                        foreach (Point p in mapPoints)
+                        SKCanvas canvas = new SKCanvas(screen.BaseImage);
+                        foreach (SKPoint p in mapPoints)
                         {
-                            foreach(Rectangle rect in rects)
+                            foreach (SKRect rect in rects)
                             {
-                                rectList.Add(new Rectangle(rect.Left+p.X, rect.Top+p.Y, rect.Width, rect.Height));
+                                canvas.DrawRect(new SKRect(rect.Left + p.X, rect.Top + p.Y, rect.Width, rect.Height), new SKPaint { Color = c });
                             }
                         }
-                        Graphics baseImageGraphics = Graphics.FromImage(screen.BaseImage);
 
-                        baseImageGraphics.FillRectangles(brush, rectList.ToArray());
-                        
-                        baseImageGraphics.Dispose();
+
+                        canvas.Dispose();
                     }
 
                 }
@@ -207,18 +206,18 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             /// <param name="srcImage"></param>
             /// <param name="x"></param>
             /// <param name="y"></param>
-            public void DrawImage(Image srcImage, ushort x, ushort y)
+            public void DrawImage(SKImage srcImage, ushort x, ushort y)
             {
-                imageGraphic.DrawImage(srcImage, x, y);
+                canvas.DrawImage(srcImage, x, y);
 
                 if (mapPoints.Count > 0)
                 {
-                    Graphics baseImageGraphics = Graphics.FromImage(screen.BaseImage);
-                    foreach (Point p in mapPoints)
+                    SKCanvas sKCanvas = new SKCanvas(screen.BaseImage);
+                    foreach (SKPoint p in mapPoints)
                     {
-                        baseImageGraphics.DrawImage(srcImage, p.X + x, p.Y + y);
+                        sKCanvas.DrawImage(srcImage, p.X + x, p.Y + y);
                     }
-                    baseImageGraphics.Dispose();
+                    sKCanvas.Dispose();
                 }
             }
 
@@ -229,19 +228,19 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             /// <param name="srcImage"></param>
             /// <param name="x"></param>
             /// <param name="y"></param>
-            public void DrawImage(Image srcImage, ushort x, ushort y, RDPGFX_RECT16 srcRect)
+            public void DrawImage(SKImage srcImage, ushort x, ushort y, RDPGFX_RECT16 srcRect)
             {
-                Rectangle rect = new Rectangle(srcRect.left, srcRect.top, srcRect.right - srcRect.left, srcRect.bottom - srcRect.top);
-                imageGraphic.DrawImage(srcImage, x, y, rect, GraphicsUnit.Pixel);
+                SKRect rect = new SKRect(srcRect.left, srcRect.top, srcRect.right, srcRect.bottom);
+                canvas.DrawImage(srcImage, rect);
 
                 if (mapPoints.Count > 0)
                 {
-                    Graphics baseImageGraphics = Graphics.FromImage(screen.BaseImage);
-                    foreach (Point p in mapPoints)
+                    SKCanvas canvas = new SKCanvas(screen.BaseImage);
+                    foreach (SKPoint p in mapPoints)
                     {
-                        baseImageGraphics.DrawImage(srcImage, p.X + x, p.Y + y, rect, GraphicsUnit.Pixel);
+                        canvas.DrawImage(srcImage, rect);
                     }
-                    baseImageGraphics.Dispose();
+                    canvas.Dispose();
                 }
             }
 
@@ -251,7 +250,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             public void Dispose()
             {
                 RemoveFromScreen();
-                imageGraphic.Dispose();
+                canvas.Dispose();
             }
 
             #region Private Methods
@@ -263,11 +262,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 if (mapPoints.Count > 0)
                 {
-                    foreach (Point p in mapPoints)
+                    foreach (SKPoint p in mapPoints)
                     {
-                        for (int i = p.X; i < p.X + this.width && i < screen.baseImage.Width; i++)
+                        for (int i = (int)p.X; i < p.X + this.width && i < screen.baseImage.Width; i++)
                         {
-                            for (int j = p.Y; j < p.Y + this.height && j < screen.baseImage.Height; j++)
+                            for (int j = (int)p.Y; j < p.Y + this.height && j < screen.baseImage.Height; j++)
                             {
                                 screen.baseImage.SetPixel(i, j, SimulatedScreen.OriginalColor);
                             }
@@ -285,7 +284,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         class CacheItem
         {
-            public Bitmap Image;
+            public SKBitmap Image;
 
             public UInt64 CacheKey;
 
@@ -295,23 +294,22 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             public ushort Height;
 
-            public CacheItem(ulong cacheKey, ushort cacheSlot, Image imageSrc, RDPGFX_RECT16 rect)
+            public CacheItem(ulong cacheKey, ushort cacheSlot, SKImage imageSrc, RDPGFX_RECT16 rect)
             {
                 this.CacheKey = cacheKey;
                 this.CacheSlot = cacheSlot;
                 this.Width = (ushort)(rect.right - rect.left);
                 this.Height = (ushort)(rect.bottom - rect.top);
                 // Create the new bitmap and associated graphics object
-                this.Image = new Bitmap(this.Width, this.Height);
-                Graphics graphics = Graphics.FromImage(this.Image);
+                this.Image = new SKBitmap(this.Width, this.Height);
+                SKCanvas sKCanvas = new SKCanvas(this.Image);
 
                 // Draw the specified section of the source bitmap to the new one
-                Rectangle rectangle = new Rectangle(rect.left, rect.top, this.Width, this.Height);
-                graphics.DrawImage(imageSrc, 0, 0, rectangle, GraphicsUnit.Pixel);
-
+                SKRect rectangle = new SKRect(rect.left, rect.top, rect.left + this.Width, rect.top + this.Height);
+                SKRect rectangle2 = new SKRect(0, 0, this.Width, this.Height);
+                sKCanvas.DrawImage(imageSrc, rectangle, rectangle2);
                 // Clean up
-                graphics.Dispose();
-
+                sKCanvas.Dispose();
             }
         }
         #endregion Internal Definition
@@ -321,8 +319,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public const int DefaultScreenWidth = 2000;
 
         public const int DefaultScreenHeight = 2000;
-        
-        public static Color OriginalColor = Color.Black;
+
+        public static SKColor OriginalColor = SKColors.Black;
 
         /// <summary>
         /// Whether the IQA algorithm assess Y component when assess the two images
@@ -345,7 +343,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         private int height;
 
-        private Bitmap baseImage;
+        private SKBitmap baseImage;
 
         private RemoteFXContext remoteFXContext;
 
@@ -354,7 +352,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         private Dictionary<ushort, CacheItem> bitmapCache;
 
         // Decompressor Glyph Storage 
-        private Dictionary<ushort, Image> clearCodecGlyphStorage;
+        private Dictionary<ushort, SKImage> clearCodecGlyphStorage;
 
         private ImageQualityAssessment.FRIQAIndexBase iqaIndex;
 
@@ -367,7 +365,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <summary>
         /// Base Image which is the same as expected output on RDP Client
         /// </summary>
-        public Bitmap BaseImage
+        public SKBitmap BaseImage
         {
             get
             {
@@ -417,14 +415,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 iqaIndex = new ImageQualityAssessment.Ssim();
             }
 
-            baseImage = new Bitmap(width, height);
-            FillColor(Color.Black);
+            baseImage = new SKBitmap(width, height);
+            FillColor(SKColors.Black);
 
             remoteFXContext = new RemoteFXContext();
 
             surfaceDic = new Dictionary<ushort, Surface>();
             bitmapCache = new Dictionary<ushort, CacheItem>();
-            clearCodecGlyphStorage = new Dictionary<ushort, Image>();
+            clearCodecGlyphStorage = new Dictionary<ushort, SKImage>();
 
             // Set default values for each component
             // to decide whether access this component in IQA algorithm
@@ -438,8 +436,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         public void Reset()
         {
-            baseImage = new Bitmap(width, height);
-            FillColor(Color.Black);
+            baseImage = new SKBitmap(width, height);
+            FillColor(SKColors.Black);
             surfaceDic.Clear();
             bitmapCache.Clear();
             clearCodecGlyphStorage.Clear();
@@ -454,8 +452,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="rfxRegion"></param>
         public void SetRemoteFXRegion(TS_RFX_REGION rfxRegion)
         {
-            
-            remoteFXContext.Region = rfxRegion;            
+
+            remoteFXContext.Region = rfxRegion;
         }
 
         /// <summary>
@@ -478,7 +476,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="surfaceId"></param>
         public void RenderRemoteFXTile(ushort left, ushort top)
         {
-            Bitmap image = baseImage;
+            SKBitmap image = baseImage;
             byte quantIdxY = remoteFXContext.TileSet.tiles[0].quantIdxY;
             byte quantIdxCb = remoteFXContext.TileSet.tiles[0].quantIdxCb;
             byte quantIdxCr = remoteFXContext.TileSet.tiles[0].quantIdxCr;
@@ -491,10 +489,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     for (int j = 0; j < RgbTile.TileSize; j++)
                     {
                         int x = tile.xIdx * 64 + i;
-                        int y =  tile.yIdx * 64 + j;
+                        int y = tile.yIdx * 64 + j;
                         if (IsInRects(x, y, remoteFXContext.Region.rects))
                         {
-                            image.SetPixel(left + x, top + y, Color.FromArgb(context.RSet[i, j], context.GSet[i, j], context.BSet[i, j]));
+                            image.SetPixel(left + x, top + y, new SKColor(context.RSet[i, j], context.GSet[i, j], context.BSet[i, j]));
                         }
                     }
                 }
@@ -531,7 +529,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                             {
                                 if (destRect.left + x < destRect.right && destRect.top + y < destRect.bottom)
                                 {
-                                    sur.SetPixel(destRect.left + x, destRect.top + y, Color.FromArgb(context.RSet[i, j], context.GSet[i, j], context.BSet[i, j]));
+                                    sur.SetPixel(destRect.left + x, destRect.top + y, new SKColor(context.RSet[i, j], context.GSet[i, j], context.BSet[i, j]));
                                 }
                             }
                         }
@@ -556,19 +554,19 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="residualBmp"></param>
         /// <param name="bands"></param>
         /// <param name="subcodecs"></param>
-        public void RenderClearCodecImage(ushort surfaceId, PixelFormat pixFormat, byte ccFlag, ushort graphIdx, RDPGFX_RECT16 bmRect, Image residualBmp,
-                            Dictionary<RDPGFX_POINT16, Bitmap> bands, Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecs)
+        public void RenderClearCodecImage(ushort surfaceId, PixelFormat pixFormat, byte ccFlag, ushort graphIdx, RDPGFX_RECT16 bmRect, SKImage residualBmp,
+                            Dictionary<RDPGFX_POINT16, SKBitmap> bands, Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecs)
         {
-            Image paint = new Bitmap(bmRect.right - bmRect.left, bmRect.bottom - bmRect.top);
-            Graphics paintG = Graphics.FromImage(paint);
+            SKBitmap paint = new SKBitmap(bmRect.right - bmRect.left, bmRect.bottom - bmRect.top);
+            SKCanvas sKCanvas = new SKCanvas(paint);
             if (ccFlag != 0 && ((ccFlag & ClearCodec_BitmapStream.CLEARCODEC_FLAG_GLYPH_INDEX) != 0)
                 && ((ccFlag & ClearCodec_BitmapStream.CLEARCODEC_FLAG_GLYPH_HIT) != 0)
                 && this.clearCodecGlyphStorage.ContainsKey(graphIdx))
             {
-                Image srcImage = this.clearCodecGlyphStorage[graphIdx];
-                Rectangle srcRect = new Rectangle(0,0, srcImage.Width, srcImage.Height);
-                Rectangle destRect = new Rectangle(0, 0, bmRect.right - bmRect.left, bmRect.bottom - bmRect.top);
-                paintG.DrawImage(srcImage, destRect, srcRect, GraphicsUnit.Pixel);
+                SKImage srcImage = this.clearCodecGlyphStorage[graphIdx];
+                SKRect srcRect = new SKRect(0, 0, srcImage.Width, srcImage.Height);
+                SKRect destRect = new SKRect(0, 0, bmRect.right - bmRect.left, bmRect.bottom - bmRect.top);
+                sKCanvas.DrawImage(srcImage, destRect, srcRect, new SKPaint { FilterQuality = SKFilterQuality.High });
             }
             else
             {
@@ -576,7 +574,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 // Draw the first layer: residualData
                 if (residualBmp != null && residualBmp.Width <= paint.Width && residualBmp.Height <= residualBmp.Height)
                 {
-                    paintG.DrawImage(residualBmp, 0, 0);
+                    sKCanvas.DrawImage(residualBmp, 0, 0);
                 }
 
                 // Draw the second layer: bandsData 
@@ -584,10 +582,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 {
                     foreach (RDPGFX_POINT16 pos in bands.Keys)
                     {
-                        Bitmap image = bands[pos];
+                        SKBitmap image = bands[pos];
                         if (pos.x + image.Width <= paint.Width && pos.y + image.Height <= paint.Height)
                         {
-                            paintG.DrawImage(image, pos.x, pos.y);
+                            sKCanvas.DrawImage(SKImage.FromBitmap(image), pos.x, pos.y);
                         }
                     }
                 }
@@ -597,22 +595,22 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 {
                     foreach (RDPGFX_POINT16 pos in subcodecs.Keys)
                     {
-                        Bitmap image = subcodecs[pos].bmp;
+                        SKBitmap image = subcodecs[pos].bmp;
                         if (pos.x + image.Width <= paint.Width && pos.y + image.Height <= paint.Height)
                         {
-                            paintG.DrawImage(image, pos.x, pos.y);
+                            sKCanvas.DrawImage(SKImage.FromBitmap(image), pos.x, pos.y);
                         }
                     }
                 }
 
-                paintG.Dispose();
+                sKCanvas.Dispose();
             }
 
             // Draw the image to the surface
             if (this.surfaceDic.ContainsKey(surfaceId))
             {
                 Surface sur = surfaceDic[surfaceId];
-                sur.DrawImage(paint, bmRect.left, bmRect.top);
+                sur.DrawImage(SKImage.FromBitmap(paint), bmRect.left, bmRect.top);
             }
 
             // Save the image to Glyph Storage
@@ -623,7 +621,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 {
                     this.clearCodecGlyphStorage.Remove(graphIdx);
                 }
-                this.clearCodecGlyphStorage.Add(graphIdx, paint);
+                this.clearCodecGlyphStorage.Add(graphIdx, SKImage.FromBitmap(paint));
             }
         }
 
@@ -635,7 +633,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="startGlyphPos"></param>
         /// <param name="glyphNum"></param>
         /// <param name="glyph"></param>
-        public void RenderClearCodecBatch(ushort surfaceId, ushort startGlyphIdx, RDPGFX_POINT16 startGlyphPos, ushort glyphNum, Image glyph)
+        public void RenderClearCodecBatch(ushort surfaceId, ushort startGlyphIdx, RDPGFX_POINT16 startGlyphPos, ushort glyphNum, SKImage glyph)
         {
             ushort glyphIdx = startGlyphIdx;
 
@@ -661,11 +659,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="width"></param>
         /// <param name="height"></param>
         public void RenderProgressiveCodec(ushort surfaceId, Dictionary<TileIndex, EncodedTile[]> tileDict, ushort width, ushort height)
-        {            
+        {
             if (surfaceDic.ContainsKey(surfaceId))
             {
-                Bitmap paint = new Bitmap(width, height);
-                Graphics paintGraphics = Graphics.FromImage(paint);
+                SKBitmap paint = new SKBitmap(width, height);
+                SKCanvas sKCanvas = new SKCanvas(paint);
                 if (surfaceDic[surfaceId].CurrentFrame == null)
                 {
                     surfaceDic[surfaceId].CurrentFrame = new SurfaceFrame(surfaceId, width, height);
@@ -683,11 +681,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                             RfxProgressiveDecoder.DecodeTile(tiles[i], state);
                         }
                     }
-                    paintGraphics.DrawImage(state.GetDwt().ToImage(), index.X * RdpegfxTileUtils.TileSize, index.Y * RdpegfxTileUtils.TileSize);
+                    sKCanvas.DrawImage(SKImage.FromBitmap(state.GetDwt().ToImage()), index.X * RdpegfxTileUtils.TileSize, index.Y * RdpegfxTileUtils.TileSize);
                 }
 
                 Surface sur = surfaceDic[surfaceId];
-                sur.DrawImage(paint, 0, 0);
+                sur.DrawImage(SKImage.FromBitmap(paint), 0, 0);
 
             }
         }
@@ -703,7 +701,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="image"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public void RenderUncompressedImage(ushort surfaceId, Image image, ushort x, ushort y)
+        public void RenderUncompressedImage(ushort surfaceId, SKImage image, ushort x, ushort y)
         {
             if (surfaceDic.ContainsKey(surfaceId))
             {
@@ -712,10 +710,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
         }
 
-        public void RenderUncompressedImage(Image image, ushort x, ushort y)
+        public void RenderUncompressedImage(SKImage image, ushort x, ushort y)
         {
-            Graphics graphic = Graphics.FromImage(baseImage);
-            graphic.DrawImageUnscaled(image, x, y);
+            SKCanvas canvas = new SKCanvas(baseImage);
+            canvas.DrawImage(image, x, y);
         }
 
         #endregion Methods for Uncompressed Image
@@ -776,7 +774,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 surfaceDic[surfaceId].MapToScaledOutput((int)x, (int)y, (int)w, (int)h);
             }
-        }       
+        }
 
         /// <summary>
         /// Copy bitmap data from a source surface to a destination surface 
@@ -797,7 +795,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
                     foreach (RDPGFX_POINT16 destPt in destPts)
                     {
-                        surfaceDest.DrawImage(surfaceSrc.Image, destPt.x, destPt.y, rectSrc);
+                        surfaceDest.DrawImage(SKImage.FromBitmap(surfaceSrc.Image), destPt.x, destPt.y, rectSrc);
                     }
                 }
             }
@@ -812,10 +810,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="rectSrc"></param>
         public void SurfaceToCache(ushort surfaceId, ulong cacheKey, ushort cacheSlot, RDPGFX_RECT16 rectSrc)
         {
-            if(surfaceDic.ContainsKey(surfaceId))
+            if (surfaceDic.ContainsKey(surfaceId))
             {
                 Surface sur = surfaceDic[surfaceId];
-                CacheItem cacheItem = new CacheItem(cacheKey, cacheSlot, sur.Image, rectSrc);
+                CacheItem cacheItem = new CacheItem(cacheKey, cacheSlot, SKImage.FromBitmap(sur.Image), rectSrc);
                 bitmapCache[cacheSlot] = cacheItem;
             }
         }
@@ -849,7 +847,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
                     foreach (RDPGFX_POINT16 destPt in destPts)
                     {
-                        surfaceDest.DrawImage(cacheItem.Image, destPt.x, destPt.y);
+                        surfaceDest.DrawImage(SKImage.FromBitmap(cacheItem.Image), destPt.x, destPt.y);
                     }
                 }
             }
@@ -870,7 +868,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         }
 
         #endregion Methods for Graphic commands        
-        
+
         #region Methods for SUT display verification
 
         /// <summary>
@@ -880,13 +878,13 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="shift"></param>
         /// <param name="compareRect"></param>
         /// <returns></returns>
-        public bool Compare(Image image, Point shift, Rectangle compareRect, bool usingRemoteFX)
+        public bool Compare(SKImage image, SKPoint shift, SKRect compareRect, bool usingRemoteFX)
         {
             if (usingRemoteFX)
             {
                 return IsSimilar(image, shift, compareRect, this.assessValueThreshold);
-            }            
-            return IsIdentical(image, shift, compareRect);            
+            }
+            return IsIdentical(image, shift, compareRect);
         }
 
         #endregion Methods for SUT display verification
@@ -915,7 +913,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 }
                 return false;
             }
-            return true;                
+            return true;
         }
 
         /// <summary>
@@ -926,23 +924,16 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="shift"></param>
         /// <param name="compareRect"></param>
         /// <returns></returns>
-        private bool IsIdentical(Image image, Point shift, Rectangle compareRect)
+        private bool IsIdentical(SKImage image, SKPoint shift, SKRect compareRect)
         {
-            Bitmap bitmap = null;
-            if (image is Bitmap)
-            {
-                bitmap = image as Bitmap;
-            }
-            else
-            {
-                bitmap = new Bitmap(image);
-            }
+            SKBitmap bitmap = null;
+            bitmap = SKBitmap.FromImage(image);
 
-            for (int i = compareRect.Left; i < compareRect.Right; i++)
+            for (int i = (int)compareRect.Left; i < compareRect.Right; i++)
             {
-                for (int j = compareRect.Top; j < compareRect.Bottom; j++)
+                for (int j = (int)compareRect.Top; j < compareRect.Bottom; j++)
                 {
-                    if (!IsIdenticial(BaseImage.GetPixel(i, j), bitmap.GetPixel(i + shift.X, j + shift.Y)))
+                    if (!IsIdenticial(BaseImage.GetPixel(i, j), bitmap.GetPixel((int)(i + shift.X), (int)(j + shift.Y))))
                         return false;
                 }
             }
@@ -955,9 +946,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        private bool IsIdenticial(Color a, Color b)
+        private bool IsIdenticial(SKColor a, SKColor b)
         {
-            if (a.R == b.R && a.G == b.G && a.B == b.B)
+            if (a.Red == b.Red && a.Green == b.Green && a.Blue == b.Blue)
                 return true;
             return false;
         }
@@ -972,21 +963,15 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="compareRect"></param>
         /// <param name="assessValueThreshold"></param>
         /// <returns></returns>
-        private bool IsSimilar(Image image, Point shift, Rectangle compareRect, double assessValueThreshold)
+        private bool IsSimilar(SKImage image, SKPoint shift, SKRect compareRect, double assessValueThreshold)
         {
-            Bitmap bitmap = null;
-            if (image is Bitmap)
-            {
-                bitmap = image as Bitmap;
-            }
-            else
-            {
-                bitmap = new Bitmap(image);
-            }
-            
-            Bitmap referenceImage = BaseImage.Clone(compareRect, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            Bitmap inputImage = bitmap.Clone(new Rectangle(shift.X + compareRect.Left, shift.Y + compareRect.Top, compareRect.Width, compareRect.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
+            SKBitmap bitmap = null;
+            bitmap = SKBitmap.FromImage(image);
+            SKCanvas canvas = new SKCanvas(BaseImage);
+            SKBitmap referenceImage = new SKBitmap(BaseImage.Width, baseImage.Height);
+            BaseImage.ExtractSubset(referenceImage, SKRectI.Truncate(compareRect));
+            SKBitmap inputImage = new SKBitmap(bitmap.Width, bitmap.Height);
+            bitmap.ExtractSubset(inputImage, SKRectI.Truncate(new SKRect(shift.X + compareRect.Left, shift.Y + compareRect.Top, compareRect.Width + shift.X + compareRect.Left, compareRect.Height + shift.Y + compareRect.Top)));
             // Extend image if necessary, so as to make sure the image used for IQA assess is not smaller than size requested by SSIM/MS-SSIM/G-SSIM algorithm
             referenceImage = ExtendImage(referenceImage, ImageQualityAssessment.Ssim.MinWidth, ImageQualityAssessment.Ssim.MinHeight);
             inputImage = ExtendImage(inputImage, ImageQualityAssessment.Ssim.MinWidth, ImageQualityAssessment.Ssim.MinWidth);
@@ -1030,18 +1015,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 }
             }
             return true;
-        }               
+        }
 
         /// <summary>
         /// Fill the base image with specific color
         /// </summary>
         /// <param name="c"></param>
-        private void FillColor(Color c)
+        private void FillColor(SKColor c)
         {
-            Graphics baseImageGraphics = Graphics.FromImage(this.BaseImage);
-            Brush brush = new SolidBrush(c);
-            baseImageGraphics.FillRectangle(brush, 0, 0, BaseImage.Width, BaseImage.Height);
-            baseImageGraphics.Dispose();
+            SKCanvas canvas = new SKCanvas(this.baseImage);
+            SKPaint paint = new SKPaint { Color = c };
+            canvas.DrawRect(0, 0, baseImage.Width, baseImage.Height, paint);
         }
 
         /// <summary>
@@ -1051,7 +1035,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="minWidth"></param>
         /// <param name="minHeight"></param>
         /// <returns></returns>
-        private Bitmap ExtendImage(Bitmap originalImage, int minWidth, int minHeight)
+        private SKBitmap ExtendImage(SKBitmap originalImage, int minWidth, int minHeight)
         {
             if (originalImage.Width >= minWidth && originalImage.Height >= minHeight)
             {
@@ -1061,12 +1045,12 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             int width = Math.Max(originalImage.Width, minWidth);
             int height = Math.Max(originalImage.Height, minHeight);
 
-            Bitmap newBitmap = new Bitmap(width, height);
-            Graphics newBitmapGraphics = Graphics.FromImage(newBitmap);
-            Brush brush = new SolidBrush(Color.Black);
-            newBitmapGraphics.FillRectangle(brush, 0, 0, width, height);
-            newBitmapGraphics.DrawImage(originalImage, 0, 0);
-            newBitmapGraphics.Dispose();
+            SKBitmap newBitmap = new SKBitmap(width, height);
+            SKCanvas canvas = new SKCanvas(newBitmap);
+            SKPaint paint = new SKPaint { Color = SKColors.Black };
+            canvas.DrawRect(0, 0, width, height, paint);
+            canvas.DrawImage(SKImage.FromBitmap(originalImage), 0, 0);
+            canvas.Dispose();
 
             return newBitmap;
         }

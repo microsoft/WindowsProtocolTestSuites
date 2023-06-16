@@ -1,8 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
 {
@@ -57,7 +56,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
         /// <exception cref="ArgumentNullException">Thrown when at least one param is null</exception>
         /// <exception cref="ArgumentException">Thrown when the size of the two bitmaps are not illegal for assessment (Sizes are not same, Size too small, etc.)</exception>
         /// <returns>A new AssessResult object indicates the assess results in every specified component.</returns>
-        public override AssessResult Assess(Bitmap reference, Bitmap distorted, UseComponent component)
+        public override AssessResult Assess(SKBitmap reference, SKBitmap distorted, UseComponent component)
         {
             InitBitmaps(reference, distorted);
             LumaReference = Downscaler.DownscaleByKeepMinLength(LumaReference, ScaleMinLength);

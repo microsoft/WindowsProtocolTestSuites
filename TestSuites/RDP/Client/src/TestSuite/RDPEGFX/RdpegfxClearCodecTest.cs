@@ -1,16 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkiaSharp;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
@@ -21,7 +16,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("BVT")]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec(L1&L2) bitmap transition via RDPEGFX.")]
@@ -46,13 +41,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Data (L1&L2) Messages to client.");
             // Set clearcodec residual layer and band layer bitmap 
-            Image bgImage;
-            Bitmap ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight, out bgImage);
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
             bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Set clearcodec bitmap rectangle, relative to surface
-            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)bgImage.Width, (ushort)bgImage.Height); 
+            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)bgImage.Width, (ushort)bgImage.Height);
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_CACHE_RESET, 0,
                                                         ccRect, bgImage, bandBmpDict, null);
@@ -73,7 +68,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [TestCategory("BVT")]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec(L1&L3) bitmap transition via RDPEGFX.")]
@@ -98,10 +93,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Data(L1&L3) Messages to client.");
             // Set clearcodec residual layer and band layer bitmap 
-            Image bgImage;
+            SKImage bgImage;
             BMP_INFO bmp_info = new BMP_INFO();
             bmp_info.scID = CLEARCODEC_SUBCODEC_ID.SUBCODEC_RLEX;
-            bmp_info.bmp = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            bmp_info.bmp = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccSubcodecWidth, RdpegfxTestUtility.ccSubcodecHeight, out bgImage);
 
             Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecBmpDict = new Dictionary<RDPGFX_POINT16, BMP_INFO>();
@@ -126,7 +121,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(0)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec(L1&L2) bitmap transition without resetting vbar cache via RDPEGFX.")]
@@ -151,10 +146,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Data Messages to client.");
             // Set clearcodec residual layer and band layer bitmap
-            Image bgImage;
-            Bitmap ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight, out bgImage);
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
             bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Set clearcodec bitmap rectangle, relative to surface
             RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)bgImage.Width, (ushort)bgImage.Height);
@@ -177,7 +172,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(0)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec multiple band bitmap transition via RDPEGFX.")]
@@ -202,17 +197,17 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap(multiple bands) Messages to client.");
             // Init 2 clearcodec band bitmaps
-            Image bgImage;
-            Image ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight, out bgImage);
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos, (Bitmap)ccBandImage);
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos2, (Bitmap)ccBandImage);
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos2, ccBandImage);
             // Set clearcode bitmap rectangle, relative to surface
             RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)bgImage.Width, (ushort)bgImage.Height);
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_CACHE_RESET, 0,
-                                                        ccRect, (Bitmap)bgImage, bandBmpDict, null);
+                                                        ccRect, bgImage, bandBmpDict, null);
             // Test case pass if frame acknowledge is received.
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
@@ -229,7 +224,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(0)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if vbar cache in previous PDU can be used in second PDU.")]
@@ -253,13 +248,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending first ClearCodec Encoded Bitmap Data Messages to client to init v-bar cache.");
-            Image bgImage;
-            Image ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight, out bgImage);
 
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
             // Set clearcodec band and position (relative to Clearcodec bitmap) 
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos, (Bitmap)ccBandImage);
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)ccBandImage.Width, (ushort)ccBandImage.Height);
             // Send encoded clearcodec bitmap data in w2s_1 PDU, and reseting v-bar cache on client.
             // This message will set v-bar/short v-bar cache on client.
@@ -273,7 +268,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending same band which is ClearCodec Encoded by v-bar cache to client.");
             bandBmpDict.Clear();
             // Set same clearcodec band and position(relative to Clearcodec bitmap) 
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos, (Bitmap)ccBandImage);
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Set clearcodec bitmap rectangle to different position, relative to surface
             RDPGFX_RECT16 ccRect2 = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos2, (ushort)ccBandImage.Width, (ushort)ccBandImage.Height);
             // Send encoded clearcodec bitmap data in w2s_1 PDU, and without reseting v-bar cache on client, the same band will be totally encoded 
@@ -296,7 +291,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(0)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec multiple subcodec bitmap transition via RDPEGFX.")]
@@ -321,19 +316,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Data Messages(with multiple subcodec bitmap) to client.");
             // Set 2 clearcodec subcodec layer bitmap
-            Image bgImage;
+            SKImage bgImage;
             BMP_INFO bmp_info = new BMP_INFO();
             bmp_info.scID = CLEARCODEC_SUBCODEC_ID.SUBCODEC_RLEX;
-            bmp_info.bmp = (Bitmap)RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            bmp_info.bmp = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccSubcodecWidth, RdpegfxTestUtility.ccSubcodecHeight, out bgImage);
             Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecBmpDict = new Dictionary<RDPGFX_POINT16, BMP_INFO>();
             subcodecBmpDict.Add(RdpegfxTestUtility.imgPos, bmp_info);
             subcodecBmpDict.Add(RdpegfxTestUtility.imgPos2, bmp_info);
             // Set clearcodec bitmap rectangle, relative to surface
-            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)bgImage.Width,(ushort)bgImage.Height);
+            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)bgImage.Width, (ushort)bgImage.Height);
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE, 0,
-                                                        ccRect, (Bitmap)bgImage, null, subcodecBmpDict);
+                                                        ccRect, bgImage, null, subcodecBmpDict);
             // Test case pass if frame acknowledge is received.
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
@@ -350,7 +345,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(0)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec uncompressed subcodec bitmap transition via RDPEGFX.")]
@@ -375,10 +370,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Data Messages(with raw format in subcodec layer) to client.");
             // Set clearcodec residual layer and subcodec layer bitmap
-            Image bgImage;
+            SKImage bgImage;
             BMP_INFO bmp_info = new BMP_INFO();
             bmp_info.scID = CLEARCODEC_SUBCODEC_ID.SUBCODEC_RAW;  // Set subcodec layer bitmap to be encoded in raw format
-            bmp_info.bmp = (Bitmap)RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            bmp_info.bmp = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccSubcodecWidth, RdpegfxTestUtility.ccSubcodecHeight, out bgImage);
 
             Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecBmpDict = new Dictionary<RDPGFX_POINT16, BMP_INFO>();
@@ -387,7 +382,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)bgImage.Width, (ushort)bgImage.Height);
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE, 0,
-                                                        ccRect, (Bitmap)bgImage, null, subcodecBmpDict);
+                                                        ccRect, bgImage, null, subcodecBmpDict);
             // Test case pass if frame acknowledge is received.
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
@@ -404,7 +399,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if ClearCodec stream with glyph index can be handled by the client.")]
@@ -429,12 +424,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a glyph(with glyph_index flag set) which is ClearCodec Encoded Messages to client.");
             // Init a glyph bitmap
-            Image bgImage;
-            Image ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight, out bgImage);
 
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos, (Bitmap)ccBandImage);
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Set glyph bitmap rectangle, relative to surface
             RDPGFX_RECT16 glyphRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight);
             // Set GLYPH_INDEX flag
@@ -457,7 +452,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can cache max size(1024) glyph in clearcodec stream.")]
@@ -482,15 +477,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a Glyph with max(1024) square pixels size in ClearCodec Encoded Bitmap Messages to client.");
             // Init a glyph with size of 1024 square pixels
-            Image bgImage;
+            SKImage bgImage;
             ushort w = RdpegfxTestUtility.ccGlyphWidth;
             ushort h = (ushort)(RdpegfxTestUtility.ccMaxGlyphSize / w);
-            Image ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 w, h, out bgImage);
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos, (Bitmap)ccBandImage);
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Set glyph bitmap rectangle, relative to surface
-            RDPGFX_RECT16 glyphRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos,w, h);
+            RDPGFX_RECT16 glyphRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, w, h);
             // Sending a glyph to client without glyph_index in w2s_1 PDU
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE,
                                                         0, glyphRect, null, bandBmpDict, null);
@@ -509,7 +504,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can support max(4000) ClearCodec glyph slot.")]
@@ -537,7 +532,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Init a small glyph with width 1, height 2, the glyphes in the same row will be sent in same w2s_1 PDU.
             ushort width = RdpegfxTestUtility.ccSmallGlyphWidth;
             ushort height = RdpegfxTestUtility.ccSmallGlyphHeight;
-            Image ccGlyph = RdpegfxTestUtility.DrawImage(width, height, Color.Violet);
+            SKImage ccGlyph = SKImage.FromBitmap(RdpegfxTestUtility.DrawImage(width, height, SKColors.Violet));
             // Init start position and rectangle of small glyph in same raw.
             RDPGFX_POINT16 startPos = RdpegfxTestUtility.imgPos;
 
@@ -551,18 +546,18 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Send the whole row glyphs in a w2s_1 frame
             for (ushort i = 0; i < count; i++)
             {
-                fid = this.rdpegfxAdapter.SendClearCodecGlyphInBatch(surf, startGlyphIdx, startPos, glyphNumInBatch, ccGlyph);   
-                this.rdpegfxAdapter.ExpectFrameAck(fid);             
-                
+                fid = this.rdpegfxAdapter.SendClearCodecGlyphInBatch(surf, startGlyphIdx, startPos, glyphNumInBatch, ccGlyph);
+                this.rdpegfxAdapter.ExpectFrameAck(fid);
+
                 // Move to next row, reset start position
                 startGlyphIdx += glyphNumInBatch;
-                startPos.y += (ushort)(height+1);
+                startPos.y += (ushort)(height + 1);
             }
 
             // Send the left number glyphs in a rdpegfx frame
-            if(tailNum != 0)
+            if (tailNum != 0)
             {
-                fid = this.rdpegfxAdapter.SendClearCodecGlyphInBatch(surf, startGlyphIdx, startPos, tailNum, ccGlyph);   
+                fid = this.rdpegfxAdapter.SendClearCodecGlyphInBatch(surf, startGlyphIdx, startPos, tailNum, ccGlyph);
                 this.rdpegfxAdapter.ExpectFrameAck(fid);
             }
             // Reaching here means each glyph message has a frame acknowledge received, test case pass
@@ -577,7 +572,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can use ClearCodec glyph Cache in same rect area.")]
@@ -592,20 +587,20 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             RDPGFX_RECT16 surfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.surfPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
             Surface surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
             this.TestSite.Assert.IsNotNull(surf, "Surface {0} is created", surf.Id);
-            
+
             // Send solid fill request to client to fill surface with green color
             RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
             RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
             uint fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.fillColorGreen, fillRects);
-            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);           
+            this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a glyph in ClearCodec Encoded Bitmap Data Messages to client and instruct client to cache it.");
-            Image bgImage;
-            Image ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight, out bgImage);
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos, (Bitmap)ccBandImage);
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Set glyph bitmap rectangle, relative to surface
             RDPGFX_RECT16 glyphRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight);
             // Set glyph_index use flag
@@ -617,7 +612,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
             this.VerifySUTDisplay(false, surfRect);
-            
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending same glyph in ClearCodec Encoded Bitmap Data Messages with glyph index only to client.");
             // Set same glyph bitmap to new rectangle, relative to surface
             RDPGFX_RECT16 glyphRect2 = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos2, RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight);
@@ -642,7 +637,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec glyph Cache can be used in a Rectangle with same size, but different width/height.")]
@@ -667,11 +662,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending a glyph in ClearCodec Encoded Bitmap Data Messages to client and instruct client to cache it..");
             // Init a 50 * 20 size glyph
-            Image bgImage;
-            Image ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight, out bgImage);
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos, (Bitmap)ccBandImage);
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
 
             // Set glyph bitmap rectangle, relative to surface
             RDPGFX_RECT16 glyphRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight);
@@ -694,7 +689,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                                                         RdpegfxTestUtility.ccGlyphIndex, glyphRect2, null, null, null);
             // Test case pass if frame acknowledge is received.
             this.rdpegfxAdapter.ExpectFrameAck(fid);
-            
+
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
@@ -705,7 +700,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if RDP client can accept a ClearCodec Encoded bitmap with max(32766) bitmap width.")]
@@ -730,16 +725,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Messages with max bitmap width(32766 pixels) to client.");
             // Init a bitmap with width is 32766
-            Bitmap maxBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.MaxBmpWidth, RdpegfxTestUtility.surfHeight, Color.Azure);
+            SKBitmap maxBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.MaxBmpWidth, RdpegfxTestUtility.surfHeight, SKColors.Azure);
             // Set clearcodec bitmap rectangle, relative to surface
-            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.MaxBmpWidth, RdpegfxTestUtility.surfHeight);        
+            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.MaxBmpWidth, RdpegfxTestUtility.surfHeight);
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE;
             // Encode the bitmap into residual layer and Send encoded clearcodec bitmap data in w2s_1 PDU             
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, ccRect, maxBitmap, null, null);
+                                                        0, ccRect, SKImage.FromBitmap(maxBitmap), null, null);
             // Test case pass if frame acknowledge is received.
             this.rdpegfxAdapter.ExpectFrameAck(fid);
-            
+
             // Delete the surface
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface {0} is deleted", surf.Id);
@@ -749,7 +744,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if RDP client can accept a ClearCodec Encoded bitmap with max bitmap height(32766).")]
@@ -774,13 +769,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Messages with max bitmap height(32766 pixels) to client.");
             // Init a bitmap with height is 32766
-            Bitmap maxBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.MaxBmpHeight, Color.Azure);
+            SKBitmap maxBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.MaxBmpHeight, SKColors.Azure);
             // Set clearcodec bitmap rectangle, relative to surface
-            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.MaxBmpHeight);       
+            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.MaxBmpHeight);
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE;
             // Encode the bitmap into residual layer and Send encoded clearcodec bitmap data in w2s_1 PDU          
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, ccRect, maxBitmap, null, null);
+                                                        0, ccRect, SKImage.FromBitmap(maxBitmap), null, null);
             // Test case pass if frame acknowledge is received.
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
@@ -794,7 +789,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with last RunLengthFactor that is zero in residual layer.")]
@@ -814,15 +809,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Messages with last residual RLF is zero to client.");
             // Init a residual bitmap
-            Bitmap resBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight, Color.Azure);
+            SKBitmap resBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight, SKColors.Azure);
             // Set clearcodec bitmap rectangle, relative to surface
-            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);         
+            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, RdpegfxTestUtility.surfHeight);
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE;
             // Set test type with ClearCodec_Residual_ZeroRunLengthFactor
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.ClearCodec_Residual_ZeroRunLengthFactor);  // RLF data: 0x00
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, ccRect, resBitmap, null, null);
+                                                        0, ccRect, SKImage.FromBitmap(resBitmap), null, null);
             // Test case pass if frame acknowledge is received.
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
@@ -835,7 +830,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec bitmap transition with max(52 pixels) band height.")]
@@ -860,10 +855,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Band(height is 52 pixels) Data Messages to client.");
             // Init a band with height is 52 pixels
-            Image bgImage;
-            Bitmap ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccMaxBandHeight, out bgImage);
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
             bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Set clearcodec bitmap rectangle, relative to surface
             RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)ccBandImage.Width, (ushort)ccBandImage.Height);
@@ -882,7 +877,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Positive")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can accept a RLEX encoded stream with max color in palette.")]
@@ -909,7 +904,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Init a subcodec bitmap with max(127) type of color
             BMP_INFO bmp_info = new BMP_INFO();
             bmp_info.scID = CLEARCODEC_SUBCODEC_ID.SUBCODEC_RLEX;
-            bmp_info.bmp = RdpegfxTestUtility.DrawGradientImage(RdpegfxTestUtility.ccSubcodecMaxWidth, RdpegfxTestUtility.ccSubcodecHeight, Color.Red);
+            bmp_info.bmp = RdpegfxTestUtility.DrawGradientImage(RdpegfxTestUtility.ccSubcodecMaxWidth, RdpegfxTestUtility.ccSubcodecHeight, SKColors.Red);
             Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecBmpDict = new Dictionary<RDPGFX_POINT16, BMP_INFO>();
             subcodecBmpDict.Add(RdpegfxTestUtility.imgPos, bmp_info);
             // Set clearcodec subcodec layer bitmap rectangle, relative to surface
@@ -929,7 +924,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if RDP client can accept a ClearCodec Encoded bitmap with width larger than max width(32766).")]
@@ -954,22 +949,22 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap(width > 32766) Messages to client.");
             // Init a too big width(32767) bitmap to client
-            Bitmap maxBitmap = RdpegfxTestUtility.DrawImage((ushort)(RdpegfxTestUtility.MaxBmpWidth + 1), RdpegfxTestUtility.surfHeight, Color.Azure);
+            SKBitmap maxBitmap = RdpegfxTestUtility.DrawImage((ushort)(RdpegfxTestUtility.MaxBmpWidth + 1), RdpegfxTestUtility.surfHeight, SKColors.Azure);
             // Set clearcodec bitmap rectangle, relative to surface
-            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)(RdpegfxTestUtility.MaxBmpWidth+1), RdpegfxTestUtility.surfHeight);          
+            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)(RdpegfxTestUtility.MaxBmpWidth + 1), RdpegfxTestUtility.surfHeight);
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE;
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, ccRect, maxBitmap, null, null);
+                                                        0, ccRect, SKImage.FromBitmap(maxBitmap), null, null);
             // Test case pass if RDP connection is stopped due to too wide bitmap are encoded in clearcodec stream.
-            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with width larger than 32766");            
+            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with width larger than 32766");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if RDP client can accept a ClearCodec Encoded bitmap with height larger than max height(32766).")]
@@ -994,22 +989,22 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap(height> 32766) Messages to client.");
             // Init too big height(32767) bitmap
-            Bitmap maxBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.surfWidth, (ushort)(RdpegfxTestUtility.MaxBmpHeight + 1), Color.Azure);
+            SKBitmap maxBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.surfWidth, (ushort)(RdpegfxTestUtility.MaxBmpHeight + 1), SKColors.Azure);
             // Set clearcodec bitmap rectangle, relative to surface
-            RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, (ushort)(RdpegfxTestUtility.MaxBmpHeight+1));          
+            RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.surfWidth, (ushort)(RdpegfxTestUtility.MaxBmpHeight + 1));
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE;
             // Send encoded clearcodec bitmap data in w2s_1 PDU           
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, fillSurfRect, maxBitmap, null, null);
+                                                        0, fillSurfRect, SKImage.FromBitmap(maxBitmap), null, null);
             // Test case pass if RDP connection is stopped due to too high bitmap are encoded in clearcodec stream.
-            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with height larger than 32766");            
+            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with height larger than 32766");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if a glyph larger than max number(1024) square pixels can be handled by the client.")]
@@ -1034,12 +1029,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Encoded Glyph with larger than max number(1024) square pixels to client.");
             // Init a glyph with 1025 (41*25) square pixels
-            Image bgImage;
-            Image ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth2, RdpegfxTestUtility.ccBandHeight2, out bgImage);
 
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
-            bandBmpDict.Add(RdpegfxTestUtility.imgPos, (Bitmap)ccBandImage);
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
+            bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Set glyph bitmap rectangle, relative to surface
             RDPGFX_RECT16 glyphRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.ccBandWidth2, RdpegfxTestUtility.ccBandHeight2);
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_GLYPH_INDEX;
@@ -1047,14 +1042,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         RdpegfxTestUtility.ccGlyphIndex, glyphRect, null, bandBmpDict, null);
             // Test case pass if RDP connection is stopped due to too large size bitmap are encoded in clearcodec stream.
-            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with a glyph larger than 1024 square pixels");            
+            RDPClientTryDropConnection("a ClearCodec Encoded bitmap with a glyph larger than 1024 square pixels");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if a clearcodec stream with glyph_hit flag set only can be handled by the client.")]
@@ -1085,14 +1080,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         0, glyphRect, null, null, null);
             // Test case pass if RDP connection is stopped due to glyph_hit flag is enabled, but glyph_index flag is disabled in clearcodec stream.
-            RDPClientTryDropConnection("a ClearCodec stream with glyphhit only flag set");            
+            RDPClientTryDropConnection("a ClearCodec stream with glyphhit only flag set");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if a clearcodec stream with glyph_hit and glyph_index flag set but glyph index is not used can be handled by the client.")]
@@ -1124,14 +1119,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         RdpegfxTestUtility.ccGlyphIndex, glyphRect, null, null, null);
             // Test case pass if RDP connection is stopped due to unused glyph index are encoded in clearcodec stream.
-            RDPClientTryDropConnection("a ClearCodec stream with glyph_hit and glyph_index flag set but glyph index is unused");            
+            RDPClientTryDropConnection("a ClearCodec stream with glyph_hit and glyph_index flag set but glyph index is unused");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if a clearcodec stream with glyph_hit and glyph_index flag set but glyph index is out of range(0, 3999) can be handled by the client.")]
@@ -1164,14 +1159,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         ccGlyphIndex, glyphRect, null, null, null);
             // Test case pass if RDP connection is stopped due to too big glyph index are encoded in clearcodec stream.
-            RDPClientTryDropConnection("a ClearCodec stream with glyph_hit and glyph_index flag set but glyph index is out of range(0, 3999)");            
+            RDPClientTryDropConnection("a ClearCodec stream with glyph_hit and glyph_index flag set but glyph index is out of range(0, 3999)");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if client can support too much(4001) ClearCodec glyph slot.")]
@@ -1198,7 +1193,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Init a small glyph with width is 1, height is 2
             ushort width = RdpegfxTestUtility.ccSmallGlyphWidth;
             ushort height = RdpegfxTestUtility.ccSmallGlyphHeight;
-            Image ccGlyph = RdpegfxTestUtility.DrawImage(width, height, Color.Violet);
+            SKImage ccGlyph = SKImage.FromBitmap(RdpegfxTestUtility.DrawImage(width, height, SKColors.Violet));
 
             // Set start position of a glyph row
             RDPGFX_POINT16 startPos = RdpegfxTestUtility.imgPos;
@@ -1206,7 +1201,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             ushort glyphNumInBatch = (ushort)(surf.Width - (startPos.x + width) + 1);
             ushort startGlyphIdx = 0;
             // Set glyph number to 4001, then get full row glyph number, 
-            ushort count = (ushort)((RdpegfxTestUtility.ccMaxGlyphIndexNum +1)/ glyphNumInBatch);
+            ushort count = (ushort)((RdpegfxTestUtility.ccMaxGlyphIndexNum + 1) / glyphNumInBatch);
             ushort tailNum = (ushort)((RdpegfxTestUtility.ccMaxGlyphIndexNum + 1) % glyphNumInBatch);
 
             // Send a row of glyph in one w2s_1 frame
@@ -1233,7 +1228,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with graph index hit flag set but composite payload exists.")]
@@ -1258,8 +1253,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Messages to client and instruct client to cache it.");
             // Init a bitmap to be clearcodec encoded
-            Image bgImage;
-            Image ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight, out bgImage);
             // Set clearcodec bitmap rectangle, relative to surface
             RDPGFX_RECT16 glyphRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, RdpegfxTestUtility.ccBandWidth, RdpegfxTestUtility.ccBandHeight);
@@ -1267,7 +1262,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_GLYPH_INDEX;
             // Send encoded clearcodec bitmap data with glyph cache is 999 in w2s_1 PDU
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        RdpegfxTestUtility.ccGlyphIndex, glyphRect, ccBandImage, null, null);
+                                                        RdpegfxTestUtility.ccGlyphIndex, glyphRect, SKImage.FromBitmap(ccBandImage), null, null);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Messages with glyph hit flag is set but composite payload exists to client.");
@@ -1281,14 +1276,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
                                                         RdpegfxTestUtility.ccGlyphIndex, glyphRect2, bgImage, null, null);
             // Test case pass if RDP connection is stopped due to both glyph hit flag and compsite payload exist in clearcodec stream
-            RDPClientTryDropConnection("a ClearCodec stream with graph index hit flag set but composite payload exists");            
+            RDPClientTryDropConnection("a ClearCodec stream with graph index hit flag set but composite payload exists");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with redundant RunLengthFactor2 in residual layer.")]
@@ -1314,23 +1309,23 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Messages with residual RLF1 less than 255 but RLF2 exists to client.");
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE;
             // Set clearcodec bitmap rectangle, relative to surface
-            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)testData.ClearCodecImage.Width, 
+            RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)testData.ClearCodecImage.Width,
                                                                     (ushort)testData.ClearCodecImage.Height);
             // Set test type to instruct clearcodec encoder to generate a redundant RLF2
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.ClearCodec_Residual_RedundantRunLengthFactor2);  // RLF Data: 0xf0 00 40 
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, ccRect, testData.ClearCodecImage, null, null);
+                                                        0, ccRect, SKImage.FromBitmap(testData.ClearCodecImage), null, null);
             // Test case pass if RDP connection is stopped due to redundant RLF2 in clearcodec stream
             RDPClientTryDropConnection("a ClearCodec stream with redundant RunLengthFactor2 or 3 in residual layer");
-            
+
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with RunLengthFactor1 is 0xff but RunLengthFactor2 is absent in residual layer.")]
@@ -1362,7 +1357,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.ClearCodec_Residual_AbsentRunLengthFactor2);  // RLF data: 0xff 
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, ccRect, testData.ClearCodecImage, null, null);
+                                                        0, ccRect, SKImage.FromBitmap(testData.ClearCodecImage), null, null);
             // Test case pass if RDP connection is stopped due to RLF1 is 0xff but RLF2 is absent in clearcodec stream
             RDPClientTryDropConnection("a ClearCodec stream with absent RunLengthFactor2 in residual layer");
         }
@@ -1371,7 +1366,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with RunLengthFactor2 is less than 0xffff but RunLengthFactor3 exist in residual layer.")]
@@ -1403,24 +1398,24 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Messages to client. In this stream, the RunLengthFactor2 is less than 0xffff and the RunLengthFactor3 exists in the residual layer.");
             // Init a residual layer bitmap for clearcodec encoding
-            Bitmap resBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.MaxBmpWidth, RdpegfxTestUtility.surfHeight, Color.Azure);
+            SKBitmap resBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.MaxBmpWidth, RdpegfxTestUtility.surfHeight, SKColors.Azure);
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE;
             RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)resBitmap.Width, (ushort)resBitmap.Height);
             // Set test type to instruct clearcodec encoder to add redundant RLF3
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.ClearCodec_Residual_RedundantRunLengthFactor3);  // RLF data: 0xff f0 f0 00 ff 3f 10
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, ccRect, resBitmap, null, null);
+                                                        0, ccRect, SKImage.FromBitmap(resBitmap), null, null);
             // Test case pass if RDP connection is stopped due to redundant RLF3 in clearcodec stream
             RDPClientTryDropConnection("a ClearCodec stream with redundant RunLengthFactor3 in residual layer");
-            
+
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with absent RunLengthFactor3 in residual layer.")]
@@ -1452,14 +1447,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Bitmap Messages with  RLF2 is 0xffff but RLF3 is absent in residual layer to client.");
             // Init a residual layer bitmap for clearcodec encoding
-            Bitmap resBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.MaxBmpWidth, RdpegfxTestUtility.surfHeight, Color.Azure);
+            SKBitmap resBitmap = RdpegfxTestUtility.DrawImage(RdpegfxTestUtility.MaxBmpWidth, RdpegfxTestUtility.surfHeight, SKColors.Azure);
             byte ccFlag = ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE;
             RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)resBitmap.Width, (ushort)resBitmap.Height);
             // Set test type to instruct clearcodec encoder to remove RLF3 part
             this.rdpegfxAdapter.SetTestType(RdpegfxNegativeTypes.ClearCodec_Residual_AbsentRunLengthFactor3);  // RLF data: 0xff ff ff 
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ccFlag,
-                                                        0, ccRect, resBitmap, null, null);
+                                                        0, ccRect, SKImage.FromBitmap(resBitmap), null, null);
             // Test case pass if RDP connection is stopped due to absent RLF3 in clearcodec stream
             RDPClientTryDropConnection("a ClearCodec stream with absent RunLengthFactor3 in residual layer");
         }
@@ -1468,7 +1463,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test ClearCodec bitmap transition with larger than 52 pixels band height.")]
@@ -1495,12 +1490,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending ClearCodec Encoded Band Messages with 53 pixels height to client.");
             // Init a band with height is 53 pixels            
-            Image bgImage;
-            Bitmap ccBandImage = RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos, RdpegfxTestUtility.ccBandWidth,
-                                                                        (ushort)(RdpegfxTestUtility.ccMaxBandHeight+1), out bgImage);
+            SKImage bgImage;
+            SKBitmap ccBandImage = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos, RdpegfxTestUtility.ccBandWidth,
+                                                                        (ushort)(RdpegfxTestUtility.ccMaxBandHeight + 1), out bgImage);
             RDPGFX_RECT16 ccRect = RdpegfxTestUtility.ConvertToRect(RdpegfxTestUtility.imgPos, (ushort)ccBandImage.Width, (ushort)ccBandImage.Height);
 
-            Dictionary<RDPGFX_POINT16, Bitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, Bitmap>();
+            Dictionary<RDPGFX_POINT16, SKBitmap> bandBmpDict = new Dictionary<RDPGFX_POINT16, SKBitmap>();
             bandBmpDict.Add(RdpegfxTestUtility.imgPos, ccBandImage);
             // Send encoded clearcodec bitmap data in w2s_1 PDU
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE, 0,
@@ -1508,12 +1503,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Test case pass if RDP connection is stopped due to bandBmpDict height is too big(>52 pixels) 
             RDPClientTryDropConnection("a ClearCodec stream with band height larger than 52 pixels");
         }
-                
+
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with RLEX encoded bytes number larger than 3 * width * height.")]
@@ -1540,7 +1535,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             // Set a subcodec bitmap with each pixel color is unique for clearcodec RLEX encoding
             BMP_INFO bmp_info = new BMP_INFO();
             bmp_info.scID = CLEARCODEC_SUBCODEC_ID.SUBCODEC_RLEX;
-            bmp_info.bmp = (Bitmap)RdpegfxTestUtility.DrawImageWithUniqueColor(RdpegfxTestUtility.ccSubcodecWidth, RdpegfxTestUtility.ccSubcodecHeight, Color.Red);                                        
+            bmp_info.bmp = RdpegfxTestUtility.DrawImageWithUniqueColor(RdpegfxTestUtility.ccSubcodecWidth, RdpegfxTestUtility.ccSubcodecHeight, SKColors.Red);
             Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecBmpDict = new Dictionary<RDPGFX_POINT16, BMP_INFO>();
             subcodecBmpDict.Add(RdpegfxTestUtility.imgPos, bmp_info);
             // Set clearcodec bitmap rectangle, relative to surface
@@ -1549,14 +1544,14 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE, 0,
                                                         scRect, null, null, subcodecBmpDict);
             // Test case pass if RDP connection is stopped due to RLEX encoded bytes is larger than 3 * width * height in subcodec layer.
-            RDPClientTryDropConnection("a ClearCodec stream with RLEX encoded bytes larger than 3 * width * height in subcodec layer");            
+            RDPClientTryDropConnection("a ClearCodec stream with RLEX encoded bytes larger than 3 * width * height in subcodec layer");
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("Negative")]
         [TestCategory("RDP8.0")]
-        [TestCategory("RDPEGFX")]        
+        [TestCategory("RDPEGFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test case is used to test if the client accepts a ClearCodec stream with incorrect palette count in subcodec layer.")]
@@ -1581,10 +1576,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Encode Header/Data Messages to client.");
             // Init a subcodec bitmap for clearcodec RLEX encoding
-            Image bgImage;
+            SKImage bgImage;
             BMP_INFO bmp_info = new BMP_INFO();
             bmp_info.scID = CLEARCODEC_SUBCODEC_ID.SUBCODEC_RLEX;
-            bmp_info.bmp = (Bitmap)RdpegfxTestUtility.captureFromImage(testData.ClearCodecImage, RdpegfxTestUtility.imgPos,
+            bmp_info.bmp = RdpegfxTestUtility.captureFromImage(SKImage.FromBitmap(testData.ClearCodecImage), RdpegfxTestUtility.imgPos,
                                                 RdpegfxTestUtility.ccSubcodecWidth, RdpegfxTestUtility.ccSubcodecHeight, out bgImage);
             Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecBmpDict = new Dictionary<RDPGFX_POINT16, BMP_INFO>();
             subcodecBmpDict.Add(RdpegfxTestUtility.imgPos, bmp_info);
@@ -1596,7 +1591,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             fid = this.rdpegfxAdapter.SendImageWithClearCodec(surf.Id, PixelFormat.PIXEL_FORMAT_XRGB_8888, ClearCodec_BitmapStream.CLEARCODEC_FLAG_NONE, 0,
                                                         fillSurfRect, null, null, subcodecBmpDict);
             // Test case pass if RDP connection is stopped due to incorrect Palette Count in RLEX encoding
-            RDPClientTryDropConnection("a ClearCodec stream with incorrect palette count in subcodec layer");            
+            RDPClientTryDropConnection("a ClearCodec stream with incorrect palette count in subcodec layer");
         }
     }
 }

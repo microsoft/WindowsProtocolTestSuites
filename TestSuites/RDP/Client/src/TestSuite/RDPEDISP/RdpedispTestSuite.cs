@@ -13,10 +13,10 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedisp
 {
@@ -85,7 +85,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                                && PtfPropUtility.GetPtfPropertyValue(Site, "ChangedDesktopHeight", out changedDesktopHeight)
                                && PtfPropUtility.GetPtfPropertyValue(Site, "OriginalMonitorNumber", out originalMonitorNumber)
                                && PtfPropUtility.GetPtfPropertyValue(Site, "ChangedMonitorNumber", out changedMonitorNumber);
-                if (!isValid) {
+                if (!isValid)
+                {
                     throw new InvalidCastException("Invalid configured parameters");
                 }
             }
@@ -283,11 +284,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// Load Rdpedisp test image RdpedispTestImage
         /// </summary>
         /// <returns></returns>
-        private Bitmap LoadImage()
+        private SKBitmap LoadImage()
         {
             // Load Rdpedisp test image
             String RdpedispTestImagePath;
-            Bitmap testImage = null;
+            SKBitmap testImage = null;
             if (!PtfPropUtility.GetPtfPropertyValue(this.TestSite, "RdpedispTestImage", out RdpedispTestImagePath))
             {
                 RdpedispTestImagePath = "";
@@ -295,7 +296,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             }
             try
             {
-                testImage = new Bitmap(RdpedispTestImagePath);
+                testImage = SKBitmap.Decode(RdpedispTestImagePath);
             }
             catch (System.IO.FileNotFoundException)
             {
@@ -491,7 +492,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
                true, true, true);
         }
 
-        private void SendInstruction(ushort screenWidth, ushort screenHeight, Bitmap bitmap)
+        private void SendInstruction(ushort screenWidth, ushort screenHeight, SKBitmap bitmap)
         {
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a surface and fill it with white color.");
             // Create & output a surface 
@@ -502,7 +503,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             // Send solid fill request to client to fill surface with white color
             RDPGFX_RECT16 fillSurfRect = RdpegfxTestUtility.ConvertToRect(new RDPGFX_POINT16(0, 0), screenWidth, screenHeight);
             RDPGFX_RECT16[] fillRects = { fillSurfRect };  // Relative to surface
-            uint fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.ToRdpgfx_Color32(Color.White), fillRects);
+            uint fid = this.rdpegfxAdapter.SolidFillSurface(surf, RdpegfxTestUtility.ToRdpgfx_Color32(SKColors.White), fillRects);
             this.TestSite.Log.Add(LogEntryKind.Debug, "Surface is filled with solid color in frame: {0}", fid);
             this.rdpegfxAdapter.ExpectFrameAck(fid);
             this.rdpegfxAdapter.DeleteSurface(surf.Id);
@@ -514,7 +515,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             surf = this.rdpegfxAdapter.CreateAndOutputSurface(surfRect, PixelFormat.PIXEL_FORMAT_XRGB_8888);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Instruction Image to client.");
-            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, bitmap, PixelFormat.PIXEL_FORMAT_XRGB_8888,
+            List<Dictionary<uint, byte[]>> layerDataList = this.rdpegfxAdapter.RfxProgressiveCodecEncode(surf, SKImage.FromBitmap(bitmap), PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                                             false, true, ImageQuality_Values.Lossless, false, false, true);
             fid = SendRfxProgCodecEcodedData(layerDataList);
             this.rdpegfxAdapter.ExpectFrameAck(fid);

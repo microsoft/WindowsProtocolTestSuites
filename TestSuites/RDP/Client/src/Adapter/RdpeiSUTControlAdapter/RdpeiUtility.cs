@@ -6,7 +6,7 @@ using Microsoft.Protocols.TestSuites.Rdprfx;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using System.Drawing;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdpei
 {
@@ -18,6 +18,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         private static ITestSite Site;
         private static IRdpbcgrAdapter rdpbcgrAdapter;
         private static IRdprfxAdapter rdprfxAdapter;
+
+        public static SKPaint Paint_Arial_35 = new SKPaint { Typeface = SKTypeface.FromFamilyName("Arial"), TextSize = 35 * 96 / 72 };
+        public static SKPaint Paint_Arial_28 = new SKPaint { Typeface = SKTypeface.FromFamilyName("Arial"), TextSize = 28 * 96 / 72 };
+        public static SKPaint Paint_Verdana_24 = new SKPaint { Typeface = SKTypeface.FromFamilyName("Verdana"), TextSize = 24 * 96 / 72 };
+        public static SKPaint Paint_Verdana_20 = new SKPaint { Typeface = SKTypeface.FromFamilyName("Verdana"), TextSize = 20 * 96 / 72 };
 
         /// <summary>
         /// Initializes the RdpeiUtility class.
@@ -40,7 +45,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// <param name="destLeft">The left bound of the frame.</param>
         /// <param name="destTop">The top bound of the frame.</param>
         /// <param name="frameId">The index of the sending frame.</param>
-        public static void SendImageToClient(Image image, ushort destLeft, ushort destTop, uint frameId)
+        public static void SendImageToClient(SKImage image, ushort destLeft, ushort destTop, uint frameId)
         {
             OperationalMode opMode = OperationalMode.ImageMode;
             EntropyAlgorithm enAlgorithm = EntropyAlgorithm.CLW_ENTROPY_RLGR1;
@@ -64,11 +69,13 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             ushort left = (ushort)((rdpbcgrAdapter.CapabilitySetting.DesktopWidth - 150) / 2);
             ushort top = (ushort)((rdpbcgrAdapter.CapabilitySetting.DesktopHeight - 100) / 2 + 150);
 
-            Bitmap img = new Bitmap(150, 100);
-            Graphics graph = Graphics.FromImage(img);
-            graph.DrawString("Great!", new Font("Arial", 35), new SolidBrush(Color.White), 0, 0, new StringFormat());
+            SKBitmap img = new SKBitmap(150, 100);
+            SKCanvas canvas = new SKCanvas(img);
+            SKPaint paint = Paint_Arial_35;
+            paint.Color = SKColors.White;
+            canvas.DrawText("Great!", 0, paint.TextSize, paint);
 
-            SendImageToClient(img, left, top, 0);
+            SendImageToClient(SKImage.FromBitmap(img), left, top, 0);
         }
 
         /// <summary>
@@ -77,18 +84,19 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// <param name="config">The configuration of the instructions to be sent.</param>
         public static void SendInstruction(RdpeiSUTControlConfig config)
         {
-            Bitmap img = new Bitmap(config.width, config.height);
-            Graphics graph = Graphics.FromImage(img);
+            SKBitmap img = new SKBitmap(config.width, config.height);
+            SKCanvas canvas = new SKCanvas(img);
             if (config.instructions != null)
             {
                 foreach (RdpeiSUTControlInstruction i in config.instructions)
                 {
-                    graph.DrawString(i.text, i.font, new SolidBrush(Color.White), i.left, i.top, new StringFormat());
+                    i.paint.Color = SKColors.White;
+                    canvas.DrawText(i.text, i.left, i.top + i.paint.TextSize, i.paint);
                 }
             }
             ushort left = (ushort)((rdpbcgrAdapter.CapabilitySetting.DesktopWidth - config.width) / 2);
             ushort top = (ushort)((rdpbcgrAdapter.CapabilitySetting.DesktopHeight - config.height) / 2);
-            SendImageToClient(img, left, top, 0);
+            SendImageToClient(SKImage.FromBitmap(img), left, top, 0);
         }
 
         /// <summary>
@@ -99,11 +107,15 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// <param name="top">The top position of the button.</param>
         public static void AddButton(string text, ushort left, ushort top)
         {
-            Bitmap img = new Bitmap(text.Length * 25, 60);
-            Graphics graph = Graphics.FromImage(img);
-            graph.FillRectangle(new SolidBrush(Color.Gray), 0, 0, text.Length * 25, 60);
-            graph.DrawString(text, new Font("Verdana", 32), new SolidBrush(Color.Black), 0, 0, new StringFormat());
-            SendImageToClient(img, left, top, 1);
+            SKBitmap img = new SKBitmap(text.Length * 25, 60);
+            SKCanvas canvas = new SKCanvas(img);
+            SKPaint paint = new SKPaint() { Color = SKColors.Gray };
+            canvas.DrawRect(new SKRect(0, 0, text.Length * 25, 60), paint);
+            SKPaint paint2 = new SKPaint() { Color = SKColors.Black };
+            paint2.Typeface = SKTypeface.FromFamilyName("Verdana");
+            paint2.TextSize = 32 * 96 / 72;
+            canvas.DrawText(text, 0, paint2.TextSize, paint2);
+            SendImageToClient(SKImage.FromBitmap(img), left, top, 1);
         }
 
         /// <summary>
@@ -113,12 +125,12 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// <param name="color">The color of the circle.</param>
         /// <param name="left">The left position of the circle.</param>
         /// <param name="top">The top position of the circle.</param>
-        public static void SendCircle(ushort diam, Color color, ushort left, ushort top)
+        public static void SendCircle(ushort diam, SKColor color, ushort left, ushort top)
         {
-            Bitmap img = new Bitmap(diam, diam);
-            Graphics graph = Graphics.FromImage(img);
-            graph.FillEllipse(new SolidBrush(color), 0, 0, diam, diam);
-            RdpeiUtility.SendImageToClient(img, left, top, 0);
+            SKBitmap img = new SKBitmap(diam, diam);
+            SKCanvas canvas = new SKCanvas(img);
+            canvas.DrawOval(diam / 2, diam / 2, diam / 2, diam / 2, new SKPaint { Color = color });
+            RdpeiUtility.SendImageToClient(SKImage.FromBitmap(img), left, top, 0);
         }
     }
 }

@@ -1,15 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Text;
-using System.Drawing;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdprfx
 {
@@ -19,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(0)]
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Sending client an encoded bitmap data which encoded with RLGR1 algorithm.")]
@@ -99,9 +95,9 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
-            this.VerifySUTDisplay(true, compareRect);             
-           
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + image_64X64.Width, destTop + image_64X64.Height);
+            this.VerifySUTDisplay(true, compareRect);
+
             #endregion
         }
 
@@ -109,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(0)]
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Sending client an encoded bitmap data which encoded with RLGR3 algorithm.")]
@@ -189,9 +185,9 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + image_64X64.Width, destTop + image_64X64.Height);
             this.VerifySUTDisplay(true, compareRect);
-           
+
             #endregion
         }
 
@@ -271,10 +267,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles whose height is TileSize/2, this rectangle is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect = new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize / 2);
-            Rectangle[] rects = new Rectangle[] { clipRect };
+            SKRect clipRect = new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize / 2);
+            SKRect[] rects = new SKRect[] { clipRect };
 
-            TileImage[] tileImageArr = RdprfxTileUtils.SplitToTileImage(image_64X64, RdprfxServer.TileSize, RdprfxServer.TileSize);            
+            TileImage[] tileImageArr = RdprfxTileUtils.SplitToTileImage(image_64X64, RdprfxServer.TileSize, RdprfxServer.TileSize);
             for (int idx = 0; idx < tileImageArr.Length; idx++)
             {
                 if (idx == 0)
@@ -298,8 +294,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
-            this.VerifySUTDisplay(true, compareRect); 
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + image_64X64.Width, destTop + image_64X64.Height);
+            this.VerifySUTDisplay(true, compareRect);
 
             #endregion
         }
@@ -409,16 +405,16 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + image_64X64.Width, destTop + image_64X64.Height);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion
         }
-        
+
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Ensure the client terminates the RDP connection when received a TS_RFX_FRAME_BEGIN with the blockLen field set to an invalid value.")]
@@ -607,12 +603,12 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             this.TestSite.Log.Add(LogEntryKind.Comment, "Sending Frame Marker Command (Begin) with frameID: {0}.", frameId);
             rdpbcgrAdapter.SendFrameMarkerCommand(frameAction_Values.SURFACECMD_FRAMEACTION_BEGIN, frameId);
 
-            this.TestSite.Log.Add(LogEntryKind.Comment, "Start to send bitmap data without encoding to client. destLeft = {0}, destTop = {1}.",  destLeft, destTop);
+            this.TestSite.Log.Add(LogEntryKind.Comment, "Start to send bitmap data without encoding to client. destLeft = {0}, destTop = {1}.", destLeft, destTop);
 
             this.rdprfxAdapter.SendImageToClientWithoutEncoding(image_64X64, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, image_64X64.Width, image_64X64.Height);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + image_64X64.Width, destTop + image_64X64.Height);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion

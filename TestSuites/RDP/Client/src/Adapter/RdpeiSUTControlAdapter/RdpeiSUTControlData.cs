@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using System.Drawing;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdpei
 {
@@ -11,7 +11,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             (
             new RdpeiSUTControlInstruction[]
             {
-                new RdpeiSUTControlInstruction("Please touch the screen.", new Font("Arial", 35), 0, 0)
+                new RdpeiSUTControlInstruction("Please touch the screen.",RdpeiUtility.Paint_Arial_35 , 0, 0)
             },
             540,
             100
@@ -21,8 +21,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             (
             new RdpeiSUTControlInstruction[]
             {
-                new RdpeiSUTControlInstruction("Please touch the screen several times to trigger", new Font("Arial", 28), 0, 0),
-                new RdpeiSUTControlInstruction("touch events (at least touch 5 times).", new Font("Arial", 28), 0, 70)
+                new RdpeiSUTControlInstruction("Please touch the screen several times to trigger", RdpeiUtility.Paint_Arial_35, 0, 0),
+                new RdpeiSUTControlInstruction("touch events (at least touch 5 times).", RdpeiUtility.Paint_Arial_28, 0, 70)
             },
             800,
             150
@@ -34,8 +34,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                 (
                 new RdpeiSUTControlInstruction[]
                 {
-                    new RdpeiSUTControlInstruction("Please multitouch the screen with", new Font("Arial", 35), 0, 0),
-                    new RdpeiSUTControlInstruction($"2 to {count} fingers.", new Font("Arial", 35), 0, 70)
+                    new RdpeiSUTControlInstruction("Please multitouch the screen with", RdpeiUtility.Paint_Arial_35, 0, 0),
+                    new RdpeiSUTControlInstruction($"2 to {count} fingers.",RdpeiUtility.Paint_Arial_35, 0, 70)
                 },
                 720,
                 150
@@ -46,7 +46,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             (
             new RdpeiSUTControlInstruction[]
             {
-                new RdpeiSUTControlInstruction("Please touch the red circles.", new Font("Arial", 35), 0, 0)
+                new RdpeiSUTControlInstruction("Please touch the red circles.", RdpeiUtility.Paint_Arial_35, 0, 0)
             },
             600,
             100
@@ -56,9 +56,9 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             (
             new RdpeiSUTControlInstruction[]
             {
-                new RdpeiSUTControlInstruction("Does your device support proximity? If yes,", new Font("Verdana", 24), 0, 0),
-                new RdpeiSUTControlInstruction("trigger RDPINPUT_DISMISS_HOVERING_CONTACT_PDU.", new Font("Verdana", 20), 0, 70),
-                new RdpeiSUTControlInstruction("If no, touch the 'Exit' at the bottom right.", new Font("Verdana", 24), 0, 140)
+                new RdpeiSUTControlInstruction("Does your device support proximity? If yes,",RdpeiUtility.Paint_Verdana_24, 0, 0),
+                new RdpeiSUTControlInstruction("trigger RDPINPUT_DISMISS_HOVERING_CONTACT_PDU.",RdpeiUtility.Paint_Verdana_20, 0, 70),
+                new RdpeiSUTControlInstruction("If no, touch the 'Exit' at the bottom right.",RdpeiUtility.Paint_Verdana_24 , 0, 140)
             },
             800,
             200
@@ -68,7 +68,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
             (
             new RdpeiSUTControlInstruction[]
             {
-                new RdpeiSUTControlInstruction("Oops...Unexpected position.", new Font("Arial", 35), 0, 0)
+                new RdpeiSUTControlInstruction("Oops...Unexpected position.", new SKPaint{Typeface=SKTypeface.FromFamilyName("Arial"),TextSize= 35*96/72}, 0, 0)
             },
             650,
             100
@@ -88,7 +88,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// <summary>
         /// The font of the instruction
         /// </summary>
-        public Font font;
+        public SKPaint paint;
 
         /// <summary>
         /// The left position of current line of instruction text relative to the entire instruction area. 
@@ -100,10 +100,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
         /// </summary>
         public ushort top;
 
-        public RdpeiSUTControlInstruction(string text, Font font, ushort left, ushort top)
+        public RdpeiSUTControlInstruction(string text, SKPaint paint, ushort left, ushort top)
         {
             this.text = text;
-            this.font = font;
+            this.paint = paint;
             this.left = left;
             this.top = top;
         }

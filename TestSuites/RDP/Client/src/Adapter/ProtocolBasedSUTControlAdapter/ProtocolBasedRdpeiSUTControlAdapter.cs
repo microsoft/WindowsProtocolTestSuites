@@ -1,14 +1,10 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using Microsoft.Protocols.TestSuites.Rdpei;
+using Microsoft.Protocols.TestTools;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestSuites;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestSuites.Rdpei;
-using System.Drawing;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
 {
@@ -33,7 +29,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public override void Initialize(ITestSite testSite)
         {
             base.Initialize(testSite);
-            controlHandler = SUTControlProtocolHandler.GetInstance(testSite);            
+            controlHandler = SUTControlProtocolHandler.GetInstance(testSite);
         }
 
         /// <summary>
@@ -121,7 +117,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public int TriggerPositionSpecifiedTouchEventOnClient(string caseName)
         {
             // this interface need some updates, should contains an input 
-            Point[] points = new Point[5];
+            SKPoint[] points = new SKPoint[5];
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
@@ -133,7 +129,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
             payloadList.AddRange(valueByte);
 
-            foreach (Point point in points)
+            foreach (SKPoint point in points)
             {
                 byte[] xBytes = BitConverter.GetBytes(point.X);
                 byte[] yBytes = BitConverter.GetBytes(point.Y);

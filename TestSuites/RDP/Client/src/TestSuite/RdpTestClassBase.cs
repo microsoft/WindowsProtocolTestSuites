@@ -5,11 +5,12 @@ using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkiaSharp;
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -45,8 +46,8 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool isClientSupportEmptyRdpNegData;
         protected bool supportCompression = false;
         protected static int? compressionValueResult = null; // the return value of SetCompressionValue(supportCompression)
-        protected static Image image_64X64; //Defined to static for reuse across test cases
-        protected static Image imageForVideoMode;
+        protected static SKImage image_64X64; //Defined to static for reuse across test cases
+        protected static SKImage imageForVideoMode;
         protected uint maxRequestSize = 0x50002A; //The MaxReqestSize field of  Multifragment Update Capability Set. Just for test.
         protected bool isWindowsImplementation = true;
         protected bool DropConnectionForInvalidRequest = true;
@@ -64,7 +65,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
         // Variable for SUT display verification
         protected bool verifySUTDisplay = false;
-        protected Point sutDisplayShift;
+        protected SKPoint sutDisplayShift;
         protected string bitmapSavePath;
         protected int imageId = 0;
         protected string tmpFilePath = @".\tmpBitmap.bmp";
@@ -468,7 +469,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 shiftY = 0;
             }
 
-            sutDisplayShift = new Point(shiftX, shiftY);
+            sutDisplayShift = new SKPoint(shiftX, shiftY);
 
             if (!PtfPropUtility.GetPtfPropertyValue(TestSite, "BitmapSavePath", out bitmapSavePath, new string[] { RdpPtfGroupNames.VerifySUTDisplay }))
             {
@@ -570,8 +571,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 {
                     AssumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_Image);
                 }
-
-                image_64X64 = Image.FromFile(rdprfxImageFile);
+                image_64X64 = SKImage.FromEncodedData(rdprfxImageFile);
             }
 
             if (imageForVideoMode == null)
@@ -582,7 +582,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     AssumeFailForInvalidPtfProp(RdpPtfPropNames.MSRDPRFX_VideoModeImage);
                 }
 
-                imageForVideoMode = Image.FromFile(rdprfxVideoModeImageFile);
+                imageForVideoMode = SKImage.FromEncodedData(rdprfxVideoModeImageFile);
             }
 
             #endregion
@@ -614,7 +614,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// <param name="usingRemoteFX">Whether the output image is using RemoteFX codec</param>
         /// <param name="compareRect">The Rectangle on the image to be compared</param>
         /// <param name="callStackIndex">Call stack index from the test method</param>
-        protected void VerifySUTDisplay(bool usingRemoteFX, Rectangle compareRect, int callStackIndex = 1)
+        protected void VerifySUTDisplay(bool usingRemoteFX, SKRect compareRect, int callStackIndex = 1)
         {
             if (!verifySUTDisplay || this.rdpbcgrAdapter.SimulatedScreen == null)
             {
@@ -638,16 +638,17 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             this.TestSite.Log.Add(LogEntryKind.Debug, "The absolute path of screen shot file is {0}.", fileInfoScreenShot.FullName);
 
             // Compare the screenshot with base image in simulated screen
-            Bitmap image = new Bitmap(pathForSUTScreenShot);
+            SKBitmap image = SKBitmap.Decode(pathForSUTScreenShot);
             string pathForBaseImage = bitmapSavePath + @"\" + sf.GetMethod().Name + "_" + imageId + "_BaseImage.bmp";
-            this.rdpbcgrAdapter.SimulatedScreen.BaseImage.Save(tmpFilePath);
+            using var stream = File.OpenWrite(tmpFilePath);
+            this.rdpbcgrAdapter.SimulatedScreen.BaseImage.Encode(SKEncodedImageFormat.Png, 100).SaveTo(stream);
             File.Copy(tmpFilePath, pathForBaseImage, true);
 
             // print the absolute path of base image file
             var fileInfoBaseImage = new FileInfo(pathForBaseImage);
             this.TestSite.Log.Add(LogEntryKind.Debug, "The absolute path of base image file is {0}.", fileInfoBaseImage.FullName);
 
-            bool compareRes = this.rdpbcgrAdapter.SimulatedScreen.Compare(image, sutDisplayShift, compareRect, usingRemoteFX);
+            bool compareRes = this.rdpbcgrAdapter.SimulatedScreen.Compare(SKImage.FromBitmap(image), sutDisplayShift, compareRect, usingRemoteFX);
             this.TestSite.Assert.IsTrue(compareRes, "SUT display verification should success, the output on RDP client should be equal (or similar enough if using RemoteFX codec) as expected.");
         }
 
@@ -667,16 +668,6 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         private void AssumeFailForInvalidPtfProp(string propName)
         {
             this.TestSite.Assume.Fail("The property \"{0}\" is invalid or not present in PTFConfig file!", propName);
-        }
-
-        //Capture image from screen
-        private Bitmap CaptureScreenImage(int left, int top, int width, int height)
-        {
-            Bitmap bitmap = new Bitmap(width, height);
-            Graphics g = Graphics.FromImage(bitmap);
-            g.CopyFromScreen(left, top, 0, 0, new Size(width, height));
-            g.Dispose();
-            return bitmap;
         }
 
         //Get capability information from Client_Confirm_Active_Pdu, 

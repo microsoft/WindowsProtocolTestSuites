@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Drawing;
 using Microsoft.Protocols.TestTools.StackSdk;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 {
@@ -26,7 +26,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
     /// </summary>
     public struct BMP_INFO
     {
-        public Bitmap bmp;   // subcodec layer bitmap object
+        public SKBitmap bmp;   // subcodec layer bitmap object
         public CLEARCODEC_SUBCODEC_ID scID;  // the encoding identifier of subcodec layer bitmap
     }
 
@@ -159,13 +159,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// convert a color into RLEX_RGB_TRIPLET structure
         /// </summary>
         /// <param name="pixelColor">The color to be converted.</param>
-        public static RLEX_RGB_TRIPLET Convert2RGB(Color pixelColor)
+        public static RLEX_RGB_TRIPLET Convert2RGB(SKColor pixelColor)
         {
             
             RLEX_RGB_TRIPLET rgbPlette = new RLEX_RGB_TRIPLET();
-            rgbPlette.B = pixelColor.B;
-            rgbPlette.G = pixelColor.G;
-            rgbPlette.R = pixelColor.R;
+            rgbPlette.B = pixelColor.Blue;
+            rgbPlette.G = pixelColor.Green;
+            rgbPlette.R = pixelColor.Red;
             return rgbPlette;
         }
 
@@ -174,7 +174,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="subcodeBmp">The bitmap to be encoded in subcodec layer.</param>
         /// <return> a plette dictionary of all unique pixel and it's index in plette  </return>
-        public static Dictionary<RLEX_RGB_TRIPLET, byte> GetTripletDict(Bitmap bitmap)
+        public static Dictionary<RLEX_RGB_TRIPLET, byte> GetTripletDict(SKBitmap bitmap)
         {
             Dictionary<RLEX_RGB_TRIPLET, byte> pletteIndexDict = new Dictionary<RLEX_RGB_TRIPLET,byte>();
             byte index =0;
@@ -183,7 +183,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             {
                 for (int x = 0; x < bitmap.Width; x++) 
                 {
-                    Color pixelColor = bitmap.GetPixel(x, y);
+                    SKColor pixelColor = bitmap.GetPixel(x, y);
                     RLEX_RGB_TRIPLET rgb = Convert2RGB(pixelColor);
 
                     if (!pletteIndexDict.ContainsKey(rgb))
@@ -203,7 +203,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name="pixelColor">The color to search.</param>
         /// <param name="pletteDict">The plette dictionary to be searched.</param>
         /// <return> the index of a pixel in plette  </return>
-        public static byte ColorToPletIdx(Color pixelColor, Dictionary<RLEX_RGB_TRIPLET, byte> pletteDict)
+        public static byte ColorToPletIdx(SKColor pixelColor, Dictionary<RLEX_RGB_TRIPLET, byte> pletteDict)
         {
             RLEX_RGB_TRIPLET rgbPlette = Convert2RGB(pixelColor);
 
@@ -215,7 +215,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="subcodeBmp">The bitmap to be encoded in subcodec layer.</param>
         /// <return> > 0 if encode success, otherwise return 0 </return>
-        public static bool RlexEncode(Bitmap subcodecBmp, ref CLEARCODEC_SUBCODEC_RLEX rlex)
+        public static bool RlexEncode(SKBitmap subcodecBmp, ref CLEARCODEC_SUBCODEC_RLEX rlex)
         {
             if (subcodecBmp == null) return false;
 
@@ -246,7 +246,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 for (int x = 0; x < subcodecBmp.Width; x++)
                 {
                     if (x == 0 && y == 0) continue; // skip the pixel (0, 0)
-                    Color pixelColor = subcodecBmp.GetPixel(x, y);
+                    SKColor pixelColor = subcodecBmp.GetPixel(x, y);
                     byte pletIdx = ColorToPletIdx(pixelColor, pletteDict);
                     
                     if (rlex_seg.stopIndex == pletIdx)  // same color as previous one
@@ -279,7 +279,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="subcodeBmp">The bitmap to be encoded in subcodec layer.</param>
         /// <return> > 0 if encode success, otherwise return 0 </return>
-        public static bool RawEncode(Bitmap subcodecBmp, ref RLEX_RGB_TRIPLET[] bmpPixels)
+        public static bool RawEncode(SKBitmap subcodecBmp, ref RLEX_RGB_TRIPLET[] bmpPixels)
         {
             if (subcodecBmp == null) return false;
 
@@ -289,7 +289,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             {
                 for (int x = 0; x < subcodecBmp.Width; x++)  
                 {
-                    Color pixelColor = subcodecBmp.GetPixel(x, y);
+                    SKColor pixelColor = subcodecBmp.GetPixel(x, y);
                     RLEX_RGB_TRIPLET rgbPlette = Convert2RGB(pixelColor);
                     pixelList.Add(rgbPlette);       
                 }
@@ -307,7 +307,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name="subcodecRect">The subcodec area relative to bitmap left-top edge.</param>
         /// <param name="subcodecID">The subcodec ID to be chosen.</param>
         /// <param name="subcodec">The subcodec layer encode result.</param>
-        public static bool EncodeSubcodec(Bitmap subcodecBmp, ClearCodec_RECT16 subcodecRect, CLEARCODEC_SUBCODEC_ID subcodecID, 
+        public static bool EncodeSubcodec(SKBitmap subcodecBmp, ClearCodec_RECT16 subcodecRect, CLEARCODEC_SUBCODEC_ID subcodecID, 
             ref CLEARCODEC_SUBCODEC subcodec)
         {
             if (subcodecBmp == null) return false;
@@ -345,7 +345,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             foreach (KeyValuePair<ClearCodec_RECT16, BMP_INFO> scArea in subcodecDict)
             {
                 CLEARCODEC_SUBCODEC scData = new CLEARCODEC_SUBCODEC();
-                if (!EncodeSubcodec((Bitmap)(scArea.Value.bmp), scArea.Key, scArea.Value.scID, ref scData))
+                if (!EncodeSubcodec((SKBitmap)(scArea.Value.bmp), scArea.Key, scArea.Value.scID, ref scData))
                 {
                     // skip a subcodec layer bitmap if it failed to be encoded.
                     continue;

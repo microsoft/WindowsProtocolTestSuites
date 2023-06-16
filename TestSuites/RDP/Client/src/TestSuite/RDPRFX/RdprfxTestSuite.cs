@@ -1,16 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Text;
-using System.Drawing;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdprfx
 {
@@ -223,8 +219,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles whose height is TileSize, this rectangle is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect = new Rectangle(32, 32, RgbTile.TileSize, RgbTile.TileSize);
-            Rectangle[] rects = new Rectangle[] { clipRect };
+            SKRect clipRect = new SKRect(32, 32, 32 + RgbTile.TileSize, 32 + RgbTile.TileSize);
+            SKRect[] rects = new SKRect[] { clipRect };
 
             rdprfxAdapter.SendTsRfxSync();
             rdprfxAdapter.SendTsRfxCodecVersions();
@@ -242,7 +238,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { image_64X64, image_64X64, image_64X64, image_64X64 },
+                new SKImage[] { image_64X64, image_64X64, image_64X64, image_64X64 },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize + RgbTile.TileSize / 2, RgbTile.TileSize + RgbTile.TileSize / 2);
@@ -254,7 +250,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(32, 32, image_64X64.Width, image_64X64.Height);
+            SKRect compareRect = new SKRect(32, 32, 32 + image_64X64.Width, 32 + image_64X64.Height);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion
@@ -329,8 +325,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles whose height is TileSize + TileSize/2, this rectangle is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect = new Rectangle(32, 32, RgbTile.TileSize + RgbTile.TileSize / 2, RgbTile.TileSize + RgbTile.TileSize / 2);
-            Rectangle[] rects = new Rectangle[] { clipRect };
+            SKRect clipRect = new SKRect(32, 32, 32 + RgbTile.TileSize + RgbTile.TileSize / 2, 32 + RgbTile.TileSize + RgbTile.TileSize / 2);
+            SKRect[] rects = new SKRect[] { clipRect };
 
             rdprfxAdapter.SendTsRfxSync();
             rdprfxAdapter.SendTsRfxCodecVersions();
@@ -348,7 +344,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { image_64X64, image_64X64, image_64X64, image_64X64 },
+                new SKImage[] { image_64X64, image_64X64, image_64X64, image_64X64 },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
@@ -360,7 +356,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(32, 32, RgbTile.TileSize + RgbTile.TileSize / 2, RgbTile.TileSize + RgbTile.TileSize / 2);
+            SKRect compareRect = new SKRect(32, 32, RgbTile.TileSize + RgbTile.TileSize / 2, RgbTile.TileSize + RgbTile.TileSize / 2);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion
@@ -435,23 +431,22 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles list, this rectangle list is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect1 = new Rectangle(0, 0, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
-            Rectangle clipRect2 = new Rectangle(RgbTile.TileSize * 3, RgbTile.TileSize * 3, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect clipRect1 = new SKRect(0, 0, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect clipRect2 = new SKRect(RgbTile.TileSize * 3, RgbTile.TileSize * 3, RgbTile.TileSize * 3 + RgbTile.TileSize * 2, RgbTile.TileSize * 3 + RgbTile.TileSize * 2);
 
-            Rectangle[] rects = new Rectangle[] { clipRect1, clipRect2 };
+            SKRect[] rects = new SKRect[] { clipRect1, clipRect2 };
 
             rdprfxAdapter.SendTsRfxSync();
             rdprfxAdapter.SendTsRfxCodecVersions();
             rdprfxAdapter.SendTsRfxChannels(RgbTile.TileSize * 5, RgbTile.TileSize * 5);
             rdprfxAdapter.SendTsRfxContext(opMode, enAlgorithm);
 
-            var bitmapBlue = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            Graphics graphics = Graphics.FromImage(bitmapBlue);
-            graphics.FillRectangle(Brushes.Blue, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
-            var bitmapRed = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            graphics = Graphics.FromImage(bitmapRed);
-            graphics.FillRectangle(Brushes.Red, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
-
+            var bitmapBlue = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            SKCanvas canvas = new SKCanvas(bitmapBlue);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Blue });
+            var bitmapRed = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            canvas = new SKCanvas(bitmapRed);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Red });
             rdprfxAdapter.SendTsRfxFrameBegin(0);
             rdprfxAdapter.SendTsRfxRegion(rects);
 
@@ -465,11 +460,13 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 new TILE_POSITION{ xIdx = 4, yIdx = 3 },
                 new TILE_POSITION{ xIdx = 4, yIdx = 4 }
             };
+            SKImage imageBlue = SKImage.FromBitmap(bitmapBlue);
+            SKImage imageRed = SKImage.FromBitmap(bitmapRed);
 
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { bitmapBlue, bitmapBlue, bitmapBlue, bitmapBlue, bitmapRed, bitmapRed, bitmapRed, bitmapRed },
+                new SKImage[] { imageBlue, imageBlue, imageBlue, imageBlue, imageRed, imageRed, imageRed, imageRed },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 5, RgbTile.TileSize * 5);
@@ -481,7 +478,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, RgbTile.TileSize * 5, RgbTile.TileSize * 5);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + RgbTile.TileSize * 5, destTop + RgbTile.TileSize * 5);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion
@@ -556,25 +553,25 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles list, this rectangle list is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect1 = new Rectangle(0, 0, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
-            Rectangle clipRect2 = new Rectangle(RgbTile.TileSize, RgbTile.TileSize, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect clipRect1 = new SKRect(0, 0, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect clipRect2 = new SKRect(RgbTile.TileSize, RgbTile.TileSize, RgbTile.TileSize + RgbTile.TileSize * 2, RgbTile.TileSize + RgbTile.TileSize * 2);
 
-            Rectangle[] rects = new Rectangle[] { clipRect1, clipRect2 };
+            SKRect[] rects = new SKRect[] { clipRect1, clipRect2 };
 
             rdprfxAdapter.SendTsRfxSync();
             rdprfxAdapter.SendTsRfxCodecVersions();
             rdprfxAdapter.SendTsRfxChannels(RgbTile.TileSize * 3, RgbTile.TileSize * 3);
             rdprfxAdapter.SendTsRfxContext(opMode, enAlgorithm);
 
-            var bitmapBlue = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            Graphics graphics = Graphics.FromImage(bitmapBlue);
-            graphics.FillRectangle(Brushes.Blue, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
-            var bitmapRed = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            graphics = Graphics.FromImage(bitmapRed);
-            graphics.FillRectangle(Brushes.Red, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
-            var bitmapYellow = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            graphics = Graphics.FromImage(bitmapYellow);
-            graphics.FillRectangle(Brushes.Yellow, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
+            var bitmapBlue = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            SKCanvas canvas = new SKCanvas(bitmapBlue);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Blue });
+            var bitmapRed = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            canvas = new SKCanvas(bitmapRed);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Red });
+            var bitmapYellow = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            canvas = new SKCanvas(bitmapYellow);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Yellow });
 
             rdprfxAdapter.SendTsRfxFrameBegin(0);
             rdprfxAdapter.SendTsRfxRegion(rects);
@@ -589,10 +586,14 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 new TILE_POSITION{ xIdx = 2, yIdx = 2 },
             };
 
+            SKImage imageBlue = SKImage.FromBitmap(bitmapBlue);
+            SKImage imageRed = SKImage.FromBitmap(bitmapRed);
+            SKImage imageYellow = SKImage.FromBitmap(bitmapYellow);
+
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { bitmapBlue, bitmapBlue, bitmapBlue, bitmapYellow, bitmapRed, bitmapRed, bitmapRed },
+                new SKImage[] { imageBlue, imageBlue, imageBlue, imageYellow, imageRed, imageRed, imageRed },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 3, RgbTile.TileSize * 3);
@@ -604,7 +605,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, RgbTile.TileSize * 3, RgbTile.TileSize * 3);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + RgbTile.TileSize * 3, destTop + RgbTile.TileSize * 3);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion
@@ -679,22 +680,22 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles list, this rectangle list is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect1 = new Rectangle(0, 0, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
-            Rectangle clipRect2 = new Rectangle(RgbTile.TileSize, RgbTile.TileSize, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect clipRect1 = new SKRect(0, 0, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect clipRect2 = new SKRect(RgbTile.TileSize, RgbTile.TileSize, RgbTile.TileSize * 3, RgbTile.TileSize * 3);
 
-            Rectangle[] rects = new Rectangle[] { clipRect1, clipRect2 };
+            SKRect[] rects = new SKRect[] { clipRect1, clipRect2 };
 
             rdprfxAdapter.SendTsRfxSync();
             rdprfxAdapter.SendTsRfxCodecVersions();
             rdprfxAdapter.SendTsRfxChannels(RgbTile.TileSize * 3, RgbTile.TileSize * 3);
             rdprfxAdapter.SendTsRfxContext(opMode, enAlgorithm);
 
-            var bitmapBlue = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            Graphics graphics = Graphics.FromImage(bitmapBlue);
-            graphics.FillRectangle(Brushes.Blue, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
-            var bitmapRed = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            graphics = Graphics.FromImage(bitmapRed);
-            graphics.FillRectangle(Brushes.Red, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
+            var bitmapBlue = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            SKCanvas canvas = new SKCanvas(bitmapBlue);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Blue });
+            var bitmapRed = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            canvas = new SKCanvas(bitmapRed);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Red });
 
             rdprfxAdapter.SendTsRfxFrameBegin(0);
             rdprfxAdapter.SendTsRfxRegion(rects);
@@ -709,11 +710,13 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 new TILE_POSITION{ xIdx = 2, yIdx = 1 },
                 new TILE_POSITION{ xIdx = 2, yIdx = 2 },
             };
+            SKImage imageBlue = SKImage.FromBitmap(bitmapBlue);
+            SKImage imageRed = SKImage.FromBitmap(bitmapRed);
 
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { bitmapBlue, bitmapBlue, bitmapBlue, bitmapBlue, bitmapRed, bitmapRed, bitmapRed, bitmapRed },
+                new SKImage[] { imageBlue, imageBlue, imageBlue, imageBlue, imageRed, imageRed, imageRed, imageRed },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 3, RgbTile.TileSize * 3);
@@ -725,7 +728,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, RgbTile.TileSize * 3, RgbTile.TileSize * 3);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + RgbTile.TileSize * 3, destTop + RgbTile.TileSize * 3);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion
@@ -799,21 +802,21 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles list, this rectangle list is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect1 = new Rectangle(0, 0, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect clipRect1 = new SKRect(0, 0, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
 
-            Rectangle[] rects = new Rectangle[] { clipRect1 };
+            SKRect[] rects = new SKRect[] { clipRect1 };
 
             rdprfxAdapter.SendTsRfxSync();
             rdprfxAdapter.SendTsRfxCodecVersions();
             rdprfxAdapter.SendTsRfxChannels(RgbTile.TileSize * 2, RgbTile.TileSize * 2);
             rdprfxAdapter.SendTsRfxContext(opMode, enAlgorithm);
 
-            var bitmapBlue = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            Graphics graphics = Graphics.FromImage(bitmapBlue);
-            graphics.FillRectangle(Brushes.Blue, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
-            var bitmapRed = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            graphics = Graphics.FromImage(bitmapRed);
-            graphics.FillRectangle(Brushes.Red, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
+            var bitmapBlue = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            SKCanvas canvas = new SKCanvas(bitmapBlue);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Blue });
+            var bitmapRed = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            canvas = new SKCanvas(bitmapRed);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Red });
 
             rdprfxAdapter.SendTsRfxFrameBegin(0);
             rdprfxAdapter.SendTsRfxRegion(rects);
@@ -825,11 +828,13 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 new TILE_POSITION{ xIdx = 0, yIdx = 1 },
                 new TILE_POSITION{ xIdx = 1, yIdx = 1 },
             };
+            SKImage imageBlue = SKImage.FromBitmap(bitmapBlue);
+            SKImage imageRed = SKImage.FromBitmap(bitmapRed);
 
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { bitmapRed, bitmapBlue, bitmapBlue, bitmapBlue, bitmapBlue },
+                new SKImage[] { imageRed, imageBlue, imageBlue, imageBlue, imageBlue },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
@@ -912,8 +917,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles whose height is TileSize/2, this rectangle is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect = new Rectangle(destLeft, destTop, RgbTile.TileSize * 10, RgbTile.TileSize * 10);
-            Rectangle[] rects = new Rectangle[] { clipRect };
+            SKRect clipRect = new SKRect(destLeft, destTop, destLeft + RgbTile.TileSize * 10, destTop + RgbTile.TileSize * 10);
+            SKRect[] rects = new SKRect[] { clipRect };
 
             rdprfxAdapter.SendTsRfxSync();
             rdprfxAdapter.SendTsRfxCodecVersions();
@@ -932,7 +937,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { image_64X64, image_64X64, image_64X64, image_64X64 },
+                new SKImage[] { image_64X64, image_64X64, image_64X64, image_64X64 },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 3, RgbTile.TileSize * 10);
@@ -944,7 +949,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, RgbTile.TileSize * 3, RgbTile.TileSize * 10);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + RgbTile.TileSize * 3, destTop + RgbTile.TileSize * 10);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion
@@ -1019,8 +1024,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 opMode, enAlgorithm, destLeft, destTop);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create rectangles whose height is TileSize/2, this rectangle is used for TS_RFX_REGION structure to clip the bitmap.");
-            Rectangle clipRect = new Rectangle(64, 64, RgbTile.TileSize, RgbTile.TileSize);
-            Rectangle[] rects = new Rectangle[] { clipRect };
+            SKRect clipRect = new SKRect(64, 64, 64 + RgbTile.TileSize, 64 + RgbTile.TileSize);
+            SKRect[] rects = new SKRect[] { clipRect };
 
             rdprfxAdapter.SendTsRfxSync();
             rdprfxAdapter.SendTsRfxCodecVersions();
@@ -1038,7 +1043,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { image_64X64, image_64X64, image_64X64, image_64X64 },
+                new SKImage[] { image_64X64, image_64X64, image_64X64, image_64X64 },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
@@ -1050,7 +1055,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + RgbTile.TileSize * 2, destTop + RgbTile.TileSize * 2);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion

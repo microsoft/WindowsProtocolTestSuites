@@ -10,7 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp;
 using Microsoft.Protocols.TestSuites.Rdpegfx;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdprfx;
-using System.Drawing;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedisp
 {
@@ -76,7 +76,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         /// <param name="imagefile">Image to send</param>
         /// <param name="width">width of image to send</param>
         /// <param name="height">height of image to send</param>
-        bool RdprfxSendImage(Image image, ushort width, ushort height);
+        bool RdprfxSendImage(SKImage image, ushort width, ushort height);
 
         /// <summary>
         /// Method to send client a display configuration change notification by sending surface management commands to restart graphics pipeline 

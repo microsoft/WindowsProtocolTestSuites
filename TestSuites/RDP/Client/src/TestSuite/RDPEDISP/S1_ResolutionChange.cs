@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedisp;
 using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestTools;
-using System.Drawing;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdpedisp
 {
@@ -16,7 +16,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
         [TestCategory("BVT")]
         [TestCategory("Positive")]
         [TestCategory("RDP8.1")]
-        [TestCategory("RDPEDISP")]   
+        [TestCategory("RDPEDISP")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description("This test is used to test resolution change and notification with surface management commands")]
@@ -71,11 +71,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             RDPConnect(NotificationType.DeactivationReactivation);
 
             ChangeDesktopResolution(this.TestContext.TestName);
-                        
+
             this.TestSite.Log.Add(LogEntryKind.Comment, "Initialize Deactivation-Reactivation Sequence");
             this.rdpedispAdapter.initiateDeactivationReactivation(changedDesktopWidth, changedDesktopHeight);
-            Image testImage = LoadImage();
-            this.Site.Assume.AreNotEqual<Image>(null, testImage, "Cannot load the test image");
+            SKImage testImage = SKImage.FromBitmap(LoadImage());
+            this.Site.Assume.AreNotEqual<SKImage>(null, testImage, "Cannot load the test image");
             this.rdpedispAdapter.RdprfxSendImage(testImage, changedDesktopWidth, changedDesktopHeight);
 
             // wait time to display the result and then restore the default configuration

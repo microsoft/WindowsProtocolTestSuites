@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using SkiaSharp;
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
 {
@@ -56,7 +54,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
         /// <param name="distorted">Distorted bitmap</param>
         /// <exception cref="ArgumentNullException">Thrown when at least one param is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the bitmaps don't fit the assess precondition of the specified index.</exception>
-        protected abstract void CheckException(Bitmap reference, Bitmap distorted);
+        protected abstract void CheckException(SKBitmap reference, SKBitmap distorted);
 
         /// <summary>
         /// Assess the quality of a distorted bitmap with the reference bitmap
@@ -67,7 +65,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
         /// <exception cref="ArgumentNullException">Thrown when at least one param is null.</exception>
         /// <exception cref="ArgumentException">Thrown when the bitmaps don't fit the assess precondition of the specified index.</exception>
         /// <returns>A new AssessResult object indicates the assess results in every specified component.</returns> 
-        public abstract AssessResult Assess(Bitmap reference, Bitmap distorted, UseComponent component);
+        public abstract AssessResult Assess(SKBitmap reference, SKBitmap distorted, UseComponent component);
 
         /// <summary>
         /// Check exceptions and initialize the variables before measure.
@@ -76,10 +74,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
         /// <param name="distorted">Distorted bitmap</param>
         /// <exception cref="ArgumentNullException">Thrown when at least one param is null</exception>
         /// <exception cref="ArgumentException">Thrown when the size of two bitmaps is invalid</exception>
-        protected void InitBitmaps(Bitmap reference, Bitmap distorted)
+        protected void InitBitmaps(SKBitmap reference, SKBitmap distorted)
         {
             CheckException(reference, distorted);
-            
+
             GetValues(reference, ref LumaReference, ref CbReference, ref CrReference);
             GetValues(distorted, ref LumaDistorted, ref CbDistorted, ref CrDistorted);
         }
@@ -91,34 +89,28 @@ namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
         /// <param name="luma">Output Y component</param>
         /// <param name="cb">Output Cb component</param>
         /// <param name="cr">Output Cr component</param>
-        private void GetValues(Bitmap bitmap, ref double[,] luma, ref double[,] cb, ref double[,] cr)
+        private void GetValues(SKBitmap bitmap, ref double[,] luma, ref double[,] cb, ref double[,] cr)
         {
             int width = bitmap.Width;
             int height = bitmap.Height;
             luma = new double[width, height];
             cb = new double[width, height];
             cr = new double[width, height];
-            Rectangle rect = new Rectangle(0, 0, width, height);
-            BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-            IntPtr ptr = bitmapData.Scan0;
-            int stride = bitmapData.Stride;
-            byte[] linebytes = new byte[Math.Abs(stride)];
+
             for (int y = 0; y < height; y++)
             {
-                Marshal.Copy(ptr + stride * y, linebytes, 0, linebytes.Length);
                 for (int x = 0; x < width; x++)
                 {
                     //Strangely the color order in linebytes is B,G,R
-                    int red = linebytes[3 * x + 2];
-                    int green = linebytes[3 * x + 1];
-                    int blue = linebytes[3 * x];
+                    int red = bitmap.GetPixel(x, y).Red;
+                    int green = bitmap.GetPixel(x, y).Green;
+                    int blue = bitmap.GetPixel(x, y).Blue;
                     //Rec.601 color space conversation
                     luma[x, y] = 0.2989 * red + 0.5870 * green + 0.1140 * blue;
                     cb[x, y] = 127.5 - 0.1687 * red - 0.3312 * green + 0.5000 * blue;
                     cr[x, y] = 127.5 + 0.5000 * red - 0.4186 * green - 0.0813 * blue;
                 }
             }
-            bitmap.UnlockBits(bitmapData);
         }
     }
 
@@ -212,7 +204,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp.ImageQualityAssessment
                 this.cr = value;
             }
         }
-                
+
 
         /// <summary>
         /// Constructor

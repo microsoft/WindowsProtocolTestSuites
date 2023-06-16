@@ -67,7 +67,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
         public readonly string SUTShellControlScriptLocation;
 
         #endregion Variables
-        
+
         #region Constructor
 
         public RDPDetector(DetectionInfo detectInfo, DetectLogger logger, string testSuitePath)
@@ -111,7 +111,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             {
                 logWriter.AddLog(DetectLogLevel.Information, "Exception occured when establishing RDP connection: " + e.Message);
                 logWriter.AddLog(DetectLogLevel.Information, "" + e.StackTrace);
-                
+
                 if (e.InnerException != null)
                 {
                     logWriter.AddLog(DetectLogLevel.Information, "**" + e.InnerException.Message);
@@ -296,7 +296,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             rdpeudpServer.UnhandledExceptionReceived += (ex) =>
             {
                 logWriter.AddLog(DetectLogLevel.Warning, $"Unhandled exception from RdpeudpServer: {ex}");
-            }; 
+            };
             rdpeudpServer.Start();
 
             // Create a UDP socket.
@@ -322,10 +322,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             RdpeudpServerSocket rdpeudpSocket = rdpeudpServer.CreateSocket(sutIP, udpTransportMode, timeout);
             if (rdpeudpSocket == null)
             {
-                logWriter.AddLog(DetectLogLevel.Warning, $"Failed to create a UDP socket for the Client : {endPoint.Address}"); 
-                
+                logWriter.AddLog(DetectLogLevel.Warning, $"Failed to create a UDP socket for the Client : {endPoint.Address}");
+
                 result = false;
-            }             
+            }
             else
             {
                 // Expect a SYN packet.
@@ -339,7 +339,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
                 else
                 {
                     // Verify the SYN packet.
-                    //Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported. 
+                    //Section 3.1.5.1.1: Not appending RDPUDP_SYNDATAEX_PAYLOAD structure implies that RDPUDP_PROTOCOL_VERSION_1 is the highest protocol version supported.
                     if (synPacket.SynDataEx == null)
                     {
                         logWriter.AddLog(DetectLogLevel.Information, "SynDataEx is null. RDPEUDP2 not supported");
@@ -853,10 +853,10 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             sessionStateProxy.Path.SetLocation(Path.GetDirectoryName(scriptPath));
             SetPTFVariables(sessionStateProxy);
             logWriter.AddLog(DetectLogLevel.Information, sessionStateProxy.GetVariable("PtfProp_SUTName").ToString());
-            
+
             try
             {
-               pipeline.Invoke();
+                pipeline.Invoke();
             }
             catch (RuntimeException ex)
             {
@@ -961,7 +961,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
             }
             return exitCode;
         }
-        
+
         private IPAddress GetHostIP(string hostname)
         {
             try
@@ -1015,7 +1015,7 @@ namespace Microsoft.Protocols.TestManager.RDPClientPlugin
 
         private void WriteConfigValuesToLog()
         {
-            logWriter.AddLog(DetectLogLevel.Information, "SUT Name => " +  detectInfo.SUTName);
+            logWriter.AddLog(DetectLogLevel.Information, "SUT Name => " + detectInfo.SUTName);
             logWriter.AddLog(DetectLogLevel.Information, "PtfProp_SUTName => " + detectInfo.SUTName);
             logWriter.AddLog(DetectLogLevel.Information, "PtfProp_SUTUserName => " + detectInfo.UserNameInTC);
             logWriter.AddLog(DetectLogLevel.Information, "PtfProp_SUTUserPassword => " + detectInfo.UserPwdInTC);

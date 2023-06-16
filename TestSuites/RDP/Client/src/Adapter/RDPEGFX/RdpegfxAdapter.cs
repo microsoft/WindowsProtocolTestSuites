@@ -7,9 +7,9 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
@@ -218,7 +218,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         void MakeMapSurfaceToScaledOutputPdu(ushort sid, uint x, uint y, uint width, uint height)
         {
             RDPGFX_MAP_SURFACE_TO_SCALED_OUTPUT_PDU surf2ScaledOutput = egfxServer.CreateMapSurfaceToScaledOutputPdu(sid, x, y, width, height);
-            
+
             // Change pdu based testtype. 
             if (currentTestType == RdpegfxNegativeTypes.SurfaceManagement_MapInexistentSurfaceToOutput)
                 surf2ScaledOutput.surfaceId = 0xffff;  // Set the surface id to an inexsit surface's id 0xffff
@@ -696,16 +696,16 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                     default:
                         Site.Assert.Fail("The version of RDPEGFX capability set MUST be set to : {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7} or {8}. Received version: {9} in capset[{10}]",
                             CapsVersions.RDPGFX_CAPVERSION_8,
-                            CapsVersions.RDPGFX_CAPVERSION_81, 
-                            CapsVersions.RDPGFX_CAPVERSION_10, 
+                            CapsVersions.RDPGFX_CAPVERSION_81,
+                            CapsVersions.RDPGFX_CAPVERSION_10,
                             CapsVersions.RDPGFX_CAPVERSION_101,
-                            CapsVersions.RDPGFX_CAPVERSION_102, 
-                            CapsVersions.RDPGFX_CAPVERSION_103, 
-                            CapsVersions.RDPGFX_CAPVERSION_104, 
-                            CapsVersions.RDPGFX_CAPVERSION_105, 
+                            CapsVersions.RDPGFX_CAPVERSION_102,
+                            CapsVersions.RDPGFX_CAPVERSION_103,
+                            CapsVersions.RDPGFX_CAPVERSION_104,
+                            CapsVersions.RDPGFX_CAPVERSION_105,
                             CapsVersions.RDPGFX_CAPVERSION_106,
                             CapsVersions.RDPGFX_CAPVERSION_107,
-                            adv.capsSets[index].version, 
+                            adv.capsSets[index].version,
                             index);
                         break;
                 }
@@ -1259,7 +1259,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="entropy"> Indicate Entropy Algorithm.</param>
         /// <param name="tileImage"> The image to be encoded as RFX codec.</param>
         /// <return> A byte array of image encoded as RFX codec.</return>
-        private byte[] PackRfxTileImage(uint index, OperationalMode opMode, EntropyAlgorithm entropy, System.Drawing.Image tileImage)
+        private byte[] PackRfxTileImage(uint index, OperationalMode opMode, EntropyAlgorithm entropy, SKImage tileImage)
         {
             lock (syncLocker)
             {
@@ -1331,7 +1331,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="imgPos"> The top-left position of bitmap image relative to surface</param>
         /// <param name="sId"> The surface Id that bitmap image is sent to </param>
         /// <returns> A dictionary with frameId and byte stream frame pair </returns>
-        public Dictionary<uint, byte[]> RemoteFXCodecEncode(System.Drawing.Image image, OperationalMode opMode, EntropyAlgorithm entropy,
+        public Dictionary<uint, byte[]> RemoteFXCodecEncode(SKImage image, OperationalMode opMode, EntropyAlgorithm entropy,
                                             RDPGFX_POINT16 imgPos, ushort sId, PixelFormat pixFormat)
         {
             if (image == null) return null;
@@ -1427,7 +1427,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="bSubDiff">Indicates if sub-diffing with last frame of this surface</param>
         /// <param name="bReduceExtrapolate">Indicates if use Reduce Extrapolate method in DWT step.</param>
         /// <returns> A list of layer byte stream, each layer is built by a dictionary with frameId and byte stream frame pair </returns>
-        public List<Dictionary<uint, byte[]>> RfxProgressiveCodecEncode(Surface surf, Image image, PixelFormat pixFormat, bool hasSync, bool hasContext,
+        public List<Dictionary<uint, byte[]>> RfxProgressiveCodecEncode(Surface surf, SKImage image, PixelFormat pixFormat, bool hasSync, bool hasContext,
                                                     ImageQuality_Values quality, bool bProg, bool bSubDiff, bool bReduceExtrapolate)
         {
             bool multipleTileInRegion = true;
@@ -1439,7 +1439,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             List<Dictionary<uint, byte[]>> layerDataList = new List<Dictionary<uint, byte[]>>();  // To save different layer data encoded by RFX Prog Codec.            
             RdpegfxRfxProgCodecBlockManagerDecorator blockMngr = new RdpegfxRfxProgCodecBlockManagerDecorator(currentTestType);
 
-            surf.UpdateFromBitmap((System.Drawing.Bitmap)image);
+            surf.UpdateFromBitmap(SKBitmap.FromImage(image));
             Dictionary<TileIndex, EncodedTile[]> tileDict = surf.ProgressiveEncode(quality, bProg, bSubDiff, bReduceExtrapolate, false);
             if (multipleTileInRegion)
             {
@@ -1532,8 +1532,8 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="bands"> The dictionary of band layer image and position </param>
         /// <param name="subcodecs"> The dictionary of subcodec layer image, subcodecID and position </param>
         /// <returns> Frame Id </returns>
-        public uint SendImageWithClearCodec(ushort sId, PixelFormat pixFormat, byte ccFlag, ushort graphIdx, RDPGFX_RECT16 bmRect, Image residualBmp,
-                            Dictionary<RDPGFX_POINT16, Bitmap> bands, Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecs)
+        public uint SendImageWithClearCodec(ushort sId, PixelFormat pixFormat, byte ccFlag, ushort graphIdx, RDPGFX_RECT16 bmRect, SKImage residualBmp,
+                            Dictionary<RDPGFX_POINT16, SKBitmap> bands, Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecs)
         {
             uint fid = MakeStartFramePdu();
 
@@ -1544,10 +1544,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
                 ccStream.SetTestType(currentTestType);
             }
 
-            ccStream.LoadResidualBitmap((Bitmap)residualBmp);
+            ccStream.LoadResidualBitmap(residualBmp == null ? null : SKBitmap.FromImage(residualBmp));
             if (bands != null)
             {
-                foreach (KeyValuePair<RDPGFX_POINT16, Bitmap> band in bands)
+                foreach (KeyValuePair<RDPGFX_POINT16, SKBitmap> band in bands)
                 {
                     ccStream.LoadBandBitmap(band.Value, band.Key);
                 }
@@ -1586,7 +1586,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="baseImage">Base Image used to verify output</param>
         /// <returns></returns>
         public uint SendImageWithH264AVC420Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, uint numRects, RDPGFX_RECT16[] regionRects, RDPGFX_AVC420_QUANT_QUALITY[] quantQualityVals,
-                          byte[] avc420EncodedBitstream, Image baseImage)
+                          byte[] avc420EncodedBitstream, SKImage baseImage)
         {
             uint fid = MakeStartFramePdu();
 
@@ -1622,7 +1622,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="avc420BitmapStream">A RFX_AVC420_BITMAP_STREAM structure for encoded information</param>
         /// <param name="baseImage">Base Image used to verify output</param>
         /// <returns></returns>
-        public uint SendImageWithH264AVC420Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC420_BITMAP_STREAM avc420BitmapStream, Image baseImage)
+        public uint SendImageWithH264AVC420Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC420_BITMAP_STREAM avc420BitmapStream, SKImage baseImage)
         {
             uint fid = MakeStartFramePdu();
             MakeWireToSurfacePdu1(sId, CodecType.RDPGFX_CODECID_AVC420, pixFormat, bmRect, avc420BitmapStream.Encode());
@@ -1660,7 +1660,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         public uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, AVC444LCValue lcValue,
             uint stream1NumRects, RDPGFX_RECT16[] steam1RegionRects, RDPGFX_AVC420_QUANT_QUALITY[] stream1QuantQualityVals, byte[] avc420EncodedBitstream1,
             uint stream2NumRects, RDPGFX_RECT16[] steam2RegionRects, RDPGFX_AVC420_QUANT_QUALITY[] stream2QuantQualityVals, byte[] avc420EncodedBitstream2,
-            Image baseImage)
+            SKImage baseImage)
         {
             uint fid = MakeStartFramePdu();
             RFX_AVC420_METABLOCK avc420MetaData = new RFX_AVC420_METABLOCK();
@@ -1708,7 +1708,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="baseImage">Base Image used to verify output</param>
         /// <returns></returns>
         public uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, CodecType codec, IRFX_AVC444_BITMAP_STREAM avc444BitmapStream,
-            Image baseImage)
+            SKImage baseImage)
         {
             bool checkType = (codec == CodecType.RDPGFX_CODECID_AVC444 && avc444BitmapStream is RFX_AVC444_BITMAP_STREAM)
                 || (codec == CodecType.RDPGFX_CODECID_AVC444v2 && avc444BitmapStream is RFX_AVC444V2_BITMAP_STREAM);
@@ -1744,7 +1744,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="glyphNum"> The glyph number in batch. </param>
         /// <param name="glyph"> The residual layer image to be sent. </param>
         /// <returns> Frame Id </returns>
-        public uint SendClearCodecGlyphInBatch(Surface surf, ushort startGlyphIdx, RDPGFX_POINT16 startGlyphPos, ushort glyphNum, Image glyph)
+        public uint SendClearCodecGlyphInBatch(Surface surf, ushort startGlyphIdx, RDPGFX_POINT16 startGlyphPos, ushort glyphNum, SKImage glyph)
         {
             uint fid = MakeStartFramePdu();
 
@@ -1757,7 +1757,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             for (ushort i = 0; i < glyphNum; i++)
             {
                 ClearCodec_BitmapStream ccStream = new ClearCodec_BitmapStream(ClearCodec_BitmapStream.CLEARCODEC_FLAG_GLYPH_INDEX, glyphIdx);
-                ccStream.LoadResidualBitmap((Bitmap)glyph);
+                ccStream.LoadResidualBitmap(SKBitmap.FromImage(glyph));
                 ccStream.seqNumber = egfxServer.Get_ClearCodecBitmapStream_SeqNum();
                 MakeWireToSurfacePdu1(surf.Id, CodecType.RDPGFX_CODECID_CLEARCODEC, PixelFormat.PIXEL_FORMAT_XRGB_8888,
                                         glyphRect, ccStream.Encode());
@@ -1788,7 +1788,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="compFlag"> The flag indicates whether the bitmap is compressed </param>
         /// <param name="partSize"> The size of pure data in a single RDP8_BULK_ENCODED_DATA structure </param>
         /// <returns> Frame Id </returns>
-        public uint SendUncompressedImage(System.Drawing.Image image, ushort destLeft, ushort destTop,
+        public uint SendUncompressedImage(SKImage image, ushort destLeft, ushort destTop,
                                             ushort sId, PixelFormat pixFormat, byte compFlag, uint partSize)
         {
             if (image == null)
@@ -1824,39 +1824,26 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// Convert an bitmap to an byte array.
         /// </summary>
         /// <param name="img"> The source bitmap </param>
-        private byte[] ImageToByteArray(System.Drawing.Image img)
+        private byte[] ImageToByteArray(SKImage img)
         {
-            Bitmap bmpImg = new Bitmap(img);
+            SKBitmap bmpImg = SKBitmap.FromImage(img);
             int width = bmpImg.Width;
             int height = bmpImg.Height;
             int right = width - 1;
             int bottom = height - 1;
 
+            byte[] RGB = new byte[height * width * 4];
+            int curIdx = 0;
 
-            // System.Drawing.Imaging.BitmapData bmpData = bmpImg.LockBits(new Rectangle(0, 0, width, height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            System.Drawing.Imaging.BitmapData bmpData = bmpImg.LockBits(new Rectangle(0, 0, width, height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-            int stride = bmpData.Stride;
-            byte[] RGB = new byte[height * stride];
-
-            unsafe
+            for (int y = 0; y <= bottom; ++y)
             {
-                unsafe
+                for (int x = 0; x <= right; ++x)
                 {
-                    byte* cursor = (byte*)bmpData.Scan0.ToPointer();
-                    int curIdx = 0;
-                    for (int y = 0; y <= bottom; ++y)
-                    {
-                        for (int x = 0; x <= right; ++x)
-                        {
-                            RGB[curIdx++] = cursor[y * stride + 4 * x + 0];
-                            RGB[curIdx++] = cursor[y * stride + 4 * x + 1];
-                            RGB[curIdx++] = cursor[y * stride + 4 * x + 2];
-                            RGB[curIdx++] = cursor[y * stride + 4 * x + 3];
-                        }
-                    }
-
+                    RGB[curIdx++] = bmpImg.GetPixel(x, y).Blue;
+                    RGB[curIdx++] = bmpImg.GetPixel(x, y).Green;
+                    RGB[curIdx++] = bmpImg.GetPixel(x, y).Red;
+                    RGB[curIdx++] = 0;
                 }
-                bmpImg.UnlockBits(bmpData);
             }
             return RGB;
         }

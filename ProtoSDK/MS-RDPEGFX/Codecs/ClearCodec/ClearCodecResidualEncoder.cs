@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Drawing;
 using Microsoft.Protocols.TestTools.StackSdk;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 {
@@ -72,12 +72,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name = "resRLSegList"> the list to save all pixel and its run length count </param>
         /// <param name = "compPixel"> the new pixel to be added </param>
         /// <param name = "count"> the run length factor of new pixel to be added </param>
-        public static void addPixelToRLSegList(List<CLEARCODEC_RGB_RUN_SEGMENT> resRLSegList, Color compPixel, uint count)
+        public static void addPixelToRLSegList(List<CLEARCODEC_RGB_RUN_SEGMENT> resRLSegList, SKColor compPixel, uint count)
         {
             CLEARCODEC_RGB_RUN_SEGMENT rgbSeg = new CLEARCODEC_RGB_RUN_SEGMENT();
-            rgbSeg.buleValue = compPixel.B;
-            rgbSeg.greenValue = compPixel.G;
-            rgbSeg.redValue = compPixel.R;
+            rgbSeg.buleValue = compPixel.Blue;
+            rgbSeg.greenValue = compPixel.Green;
+            rgbSeg.redValue = compPixel.Red;
             rgbSeg.rlFactor = count;
 
             resRLSegList.Add(rgbSeg);
@@ -87,19 +87,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Encode a bitmap with Run-length format
         /// </summary>
         /// <param name="resBmp">The bitmap to be encoded in residual layer.</param>
-        public static CLEARCODEC_RESIDUAL_DATA Encode(Bitmap resBmp)
+        public static CLEARCODEC_RESIDUAL_DATA Encode(SKBitmap resBmp)
         {
 
             CLEARCODEC_RESIDUAL_DATA resData = new CLEARCODEC_RESIDUAL_DATA();
             List<CLEARCODEC_RGB_RUN_SEGMENT> resRLSegList = new List<CLEARCODEC_RGB_RUN_SEGMENT>();       
-            Color compColor = resBmp.GetPixel(0, 0);
+            SKColor compColor = resBmp.GetPixel(0, 0);
 
             uint count = 0;
             for (ushort y = 0; y < resBmp.Height; y++)
             {
                 for (ushort x = 0; x < resBmp.Width; x++)
                 {
-                    Color pixelColor = resBmp.GetPixel(x, y);
+                    SKColor pixelColor = resBmp.GetPixel(x, y);
                     if (compColor.Equals(pixelColor))
                     {
                         count++;

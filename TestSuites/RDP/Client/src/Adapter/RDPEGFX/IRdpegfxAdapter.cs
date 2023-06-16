@@ -1,17 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-using System.Collections.Generic;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
-using Microsoft.Protocols.TestSuites.Rdp;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
-using Microsoft.Protocols.TestSuites.Rdprfx;
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
+using SkiaSharp;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
@@ -119,7 +114,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="surfaceId">Specify a Surface ID</param>
         /// <returns>The created surface.</returns>
         Surface CreateAndOutputSurface(RDPGFX_RECT16 rect, PixelFormat pixFormat, ushort? surfaceId = null);
-              
+
         /// <summary>
         /// Method to solidfill a surface with color.
         /// </summary>
@@ -223,7 +218,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="sId"> The surface Id that bitmap image is sent to. </param>
         /// <param name="pixFormat"> The pixel format of bitmap image. </param>
         /// <returns> A dictionary with frameId and byte stream frame pair. </returns>
-        Dictionary<uint, byte[]> RemoteFXCodecEncode(System.Drawing.Image image, OperationalMode opMode, EntropyAlgorithm entropy,
+        Dictionary<uint, byte[]> RemoteFXCodecEncode(SKImage image, OperationalMode opMode, EntropyAlgorithm entropy,
                                             RDPGFX_POINT16 imgPos, ushort sId, PixelFormat pixFormat);
 
         /// <summary>
@@ -250,7 +245,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="bSubDiff">Indicates if sub-diffing with last frame of this surface.</param>
         /// <param name="bReduceExtrapolate">Indicates if use Reduce Extrapolate method in DWT step.</param>
         /// <returns> A list of layer byte stream, each layer is built by a dictionary with frameId and byte stream frame pair. </returns>
-        List<Dictionary<uint, byte[]>> RfxProgressiveCodecEncode(Surface surf, System.Drawing.Image image, PixelFormat pixFormat, bool hasSync, bool hasContext,
+        List<Dictionary<uint, byte[]>> RfxProgressiveCodecEncode(Surface surf, SKImage image, PixelFormat pixFormat, bool hasSync, bool hasContext,
                                                     ImageQuality_Values quality, bool bProg, bool bSubDiff, bool bReduceExtrapolate);
 
         /// <summary>
@@ -281,7 +276,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="subcodecs"> The dictionary of subcodec layer image, subcodecID and position. </param>
         /// <returns> Frame Id. </returns>
         uint SendImageWithClearCodec(ushort sId, PixelFormat pixFormat, byte ccFlag, ushort graphIdx, RDPGFX_RECT16 bmRect,
-                                        System.Drawing.Image residualBmp, Dictionary<RDPGFX_POINT16, System.Drawing.Bitmap> bands,
+                                        SKImage residualBmp, Dictionary<RDPGFX_POINT16, SKBitmap> bands,
                                         Dictionary<RDPGFX_POINT16, BMP_INFO> subcodecs);
 
         /// <summary>
@@ -297,7 +292,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="baseImage">Base Image used to verify output</param>
         /// <returns></returns>
         uint SendImageWithH264AVC420Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, uint numRects, RDPGFX_RECT16[] regionRects, RDPGFX_AVC420_QUANT_QUALITY[] quantQualityVals,
-                          byte[] avc420EncodedBitstream, Image baseImage);
+                          byte[] avc420EncodedBitstream, SKImage baseImage);
 
         /// <summary>
         /// Send bitmap data in H264 AVC420 codec
@@ -308,7 +303,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="avc420BitmapStream">A RFX_AVC420_BITMAP_STREAM structure for encoded information</param>
         /// <param name="baseImage">Base Image used to verify output</param>
         /// <returns></returns>
-        uint SendImageWithH264AVC420Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC420_BITMAP_STREAM avc420BitmapStream, Image baseImage);
+        uint SendImageWithH264AVC420Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, RFX_AVC420_BITMAP_STREAM avc420BitmapStream, SKImage baseImage);
 
         /// <summary>
         /// Send clearcodec encoded glyph in batch (make sure glyphnum + startGlyphRect.right is not bigger than surf.width).
@@ -319,7 +314,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="glyphNum"> The glyph number in batch. </param>
         /// <param name="glyph"> The residual layer image to be sent. </param>
         /// <returns> Frame Id. </returns>
-        uint SendClearCodecGlyphInBatch(Surface surf, ushort startGlyphIdx, RDPGFX_POINT16 startGlyphPos, ushort glyphNum, System.Drawing.Image glyph);
+        uint SendClearCodecGlyphInBatch(Surface surf, ushort startGlyphIdx, RDPGFX_POINT16 startGlyphPos, ushort glyphNum, SKImage glyph);
 
         /// <summary>
         /// Send bitmap data in H264 AVC444 codec
@@ -341,7 +336,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, AVC444LCValue lcValue,
             uint stream1NumRects, RDPGFX_RECT16[] steam1RegionRects, RDPGFX_AVC420_QUANT_QUALITY[] stream1QuantQualityVals, byte[] avc420EncodedBitstream1,
             uint stream2NumRects, RDPGFX_RECT16[] steam2RegionRects, RDPGFX_AVC420_QUANT_QUALITY[] stream2QuantQualityVals, byte[] avc420EncodedBitstream2,
-            Image baseImage);
+            SKImage baseImage);
 
         /// <summary>
         /// Send bitmap data in H264 AVC444/AVC444v2 codec
@@ -354,7 +349,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="baseImage">Base Image used to verify output</param>
         /// <returns></returns>
         uint SendImageWithH264AVC444Codec(ushort sId, PixelFormat pixFormat, RDPGFX_RECT16 bmRect, CodecType codec, IRFX_AVC444_BITMAP_STREAM avc444BitmapStream,
-            Image baseImage);
+            SKImage baseImage);
 
         /// <summary>
         /// Send a uncompressed bitmap data, the data segment(s) can be compressed or uncompressed according to parameter.
@@ -367,7 +362,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
         /// <param name="compFlag"> The flag indicates whether the bitmap is compressed. </param>
         /// <param name="partSize"> The size of pure data in a single RDP8_BULK_ENCODED_DATA structure. </param>
         /// <returns> Frame Id. </returns>
-        uint SendUncompressedImage(System.Drawing.Image image, ushort destLeft, ushort destTop,
+        uint SendUncompressedImage(SKImage image, ushort destLeft, ushort destTop,
                                             ushort sId, PixelFormat pixFormat, byte compFlag, uint partSize);
     }
 }

@@ -4,8 +4,8 @@
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpei;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkiaSharp;
 using System;
-using System.Drawing;
 
 namespace Microsoft.Protocols.TestSuites.Rdpei
 {
@@ -141,7 +141,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
 
                 if (isManagedAdapter)
                 {
-                    RdpeiUtility.SendCircle(diam, Color.Red, left, top);
+                    RdpeiUtility.SendCircle(diam, SKColors.Red, left, top);
                 }
                 Site.Log.Add(LogEntryKind.Debug, "Expecting RDPINPUT_TOUCH_EVENT_PDU ...");
 
@@ -183,7 +183,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                                 {
                                     ushort l = (contactX < diam / 2) ? (ushort)0 : (contactX > (ushort)(rdpbcgrAdapter.CapabilitySetting.DesktopWidth - diam / 2) ? (ushort)(rdpbcgrAdapter.CapabilitySetting.DesktopWidth - diam) : (ushort)(contactX - diam / 2));
                                     ushort t = (contactY < diam / 2) ? (ushort)0 : (contactY > (ushort)(rdpbcgrAdapter.CapabilitySetting.DesktopHeight - diam / 2) ? (ushort)(rdpbcgrAdapter.CapabilitySetting.DesktopHeight - diam) : (ushort)(contactY - diam / 2));
-                                    RdpeiUtility.SendCircle(diam, Color.Green, l, t);
+                                    RdpeiUtility.SendCircle(diam, SKColors.Green, l, t);
 
                                     RdpeiUtility.SendInstruction(RdpeiSUTControlData.UnexpectedPositionNotice);
                                 }
@@ -200,7 +200,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpei
                 // Update on the client screen.
                 if (isManagedAdapter)
                 {
-                    RdpeiUtility.SendCircle(diam, Color.Black, left, top);
+                    RdpeiUtility.SendCircle(diam, SKColors.Black, left, top);
                 }
             }
             if (isManagedAdapter)

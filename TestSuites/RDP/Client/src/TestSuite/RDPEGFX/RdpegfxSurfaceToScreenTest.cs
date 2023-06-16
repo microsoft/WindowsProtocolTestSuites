@@ -1,16 +1,12 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Drawing;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpedyc;
-using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestSuites.Rdp;
+using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkiaSharp;
+using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestSuites.Rdpegfx
 {
@@ -753,11 +749,11 @@ namespace Microsoft.Protocols.TestSuites.Rdpegfx
             heights[2] = (ushort)(RdpegfxTestUtility.surfHeight / 2);
             heights[3] = RdpegfxTestUtility.surfHeight;
 
-            Color[] colors = new Color[4];
-            colors[0] = Color.Green;
-            colors[1] = Color.Blue;
-            colors[2] = Color.Red;
-            colors[3] = Color.Yellow;
+            SKColor[] colors = new SKColor[4];
+            colors[0] = SKColors.Green;
+            colors[1] = SKColors.Blue;
+            colors[2] = SKColors.Red;
+            colors[3] = SKColors.Yellow;
 
             Surface[] surfaces = new Surface[4];
             // Test the overlap

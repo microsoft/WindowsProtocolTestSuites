@@ -1,15 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Text;
-using System.Drawing;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Protocols.TestSuites.Rdpbcgr;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestSuites.Rdprfx
 {
@@ -19,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(0)]
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Sending client an encoded bitmap data which encoded with RLGR1 algorithm.")]
@@ -99,9 +95,9 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, imageForVideoMode.Width, imageForVideoMode.Height);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + imageForVideoMode.Width, destTop + imageForVideoMode.Height);
             this.VerifySUTDisplay(true, compareRect);
-           
+
             #endregion
         }
 
@@ -109,7 +105,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [Priority(0)]
         [TestCategory("BVT")]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Sending client an encoded bitmap data which encoded with RLGR3 algorithm.")]
@@ -189,16 +185,16 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, imageForVideoMode.Width, imageForVideoMode.Height);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + imageForVideoMode.Width, destTop + imageForVideoMode.Height);
             this.VerifySUTDisplay(true, compareRect);
-           
+
             #endregion
         }
 
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Send a TS_RFX_SYNC message among frames of the video mode stream.")]
@@ -310,7 +306,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Send a TS_RFX_CODEC_VERSIONS message among frames of the video mode stream.")]
@@ -422,7 +418,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Send a TS_RFX_CHANNELS message among frames of the video mode stream.")]
@@ -534,7 +530,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Send a TS_RFX_CONTEXT message among frames of the video mode stream.")]
@@ -646,7 +642,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"When Video Mode is in effect, ensure the client terminates the RDP connection when the server uses an unsupported entropy algorithm to encode data.")]
@@ -732,7 +728,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         [TestMethod]
         [Priority(1)]
         [TestCategory("RDP7.1")]
-        [TestCategory("RDPRFX")]        
+        [TestCategory("RDPRFX")]
         [TestCategory("BasicRequirement")]
         [TestCategory("BasicFeature")]
         [Description(@"Ensure  the client terminates the RDP connection when received a TS_RFX_FRAME_BEGIN with the blockLen field set to an invalid value.")]
@@ -891,8 +887,8 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdpbcgrAdapter.SendFrameMarkerCommand(frameAction_Values.SURFACECMD_FRAMEACTION_BEGIN, frameId);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Create a rectangle whose width and height is TileSize * 2.");
-            Rectangle clipRect = new Rectangle(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
-            Rectangle[] rects = new Rectangle[] { clipRect };
+            SKRect clipRect = new SKRect(destLeft, destTop, destLeft + RgbTile.TileSize * 2, destTop + RgbTile.TileSize * 2);
+            SKRect[] rects = new SKRect[] { clipRect };
 
             uint surfFrameId = 0;
 
@@ -911,17 +907,20 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
                 new TILE_POSITION{ xIdx = 1, yIdx = 1 }
             };
 
-            var bitmapBlue = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            Graphics graphics = Graphics.FromImage(bitmapBlue);
-            graphics.FillRectangle(Brushes.Blue, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
-            var bitmapRed = new Bitmap(RgbTile.TileSize, RgbTile.TileSize);
-            graphics = Graphics.FromImage(bitmapRed);
-            graphics.FillRectangle(Brushes.Red, new Rectangle(0, 0, RgbTile.TileSize, RgbTile.TileSize));
+            var bitmapBlue = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            SKCanvas canvas = new SKCanvas(bitmapBlue);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Blue });
+            var bitmapRed = new SKBitmap(RgbTile.TileSize, RgbTile.TileSize);
+            canvas = new SKCanvas(bitmapRed);
+            canvas.DrawRect(new SKRect(0, 0, RgbTile.TileSize, RgbTile.TileSize), new SKPaint { Color = SKColors.Red });
+
+            SKImage imageBlue = SKImage.FromBitmap(bitmapBlue);
+            SKImage imageRed = SKImage.FromBitmap(bitmapRed);
 
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { bitmapBlue, bitmapBlue, bitmapBlue, bitmapBlue },
+                new SKImage[] { imageBlue, imageBlue, imageBlue, imageBlue },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
@@ -939,7 +938,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { bitmapRed, bitmapRed, bitmapRed },
+                new SKImage[] { imageRed, imageRed, imageRed },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
@@ -956,7 +955,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.SendTsRfxTileSet(
                 opMode,
                 enAlgorithm,
-                new Image[] { bitmapRed },
+                new SKImage[] { imageRed },
                 positions);
             rdprfxAdapter.SendTsRfxFrameEnd();
             rdprfxAdapter.FlushEncodedData(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
@@ -968,7 +967,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             rdprfxAdapter.ExpectTsFrameAcknowledgePdu(frameId, waitTime);
 
             this.TestSite.Log.Add(LogEntryKind.Comment, "Verify output on SUT Display if the verifySUTDisplay entry in PTF config is true.");
-            Rectangle compareRect = new Rectangle(destLeft, destTop, RgbTile.TileSize * 2, RgbTile.TileSize * 2);
+            SKRect compareRect = new SKRect(destLeft, destTop, destLeft + RgbTile.TileSize * 2, destTop + RgbTile.TileSize * 2);
             this.VerifySUTDisplay(true, compareRect);
 
             #endregion

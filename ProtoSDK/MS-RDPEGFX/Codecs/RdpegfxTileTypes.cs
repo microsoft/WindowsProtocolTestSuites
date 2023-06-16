@@ -2,11 +2,10 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
 using System.Collections;
 using System.Security.Cryptography;
-using System.Drawing.Imaging;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 {
@@ -70,10 +69,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name="quant">Codec quantity</param>
         /// <param name="bReduceExtrapolate">Indicates if used Reduce-Extrapolate method in DWT</param>
         /// <param name="progQuant">The progressive codec quantity</param>
-        public DwtTile(short[] y, short[] cb, short[] cr, TS_RFX_CODEC_QUANT[] quantVals, byte quantIdxY, byte quantIdxCb, byte quantIdxCr, bool bReduceExtrapolate, RFX_PROGRESSIVE_CODEC_QUANT progQuant = null)         
+        public DwtTile(short[] y, short[] cb, short[] cr, TS_RFX_CODEC_QUANT[] quantVals, byte quantIdxY, byte quantIdxCb, byte quantIdxCr, bool bReduceExtrapolate, RFX_PROGRESSIVE_CODEC_QUANT progQuant = null)
         {
             // Clone the array， make sure different DwtTitle cannot hold the same array reference
-            Y_DwtQ = (short[])y.Clone(); 
+            Y_DwtQ = (short[])y.Clone();
             Cb_DwtQ = (short[])cb.Clone();
             Cr_DwtQ = (short[])cr.Clone();
             CodecQuantVals = quantVals;
@@ -102,9 +101,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Decode and Render the tile to an image
         /// </summary>
         /// <returns>The image rendered from tile</returns>
-        public Bitmap ToImage()
+        public SKBitmap ToImage()
         {
-            Bitmap tileImg = new Bitmap(RdpegfxTileUtils.TileSize, RdpegfxTileUtils.TileSize);
+            SKBitmap tileImg = new SKBitmap(RdpegfxTileUtils.TileSize, RdpegfxTileUtils.TileSize);
 
             RfxProgressiveCodecContext codecContext = new RfxProgressiveCodecContext(this.CodecQuantVals, this.QuantIdxY, this.QuantIdxCb, this.QuantIdxCr, UseReduceExtrapolate);
             codecContext.YComponent = new short[Y_DwtQ.Length];
@@ -116,25 +115,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             Cr_DwtQ.CopyTo(codecContext.CrComponent, 0);
 
             RfxProgressiveDecoder.DecodeTileFromDwtQ(codecContext);
-
-            BitmapData bmpData = tileImg.LockBits(new Rectangle(0, 0, tileImg.Width, tileImg.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            unsafe
+            for (int y = 0; y < tileImg.Height; y++)
             {
-                byte* cusor = (byte*)bmpData.Scan0.ToPointer();
-                for (int y = 0; y < bmpData.Height; y++)
+                for (int x = 0; x < tileImg.Width; x++)
                 {
-                    for (int x = 0; x < bmpData.Width; x++)
-                    {
-                        cusor[0] = codecContext.BSet[x, y];
-                        cusor[1] = codecContext.GSet[x, y];
-                        cusor[2] = codecContext.RSet[x, y];
-                        cusor += 3;
-                    }
-                    cusor += (bmpData.Stride - 3 * (bmpData.Width));
+                    var (r, g, b) = (codecContext.RSet[x, y], codecContext.GSet[x, y], codecContext.BSet[x, y]);
+                    tileImg.SetPixel(x, y, new SKColor(r, g, b));
                 }
             }
-            tileImg.UnlockBits(bmpData);
-
             return tileImg;
         }
 
@@ -190,7 +178,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             }
             return true;
         }
-    }      
+    }
 
     /// <summary>
     /// Specify the index of a tile in a surface
@@ -268,7 +256,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Raw V data
         /// </summary>
-        public byte[] CrRawData; 
+        public byte[] CrRawData;
 
         /// <summary>
         /// The data type of Y, Cb, Cr
@@ -371,14 +359,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         public short[] GetLinearizationData()
         {
             List<short> lineList = new List<short>();
-            lineList.AddRange(HL1); 
-            lineList.AddRange(LH1); 
-            lineList.AddRange(HH1); 
-            lineList.AddRange(HL2); 
-            lineList.AddRange(LH2); 
-            lineList.AddRange(HH2); 
-            lineList.AddRange(HL3); 
-            lineList.AddRange(LH3); 
+            lineList.AddRange(HL1);
+            lineList.AddRange(LH1);
+            lineList.AddRange(HH1);
+            lineList.AddRange(HL2);
+            lineList.AddRange(LH2);
+            lineList.AddRange(HH2);
+            lineList.AddRange(HL3);
+            lineList.AddRange(LH3);
             lineList.AddRange(HH3);
             lineList.AddRange(LL3);
             return lineList.ToArray();
@@ -440,7 +428,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             NewFrame = newFrame;
             Index = index;
         }
-        
+
         /// <summary>
         /// Get the DWT data of this tile from last frame
         /// </summary>

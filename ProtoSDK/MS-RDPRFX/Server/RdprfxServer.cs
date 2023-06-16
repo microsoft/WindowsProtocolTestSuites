@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
 {
@@ -128,7 +128,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         /// </summary>
         /// <param name="rects">Array of rects, if this parameter is null, will send a 64*64 rect </param>
         /// <param name="numRectsZero">A boolean variable to indicate whether the numRectsZero field of the TS_RFX_REGION is zero </param>
-        public TS_RFX_REGION CreateTsRfxRegion(Rectangle[] rects = null, bool numRectsZero = false)
+        public TS_RFX_REGION CreateTsRfxRegion(SKRect[] rects = null, bool numRectsZero = false)
         {
             TS_RFX_REGION rfxRegion = new TS_RFX_REGION();
             rfxRegion.CodecChannelT = new TS_RFX_CODEC_CHANNELT();
@@ -136,7 +136,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
             rfxRegion.CodecChannelT.codecId = 0x01;
             rfxRegion.CodecChannelT.channelId = 0x00;
             rfxRegion.regionFlags = 0x01;
-            
+
             if (numRectsZero)
             {
                 rfxRegion.numRects = 0;
@@ -160,15 +160,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
             }
             else
             {
-                rfxRegion.numRects = (ushort) rects.Length;
+                rfxRegion.numRects = (ushort)rects.Length;
                 rfxRegion.CodecChannelT.blockLen = (uint)(15 + rfxRegion.numRects * 8);
                 rfxRegion.rects = new TS_RFX_RECT[rects.Length];
                 for (int i = 0; i < rects.Length; i++)
                 {
-                    rfxRegion.rects[i].x = (ushort) rects[i].Left;
-                    rfxRegion.rects[i].y = (ushort) rects[i].Top;
-                    rfxRegion.rects[i].width = (ushort) rects[i].Width;
-                    rfxRegion.rects[i].height = (ushort) rects[i].Height;
+                    rfxRegion.rects[i].x = (ushort)rects[i].Left;
+                    rfxRegion.rects[i].y = (ushort)rects[i].Top;
+                    rfxRegion.rects[i].width = (ushort)rects[i].Width;
+                    rfxRegion.rects[i].height = (ushort)rects[i].Height;
                 }
 
             }
@@ -190,7 +190,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         /// <param name="quantIdxCb">Index of Cb component in Quant value array</param>
         /// <param name="quantIdxCr">Index of Cr component in Quant value array</param>
         /// <returns></returns>
-        public TS_RFX_TILESET CreateTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, Image tileImage,
+        public TS_RFX_TILESET CreateTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, SKImage tileImage,
             TS_RFX_CODEC_QUANT[] codecQuantVals = null, byte quantIdxY = 0, byte quantIdxCb = 0, byte quantIdxCr = 0)
         {
             if (codecQuantVals == null)
@@ -274,7 +274,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         public TS_RFX_TILESET CreateTsRfxTileSet(
             OperationalMode opMode,
             EntropyAlgorithm entropy,
-            Image[] tileImages,
+            SKImage[] tileImages,
             TILE_POSITION[] positions,
             TS_RFX_CODEC_QUANT[] codecQuantVals = null,
             byte[] quantIdxYs = null,
@@ -321,7 +321,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
             byte[] yData, cbData, crData;
 
             rfxTileSet.tiles = new TS_RFX_TILE[tileImages.Length];
-            rfxTileSet.numTiles = (ushort) rfxTileSet.tiles.Length;
+            rfxTileSet.numTiles = (ushort)rfxTileSet.tiles.Length;
 
             for (int i = 0; i < tileImages.Length; i++)
             {
@@ -355,7 +355,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
 
             return rfxTileSet;
         }
-         
+
         /// <summary>
         /// Method to create TS_RFX_TILESET.
         /// </summary>

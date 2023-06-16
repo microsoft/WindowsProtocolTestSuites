@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using System.Drawing;
 using System.Collections;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx

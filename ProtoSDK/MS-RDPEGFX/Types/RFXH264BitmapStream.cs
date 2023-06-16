@@ -1,13 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
+using SkiaSharp;
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
 using System.Xml.Serialization;
-using Microsoft.Protocols.TestTools.StackSdk;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 {
@@ -611,13 +607,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// BaseImage string to an image
         /// </summary>
         /// <returns></returns>
-        public Image GetBaseImage()
+        public SKImage GetBaseImage()
         {
             try
             {
                 if (!string.IsNullOrEmpty(BaseImage))
                 {
-                    Image image = Bitmap.FromFile(BaseImage);
+                    SKImage image = SKImage.FromEncodedData(BaseImage);
                     return image;
                 }
             }

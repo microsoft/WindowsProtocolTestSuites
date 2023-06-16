@@ -2,13 +2,12 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Collections;
 using System.Security.Cryptography;
-using System.Drawing.Imaging;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
-{    
+{
 
     /// <summary>
     /// The image tile in RGB format.
@@ -47,7 +46,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         /// <param name="leftOffset">The left offset of the tile to the bitmap</param>
         /// <param name="topOffset">The top offset of the tile to the bitmap</param>
         /// <returns></returns>
-        public static RgbTile GetFromImage(Bitmap orgImg, int leftOffset, int topOffset)
+        public static RgbTile GetFromImage(SKBitmap orgImg, int leftOffset, int topOffset)
         {
             RgbTile tile = new RgbTile();
             tile.RSet = new byte[TileSize, TileSize];
@@ -56,29 +55,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
 
             int right = Math.Min(orgImg.Width - 1, leftOffset + TileSize - 1);
             int bottom = Math.Min(orgImg.Height - 1, topOffset + TileSize - 1);
-            Rectangle bmpRect = new Rectangle(leftOffset, topOffset, right - leftOffset + 1, bottom - topOffset + 1);
-            BitmapData bmpData = orgImg.LockBits(bmpRect, ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 
-            unsafe
+            for (int y = topOffset; y < bottom; y++)
             {
-                byte* cusor = (byte*)bmpData.Scan0.ToPointer();
-                
-                for (int y = topOffset; y <= bottom; y++)
+                for (int x = leftOffset; x < right; x++)
                 {
-                    for (int x = leftOffset; x <= right; x++)
-                    {
-                        int tileX = x - leftOffset;
-                        int tileY = y - topOffset;
-                        tile.BSet[tileX, tileY] = cusor[0];
-                        tile.GSet[tileX, tileY] = cusor[1];
-                        tile.RSet[tileX, tileY] = cusor[2];
-                        cusor += 3;
-                    }
-                    cusor += (bmpData.Stride - 3 * (bmpData.Width));
+                    int tileX = x - leftOffset;
+                    int tileY = y - topOffset;
+                    SKColor color = orgImg.GetPixel(tileX, tileY);
+                    tile.BSet[tileX, tileY] = color.Blue;
+                    tile.GSet[tileX, tileY] = color.Green;
+                    tile.RSet[tileX, tileY] = color.Red;
                 }
             }
-            orgImg.UnlockBits(bmpData);
-            
             return tile;
         }
 
@@ -86,26 +75,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         /// Reander RGB data to a bitmap
         /// </summary>
         /// <returns>Bitmap of the tile.</returns>
-        public  Bitmap ToImage()
+        public SKBitmap ToImage()
         {
-            Bitmap bmp = new Bitmap(TileSize, TileSize);
-            BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            unsafe
+            SKBitmap bmp = new SKBitmap(TileSize, TileSize);
+            for (int y = 0; y < bmp.Height; y++)
             {
-                byte* cusor = (byte*)bmpData.Scan0.ToPointer();
-                for (int y = 0; y < bmpData.Height; y++)
+                for (int x = 0; x < bmp.Width; x++)
                 {
-                    for (int x = 0; x < bmpData.Width; x++)
-                    {
-                        cusor[0] = this.BSet[x, y];
-                        cusor[1] = this.GSet[x, y];
-                        cusor[2] = this.RSet[x, y];
-                        cusor += 3;
-                    }
-                    cusor += (bmpData.Stride - 3 * (bmpData.Width));
+                    var (r, g, b) = (this.RSet[x, y], this.GSet[x, y], this.BSet[x, y]);
+                    bmp.SetPixel(x, y, new SKColor(r, g, b));
                 }
             }
-            bmp.UnlockBits(bmpData);
             return bmp;
         }
 
@@ -164,5 +144,5 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
             }
         }
     }
-    
+
 }

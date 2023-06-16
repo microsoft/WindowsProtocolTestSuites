@@ -1,11 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Collections.Generic;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 {
@@ -41,7 +39,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 }
             }
             Surface newSuf = new Surface(surfaceId.Value, w, h);
-            surfList.Add(newSuf.Id, newSuf);                    
+            surfList.Add(newSuf.Id, newSuf);
 
             return newSuf;
         }
@@ -117,22 +115,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="rect">The rect area</param>
         /// <returns>The tile indexes cover the specified area</returns>
-        public TileIndex[] GetIndexesInRect(Rectangle[] rects)
+        public TileIndex[] GetIndexesInRect(SKRect[] rects)
         {
             List<TileIndex> indexList = new List<TileIndex>();
-            foreach (Rectangle rect in rects)
+            foreach (SKRect rect in rects)
             {
-                int leftXIndex = rect.X / RdpegfxTileUtils.TileSize;
-                int topYIndex = rect.Y / RdpegfxTileUtils.TileSize;
-                int rightXIndex = (rect.X + rect.Width) / RdpegfxTileUtils.TileSize;
-                int bottomYIndex = (rect.Y + rect.Height) / RdpegfxTileUtils.TileSize;
+                int leftXIndex = (int)rect.Left / RdpegfxTileUtils.TileSize;
+                int topYIndex = (int)rect.Top / RdpegfxTileUtils.TileSize;
+                int rightXIndex = (int)rect.Right / RdpegfxTileUtils.TileSize;
+                int bottomYIndex = (int)rect.Bottom / RdpegfxTileUtils.TileSize;
 
 
                 for (int x = leftXIndex; x <= rightXIndex; x++)
                 {
                     for (int y = topYIndex; y <= bottomYIndex; y++)
                     {
-                        TileIndex index = new TileIndex((ushort)x, (ushort)y, (rect.X + rect.Width), (rect.Y + rect.Height));
+                        TileIndex index = new TileIndex((ushort)x, (ushort)y, (int)(rect.Left + rect.Width), (int)(rect.Top + rect.Height));
                         if (!indexList.Contains(index) && IsIndexInScope(index))
                         {
                             indexList.Add(index);
@@ -148,7 +146,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Update surface to new bitmap
         /// </summary>
         /// <param name="bmp">Bitmap which used to update surface</param>
-        public void UpdateFromBitmap(Bitmap bmp)
+        public void UpdateFromBitmap(SKBitmap bmp)
         {
             if (pendingUpdateIndexs != null && LastFrame != null)
             {
@@ -170,9 +168,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="bmp">Bitmap which used to update surface</param>
         /// <param name="changedArea">The changed areas</param>
-        public void UpdateFromBitmap(Bitmap bmp, Rectangle[] changedAreas)
+        public void UpdateFromBitmap(SKBitmap bmp, SKRect[] changedAreas)
         {
-            if (pendingUpdateIndexs != null && LastFrame !=null)
+            if (pendingUpdateIndexs != null && LastFrame != null)
             {
                 foreach (TileIndex index in pendingUpdateIndexs)
                 {
@@ -236,7 +234,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 for (int yIndex = 0; yIndex * RdpegfxTileUtils.TileSize < this.Height; yIndex++)
                 {
                     TileIndex tIndex = new TileIndex((ushort)xIndex, (ushort)yIndex, this.Width, this.Height);
-                    if(CurrentFrame.IsIndexInScope(tIndex, bRgb))
+                    if (CurrentFrame.IsIndexInScope(tIndex, bRgb))
                     {
                         //diffIndexList.Add(tIndex);
                         if (LastFrame != null && LastFrame.IsIndexInScope(tIndex, bRgb))
@@ -262,7 +260,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 }
             }
             return diffIndexList.ToArray();
-            
+
         }
 
         /// <summary>
@@ -273,12 +271,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name="bSubDiff">Indicates if sub-diffing with last frame of this surface</param>
         /// <param name="bReduceExtrapolate">Indicates if use Reduce Extrapolate method in DWT step.</param>
         /// <returns>The dictionary of tile index and encoded tile datas.</returns>
-        public Dictionary<TileIndex, EncodedTile[]> ProgressiveEncode(ImageQuality_Values quality, bool bProg, bool bSubDiff, bool bReduceExtrapolate, bool ignoreUnchangedTile=true)
+        public Dictionary<TileIndex, EncodedTile[]> ProgressiveEncode(ImageQuality_Values quality, bool bProg, bool bSubDiff, bool bReduceExtrapolate, bool ignoreUnchangedTile = true)
         {
             Dictionary<TileIndex, EncodedTile[]> encodedTileDic = new Dictionary<TileIndex, EncodedTile[]>();
             TS_RFX_CODEC_QUANT quant = RdpegfxTileUtils.GetCodecQuant(quality);
             TileIndex[] tileIndexArr;
-            if(!ignoreUnchangedTile)
+            if (!ignoreUnchangedTile)
             {
                 tileIndexArr = GetAllIndexes();
             }
@@ -290,7 +288,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             foreach (TileIndex index in tileIndexArr)
             {
                 RfxProgressiveCodecContext codecContext = new RfxProgressiveCodecContext(
-                    new TS_RFX_CODEC_QUANT[]{quant}, 
+                    new TS_RFX_CODEC_QUANT[] { quant },
                     0, // quantization index of Y, set this paramter to 0 since only one quantization value in the array
                     0, // quantization index of Cb
                     0, // quantization index of Cr
@@ -298,7 +296,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                     bSubDiff,//sub-diffing
                     bReduceExtrapolate);//reduce extrapolate
                 TileState tState = new TileState(this, index);
-                encodedTileDic.Add(index,RfxProgressiveEncoder.EncodeTile(codecContext, tState));
+                encodedTileDic.Add(index, RfxProgressiveEncoder.EncodeTile(codecContext, tState));
             }
             return encodedTileDic;
         }
@@ -311,7 +309,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         {
             if (this.CurrentFrame == null)
             {
-                this.CurrentFrame = SurfaceFrame.GetFromImage(this.Id, new Bitmap(this.Width, this.Height));
+                this.CurrentFrame = SurfaceFrame.GetFromImage(this.Id, new SKBitmap(this.Width, this.Height));
             }
 
             foreach (TileIndex index in tileDic.Keys)
@@ -325,7 +323,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Render to bitmap with Rgb data.
         /// </summary>
         /// <returns>Surface bitmap.</returns>
-        public Bitmap RgbToBitmap()
+        public SKBitmap RgbToBitmap()
         {
             if (CurrentFrame != null)
             {
@@ -333,7 +331,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             }
             else
             {
-                return new Bitmap(Width, Height);
+                return new SKBitmap(Width, Height);
             }
         }
 
@@ -341,7 +339,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Render to bitmap with DWT data.
         /// </summary>
         /// <returns>Surface bitmap.</returns>
-        public Bitmap DwtToBitmap()
+        public SKBitmap DwtToBitmap()
         {
             if (CurrentFrame != null)
             {
@@ -349,7 +347,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             }
             else
             {
-                return new Bitmap(Width, Height);
+                return new SKBitmap(Width, Height);
             }
         }
 
@@ -358,7 +356,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name="ti">Tile index</param>
         /// <returns>Tile bitmap</returns>
-        public Bitmap GetTileBitmap(TileIndex ti)
+        public SKBitmap GetTileBitmap(TileIndex ti)
         {
             RgbTile tl = CurrentFrame.GetRgbTile(ti);
             if (tl != null)
@@ -525,16 +523,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Convert Dwts to an image object
         /// </summary>
         /// <returns>The image returned from this surface</returns>
-        public Bitmap DwtToImage()
+        public SKBitmap DwtToImage()
         {
-            Bitmap surfImg = new Bitmap(this.Width, this.Height);
-            Graphics gSurf = Graphics.FromImage(surfImg);
+            SKBitmap surfImg = new SKBitmap(this.Width, this.Height);
+            SKCanvas canvas = new SKCanvas(surfImg);
             foreach (TileIndex index in this.dwtQDic.Keys)
             {
                 DwtTile dwtQ = dwtQDic[index];
-                gSurf.DrawImage(dwtQ.ToImage(), index.X * RdpegfxTileUtils.TileSize, index.Y * RdpegfxTileUtils.TileSize);
+                canvas.DrawImage(SKImage.FromBitmap(dwtQ.ToImage()), index.X * RdpegfxTileUtils.TileSize, index.Y * RdpegfxTileUtils.TileSize);
             }
-            gSurf.Dispose();
+            canvas.Dispose();
             return surfImg;
         }
 
@@ -542,18 +540,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Write the Rgb data of this surface to a bitmap
         /// </summary>
         /// <returns>Bitmap</returns>
-        public Bitmap RgbToImage()
+        public SKBitmap RgbToImage()
         {
-            Bitmap surfImg = new Bitmap(this.Width, this.Height);
-            Graphics gSurf = Graphics.FromImage(surfImg);
-            SolidBrush bgBrush = new SolidBrush(Color.FromArgb(0, Color.Black));
-            gSurf.FillRectangle(bgBrush, new Rectangle(0, 0, surfImg.Width, surfImg.Height));
+            SKBitmap surfImg = new SKBitmap(this.Width, this.Height);
+            SKCanvas canvas = new SKCanvas(surfImg);
+            SKPaint paint = new SKPaint { Color = SKColors.Black };
+            canvas.DrawRect(new SKRect(0, 0, surfImg.Width, surfImg.Height), paint);
             foreach (TileIndex index in this.rgbTileDic.Keys)
             {
                 RgbTile rgbT = rgbTileDic[index];
-                gSurf.DrawImage(rgbT.ToImage(), index.X * RdpegfxTileUtils.TileSize, index.Y * RdpegfxTileUtils.TileSize);
+                canvas.DrawImage(SKImage.FromBitmap(rgbT.ToImage()), index.X * RdpegfxTileUtils.TileSize, index.Y * RdpegfxTileUtils.TileSize);
             }
-            gSurf.Dispose();
+            canvas.Dispose();
             return surfImg;
         }
 
@@ -604,7 +602,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name="sId">The surface Id</param>
         /// <param name="bm">The original bitmap</param>
         /// <returns>A surface instance</returns>
-        public static SurfaceFrame GetFromImage(ushort sId, Bitmap bitmap)
+        public static SurfaceFrame GetFromImage(ushort sId, SKBitmap bitmap)
         {
             SurfaceFrame surf = new SurfaceFrame(sId, (ushort)bitmap.Width, (ushort)bitmap.Height);
             for (int xIndex = 0; xIndex * RdpegfxTileUtils.TileSize < bitmap.Width; xIndex++)
@@ -627,7 +625,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name="bm">The original bitmap</param>
         /// <param name="changedTileIndexs">The indexes of the changed tiles</param>
         /// <returns>A surface instance</returns>
-        public static SurfaceFrame GetFromImage(ushort sId, Bitmap bitmap, TileIndex[] changedTileIndexs)
+        public static SurfaceFrame GetFromImage(ushort sId, SKBitmap bitmap, TileIndex[] changedTileIndexs)
         {
             SurfaceFrame surf = new SurfaceFrame(sId, (ushort)bitmap.Width, (ushort)bitmap.Height);
 

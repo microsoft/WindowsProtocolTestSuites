@@ -1,17 +1,14 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Microsoft.Protocols.TestTools;
-using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
-using System.Drawing;
+using SkiaSharp;
+using System;
 
 namespace Microsoft.Protocols.TestSuites.Rdprfx
 {
-    public interface IRdprfxAdapter:IAdapter
+    public interface IRdprfxAdapter : IAdapter
     {
         /// <summary>
         /// Wait for connection.
@@ -52,7 +49,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="entropy">Indicates the entropy algorithm.</param>
         /// <param name="destLeft">Left bound of the frame.</param>
         /// <param name="destTop">Left bound of the frame.</param>
-        void SendImageToClient(System.Drawing.Image image, OperationalMode opMode, EntropyAlgorithm entropy, ushort destLeft, ushort destTop);
+        void SendImageToClient(SKImage image, OperationalMode opMode, EntropyAlgorithm entropy, ushort destLeft, ushort destTop);
 
         /// <summary>
         /// Method to send one image without encoding to client.
@@ -60,7 +57,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="image">The image to be sent.</param>
         /// <param name="destLeft">Left bound of the frame.</param>
         /// <param name="destTop">Left bound of the frame.</param>
-        void SendImageToClientWithoutEncoding(System.Drawing.Image image, ushort destLeft, ushort destTop);
+        void SendImageToClientWithoutEncoding(SKImage image, ushort destLeft, ushort destTop);
 
         /// <summary>
         /// Method to send all pending encoded data of a frame to RDP client.
@@ -115,7 +112,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// </summary>
         /// <param name="rects">Array of rects, if this parameter is null, will send a 64*64 rect </param>
         /// <param name="numRectsZero">A boolean variable to indicate whether the numRectsZero field of the TS_RFX_REGION is zero </param>
-        void SendTsRfxRegion(Rectangle[] rects = null, bool numRectsZero = false);
+        void SendTsRfxRegion(SKRect[] rects = null, bool numRectsZero = false);
 
         /// <summary>
         /// Method to send TS_RFX_TILESET to client.
@@ -127,7 +124,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="quantIdxY">Index of Y component in Quant value array</param>
         /// <param name="quantIdxCb">Index of Cb component in Quant value array</param>
         /// <param name="quantIdxCr">Index of Cr component in Quant value array</param>
-        void SendTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, System.Drawing.Image tileImage,
+        void SendTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, SKImage tileImage,
             TS_RFX_CODEC_QUANT[] codecQuantVals = null, byte quantIdxY = 0, byte quantIdxCb = 0, byte quantIdxCr = 0);
 
         /// <summary>
@@ -141,7 +138,7 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="quantIdxYs">Index array of Y component in Quant value array</param>
         /// <param name="quantIdxCbs">Index array of Cb component in Quant value array</param>
         /// <param name="quantIdxCrs">Index array of Cr component in Quant value array</param>
-        void SendTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, Image[] tileImages, TILE_POSITION[] positions,
+        void SendTsRfxTileSet(OperationalMode opMode, EntropyAlgorithm entropy, SKImage[] tileImages, TILE_POSITION[] positions,
             TS_RFX_CODEC_QUANT[] codecQuantVals = null, byte[] quantIdxYs = null, byte[] quantIdxCbs = null, byte[] quantIdxCrs = null);
 
         /// <summary>

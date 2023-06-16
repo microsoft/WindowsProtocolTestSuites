@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Microsoft.Protocols.TestTools;
+using SkiaSharp;
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.IO;
 using System.Net;
 
 namespace Microsoft.Protocols.TestSuites.Rdp
@@ -27,7 +27,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
 
         #region IRdpSutControlAdapter Implementation
-        
+
         /// <summary>
         /// This method used to trigger client to initiate a RDP connection from RDP client, 
         /// and the client should use Direct Approach with CredSSP as the security protocol.
@@ -108,21 +108,21 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         /// </summary>
         /// <returns>Negative values indicate the operation is failed, otherwise, successful.</returns>
         public int TriggerCloseRDPWindow(string caseName)
-        {      
+        {
             // Get help message
             string helpMessage = CommonUtility.GetHelpMessage(interfaceFullName);
             // Create payload
             byte[] payload = null;
-            
+
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
             SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.CLOSE_RDP_CONNECTION, caseName,
                 reqId, helpMessage, payload);
-            
+
             //Send the request and get response if necessary
             byte[] resposePayload = null;
             return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
-                        
+
         }
 
         /// <summary>
@@ -206,9 +206,9 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             //Send the request and get response if necessary
             byte[] resposePayload = null;
-            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);            
+            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
         }
-        
+
         /// <summary>
         /// This method is used to trigger the client to server input events. 
         /// </summary>
@@ -228,7 +228,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 Array.Reverse(payload);
             }
-            
+
             // Create request message
             ushort reqId = controlHandler.GetNextRequestId();
             SUT_Control_Request_Message requestMessage = new SUT_Control_Request_Message(SUTControl_TestsuiteId.RDP_TESTSUITE, (ushort)RDPSUTControl_CommandId.BASIC_INPUT, caseName,
@@ -236,7 +236,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
 
             //Send the request and get response if necessary
             byte[] resposePayload = null;
-            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);  
+            return controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 return -1;
             }
-            
+
         }
 
         /// <summary>
@@ -316,11 +316,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 localPort = 0;
             }
-                        
+
             // Initiate Connect payload type
             bool clientSupportRDPFile;
-            PtfPropUtility.GetPtfPropertyValue(testSite, "ClientSupportRDPFile", out clientSupportRDPFile,new string[] { RdpPtfGroupNames.SUTControl});
-            
+            PtfPropUtility.GetPtfPropertyValue(testSite, "ClientSupportRDPFile", out clientSupportRDPFile, new string[] { RdpPtfGroupNames.SUTControl });
+
             if (clientSupportRDPFile)
             {
                 connectPayloadType = RDP_Connect_Payload_Type.RDP_FILE;
@@ -361,14 +361,14 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                 output = controlHandler.OperateSUTControl(requestMessage, false, out resposePayload);
                 this.Site.Log.Add(LogEntryKind.Comment, "Complete RDP Connection To Server.");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 this.Site.Log.Add(LogEntryKind.Comment, "RDP Connection: RDP Connection To SUT Failed:" + e.Message);
             }
 
             return output;
         }
-        
+
         /// <summary>
         /// Create a payload for start RDP connection command
         /// </summary>
@@ -446,7 +446,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 rdpConfigString += "compression:i:0\n";
             }
-            
+
             return rdpConfigString;
         }
 
@@ -482,7 +482,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             return config;
 
         }
-        
+
         /// <summary>
         /// Get IP address of local host
         /// </summary>
@@ -526,7 +526,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             }
             int height = BitConverter.ToInt32(heightArray, 0);
 
-            Bitmap bitmapScreen = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            SKBitmap bitmapScreen = new SKBitmap(width, height);
             for (int j = 0; j < height; j++)
             {
                 for (int i = 0; i < width; i++)
@@ -534,10 +534,11 @@ namespace Microsoft.Protocols.TestSuites.Rdp
                     byte R = bitmapBinary[index++];
                     byte G = bitmapBinary[index++];
                     byte B = bitmapBinary[index++];
-                    bitmapScreen.SetPixel(i, j, Color.FromArgb(R, G, B));
+                    bitmapScreen.SetPixel(i, j, new SKColor(R, G, B));
                 }
             }
-            bitmapScreen.Save(bitmapFile, ImageFormat.Bmp);
+            using var stream = File.OpenWrite(bitmapFile);
+            bitmapScreen.Encode(SKEncodedImageFormat.Png, 100).SaveTo(stream);
         }
 
         #endregion Private methods

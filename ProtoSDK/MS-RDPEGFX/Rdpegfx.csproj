@@ -13,6 +13,10 @@
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.88.3" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\MS-RDPEFS\Rdpefs.csproj" />

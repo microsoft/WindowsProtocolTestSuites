@@ -3,8 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
 {
@@ -26,7 +25,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         /// <param name="leftOffset">The left offset of the tile.</param>
         /// <param name="topOffset">The top offset of the tile.</param>
         /// <param name="encodingContext">The encoding context.</param>
-        public static void EncodeTile(Image image, int leftOffset, int topOffset, RemoteFXCodecContext encodingContext)
+        public static void EncodeTile(SKImage image, int leftOffset, int topOffset, RemoteFXCodecContext encodingContext)
         {
 
             //Initialize the encoding context
@@ -80,9 +79,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
         }
 
         //Load a tile from image
-        public static void GetTileData(Image image, int leftOffset, int topOffset, RemoteFXCodecContext encodingContext)
+        public static void GetTileData(SKImage image, int leftOffset, int topOffset, RemoteFXCodecContext encodingContext)
         {
-            Bitmap bitmap = new Bitmap(image);
+            SKBitmap bitmap = SKBitmap.FromImage(image);
             encodingContext.RSet = new byte[TileSize, TileSize];
             encodingContext.GSet = new byte[TileSize, TileSize];
             encodingContext.BSet = new byte[TileSize, TileSize];
@@ -90,26 +89,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
             int right = Math.Min(image.Width - 1, leftOffset + TileSize - 1);
             int bottom = Math.Min(image.Height - 1, topOffset + TileSize - 1);
 
-            BitmapData bmpData = bitmap.LockBits(new Rectangle(leftOffset, topOffset, right - leftOffset + 1, bottom - topOffset + 1), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-
-            unsafe
+            for (int y = topOffset; y < bottom; y++)
             {
-                byte* cusor = (byte*)bmpData.Scan0.ToPointer();
-                for (int y = topOffset; y <= bottom; y++)
+                for (int x = leftOffset; x < right; x++)
                 {
-                    for (int x = leftOffset; x <= right; x++)
-                    {
-                        int tileX = x - leftOffset;
-                        int tileY = y - topOffset;
-                        encodingContext.BSet[tileX, tileY] = cusor[0];
-                        encodingContext.GSet[tileX, tileY] = cusor[1];
-                        encodingContext.RSet[tileX, tileY] = cusor[2];
-                        cusor += 3;
-                    }
-                    cusor += (bmpData.Stride - 3 * (bmpData.Width));
+                    int tileX = x - leftOffset;
+                    int tileY = y - topOffset;
+                    SKColor color = bitmap.GetPixel(tileX, tileY);
+                    encodingContext.BSet[tileX, tileY] = color.Blue;
+                    encodingContext.GSet[tileX, tileY] = color.Green;
+                    encodingContext.RSet[tileX, tileY] = color.Red;
                 }
             }
-            bitmap.UnlockBits(bmpData);
         }
 
         //Color coversion
@@ -446,7 +437,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
                 }
             }
         }
-        
+
         private static void Convert2Dto1D<T>(T[,] sourceArr, out T[] targetArr, ArrayDirection direction)
         {
             int len0 = sourceArr.GetLength(0);
@@ -525,7 +516,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx
                 crSet[i] = (short)(v * 255.0f * 16);
             }
         }
-        
+
         #endregion
     }
 

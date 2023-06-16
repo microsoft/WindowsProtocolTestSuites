@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Drawing;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
+using SkiaSharp;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 {
@@ -40,7 +40,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         public byte[] subcodecData;
     }
-    
+
     public class ClearCodec_BitmapStream
     {
         #region Const    
@@ -101,12 +101,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <summary>
         /// Residual layer bitmap.
         /// </summary>
-        Bitmap resBmp;
+        SKBitmap resBmp;
 
         /// <summary>
         /// Band layer bitmap and position, can be multiple.  
         /// </summary>
-        Dictionary<ClearCodec_RECT16, Bitmap> bandDict;
+        Dictionary<ClearCodec_RECT16, SKBitmap> bandDict;
 
         /// <summary>
         /// subcodec layer bitmap, position and subcodecID, can be multiple     
@@ -133,9 +133,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             this.glyphIndex = glyphIdx;
 
             this.resBmp = null;
-            this.bandDict = new Dictionary<ClearCodec_RECT16, Bitmap>();
+            this.bandDict = new Dictionary<ClearCodec_RECT16, SKBitmap>();
             this.subcodecDict = new Dictionary<ClearCodec_RECT16, BMP_INFO>();
-            
+
         }
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// Load a residual layer bitmap into clearcode encoder.   
         /// </summary>
         /// <param name = "resBitmap"> specifies a residual layer image </param>
-        public void LoadResidualBitmap(Bitmap resBitmap)
+        public void LoadResidualBitmap(SKBitmap resBitmap)
         {
             resBmp = resBitmap;
         }
@@ -160,7 +160,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         /// <param name = "bandBitmap"> specifies a band layer image </param>
         /// <param name = "pos"> specifies position of band layer image, relative to residual layer image </param>
-        public void LoadBandBitmap(Bitmap bandBitmap, RDPGFX_POINT16 pos)
+        public void LoadBandBitmap(SKBitmap bandBitmap, RDPGFX_POINT16 pos)
         {
             if (bandBitmap != null)
             {
@@ -179,7 +179,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// <param name = "subcodecBitmap"> specifies a subcodec layer image </param>
         /// <param name = "pos"> specifies position of subcodec layer image, relative to residual layer image </param>
         /// <param name = "sbcID"> specifies subcodec ID to encoding subcodec layer image </param>
-        public void LoadSubcodecBitmap(Bitmap subcodecBitmap, RDPGFX_POINT16 pos, CLEARCODEC_SUBCODEC_ID sbcID)
+        public void LoadSubcodecBitmap(SKBitmap subcodecBitmap, RDPGFX_POINT16 pos, CLEARCODEC_SUBCODEC_ID sbcID)
         {
             if (subcodecBitmap != null)
             {
@@ -200,7 +200,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
         /// </summary>
         public byte[] Encode()
         {
-            List<byte> bufList = new List<byte>();;
+            List<byte> bufList = new List<byte>();
 
             bufList.AddRange(TypeMarshal.ToBytes<byte>(this.flags));
             bufList.AddRange(TypeMarshal.ToBytes<byte>(this.seqNumber));
@@ -302,7 +302,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                     if (ccTestType != RdpegfxNegativeTypes.ClearCodec_Residual_AbsentRunLengthFactor3)
                     {
                         bufList.AddRange(TypeMarshal.ToBytes<uint>((uint)seg.rlFactor));
-                    }                    
+                    }
                 }
             }
             return bufList.ToArray();
@@ -411,7 +411,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
                 else if (bandData.vBars[i].type == VBAR_TYPE.SHORT_VBAR_CACHE_MISS)  // 2 bits check.
                 {
                     SHORT_VBAR_CACHE_MISS svbarCacheMiss = bandData.vBars[i].shortVbarCacheMiss;
-                    bufList.AddRange(ToBytes(svbarCacheMiss));                  
+                    bufList.AddRange(ToBytes(svbarCacheMiss));
                 }
             }
             return bufList.ToArray();
@@ -535,7 +535,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             }
             else    // NSCodec bitmap data for subcodec layer.
             {
-                
+
             }
 
             // Set bitmapData byte length.
@@ -593,7 +593,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
             }
 
             if (bandDict.Count() != 0)  // Band image are loaded before.
-            {           
+            {
                 ClearCodecBandEncoder bandencoder = ClearCodecBandEncoder.GetInstance();
                 if ((this.flags & ClearCodec_BitmapStream.CLEARCODEC_FLAG_CACHE_RESET) != 0)
                     bandencoder.ResetVBarStorage();
@@ -652,5 +652,5 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpegfx
 
         #endregion
     }
-    
+
 }
