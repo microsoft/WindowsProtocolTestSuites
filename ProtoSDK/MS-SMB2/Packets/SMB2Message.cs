@@ -243,6 +243,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// This flag is only valid for the SMB 3.1.1 dialect.
         /// </summary>
         SHAREFLAG_COMPRESS_DATA = 0x00100000,
+
+        /// <summary>
+        /// The server indicates that administrator set share property telling client that it is preferable to
+        /// isolate communication to that share on a separate set of connections. This flag is advisory and can
+        /// be ignored by SMB clients.
+        /// </summary>
+        SHAREFLAG_ISOLATED_TRANSPORT = 0x00200000,
     }
 
     /// <summary>
