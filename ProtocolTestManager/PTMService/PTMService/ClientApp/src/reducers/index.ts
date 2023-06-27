@@ -15,6 +15,7 @@ import { getTestCaseResultReducer } from './TestCaseResultReducer';
 import { getTestResultsReducer } from './TestResultsReducer';
 import { getTestSuiteInfoReducer } from './TestSuiteInfoReducer';
 import { getWizardNavBarReducer } from './WizardNavBarReducer';
+import { getCapabilitiesListReducer } from './CapabilitiesListReducer';
 
 export const appReducers = {
   testSuites: getTestSuitesReducer,
@@ -30,5 +31,6 @@ export const appReducers = {
   testResults: getTestResultsReducer,
   testCaseResult: getTestCaseResultReducer,
   management: getManagementReducer,
-  wizard: getWizardNavBarReducer
+  wizard: getWizardNavBarReducer,
+  capabilitiesList: getCapabilitiesListReducer,
 }

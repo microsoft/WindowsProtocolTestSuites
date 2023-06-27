@@ -24,6 +24,7 @@ export function Header () {
             <NavLink activeClassName="active" exact to="/Tasks/NewRun">Run TestSuite</NavLink>
             <NavLink activeClassName="active" exact to="/Tasks/History">View History</NavLink>
             <NavLink activeClassName="active" exact to="/Management">Management</NavLink>
+            <NavLink activeClassName="active" exact to="/Capabilities">Capabilities</NavLink>
           </div>
         </Stack>
         <Stack horizontal horizontalAlign="end">

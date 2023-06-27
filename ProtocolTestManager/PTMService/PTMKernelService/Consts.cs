@@ -10,6 +10,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public const string Configuration = "configuration";
 
         public const string TestResult = "testresult";
+
+        public const string CapabilitiesSpec = "capabilitiesspec";
     }
 
     public static class TestSuiteConsts
@@ -77,6 +79,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
     public static class TestRunConsts
     {
         public const string TestCaseListFile = "list.json";
+    }
+
+    public static class CapabilitiesConsts
+    {
+        public const string SpecsFile = "specs.json";
     }
 
     public static class StringMessages

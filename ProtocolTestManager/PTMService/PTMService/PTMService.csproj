@@ -34,6 +34,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\actions\CapabilitiesAction.ts" />
+    <None Remove="ClientApp\src\model\CapabilitiesFileInfo.ts" />
+    <None Remove="ClientApp\src\model\CreateCapabilitiesFileRequest.ts" />
+    <None Remove="ClientApp\src\model\UpdateCapabilitiesFileRequest.ts" />
+    <None Remove="ClientApp\src\pages\ConfigureCapabilitiesConfig.tsx" />
+    <None Remove="ClientApp\src\reducers\CapabilitiesListReducer.ts" />
+    <None Remove="ClientApp\src\services\Capabilities.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\..\..\AssemblyInfo\PTMAssemblyInfo.cs" Link="PTMAssemblyInfo.cs" />
   </ItemGroup>
 
@@ -43,6 +53,18 @@
     <ProjectReference Include="..\Database\Database.csproj" />
     <ProjectReference Include="..\PTMKernelService\PTMKernelService.csproj" />
     <ProjectReference Include="..\Storage\Storage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\actions\CapabilitiesAction.ts" />
+    <TypeScriptCompile Include="ClientApp\src\model\CapabilitiesFileInfo.ts" />
+    <TypeScriptCompile Include="ClientApp\src\model\UpdateCapabilitiesFileRequest.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\model\CreateCapabilitiesFileRequest.ts" />
+    <TypeScriptCompile Include="ClientApp\src\pages\ConfigureCapabilitiesConfig.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\reducers\CapabilitiesListReducer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\services\Capabilities.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

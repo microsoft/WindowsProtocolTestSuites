@@ -259,5 +259,46 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         void SetConfigurationProperties(int configurationId, IEnumerable<PropertyGroup> propertyGroupes);
 
         #endregion
+
+        #region Capabilities Section
+
+        /// <summary>
+        /// Creates a new capabilities file.
+        /// </summary>
+        /// <param name="name">The name of the capabilities file.</param>
+        /// <param name="description">The description of the capabilities file</param>
+        /// <param name="testSuiteId">The Id of the test suite for creating the capabilities file.</param>
+        /// <returns>The Id of the newly created capabilities file.</returns>
+        int CreateCapabilitiesFile(string name, string description, int testSuiteId);
+
+        /// <summary>
+        /// Retrieves the list of capabilities files in the database and also cleans up
+        /// any orphaned capabilities files left on the file system due to an error from 
+        /// a prior delete operation.
+        /// </summary>
+        /// <returns>A list of capabilities files.</returns>
+        CapabilitiesConfig[] QueryCapabilitiesConfigAndCleanUp();
+
+        /// <summary>
+        /// Updates metadata for a capabilities file.
+        /// </summary>
+        /// <param name="id">Id of the capabilities file to update.</param>
+        /// <param name="name">New name to update to.</param>
+        /// <param name="description">New description to update to.</param>
+        void UpdateCapabilitiesFileMetadata(int id, string name, string description);
+
+        /// <summary>
+        /// Removes a capabilities file.
+        /// </summary>
+        /// <param name="id">The Id of the capabilities file to remove.</param>
+        void RemoveCapabilitiesFile(int id);
+
+        /// <summary>
+        /// Gets the path to the json file for the capabilities file.
+        /// </summary>
+        /// <param name="id">The id of the <see cref="CapabilitiesConfig"/> to get the json file for.</param>
+        string GetCapabilitiesConfigJsonPath(int id);
+
+        #endregion
     }
 }

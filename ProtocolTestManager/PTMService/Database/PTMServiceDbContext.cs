@@ -25,5 +25,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Database
         public DbSet<TestSuiteConfiguration> TestSuiteConfigurations { get; set; }
 
         public DbSet<TestResult> TestResults { get; set; }
+
+        public DbSet<CapabilitiesConfig> CapabilitiesConfigs { get; set; }
     }
 }

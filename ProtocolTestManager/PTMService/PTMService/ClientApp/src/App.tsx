@@ -13,6 +13,8 @@ import './css/index.css'
 import { IStackStyles, IStackTokens, Stack } from '@fluentui/react'
 import { useWindowSize } from './components/UseWindowSize'
 import { Management } from './pages/Management'
+import { ListCapabilitiesConfig } from './pages/ListCapabilitiesConfig'
+import { ConfigureCapabilitiesConfig } from './pages/ConfigureCapabilitiesConfig'
 
 export default function App () {
   const winSize = useWindowSize()
@@ -32,6 +34,8 @@ export default function App () {
                 <Route exact path='/Tasks/History' component={TaskHistory} />
                 <Route exact path='/Tasks/TestResult' component={TestResultDetail} />
                 <Route exact path='/Management' component={Management} />
+                <Route exact path='/Capabilities' component={ListCapabilitiesConfig} />
+                <Route exact path='/Capabilities/Configure/:id' component={ConfigureCapabilitiesConfig} />
                 <Redirect from="*" to="/" />
             </Switch>
         </Stack>

@@ -57,11 +57,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         /// </summary>
         /// <param name="ptmKernelService">The <see cref="IPTMKernelService"/> instance for managing the test suite operations.</param>
         /// <param name="testSuiteId">The Id of the test suite to create the file from.</param>
-        /// <returns>The created file in Json format.</returns>
+        /// <returns>A tuple of the created file in Json format and the test suite used in creating the file.</returns>
         /// <exception cref="InvalidOperationException">
         /// Thrown when the given test suite does not exist or has been removed.
         /// </exception>
-        public static JsonNode Create(IPTMKernelService ptmKernelService, int testSuiteId)
+        public static (JsonNode, ITestSuite) Create(IPTMKernelService ptmKernelService, int testSuiteId)
         {
             var testSuite = ptmKernelService.GetTestSuite(testSuiteId);
 
@@ -92,7 +92,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
             };
 
-            return document;
+            return (document, testSuite);
         }
     }
 }

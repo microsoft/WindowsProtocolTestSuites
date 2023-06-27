@@ -56,7 +56,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.PTMKernelService
                                 .Returns(() => testSuiteMock.Object);
 
             // Act
-            var json = CapabilitiesConfigWriter.Create(ptmKernelServiceMock.Object, testSuiteId);
+            var (json, testsuite) = CapabilitiesConfigWriter.Create(ptmKernelServiceMock.Object, testSuiteId);
 
             // Assert
             Assert.IsNotNull(json);

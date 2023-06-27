@@ -87,7 +87,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService
                 {
                     KnownStorageNodeNames.TestSuite,
                     KnownStorageNodeNames.Configuration,
-                    KnownStorageNodeNames.TestResult
+                    KnownStorageNodeNames.TestResult,
+                    KnownStorageNodeNames.CapabilitiesSpec
                 }.Select(name => new KnownStorageNodeItem { Name = name, Path = Path.Combine(storageRoot, name) });
 
                 options.Nodes = items.ToDictionary(item => item.Name, item => item.Path);
