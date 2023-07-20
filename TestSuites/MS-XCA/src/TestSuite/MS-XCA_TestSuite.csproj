@@ -38,15 +38,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="TestData\" />
+		<Folder Include="StaticData\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<_TestDataFiles Include="$(ProjectDir)TestData\*.*" />
+		<_StaticDataFiles Include="$(ProjectDir)StaticData\*.*" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Copy SourceFiles="@(_TestDataFiles)" DestinationFolder="$(OutDir)../TestData" />
+		<Copy SourceFiles="@(_StaticDataFiles)" DestinationFolder="$(OutDir)../StaticData" />
 	</Target>
 
 </Project>

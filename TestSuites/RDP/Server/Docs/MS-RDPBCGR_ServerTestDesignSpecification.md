@@ -561,7 +561,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 
 #### <a name="_Toc396468175"/>BVT Test cases
 
-#####S1_Connection_ConnectionInitiation_PositiveTest
+##### S1_Connection_ConnectionInitiation_PositiveTest
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -579,7 +579,7 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 |  **Requirements Covered**| N/A|
 |  **Cleanup**| N/A|
 
-#####S1_Connection_BasicSettingExchange_PositiveTest
+##### S1_Connection_BasicSettingExchange_PositiveTest
 
 | &#32;| &#32; |
 | -------------| ------------- |

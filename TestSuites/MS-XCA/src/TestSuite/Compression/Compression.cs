@@ -29,9 +29,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77")]
-        public void Compression_LZ77_TestData_01()
+        public void Compression_LZ77_StaticData_01()
         {
             TestCompression(new PlainLZ77Compressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77, defaultLZ77CompressionInput01);
         }
@@ -47,9 +47,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77")]
-        public void Compression_LZ77_TestData_02()
+        public void Compression_LZ77_StaticData_02()
         {
             TestCompression(new PlainLZ77Compressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77, defaultLZ77CompressionInput02);
         }
@@ -60,9 +60,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77")]
-        public void Compression_LZ77_TestData_Large_01()
+        public void Compression_LZ77_StaticData_Large_01()
         {
             TestCompression(new PlainLZ77Compressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77, defaultLZ77CompressionInputLarge01);
         }
@@ -78,9 +78,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77")]
-        public void Compression_LZ77_TestData_Large_02()
+        public void Compression_LZ77_StaticData_Large_02()
         {
             TestCompression(new PlainLZ77Compressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77, defaultLZ77CompressionInputLarge02);
         }
@@ -91,9 +91,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77+Huffman")]
-        public void Compression_LZ77Huffman_TestData_01()
+        public void Compression_LZ77Huffman_StaticData_01()
         {
             TestCompression(new LZ77HuffmanCompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77_HUFF, defaultLZ77CompressionInput01);
         }
@@ -109,9 +109,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77+Huffman")]
-        public void Compression_LZ77Huffman_TestData_02()
+        public void Compression_LZ77Huffman_StaticData_02()
         {
             TestCompression(new LZ77HuffmanCompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77_HUFF, defaultLZ77CompressionInput02);
         }
@@ -122,9 +122,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77+Huffman")]
-        public void Compression_LZ77Huffman_TestData_Large_01()
+        public void Compression_LZ77Huffman_StaticData_Large_01()
         {
             TestCompression(new LZ77HuffmanCompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77_HUFF, defaultLZ77CompressionInputLarge01);
         }
@@ -140,9 +140,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77+Huffman")]
-        public void Compression_LZ77Huffman_TestData_Large_02()
+        public void Compression_LZ77Huffman_StaticData_Large_02()
         {
             TestCompression(new LZ77HuffmanCompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77_HUFF, defaultLZ77CompressionInputLarge02);
         }
@@ -154,9 +154,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZNT1")]
-        public void Compression_LZNT1_TestData()
+        public void Compression_LZNT1_StaticData()
         {
             TestCompression(new LZNT1Compressor(), COMPRESS_ALGORITHM.ALGORITHM_LZNT1, lznt1CompressionInput);
         }
@@ -168,17 +168,17 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Compression
         /// </summary>
         [TestMethod]
         [TestCategory("Compression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZNT1")]
-        public void Compression_LZNT1_TestData_Large()
+        public void Compression_LZNT1_StaticData_Large()
         {
             TestCompression(new LZNT1Compressor(), COMPRESS_ALGORITHM.ALGORITHM_LZNT1, lznt1CompressionInputLarge);
         }
 
         private void TestCompression(XcaCompressor compressor, COMPRESS_ALGORITHM algorithm, string inputFile, [CallerMemberName] string callingMethod = "")
         {
-            var testOutputFile = GetTestDataOutputFilename(inputFile, true, true, callingMethod);
-            var implOutputFile = GetTestDataOutputFilename(inputFile, true, false, callingMethod);
+            var testOutputFile = GetStaticDataOutputFilename(inputFile, true, true, callingMethod);
+            var implOutputFile = GetStaticDataOutputFilename(inputFile, true, false, callingMethod);
 
             // Read input data
             Site.Log.Add(LogEntryKind.TestStep, $"1. TestSuite reads and compress input");

@@ -5,9 +5,9 @@
 
 	<Properties>
 		<Group name="XCA">
-			<Property name="TestDataOutputFolder" value="../TestData/Results">
+			<Property name="StaticDataOutputFolder" value="../StaticData/Results">
 				<Description>
-					The folder where the Output files from TestData Tests will be stored
+					The folder where the Output files from StaticData Tests will be stored
 				</Description>
 			</Property>
 

@@ -16,37 +16,37 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA
 
         protected XcaTestConfig testConfig;
 
-        protected static readonly string defaultLZ77CompressionInput01 = "../TestData/Uncompressed_a_z.data";
+        protected static readonly string defaultLZ77CompressionInput01 = "../StaticData/Uncompressed_a_z.data";
 
-        protected static readonly string defaultLZ77CompressionInput02 = "../TestData/Uncompressed_abc_100.data";
+        protected static readonly string defaultLZ77CompressionInput02 = "../StaticData/Uncompressed_abc_100.data";
 
-        protected static readonly string defaultLZ77CompressionInputLarge01 = "../TestData/Uncompressed_a_z_large.data";
+        protected static readonly string defaultLZ77CompressionInputLarge01 = "../StaticData/Uncompressed_a_z_large.data";
 
-        protected static readonly string defaultLZ77CompressionInputLarge02 = "../TestData/Uncompressed_abc_100_large.data";
+        protected static readonly string defaultLZ77CompressionInputLarge02 = "../StaticData/Uncompressed_abc_100_large.data";
 
-        protected static readonly string plainLZ77DecompressionInput01 = "../TestData/LZ77_Compressed_a_z.data";
+        protected static readonly string plainLZ77DecompressionInput01 = "../StaticData/LZ77_Compressed_a_z.data";
 
-        protected static readonly string plainLZ77DecompressionInput02 = "../TestData/LZ77_Compressed_abc_100.data";
+        protected static readonly string plainLZ77DecompressionInput02 = "../StaticData/LZ77_Compressed_abc_100.data";
 
-        protected static readonly string plainLZ77DecompressionInputLarge01 = "../TestData/LZ77_Compressed_a_z_large.data";
+        protected static readonly string plainLZ77DecompressionInputLarge01 = "../StaticData/LZ77_Compressed_a_z_large.data";
 
-        protected static readonly string plainLZ77DecompressionInputLarge02 = "../TestData/LZ77_Compressed_abc_100_large.data";
+        protected static readonly string plainLZ77DecompressionInputLarge02 = "../StaticData/LZ77_Compressed_abc_100_large.data";
 
-        protected static readonly string lz77HuffmanDecompressionInput01 = "../TestData/LZ77Huffman_Compressed_a_z.data";
+        protected static readonly string lz77HuffmanDecompressionInput01 = "../StaticData/LZ77Huffman_Compressed_a_z.data";
 
-        protected static readonly string lz77HuffmanDecompressionInput02 = "../TestData/LZ77Huffman_Compressed_abc_100.data";
+        protected static readonly string lz77HuffmanDecompressionInput02 = "../StaticData/LZ77Huffman_Compressed_abc_100.data";
 
-        protected static readonly string lz77HuffmanDecompressionInputLarge01 = "../TestData/LZ77Huffman_Compressed_a_z_large.data";
+        protected static readonly string lz77HuffmanDecompressionInputLarge01 = "../StaticData/LZ77Huffman_Compressed_a_z_large.data";
 
-        protected static readonly string lz77HuffmanDecompressionInputLarge02 = "../TestData/LZ77Huffman_Compressed_abc_100_large.data";
+        protected static readonly string lz77HuffmanDecompressionInputLarge02 = "../StaticData/LZ77Huffman_Compressed_abc_100_large.data";
 
-        protected static readonly string lznt1CompressionInput = "../TestData/LZNT1_Uncompressed.data";
+        protected static readonly string lznt1CompressionInput = "../StaticData/LZNT1_Uncompressed.data";
 
-        protected static readonly string lznt1CompressionInputLarge = "../TestData/LZNT1_Uncompressed_large.data";
+        protected static readonly string lznt1CompressionInputLarge = "../StaticData/LZNT1_Uncompressed_large.data";
 
-        protected static readonly string lznt1DecompressionInput = "../TestData/LZNT1_Compressed.data";
+        protected static readonly string lznt1DecompressionInput = "../StaticData/LZNT1_Compressed.data";
 
-        protected static readonly string lznt1DecompressionInputLarge = "../TestData/LZNT1_Compressed_large.data";
+        protected static readonly string lznt1DecompressionInputLarge = "../StaticData/LZNT1_Compressed_large.data";
 
         public static readonly string InputFileParam = "InputFile";
 
@@ -112,12 +112,12 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA
             return GetOutputFilename(baseDirectory, inputFile, isCompressionTest, isTestSuiteOutput, callingMethod);
         }
 
-        protected string GetTestDataOutputFilename(string inputFile,
+        protected string GetStaticDataOutputFilename(string inputFile,
         bool isCompressionTest,
         bool isTestSuiteOutput,
         [CallerMemberName] string callingMethod = "")
         {
-            var baseDirectory = testConfig.GetProperty("TestDataOutputFolders", false);
+            var baseDirectory = testConfig.GetProperty("StaticDataOutputFolder", false);
             return GetOutputFilename(baseDirectory, inputFile, isCompressionTest, isTestSuiteOutput, callingMethod);
         }
 

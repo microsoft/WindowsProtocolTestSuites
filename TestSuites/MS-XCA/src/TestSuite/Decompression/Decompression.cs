@@ -28,9 +28,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77")]
-        public void Decompression_LZ77_TestData_01()
+        public void Decompression_LZ77_StaticData_01()
         {
             TestDecompression(new PlainLZ77Decompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77, plainLZ77DecompressionInput01);
         }
@@ -46,9 +46,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77")]
-        public void Decompression_LZ77_TestData_02()
+        public void Decompression_LZ77_StaticData_02()
         {
             TestDecompression(new PlainLZ77Decompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77, plainLZ77DecompressionInput02);
         }
@@ -59,9 +59,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77")]
-        public void Decompression_LZ77_TestData_Large_01()
+        public void Decompression_LZ77_StaticData_Large_01()
         {
             TestDecompression(new PlainLZ77Decompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77, plainLZ77DecompressionInputLarge01);
         }
@@ -77,9 +77,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77")]
-        public void Decompression_LZ77_TestData_Large_02()
+        public void Decompression_LZ77_StaticData_Large_02()
         {
             TestDecompression(new PlainLZ77Decompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77,  plainLZ77DecompressionInputLarge02);
         }
@@ -89,9 +89,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77+Huffman")]
-        public void Decompression_LZ77Huffman_TestData_01()
+        public void Decompression_LZ77Huffman_StaticData_01()
         {
             TestDecompression(new LZ77HuffmanDecompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77_HUFF, lz77HuffmanDecompressionInput01);
         }
@@ -107,9 +107,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77+Huffman")]
-        public void Decompression_LZ77Huffman_TestData_02()
+        public void Decompression_LZ77Huffman_StaticData_02()
         {
             TestDecompression(new LZ77HuffmanDecompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77_HUFF, lz77HuffmanDecompressionInput02);
         }
@@ -120,9 +120,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77+Huffman")]
-        public void Decompression_LZ77Huffman_TestData_Large_01()
+        public void Decompression_LZ77Huffman_StaticData_Large_01()
         {
             TestDecompression(new LZ77HuffmanDecompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77_HUFF, lz77HuffmanDecompressionInputLarge01);
         }
@@ -138,9 +138,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZ77+Huffman")]
-        public void Decompression_LZ77Huffman_TestData_Large_02()
+        public void Decompression_LZ77Huffman_StaticData_Large_02()
         {
             TestDecompression(new LZ77HuffmanDecompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZ77_HUFF,  lz77HuffmanDecompressionInputLarge02);
         }
@@ -152,9 +152,9 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZNT1")]
-        public void Decompression_LZNT1_TestData()
+        public void Decompression_LZNT1_StaticData()
         {
             TestDecompression(new LZNT1Decompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZNT1, lznt1DecompressionInput);
         }
@@ -166,17 +166,17 @@ namespace Microsoft.Protocols.TestSuites.MS_XCA.Decompression
         /// </summary>
         [TestMethod]
         [TestCategory("Decompression")]
-        [TestCategory("TestData")]
+        [TestCategory("StaticData")]
         [TestCategory("LZNT1")]
-        public void Decompression_LZNT1_TestData_Large()
+        public void Decompression_LZNT1_StaticData_Large()
         {
             TestDecompression(new LZNT1Decompressor(), COMPRESS_ALGORITHM.ALGORITHM_LZNT1, lznt1DecompressionInputLarge);
         }
 
         private void TestDecompression(XcaDecompressor decompressor, COMPRESS_ALGORITHM algorithm, string inputFile, [CallerMemberName] string callingMethod = "")
         {
-            var testOutputFile = GetTestDataOutputFilename(inputFile, false, true, callingMethod);
-            var implOutputFile = GetTestDataOutputFilename(inputFile, false, false, callingMethod);
+            var testOutputFile = GetStaticDataOutputFilename(inputFile, false, true, callingMethod);
+            var implOutputFile = GetStaticDataOutputFilename(inputFile, false, false, callingMethod);
 
             // Read input data
             Site.Log.Add(LogEntryKind.TestStep, $"1. TestSuite reads and decompress input");

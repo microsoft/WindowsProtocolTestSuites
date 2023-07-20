@@ -36,8 +36,8 @@ mkdir -p $OutDir/Batch
 cp $TestSuiteRoot/TestSuites/FileServer/src/Batch/* $OutDir/Batch/ -f
 cp $TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.* $OutDir/Batch/ -f
 
-mkdir -p $OutDir/TestData
-cp $TestSuiteRoot/TestSuites/MS-XCA/Setup/TestData/* $OutDir/TestData/ -fr
+mkdir -p $OutDir/StaticData
+cp $TestSuiteRoot/TestSuites/MS-XCA/Setup/StaticData/* $OutDir/StaticData/ -fr
 
 mkdir -p $OutDir/UserData
 cp $TestSuiteRoot/TestSuites/MS-XCA/Setup/UserData/* $OutDir/UserData/ -fr

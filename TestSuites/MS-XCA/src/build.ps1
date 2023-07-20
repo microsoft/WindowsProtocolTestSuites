@@ -27,8 +27,8 @@ Copy-Item  "$TestSuiteRoot/TestSuites/MS-XCA/src/Batch/*" -Destination "$OutDir/
 Copy-Item "$TestSuiteRoot/common/RunTestCasesByBinariesAndFilter.*" -Destination "$OutDir/Batch/" -Recurse -Force
 
 
-New-Item -ItemType Directory $OutDir/TestData -Force
-Copy-Item  "$TestSuiteRoot/TestSuites/MS-XCA/src/TestSuite/TestData/*.*" -Destination "$OutDir/TestData/" -Force
+New-Item -ItemType Directory $OutDir/StaticData -Force
+Copy-Item  "$TestSuiteRoot/TestSuites/MS-XCA/src/TestSuite/StaticData/*.*" -Destination "$OutDir/StaticData/" -Force
 
 New-Item -ItemType Directory $OutDir/UserData -Force
 Copy-Item  "$TestSuiteRoot/TestSuites/MS-XCA/src/TestSuite/UserData/*.*" -Destination "$OutDir/UserData/" -Force
