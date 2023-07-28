@@ -13,11 +13,36 @@ Param(
 )
 
 # Edit the file
-$returnValue = 1;
+$returnValue = -1;
 
-$returnValue = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock {param([string]$filePath,[string]$originalText,[string]$newText) if((Get-Content $filePath).Contains($originalText)){ (Get-Content $filePath) | 
-Foreach-Object {$_.replace($originalText, $newText)} | 
-Set-Content $filePath} if((Get-Content $filePath).Contains($newText)){return 0} else{return -1}} -ArgumentList $filePath,$originalText,$newText
-"$filePath replaced from $originalText to $newText; return value: $returnValue" | out-file "./EditFile.log" -Append  -Encoding unicode
+$userPwdInTCEn = ConvertTo-SecureString $ptfprop_SUTUserPassword -AsPlainText -Force
+$Credential = New-Object System.Management.Automation.PSCredential($ptfprop_SUTUserName,$userPwdInTCEn)
+
+$sessionM = $null;
+
+try
+{
+	$sessionM = New-PSSession -ComputerName $ptfprop_SUTName -Credential $Credential -ErrorAction SilentlyContinue
+}
+catch
+{
+}
+
+if ($sessionM -eq $null) {
+	$returnValue = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock {param([string]$filePath,[string]$originalText,[string]$newText) if((Get-Content $filePath).Contains($originalText)){ (Get-Content $filePath) | 
+	Foreach-Object {$_.replace($originalText, $newText)} | 
+	Set-Content $filePath} if((Get-Content $filePath).Contains($newText)){return 0} else{return -1}} -ArgumentList $filePath,$originalText,$newText
+	"$filePath replaced from $originalText to $newText; return value: $returnValue" | out-file "./EditFile.log" -Append  -Encoding unicode
+}
+else
+{
+	$returnValue = Invoke-Command -Session $sessionM -ScriptBlock {param([string]$filePath,[string]$originalText,[string]$newText) if((Get-Content $filePath).Contains($originalText)){ (Get-Content $filePath) | 
+	Foreach-Object {$_.replace($originalText, $newText)} | 
+	Set-Content $filePath} if((Get-Content $filePath).Contains($newText)){return 0} else{return -1}} -ArgumentList $filePath,$originalText,$newText
+	"$filePath replaced from $originalText to $newText; return value: $returnValue" | out-file "./EditFile.log" -Append  -Encoding unicode
+
+	Remove-PSSession $sessionM
+}
+
 
 return $returnValue  #operation succeed if 0
