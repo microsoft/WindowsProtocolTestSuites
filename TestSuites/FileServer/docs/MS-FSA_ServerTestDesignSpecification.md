@@ -68,6 +68,9 @@
         * [Query Directory](#Scenario-QueryDirectory)
     * [Scenarios for File and Directory Leasing](#Test-cases-for-File-And-Directory-Leasing)
         * [CompareLeaseKeys](#CompareLeaseKeys)
+    * [Scenarios for FileAccess](#Scenarios-for-FileAccess)
+        * [FileAccess_OpenExistingFile](#FileAccess_OpenExistingFile)
+        * [FileAccess_OpenNamedPipe](#FileAccess_OpenNamedPipe)
     * [Other Scenarios](#Other-Scenarios)
         * [CreateFile_InvalidStreamName](#Scenario-CreateFile_InvalidStreamName)
         * [CreateFile_InvalidColon](#Scenario-CreateFile_InvalidColon)
@@ -417,6 +420,18 @@
             * [DirectoryComparing_LeaseKeysV2](#DirectoryComparing_LeaseKeysV2)
             * [DirectoryComparing_ParentLeaseKey_ChildLeaseKey](#DirectoryComparing_ParentLeaseKey_ChildLeaseKey)
             * [DirectoryComparing_Child_Invalid_ParentLeaseKeys](#DirectoryComparing_Child_Invalid_ParentLeaseKeys)
+    * [Test cases for File Access](#Test-cases-for-File-Access)
+        * [FileAccess_OpenExistingFile](#FileAccess_OpenExistingFile)
+            * [FileAccess_WriteReadOnlyFile](#FileAccess_WriteReadOnlyFile)
+            * [FileAccess_DeleteReadOnlyDataFile](#FileAccess_DeleteReadOnlyDataFile)
+        * [FileAccess_OpenNamedPipe](#FileAccess_OpenNamedPipe)
+            * [BVT_FileAccess_OpenNamedPipe](#BVT_FileAccess_OpenNamedPipe)
+            * [BVT_FileAccess_OpenNamedPipe_InvalidPathName](#BVT_FileAccess_OpenNamedPipe_InvalidPathName)
+            * [FileAccess_OpenNamedPipe_DesiredAccessZero](#FileAccess_OpenNamedPipe_DesiredAccessZero)
+            * [FileAccess_OpenNamedPipe_InactiveListerner](#FileAccess_OpenNamedPipe_InactiveListerner)
+            * [FileAccess_OpenNamedPipe_Inbound](#FileAccess_OpenNamedPipe_Inbound)
+            * [FileAccess_OpenNamedPipe_Outbound](#FileAccess_OpenNamedPipe_Outbound)
+            * [FileAccess_OpenNamedPipe_IsCaseInsensitive](#FileAccess_OpenNamedPipe_IsCaseInsensitive)
     * [Test cases for Other Scenarios](#Test-cases-for-Other-Scenarios)
         * [IsCreateFileSupported](#IsCreateFileSupported)
             * [CreateFile_InvalidStreamName](#CreateFile_InvalidStreamName)
@@ -489,7 +504,7 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 221 test cases in total:
+There are 228 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
@@ -499,7 +514,7 @@ There are 221 test cases in total:
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
-| Scenarios for FileAccess | 1 | 2 (0) |
+| Scenarios for FileAccess | 2 | 9 (2) |
 | Scenarios for CommonAlgorithm | 2 | 11 (11) |
 | Scenarios for Query Directory | 1 | 51 (48) |
 | Other Scenarios | 4 | 10 (0) |
@@ -1230,30 +1245,28 @@ There are 343 test cases in total:
 
 ### <a name="Scenarios-for-FileAccess"/>Scenarios for FileAccess
 
-#### <a name="FileAccess_WriteReadOnlyFile"/>FileAccess_WriteReadOnlyFile
+#### <a name="FileAccess_OpenExistingFile"/>FileAccess_OpenExistingFile
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To write a read only file and check the returned status code.|
+| Description| To write or delete a read only file and check the returned status code.|
 | | Test environment: FAT32, NTFS, ReFS|
 | | Test object: DataFile|
 | | Test coverage:|
-| | If file type is DataFile, file attributes is read only and desired access is write data or append data, server will return STATUS_ACCESS_DENIED |
 | Message Sequence| Create readonly data file.|
-| | Write the read only data file|
+| | Write or delete the read only data file|
 | | Verify server responses accordingly.|
 
-#### <a name="FileAccess_DeleteReadOnlyDataFile"/>FileAccess_DeleteReadOnlyDataFile
+#### <a name="FileAccess_OpenNamedPipe"/>FileAccess_OpenNamedPipe
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Description| To delete a read only data file and check the returned status code.|
+| Description| Open a named pipe and check the returned status code.|
 | | Test environment: FAT32, NTFS, ReFS|
-| | Test object: DataFile|
+| | Test object: NamedPipe|
 | | Test coverage:|
-| | If file attributes is read only and create options is  FILE_DELETE_ON_CLOSE, server will return STATUS_CANNOT_DELETE. |
-| Message Sequence| Create readonly data file.|
-| | Delete the read only data file|
+| Message Sequence| Create named pipe.|
+| | Open named pipe|
 | | Verify server responses accordingly.|
 
 ### <a name="Scenarios-for-Alternate-Data-Stream"/>Scenarios for Alternate Data Stream
@@ -4747,6 +4760,110 @@ There are 343 test cases in total:
 | | } Else {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(True, ActualResult == **STATUS_OBJECT_PATH_NOT_FOUND** \|\| ActualResult == **OBJECT_NAME_NOT_FOUND**);|
 | | }|
+
+### <a name="Test-cases-for-File-Access"/>Test cases for File Access
+
+#### <a name="FileAccess_OpenExistingFile"/>FileAccess_OpenExistingFile
+
+##### <a name="FileAccess_WriteReadOnlyFile"/>FileAccess_WriteReadOnlyFile
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To write a read only file and check the returned status code.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | If file type is DataFile, file attributes is read only and desired access is write data or append data, server will return STATUS_ACCESS_DENIED |
+| Message Sequence| Create readonly data file.|
+| | Write the read only data file|
+| | Verify server responses accordingly.|
+
+##### <a name="FileAccess_DeleteReadOnlyDataFile"/>FileAccess_DeleteReadOnlyDataFile
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To delete a read only data file and check the returned status code.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | If file attributes is read only and create options is  FILE_DELETE_ON_CLOSE, server will return STATUS_CANNOT_DELETE. |
+| Message Sequence| Create readonly data file.|
+| | Delete the read only data file|
+| | Verify server responses accordingly.|
+
+#### <a name="FileAccess_OpenNamedPipe"/>FileAccess_OpenNamedPipe
+
+##### <a name="BVT_FileAccess_OpenNamedPipe"/>BVT_FileAccess_OpenNamedPipe
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test that server sends STATUS_SUCCESS when a named pipe is opened successfully|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create named pipe|
+| | Open named pipe|
+| | Verify server return with **STATUS_SUCCESS**|
+
+##### <a name="BVT_FileAccess_OpenNamedPipe_InvalidPathName"/>BVT_FileAccess_OpenNamedPipe_InvalidPathName
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test that server sends STATUS_OBJECT_NAME_NOT_FOUND when a named pipe open request is sent with invalid path name.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create named pipe|
+| | Open named pipe with invalid path name|
+| | Verify server return with **STATUS_OBJECT_NAME_NOT_FOUND**|
+
+##### <a name="BVT_FileAccess_OpenNamedPipe_DesiredAccessZero"/>BVT_FileAccess_OpenNamedPipe_DesiredAccessZero
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test that server sends STATUS_ACCESS_DENIED when a open named pipe request is sent with DesiredAccess as zero.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create named pipe|
+| | Open named pipe with DesiredAccess set to zero|
+| | Verify server return with **STATUS_ACCESS_DENIED**|
+
+##### <a name="BVT_FileAccess_OpenNamedPipe_InactiveListener"/>BVT_FileAccess_OpenNamedPipe_InactiveListener
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test that server sends STATUS_PIPE_NOT_AVAILABLE when a open named pipe request is sent when named pipe has no active listener.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create named pipe|
+| | Open named pipe|
+| | Verify server return with **STATUS_SUCCESS**|
+| | Open named pipe|
+| | Verify server return with **STATUS_PIPE_NOT_AVAILABLE**|
+
+##### <a name="BVT_FileAccess_OpenNamedPipe_Inbound"/>BVT_FileAccess_OpenNamedPipe_Inbound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test that server sends STATUS_ACCESS_DENIED when a open named pipe request is sent with FILE_READ_DATA while it was created with FILE_PIPE_INBOUND.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create named pipe with direction FILE_PIPE_INBOUND|
+| | Open named pipe with AccessMask.GENERIC_READ |
+| | Verify server return with **STATUS_ACCESS_DENIED**|
+
+##### <a name="BVT_FileAccess_OpenNamedPipe_Outbound"/>BVT_FileAccess_OpenNamedPipe_Outbound
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test that server sends STATUS_ACCESS_DENIED when a open named pipe request is sent with FILE_WRITE_DATA while it was created with FILE_PIPE_OUTBOUND.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create named pipe with direction FILE_PIPE_OUTBOUND|
+| | Open named pipe with AccessMask.GENERIC_WRITE |
+| | Verify server return with **STATUS_ACCESS_DENIED**|
+
+##### <a name="BVT_FileAccess_OpenNamedPipe_IsCaseInsensitive"/>BVT_FileAccess_OpenNamedPipe_IsCaseInsensitive
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test that server sends STATUS_SUCCESS when a named pipe is opened using different path name case.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| Create named pipe|
+| | Open named pipe using different path name case |
+| | Verify server return with **STATUS_SUCCESS**|
 
 ### <a name="Test-cases-for-Alternate-Data-Stream"/>Test cases for Alternate Data Stream
 

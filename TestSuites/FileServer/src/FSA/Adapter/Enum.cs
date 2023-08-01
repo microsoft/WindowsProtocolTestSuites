@@ -1224,7 +1224,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <summary>
         /// This operation is not supported on compressed files.
         /// </summary>
-        STATUS_COMPRESSED_FILE_NOT_SUPPORTED = 0xC000047B
+        STATUS_COMPRESSED_FILE_NOT_SUPPORTED = 0xC000047B,
+
+        /// <summary>
+        /// An instance of a named pipe cannot be found in the listening state.
+        /// </summary>
+        STATUS_PIPE_NOT_AVAILABLE = 0xC00000AC
     }
 
     /// <summary>

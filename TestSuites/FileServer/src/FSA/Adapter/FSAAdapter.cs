@@ -10,6 +10,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Sockets;
@@ -1520,6 +1521,55 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
 
             return returnedStatus;
+        }
+        #endregion
+
+        #region Server Create a Named Pipe
+        public Process CreateNamedPipeAsync(string pipeName, string direction)
+        {
+            string script;
+            string processName;
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                script = @$"
+                            #Create credential object
+	                        $PWord = ConvertTo-SecureString -String ""{testConfig.UserPassword}"" -AsPlainText -Force
+	                        $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ""{testConfig.UserName}"", $PWord
+	
+	                        $vmSession = New-PSSession -ComputerName ""{testConfig.SutComputerName}"" -Credential $credential 
+
+	                        #Create Named Pipe on the remote computer
+	                        Invoke-Command -Session $vmSession -ScriptBlock {{
+                                New-Object System.IO.Pipes.NamedPipeServerStream('{pipeName}', '{direction}');
+                                Start-Sleep -Seconds 9;
+                            }}
+                        ";
+                processName = "powershell";
+            } 
+            else
+            {
+                script = @$"-c Invoke-Command -HostName ""{testConfig.SutComputerName}"" -UserName ""{testConfig.UserName}"" -ScriptBlock {{
+                                New-Object System.IO.Pipes.NamedPipeServerStream('{pipeName}', '{direction}');
+                                Start-Sleep -Seconds 9;
+                            }}
+                        ";
+                processName = "pwsh";
+            }
+
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(processName, script)
+            {
+                RedirectStandardError = true,
+                RedirectStandardOutput = true
+            };
+
+            Process process = new Process()
+            {
+                StartInfo = processStartInfo
+            };
+            process.Start();
+            process.WaitForExitAsync();
+            return process;
         }
         #endregion
 
