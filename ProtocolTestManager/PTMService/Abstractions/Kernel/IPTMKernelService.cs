@@ -8,6 +8,7 @@ using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using Microsoft.Protocols.TestManager.Detector;
 using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
+using System.Text.Json.Nodes;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 {
@@ -298,6 +299,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// </summary>
         /// <param name="id">The id of the <see cref="CapabilitiesConfig"/> to get the json file for.</param>
         string GetCapabilitiesConfigJsonPath(int id);
+
+        /// <summary>
+        /// Saves a capabilities file.
+        /// </summary>
+        /// <param name="id">The id of the <see cref="CapabilitiesConfig"/> to save the json file for.</param>
+        /// <param name="json">The json content to save.</param>
+        void SaveCapabilitiesFile(int id, JsonNode json);
 
         #endregion
     }

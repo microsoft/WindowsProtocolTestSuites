@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Protocols.TestManager.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
@@ -40,6 +41,26 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             var result = PTMKernelService.QueryCapabilitiesConfigAndCleanUp();
 
             return result;
+        }
+
+        /// <summary>
+        /// Get a capabilities config file.
+        /// </summary>
+        /// <returns>Json document representing the capabilities config.</returns>
+        [Route("{id}")]
+        [HttpGet]
+        public IActionResult GetCapabilitiesConfigJson(int id)
+        {
+            var location =
+                PTMKernelService.GetCapabilitiesConfigJsonPath(id);
+
+            if (location == null)
+            {
+                return new NotFoundResult();
+            }
+
+            var json = CapabilitiesConfigReader.Parse(new FileInfo(location)).Json;
+            return Ok(json.ToJsonString());
         }
 
         /// <summary>

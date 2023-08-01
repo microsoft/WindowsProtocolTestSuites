@@ -4,8 +4,10 @@
 
 import { RequestMethod, FetchService } from '.'
 import { CapabilitiesActions, CapabilitiesFileActionTypes } from '../actions/CapabilitiesAction'
+import { CapabilitiesConfigActions, CapabilitiesConfigActionTypes } from '../actions/CapabilitiesConfigAction'
 import { CreateCapabilitiesFileRequest } from '../model/CreateCapabilitiesFileRequest'
 import { UpdateCapabilitiesFileRequest } from '../model/UpdateCapabilitiesFileRequest'
+import { SaveCapabilitiesFileRequest } from '../model/SaveCapabilitiesFileRequest'
 import { AppThunkAction } from '../store/configureStore'
 
 export const CapabilitiesDataSrv = {
@@ -19,12 +21,22 @@ export const CapabilitiesDataSrv = {
             onError: CapabilitiesActions.getCapabilitiesFilesAction_Failure
         })
     },
+    getCapabilitiesConfig: (id: number): AppThunkAction<CapabilitiesConfigActionTypes> => async (dispatch) => {
+        await FetchService({
+            url: `api/capabilities/${id}`,
+            method: RequestMethod.GET,
+            dispatch,
+            onRequest: CapabilitiesConfigActions.getCapabilitiesConfigAction_Request,
+            onComplete: CapabilitiesConfigActions.getCapabilitiesConfigAction_Success,
+            onError: CapabilitiesConfigActions.getCapabilitiesConfigAction_Failure
+        })
+    },
     createCapabilitiesFile: (request: CreateCapabilitiesFileRequest, callback: () => void): AppThunkAction<CapabilitiesFileActionTypes> => async (dispatch) => {
         const postData = new FormData()
         postData.append('TestSuiteId', request.TestSuiteId?.toString())
         postData.append('CapabilitiesFileName', request.CapabilitiesFileName)
         if (request.CapabilitiesFileDescription) {
-          postData.append('CapabilitiesFileDescription', request.CapabilitiesFileDescription)
+            postData.append('CapabilitiesFileDescription', request.CapabilitiesFileDescription)
         }
 
         await FetchService({
@@ -73,5 +85,21 @@ export const CapabilitiesDataSrv = {
         const link = document.createElement('a')
         link.href = url
         link.click()
-    }
+    },
+    saveCapabilitiesFile: (id: number, request: SaveCapabilitiesFileRequest, callback: () => void): AppThunkAction<CapabilitiesFileActionTypes> => async (dispatch) => {
+        const postData = new FormData()
+        postData.append('CapabilitiesFileJson', request.CapabilitiesFileJson)
+
+        await FetchService({
+            url: `api/management/capabilities/save/${id}`,
+            method: RequestMethod.POST,
+            body: postData,
+            headers: {},
+            dispatch,
+            onRequest: CapabilitiesConfigActions.saveCapabilitiesConfigAction_Request,
+            onComplete: CapabilitiesConfigActions.saveCapabilitiesConfigAction_Success,
+            onError: CapabilitiesConfigActions.saveCapabilitiesConfigAction_Failure,
+            onCompleteCallback: callback
+        })
+    },
 }

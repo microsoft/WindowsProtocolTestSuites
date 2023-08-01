@@ -121,6 +121,16 @@ namespace Microsoft.Protocols.TestManager.PTMService.Storage
             fs.Close();
         }
 
+        public void WriteFile(string name, Stream content)
+        {
+            using (var binaryReader = new BinaryReader(content))
+            {
+                var bytes = binaryReader.ReadBytes((int)content.Length);
+                var path = Path.Combine(AbsolutePath, name);
+                File.WriteAllBytes(path, bytes);
+            }
+        }
+
         public void CopyFromNode(IStorageNode extractNode, bool deleteSource = false)
         {
             Utility.DirectoryCopy(extractNode.AbsolutePath, AbsolutePath, true);

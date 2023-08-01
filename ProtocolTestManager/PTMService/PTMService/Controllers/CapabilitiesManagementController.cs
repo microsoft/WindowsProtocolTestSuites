@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Protocols.TestManager.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using System;
 using static Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers.TestSuiteManagementController;
@@ -65,6 +66,17 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         }
 
         /// <summary>
+        /// Request model for saving a capabilities file.
+        /// </summary>
+        public class SaveCapabilitiesFileRequest
+        {
+            /// <summary>
+            /// Capabilities file Json.
+            /// </summary>
+            public string CapabilitiesFileJson { get; set; }
+        }
+
+        /// <summary>
         /// Create a new capabilities file.
         /// </summary>
         /// <param name="request">The create request.</param>
@@ -120,6 +132,22 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public IActionResult Remove(int id)
         {
             PTMKernelService.RemoveCapabilitiesFile(id);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Saves a capabilities file.
+        /// </summary>
+        /// <param name="request">The create request.</param>
+        /// <returns>The action result.</returns>
+        [Route("save/{id}")]
+        [HttpPost]
+        public IActionResult Save(int id, [FromForm] SaveCapabilitiesFileRequest request)
+        {
+            var reader = CapabilitiesConfigReader.Parse(request.CapabilitiesFileJson);
+            
+            PTMKernelService.SaveCapabilitiesFile(id, reader.Json);
 
             return Ok();
         }

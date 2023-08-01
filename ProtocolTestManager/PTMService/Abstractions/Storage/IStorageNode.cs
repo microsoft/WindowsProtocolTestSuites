@@ -66,6 +66,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions
         void CreateFile(string name, Stream content);
 
         /// <summary>
+        /// Writes a file. The file will be overridden if it already exists.
+        /// </summary>
+        /// <param name="name">The name of file.</param>
+        /// <param name="content">The content of file.</param>
+        void WriteFile(string name, Stream content);
+
+        /// <summary>
         /// Copy from another node
         /// </summary>
         /// <param name="extractNode">source node</param>

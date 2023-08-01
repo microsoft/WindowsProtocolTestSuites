@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.Json.Nodes;
 using System.Threading;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -28,30 +29,33 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             //Try clean up nodes that might have been left orphaned from a previous delete
             //operation.
-            var capabilitiesConfigRootNode =
-                StoragePool.GetKnownNode(KnownStorageNodeNames.CapabilitiesSpec);
-            var currentNodes = new DirectoryInfo(capabilitiesConfigRootNode.AbsolutePath)
-                                        .GetDirectories()
-                                        .Select(d => (d.Name, d.FullName))
-                                        .ToArray();
-            
-            var expectedNodeNames =
-                result.Select(c => $@"{c.Id.ToString()}")
-                      .ToDictionary(n => n);
-
-            try
+            if (Directory.Exists(KnownStorageNodeNames.CapabilitiesSpec))
             {
-                foreach (var node in currentNodes)
+                var capabilitiesConfigRootNode =
+                    StoragePool.GetKnownNode(KnownStorageNodeNames.CapabilitiesSpec);
+                var currentNodes = new DirectoryInfo(capabilitiesConfigRootNode.AbsolutePath)
+                                            .GetDirectories()
+                                            .Select(d => (d.Name, d.FullName))
+                                            .ToArray();
+
+                var expectedNodeNames =
+                    result.Select(c => $@"{c.Id.ToString()}")
+                          .ToDictionary(n => n);
+
+                try
                 {
-                    if (!expectedNodeNames.ContainsKey(node.Name))
+                    foreach (var node in currentNodes)
                     {
-                        Directory.Delete(node.FullName, true);
+                        if (!expectedNodeNames.ContainsKey(node.Name))
+                        {
+                            Directory.Delete(node.FullName, true);
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.AddLog(LogLevel.Error, $"Deleting capabilities files in {capabilitiesConfigRootNode.AbsolutePath} failed with {ex}");
+                catch (Exception ex)
+                {
+                    Logger.AddLog(LogLevel.Error, $"Deleting capabilities files in {capabilitiesConfigRootNode.AbsolutePath} failed with {ex}");
+                }
             }
 
             return result;
@@ -122,7 +126,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             var repo = pool.Get<CapabilitiesConfig>();
 
             var capabilitiesConfig = repo.Get(q => q.Where(item => item.Id == id)).FirstOrDefault();
-            if( capabilitiesConfig != null )
+            if (capabilitiesConfig != null)
             {
                 capabilitiesConfig.Name = name;
                 capabilitiesConfig.Description = description;
@@ -196,6 +200,36 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
 
             return result;
+        }
+
+        public void SaveCapabilitiesFile(int id, JsonNode json)
+        {
+            using var instance = ScopedServiceFactory.GetInstance();
+            var pool = instance.ScopedServiceInstance;
+            var repo = pool.Get<CapabilitiesConfig>();
+
+            var capabilitiesConfig = repo.Get(q => q.Where(item => item.Id == id)).FirstOrDefault();
+            if (capabilitiesConfig != null)
+            {
+                var capabilitiesConfigNode = StoragePool.GetKnownNode(KnownStorageNodeNames.CapabilitiesSpec).GetNode(id.ToString());
+
+                using var stream = new MemoryStream();
+                using var sw = new StreamWriter(stream);
+
+                var content = json.ToJsonString();
+
+                sw.Write(content);
+
+                sw.Flush();
+
+                stream.Seek(0, SeekOrigin.Begin);
+
+                capabilitiesConfigNode.WriteFile(CapabilitiesConsts.SpecsFile, stream);
+            }
+            else
+            {
+                Logger.AddLog(LogLevel.Error, $"Capabilities Config with id, {id} not found for update.");
+            }
         }
     }
 }

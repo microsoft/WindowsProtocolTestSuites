@@ -77,9 +77,12 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// </summary>
         /// <param name="testsByCategories">A dictionary of test cases by groups and categories representing the inner state of the
         /// capabilities file.</param>
-        private CapabilitiesConfigReader(Dictionary<string, Dictionary<string, HashSet<string>>> testsByCategories)
+        /// <param name="json"><see cref="JsonNode"/> representing the source Json.</param>
+        private CapabilitiesConfigReader(Dictionary<string, Dictionary<string, HashSet<string>>> testsByCategories,
+            JsonNode json)
         {
             this.testsByCategories = testsByCategories;
+            this.Json = json;
         }
 
         /// <summary>
@@ -90,7 +93,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <returns>A tuple containing the group and the category.</returns>
         private static (string group, string category) ParseCategoryInfo(string identifier)
         {
-            var identifierSeperator = '.';
+            var identifierSeparator = '.';
             var group = string.Empty;
             var category = string.Empty;
 
@@ -98,17 +101,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 identifier = identifier.ToLowerInvariant();
 
-                var identifierSeperatorIndex =
-                    identifier.IndexOf(identifierSeperator, StringComparison.InvariantCulture);
-                if (identifierSeperatorIndex == -1) // Only group name specified.
+                var identifierSeparatorIndex =
+                    identifier.IndexOf(identifierSeparator, StringComparison.InvariantCulture);
+                if (identifierSeparatorIndex == -1) // Only group name specified.
                 {
                     group = identifier.Trim();
                     category = string.Empty;
                 }
                 else
                 {
-                    group = identifier.Substring(0, identifierSeperatorIndex).Trim();
-                    category = identifier.Substring(identifierSeperatorIndex + 1).Trim();
+                    group = identifier.Substring(0, identifierSeparatorIndex).Trim();
+                    category = identifier.Substring(identifierSeparatorIndex + 1).Trim();
                 }
             }
 
@@ -139,6 +142,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
 
             return testsByCategories[group];
+        }
+
+        /// <summary>
+        /// Json node read by this reader.
+        /// </summary>
+        public JsonNode Json
+        {
+            get;
         }
 
         /// <summary>
@@ -280,7 +291,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
             }
 
-            return new CapabilitiesConfigReader(testsByCategories);
+            return new CapabilitiesConfigReader(testsByCategories, json);
         }
 
         /// <summary>

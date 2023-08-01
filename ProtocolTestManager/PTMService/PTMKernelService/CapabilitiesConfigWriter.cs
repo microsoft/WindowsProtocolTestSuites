@@ -85,7 +85,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     ["testcases"] = new JsonArray(
                                     testCases.Select(c => new JsonObject
                                     {
-                                        ["name"] = c.Name,
+                                        ["name"] = c.FullName,
                                         ["categories"] = new JsonArray()
                                     }).ToArray()
                                 )

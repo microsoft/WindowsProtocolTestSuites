@@ -16,21 +16,23 @@ import { getTestResultsReducer } from './TestResultsReducer';
 import { getTestSuiteInfoReducer } from './TestSuiteInfoReducer';
 import { getWizardNavBarReducer } from './WizardNavBarReducer';
 import { getCapabilitiesListReducer } from './CapabilitiesListReducer';
+import { getCapabilitiesConfigReducer } from './CapabilitiesConfigReducer';
 
 export const appReducers = {
-  testSuites: getTestSuitesReducer,
-  testSuiteInfo: getTestSuiteInfoReducer,
-  configurations: getConfigurationReducer,
-  configureMethod: getConfigureMethodReducer,
-  autoDetection: getAutoDetectionReducer,
-  detectResult: getDetectionResultReducer,
-  propertyGroups: getPropertyGroupsReducer,
-  configureAdapter: getAdapterReducer,
-  filterInfo: getFilterTestCaseReducer,
-  selectedTestCases: getSelectedTestCasesReducer,
-  testResults: getTestResultsReducer,
-  testCaseResult: getTestCaseResultReducer,
-  management: getManagementReducer,
-  wizard: getWizardNavBarReducer,
-  capabilitiesList: getCapabilitiesListReducer,
+    testSuites: getTestSuitesReducer,
+    testSuiteInfo: getTestSuiteInfoReducer,
+    configurations: getConfigurationReducer,
+    configureMethod: getConfigureMethodReducer,
+    autoDetection: getAutoDetectionReducer,
+    detectResult: getDetectionResultReducer,
+    propertyGroups: getPropertyGroupsReducer,
+    configureAdapter: getAdapterReducer,
+    filterInfo: getFilterTestCaseReducer,
+    selectedTestCases: getSelectedTestCasesReducer,
+    testResults: getTestResultsReducer,
+    testCaseResult: getTestCaseResultReducer,
+    management: getManagementReducer,
+    wizard: getWizardNavBarReducer,
+    capabilitiesList: getCapabilitiesListReducer,
+    capabilitiesConfig: getCapabilitiesConfigReducer
 }
