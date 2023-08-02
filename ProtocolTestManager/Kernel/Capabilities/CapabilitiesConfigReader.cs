@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestManager.Kernel
@@ -46,14 +47,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
     ///}
     /// </code>
     /// </example>
-    public class CapabilitiesConfigReader
+    public partial class CapabilitiesConfigReader
     {
         public static string MissingTestSuiteOrVersionMessage =>
             @"Test suite name and version must be specified for a capabilities file.";
         public static string EmptyOrDuplicateGroupNameMessage(string groupName) =>
             $"Group names cannot be empty and must be unique within the capabilities file | Group: {groupName}.";
+        public static string InvalidCharactersInGroupNameMessage(string groupName) =>
+            $"Group names can contain only alphanumeric, hyphen, underscore, space and period characters. | Group: {groupName}.";
         public static string EmptyOrDuplicateCategoryNameMessage(string groupName, string categoryName) =>
             $"Category names cannot be empty and must be unique within a group in capabilities file | Group: {groupName}, Category: {categoryName}.";
+        public static string InvalidCharactersInCategoryNameMessage(string groupName, string categoryName) =>
+            $"Category names can contain only alphanumeric, hyphen, underscore, space and period characters. | Group: {groupName}, Category: {categoryName}.";
         public static string EmptyTestCaseNameMessage =>
             @"Test case names cannot be empty.";
         public static string InvalidGroupOrCategoryMessage(string testName, string groupName, string categoryName) =>
@@ -83,6 +88,18 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             this.testsByCategories = testsByCategories;
             this.Json = json;
+        }
+
+        private static bool ContainsInvalidCharacters(string name)
+        {
+            var regex = new Regex($"^[A-Za-z0-9-_ ]+$"); // Allow alphanumeric, hyphen, underscores and space(s).
+
+            if (!regex.IsMatch(name))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -249,6 +266,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     throw new InvalidOperationException(EmptyOrDuplicateGroupNameMessage(groupName));
                 }
 
+                if (ContainsInvalidCharacters(groupName))
+                {
+                    throw new InvalidOperationException(InvalidCharactersInGroupNameMessage(groupName));
+                }
+
                 testsByCategories.Add(groupName, new());
 
                 var categories = group["categories"] as JsonArray ?? new JsonArray();
@@ -258,6 +280,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     if (string.IsNullOrWhiteSpace(categoryName) || testsByCategories[groupName].ContainsKey(categoryName))
                     {
                         throw new InvalidOperationException(EmptyOrDuplicateCategoryNameMessage(groupName, categoryName));
+                    }
+
+                    if (ContainsInvalidCharacters(categoryName))
+                    {
+                        throw new InvalidOperationException(InvalidCharactersInCategoryNameMessage(groupName, categoryName));
                     }
 
                     testsByCategories[groupName].Add(categoryName, new HashSet<string>());

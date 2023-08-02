@@ -44,7 +44,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
                     },
                     ""groups"": [
                         {
-                            ""name"": ""Group 1"",
+                            ""name"": ""Group 1-_ "",
                             ""categories"": [
                                 {
                                     ""name"": ""Category 1""
@@ -67,14 +67,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
                         {
                             ""name"": ""Test Case 1"",
                             ""categories"": [
-                                ""Group 1.Category 1"",
+                                ""Group 1-_ .Category 1"",
                                 ""Group 2.Category 3""
                             ]
                         },
                         {
                             ""name"": ""Test Case 2"",
                             ""categories"": [
-                                ""Group 1.Category 2""
+                                ""Group 1-_ .Category 2""
                             ]
                         }
                     ]
@@ -167,6 +167,42 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
         }
 
         [TestMethod]
+        public void Parse_WithInvalidGroupName_ThrowsInvalidOperationException()
+        {
+            var groupName = "Group**'']";
+
+            // Arrange
+            var json = JsonNode.Parse($@"
+            {{
+              ""capabilities"": {{
+                ""metadata"": {{
+                  ""testsuite"": ""Test Suite 1"",
+                  ""version"": ""1.0""
+                }},
+                ""groups"": [
+                  {{
+                    ""name"": ""{groupName}"",
+                    ""categories"": [
+                      {{
+                        ""name"": ""Category 1""
+                      }},
+                      {{
+                        ""name"": ""Category 2""
+                      }}
+                    ]
+                  }}
+                ],
+                ""testcases"": []
+              }}
+            }}");
+
+            // Act and Assert
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                                CapabilitiesConfigReader.Parse(json));
+            Assert.AreEqual(CapabilitiesConfigReader.InvalidCharactersInGroupNameMessage(groupName).ToLowerInvariant(), ex.Message.ToLowerInvariant());
+        }
+
+        [TestMethod]
         public void Parse_WithDuplicateGroupName_ThrowsInvalidOperationException()
         {
             var groupName = "Group 1";
@@ -245,6 +281,43 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
             var ex = Assert.ThrowsException<InvalidOperationException>(() => 
                                     CapabilitiesConfigReader.Parse(json));
             Assert.AreEqual(CapabilitiesConfigReader.EmptyOrDuplicateCategoryNameMessage(groupName, categoryName).ToLowerInvariant(), ex.Message.ToLowerInvariant());
+        }
+
+        [TestMethod]
+        public void Parse_WithInvalidCategoryName_ThrowsInvalidOperationException()
+        {
+            var groupName = "Group 1";
+            var categoryName = "''**!Hello";
+
+            // Arrange
+            var json = JsonNode.Parse($@"
+            {{
+              ""capabilities"": {{
+                ""metadata"": {{
+                  ""testsuite"": ""Test Suite 1"",
+                  ""version"": ""1.0""
+                }},
+                ""groups"": [
+                  {{
+                    ""name"": ""{groupName}"",
+                    ""categories"": [
+                      {{
+                        ""name"": ""{categoryName}""
+                      }},
+                      {{
+                        ""name"": ""Category 2""
+                      }}
+                    ]
+                  }}
+                ],
+                ""testcases"": []
+              }}
+            }}");
+
+            // Act and Assert
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                                    CapabilitiesConfigReader.Parse(json));
+            Assert.AreEqual(CapabilitiesConfigReader.InvalidCharactersInCategoryNameMessage(groupName, categoryName).ToLowerInvariant(), ex.Message.ToLowerInvariant());
         }
 
         [TestMethod]
