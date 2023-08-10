@@ -29,6 +29,10 @@ namespace Microsoft.Protocols.TestManager.CLI
         static void Run(Options options)
         {
             Logger.EnableDebugging = options.EnableDebugging;
+            UpdateTestCaseListCallback capabilitiesReportHandler = null;
+            var capabilitiesResultsTree = 
+                new Dictionary<string, Dictionary<string, TestCase>>();
+
             try
             {
                 Program p = new Program();
@@ -58,7 +62,7 @@ namespace Microsoft.Protocols.TestManager.CLI
 
                 List<TestCase> testCases;
 
-                if(string.IsNullOrWhiteSpace(options.CapabilitiesSpecification))
+                if(!options.IsUsingCapabilitiesFiltering())
                 {
                     if (string.IsNullOrWhiteSpace(options.FilterExpression))
                     {
@@ -71,9 +75,43 @@ namespace Microsoft.Protocols.TestManager.CLI
                 }
                 else
                 {
-                    testCases = 
-                        p.GetTestCases(options.CapabilitiesSpecification, 
-                                       options.CapabilitiesFilterExpression);
+                    Logger.AddLog(LogLevel.Information, $"Loading test cases using the following capabilities specification file: {options.CapabilitiesSpecification}.");
+                    
+                    var reader =
+                        CapabilitiesConfigReader.Parse(new FileInfo(options.CapabilitiesSpecification));
+                    var filters = options.CapabilitiesFilterExpression?.Split(',');
+
+                    Logger.AddLog(LogLevel.Information, $"Using {filters.Length} capabilities specification filters.");
+
+                    var testNames = reader.GetTestCases(filters);
+                    testCases = p.GetTestCases(testNames);
+
+                    // Subscribe to the test runs and update the results by group/category
+                    // if capabilities filtering is in use.
+                    capabilitiesReportHandler = (group, runningCase) =>
+                    {
+                        var testFullName = runningCase.FullName;
+
+                        var testCaseCategories = reader.GetCategoriesFor(testFullName)
+                                                        .Select(f => f.ToLowerInvariant());
+
+                        foreach (var c in testCaseCategories)
+                        {
+                            if (!capabilitiesResultsTree.ContainsKey(c))
+                            {
+                                capabilitiesResultsTree.Add(c, new Dictionary<string, TestCase>());
+                            }
+
+                            if (!capabilitiesResultsTree[c].ContainsKey(testFullName))
+                            {
+                                capabilitiesResultsTree[c].Add(testFullName, runningCase);
+                            }
+                            else
+                            {
+                                capabilitiesResultsTree[c][testFullName] = runningCase;
+                            }
+                        }
+                    };
                 }
 
                 Console.CancelKeyPress += (sender, args) =>
@@ -82,7 +120,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                     p.AbortExecution();
                 };
 
-                p.RunTestSuite(testCases);
+                p.RunTestSuite(testCases, capabilitiesReportHandler);
 
                 if (options.ReportFile == null)
                 {
@@ -96,6 +134,13 @@ namespace Microsoft.Protocols.TestManager.CLI
                     }
                     p.SaveTestReport(options.ReportFile, options.ReportFormat, options.Outcome);
                     Console.WriteLine(String.Format(StringResources.ReportFilePath, options.ReportFile));
+
+                    if (options.IsUsingCapabilitiesFiltering())
+                    {
+                        var outputFolder = Path.GetDirectoryName(options.ReportFile);
+                        p.SaveTestReportByCapabilities(outputFolder,
+                            options.ReportFormat, options.Outcome, capabilitiesResultsTree);
+                    }
                 }
 
                 Console.WriteLine(String.Format(StringResources.TestResultPath, Path.Combine(options.TestSuite, p.util.GetTestEngineResultPath())));
@@ -299,18 +344,8 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// <param name="capabilitiesFilePath">The path to the capabilities file.</param>
         /// <param name="capabilitiesFilter">Filter expression to use with the capabilities specification.</param>
         /// <returns>The test case list.</returns>
-        public List<TestCase> GetTestCases(string capabilitiesFilePath, string capabilitiesFilter)
+        public List<TestCase> GetTestCases(string[] testNames)
         {
-            Logger.AddLog(LogLevel.Information, $"Loading test cases using the following capabilities specification file: {capabilitiesFilePath}.");
-
-            var reader =
-                CapabilitiesConfigReader.Parse(new FileInfo(capabilitiesFilePath));
-            var filters = capabilitiesFilter?.Split(',');
-
-            Logger.AddLog(LogLevel.Information, $"Using {filters.Length} capabilities specification filters.");
-
-            var testNames = reader.GetTestCases(filters);
-
             Logger.AddLog(LogLevel.Information, $"Found {testNames.Length} matching test name(s).");
             Logger.AddLog(LogLevel.Debug, $"The following matching test name(s) were found: {string.Join('|', testNames)}.");
 
@@ -324,7 +359,7 @@ namespace Microsoft.Protocols.TestManager.CLI
         }
 
         /// <summary>
-        /// Get test cases using category paramter
+        /// Get test cases using category parameter
         /// </summary>
         /// <param name="category">The specific category of test cases to run</param>
         public List<TestCase> GetTestCases(List<string> categories)
@@ -343,7 +378,9 @@ namespace Microsoft.Protocols.TestManager.CLI
         /// Run test suite
         /// </summary>
         /// <param name="testCases">The list of test cases to run</param>
-        public void RunTestSuite(List<TestCase> testCases)
+        /// <param name="handlers">List of event handlers that can be used to handle status changes for test cases as they're being run.</param>
+        public void RunTestSuite(List<TestCase> testCases,
+            params UpdateTestCaseListCallback[] handlers)
         {
             Logger.AddLog(LogLevel.Information, "Run Test Suite");
             using (ProgressBar progress = new ProgressBar())
@@ -357,7 +394,7 @@ namespace Microsoft.Protocols.TestManager.CLI
 
                 TestSuiteLogManager tsLogManager = util.GetTestSuiteLogManager();
                 var caseSet = new HashSet<string>();
-                tsLogManager.GroupByOutcome.UpdateTestCaseList = (group, runningcase) =>
+                tsLogManager.GroupByOutcome.UpdateTestCaseList += (group, runningcase) =>
                 {
                     if (caseSet.Contains(runningcase.Name))
                     {
@@ -367,6 +404,14 @@ namespace Microsoft.Protocols.TestManager.CLI
                     executed++;
                     progress.Update((double)executed / total, $"({executed}/{total}) Executing {runningcase.Name}");
                 };
+
+                foreach (var handler in handlers) 
+                {
+                    if (handler != null)
+                    {
+                        tsLogManager.GroupByOutcome.UpdateTestCaseList += handler;
+                    }
+                }
 
                 progress.Update(0, "Loading test suite");
                 util.SyncRunByCases(testCases);
@@ -420,6 +465,56 @@ namespace Microsoft.Protocols.TestManager.CLI
             }
 
             report.ExportReport(filename);
+        }
+
+
+        /// <summary>
+        /// Save test report to disk by capabilities category.
+        /// </summary>
+        /// <param name="outputFolder">Root folder to output the results to.</param>
+        /// <param name="format">The format of the results.</param>
+        /// <param name="outcomes">The outcomes to include in the reports.</param>
+        /// <param name="capabilitiesResultsTree">A dictionary of capabilities categories and associated test cases.</param>
+        /// <exception cref="InvalidOperationException">Thrown when an invalid report format is specified.</exception>
+        public void SaveTestReportByCapabilities(string outputFolder,
+            ReportFormat format, IEnumerable<Outcome> outcomes,
+            Dictionary<string, Dictionary<string, TestCase>> capabilitiesResultsTree)
+        {
+            Logger.AddLog(LogLevel.Information, "Save Test Report By Capabilities");
+
+            outputFolder = @$"{outputFolder}/capabilities_report";
+            if(Directory.Exists(outputFolder))
+            {
+                Directory.Delete(outputFolder);
+            }
+
+            Directory.CreateDirectory(outputFolder);
+
+            bool pass = outcomes.Contains(Outcome.Pass);
+            bool fail = outcomes.Contains(Outcome.Fail);
+            bool inconclusive = outcomes.Contains(Outcome.Inconclusive);
+
+            foreach (var identifier in capabilitiesResultsTree.Keys) 
+            {
+                var fileName = format switch
+                {
+                    ReportFormat.Json => $"{identifier}.json",
+                    ReportFormat.XUnit => $"{identifier}.xml",
+                    _ => $"{identifier}.txt"
+                };
+
+                var path = Path.Combine(outputFolder, fileName);
+
+                var testCases = capabilitiesResultsTree[identifier].Select(t => t.Value).ToList();
+
+                var report = TestReport.GetInstance(format.ToString(), testCases);
+                if (report == null)
+                {
+                    throw new InvalidOperationException(String.Format(StringResources.UnknownReportFormat, format.ToString()));
+                }
+
+                report.ExportReport(path);
+            }
         }
 
         /// <summary>

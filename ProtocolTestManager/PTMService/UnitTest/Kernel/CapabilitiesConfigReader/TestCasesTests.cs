@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
@@ -220,6 +221,22 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
             var ex = Assert.ThrowsException<InvalidOperationException>(() =>
                             capabilitiesConfigReader.GetTestCases(group, category));
             Assert.AreEqual(CapabilitiesConfigReader.NonExistentCategoryNameMessage(group, category).ToLowerInvariant(), ex.Message.ToLowerInvariant());
+        }
+
+        [TestMethod]
+        public void GetTestCases_GetCategories_ReturnsValidCategories()
+        {
+            // Arrange
+            string testCase = "Test Case 1";
+
+            //Act
+            var categories =
+                capabilitiesConfigReader.GetCategoriesFor(testCase);
+
+            //Assert
+            Assert.AreEqual(categories.Count(), 2);
+            Assert.AreEqual(categories.ElementAt(0), "Group 1.Category 1");
+            Assert.AreEqual(categories.ElementAt(1), "Group 2.Category 3");
         }
     }
 }

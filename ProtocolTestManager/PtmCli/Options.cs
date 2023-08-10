@@ -47,7 +47,8 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         [Option('r', "report",
             Required = false,
-            HelpText = "Specifies the result file which will be written to.\nIf not specified, test results will be written to stdout.")]
+            HelpText = "Specifies the result file which will be written to.\nIf not specified, test results will be written to stdout.\n" +
+            "Additionally, if using a capabilities file, the results for each category will also be written to the report file directory.")]
         public string ReportFile { get; set; }
 
         [Option('f', "format",
@@ -73,11 +74,19 @@ namespace Microsoft.Protocols.TestManager.CLI
             HelpText = "Enable debugging of PTMCli.")]
         public bool EnableDebugging { get; set; }
 
+        public bool IsUsingCapabilitiesFiltering()
+        {
+            return !string.IsNullOrWhiteSpace(CapabilitiesSpecification) &&
+                    !string.IsNullOrWhiteSpace(CapabilitiesFilterExpression);
+        }
+
         public override string ToString()
         {
             return "Input Options:" + Environment.NewLine +
                 $"Profile: {Profile}; TestSuite: {TestSuite}; SelectedOnly: {SelectedOnly}; " +
                 $"{nameof(FilterExpression)}: {FilterExpression} " +
+                $"{nameof(CapabilitiesSpecification)}: {CapabilitiesSpecification} " +
+                $"{nameof(CapabilitiesFilterExpression)}: {CapabilitiesFilterExpression} " +
                 $"{nameof(Configuration)}: {String.Join(" ", Configuration)}; " +
                 $"ReportFile: {ReportFile}; " +
                 $"ReportFormat: {ReportFormat}; Outcome: {string.Join(", ", Outcome)}; Debug: {EnableDebugging}";

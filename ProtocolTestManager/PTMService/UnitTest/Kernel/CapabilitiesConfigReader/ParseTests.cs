@@ -21,21 +21,12 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
     [TestClass]
     public class ParseTests
     {
+        private JsonNode validJson;
+
         [TestInitialize]
         public void TestInitialize()
         {
-        }
-
-        [TestCleanup]
-        public void TestCleanup()
-        {
-        }
-
-        [TestMethod]
-        public void Parse_WithValidInput_ReturnsCapabilitiesConfig()
-        {
-            // Arrange
-            var json = JsonNode.Parse(@"
+            validJson = JsonNode.Parse(@"
             {
                 ""capabilities"": {
                     ""metadata"": {
@@ -44,7 +35,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
                     },
                     ""groups"": [
                         {
-                            ""name"": ""Group 1-_ "",
+                            ""name"": ""Group 1-_"",
                             ""categories"": [
                                 {
                                     ""name"": ""Category 1""
@@ -80,6 +71,18 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
                     ]
                 }
             }");
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+        }
+
+        [TestMethod]
+        public void Parse_WithValidInput_ReturnsCapabilitiesConfig()
+        {
+            // Arrange
+            var json = validJson;
 
             // Act
             var capabilitiesConfig = CapabilitiesConfigReader.Parse(json);
@@ -449,6 +452,66 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
             var ex = Assert.ThrowsException<InvalidOperationException>(() =>
                                     CapabilitiesConfigReader.Parse(json));
             Assert.AreEqual(CapabilitiesConfigReader.InvalidJsonMessage.ToLowerInvariant(), ex.Message.ToLowerInvariant());
+        }
+
+        [TestMethod]
+        public void ExpandIdentifier_WithValidGroup_ReturnsAllCategoriesInTheGroup()
+        {
+            // Arrange
+            var json = validJson;
+
+            // Act
+            var capabilitiesConfig = CapabilitiesConfigReader.Parse(json);
+            var categories = capabilitiesConfig.ExpandIdentifier("Group 1-_").ToArray();
+
+            //Assert
+            Assert.AreEqual(categories.Count(), 2);
+            Assert.AreEqual(categories[0].group.ToLowerInvariant(), "Group 1-_".ToLowerInvariant());
+            Assert.AreEqual(categories[0].category.ToLowerInvariant(), "Category 1".ToLowerInvariant());
+            Assert.AreEqual(categories[1].group.ToLowerInvariant(), "Group 1-_".ToLowerInvariant());
+            Assert.AreEqual(categories[1].category.ToLowerInvariant(), "Category 2".ToLowerInvariant());
+        }
+
+        [TestMethod]
+        public void ExpandIdentifier_WithValidGroupAndCategory_ReturnsTheSpecificCategorySpecified()
+        {
+            // Arrange
+            var json = validJson;
+
+            // Act
+            var capabilitiesConfig = CapabilitiesConfigReader.Parse(json);
+            var categories = capabilitiesConfig.ExpandIdentifier("Group 1-_.Category 1").ToArray();
+
+            //Assert
+            Assert.AreEqual(categories.Count(), 1);
+            Assert.AreEqual(categories[0].group.ToLowerInvariant(), "Group 1-_".ToLowerInvariant());
+            Assert.AreEqual(categories.ElementAt(0).category.ToLowerInvariant(), "Category 1".ToLowerInvariant());
+        }
+
+        [TestMethod]
+        public void ExpandIdentifier_WithInvalidGroup_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var json = validJson;
+
+            // Act and Assert
+            var capabilitiesConfig = CapabilitiesConfigReader.Parse(json);
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                                    capabilitiesConfig.ExpandIdentifier("GroupX.Category 1").ToArray());
+            Assert.AreEqual(CapabilitiesConfigReader.UnknownGroupMessage("GroupX").ToLowerInvariant(), ex.Message.ToLowerInvariant());
+        }
+
+        [TestMethod]
+        public void ExpandIdentifier_WithInvalidCategory_ThrowsInvalidOperationException()
+        {
+            // Arrange
+            var json = validJson;
+
+            // Act and Assert
+            var capabilitiesConfig = CapabilitiesConfigReader.Parse(json);
+            var ex = Assert.ThrowsException<InvalidOperationException>(() =>
+                                    capabilitiesConfig.ExpandIdentifier("Group 1-_.CategoryX").ToArray());
+            Assert.AreEqual(CapabilitiesConfigReader.UnknownCategoryMessage("CategoryX").ToLowerInvariant(), ex.Message.ToLowerInvariant());
         }
     }
 }

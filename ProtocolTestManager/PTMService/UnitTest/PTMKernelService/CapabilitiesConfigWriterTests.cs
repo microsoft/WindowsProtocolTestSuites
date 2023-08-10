@@ -37,9 +37,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.PTMKernelService
             var testSuiteVersion = "4.29.22.1";
             var testCaseInfo = new TestCaseInfo[] 
             { 
-                new TestCaseInfo() { Name = "test 1" },
-                new TestCaseInfo() { Name = "test 2" },
-                new TestCaseInfo() { Name = "test 3" }
+                new TestCaseInfo() { Name = "test 1", FullName = "test 1" },
+                new TestCaseInfo() { Name = "test 2", FullName = "test 2" },
+                new TestCaseInfo() { Name = "test 3", FullName = "test 3" }
             };
 
             // Arrange

@@ -47,7 +47,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     ///}
     /// </code>
     /// </example>
-    public partial class CapabilitiesConfigReader
+    public class CapabilitiesConfigReader
     {
         public static string MissingTestSuiteOrVersionMessage =>
             @"Test suite name and version must be specified for a capabilities file.";
@@ -63,6 +63,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             @"Test case names cannot be empty.";
         public static string InvalidGroupOrCategoryMessage(string testName, string groupName, string categoryName) =>
             $"Test, '{testName}' has an invalid group or category name | Group: {groupName}, Category: {categoryName}.";
+        public static string UnknownGroupMessage(string groupName) =>
+            $"Group: {groupName} does not exist.";
+        public static string UnknownCategoryMessage(string categoryName) =>
+            $"Category: {categoryName} does not exist.";
         public static string InvalidJsonMessage =>
             @"The provided capabilities file is not a valid Json file.";
         public static string EmptyTestCaseFilterGroupOrCategoryNameMessage =>
@@ -76,17 +80,21 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
 
         private readonly Dictionary<string, Dictionary<string, HashSet<string>>> testsByCategories;
+        private readonly Dictionary<string, HashSet<string>> filtersByTest;
 
         /// <summary>
         /// Creates a new instance of <see cref="CapabilitiesConfigReader"/>.
         /// </summary>
         /// <param name="testsByCategories">A dictionary of test cases by groups and categories representing the inner state of the
         /// capabilities file.</param>
+        /// <param name="filtersByTest">A dictionary of categories by test case representing the inner state of the
+        /// capabilities file.</param>
         /// <param name="json"><see cref="JsonNode"/> representing the source Json.</param>
         private CapabilitiesConfigReader(Dictionary<string, Dictionary<string, HashSet<string>>> testsByCategories,
-            JsonNode json)
+            Dictionary<string, HashSet<string>> filtersByTest, JsonNode json)
         {
             this.testsByCategories = testsByCategories;
+            this.filtersByTest = filtersByTest;
             this.Json = json;
         }
 
@@ -116,8 +124,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
             if (!string.IsNullOrWhiteSpace(identifier))
             {
-                identifier = identifier.ToLowerInvariant();
-
                 var identifierSeparatorIndex =
                     identifier.IndexOf(identifierSeparator, StringComparison.InvariantCulture);
                 if (identifierSeparatorIndex == -1) // Only group name specified.
@@ -133,6 +139,48 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
 
             return (group, category);
+        }
+
+        /// <summary>
+        /// Expands an identifier for a category from the format {GroupName}.{CategoryName}
+        /// into an enumerable of tuples of the constituent group and categor(ies). If no category
+        /// is explicitly specified, all the categories in the specified group are returned.
+        /// </summary>
+        /// <param name="identifier">The identifier to expand.</param>
+        /// <returns>An enumerable of tuples of group and category names, matching the specified identifier. </returns>
+        /// <exception cref="InvalidOperationException">Thrown when either the specified group or category name does
+        /// not exist within this capabilities file.</exception>
+        public IEnumerable<(string group, string category)> ExpandIdentifier(string identifier)
+        {
+            (string group, string category) = ParseCategoryInfo(identifier);
+            var groupLowerCase = group.ToLowerInvariant();
+            var categoryLowerCase = category.ToLowerInvariant();
+            var categories = Enumerable.Empty<string>();
+
+            if (!testsByCategories.ContainsKey(groupLowerCase))
+            {
+                throw new InvalidOperationException(UnknownGroupMessage(group));
+            }
+
+            if(String.IsNullOrWhiteSpace(category))
+            {
+                // If no category specified, return all the categories in the group.
+                categories = testsByCategories[groupLowerCase].Select(c => c.Key).ToArray();
+            }
+            else
+            {
+                if (!testsByCategories[groupLowerCase].ContainsKey(categoryLowerCase))
+                {
+                    throw new InvalidOperationException(UnknownCategoryMessage(category));
+                }
+
+                categories = new string[] { category };
+            }
+
+            foreach (var c in categories)
+            {
+                yield return (group, c);
+            }
         }
 
         /// <summary>
@@ -159,6 +207,21 @@ namespace Microsoft.Protocols.TestManager.Kernel
             }
 
             return testsByCategories[group];
+        }
+
+        /// <summary>
+        /// Returns the categories for the specified test case.
+        /// </summary>
+        /// <param name="testCase">The test case to return the categories for.</param>
+        /// <returns>An enumerable of categories for the test case in the format: {GroupName}.{CategoryName}.</returns>
+        public IEnumerable<string> GetCategoriesFor(string testCase)
+        {
+            if (!filtersByTest.ContainsKey(testCase))
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            return filtersByTest[testCase].ToArray();
         }
 
         /// <summary>
@@ -246,6 +309,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             var testsByCategories =
                 new Dictionary<string, Dictionary<string, HashSet<string>>>();
+            var filtersByTest = new Dictionary<string, HashSet<string>>();
 
             var document = json["capabilities"];
 
@@ -304,7 +368,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 foreach (var testCategory in testCategories)
                 {
                     var identifier = testCategory.AsValue().ToString();
-                    (string group, string category) = ParseCategoryInfo(identifier);
+                    (string group, string category) = ParseCategoryInfo(identifier.Trim().ToLowerInvariant());
 
                     if (!testsByCategories.ContainsKey(group) || !testsByCategories[group].ContainsKey(category))
                     {
@@ -315,10 +379,22 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     {
                         testsByCategories[group][category].Add(testName);
                     }
+
+                    if(!filtersByTest.ContainsKey(testName))
+                    {
+                        filtersByTest.Add(testName, new HashSet<string>(new string[] { identifier }));
+                    }
+                    else
+                    {
+                        if(!filtersByTest[testName].Contains(identifier))
+                        {
+                            filtersByTest[testName].Add(identifier);
+                        }
+                    }
                 }
             }
 
-            return new CapabilitiesConfigReader(testsByCategories, json);
+            return new CapabilitiesConfigReader(testsByCategories, filtersByTest, json);
         }
 
         /// <summary>
