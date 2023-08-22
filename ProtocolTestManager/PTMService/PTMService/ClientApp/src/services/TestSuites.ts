@@ -43,5 +43,15 @@ export const TestSuitesDataSrv = {
       onComplete: TestSuiteInfoActions.getTestSuiteInfoAction_Success,
       onError: TestSuiteInfoActions.getTestSuiteInfoAction_Failure
     })
+  },
+  getCapabilitiesConfig: (id: number): AppThunkAction<FilterTestCaseActionTypes> => async (dispatch) => {
+    await FetchService({
+      url: `api/capabilities/${id}`,
+      method: RequestMethod.GET,
+      dispatch,
+      onRequest: FilterTestCaseActions.getCapabilitiesConfigAction_Request,
+      onComplete: FilterTestCaseActions.getCapabilitiesConfigAction_Success,
+      onError: FilterTestCaseActions.getCapabilitiesConfigAction_Failure
+    })
   }
 }

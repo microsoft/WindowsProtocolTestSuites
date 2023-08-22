@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+import { TestCase } from "./TestCase"
+
 export type TestCasesViewType = 'InCategory' | 'OutCategory' | 'NoCategory' | undefined
 
 export const TestCasesViewsConfig = new Map<string, TestCasesViewType>([
@@ -57,4 +59,9 @@ export interface CapabilitiesConfig {
   Groups: ConfigGroup[]
   TestCases: ConfigTestCase[]
   TestCasesMap: Map<string, ConfigTestCase>
+}
+
+export interface TestCaseWithCategories {
+  Test: TestCase
+  LowerCaseCategories: Set<string>
 }

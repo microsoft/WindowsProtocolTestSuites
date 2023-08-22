@@ -20,6 +20,14 @@ export const SET_RULES_FAILURE = 'FILTERTESTCASE/SET_RULES_FAILURE'
 
 export const SET_SELECTED_RULES = 'FILTERTESTCASE/SET_SELECTED_RULES'
 
+export const SELECT_CAPABILITIES_FILE = 'FILTERTESTCASE/SELECT_CAPABILITIES_FILE'
+export const SELECT_CAPABILITIES_FILE_CATEGORIES = 'FILTERTESTCASE/SELECT_CAPABILITIES_FILE_CATEGORIES'
+export const EXPAND_CAPABILITIES_FILE_CATEGORIES = 'FILTERTESTCASE/EXPAND_CAPABILITIES_FILE_CATEGORIES'
+
+export const GET_CAPABILITIES_CONFIG_REQUEST = 'FILTERTESTCASE/GET_CAPABILITIES_CONFIG_REQUEST'
+export const GET_CAPABILITIES_CONFIG_SUCCESS = 'FILTERTESTCASE/GET_CAPABILITIES_CONFIG_SUCCESS'
+export const GET_CAPABILITIES_CONFIG_FAILURE = 'FILTERTESTCASE/GET_CAPABILITIES_CONFIG_FAILURE'
+
 // define action types
 interface GetTSRulesActionRequestType { type: typeof GET_FILTERTESTCASE_RULES_REQUEST }
 interface GetTSRulesActionSuccessType { type: typeof GET_FILTERTESTCASE_RULES_SUCCESS, payload: RuleData }
@@ -35,6 +43,14 @@ interface SetTSRulesActionFailureType { type: typeof SET_RULES_FAILURE, errorMsg
 
 interface SetSelectedRulesActionType { type: typeof SET_SELECTED_RULES, payload: SelectedRuleGroup }
 
+interface SelectCapabilitiesFileActionType { type: typeof SELECT_CAPABILITIES_FILE, payload: number }
+interface SelectCapabilitiesFileCategoriesActionType { type: typeof SELECT_CAPABILITIES_FILE_CATEGORIES, payload: string[] }
+interface ExpandCapabilitiesFileCategoriesActionType { type: typeof EXPAND_CAPABILITIES_FILE_CATEGORIES, payload: string[] }
+
+interface GetCapabilitiesConfigActionRequestType { type: typeof GET_CAPABILITIES_CONFIG_REQUEST }
+interface GetCapabilitiesConfigActionSuccessType { type: typeof GET_CAPABILITIES_CONFIG_SUCCESS, payload: string }
+interface GetCapabilitiesConfigActionFailureType { type: typeof GET_CAPABILITIES_CONFIG_FAILURE, errorMsg: string }
+
 export type FilterTestCaseActionTypes = GetTSRulesActionRequestType
 | GetTSRulesActionSuccessType
 | GetTSRulesActionFailureType
@@ -45,6 +61,12 @@ export type FilterTestCaseActionTypes = GetTSRulesActionRequestType
 | SetTSRulesActionSuccessType
 | SetTSRulesActionFailureType
 | SetSelectedRulesActionType
+| SelectCapabilitiesFileActionType
+| SelectCapabilitiesFileCategoriesActionType
+| ExpandCapabilitiesFileCategoriesActionType
+| GetCapabilitiesConfigActionRequestType
+| GetCapabilitiesConfigActionSuccessType
+| GetCapabilitiesConfigActionFailureType
 
 // define actions
 export const FilterTestCaseActions = {
@@ -102,6 +124,41 @@ export const FilterTestCaseActions = {
     return {
       type: SET_SELECTED_RULES,
       payload: info
+    }
+  },
+  selectCapabilitiesFileAction: (id: number): FilterTestCaseActionTypes => {
+    return {
+      type: SELECT_CAPABILITIES_FILE,
+      payload: id
+    }
+  },
+  selectCapabilitiesFileCategoriesAction: (categories: string[]): FilterTestCaseActionTypes => {
+    return {
+      type: SELECT_CAPABILITIES_FILE_CATEGORIES,
+      payload: categories
+    }
+  },
+  expandCapabilitiesFileCategoriesAction: (categories: string[]): FilterTestCaseActionTypes => {
+    return {
+      type: EXPAND_CAPABILITIES_FILE_CATEGORIES,
+      payload: categories
+    }
+  },
+  getCapabilitiesConfigAction_Request: (): FilterTestCaseActionTypes => {
+    return {
+      type: GET_CAPABILITIES_CONFIG_REQUEST
+    }
+  },
+  getCapabilitiesConfigAction_Success: (capabilitiesConfigJson: string): FilterTestCaseActionTypes => {
+    return {
+      type: GET_CAPABILITIES_CONFIG_SUCCESS,
+      payload: capabilitiesConfigJson
+    }
+  },
+  getCapabilitiesConfigAction_Failure: (error: string): FilterTestCaseActionTypes => {
+    return {
+      type: GET_CAPABILITIES_CONFIG_FAILURE,
+      errorMsg: error
     }
   }
 }

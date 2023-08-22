@@ -569,7 +569,7 @@ function getDepupedCategoryInfo(testCase: ConfigTestCase): ConfigTestCaseCategor
     return Array.from(map.values())
 }
 
-function parseCapabilitiesConfigJson(input: string): CapabilitiesConfig {
+function parseCapabilitiesConfigJson (input: string): CapabilitiesConfig {
     const json = changeKeyCasing(JSON.parse(input))
 
     const result: CapabilitiesConfig = json.Capabilities
@@ -616,8 +616,6 @@ function parseCapabilitiesConfigJson(input: string): CapabilitiesConfig {
             }
         })
     })
-
-    console.log(result)
 
     return result
 }
