@@ -35,7 +35,7 @@ namespace Microsoft.Protocols.TestManager.CLI
 
         [Option("cfilter",
             Required = false,
-            HelpText = "Specifies the filter expression of test cases to run using the provided capabilities specification file.\nThis parameter is required if a capabilities specification file is provided using the cspecs parameter.")]
+            HelpText = "Specifies the filter expression of test cases to run using the provided capabilities specification file.\nThis parameter is required if a capabilities specification file is provided using the cfile parameter.")]
         public string CapabilitiesFilterExpression { get; set; }
 
         [Option("config",

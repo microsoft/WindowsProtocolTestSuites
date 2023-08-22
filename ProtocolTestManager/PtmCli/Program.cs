@@ -228,7 +228,7 @@ namespace Microsoft.Protocols.TestManager.CLI
                 }
             }
 
-            if (_param.ContainsKey("cspecs"))
+            if (_param.ContainsKey("cfile"))
             {
                 if(!_param.ContainsKey("cfilter"))
                 {
