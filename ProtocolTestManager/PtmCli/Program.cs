@@ -349,7 +349,7 @@ namespace Microsoft.Protocols.TestManager.CLI
             Logger.AddLog(LogLevel.Information, $"Found {testNames.Length} matching test name(s).");
             Logger.AddLog(LogLevel.Debug, $"The following matching test name(s) were found: {string.Join('|', testNames)}.");
 
-            var testCases = util.GetSelectedCaseList()
+            var testCases = util.GetTestSuite().TestCaseList
                                    .Where(t => testNames.Contains(t.FullName))
                                    .ToList();
 
