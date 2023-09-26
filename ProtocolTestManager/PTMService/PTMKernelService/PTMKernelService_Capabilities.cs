@@ -75,7 +75,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 Name = name,
                 Description = description,
-                TestSuiteName = testSuite.Name,
+                TestSuiteName = testSuite.TestSuiteName,
                 TestSuiteVersion = testSuite.Version
             };
 

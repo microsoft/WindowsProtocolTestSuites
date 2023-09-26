@@ -15,9 +15,8 @@ import { ConfigurationsDataSrv } from '../services/Configurations'
 import { FilterTestCaseActions } from '../actions/FilterTestCaseAction'
 import { TestSuitesDataSrv } from '../services/TestSuites'
 import { SelectedRuleGroup } from '../model/RuleGroup'
-import { IStackItemTokens, IStackTokens, PrimaryButton, Stack, Dropdown, Label } from '@fluentui/react'
+import { IStackItemTokens, IStackTokens, PrimaryButton, Stack, Dropdown } from '@fluentui/react'
 import { ConfigurationMethod_AutoDetection } from './ConfigureMethod'
-import { PropertyGroupsActions } from '../actions/PropertyGroupsAction'
 import { InvalidAppStateNotification } from '../components/InvalidAppStateNotification'
 import { CapabilitiesDataSrv } from '../services/Capabilities'
 
@@ -76,7 +75,7 @@ export const FilterTestCase: React.FC<any> = (props: any) => {
   }
 
   const buildCapabilitiesDropdownOptions = () => {
-    const testSuiteName = testSuiteInfo.selectedTestSuite?.Name ?? ''
+    const testSuiteName = testSuiteInfo.selectedTestSuite?.TestSuiteName ?? ''
     const testSuiteVersion = testSuiteInfo.selectedTestSuite?.Version ?? ''
     const options = capabilitiesListState.displayList
       .filter(c => c.TestSuiteName === testSuiteName && c.TestSuiteVersion === testSuiteVersion)

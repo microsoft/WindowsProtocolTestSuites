@@ -6,6 +6,7 @@ import { TestCase } from './TestCase'
 export interface TestSuite {
   Id: number
   Name: string
+  TestSuiteName: string
   Version: string
   Description?: string
   Removed: boolean

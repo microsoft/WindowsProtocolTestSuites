@@ -15,6 +15,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 
         public string Name { get; set; }
 
+        public string TestSuiteName { get; set; }
+
         public string Version { get; set; }
 
         public string Description { get; set; }

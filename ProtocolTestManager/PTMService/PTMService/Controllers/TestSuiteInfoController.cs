@@ -39,6 +39,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             {
                 Id = item.Id,
                 Name = item.Name,
+                TestSuiteName = item.TestSuiteName,
                 Version = item.Version,
                 Description = item.Description,
                 Removed = item.Removed
@@ -118,6 +119,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
             {
                 Id = testSuite.Id,
                 Name = testSuite.Name,
+                TestSuiteName = testSuite.TestSuiteName,
                 Version = testSuite.Version,
                 Description = testSuite.Description,
                 TestCases = testCases.ToArray(),
