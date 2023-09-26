@@ -67,6 +67,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
                             ""categories"": [
                                 ""Group 1-_ .Category 2""
                             ]
+                        },
+                        {
+                            ""name"": ""Test Case 3"",
+                            ""categories"": []
                         }
                     ]
                 }
@@ -512,6 +516,42 @@ namespace Microsoft.Protocols.TestManager.PTMService.UnitTest.Kernel
             var ex = Assert.ThrowsException<InvalidOperationException>(() =>
                                     capabilitiesConfig.ExpandIdentifier("Group 1-_.CategoryX").ToArray());
             Assert.AreEqual(CapabilitiesConfigReader.UnknownCategoryMessage("CategoryX").ToLowerInvariant(), ex.Message.ToLowerInvariant());
+        }
+
+        [TestMethod]
+        public void GetJson_ReturnsFullJson_WhenSkipTestsWithNoCategoryIsFalse()
+        {
+            // Arrange
+            var json = validJson;
+
+            // Act
+            var capabilitiesConfig = CapabilitiesConfigReader.Parse(json);
+
+            // Assert
+            var testCasesNode =
+                capabilitiesConfig.Json["capabilities"]["testcases"] as JsonArray;
+            Assert.IsNotNull(capabilitiesConfig);
+            Assert.AreEqual(capabilitiesConfig.Json, capabilitiesConfig.GetJson(skipTestsWithNoCategory: false));
+            Assert.IsTrue(testCasesNode != null);
+            Assert.IsTrue(testCasesNode.Count == 3);
+        }
+
+        [TestMethod]
+        public void GetJson_ReturnsFilteredJson_WhenSkipTestsWithNoCategoryIsTrue()
+        {
+            // Arrange
+            var json = validJson;
+
+            // Act
+            var capabilitiesConfig = CapabilitiesConfigReader.Parse(json);
+            var filteredJson = capabilitiesConfig.GetJson(skipTestsWithNoCategory: true);
+
+            // Assert
+            var testCasesNode =
+                filteredJson["capabilities"]["testcases"] as JsonArray;
+            Assert.IsNotNull(capabilitiesConfig);
+            Assert.IsTrue(testCasesNode != null);
+            Assert.IsTrue(testCasesNode.Count == 2);
         }
     }
 }

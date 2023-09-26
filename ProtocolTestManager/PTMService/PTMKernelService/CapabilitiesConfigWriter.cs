@@ -83,7 +83,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     },
                     ["groups"] = new JsonArray(),
                     ["testcases"] = new JsonArray(
-                                    testCases.Select(c => new JsonObject
+                                    testCases
+                                    .OrderBy(t => t.FullName)
+                                    .Select(c => new JsonObject
                                     {
                                         ["name"] = c.FullName,
                                         ["categories"] = new JsonArray()

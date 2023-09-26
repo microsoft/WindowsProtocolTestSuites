@@ -1,9 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { TestCase } from "./TestCase"
+import { TestCase } from './TestCase'
 
 export type TestCasesViewType = 'InCategory' | 'OutCategory' | 'NoCategory' | undefined
+
+export type CapabilitiesTestCasesFilterType = 'Name' | 'TestCategory'
 
 export const TestCasesViewsConfig = new Map<string, TestCasesViewType>([
   ['0', 'InCategory'],
@@ -64,4 +66,22 @@ export interface CapabilitiesConfig {
 export interface TestCaseWithCategories {
   Test: TestCase
   LowerCaseCategories: Set<string>
+}
+
+export interface TestCaseFilterInfo {
+  IsFiltered: boolean
+  FilterBy: CapabilitiesTestCasesFilterType
+  FilterText: string
+  FilterOutput: string[]
+}
+
+export interface ConfigTestCasesFilterInfo {
+  TestsInCurrentCategory: TestCaseFilterInfo
+  TestsInOtherCategories: TestCaseFilterInfo
+  TestsNotInAnyCategory: TestCaseFilterInfo
+}
+
+export interface JsonInfo {
+  Name: string
+  Json: string
 }

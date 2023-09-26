@@ -174,9 +174,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             }
         }
 
-        public string GetCapabilitiesConfigJsonPath(int id)
+        public (string Name, string Path) GetCapabilitiesConfigInfo(int id)
         {
-            var result = string.Empty;
+            var path = string.Empty;
+            var name = string.Empty;
             using var instance = ScopedServiceFactory.GetInstance();
 
             var pool = instance.ScopedServiceInstance;
@@ -187,10 +188,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 repo.Get(q => q.Where(item => item.Id == id)).FirstOrDefault();
             if (capabilities != null)
             {
+                name = capabilities.Name;
                 var capabilitiesConfigNode =
                     StoragePool.GetKnownNode(KnownStorageNodeNames.CapabilitiesSpec).GetNode(id.ToString());
 
-                result = capabilitiesConfigNode.GetFiles()
+                path = capabilitiesConfigNode.GetFiles()
                                                .Where(f => Path.GetFileName(f) == CapabilitiesConsts.SpecsFile)
                                                .FirstOrDefault();
             }
@@ -199,9 +201,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 Logger.AddLog(LogLevel.Error, $"Capabilities Config with id, {id} not found for retrieval.");
             }
 
-            return result;
+            return (name, path);
         }
 
+        /// <summary>
+        /// Saves a capabilities file.
+        /// </summary>
+        /// <param name="id">The id of the capabilities file to save to.</param>
+        /// <param name="json">Json content of the capabilities file to save.</param>
         public void SaveCapabilitiesFile(int id, JsonNode json)
         {
             using var instance = ScopedServiceFactory.GetInstance();
@@ -230,6 +237,50 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 Logger.AddLog(LogLevel.Error, $"Capabilities Config with id, {id} not found for update.");
             }
+        }
+
+        /// <summary>
+        /// Filters test cases by name.
+        /// </summary>
+        /// <param name="testCases">The test cases to apply the filter to.</param>
+        /// <param name="filter">The name filter to apply.</param>
+        /// <returns>An array of filtered test cases.</returns>
+        public string[] FilterCapabilitiesTestCasesByName(string[] testCases, string filter) 
+        {
+            filter = filter.Trim().ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                return testCases;
+            }
+
+            return testCases
+                .Where(t => t.Trim().ToLowerInvariant().Contains(filter))
+                .ToArray();
+        }
+
+        public string[] FilterCapabilitiesTestCasesByCategory(string[] testCases, string filter,
+            ITestSuite testSuite)
+        {
+            filter = filter.Trim().ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(filter))
+            {
+                return testCases;
+            }
+
+            var testCasesInTestSuite =
+                testSuite.GetTestCases(filter: null)
+                .ToDictionary(t => t.FullName.Trim().ToLowerInvariant(), t => t.Category);
+
+            return testCases.Where(t =>
+                                    {
+                                        var fullNameLowerCase = t?.Trim()?.ToLowerInvariant();
+
+                                        return fullNameLowerCase != null 
+                                            && testCasesInTestSuite.ContainsKey(fullNameLowerCase)
+                                            && testCasesInTestSuite[fullNameLowerCase].Any(c =>
+                                            c.Trim().ToLowerInvariant().Contains(filter));
+                                    })
+                            .ToArray();
         }
     }
 }

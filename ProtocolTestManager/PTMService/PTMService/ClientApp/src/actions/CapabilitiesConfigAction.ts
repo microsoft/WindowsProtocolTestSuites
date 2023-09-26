@@ -1,7 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { ConfigGroup, ConfigCategory, TestCasesViewType } from '../model/CapabilitiesFileInfo'
+import { ConfigGroup, ConfigCategory, TestCasesViewType, JsonInfo } from '../model/CapabilitiesFileInfo'
+import { FilterResult } from '../model/FilterCapabilitiesTestCasesRequest'
 
 // define action consts
 export const GET_CAPABILITIES_CONFIG_REQUEST = 'CAPABILITIES/GET_CAPABILITIES_CONFIG_REQUEST'
@@ -28,9 +29,15 @@ export const SAVE_CAPABILITIES_CONFIG_REQUEST = 'CAPABILITIES/SAVE_CAPABILITIES_
 export const SAVE_CAPABILITIES_CONFIG_SUCCESS = 'CAPABILITIES/SAVE_CAPABILITIES_CONFIG_SUCCESS'
 export const SAVE_CAPABILITIES_CONFIG_FAILURE = 'CAPABILITIES/SAVE_CAPABILITIES_CONFIG_FAILURE'
 
+export const FILTER_CAPABILITIES_TESTCASES_REQUEST = 'CAPABILITIES/FILTER_CAPABILITIES_TESTCASES_REQUEST'
+export const FILTER_CAPABILITIES_TESTCASES_SUCCESS = 'CAPABILITIES/FILTER_CAPABILITIES_TESTCASES_SUCCESS'
+export const FILTER_CAPABILITIES_TESTCASES_FAILURE = 'CAPABILITIES/FILTER_CAPABILITIES_TESTCASES_FAILURE'
+
+export const REMOVE_CAPABILITIES_TESTCASES_FILTER = 'CAPABILITIES/REMOVE_CAPABILITIES_TESTCASES_FILTER'
+
 // define action types
 interface GetCapabilitiesConfigActionRequestType { type: typeof GET_CAPABILITIES_CONFIG_REQUEST }
-interface GetCapabilitiesConfigActionSuccessType { type: typeof GET_CAPABILITIES_CONFIG_SUCCESS, payload: string }
+interface GetCapabilitiesConfigActionSuccessType { type: typeof GET_CAPABILITIES_CONFIG_SUCCESS, payload: JsonInfo }
 interface GetCapabilitiesConfigActionFailureType { type: typeof GET_CAPABILITIES_CONFIG_FAILURE, errorMsg: string }
 
 interface SelectCapabilitiesConfigGroupActionType { type: typeof SELECT_CAPABILITIES_CONFIG_GROUP, payload: ConfigGroup }
@@ -54,6 +61,12 @@ interface SaveCapabilitiesConfigRequestActionType { type: typeof SAVE_CAPABILITI
 interface SaveCapabilitiesConfigSuccessActionType { type: typeof SAVE_CAPABILITIES_CONFIG_SUCCESS }
 interface SaveCapabilitiesConfigFailureActionType { type: typeof SAVE_CAPABILITIES_CONFIG_FAILURE, errorMsg: string }
 
+interface FilterCapabilitiesTestCasesRequestActionType { type: typeof FILTER_CAPABILITIES_TESTCASES_REQUEST }
+interface FilterCapabilitiesTestCasesSuccessActionType { type: typeof FILTER_CAPABILITIES_TESTCASES_SUCCESS, payload: FilterResult }
+interface FilterCapabilitiesTestCasesFailureActionType { type: typeof FILTER_CAPABILITIES_TESTCASES_FAILURE, errorMsg: string }
+
+interface RemoveCapabilitiesTestCasesFilterActionType { type: typeof REMOVE_CAPABILITIES_TESTCASES_FILTER }
+
 export type CapabilitiesConfigActionTypes = GetCapabilitiesConfigActionRequestType
 | GetCapabilitiesConfigActionSuccessType
 | GetCapabilitiesConfigActionFailureType
@@ -72,6 +85,10 @@ export type CapabilitiesConfigActionTypes = GetCapabilitiesConfigActionRequestTy
 | SaveCapabilitiesConfigRequestActionType
 | SaveCapabilitiesConfigSuccessActionType
 | SaveCapabilitiesConfigFailureActionType
+| FilterCapabilitiesTestCasesRequestActionType
+| FilterCapabilitiesTestCasesSuccessActionType
+| FilterCapabilitiesTestCasesFailureActionType
+| RemoveCapabilitiesTestCasesFilterActionType
 
 // define actions
 export const CapabilitiesConfigActions = {
@@ -80,10 +97,10 @@ export const CapabilitiesConfigActions = {
       type: GET_CAPABILITIES_CONFIG_REQUEST
     }
   },
-  getCapabilitiesConfigAction_Success: (capabilitiesConfigJson: string): CapabilitiesConfigActionTypes => {
+  getCapabilitiesConfigAction_Success: (capabilitiesConfigJsonInfo: JsonInfo): CapabilitiesConfigActionTypes => {
     return {
       type: GET_CAPABILITIES_CONFIG_SUCCESS,
-      payload: capabilitiesConfigJson
+      payload: capabilitiesConfigJsonInfo
     }
   },
   getCapabilitiesConfigAction_Failure: (error: string): CapabilitiesConfigActionTypes => {
@@ -176,6 +193,28 @@ export const CapabilitiesConfigActions = {
     return {
       type: SAVE_CAPABILITIES_CONFIG_FAILURE,
       errorMsg: error
+    }
+  },
+  filterTestCasesConfigAction_Request: (): CapabilitiesConfigActionTypes => {
+    return {
+      type: FILTER_CAPABILITIES_TESTCASES_REQUEST
+    }
+  },
+  filterTestCasesConfigAction_Success: (result: FilterResult): CapabilitiesConfigActionTypes => {
+    return {
+      type: FILTER_CAPABILITIES_TESTCASES_SUCCESS,
+      payload: result
+    }
+  },
+  filterTestCasesConfigAction_Failure: (error: string): CapabilitiesConfigActionTypes => {
+    return {
+      type: FILTER_CAPABILITIES_TESTCASES_FAILURE,
+      errorMsg: error
+    }
+  },
+  removeTestCasesFilter: (): CapabilitiesConfigActionTypes => {
+    return {
+      type: REMOVE_CAPABILITIES_TESTCASES_FILTER
     }
   }
 }

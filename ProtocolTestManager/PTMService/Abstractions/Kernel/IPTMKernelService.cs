@@ -294,11 +294,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="id">The Id of the capabilities file to remove.</param>
         void RemoveCapabilitiesFile(int id);
 
+
         /// <summary>
-        /// Gets the path to the json file for the capabilities file.
+        /// Gets the path and name to the json file for the capabilities file.
         /// </summary>
         /// <param name="id">The id of the <see cref="CapabilitiesConfig"/> to get the json file for.</param>
-        string GetCapabilitiesConfigJsonPath(int id);
+        /// <returns>A tuple of the capabilities file name and path.</returns>
+        (string Name, string Path) GetCapabilitiesConfigInfo(int id);
 
         /// <summary>
         /// Saves a capabilities file.
@@ -306,6 +308,24 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="id">The id of the <see cref="CapabilitiesConfig"/> to save the json file for.</param>
         /// <param name="json">The json content to save.</param>
         void SaveCapabilitiesFile(int id, JsonNode json);
+
+        /// <summary>
+        /// Filters test cases for a capabilities file by name.
+        /// </summary>
+        /// <param name="testCases">The test cases to filter.</param>
+        /// <param name="filter">The filter to apply.</param>
+        /// <returns>The filtered test cases.</returns>
+        string[] FilterCapabilitiesTestCasesByName(string[] testCases, string filter);
+
+        /// <summary>
+        /// Filters test cases in a capabilities file by category.
+        /// </summary>
+        /// <param name="testCases">The test cases to filter.</param>
+        /// <param name="filter">The filter to apply.</param>
+        /// <param name="testSuite">The test suite the capabilities file targets and from which the categories will be extracted.</param>
+        /// <returns>The filtered test cases.</returns>
+        string[] FilterCapabilitiesTestCasesByCategory(string[] testCases, string filter,
+                    ITestSuite testSuite);
 
         #endregion
     }

@@ -41,6 +41,7 @@
     <None Remove="ClientApp\src\components\CapabilitiesTreePanel.tsx" />
     <None Remove="ClientApp\src\model\CapabilitiesFileInfo.ts" />
     <None Remove="ClientApp\src\model\CreateCapabilitiesFileRequest.ts" />
+    <None Remove="ClientApp\src\model\FilterCapabilitiesTestCasesRequest.ts" />
     <None Remove="ClientApp\src\model\SaveCapabilitiesFileRequest.ts" />
     <None Remove="ClientApp\src\model\UpdateCapabilitiesFileRequest.ts" />
     <None Remove="ClientApp\src\pages\ConfigureCapabilitiesConfig.tsx" />
@@ -68,6 +69,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\CapabilitiesTestCasesTreePanel.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\CapabilitiesTreePanel.tsx" />
     <TypeScriptCompile Include="ClientApp\src\model\CapabilitiesFileInfo.ts" />
+    <TypeScriptCompile Include="ClientApp\src\model\FilterCapabilitiesTestCasesRequest.ts" />
     <TypeScriptCompile Include="ClientApp\src\model\SaveCapabilitiesFileRequest.ts" />
     <TypeScriptCompile Include="ClientApp\src\model\UpdateCapabilitiesFileRequest.ts">
       <SubType>Code</SubType>

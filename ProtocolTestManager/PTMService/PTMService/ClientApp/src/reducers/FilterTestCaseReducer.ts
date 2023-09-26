@@ -403,9 +403,9 @@ function changeKeyCasing (current: any) {
   return current
 }
 
-function parseCapabilitiesConfigJson (input: string, testCasesMap: Map<string, TestCase>):
+function parseCapabilitiesConfigJson (input: any, testCasesMap: Map<string, TestCase>):
 [ConfigGroup[], Map<string, TestCaseWithCategories>] {
-  const json = changeKeyCasing(JSON.parse(input))
+  const json = changeKeyCasing(JSON.parse(input.Json))
 
   const result: CapabilitiesConfig = json.Capabilities
   const testCasesWithCategories = new Map<string, TestCaseWithCategories>()

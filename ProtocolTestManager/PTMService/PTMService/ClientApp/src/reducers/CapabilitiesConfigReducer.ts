@@ -21,17 +21,23 @@ import {
     CapabilitiesConfigActionTypes,
     SAVE_CAPABILITIES_CONFIG_REQUEST,
     SAVE_CAPABILITIES_CONFIG_SUCCESS,
-    SAVE_CAPABILITIES_CONFIG_FAILURE
+    SAVE_CAPABILITIES_CONFIG_FAILURE,
+    FILTER_CAPABILITIES_TESTCASES_REQUEST,
+    FILTER_CAPABILITIES_TESTCASES_SUCCESS,
+    FILTER_CAPABILITIES_TESTCASES_FAILURE,
+    REMOVE_CAPABILITIES_TESTCASES_FILTER
 } from '../actions/CapabilitiesConfigAction'
 import {
     TestCasesViewType, CapabilitiesConfig, NamedConfigHierarchy, ConfigGroup, ConfigMetadata,
-    ConfigCategory, ConfigTestCase, ConfigTestCaseCategoryInfo, ConfigTestCasesInfo
+    ConfigCategory, ConfigTestCase, ConfigTestCaseCategoryInfo, ConfigTestCasesInfo,
+    TestCaseFilterInfo, ConfigTestCasesFilterInfo, JsonInfo
 } from '../model/CapabilitiesFileInfo'
-import { TestCase } from '../model/TestCase'
+
 export interface CapabilitiesConfigState {
     isLoading: boolean
     isProcessing: boolean
     errorMsg?: string
+    name: string
     metadata: ConfigMetadata
     groups: ConfigGroup[]
     selectedGroup?: ConfigGroup
@@ -39,16 +45,25 @@ export interface CapabilitiesConfigState {
     selectedCategoryInGroup?: ConfigCategory
     testCases: Map<string, ConfigTestCase>
     testCasesInfo: ConfigTestCasesInfo
+    testCasesFilterInfo: ConfigTestCasesFilterInfo
     selectedTestCasesInfo: ConfigTestCasesInfo
     selectedTestCasesInCurrentView: string[]
     testCasesView: TestCasesViewType
     hasUnsavedChanges: boolean
 }
 
+const defaultFilterInfo: TestCaseFilterInfo = {
+    IsFiltered: false,
+    FilterBy: 'Name',
+    FilterText: '',
+    FilterOutput: []
+}
+
 const initialCapabilitiesConfigState: CapabilitiesConfigState = {
     isLoading: false,
     isProcessing: false,
     errorMsg: undefined,
+    name: '',
     metadata: {
         Testsuite: '',
         Version: ''
@@ -62,6 +77,11 @@ const initialCapabilitiesConfigState: CapabilitiesConfigState = {
         TestsInCurrentCategory: [],
         TestsInOtherCategories: [],
         TestsNotInAnyCategory: []
+    },
+    testCasesFilterInfo: {
+        TestsInCurrentCategory: defaultFilterInfo,
+        TestsInOtherCategories: defaultFilterInfo,
+        TestsNotInAnyCategory: defaultFilterInfo
     },
     selectedTestCasesInfo: {
         TestsInCurrentCategory: [],
@@ -215,7 +235,7 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
 
         case GET_CAPABILITIES_CONFIG_SUCCESS:
             {
-                const config = parseCapabilitiesConfigJson(action.payload)
+                const [name, config] = parseCapabilitiesConfigJson(action.payload)
 
                 const selectedGroup = config.Groups.length > 0 ? config.Groups[0] : undefined
                 const categoriesInGroup = config.Groups.length > 0 ? config.Groups[0].Categories.sort(compare) : []
@@ -223,8 +243,11 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                 const testCasesInfo =
                     getConfigTestCasesInfo(config.TestCasesMap, selectedCategoryInGroup)
 
+                state.testCasesFilterInfo.TestsInCurrentCategory = defaultFilterInfo
+
                 return {
                     ...state,
+                    name: name,
                     isLoading: false,
                     errorMsg: undefined,
                     metadata: config.Metadata,
@@ -253,6 +276,8 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                     categoriesInGroup.length > 0 ? categoriesInGroup[0] : undefined
                 const testCasesInfo = getConfigTestCasesInfo(state.testCases, selectedCategoryInGroup)
 
+                state.testCasesFilterInfo.TestsInCurrentCategory = defaultFilterInfo
+
                 return {
                     ...state,
                     errorMsg: undefined,
@@ -268,6 +293,8 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                 const selectedCategoryInGroup = action.payload
                 const testCasesInfo =
                     getConfigTestCasesInfo(state.testCases, selectedCategoryInGroup)
+
+                state.testCasesFilterInfo.TestsInCurrentCategory = defaultFilterInfo
 
                 return {
                     ...state,
@@ -361,6 +388,10 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                 const testCasesInfo =
                     getConfigTestCasesInfo(updatedTestCases, newSelectedCategoryInGroup)
 
+                state.testCasesFilterInfo.TestsInCurrentCategory = defaultFilterInfo
+                state.testCasesFilterInfo.TestsInOtherCategories = defaultFilterInfo
+                state.testCasesFilterInfo.TestsNotInAnyCategory = defaultFilterInfo
+
                 return {
                     ...state,
                     errorMsg: undefined,
@@ -388,6 +419,9 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                     state.selectedGroup.Categories =
                         [...state.selectedGroup.Categories, newCategory].sort(compare)
                 }
+
+                state.testCasesFilterInfo.TestsInCurrentCategory = defaultFilterInfo
+
                 return {
                     ...state,
                     errorMsg: undefined,
@@ -426,6 +460,10 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                 const testCasesInfo =
                     getConfigTestCasesInfo(updatedTestCases, newSelectedCategoryInGroup)
 
+                state.testCasesFilterInfo.TestsInCurrentCategory = defaultFilterInfo
+                state.testCasesFilterInfo.TestsInOtherCategories = defaultFilterInfo
+                state.testCasesFilterInfo.TestsNotInAnyCategory = defaultFilterInfo
+
                 return {
                     ...state,
                     errorMsg: undefined,
@@ -448,6 +486,14 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                 const testCasesInfo =
                     getConfigTestCasesInfo(updatedTestCases, updatedCategory)
 
+                state.testCasesFilterInfo.TestsInCurrentCategory = defaultFilterInfo
+
+                if (state.testCasesView === 'NoCategory') {
+                    // Remove filter from 'NoCategory' so removed test cases no longer show on the
+                    // view.
+                    state.testCasesFilterInfo.TestsNotInAnyCategory = defaultFilterInfo
+                }
+
                 return {
                     ...state,
                     errorMsg: undefined,
@@ -468,6 +514,8 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                     removeSelectedTestCasesFromCategory(selectedCategory, testCases, selectedTestCases)
                 const testCasesInfo =
                     getConfigTestCasesInfo(updatedTestCases, updatedCategory)
+
+                state.testCasesFilterInfo.TestsInCurrentCategory = defaultFilterInfo
 
                 return {
                     ...state,
@@ -501,6 +549,95 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                 ...state,
                 isLoading: false,
                 errorMsg: action.errorMsg
+            }
+
+        case FILTER_CAPABILITIES_TESTCASES_REQUEST:
+            return {
+                ...state,
+                isLoading: true,
+                errorMsg: undefined
+            }
+
+        case FILTER_CAPABILITIES_TESTCASES_SUCCESS:
+            {
+                let filterInfo = state.testCasesFilterInfo
+                const filterResult = action.payload
+                const filterInfoChange: TestCaseFilterInfo = {
+                    IsFiltered: true,
+                    FilterBy: filterResult.FilterByCategory ? 'TestCategory' : 'Name',
+                    FilterText: filterResult.Filter,
+                    FilterOutput: filterResult.TestCases
+                }
+                switch (state.testCasesView) {
+                    case 'InCategory':
+                        filterInfo = {
+                            ...state.testCasesFilterInfo,
+                            TestsInCurrentCategory: filterInfoChange
+                        }
+                        break
+                    case 'OutCategory':
+                        filterInfo = {
+                            ...state.testCasesFilterInfo,
+                            TestsInOtherCategories: filterInfoChange
+                        }
+                        break
+                    case 'NoCategory':
+                        filterInfo = {
+                            ...state.testCasesFilterInfo,
+                            TestsNotInAnyCategory: filterInfoChange
+                        }
+                        break
+                }
+
+                return {
+                    ...state,
+                    isLoading: false,
+                    errorMsg: undefined,
+                    testCasesFilterInfo: filterInfo
+                }
+            }
+
+        case FILTER_CAPABILITIES_TESTCASES_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                errorMsg: action.errorMsg
+            }
+
+        case REMOVE_CAPABILITIES_TESTCASES_FILTER:
+            {
+                let filterInfo = state.testCasesFilterInfo
+                const filterInfoChange: TestCaseFilterInfo = {
+                    IsFiltered: false,
+                    FilterBy: 'Name',
+                    FilterText: '',
+                    FilterOutput: []
+                }
+                switch (state.testCasesView) {
+                    case 'InCategory':
+                        filterInfo = {
+                            ...state.testCasesFilterInfo,
+                            TestsInCurrentCategory: filterInfoChange
+                        }
+                        break
+                    case 'OutCategory':
+                        filterInfo = {
+                            ...state.testCasesFilterInfo,
+                            TestsInOtherCategories: filterInfoChange
+                        }
+                        break
+                    case 'NoCategory':
+                        filterInfo = {
+                            ...state.testCasesFilterInfo,
+                            TestsNotInAnyCategory: filterInfoChange
+                        }
+                        break
+                }
+
+                return {
+                    ...state,
+                    testCasesFilterInfo: filterInfo
+                }
             }
 
         default:
@@ -569,8 +706,9 @@ function getDepupedCategoryInfo(testCase: ConfigTestCase): ConfigTestCaseCategor
     return Array.from(map.values())
 }
 
-function parseCapabilitiesConfigJson (input: string): CapabilitiesConfig {
-    const json = changeKeyCasing(JSON.parse(input))
+function parseCapabilitiesConfigJson(input: JsonInfo): [string, CapabilitiesConfig] {
+    const name = input.Name
+    const json = changeKeyCasing(JSON.parse(input.Json))
 
     const result: CapabilitiesConfig = json.Capabilities
 
@@ -617,5 +755,5 @@ function parseCapabilitiesConfigJson (input: string): CapabilitiesConfig {
         })
     })
 
-    return result
+    return [name, result]
 }

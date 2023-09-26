@@ -4,18 +4,21 @@
 
 import {
   ContextualMenu, DefaultButton, Dialog, DialogFooter, DialogType, PrimaryButton, SearchBox, Stack,
-    TextField, IStackItemTokens, IStackTokens, MessageBar, MessageBarType, Label
+    TextField, MessageBar, MessageBarType, Label, Dropdown, Checkbox
 } from '@fluentui/react'
 import { CommandBar, ICommandBarItemProps } from '@fluentui/react/lib/CommandBar'
 import { useBoolean } from '@uifabric/react-hooks'
 import { StackGap5, StackGap10 } from '../components/StackStyle'
 import { CapabilitiesGroupsPanel } from '../components/CapabilitiesGroupsPanel'
-import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CapabilitiesDataSrv } from '../services/Capabilities'
 import { CapabilitiesConfigActions } from '../actions/CapabilitiesConfigAction'
 import { buildCapabilitiesFileRequest } from '../model/SaveCapabilitiesFileRequest'
+import { FilterParams } from '../model/FilterCapabilitiesTestCasesRequest'
+import { CapabilitiesTestCasesFilterType } from '../model/CapabilitiesFileInfo'
 import { AppState } from '../store/configureStore'
+import { Icon } from '@fluentui/react/lib/Icon';
 
 type CapabilitiesConfigDialogContentKind = 'Group' | 'Category'
 type CapabilitiesConfigDialogActionKind = 'CreateUpdate' | 'Remove'
@@ -32,23 +35,19 @@ export function ConfigureCapabilitiesConfig (props: any) {
   const capabilitiesConfigState = useSelector((state: AppState) => state.capabilitiesConfig)
   const selectedGroup = capabilitiesConfigState.selectedGroup
   const selectedCategoryInGroup = capabilitiesConfigState.selectedCategoryInGroup
-  const testCasesInfo = capabilitiesConfigState.testCasesInfo
   const selectedTestCasesInfo = capabilitiesConfigState.selectedTestCasesInfo
   const selectedTestCasesView = capabilitiesConfigState.testCasesView
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
+  const [hideDownloadDialog, { toggle: toggleHideDownloadDialog }] = useBoolean(true)
+  const [streamlineDownload, setStreamlineDownload] = useState(false)
   const [showErrorMessageBar, setShowErrorMessageBar] = useState(false)
   const [groupName, setGroupName] = useState('')
   const [categoryName, setCategoryName] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const dispatch = useDispatch()
   const [dialogContentProps, setDialogContentProps] = useState<CapabilitiesConfigDialogContentProps | undefined>(undefined)
-  const stackTokens: IStackTokens = {
-    maxHeight: '100%'
-  }
-
-  const stackItemTokens: IStackItemTokens = {
-    padding: '0 10px'
-  }
+  const [filterText, setFilterText] = useState('')
+  const [filterType, setFilterType] = useState<CapabilitiesTestCasesFilterType>('Name')
 
   useEffect(() => {
     const id: number = props.match.params.id
@@ -196,7 +195,11 @@ export function ConfigureCapabilitiesConfig (props: any) {
 
   const onDownload = () => {
     const id: number = props.match.params.id
-    dispatch(CapabilitiesDataSrv.downloadCapabilitiesFile(id))
+    if (streamlineDownload) {
+        dispatch(CapabilitiesDataSrv.downloadFilteredCapabilitiesFile(id))
+    } else {
+        dispatch(CapabilitiesDataSrv.downloadCapabilitiesFile(id))
+    }
   }
 
   const onSave = () => {
@@ -207,6 +210,46 @@ export function ConfigureCapabilitiesConfig (props: any) {
       () => {
 
       }))
+  }
+
+  const getTestCases = () => {
+      let testCases: string[] = []
+
+      switch (capabilitiesConfigState.testCasesView) {
+          case 'InCategory':
+              testCases = capabilitiesConfigState.testCasesInfo.TestsInCurrentCategory
+              break
+          case 'OutCategory':
+              testCases = capabilitiesConfigState.testCasesInfo.TestsInOtherCategories
+              break
+          case 'NoCategory':
+              testCases = capabilitiesConfigState.testCasesInfo.TestsNotInAnyCategory
+              break
+      }
+
+      return testCases
+  }
+
+  const onTestCasesFilter = () => {
+      if (filterText) {
+          const testSuiteName = capabilitiesConfigState.metadata.Testsuite
+          const testSuiteVersion = capabilitiesConfigState.metadata.Version
+          const testCases = getTestCases()
+          const parameters: FilterParams = {
+              TestCases: testCases,
+              FilterByCategory: filterType === 'TestCategory',
+              Filter: filterText,
+              TestSuiteName: testSuiteName,
+              TestSuiteVersion: testSuiteVersion
+          }
+          dispatch(CapabilitiesDataSrv.filterCapabilitiesTestCases(parameters, () => {
+
+          }))
+      }
+  }
+
+  const onFilterTextChanged = (newValue: string): void => {
+     setFilterText(newValue)
   }
 
   const createGroupDialogContentProps: CapabilitiesConfigDialogContentProps = {
@@ -273,7 +316,7 @@ export function ConfigureCapabilitiesConfig (props: any) {
       key: 'download',
       text: 'Download',
       iconProps: { iconName: 'Download' },
-      onClick: onDownload
+      onClick: toggleHideDownloadDialog
     }
 
     const fileMenu = {
@@ -448,6 +491,16 @@ export function ConfigureCapabilitiesConfig (props: any) {
       reset()
   }
 
+  const filterDropdownOptions =
+    [{
+        key: 'Name',
+        text: 'Name contains'
+    },
+    {
+        key: 'TestCategory',
+        text: 'TestCategory contains'
+    }]
+
   const dialog = () => {
     return <Dialog
           hidden={hideDialog}
@@ -476,7 +529,7 @@ export function ConfigureCapabilitiesConfig (props: any) {
                     disabled={capabilitiesConfigState.isProcessing}
                     errorMessage={errorMsg || capabilitiesConfigState.errorMsg}
                     onChange={(event: any, newValue?: string) => { onCategoryNameChanged(newValue) }} />
-                        </Stack>
+                 </Stack>
                 : dialogContentProps?.kind === 'Group'
                     ? <div style={{ fontSize: 'large' }}>
                         <Stack horizontalAlign='start' tokens={StackGap5}>
@@ -510,15 +563,67 @@ export function ConfigureCapabilitiesConfig (props: any) {
       </Dialog>
   }
 
+  const onDownloadOptionChange = (ev?: React.FormEvent<HTMLElement | HTMLInputElement>, isChecked?: boolean) => {
+    setStreamlineDownload(isChecked ?? false)
+  }
+
+  const downloadDialog = () => {
+    return <Dialog
+        hidden={hideDownloadDialog}
+        onDismiss={toggleHideDownloadDialog}
+        dialogContentProps={{
+            type: DialogType.normal,
+            title: 'Download Capabilities File'
+        }}
+        modalProps={modalProps}>
+        {
+            <Stack tokens={StackGap10}>
+                <Checkbox label="Remove tests not in any category from the download" checked={streamlineDownload} onChange={onDownloadOptionChange} />
+            </Stack>
+        }
+
+        <DialogFooter>
+            <PrimaryButton
+                onClick={() => {
+                    toggleHideDownloadDialog()
+                    onDownload()
+                }}
+                text='Download'
+                disabled={capabilitiesConfigState.isProcessing} />
+            <DefaultButton
+                onClick={toggleHideDownloadDialog}
+                text="Close"
+                disabled={capabilitiesConfigState.isProcessing} />
+        </DialogFooter>
+    </Dialog>
+  }
+
   return (
-        <div>
-          <Stack horizontal style={{ width: '100%', paddingLeft: 10, paddingRight: 10, paddingTop: 10 }} tokens={StackGap10}>
+      <div>
+          <Stack horizontal style={{ width: '100%', paddingLeft: 10, paddingRight: 10, paddingTop: 5 }} tokens={StackGap10}>
+              <div style={{ fontWeight: 'bold' }}><Icon iconName="ConfigurationSolid" />&nbsp;{ capabilitiesConfigState.name }</div>
+          </Stack>
+          <hr style={{ border: '1px solid #d9d9d9' }} />
+          <Stack horizontal style={{ width: '100%', paddingLeft: 10, paddingRight: 10, paddingTop: 0 }} tokens={StackGap10}>
               <CommandBar items={buildMenuItems()} style={{ width: 480 }} />
 
               {
-                  // selectedCategoryInGroup !== undefined
-                  //  ? <SearchBox placeholder="Filter test cases (You can review filtering rules using the help link above)" style={{ width: 500 }} />
-                  //  : ''
+                selectedCategoryInGroup !== undefined
+                      ? <Stack horizontal horizontalAlign="end">
+                          <Dropdown
+                              key={props.key}
+                              style={{ alignSelf: 'center' }}
+                              ariaLabel={'Filter By ...'}
+                              placeholder='Filter By ...'
+                              selectedKey={filterType}
+                              options={filterDropdownOptions}
+                              onChange={(_, newValue, __) => { const value: any = newValue?.key; setFilterType(value) }}
+                          />
+                          &nbsp;<SearchBox placeholder="Filter test cases by Name or by the TestCategory in code" style={{ width: 400 }}
+                              onChange={(_, newValue) => onFilterTextChanged(newValue ?? '')}/>
+                          &nbsp;<PrimaryButton onClick={() => onTestCasesFilter()}>Filter</PrimaryButton>
+                    </Stack>
+                : ''
               }
 
           </Stack>
@@ -537,8 +642,11 @@ export function ConfigureCapabilitiesConfig (props: any) {
                 : ''
           }
 
-            <CapabilitiesGroupsPanel />
+          <CapabilitiesGroupsPanel />
+
           {dialog()}
+          {downloadDialog()}
+
       </div>
   )
 }

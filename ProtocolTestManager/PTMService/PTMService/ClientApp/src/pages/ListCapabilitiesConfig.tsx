@@ -1,7 +1,11 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { CommandBarButton, ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode, Dialog, DialogFooter, DialogType, IColumn, Label, PrimaryButton, SearchBox, SelectionMode, Stack, TextField, Dropdown } from '@fluentui/react'
+import {
+  CommandBarButton, ContextualMenu, DefaultButton, DetailsList, DetailsListLayoutMode,
+  Dialog, DialogFooter, DialogType, IColumn, Label, PrimaryButton, SearchBox, SelectionMode,
+  Stack, TextField, Dropdown, Checkbox
+} from '@fluentui/react'
 import { useBoolean } from '@uifabric/react-hooks'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -30,11 +34,14 @@ export function ListCapabilitiesConfig (props: any) {
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
   const [dialogContentProps, setDialogContentProps] = useState<TestSuiteCapabilitiesDialogContentProps | undefined>(undefined)
   const [currentCapabilitiesFileName, setCurrentCapabilitiesFileName] = useState('')
+  const [downloadId, setDownloadId] = useState(0)
   const [currentCapabilitiesFileDescription, setCurrentCapabilitiesFileDescription] = useState('')
   const [newCapabilitiesFileTestSuiteId, setNewCapabilitiesFileTestSuiteId] = useState<number>(0)
   const [capabilitiesFileErrorMsg, setCapabilitiesFileErrorMsg] = useState('')
   const [currentCapabilitiesFile, setCurrentCapabilitiesFile] = useState<CapabilitiesFileInfo | undefined>(undefined)
   const [isWarningDialogOpen, { setTrue: showWarningDialog, setFalse: hideWarningDialog }] = useBoolean(false)
+  const [hideDownloadDialog, { toggle: toggleHideDownloadDialog }] = useBoolean(true)
+  const [streamlineDownload, setStreamlineDownload] = useState(false)
 
   useEffect(() => {
     dispatch(ManagementDataSrv.getTestSuiteList())
@@ -140,6 +147,15 @@ export function ListCapabilitiesConfig (props: any) {
   const getCapabilitiesConfigById = (id: number) =>
     capabilitiesListState.displayList.find((value) => value.Id === id)
 
+  const onDownload = () => {
+    const id: number = downloadId
+    if (streamlineDownload) {
+      dispatch(CapabilitiesDataSrv.downloadFilteredCapabilitiesFile(id))
+    } else {
+      dispatch(CapabilitiesDataSrv.downloadCapabilitiesFile(id))
+    }
+  }
+
   const columns = getCapabilitiesGridColumns({
     onDownload: (id: number) => {
       const foundCapabilitiesFile = getCapabilitiesConfigById(id)
@@ -147,7 +163,8 @@ export function ListCapabilitiesConfig (props: any) {
         setCurrentCapabilitiesFile(foundCapabilitiesFile)
         setCurrentCapabilitiesFileName(foundCapabilitiesFile.Name)
         setCurrentCapabilitiesFileDescription(foundCapabilitiesFile.Description ?? '')
-        dispatch(CapabilitiesDataSrv.downloadCapabilitiesFile(id))
+        setDownloadId(id)
+        toggleHideDownloadDialog()
       }
     },
     onConfigure: (id: number) => {
@@ -262,6 +279,49 @@ export function ListCapabilitiesConfig (props: any) {
     }
   }
 
+  const onDownloadOptionChange = (ev?: React.FormEvent<HTMLElement | HTMLInputElement>, isChecked?: boolean) => {
+    setStreamlineDownload(isChecked ?? false)
+  }
+
+  const onDownloadDialogDismiss = () => {
+    toggleHideDownloadDialog()
+    setDownloadId(0)
+    setCurrentCapabilitiesFile(undefined)
+    setCurrentCapabilitiesFileName('')
+    setCurrentCapabilitiesFileDescription('')
+  }
+
+  const downloadDialog = () => {
+    return <Dialog
+            hidden={hideDownloadDialog}
+            onDismiss={onDownloadDialogDismiss}
+            dialogContentProps={{
+              type: DialogType.normal,
+              title: `Download - ${currentCapabilitiesFileName}`
+            }}
+            modalProps={modalProps}>
+            {
+                <Stack tokens={StackGap10}>
+                    <Checkbox label="Remove tests not in any category from the download" checked={streamlineDownload} onChange={onDownloadOptionChange} />
+                </Stack>
+            }
+
+            <DialogFooter>
+                <PrimaryButton
+                    onClick={() => {
+                      toggleHideDownloadDialog()
+                      onDownload()
+                    }}
+                    text='Download'
+                    disabled={capabilitiesListState.isProcessing} />
+                <DefaultButton
+                    onClick={onDownloadDialogDismiss}
+                    text="Close"
+                    disabled={capabilitiesListState.isProcessing} />
+            </DialogFooter>
+        </Dialog>
+  }
+
   return (
         <div>
             <Stack horizontal horizontalAlign="end" style={{ paddingLeft: 10, paddingRight: 10, paddingTop: 10 }} tokens={StackGap10}>
@@ -366,6 +426,7 @@ export function ListCapabilitiesConfig (props: any) {
                       : null
                 }
             </Dialog>
+            { downloadDialog() }
             <PopupModal isOpen={isWarningDialogOpen} header={'Warning'} onClose={hideWarningDialog} text={capabilitiesListState.errorMsg} />
         </div>
   )

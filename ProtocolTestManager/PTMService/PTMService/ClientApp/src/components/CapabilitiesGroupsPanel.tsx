@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import { Link, Stack, Pivot, PivotItem } from '@fluentui/react'
-import { ConfigGroup, ConfigCategory, TestCasesViewsConfig } from '../model/CapabilitiesFileInfo'
+import {
+  ConfigGroup, ConfigCategory, TestCasesViewsConfig, TestCaseFilterInfo
+} from '../model/CapabilitiesFileInfo'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppState } from '../store/configureStore'
 import { CapabilitiesConfigActions } from '../actions/CapabilitiesConfigAction'
@@ -16,6 +18,7 @@ export function CapabilitiesGroupsPanel (props: any) {
   const selectedCategoryInGroup = capabilitiesConfigState.selectedCategoryInGroup
   const testCasesInfo = capabilitiesConfigState.testCasesInfo
   const selectedTestCasesInfo = capabilitiesConfigState.selectedTestCasesInfo
+  const testCasesFilterInfo = capabilitiesConfigState.testCasesFilterInfo
 
   const onGroupLinkClicked = (g: ConfigGroup): any => {
     dispatch(CapabilitiesConfigActions.selectCapabilitiesConfigGroup(g))
@@ -58,6 +61,15 @@ export function CapabilitiesGroupsPanel (props: any) {
     }
 
     return color
+  }
+
+  const getCount = (testCases: string[], 
+    filterInfo: TestCaseFilterInfo): number => {
+    if (filterInfo.IsFiltered) {
+      return filterInfo.FilterOutput.length
+    } else {
+      return testCases.length
+    }
   }
 
   return (
@@ -136,14 +148,14 @@ export function CapabilitiesGroupsPanel (props: any) {
                         ? <div style={{ paddingLeft: 10, overflowY: 'auto' }}>
                               <div style={{ borderLeft: '2px solid #bae7ff', paddingLeft: 20 }}>
                                   <Pivot linkFormat="tabs" onLinkClick={(item, _) => onTestCasesViewPivoted(item)}>
-                                      <PivotItem headerText="in this category" itemIcon="Sunny" itemCount={testCasesInfo.TestsInCurrentCategory.length} itemKey="0">
-                                          <CapabilitiesTestCasesTreePanel testCases={testCasesInfo.TestsInCurrentCategory} selectedTestCases={selectedTestCasesInfo.TestsInCurrentCategory} onChecked={(values) => onTestCasesSelected(values)} />
+                                      <PivotItem headerText="in this category" itemIcon="Sunny" itemCount={getCount(testCasesInfo.TestsInCurrentCategory, testCasesFilterInfo.TestsInCurrentCategory)} itemKey="0">
+                                          <CapabilitiesTestCasesTreePanel testCases={testCasesInfo.TestsInCurrentCategory} filterInfo={testCasesFilterInfo.TestsInCurrentCategory } selectedTestCases={selectedTestCasesInfo.TestsInCurrentCategory} onChecked={(values) => onTestCasesSelected(values)} />
                                       </PivotItem>
-                                      <PivotItem headerText="in other categories but not in this" itemIcon="SunAdd" itemCount={testCasesInfo.TestsInOtherCategories.length} itemKey="1">
-                                          <CapabilitiesTestCasesTreePanel testCases={testCasesInfo.TestsInOtherCategories} selectedTestCases={selectedTestCasesInfo.TestsInOtherCategories} onChecked={(values) => onTestCasesSelected(values)} />
+                                      <PivotItem headerText="in other groups/categories but not in this" itemIcon="SunAdd" itemCount={getCount(testCasesInfo.TestsInOtherCategories, testCasesFilterInfo.TestsInOtherCategories)} itemKey="1">
+                                          <CapabilitiesTestCasesTreePanel testCases={testCasesInfo.TestsInOtherCategories} filterInfo={testCasesFilterInfo.TestsInOtherCategories} selectedTestCases={selectedTestCasesInfo.TestsInOtherCategories} onChecked={(values) => onTestCasesSelected(values)} />
                                       </PivotItem>
-                                      <PivotItem headerText="not in any category" itemIcon="WarningSolid" itemCount={testCasesInfo.TestsNotInAnyCategory.length} itemKey="2">
-                                          <CapabilitiesTestCasesTreePanel testCases={testCasesInfo.TestsNotInAnyCategory} selectedTestCases={selectedTestCasesInfo.TestsNotInAnyCategory} onChecked={(values) => onTestCasesSelected(values)} />
+                                      <PivotItem headerText="not in any group/category" itemIcon="WarningSolid" itemCount={getCount(testCasesInfo.TestsNotInAnyCategory, testCasesFilterInfo.TestsNotInAnyCategory)} itemKey="2">
+                                          <CapabilitiesTestCasesTreePanel testCases={testCasesInfo.TestsNotInAnyCategory} filterInfo={testCasesFilterInfo.TestsNotInAnyCategory} selectedTestCases={selectedTestCasesInfo.TestsNotInAnyCategory} onChecked={(values) => onTestCasesSelected(values)} />
                                       </PivotItem>
                                   </Pivot>
                               </div>

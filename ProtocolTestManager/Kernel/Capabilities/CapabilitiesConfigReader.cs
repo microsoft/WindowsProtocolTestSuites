@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
+    file record TestCaseInfo(string name, string[] categories);
+
     /// <summary>
     /// Represents a reader for a capabilities file that can be used to configure tests filtering and display and
     /// test results grouping within PTM Service and PTM CLI.
@@ -162,7 +164,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 throw new InvalidOperationException(UnknownGroupMessage(group));
             }
 
-            if(String.IsNullOrWhiteSpace(category))
+            if(string.IsNullOrWhiteSpace(category))
             {
                 // If no category specified, return all the categories in the group.
                 categories = testsByCategories[groupLowerCase].Select(c => c.Key).ToArray();
@@ -230,6 +232,40 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public JsonNode Json
         {
             get;
+        }
+
+        /// <summary>
+        /// Gets the Json representation of this capabilities file.
+        /// </summary>
+        /// <param name="skipTestsWithNoCategory">Specifies if to exclude test cases with no categories
+        /// from the returned Json. The default is false.</param>
+        /// <returns>The Json representation of this capabilities file.</returns>
+        public JsonNode GetJson(bool skipTestsWithNoCategory = false)
+        {
+            if(skipTestsWithNoCategory)
+            {
+                var capabilities = Json["capabilities"];
+                var testCases = 
+                    (JsonSerializer.Deserialize<TestCaseInfo[]>(capabilities["testcases"]))
+                        .Where(t => t.categories.Length > 0)
+                        .ToArray();
+
+                var document = new JsonObject
+                {
+                    ["capabilities"] = new JsonObject()
+                    {
+                        ["metadata"] = JsonNode.Parse(capabilities["metadata"].ToJsonString()),
+                        ["groups"] = JsonNode.Parse(capabilities["groups"].ToJsonString()),
+                        ["testcases"] = JsonNode.Parse(JsonSerializer.Serialize(testCases))
+                    }
+                };
+
+                return document;
+            }
+            else
+            {
+                return Json;
+            }
         }
 
         /// <summary>
@@ -384,12 +420,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     {
                         filtersByTest.Add(testName, new HashSet<string>(new string[] { identifier }));
                     }
-                    else
+                    else if (!filtersByTest[testName].Contains(identifier))
                     {
-                        if(!filtersByTest[testName].Contains(identifier))
-                        {
-                            filtersByTest[testName].Add(identifier);
-                        }
+                        filtersByTest[testName].Add(identifier);
                     }
                 }
             }

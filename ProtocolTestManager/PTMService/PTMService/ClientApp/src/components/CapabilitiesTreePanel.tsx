@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { FunctionComponent, useCallback, useState, useEffect, useRef } from 'react'
-import CheckboxTree, { Node } from 'react-checkbox-tree'
+import { FunctionComponent, useState, useEffect } from 'react'
+import CheckboxTree from 'react-checkbox-tree'
 import { Icon } from '@fluentui/react/lib/Icon'
 import { ConfigGroup, ConfigCategory } from '../model/CapabilitiesFileInfo'
 

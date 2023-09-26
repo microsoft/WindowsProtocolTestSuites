@@ -7,6 +7,7 @@ import { CapabilitiesActions, CapabilitiesFileActionTypes } from '../actions/Cap
 import { CapabilitiesConfigActions, CapabilitiesConfigActionTypes } from '../actions/CapabilitiesConfigAction'
 import { CreateCapabilitiesFileRequest } from '../model/CreateCapabilitiesFileRequest'
 import { UpdateCapabilitiesFileRequest } from '../model/UpdateCapabilitiesFileRequest'
+import { FilterParams } from '../model/FilterCapabilitiesTestCasesRequest'
 import { SaveCapabilitiesFileRequest } from '../model/SaveCapabilitiesFileRequest'
 import { AppThunkAction } from '../store/configureStore'
 
@@ -86,6 +87,12 @@ export const CapabilitiesDataSrv = {
         link.href = url
         link.click()
     },
+    downloadFilteredCapabilitiesFile: (id: number) => {
+        const url = `api/capabilities/download/filtered/${id}`
+        const link = document.createElement('a')
+        link.href = url
+        link.click()
+    },
     saveCapabilitiesFile: (id: number, request: SaveCapabilitiesFileRequest, callback: () => void): AppThunkAction<CapabilitiesFileActionTypes> => async (dispatch) => {
         const postData = new FormData()
         postData.append('CapabilitiesFileJson', request.CapabilitiesFileJson)
@@ -102,4 +109,20 @@ export const CapabilitiesDataSrv = {
             onCompleteCallback: callback
         })
     },
+    filterCapabilitiesTestCases: (parameters: FilterParams, callback: () => void): AppThunkAction<CapabilitiesFileActionTypes> => async (dispatch) => {
+        const postData = new FormData()
+        postData.append('RequestJson', JSON.stringify(parameters))
+
+        await FetchService({
+            url: 'api/capabilities/filter',
+            method: RequestMethod.POST,
+            body: postData,
+            headers: {},
+            dispatch,
+            onRequest: CapabilitiesConfigActions.filterTestCasesConfigAction_Request,
+            onComplete: CapabilitiesConfigActions.filterTestCasesConfigAction_Success,
+            onError: CapabilitiesConfigActions.filterTestCasesConfigAction_Failure,
+            onCompleteCallback: callback
+        })
+    }
 }
