@@ -1,17 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using Microsoft.Protocols.TestManager.Common;
 using Microsoft.Protocols.TestManager.Kernel;
-using Microsoft.Protocols.TestManager.PTMService.Abstractions;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
-using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
-using System.Threading;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -258,10 +255,10 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 .ToArray();
         }
 
-        public string[] FilterCapabilitiesTestCasesByCategory(string[] testCases, string filter,
-            ITestSuite testSuite)
+        private string[] FilterCapabilitiesTestCases<T>(string[] testCases, string filter,
+            ITestSuite testSuite, Func<TestCaseInfo, T> dictSelector,
+            Func<T, bool> resultsFilter)
         {
-            filter = filter.Trim().ToLowerInvariant();
             if (string.IsNullOrWhiteSpace(filter))
             {
                 return testCases;
@@ -269,18 +266,36 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             var testCasesInTestSuite =
                 testSuite.GetTestCases(filter: null)
-                .ToDictionary(t => t.FullName.Trim().ToLowerInvariant(), t => t.Category);
+                .ToDictionary(t => t.FullName.Trim().ToLowerInvariant(), t => dictSelector(t));
 
             return testCases.Where(t =>
-                                    {
-                                        var fullNameLowerCase = t?.Trim()?.ToLowerInvariant();
+            {
+                var fullNameLowerCase = t?.Trim()?.ToLowerInvariant();
 
-                                        return fullNameLowerCase != null 
-                                            && testCasesInTestSuite.ContainsKey(fullNameLowerCase)
-                                            && testCasesInTestSuite[fullNameLowerCase].Any(c =>
-                                            c.Trim().ToLowerInvariant().Contains(filter));
-                                    })
-                            .ToArray();
+                return fullNameLowerCase != null
+                    && testCasesInTestSuite.ContainsKey(fullNameLowerCase)
+                    && resultsFilter(testCasesInTestSuite[fullNameLowerCase]);
+            }).ToArray();
+        }
+
+        public string[] FilterCapabilitiesTestCasesByCategory(string[] testCases, string filter,
+            ITestSuite testSuite)
+        {
+            filter = filter.Trim().ToLowerInvariant();
+            return FilterCapabilitiesTestCases(testCases, filter, testSuite,
+                t => t.Category,
+                categories => categories.Any(c => c.Trim().ToLowerInvariant().Contains(filter))
+            );
+        }
+
+        public string[] FilterCapabilitiesTestCasesByClass(string[] testCases, string filter,
+            ITestSuite testSuite)
+        {
+            filter = filter.Trim().ToLowerInvariant();
+            return FilterCapabilitiesTestCases(testCases, filter, testSuite,
+                t => t.GetClassName().Trim().ToLowerInvariant(),
+                className => className.Contains(filter)
+            );
         }
     }
 }

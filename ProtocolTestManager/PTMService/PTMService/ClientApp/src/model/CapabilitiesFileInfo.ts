@@ -5,7 +5,7 @@ import { TestCase } from './TestCase'
 
 export type TestCasesViewType = 'InCategory' | 'OutCategory' | 'NoCategory' | undefined
 
-export type CapabilitiesTestCasesFilterType = 'Name' | 'TestCategory'
+export type CapabilitiesTestCasesFilterType = 'Name' | 'TestCategory' | 'Class'
 
 export const TestCasesViewsConfig = new Map<string, TestCasesViewType>([
   ['0', 'InCategory'],

@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestManager.PTMService.Common.Entities;
 using Microsoft.Protocols.TestManager.PTMService.Common.Profile;
 using Microsoft.Protocols.TestManager.PTMService.PTMKernelService;
 using System;
+using System.ComponentModel.Composition.Primitives;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
@@ -17,6 +18,13 @@ using System.Text.Json;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 {
+    file static class CapabilitiesTestCasesFilterType
+    {
+        public const string ByName = "Name";
+        public const string ByTestCategory = "TestCategory";
+        public const string ByClass = "Class";
+    }
+
     /// <summary>
     /// Filter parameters for filtering capabilities test cases.
     /// </summary>
@@ -28,9 +36,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public string[] TestCases { get; set; }
 
         /// <summary>
-        /// True if to filter by category. False, otherwise.
+        /// Type to filter by.
         /// </summary>
-        public bool FilterByCategory { get; set; }
+        public string FilterType { get; set; }
 
         /// <summary>
         /// Filter to apply.
@@ -59,9 +67,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public string[] TestCases { get; set; }
 
         /// <summary>
-        /// True if to filter by category. False, otherwise.
+        /// Type to filter by.
         /// </summary>
-        public bool FilterByCategory { get; set; }
+        public string FilterType { get; set; }
 
         /// <summary>
         /// Filter to apply.
@@ -218,7 +226,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         {
             var parameters = JsonSerializer.Deserialize<FilterParams>(request.RequestJson);
 
-            if(!parameters.FilterByCategory)
+            if(parameters.FilterType == CapabilitiesTestCasesFilterType.ByName)
             {
                 var testCases =
                     PTMKernelService.FilterCapabilitiesTestCasesByName(
@@ -228,7 +236,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 {
                     TestCases = testCases,
                     Filter = parameters.Filter,
-                    FilterByCategory = parameters.FilterByCategory
+                    FilterType = parameters.FilterType
                 });
             }
             else
@@ -243,15 +251,22 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                     throw new InvalidOperationException($"Test suite with name, {parameters.TestSuiteName} and version, {parameters.TestSuiteVersion} not found.");
                 }
 
-                var testCases =
-                    PTMKernelService.FilterCapabilitiesTestCasesByCategory(
-                        parameters.TestCases, parameters.Filter, testSuite);
+                var testCases = parameters.FilterType switch
+                {
+                    CapabilitiesTestCasesFilterType.ByTestCategory
+                        => PTMKernelService.FilterCapabilitiesTestCasesByCategory(
+                            parameters.TestCases, parameters.Filter, testSuite),
+                    CapabilitiesTestCasesFilterType.ByClass
+                        => PTMKernelService.FilterCapabilitiesTestCasesByClass(
+                            parameters.TestCases, parameters.Filter, testSuite),
+                    _ => parameters.TestCases
+                };
 
                 return Ok(new FilterResult()
                 {
                     TestCases = testCases,
                     Filter = parameters.Filter,
-                    FilterByCategory = parameters.FilterByCategory
+                    FilterType = parameters.FilterType
                 });
             }
         }

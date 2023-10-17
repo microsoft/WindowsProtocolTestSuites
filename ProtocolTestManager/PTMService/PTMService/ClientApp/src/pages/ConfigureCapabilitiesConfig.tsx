@@ -48,6 +48,7 @@ export function ConfigureCapabilitiesConfig (props: any) {
   const [dialogContentProps, setDialogContentProps] = useState<CapabilitiesConfigDialogContentProps | undefined>(undefined)
   const [filterText, setFilterText] = useState('')
   const [filterType, setFilterType] = useState<CapabilitiesTestCasesFilterType>('Name')
+  const [filterPlaceholderText, setFilterPlaceholderText] = useState('Filter test cases by Name')
 
   useEffect(() => {
     const id: number = props.match.params.id
@@ -62,6 +63,17 @@ export function ConfigureCapabilitiesConfig (props: any) {
           setShowErrorMessageBar(false)
       }
   }, [capabilitiesConfigState.errorMsg])
+
+    // Adjust filter message when the filter type changes.
+    useEffect(() => {
+        if (filterType === 'Name') {
+            setFilterPlaceholderText('Filter test cases by Name')
+        } else if (filterType === 'TestCategory') {
+            setFilterPlaceholderText('Filter test cases by in-code TestCategory')
+        } else if (filterType === 'Class') {
+            setFilterPlaceholderText('Filter test cases by class')
+        }
+    }, [filterType])
 
   const modalProps = {
     isBlocking: true,
@@ -206,7 +218,7 @@ export function ConfigureCapabilitiesConfig (props: any) {
     const id: number = props.match.params.id
     const request = buildCapabilitiesFileRequest(capabilitiesConfigState.metadata,
       capabilitiesConfigState.groups, capabilitiesConfigState.testCasesInfo.TestsNotInAnyCategory)
-    dispatch(CapabilitiesDataSrv.saveCapabilitiesFile(id, request,
+        dispatch(CapabilitiesDataSrv.saveCapabilitiesFile(id, request,
       () => {
 
       }))
@@ -237,7 +249,7 @@ export function ConfigureCapabilitiesConfig (props: any) {
           const testCases = getTestCases()
           const parameters: FilterParams = {
               TestCases: testCases,
-              FilterByCategory: filterType === 'TestCategory',
+              FilterType: filterType,
               Filter: filterText,
               TestSuiteName: testSuiteName,
               TestSuiteVersion: testSuiteVersion
@@ -499,6 +511,10 @@ export function ConfigureCapabilitiesConfig (props: any) {
     {
         key: 'TestCategory',
         text: 'TestCategory contains'
+    },
+    {
+        key: 'Class',
+        text: 'Class contains'
     }]
 
   const dialog = () => {
@@ -619,7 +635,7 @@ export function ConfigureCapabilitiesConfig (props: any) {
                               options={filterDropdownOptions}
                               onChange={(_, newValue, __) => { const value: any = newValue?.key; setFilterType(value) }}
                           />
-                          &nbsp;<SearchBox placeholder="Filter test cases by Name or by the TestCategory in code" style={{ width: 400 }}
+                          &nbsp;<SearchBox placeholder={filterPlaceholderText} style={{ width: 400 }}
                               onChange={(_, newValue) => onFilterTextChanged(newValue ?? '')}/>
                           &nbsp;<PrimaryButton onClick={() => onTestCasesFilter()}>Filter</PrimaryButton>
                     </Stack>

@@ -564,7 +564,7 @@ export const getCapabilitiesConfigReducer = (state = initialCapabilitiesConfigSt
                 const filterResult = action.payload
                 const filterInfoChange: TestCaseFilterInfo = {
                     IsFiltered: true,
-                    FilterBy: filterResult.FilterByCategory ? 'TestCategory' : 'Name',
+                    FilterBy: filterResult.FilterType,
                     FilterText: filterResult.Filter,
                     FilterOutput: filterResult.TestCases
                 }

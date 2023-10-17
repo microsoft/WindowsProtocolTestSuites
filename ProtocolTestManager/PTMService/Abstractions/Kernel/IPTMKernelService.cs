@@ -318,13 +318,23 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         string[] FilterCapabilitiesTestCasesByName(string[] testCases, string filter);
 
         /// <summary>
-        /// Filters test cases in a capabilities file by category.
+        /// Filters test cases in a capabilities file by in-code test category.
         /// </summary>
         /// <param name="testCases">The test cases to filter.</param>
         /// <param name="filter">The filter to apply.</param>
         /// <param name="testSuite">The test suite the capabilities file targets and from which the categories will be extracted.</param>
         /// <returns>The filtered test cases.</returns>
         string[] FilterCapabilitiesTestCasesByCategory(string[] testCases, string filter,
+                    ITestSuite testSuite);
+
+        /// <summary>
+        /// Filters test cases in a capabilities file by class name.
+        /// </summary>
+        /// <param name="testCases">The test cases to filter.</param>
+        /// <param name="filter">The filter to apply.</param>
+        /// <param name="testSuite">The test suite the capabilities file targets.</param>
+        /// <returns>The filtered test cases.</returns>
+        string[] FilterCapabilitiesTestCasesByClass(string[] testCases, string filter,
                     ITestSuite testSuite);
 
         #endregion
