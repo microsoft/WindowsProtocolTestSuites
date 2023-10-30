@@ -1,0 +1,40 @@
+trigger: none
+variables:
+- group: Build Variables
+resources:
+  repositories:
+  - repository: template
+    type: git
+    name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+    ref: AzurePipelines-main
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool:
+      name: Azure-Pipelines-1ESPT-ExDShared
+      image: windows-2022
+      os: windows
+    customBuildTags:
+    - ES365AIMigrationTooling
+    stages:
+    - stage: stage
+      jobs:
+      - job: ''
+        displayName: DotNetCore Build
+        workspace:
+          clean: false
+        timeoutInMinutes: 0
+        steps:
+        - template: pipelines/build/1es//DotNetCore-Build-steps.yml@template
+      - job: ''
+        displayName: Build RDPSUTControlAgent (Java, CSharp, Python)
+        workspace:
+          clean: false
+        timeoutInMinutes: 0
+        condition: and(succeeded(), or(eq(variables['test.testSuiteName'], 'RDPClient'), eq(variables['test.testSuiteName'], 'RDPServer')))
+        steps:
+        - template: pipelines/build/1es/DotNetCore-Build-RDPSUTControlAgent-steps.yml@template
