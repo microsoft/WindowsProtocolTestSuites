@@ -1,0 +1,105 @@
+# This pipeline was generated from the classic pipeline "PTMService CI" on 2023-10-31 with https://aka.ms/1ESPTMigration (v1.0.0): https://dev.azure.com/microsoft/WindowsProtocolTestSuites/_build?definitionId=61868
+#
+# The following items require attention:
+# Variables were exported from the classic pipeline, confirm that `variables` values do not contain private information. If a variable contains private information, follow the guidance on handling secret variables: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/set-secret-variables
+# No trigger found, defaulting to 'none'. Update the trigger as needed.
+# No name found, setting the default value '$(Date:yyyyMMdd).$(Rev:r)'. This value determines how your pipeline runs are numbered. Update the name as needed: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&tabs=yaml
+
+name: $(Date:yyyyMMdd).$(Rev:r)
+variables:
+  - name: system.debug
+    value: false
+resources:
+  repositories:
+    - repository: 1esPipelines
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+trigger: none
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
+  parameters:
+    pool:
+      os: windows
+      image: windows-2019
+      name: Azure-Pipelines-1ESPT-ExDShared
+    customBuildTags:
+      - MigrationTooling-microsoft-WindowsProtocolTestSuites-61868-Tool
+    stages:
+      - stage: Stage
+        jobs:
+          - job: Job_1
+            displayName: Publish PTMService on Windows
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  artifactName: drop
+                  targetPath: $(Build.ArtifactStagingDirectory)
+                  displayName: "Publish Artifact: drop"
+            steps:
+              - checkout: self
+              - task: UseDotNet@2
+                displayName: Use .NET Core sdk 7.x
+                inputs:
+                  version: 7.x
+              - task: DotNetCoreCLI@2
+                displayName: dotnet restore
+                inputs:
+                  command: restore
+                  projects: ProtocolTestManager\PTMService\**\*.csproj
+                  noCache: true
+              - task: DotNetCoreCLI@2
+                displayName: dotnet build
+                inputs:
+                  projects: ProtocolTestManager\PTMService\PTMService.sln
+              - task: DotNetCoreCLI@2
+                displayName: dotnet test
+                inputs:
+                  command: test
+                  projects: ProtocolTestManager\PTMService\**\*.csproj
+              - task: DotNetCoreCLI@2
+                displayName: dotnet publish
+                inputs:
+                  command: publish
+                  publishWebProjects: false
+                  projects: ProtocolTestManager\PTMService\PTMService\PTMService.csproj
+                  arguments: --configuration Release --output "$(build.artifactstagingdirectory)"
+          - job: Job_2
+            displayName: Publish PTMService on Linux
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  artifactName: drop
+                  targetPath: $(Build.ArtifactStagingDirectory)
+                  displayName: "Publish Artifact: drop"
+            steps:
+              - checkout: self
+              - task: UseDotNet@2
+                displayName: Use .NET Core sdk 7.x
+                inputs:
+                  version: 7.x
+              - task: DotNetCoreCLI@2
+                displayName: dotnet restore
+                inputs:
+                  command: restore
+                  projects: ProtocolTestManager/PTMService/**/*.csproj
+                  noCache: true
+              - task: DotNetCoreCLI@2
+                displayName: dotnet build
+                inputs:
+                  projects: ProtocolTestManager/PTMService/PTMService.sln
+              - task: DotNetCoreCLI@2
+                displayName: dotnet publish
+                inputs:
+                  command: publish
+                  publishWebProjects: false
+                  projects: ProtocolTestManager/PTMService/PTMService/PTMService.csproj
+                  arguments: --configuration Release --output "$(build.binariesdirectory)"
+                  zipAfterPublish: false
+              - task: ArchiveFiles@2
+                displayName: Archive PTMService
+                inputs:
+                  rootFolderOrFile: $(build.binariesdirectory)/PTMService
+                  includeRootFolder: false
+                  archiveType: tar
+                  archiveFile: $(Build.ArtifactStagingDirectory)/PTMService.tar.gz
