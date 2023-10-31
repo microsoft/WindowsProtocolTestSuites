@@ -35,7 +35,7 @@ extends:
                 - output: pipelineArtifact
                   artifactName: drop
                   targetPath: $(Build.ArtifactStagingDirectory)
-                  displayName: "Publish Artifact: drop"
+                  displayName: "Publish Artifact - drop"
             steps:
               - checkout: self
               - task: UseDotNet@2
@@ -71,7 +71,7 @@ extends:
                 - output: pipelineArtifact
                   artifactName: drop
                   targetPath: $(Build.ArtifactStagingDirectory)
-                  displayName: "Publish Artifact: drop"
+                  displayName: "Publish Artifact - drop"
             steps:
               - checkout: self
               - task: UseDotNet@2
