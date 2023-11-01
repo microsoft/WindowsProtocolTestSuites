@@ -1,0 +1,178 @@
+# This pipeline was generated from the classic pipeline "FileServer_DotNetCore_Linux_Build" on 2023-11-01 with https://aka.ms/1ESPTMigration (v1.0.0): https://dev.azure.com/microsoft/WindowsProtocolTestSuites/_build?definitionId=56645
+#
+# The following items require attention:
+# Variables were exported from the classic pipeline, confirm that `variables` values do not contain private information. If a variable contains private information, follow the guidance on handling secret variables: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/set-secret-variables
+# 'Allow scripts to access the OAuth token' was selected in pipeline.  Add the following YAML to any steps requiring access:
+#       env:
+#           MY_ACCESS_TOKEN: $(System.AccessToken)
+# Cron Schedules have been converted using UTC Time Zone and may need to be updated for your location
+# No trigger found, defaulting to 'none'. Update the trigger as needed.
+
+name: $(date:yyyyMMdd)$(rev:.r)
+variables:
+  - name: build.archiveName
+    value: FileServer-TestSuite-ServerEP
+  - name: build.configuration
+    value: Release
+  - name: build.ptfBuildId
+    value: latest
+  - name: build.ptfDefaultBranch
+    value: main
+  - name: build.solutionFolder
+    value: TestSuites/FileServer/src
+  - name: build.usePublicPtf
+    value: false
+  - name: system.debug
+    value: false
+  - group: Build Variables
+schedules:
+  - cron: 0 0 * * 6
+    branches:
+      include:
+        - refs/heads/main
+    always: true
+resources:
+  repositories:
+    - repository: 1esPipelines
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+trigger: none
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
+  parameters:
+    pool:
+      os: Linux
+      image: ubuntu-2004
+      name: Azure-Pipelines-1ESPT-ExDShared
+    sdl:
+      sourceAnalysisPool:
+        name: Azure-Pipelines-1ESPT-ExDShared
+        image: windows-latest
+        os: windows
+    customBuildTags:
+      - MigrationTooling-microsoft-WindowsProtocolTestSuites-56645-Tool
+    stages:
+      - stage: Stage
+        jobs:
+          - job: Job_1
+            displayName: Archive Test Suite
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  artifactName: drop
+                  targetPath: $(Build.ArtifactStagingDirectory)/$(build.archiveName).zip
+                  displayName: Publish Zip Archive
+                  condition: succeededOrFailed()
+                - output: pipelineArtifact
+                  artifactName: CommonScripts
+                  targetPath: CommonScripts
+                  displayName: Publish Common Scripts
+                  condition: succeededOrFailed()
+            steps:
+              - checkout: self
+                clean: true
+                persistCredentials: true
+              - task: UseDotNet@2
+                displayName: Use .NET Core sdk 5.0.x
+                inputs:
+                  version: 5.0.x
+              - task: PowerShell@2
+                displayName: Download PTF of Specific Version
+                condition: and(succeeded(), ne(variables['build.usePublicPtf'], true), ne(variables['build.ptfBuildId'], 'latest'))
+                inputs:
+                  targetType: inline
+                  script: |-
+                    Add-Type -AssemblyName System.Net.Http
+                    Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+                    $tokenBytes = [System.Text.Encoding]::UTF8.GetBytes(":$(System.AccessToken)")
+                    $authString = [System.Convert]::ToBase64String($tokenBytes)
+                    $authHeaders = @{ "Authorization" = "Basic $authString" }
+
+                    $buildId = "$(build.ptfBuildId)"
+                    $artifactUrl = "$(build.apiUrl)/build/builds/$buildId/artifacts?artifactName=drop&api-version=5.0"
+                    $artifactInfo = Invoke-RestMethod -Uri $artifactUrl -Method Get -Headers $authHeaders
+                    $downloadUrl = $artifactInfo.resource.downloadUrl
+
+                    $artifactsLocalPath = "$(System.ArtifactsDirectory)"
+                    $localFilePath = "$artifactsLocalPath/$buildId"
+                    $localFileName = "$localFilePath.zip"
+                        
+                    $fileStream = [System.IO.File]::Create($localFileName)
+
+                    $httpClient = New-Object System.Net.Http.HttpClient
+                    $httpClient.DefaultRequestHeaders.Authorization = New-Object System.Net.Http.Headers.AuthenticationHeaderValue("Basic", $authString)
+                                
+                    $stream = $httpClient.GetStreamAsync($downloadUrl).GetAwaiter().GetResult()
+                    $fileStream.Seek(0, [System.IO.SeekOrigin]::Begin)
+                    $stream.CopyTo($fileStream)
+                                
+                    $stream.Close()
+                    $httpClient.Dispose()
+                    $fileStream.Close()
+
+                    [System.IO.Compression.ZipFile]::ExtractToDirectory($localFileName, $localFilePath)
+                    Remove-Item $localFileName -Force
+                        
+                    $artifactFilesPath = "$localFilePath/drop"
+                    $nuGetSourcePath = "$artifactsLocalPath/drop"
+                    New-Item $nuGetSourcePath -ItemType Directory
+                    Get-ChildItem -Recurse $artifactFilesPath | Where-Object {
+                        $_.Extension -eq ".nupkg"
+                    } | Foreach-Object {
+                        $newPath = "$nuGetSourcePath/$($_.Name)"
+                        Move-Item $_.FullName -Destination $newPath -Force
+                    }
+                    Remove-Item $localFilePath -Recurse -Force
+              - task: DownloadBuildArtifacts@0
+                displayName: Download PTF of Latest Version
+                condition: and(succeeded(), ne(variables['build.usePublicPtf'], true), eq(variables['build.ptfBuildId'], 'latest'))
+                inputs:
+                  buildType: specific
+                  project: b67fd756-1c65-48ef-9824-eeb3cb9b2728
+                  definition: "58857"
+                  buildVersionToDownload: latestFromBranch
+                  branchName: refs/heads/$(build.ptfDefaultBranch)
+                  downloadType: specific
+                  itemPattern: drop/*.nupkg
+                  extractTars: false
+              - task: PowerShell@2
+                displayName: Add NuGet.config
+                condition: "and(succeeded(), ne(variables['build.usePublicPtf'], true)) "
+                inputs:
+                  targetType: inline
+                  script: |-
+                    $content = '<?xml version="1.0" encoding="utf-8"?>
+                    <configuration>
+                        <packageSources>
+                            <add key="LocalSource" value="LOCAL_SOURCE" />
+                            <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
+                        </packageSources>
+                    </configuration>
+                    '
+
+                    $content = $content.Replace("LOCAL_SOURCE", $env:LOCAL_SOURCE)
+                    [System.IO.File]::WriteAllText("NuGet.config", $content)
+                  workingDirectory: TestSuites
+                env:
+                  LOCAL_SOURCE: $(System.ArtifactsDirectory)/drop
+              - task: DotNetCoreCLI@2
+                displayName: Restore
+                condition: "and(succeeded(), ne(variables['build.usePublicPtf'], true)) "
+                inputs:
+                  command: restore
+                  projects: $(build.solutionFolder)/**/*.csproj
+                  selectOrConfig: config
+                  nugetConfigPath: TestSuites/NuGet.config
+              - task: Bash@3
+                displayName: Build
+                inputs:
+                  filePath: $(build.solutionFolder)/build.sh
+                  arguments: $(build.configuration) $(Build.ArtifactStagingDirectory)/staging
+              - task: ArchiveFiles@2
+                displayName: Archive $(Build.ArtifactStagingDirectory)/staging
+                inputs:
+                  rootFolderOrFile: $(Build.ArtifactStagingDirectory)/staging
+                  includeRootFolder: false
+                  archiveFile: $(Build.ArtifactStagingDirectory)/$(build.archiveName).zip
