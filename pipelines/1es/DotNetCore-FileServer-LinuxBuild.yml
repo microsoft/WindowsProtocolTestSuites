@@ -74,9 +74,9 @@ extends:
                 clean: true
                 persistCredentials: true
               - task: UseDotNet@2
-                displayName: Use .NET Core sdk 5.0.x
+                displayName: Use .NET Core sdk 7.0.x
                 inputs:
-                  version: 5.0.x
+                  version: 7.0.x
               - task: PowerShell@2
                 displayName: Download PTF of Specific Version
                 condition: and(succeeded(), ne(variables['build.usePublicPtf'], true), ne(variables['build.ptfBuildId'], 'latest'))
