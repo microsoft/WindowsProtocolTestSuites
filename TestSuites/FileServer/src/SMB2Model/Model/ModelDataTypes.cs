@@ -91,6 +91,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model
         /// </summary>
         public bool ConstrainedConnection { get; set; }
 
+        /// <summary>
+        /// A Boolean indicating whether the server supports one-way notifications on this connection.
+        /// </summary>
+        public bool SupportsNotifications { get; set; }
+
+
         public ModelConnection(DialectRevision dialect)
         {
             this.ConnectionState = ModelState.Initialized;

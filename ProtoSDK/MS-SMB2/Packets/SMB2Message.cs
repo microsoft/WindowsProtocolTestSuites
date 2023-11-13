@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -1830,6 +1831,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// </summary>
         public OplockLevel_Values OplockLevel;
 
+        /// <summary>
+        /// When set, indicates the last portion of the file path is a reparse 
+        /// point.This MUST be used when the last component of a file opened 
+        /// is a reparse point, and the create request Create Options do not
+        ///  FILE_OPEN_REPARSE_POINT.
+        /// </summary>
         [StaticSize(1)]
         public CREATE_RESPONSE_Flags Flags;
 
@@ -3007,7 +3014,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  READ0x0008SMB2 WRITE0x0009SMB2 LOCK0x000ASMB2 IOCTL0x000BSMB2
         ///  CANCEL0x000CSMB2 ECHO0x000DSMB2 QUERY_DIRECTORY0x000ESMB2
         ///  CHANGE_NOTIFY 0x000FSMB2 QUERY_INFO0x0010SMB2
-        ///  SET_INFO0x0011SMB2 OPLOCK_BREAK0x0012
+        ///  SET_INFO0x0011SMB2 OPLOCK_BREAK0x0012 SERVER_TO_CLIENT_NOTIFICATION0x0013
         /// </summary>
         [StaticSize(2)]
         public Smb2Command Command;
@@ -11605,6 +11612,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// OPLOCK_BREAK
         /// </summary>
         OPLOCK_BREAK = 0x12,
+
+
+        /// <summary>
+        /// SERVER_TO_CLIENT_NOTIFICATION
+        /// </summary>
+        SERVER_TO_CLIENT_NOTIFICATION = 0x13,
+
     }
 
     public static class ErrefStatus

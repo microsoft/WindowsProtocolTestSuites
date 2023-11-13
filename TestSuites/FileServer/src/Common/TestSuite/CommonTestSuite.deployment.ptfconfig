@@ -48,20 +48,20 @@
 	        </Description>
         </Property>
 
-		<Property name="SutComputerName" value="node01.contoso.com">
+		<Property name="SutComputerName" value="WIN-MC9JQGCG80C">
         <Description>
           Computer name of system under test (SUT)
           If SUT does not have a computer name, set the value to SUT's IP address
         </Description>
       </Property>
 
-      <Property name="SutIPAddress" value="192.168.1.11" >
+      <Property name="SutIPAddress" value="172.27.117.44" >
         <Description>
           IP address or Host Name of SUT to establish connections
         </Description>
       </Property>
 
-      <Property name="DomainName" value="contoso.com" >
+      <Property name="DomainName" value="" >
         <Description>
           Domain name where the SUT locates
           If SUT is in WORKGROUP, set it to the value of SutComputerName
@@ -69,7 +69,7 @@
         </Description>
       </Property>
 
-      <Property name="DCServerComputerName" value="DC01.contoso.com">
+      <Property name="DCServerComputerName" value="">
         <Description>
           Computer ip or name of DC
           If DC does not have a computer name or SUT is in WORKGROUP, leave it blank
@@ -88,19 +88,19 @@
         </Description>
       </Property>
 
-      <Property name="NonAdminUserName" value="nonadmin" >
+      <Property name="NonAdminUserName" value="" >
         <Description>
           Non administrator user account name of the SUT. If no such user, leave it blank
         </Description>
       </Property>
 
-      <Property name="GuestUserName" value="Guest">
+      <Property name="GuestUserName" value="">
         <Description>
           Domain guest account name. If no such user, leave it blank
         </Description>
       </Property>
 
-      <Property name="PasswordForAllUsers" value="Password01!">
+      <Property name="PasswordForAllUsers" value="password01!">
         <Description>
           Password for all the users listed as above: AdminUserName, NonAdminUserName, GuestUserName.
           (To simplify the config, the 3 accounts use the same password.)
@@ -259,13 +259,13 @@
         </Description>
       </Property>
 
-      <Property name="ClientNic1IPAddress" value="192.168.1.111">
+      <Property name="ClientNic1IPAddress" value="172.27.112.1">
         <Description>
           One IP address or host name on local test drive computer to establish connections to SUT
         </Description>
       </Property>
 
-      <Property name="ClientNic2IPAddress" value="192.168.2.111">
+      <Property name="ClientNic2IPAddress" value="172.27.112.1">
         <Description>
           Another IP address or host name on local test drive computer to establish connections to SUT
           If test drive computer only has one IP address, leave it blank
