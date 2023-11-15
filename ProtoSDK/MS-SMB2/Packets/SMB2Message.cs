@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using System.Collections.Generic;
-using System.Drawing;
+
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
@@ -3208,7 +3208,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         ///  FLUSH0x07SMB2 READ0x08SMB2 WRITE0x09SMB2 LOCK0x0ASMB2
         ///  IOCTL0x0BSMB2 CANCEL0x0CSMB2 ECHO0x0DSMB2 QUERY_DIRECTORY0x0ESMB2
         ///  CHANGE_NOTIFY0x0FSMB2 QUERY_INFO0x10SMB2 SET_INFO0x11SMB2
-        ///  OPLOCK_BREAK0x12
+        ///  OPLOCK_BREAK0x12 SERVER_TO_CLIENT_NOTIFICATION0x0013
         /// </summary>
         [StaticSize(2)]
         public Smb2Command Command;
@@ -11612,7 +11612,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// OPLOCK_BREAK
         /// </summary>
         OPLOCK_BREAK = 0x12,
-
 
         /// <summary>
         /// SERVER_TO_CLIENT_NOTIFICATION
