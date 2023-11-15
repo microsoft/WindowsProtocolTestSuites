@@ -1959,8 +1959,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         /// <summary>
         /// A lease is requested. If set, the request packet MUST contain an 
-        /// SMB2_CREATE_REQUEST_LEASE create context. This value is only valid 
-        /// for the SMB 2.1 dialect.
+        /// SMB2_CREATE_REQUEST_LEASE (section 2.2.13.2.8) or an
+        /// SMB2_CREATE_REQUEST_LEASE_V2 (section 2.2.13.2.10) create
+        /// context. This value is not valid for the SMB 2.0.2 dialect.
         /// </summary>
         OPLOCK_LEVEL_LEASE = 0xFF,
     }
@@ -7701,6 +7702,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         GLOBAL_CAP_DIRECTORY_LEASING = 0x00000020,
 
         GLOBAL_CAP_ENCRYPTION = 0x00000040,
+
+        GLOBAL_CAP_NOTIFICATIONS = 0x00000080,
     }
 
     /// <summary>
