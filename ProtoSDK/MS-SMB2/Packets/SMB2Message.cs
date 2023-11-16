@@ -9,7 +9,6 @@ using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
 using System.Collections.Generic;
 
-
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 {
     /// <summary>

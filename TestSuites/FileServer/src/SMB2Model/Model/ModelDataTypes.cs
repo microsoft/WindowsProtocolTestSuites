@@ -104,6 +104,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model
             this.Session = null;
             this.Request = null;
             this.ConstrainedConnection = false;
+            this.SupportsNotifications = false;
         }
 
         public override string ToString()
