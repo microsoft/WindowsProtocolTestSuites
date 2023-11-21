@@ -300,7 +300,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         GLOBAL_CAP_ENCRYPTION = 0x00000040,
 
         /// <summary>
-        /// When set, indicates that the client supports receiving oneway notifications from a server.
+        /// When set, indicates that the client supports receiving one-way notifications from a server.
         /// </summary>
         GLOBAL_CAP_NOTIFICATIONS = 0x00000080,
     }
