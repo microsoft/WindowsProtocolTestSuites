@@ -46,7 +46,7 @@ extends:
                   scriptLocation: inlineScript
                   inlineScript: |-
                     New-Item -ItemType Directory GitSync
-                    az storage file download-batch --connection-string '$(azure.storageConnectString)' --destination GitSync --source protocoltestsuiteshare/ToolShare/GitSync
+                    az storage file download-batch --account-key '$(azure.storageAccountKey)' --account-name '$(azure.storageAccount)' --destination GitSync --source protocoltestsuiteshare/ToolShare/GitSync
               - task: PowerShell@2
                 name: PowerShell_1
                 displayName: PowerShell Script
