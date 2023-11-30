@@ -150,5 +150,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             get;
             set;
         }
+
+        /// <summary>
+        ///  A Boolean indicating whether the server supports one-way notifications on this connection.
+        /// <summary>
+        public bool SupportsNotifications
+        {
+            get;
+            set;
+        }
+
     }
 }
