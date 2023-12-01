@@ -143,6 +143,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         }
 
         /// <summary>
+        ///  A Boolean indicating whether the server supports one-way notifications on this connection.
+        /// <summary>
+        public bool SupportsNotifications
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// The underlying gss-api
         /// </summary>
         internal ClientSecurityContext Gss
@@ -151,14 +160,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             set;
         }
 
-        /// <summary>
-        ///  A Boolean indicating whether the server supports one-way notifications on this connection.
-        /// <summary>
-        public bool SupportsNotifications
-        {
-            get;
-            set;
-        }
+       
 
     }
 }
