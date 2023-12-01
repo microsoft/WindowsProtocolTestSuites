@@ -9,6 +9,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
 {
     public enum SRVS_OPNUM : ushort
     {
+        NetrShareAdd = 14,
         NetrShareEnum = 15,
         NetrShareGetInfo = 16,
         NetrShareSetInfo = 17
