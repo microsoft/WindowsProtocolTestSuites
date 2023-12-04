@@ -6,9 +6,6 @@
 # No name found, setting the default value '$(Date:yyyyMMdd).$(Rev:r)'. This value determines how your pipeline runs are numbered. Update the name as needed: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&tabs=yaml
 
 name: $(Date:yyyyMMdd).$(Rev:r)
-variables:
-  - name: system.debug
-    value: false
 resources:
   repositories:
     - repository: 1esPipelines
@@ -33,9 +30,9 @@ extends:
             templateContext:
               outputs:
                 - output: pipelineArtifact
-                  artifactName: drop
+                  artifactName: drop_windows
                   targetPath: $(Build.ArtifactStagingDirectory)
-                  displayName: "Publish Artifact - drop"
+                  displayName: "Publish Artifact - drop windows"
             steps:
               - checkout: self
               - task: UseDotNet@2
@@ -69,9 +66,9 @@ extends:
             templateContext:
               outputs:
                 - output: pipelineArtifact
-                  artifactName: drop
+                  artifactName: drop_linux
                   targetPath: $(Build.ArtifactStagingDirectory)
-                  displayName: "Publish Artifact - drop"
+                  displayName: "Publish Artifact - drop linux"
             steps:
               - checkout: self
               - task: UseDotNet@2
