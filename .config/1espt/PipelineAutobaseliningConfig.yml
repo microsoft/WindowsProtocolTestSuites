@@ -1,0 +1,158 @@
+## DO NOT MODIFY THIS FILE MANUALLY. This is part of auto-baselining from 1ES Pipeline Templates. Go to [https://aka.ms/1espt-autobaselining] for more details.
+
+pipelines:
+  109221:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-24
+        eslint:
+          lastModifiedDate: 2023-11-24
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-24
+        armory:
+          lastModifiedDate: 2023-11-24
+  58971:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        eslint:
+          lastModifiedDate: 2023-11-25
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-25
+        armory:
+          lastModifiedDate: 2023-11-25
+      binary:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        binskim:
+          lastModifiedDate: 2023-11-25
+        spotbugs:
+          lastModifiedDate: 2023-11-25
+  58991:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        eslint:
+          lastModifiedDate: 2023-11-25
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-25
+        armory:
+          lastModifiedDate: 2023-11-25
+      binary:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        binskim:
+          lastModifiedDate: 2023-11-25
+        spotbugs:
+          lastModifiedDate: 2023-11-25
+  58973:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        eslint:
+          lastModifiedDate: 2023-11-25
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-25
+        armory:
+          lastModifiedDate: 2023-11-25
+      binary:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        binskim:
+          lastModifiedDate: 2023-11-25
+        spotbugs:
+          lastModifiedDate: 2023-11-25
+  58985:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        eslint:
+          lastModifiedDate: 2023-11-25
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-25
+        armory:
+          lastModifiedDate: 2023-11-25
+      binary:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        binskim:
+          lastModifiedDate: 2023-11-25
+        spotbugs:
+          lastModifiedDate: 2023-11-25
+  58710:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        eslint:
+          lastModifiedDate: 2023-11-25
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-25
+        armory:
+          lastModifiedDate: 2023-11-25
+      binary:
+        credscan:
+          lastModifiedDate: 2023-11-25
+        binskim:
+          lastModifiedDate: 2023-11-25
+        spotbugs:
+          lastModifiedDate: 2023-11-25
+  109389:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-24
+        eslint:
+          lastModifiedDate: 2023-11-24
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-24
+        armory:
+          lastModifiedDate: 2023-11-24
+      binary:
+        credscan:
+          lastModifiedDate: 2023-11-24
+        binskim:
+          lastModifiedDate: 2023-11-24
+        spotbugs:
+          lastModifiedDate: 2023-11-24
+  100982:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-23
+        eslint:
+          lastModifiedDate: 2023-11-23
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-23
+        armory:
+          lastModifiedDate: 2023-11-23
+      binary:
+        credscan:
+          lastModifiedDate: 2023-11-23
+        binskim:
+          lastModifiedDate: 2023-11-23
+        spotbugs:
+          lastModifiedDate: 2023-11-23
+  58974:
+    retail:
+      source:
+        credscan:
+          lastModifiedDate: 2023-11-28
+        eslint:
+          lastModifiedDate: 2023-11-28
+        psscriptanalyzer:
+          lastModifiedDate: 2023-11-28
+        armory:
+          lastModifiedDate: 2023-11-28
+      binary:
+        credscan:
+          lastModifiedDate: 2023-11-28
+        binskim:
+          lastModifiedDate: 2023-11-28
+        spotbugs:
+          lastModifiedDate: 2023-11-28
