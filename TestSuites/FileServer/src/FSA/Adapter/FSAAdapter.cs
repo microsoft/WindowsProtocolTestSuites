@@ -2832,6 +2832,38 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        public MessageStatus FsCtlSetIntegrityInfo(FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER inputBuffer, uint inputBufferSize)
+        {
+            byte[] outbuffer = new byte[0];
+            byte[] inputBufferBytes = new byte[0];
+
+            FsccFsctlSetIntegrityInformationExRequestPacket fsccPacket = new FsccFsctlSetIntegrityInformationExRequestPacket();
+            fsccPacket.Payload = inputBuffer;
+
+            uint inputBufferLength = (uint)TypeMarshal.ToBytes<FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER>(inputBuffer).Length;
+            if (inputBufferSize < inputBufferLength)
+            {
+                // For some negative test cases, they want to provide a smaller input buffer size than sizeof(FSCTL_SET_INTEGRITY_INFORMATION_BUFFER),
+                // and expect server return STATUS_INVALID_PARAMETER.
+                // So here we copy a smaller size of data to inputBufferBytes which will be sent to server through IOCtl request.
+                byte[] fsccPacketBytes = fsccPacket.ToBytes();
+                inputBufferBytes = new byte[inputBufferSize];
+                Array.Copy(fsccPacket.ToBytes(), inputBufferBytes, fsccPacketBytes.Length - (inputBufferLength - inputBufferSize));
+            }
+            else
+            {
+                inputBufferBytes = fsccPacket.ToBytes();
+            }
+
+            MessageStatus returnedStatus = this.transAdapter.IOControl(
+                (uint)FsControlCommand.FSCTL_SET_INTEGRITY_INFORMATION_EX,
+                inputBufferSize,
+                inputBufferBytes,
+                out outbuffer);
+
+            return returnedStatus;
+        }
+
         #endregion
 
         #region 3.1.5.9.16   FSCTL_OFFLOAD_READ

@@ -244,6 +244,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         FSCTL_SET_INTEGRITY_INFORMATION = 0x9C280,
 
         /// <summary>
+        /// The FSCTL_SET_INTEGRITY_INFORMATION_EX Request message requests that the server set the integrity 
+        /// state of the file or directory associated with the handle on which this FSCTL was invoked.
+        /// </summary>
+        FSCTL_SET_INTEGRITY_INFORMATION_EX = 0x90380,
+
+        /// <summary>
         /// This message sets the object identifier for the file or directory associated with the handle on which this 
         ///   FSCTL was invoked. The message contains a FILE_OBJECTID_BUFFER (section 2.1.3) data element. Either a  
         /// Type 1 or a Type 2 buffer is valid. 
@@ -3785,6 +3791,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// </summary>
         public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_FLAGS Flags;
     }
+
+    /// <summary>
+    /// ChecksumAlgorithm for FSCTL_SET_INTEGRITY_INFORMATION_BUFFER
+    /// </summary>
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_CHECKSUMALGORITHM : byte
+    {
+        /// <summary>
+        /// The file or directory should be set to not use integrity.
+        /// </summary>
+        CHECKSUM_TYPE_NONE = 0x00,
+
+        /// <summary>
+        /// The file or directory is set to provide integrity using CRC32 or CRC64 checksum.
+        /// </summary>
+        CHECKSUM_TYPE_CRC32_OR_CRC64 = 0x01,
+    }
+
+    public enum FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_INTEGRITY_STATE : byte
+    {
+        /// <summary>
+        /// The file or directory is set to not use integrity.
+        /// </summary>
+        INTEGRITY_STATE_CHANGE = 0x00,
+
+        /// <summary>
+        /// The file or directory is set to provide integrity using CRC32 or CRC64 checksum.
+        /// </summary>
+        INTEGRITY_STATE_NO_CHANGE = 0x01
+    }
+
+    public partial struct FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER
+    {
+        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_CHECKSUMALGORITHM EnableIntegrity;
+        public FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER_INTEGRITY_STATE KeepIntegrityStateUnchanged;
+        public ushort Reserved;
+        public FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_FLAGS Flags;
+        public byte Version;
+
+        [StaticSize(7, StaticSizeMode.Elements)]
+        public byte[] Reserved2;
+    }
+
     #endregion
 
 
