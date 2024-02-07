@@ -14,12 +14,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
     {
         #region Test Cases
         [TestMethod()]
-        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.UnexpectedFields)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Send FSCTL_SET_INTEGRITY_INFORMATION_EX request to a file and check if Integrity is supported. No checksum algorithm and No integrity state change required.")]
-        public void FsCtl_Set_IntegrityInformation_Ex_IsIntegritySupported_InvalidRequest()
+        public void FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported_InvalidRequest()
         {
             FsCtl_Set_IntegrityInformation_Ex_Combined(FileType.DataFile, true);
         }
@@ -33,6 +33,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         public void FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported()
         {
             FsCtl_Set_IntegrityInformation_Ex_Combined(FileType.DataFile, false);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.UnexpectedFields)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION_EX request to a directory and check if Integrity is supported.  No checksum algorithm and No integrity state change required.")]
+        public void FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported_InvalidRequest()
+        {
+            FsCtl_Set_IntegrityInformation_Ex_Combined(FileType.DirectoryFile, true);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.IoCtlRequest)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Send FSCTL_SET_INTEGRITY_INFORMATION_EX request to a directory and check if Integrity is supported.")]
+        public void FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported()
+        {
+            FsCtl_Set_IntegrityInformation_Ex_Combined(FileType.DirectoryFile, false);
         }
 
         #endregion Test Cases

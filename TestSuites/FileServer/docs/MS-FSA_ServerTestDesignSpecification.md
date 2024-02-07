@@ -254,6 +254,11 @@
             * [FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_None](#FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_None)
             * [FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_Unchanged](#FsCtl_Set_IntegrityInformation_File_CheckSumEnforcement_CheckSumType_Unchanged)
             * [FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_Unchanged](#FsCtl_Set_IntegrityInformation_Dir_CheckSumEnforcement_CheckSumType_Unchanged)
+        * [IsIntegrityInformaitonExSupported](IsIntegrityInformaitonExSupported)
+            * [FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported](#FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported)
+            * [FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported_InvalidRequest](#FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported_InvalidRequest)
+            * [FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported_InvalidRequest](#FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported_InvalidRequest)
+            * [FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported](#FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported)
         * [IsOffloadReadSupported](#IsOffloadReadSupported)
             * [FsCtl_Offload_Read_File_IsOffloadSupported (BVT)](#FsCtl_Offload_Read_File_IsOffloadSupported-BVT)
         * [IsOffloadWriteSupported](#IsOffloadWriteSupported)
@@ -510,7 +515,7 @@ There are 228 test cases in total:
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 11 | 82 (32) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
-| Scenarios for FsControlRequest | 13 | 89 (26) |
+| Scenarios for FsControlRequest | 13 | 93 (28) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
@@ -928,6 +933,33 @@ There are 343 test cases in total:
 | | Verify ByteCount == sizeof(**FSCTL_SET_INTEGRITY_INFORMATION_BUFFER**).|
 | Message Sequence| CreateFile.|
 | | FSCTL request with **FSCTL_SET_INTEGRITY_INFORMATION**.|
+| | Verify server responses accordingly to input parameters.|
+
+#### <a name="FsCtl_Set_IntegrityInformation_Ex"/>FsCtl_Set_IntegrityInformation_Ex
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test FSCTL request: **FSCTL_SET_INTEGRITY_INFORMATION_EX**|
+| | Test environment: NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FsCtl: FSCTL_SET_INTEGRITY_INFORMATION_EX|
+| | Supporting test:|
+| | If not implemented, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
+| | Input parameter test:|
+| | The operation MUST be failed with **STATUS_INVALID_PARAMETER** under any of the following conditions:|
+| | OutputBufferSize is less than sizeof(**FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER**).|
+| | Open.Stream.StreamType is not DirectoryStream or FileStream.|
+| | Open.File.FileAttributes.FILE_ATTRIBUTE_SYSTEM is TRUE.|
+| | Operation test:|
+| | Upon successful completion of the operation, server returns **STATUS_SUCCESS**.|
+| | Verify OutputBuffer.CheckSumAlgorithm is set correctly.|
+| | Verify OutputBuffer.ChecksumChunkShift is set correctly.|
+| | Verify OutputBuffer.ClusterShift is set correctly.|
+| | Verify OutputBuffer.Flags for **CHECKSUM_ENFORCEMENT_OFF** is set correctly.|
+| | Verify ByteCount == sizeof(**FSCTL_SET_INTEGRITY_INFORMATION_EX_BUFFER**).|
+| Message Sequence| CreateFile.|
+| | FSCTL request with **FSCTL_SET_INTEGRITY_INFORMATION_EX**.|
 | | Verify server responses accordingly to input parameters.|
 
 #### <a name="FsCtl_Offload_Read"/>FsCtl_Offload_Read
@@ -3909,6 +3941,65 @@ There are 343 test cases in total:
 | | } else {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
 | | } |
+
+#### <a name="IsIntegrityInformationExSupported"/>IsSIntegrityInformationExSupported 
+
+##### <a name="FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported"/>FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test  if FSCTL_SET_INTEGRITY_INFORMATION_Ex is supported.|
+| | Test environment: NTFS, ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | The only data item this message returns is a status code, as specified in section 2.2. Upon success, 
+the status code returned by the function that processes this FSCTL is STATUS_SUCCESS. |
+| Message Sequence| CreateFile(DataFile)|
+| | Set Integrity Info|
+| | Verify server responses accordingly.|
+
+##### <a name="FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported_InvalidRequest"/>FsCtl_Set_IntegrityInformation_Ex_File_IsIntegritySupported_InvalidRequest
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test parameter check for invalid parameters.|
+| | Test environment: NTFS, ReFS|
+| | Test object: DataFile|
+| | Test coverage:|
+| | If the input buffer length is less than the size, in bytes, of the FSCTL_SET_INTEGRITY_INFORMATION_BUFFER_EX element;
+the handle is not to a file or directory; or Version is not equal to 1 return STATUS_INVALID_PARAMETER.|
+| Message Sequence| CreateFile(DataFile)|
+| | Set Integrity Info|
+| | Verify server responses accordingly.|
+
+##### <a name="FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported"/>FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test  if FSCTL_SET_INTEGRITY_INFORMATION_Ex is supported.|
+| | Test environment: NTFS, ReFS|
+| | Test object: DirectoryFile|
+| | Test coverage:|
+| | The only data item this message returns is a status code, as specified in section 2.2. Upon success, 
+the status code returned by the function that processes this FSCTL is STATUS_SUCCESS. |
+| Message Sequence| CreateFile(DirectoryFile)|
+| | Set Integrity Info|
+| | Verify server responses accordingly.|
+
+
+##### <a name="FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported_InvalidRequest"/>FsCtl_Set_IntegrityInformation_Ex_DirectoryFile_IsIntegritySupported_InvalidRequest
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test parameter check for invalid parameters.|
+| | Test environment: NTFS, ReFS|
+| | Test object: DirectoryFile |
+| | Test coverage:|
+| | The only data item this message returns is a status code, as specified in section 2.2. Upon success, 
+the status code returned by the function that processes this FSCTL is STATUS_SUCCESS. |
+| Message Sequence| CreateFile(DirectoryFile)|
+| | Set Integrity Info|
+| | Verify server responses accordingly.|
 
 #### <a name="IsOffloadReadSupported"/>IsOffloadReadSupported
 
