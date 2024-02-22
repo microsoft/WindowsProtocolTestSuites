@@ -73,6 +73,14 @@
         </Description>
       </Property>
 
+      <Property name="IsKB500139Installed" value="false">
+        <Choice>True, False</Choice>
+		<Description>
+		  Is KB5001391 installed on the SUT.
+		  Used to determine the expected SMB2_COMPRESSION_CAPABILITES for WindowsServerV2004 and WindowsServerV20H2
+		</Description>	
+	  </Property>
+
     </Group>
     <Group name="HVRS">
       <Property name="SharePath" value="\\node01.contoso.com\SMBBasic">

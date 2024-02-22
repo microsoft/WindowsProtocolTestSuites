@@ -71,6 +71,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.Adapter
             }
         }
 
+        public bool IsKB500139Installed
+        {
+            get
+            {
+                return Boolean.Parse(GetProperty("IsKB500139Installed"));
+            }
+        }
+
         public string ClusteredInfrastructureFileServerName
         {
             get
