@@ -60,6 +60,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isObjectSecurityBasedOnAccessControlListsSupported;
         private bool isHardLinksSupported;
         private bool isStrictAllocationSizesRequired;
+        private bool isTimestampMinusTwoSupported;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -274,6 +275,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return isStrictAllocationSizesRequired; }
         }
 
+        public bool IsTimestampMinusTwoSupported
+        {
+            get { return isTimestampMinusTwoSupported; }
+        }
+
         public string UncSharePath
         {
             get
@@ -376,6 +382,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isSingleInstanceStorageSupported = testConfig.GetProperty("WhichFileSystemSupport_SingleInstanceStorage", false).Contains(this.FileSystem.ToString());
             this.isObjectSecurityBasedOnAccessControlListsSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectSecurityBasedOnAccessControlLists").Contains(this.FileSystem.ToString());
             this.isStrictAllocationSizesRequired = testConfig.GetProperty("WhichFileSystemSupport_StrictAllocationSizes").Contains(this.FileSystem.ToString());
+            this.isTimestampMinusTwoSupported = testConfig.GetProperty("WhichFileSystemSupport_Timestamp_MinusTwo").Contains(this.FileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));

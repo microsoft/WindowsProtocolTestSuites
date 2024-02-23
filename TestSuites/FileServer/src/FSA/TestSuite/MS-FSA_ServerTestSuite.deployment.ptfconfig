@@ -138,6 +138,7 @@
       <Property name="WhichFileSystemSupport_SingleInstanceStorage" value="" />
       <Property name="WhichFileSystemSupport_ObjectSecurityBasedOnAccessControlLists" value="NTFS;REFS" />
       <Property name="WhichFileSystemSupport_StrictAllocationSizes" value="FAT32;NTFS;REFS" />
+      <Property name="WhichFileSystemSupport_Timestamp_MinusTwo" value="NTFS;REFS" />
 
       <Property name="NTFS_ClusterSizeInKB" value="4">
         <Description>

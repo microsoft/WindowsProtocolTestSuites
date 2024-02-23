@@ -14,6 +14,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         #region Test Cases        
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
@@ -24,6 +25,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileInfo_Set_FileBasicInformation_Timestamp_Zero(FileType.DirectoryFile, TimestampType.ChangeTime);
         }
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
@@ -35,6 +37,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
@@ -46,6 +49,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
@@ -57,6 +61,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
@@ -68,6 +73,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
@@ -79,6 +85,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
@@ -90,6 +97,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
 
         [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.SetFileInformation)]
         [TestCategory(TestCategories.NonSmb)]
@@ -111,19 +119,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             //[MS-FSCC] 6 Appendix B: Product Behavior <97>,<98>,<99>,<100>
             string operatingSystem = this.fsaAdapter.TestConfig.Platform.ToString();
 
-            if (this.fsaAdapter.FileSystem != FileSystem.NTFS
-                && this.fsaAdapter.FileSystem != FileSystem.REFS)
+            if (!this.fsaAdapter.IsTimestampMinusTwoSupported)
             {
-                this.TestSite.Assume.Inconclusive("Value -2 for FileBasicInformation timestamps is only supported by NTFS and ReFS.");
+                this.TestSite.Assume.Inconclusive($"Value -2 for FileBasicInformation timestamps is not supported by \"{this.fsaAdapter.FileSystem}\" filesystem.");
             }
-            else if ((!Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_NTFS), operatingSystem) && this.fsaAdapter.FileSystem == FileSystem.NTFS)
-                || (!Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_REFS), operatingSystem) && this.fsaAdapter.FileSystem == FileSystem.REFS))
+            else if ((Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_NTFS), operatingSystem) && this.fsaAdapter.FileSystem == FileSystem.NTFS)
+                || (Enum.IsDefined(typeof(OS_MinusTwo_NotSupported_REFS), operatingSystem) && this.fsaAdapter.FileSystem == FileSystem.REFS))
             {
-                TestZeroTimestamp(fileType, timestampType);
+                this.TestSite.Assume.Inconclusive(operatingSystem + " does not support -2 timestamp for " + this.fsaAdapter.FileSystem);
             }
             else
             {
-                this.TestSite.Assume.Inconclusive(operatingSystem + " does not support -2 timestamp for " + this.fsaAdapter.FileSystem);
+                TestZeroTimestamp(fileType, timestampType);
             }
         }
 

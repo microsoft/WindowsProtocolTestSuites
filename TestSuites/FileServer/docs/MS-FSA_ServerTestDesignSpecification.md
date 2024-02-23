@@ -106,6 +106,9 @@
         * [IsShortNameSupported](#IsShortNameSupported)
             * [FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported](#FileInfo_Set_FileShortNameInfo_File_IsShortNameSupported)
             * [FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported](#FileInfo_Set_FileShortNameInfo_Dir_IsShortNameSupported)
+        * [IsFileValidLengthInformationSupported](#IsFileValidLengthInformationSupported)
+            * [FileInfo_Set_FileValidDataLengthInfo_File_IsSupported](#FileInfo_Set_FileValidDataLengthInfo_File_IsSupported)
+            * [FileInfo_Set_FileValidDataLengthInfo_Dir_IsSupported](#FileInfo_Set_FileValidDataLengthInfo_Dir_IsSupported)
         * [IsCompressionSupported](#IsCompressionSupported)
             * [FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported](#FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported)
             * [FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported](#FileInfo_Query_FileCompressionInfo_Dir_IsCompressionSupported)
@@ -513,7 +516,7 @@ There are 228 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
-| Scenarios for FileInformation | 11 | 82 (32) |
+| Scenarios for FileInformation | 11 | 84 (49) |
 | Scenarios for FileSystemInformation | 4 | 22 (7) |
 | Scenarios for FsControlRequest | 13 | 93 (28) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
@@ -1874,6 +1877,29 @@ There are 343 test cases in total:
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
 | | }|
 
+#### <a name="IsFileValidLengthInformationSupported"/>IsFileValidLengthInformationSupported
+
+##### <a name="FileInfo_Set_FileValidDataLengthInfo_File_IsSupported"/>FileInfo_Set_FileValidDataLengthInfo_File_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if valid data length supported for different file system.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile)|
+| | Write data to File|
+| | SetInfo with FileInfoClass.FileValidDataLengthInformation|
+| | Assert.AreEqual(**STATUS_SUCCESS**, ActualResult);|
+
+##### <a name="FileInfo_Set_FileValidDataLengthInfo_Dir_IsSupported"/>FileInfo_Set_FileValidDataLengthInfo_Dir_IsSupported
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test if valid data length supported for different file system.|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | SetInfo with FileInfoClass.FileValidDataLengthInformation|
+| | Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
+
 #### <a name="IsCompressionSupported"/>IsCompressionSupported
 
 ##### <a name="FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported"/>FileInfo_Query_FileCompressionInfo_File_IsCompressionSupported
@@ -2779,7 +2805,7 @@ There are 343 test cases in total:
 | | Query LastAccessTime |
 | | Verify LastAccessTime was updated to current time |
 
-##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_File_CreationTime
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_CreationTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
@@ -2796,7 +2822,7 @@ There are 343 test cases in total:
 | | Query CreationTime |
 | | Verify CreationTime was not changed  |
 
-##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusOne_Dir_CreationTime
+##### <a name="FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_CreationTime"/>FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_Dir_CreationTime
 
 | &#32;| &#32; |
 | -------------| ------------- |
