@@ -62,6 +62,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         #region Utility
         private void FsCtl_Set_IntegrityInformation_Ex_Combined(FileType fileType, bool IsTestingForInvalidParameter)
         {
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Check supported Platform");
+
+            if (this.fsaAdapter.TestConfig.Platform < Platform.WindowsServer2022)
+            {
+                BaseTestSite.Assert.Inconclusive("MS-FSCC Appendix B <76> Section 2.3.75: The FSCTL_SET_INTEGRITY_INFORMATION_EX Request message is supported only by Windows Server 2022 and later, and Windows 11, version 22H2 operating system and later.");
+            }
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
 
