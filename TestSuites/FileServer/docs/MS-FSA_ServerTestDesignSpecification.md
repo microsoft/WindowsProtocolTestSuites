@@ -35,6 +35,7 @@
         * [FsInfo_FileFsSizeInformation_ClusterSize](#FsInfo_FileFsSizeInformation_ClusterSize)
         * [FsInfo_Query_FileFsSectorSizeInformation](#FsInfo_Query_FileFsSectorSizeInformation)
     * [Scenarios for FsControlRequest](#Scenarios-for-FsControlRequest)
+        * [FsCtl_Create_Or_Get_ObjectId](#FsCtl_Create_Or_Get_ObjectId)
         * [FsCtl_Get_IntegrityInformation](#FsCtl_Get_IntegrityInformation)
         * [FsCtl_Set_IntegrityInformation](#FsCtl_Set_IntegrityInformation)
         * [FsCtl_Offload_Read](#FsCtl_Offload_Read)
@@ -201,6 +202,8 @@
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
             * [FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported)
+            * [FsInfo_Query_FileFsObjectIdInformation_File_OutputBufferSize_TooSmall](#FsInfo_Query_FileFsObjectIdInformation_File_OutputBufferSize_TooSmall)
+            * [FsInfo_Query_FileFsObjectIdInformation_Dir_OutputBufferSize_TooSmall](#FsInfo_Query_FileFsObjectIdInformation_Dir_OutputBufferSize_TooSmall)
         * [IsFsSectorSizeInformationSupported](#IsFsSectorSizeInformationSupported)
             * [FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSize (3TCs, 1BVT)](#FsInfo_Query_FileFsSectorSizeInformation_File_OutputBufferSize-3TCs-BVT)
             * [FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSize (3TCs)](#FsInfo_Query_FileFsSectorSizeInformation_Dir_OutputBufferSize-3TCs)
@@ -517,8 +520,8 @@ There are 228 test cases in total:
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 11 | 84 (49) |
-| Scenarios for FileSystemInformation | 4 | 22 (7) |
-| Scenarios for FsControlRequest | 13 | 93 (28) |
+| Scenarios for FileSystemInformation | 4 | 24 (7) |
+| Scenarios for FsControlRequest | 13 | 97 (30) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
 | Scenarios for File And Directory Leasing | 1 | 7 (0) |
@@ -881,6 +884,31 @@ There are 343 test cases in total:
 | | Verify server responses accordingly to the input parameters.|
 
 ### <a name="Scenarios-for-FsControlRequest"/>Scenarios for FsControlRequest
+
+#### <a name="FsCtl_Create_Or_Get_ObjectId"/>FsCtl_Create_Or_Get_ObjectId
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test FSCTL request: **FSCTL_CREATE_OR_GET_OBJECT_ID**|
+| | Note: Only **NTFS** supports create or get object id.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FsCtl: FSCTL_CREATE_OR_GET_OBJECT_ID|
+| | Supporting test:|
+| | If not implemented, failed with **STATUS_INVALID_DEVICE_REQUEST**.|
+| | Input parameter test:|
+| | The operation MUST be failed with **STATUS_INVALID_PARAMETER** if:|
+| | OutputBufferSize is less than sizeof(**FILE_OBJECTID_BUFFER**).|
+| | Operation test:|
+| | Upon successful completion of the operation, server returns **STATUS_SUCCESS**.|
+| | Verify OutputBuffer.ObjectId is set to non-empty Guid.|
+| | Verify OutputBuffer.BirthVolumeId is set to non-empty Guid.|
+| | Verify OutputBuffer.BirthObjectId is set to non-empty Guid.|
+| | Verify OutputBuffer.DomainId is set to empty Guid.|
+| Message Sequence| CreateFile.|
+| | FSCTL request with **FSCTL_CREATE_OR_GET_OBJECT_ID**.|
+| | Verify server response is correct.|
 
 #### <a name="FsCtl_Get_IntegrityInformation"/>FsCtl_Get_IntegrityInformation
 
@@ -2960,6 +2988,34 @@ There are 343 test cases in total:
 | | } Else {|
 | | &nbsp;&nbsp;&nbsp;&nbsp;Assert.AreEqual(**STATUS_INVALID_PARAMETER**, ActualResult);|
 | | }|
+
+##### <a name="FsInfo_Query_FileFsObjectIdInformation_File_OutputBufferSize_TooSmall"/>FsInfo_Query_FileFsObjectIdInformation_File_OutputBufferSize_TooSmall
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test the response if object id is supported and the output buffer is set too small.|
+| | Note: **ReFS** does not support object IDs.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Parameter combination|
+| | Parameter&nbsp;&#124;&nbsp;Expected Result|
+| | OutputBufferSize < sizeof(FILE_FS_OBJECT_ID_INFORMATION)&nbsp;&#124;&nbsp;STATUS_INFO_LENGTH_MISMATCH|
+| Message Sequence| CreateFile (DataFile)|
+| | QueryInfo with FsInfoClass.FileFsObjectIdInformation and OutputBufferSize < sizeof(FILE_FS_OBJECT_ID_INFORMATION)|
+| | Assert.AreEqual(**STATUS_INFO_LENGTH_MISMATCH**, ActualResult);|
+
+##### <a name="FsInfo_Query_FileFsObjectIdInformation_Dir_OutputBufferSize_TooSmall"/>FsInfo_Query_FileFsObjectIdInformation_Dir_OutputBufferSize_TooSmall
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To test the response if object id is supported and the output buffer is set too small.|
+| | Note: ReFS does not support object IDs.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Parameter combination|
+| | Parameter&nbsp;&#124;&nbsp;Expected Result|
+| | OutputBufferSize < sizeof(FILE_FS_OBJECT_ID_INFORMATION)&nbsp;&#124;&nbsp;STATUS_INFO_LENGTH_MISMATCH|
+| Message Sequence| CreateFile (DirectoryFile)|
+| | QueryInfo with FsInfoClass.FileFsObjectIdInformation and OutputBufferSize < sizeof(FILE_FS_OBJECT_ID_INFORMATION)|
+| | Assert.AreEqual(**STATUS_INFO_LENGTH_MISMATCH**, ActualResult);|
 
 #### <a name="IsFsSectorSizeInformationSupported"/>IsFsSectorSizeInformationSupported
 

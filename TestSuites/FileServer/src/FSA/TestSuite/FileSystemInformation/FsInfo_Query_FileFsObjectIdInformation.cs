@@ -35,13 +35,33 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         public void FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported()
         {
             FsInfo_Query_FileFsObjectIdInformation_IsObjectIdSupported(FileType.DirectoryFile);
-        }    
-    
+        }
+
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Query FileFsObjectIdInformation from a file and check if ObjectIDs are supported.")]
+        public void FsInfo_Query_FileFsObjectIdInformation_File_OutputBufferSize_TooSmall()
+        {
+            FsInfo_Query_FileFsObjectIdInformation_IsObjectIdSupported(FileType.DataFile, true);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Query FileFsObjectIdInformation from a directory and check if ObjectIDs are supported.")]
+        public void FsInfo_Query_FileFsObjectIdInformation_Dir_OutputBufferSize_TooSmall()
+        {
+            FsInfo_Query_FileFsObjectIdInformation_IsObjectIdSupported(FileType.DirectoryFile, true);
+        }
         #endregion
 
         #region Test Case Utility
 
-        private void FsInfo_Query_FileFsObjectIdInformation_IsObjectIdSupported(FileType fileType)
+        private void FsInfo_Query_FileFsObjectIdInformation_IsObjectIdSupported(FileType fileType, bool isOutputSizeLessThanRequired = false)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
@@ -56,14 +76,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             FileFsObjectIdInformation fsObjectIdInfo = new FileFsObjectIdInformation();
             fsObjectIdInfo.ObjectId = Guid.NewGuid();
             fsObjectIdInfo.ExtendedInfo = new byte[48];
-            uint outputBufferSize = (uint)TypeMarshal.ToBytes<FileFsObjectIdInformation>(fsObjectIdInfo).Length;
+            uint outputBufferSize = isOutputSizeLessThanRequired ? 1 : (uint)TypeMarshal.ToBytes<FileFsObjectIdInformation>(fsObjectIdInfo).Length;
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Query FileFsObjectIdInformation");
             status = this.fsaAdapter.QueryFileSystemInformation(FileSystemInfoClass.File_FsObjectId_Information, outputBufferSize, out byteCount, out outputBuffer);
 
             //Step 3: Verify test result
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Verify returned NTStatus code.");
-            if (this.fsaAdapter.IsObjectIDsSupported == false)
+            if (isOutputSizeLessThanRequired)
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INFO_LENGTH_MISMATCH, status, "If OutputBufferSize is less than sizeof(FILE_FS_OBJECTID_INFORMATION), the operation MUST be failed with STATUS_INFO_LENGTH_MISMATCH.");
+            }
+            else if (this.fsaAdapter.IsObjectIDsSupported == false)
             {
                 this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status,
                     "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_PARAMETER.");
@@ -77,6 +101,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
                 else
                 {
                     this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "Status set to STATUS_SUCCESS.");
+
+                    var fileObjectIdBuffer = TypeMarshal.ToStruct<FILE_OBJECTID_BUFFER_Type_2>(outputBuffer);
+                    BaseTestSite.Assert.AreNotEqual(Guid.Empty, fileObjectIdBuffer.ObjectId, $"The ObjectId field ({fileObjectIdBuffer.ObjectId}) MUST be set to a unique identifier for the file.");
                 }
             }
         }

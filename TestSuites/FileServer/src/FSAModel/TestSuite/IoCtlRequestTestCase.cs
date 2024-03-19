@@ -13207,7 +13207,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                 bool temp1034;
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp1035;
                 this.Manager.Comment("executing step \'call FsCtlCreateOrGetObjId(BufferSizeSuccess,out _)\'");
-                temp1035 = this.IFSAAdapterInstance.FsCtlCreateOrGetObjId(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize.BufferSizeSuccess, out temp1034);
+                temp1035 = this.IFSAAdapterInstance.FsCtlCreateOrGetObjId(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize.BufferSizeSuccess, out temp1034, out byte[] outbuffer);
                 this.Manager.Checkpoint("MS-FSA_R951");
                 this.Manager.Checkpoint("[In FSCTL_CREATE_OR_GET_OBJECT_ID,Pseudocode for the operation is as follows: ]\r\n" +
                         "                    If the object store does not implement this functionality, t" +
@@ -13243,7 +13243,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                 bool temp1037;
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp1038;
                 this.Manager.Comment("executing step \'call FsCtlCreateOrGetObjId(BufferSizeSuccess,out _)\'");
-                temp1038 = this.IFSAAdapterInstance.FsCtlCreateOrGetObjId(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize.BufferSizeSuccess, out temp1037);
+                temp1038 = this.IFSAAdapterInstance.FsCtlCreateOrGetObjId(Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize.BufferSizeSuccess, out temp1037, out byte[] outbuffer);
                 this.Manager.Checkpoint("MS-FSA_R947");
                 this.Manager.Checkpoint("[In FSCTL_CREATE_OR_GET_OBJECT_ID ]On completion, the object store MUST return:\r\n" +
                         "                [Status,OutputBuffer,BytesReturned].");
@@ -13324,7 +13324,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                 bool temp1042;
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp1043;
                 this.Manager.Comment("executing step \'call FsCtlCreateOrGetObjId(LessThanFILE_OBJECTID_BUFFER,out _)\'");
-                temp1043 = this.IFSAAdapterInstance.FsCtlCreateOrGetObjId(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize)(0)), out temp1042);
+                temp1043 = this.IFSAAdapterInstance.FsCtlCreateOrGetObjId(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize)(0)), out temp1042, out byte[] outbuffer);
                 this.Manager.Checkpoint("MS-FSA_R951");
                 this.Manager.Checkpoint("[In FSCTL_CREATE_OR_GET_OBJECT_ID,Pseudocode for the operation is as follows: ]\r\n" +
                         "                    If the object store does not implement this functionality, t" +
@@ -13360,7 +13360,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
                 bool temp1045;
                 Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.MessageStatus temp1046;
                 this.Manager.Comment("executing step \'call FsCtlCreateOrGetObjId(LessThanFILE_OBJECTID_BUFFER,out _)\'");
-                temp1046 = this.IFSAAdapterInstance.FsCtlCreateOrGetObjId(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize)(0)), out temp1045);
+                temp1046 = this.IFSAAdapterInstance.FsCtlCreateOrGetObjId(((Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter.BufferSize)(0)), out temp1045, out byte[] outbuffer);
                 this.Manager.Checkpoint("MS-FSA_R4994");
                 this.Manager.Checkpoint("[In FSCTL_CREATE_OR_GET_OBJECT_ID,Pseudocode for the operation is as follows:] \r\n" +
                         "                    If OutputBufferSize is less than sizeof( FILE_OBJECTID_BUFFE" +

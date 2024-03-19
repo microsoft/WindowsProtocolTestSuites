@@ -296,10 +296,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// </summary>
         /// <param name="bufferSize">Indicate buffer size</param>
         /// <param name="isBytesReturnedSet">True: if the return status is success.</param>
+        /// <param name="outbuffer">Byte [] that contains the returned FILE_OBJECTID_BUFFER.</param>
         /// <returns>An NTSTATUS code that specifies the result</returns>
         MessageStatus FsCtlCreateOrGetObjId(
             BufferSize bufferSize,
-            out bool isBytesReturnedSet
+            out bool isBytesReturnedSet,
+            out byte[] outbuffer
             );
         #endregion
 

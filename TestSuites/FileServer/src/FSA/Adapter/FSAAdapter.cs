@@ -61,6 +61,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isHardLinksSupported;
         private bool isStrictAllocationSizesRequired;
         private bool isTimestampMinusTwoSupported;
+        private bool isCreateOrGetObjectIdSupported;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -280,6 +281,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return isTimestampMinusTwoSupported; }
         }
 
+        public bool IsCreateOrGetObjectIdSupported
+        {
+            get { return isCreateOrGetObjectIdSupported; }
+        }
+
         public string UncSharePath
         {
             get
@@ -383,6 +389,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isObjectSecurityBasedOnAccessControlListsSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectSecurityBasedOnAccessControlLists").Contains(this.FileSystem.ToString());
             this.isStrictAllocationSizesRequired = testConfig.GetProperty("WhichFileSystemSupport_StrictAllocationSizes").Contains(this.FileSystem.ToString());
             this.isTimestampMinusTwoSupported = testConfig.GetProperty("WhichFileSystemSupport_Timestamp_MinusTwo").Contains(this.FileSystem.ToString());
+            this.isCreateOrGetObjectIdSupported = testConfig.GetProperty("WhichFileSystemSupport_CreateOrGetObjectId").Contains(this.fileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
@@ -2166,10 +2173,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <returns>An NTSTATUS code that specifies the result</returns>
         public MessageStatus FsCtlCreateOrGetObjId(
             BufferSize bufferSize,
-            out bool isBytesReturnedSet)
+            out bool isBytesReturnedSet,
+            out byte[] outbuffer)
         {
-            bool isImplemented = false;
-            byte[] outbuffer = new byte[0];
             byte[] inbuffer = null;
             UInt32 outBufferSize = this.transBufferSize;
 
@@ -2177,16 +2183,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 case BufferSize.BufferSizeSuccess:
                     outBufferSize = UInt32.Parse(testConfig.GetProperty("BufferSize"));
-                    outbuffer = new byte[outBufferSize];
                     break;
 
                 case BufferSize.LessThanFILE_OBJECTID_BUFFER:
                     outBufferSize = UInt32.Parse(testConfig.GetProperty("MinBufferSize"));
-                    outbuffer = new byte[outBufferSize];
                     break;
 
                 default:
-                    outbuffer = new byte[outBufferSize];
                     break;
             }
 
@@ -2199,8 +2202,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             if (MessageStatus.SUCCESS == returnedStatus)
             {
                 isBytesReturnedSet = true;
-                isImplemented = true;
-                this.VerifyFsctlCreateOrGetObjectId(isImplemented);
+                this.VerifyFsctlCreateOrGetObjectId(isImplemented: true);
             }
             else
             {
