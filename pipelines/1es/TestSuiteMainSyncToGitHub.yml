@@ -13,11 +13,11 @@ resources:
     - repository: mainPipelines
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: AzurePipelines-main
+      ref: obogbo/azurepipelines-1es
 trigger:
   branches:
     include:
-      - refs/heads/main
+      - refs/heads/obogbo/pipeline-segments
   batch: true
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
