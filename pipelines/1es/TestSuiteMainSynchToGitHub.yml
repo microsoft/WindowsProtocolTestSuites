@@ -40,7 +40,7 @@ extends:
               - task: AzureCLI@2
                 displayName: Download Scripts
                 inputs:
-                  connectedServiceNameARM: Core-ENS-GRC-Shanghai (43ceac48-878b-45c7-9a98-4bdca5a11f25)
+                  connectedServiceNameARM: Core-ENS-TEC service connection
                   scriptType: ps
                   scriptLocation: inlineScript
                   inlineScript: |-
