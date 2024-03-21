@@ -34,4 +34,4 @@ extends:
           - job: SyncToGithub
             displayName: Sync to Github
             steps:
-            - template: pipelines/build/1es/TestSuiteMainSyncToGithub-steps.yml@mainPipelines
+            - template: pipelines/build/1es/TestSuiteMainSyncToGitHub-steps.yml@mainPipelines
