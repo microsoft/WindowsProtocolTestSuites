@@ -13,7 +13,7 @@ resources:
     - repository: mainPipelines
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: obogbo/azurepipelines-1es
+      ref: AzurePipelines-main
 trigger:
   branches:
     include:
@@ -31,7 +31,7 @@ extends:
     stages:
       - stage: Stage
         jobs:
-          - job: SyncToGithub
-            displayName: Sync to Github
+          - job: SyncToVSO
+            displayName: Sync to VSO
             steps:
-            - template: pipelines/build/1es/TestSuiteMainSyncToGitHub-steps.yml@mainPipelines
+            - template: pipelines/build/1es/TestSuiteMainSyncToVSO-steps.yml@mainPipelines

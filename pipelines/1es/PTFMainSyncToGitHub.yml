@@ -13,7 +13,7 @@ resources:
     - repository: mainPipelines
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: obogbo/azurepipelines-1es
+      ref: AzurePipelines-main
 trigger:
   branches:
     include:
@@ -34,5 +34,5 @@ extends:
           - job: SyncToGithub
             displayName: Sync to Github
             steps:
-            - template: pipelines/build/1es/PTFMainSyncToGithub.yml@mainPipelines
+            - template: pipelines/build/1es/PTFMainSyncToGitHub-steps.yml@mainPipelines
 
