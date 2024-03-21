@@ -17,7 +17,7 @@ resources:
 trigger:
   branches:
     include:
-      - refs/heads/obogbo/icm-spillover
+      - refs/heads/obogbo/test-main
   batch: true
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
