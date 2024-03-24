@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.Claim</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.ActiveDirectory</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.DirectoryServices" Version="6.0.0" />
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="6.0.1" />
+    <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
