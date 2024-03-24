@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<AssemblyName>PropertyValueDetector</AssemblyName>
 		<RootNamespace>Microsoft.Protocols.TestManager.Detector</RootNamespace>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -9,8 +9,8 @@
 	  <Compile Include="..\..\AssemblyInfo\PTMDetectorAssemblyInfo.cs" Link="PTMDetectorAssemblyInfo.cs" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="System.DirectoryServices" Version="7.0.1" />
-		<PackageReference Include="System.DirectoryServices.Protocols" Version="7.0.0" />
-		<PackageReference Include="System.Management" Version="7.0.1" />
+		<PackageReference Include="System.DirectoryServices" Version="8.0.0" />
+		<PackageReference Include="System.DirectoryServices.Protocols" Version="8.0.0" />
+		<PackageReference Include="System.Management" Version="8.0.0" />
 	</ItemGroup>
 </Project>

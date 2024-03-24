@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net7.0</targetframework>
+    <targetframework>net8.0</targetframework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
