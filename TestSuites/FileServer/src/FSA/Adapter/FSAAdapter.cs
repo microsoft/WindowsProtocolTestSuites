@@ -61,7 +61,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private bool isHardLinksSupported;
         private bool isStrictAllocationSizesRequired;
         private bool isTimestampMinusTwoSupported;
-        private bool isCreateOrGetObjectIdSupported;
 
         private bool isErrorCodeMappingRequired;
         private bool isVolumeReadonly;
@@ -281,11 +280,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             get { return isTimestampMinusTwoSupported; }
         }
 
-        public bool IsCreateOrGetObjectIdSupported
-        {
-            get { return isCreateOrGetObjectIdSupported; }
-        }
-
         public string UncSharePath
         {
             get
@@ -389,7 +383,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             this.isObjectSecurityBasedOnAccessControlListsSupported = testConfig.GetProperty("WhichFileSystemSupport_ObjectSecurityBasedOnAccessControlLists").Contains(this.FileSystem.ToString());
             this.isStrictAllocationSizesRequired = testConfig.GetProperty("WhichFileSystemSupport_StrictAllocationSizes").Contains(this.FileSystem.ToString());
             this.isTimestampMinusTwoSupported = testConfig.GetProperty("WhichFileSystemSupport_Timestamp_MinusTwo").Contains(this.FileSystem.ToString());
-            this.isCreateOrGetObjectIdSupported = testConfig.GetProperty("WhichFileSystemSupport_CreateOrGetObjectId").Contains(this.fileSystem.ToString());
 
             //Volume Properties
             this.clusterSizeInKB = uint.Parse(testConfig.GetProperty((fileSystem.ToString() + "_ClusterSizeInKB")));
@@ -2799,6 +2792,48 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        #endregion
+
+        #region 2.1.5.10.13   FSCTL_GET_OBJECT_ID
+
+        /// <summary>
+        /// Implement FSCTL_GET_OBJECT_ID
+        /// </summary>
+        /// <param name="bufferSize">Indicate buffer size</param>
+        /// <param name="isBytesReturnedSet">TRUE: if the return status is success.</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus FsCtlGetObjId(
+            BufferSize bufferSize,
+            out bool isBytesReturnedSet,
+            out byte[] outbuffer)
+        {
+            byte[] inbuffer = null;
+            uint outBufferSize = this.transBufferSize;
+
+            switch (bufferSize)
+            {
+                case BufferSize.BufferSizeSuccess:
+                    outBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
+                    break;
+
+                case BufferSize.LessThanFILE_OBJECTID_BUFFER:
+                    outBufferSize = uint.Parse(testConfig.GetProperty("MinBufferSize"));
+                    break;
+
+                default:
+                    break;
+            }
+
+            MessageStatus returnedStatus = transAdapter.IOControl(
+                (uint)FsControlCommand.FSCTL_GET_OBJECT_ID,
+                outBufferSize,
+                inbuffer,
+                out outbuffer);
+
+            isBytesReturnedSet = MessageStatus.SUCCESS == returnedStatus;
+
+            return returnedStatus;
+        }
         #endregion
 
         #region 3.1.5.9.27   FSCTL_SET_INTEGRITY_INFORMATION

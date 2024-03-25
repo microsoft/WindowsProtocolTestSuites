@@ -15,7 +15,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
     {
         #region Test cases
 
-        #region FsCtl_CreateOrGetObjectId_IsSupported
+        #region FsCtl_GetObjectId_IsSupported
 
         [TestMethod()]
         [TestCategory(TestCategories.Bvt)]
@@ -23,10 +23,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Send FSCTL_CREATE_OR_GET_OBJECT_ID request to a file.")]
-        public void BVT_FsCtl_CreateOrGetObjectId_File_IsSupported()
+        [Description("Send FSCTL_GET_OBJECT_ID request to a file.")]
+        public void BVT_FsCtl_GetObjectId_File_IsSupported()
         {
-            FsCtl_CreateOrGetObjectId_Test(FileType.DataFile);
+            FsCtl_GetObjectId_Test(FileType.DataFile);
         }
 
         [TestMethod()]
@@ -35,10 +35,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
-        [Description("Send FSCTL_CREATE_OR_GET_OBJECT_ID request to a directory.")]
-        public void BVT_FsCtl_CreateOrGetObjectId_Dir_IsSupported()
+        [Description("Send FSCTL_GET_OBJECT_ID request to a directory.")]
+        public void BVT_FsCtl_GetObjectId_Dir_IsSupported()
         {
-            FsCtl_CreateOrGetObjectId_Test(FileType.DirectoryFile);
+            FsCtl_GetObjectId_Test(FileType.DirectoryFile);
         }
 
         #endregion
@@ -49,20 +49,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Send FSCTL_CREATE_OR_GET_OBJECT_ID request to a file.")]
-        public void FsCtl_CreateOrGetObjectId_File_OutputBufferSize_TooSmall()
+        [Description("Send FSCTL_GET_OBJECT_ID request to a file.")]
+        public void FsCtl_GetObjectId_File_OutputBufferSize_TooSmall()
         {
-            FsCtl_CreateOrGetObjectId_Test(FileType.DataFile, BufferSize.LessThanFILE_OBJECTID_BUFFER);
+            FsCtl_GetObjectId_Test(FileType.DataFile, BufferSize.LessThanFILE_OBJECTID_BUFFER);
         }
 
         [TestMethod()]
         [TestCategory(TestCategories.Fsa)]
         [TestCategory(TestCategories.IoCtlRequest)]
         [TestCategory(TestCategories.NonSmb)]
-        [Description("Send FSCTL_CREATE_OR_GET_OBJECT_ID request to a directory.")]
-        public void FsCtl_CreateOrGetObjectId_Dir_OutputBufferSize_TooSmall()
+        [Description("Send FSCTL_GET_OBJECT_ID request to a directory.")]
+        public void FsCtl_GetObjectId_Dir_OutputBufferSize_TooSmall()
         {
-            FsCtl_CreateOrGetObjectId_Test(FileType.DirectoryFile, BufferSize.LessThanFILE_OBJECTID_BUFFER);
+            FsCtl_GetObjectId_Test(FileType.DirectoryFile, BufferSize.LessThanFILE_OBJECTID_BUFFER);
         }
 
         #endregion
@@ -71,35 +71,41 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         #region Test Case Utility
 
-        private void FsCtl_CreateOrGetObjectId_Test(FileType fileType, BufferSize bufferSize = BufferSize.BufferSizeSuccess)
+        private void FsCtl_GetObjectId_Test(FileType fileType, BufferSize bufferSize = BufferSize.BufferSizeSuccess)
         {
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
 
             //Step 1: Create file
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
-            status = this.fsaAdapter.CreateFile(fileType);
+            status = fsaAdapter.CreateFile(fileType);
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create should succeed.");
 
-            //Step 2: FSCTL request with FSCTL_CREATE_OR_GET_OBJECT_ID
-            bool isBytesReturned;
+            //Step 2: Ensure that ObjectId is set
+            if (fsaAdapter.IsObjectIDsSupported)
+            {
+                BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Ensure the file has an ObjectId");
+                status = fsaAdapter.FsCtlCreateOrGetObjId(BufferSize.BufferSizeSuccess, out _, out byte[] _);
+                BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "Create or get Object Id should succeed.");
+            }
 
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. FSCTL request with FSCTL_CREATE_OR_GET_OBJECT_ID");
-            status = this.fsaAdapter.FsCtlCreateOrGetObjId(bufferSize, out isBytesReturned, out byte[] outbuffer);
+            //Step 2: FSCTL request with FSCTL_GET_OBJECT_ID
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. FSCTL request with FSCTL_GET_OBJECT_ID");
+            status = fsaAdapter.FsCtlGetObjId(bufferSize, out _, out byte[] outbuffer);
 
             //Step 3: Verify test result
-            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Verify returned NTSTATUS code.");
-            // MS-FSA 2.1.5.10.1   FSCTL_CREATE_OR_GET_OBJECT_ID
-            // <72> Section 2.1.5.10.1: This is only implemented by the NTFS file systems.
-            if (this.fsaAdapter.IsObjectIDsSupported)
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "4. Verify returned NTSTATUS code.");
+            // MS-FSA 2.1.5.10.13   FSCTL_GET_OBJECT_ID
+            // <96> Section 2.1.5.10.13: This is only implemented by the NTFS file systems.
+            if (fsaAdapter.IsObjectIDsSupported)
             {
                 if (bufferSize == BufferSize.LessThanFILE_OBJECTID_BUFFER)
                 {
-                    this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_PARAMETER, status, "FSCTL_CREATE_OR_GET_OBJECT_ID is supported, If OutputBufferSize is less than sizeof(FILE_OBJECTID_BUFFER), the operation MUST be failed with STATUS_INVALID_PARAMETER.");
+                    fsaAdapter.AssertAreEqual(Manager, MessageStatus.INVALID_PARAMETER, status, "FSCTL_GET_OBJECT_ID is supported, If OutputBufferSize is less than sizeof(FILE_OBJECTID_BUFFER), the operation MUST be failed with STATUS_INVALID_PARAMETER.");
                 }
                 else
                 {
-                    this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.SUCCESS, status, "FSCTL_CREATE_OR_GET_OBJECT_ID is supported, status set to STATUS_SUCCESS.");
+                    fsaAdapter.AssertAreEqual(Manager, MessageStatus.SUCCESS, status, "FSCTL_GET_OBJECT_ID is supported, status set to STATUS_SUCCESS.");
                     var fileObjectIdBuffer = TypeMarshal.ToStruct<FILE_OBJECTID_BUFFER_Type_1>(outbuffer);
                     BaseTestSite.Assert.AreNotEqual(Guid.Empty, fileObjectIdBuffer.ObjectId, $"The ObjectId field ({fileObjectIdBuffer.ObjectId}) MUST be set to a unique identifier for the file.");
                     BaseTestSite.Assert.AreNotEqual(Guid.Empty, fileObjectIdBuffer.BirthVolumeId, $"The BirthVolumeId field ({fileObjectIdBuffer.BirthVolumeId}) MUST be set to a unique identifier for the file.");
@@ -109,7 +115,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             }
             else
             {
-                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.INVALID_DEVICE_REQUEST, status,
+                fsaAdapter.AssertAreEqual(Manager, MessageStatus.INVALID_DEVICE_REQUEST, status,
                         "If the object store does not implement this functionality, the operation MUST be failed with STATUS_INVALID_DEVICE_REQUEST.");
             }
         }
