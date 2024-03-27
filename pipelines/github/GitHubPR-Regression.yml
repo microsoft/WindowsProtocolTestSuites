@@ -127,7 +127,7 @@ stages:
             inputs:
               targetType: filePath
               filePath: "$(extRepo.dir)/RegressionRunScripts/Common/Queue-SinglePipelineWithParameters.ps1"
-              arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -RemoteAccessToken "$(tokens.pipelineTriggerToken)" -RemoteApiUrl "$(extRepo.apiUrl)" -PipelineName "$(test.regressionPipelineName)" -TargetRepoBranch "$(extRepo.branchName)" -PipelineParameters "`"targetRepo.csvFile`": `"$(test.targetRepoCsvFile)`", `"test.filter`": `"$(test.filter)`", `"test.buildId`": `"$(Build.BuildId)`", `"test.remoteApiUrl`": `"$(build.apiUrl)`", `"test.remoteAccessToken`": `"$(System.AccessToken)`"" -BuildIdVariableName "test.regressionBuildId" -Reason "manual" -ReportInfo $false'
+              arguments: '-AccessToken "$(System.AccessToken)" -ApiUrl "$(build.apiUrl)" -RemoteAccessToken "$(tokens.pipelineTriggerTokenV2)" -RemoteApiUrl "$(extRepo.apiUrl)" -PipelineName "$(test.regressionPipelineName)" -TargetRepoBranch "$(extRepo.branchName)" -PipelineParameters "`"targetRepo.csvFile`": `"$(test.targetRepoCsvFile)`", `"test.filter`": `"$(test.filter)`", `"test.buildId`": `"$(Build.BuildId)`", `"test.remoteApiUrl`": `"$(build.apiUrl)`", `"test.remoteAccessToken`": `"$(System.AccessToken)`"" -BuildIdVariableName "test.regressionBuildId" -Reason "manual" -ReportInfo $false'
               workingDirectory: "$(extRepo.dir)/RegressionRunScripts/Common"
 
           - task: PowerShell@2
