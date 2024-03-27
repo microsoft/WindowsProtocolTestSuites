@@ -119,7 +119,7 @@ stages:
         steps:
           - checkout: none
 
-          - script: "git clone -b $(extRepo.branchName) $(extRepo.url) $(extRepo.dir)"
+          - script: "git clone -b $(extRepo.branchName) $(extRepo.v2.url) $(extRepo.dir)"
             displayName: "Fetch Helper"
 
           - task: PowerShell@2
