@@ -482,6 +482,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             FsControlRequestType requestType,
             BufferSize bufferSize
             );
+
+        /// <summary>
+        /// Implement FsCtlSetObjID Interface
+        /// </summary>
+        /// <param name="requestType">FsControlRequestType is self-defined to indicate control type</param>
+        /// <param name="bufferSize">Indicate buffer size</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        MessageStatus FsCtlSetObjID(
+            FsControlRequestType requestType,
+            BufferSize bufferSize,
+            byte[] inbuffer
+            );
         #endregion
 
         #region 3.1.5.9.32   FSCTL_SET_SPARSE
