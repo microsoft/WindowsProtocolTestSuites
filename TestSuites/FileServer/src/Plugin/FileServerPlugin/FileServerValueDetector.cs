@@ -889,12 +889,16 @@ namespace Microsoft.Protocols.TestManager.Detector
                 logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
                 logWriter.AddLineToLog(DetectLogLevel.Information);
                 logWriter.AddLog(DetectLogLevel.Error, string.Format("The User cannot log on\r\nError: 0x{0:x8} ({1})\r\nPlease check the credential", winException.NativeErrorCode, winException.Message));
+
+                logWriter.LogException(ex);
             }
             catch (Exception ex)
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
                 logWriter.AddLineToLog(DetectLogLevel.Information);
                 logWriter.AddLog(DetectLogLevel.Error, string.Format("The User cannot log on:{0} \r\nPlease check the credential", ex.Message));
+
+                logWriter.LogException(ex);
             }
 
             logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);

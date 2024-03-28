@@ -56,6 +56,11 @@ namespace Microsoft.Protocols.TestManager.Detector
             AddLog(level, string.Empty);
         }
 
+        public void LogException(Exception ex)
+        {
+            DetectorUtil.WriteLog(ex.ToString(), startNewLine: true, LogStyle.Default);
+        }
+
         public Process RunCmd(string command)
         {
             Process p = new System.Diagnostics.Process();
