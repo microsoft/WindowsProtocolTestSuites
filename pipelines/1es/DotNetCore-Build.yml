@@ -6,7 +6,7 @@ resources:
   - repository: template
     type: git
     name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-    ref: AzurePipelines-main
+    ref: obogbo/pipelines-main
   - repository: 1ESPipelineTemplates
     type: git
     name: 1ESPipelineTemplates/1ESPipelineTemplates
