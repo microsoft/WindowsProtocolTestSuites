@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System.Diagnostics.Tracing;
+
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
 {
     /// <summary>
@@ -15,6 +17,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib
     /// <summary>
     /// Credential with account information.
     /// </summary>
+    [EventData]
     public class AccountCredential : ICredential
     {
         /// <summary>

@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
+using System.Diagnostics.Tracing;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
@@ -12,6 +13,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         cipher  [2] OCTET STRING -- ciphertext
     }
     */
+    [EventData]
     public class EncryptedData : Asn1Sequence
     {
         [Asn1Field(0), Asn1Tag(Asn1TagType.Context, 0)]

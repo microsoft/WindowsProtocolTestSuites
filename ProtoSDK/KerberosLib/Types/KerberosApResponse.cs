@@ -4,9 +4,11 @@
 using System;
 using Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic;
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
+using System.Diagnostics.Tracing;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
+    [EventData]
     public class KerberosApResponse : KerberosPdu
     {
         /// <summary>

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Linq;
+using EventSource = Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib.EventSources.KerberosEventSource;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
@@ -200,11 +200,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             string salt = null
             )
         {
+            EventSource.Log.ClientSecurityContext_Construction_I_Started(serverName, credential?.DomainName,
+                credential?.AccountName, accountType.ToString(), kdcAddress.ToString(), kdcPort, transportType.ToString(),
+                contextAttribute.ToString(), oidPkt.ToString(), salt);
+
             this.credential = credential;
             this.serverName = serverName;
             this.contextAttribute = contextAttribute;
             this.client = new KerberosClient(this.credential.DomainName, this.credential.AccountName, this.credential.Password, accountType, kdcAddress, kdcPort, transportType, oidPkt, salt);
             this.UpdateDefaultSettings();
+
+            EventSource.Log.ClientSecurityContext_Construction_I_Completed();
         }
 
         /// <summary>
@@ -276,6 +282,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// </summary>
         private void ClientInitialize()
         {
+            EventSource.Log.ClientSecurityContext_InitializationWithoutServerTokenStarted();
+
             this.ApRequestAuthenticator = null;
             // Create and send AS request for pre-authentication
             KdcOptions options = KdcOptions.FORWARDABLE | KdcOptions.CANONICALIZE | KdcOptions.RENEWABLE;
@@ -349,6 +357,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 this.Context.SessionKey = this.Context.ApSubKey;
                 this.needContinueProcessing = false;
             }
+
+            EventSource.Log.ClientSecurityContext_InitializationWithoutServerTokenCompleted();
         }
 
         /// <summary>
@@ -357,6 +367,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <param name="serverToken">Server token</param>
         private void ClientInitialize(byte[] serverToken)
         {
+            EventSource.Log.ClientSecurityContext_InitializationWithServerTokenStarted(serverToken);
+
             KerberosApResponse apRep = this.GetApResponseFromToken(serverToken, KerberosConstValue.GSSToken.GSSAPI);
             this.VerifyApResponse(apRep);
 
@@ -407,6 +419,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             }
 
             this.needContinueProcessing = false;      // SEC_E_OK;
+
+            EventSource.Log.ClientSecurityContext_InitializationWithServerTokenCompleted();
         }
         #endregion
 
@@ -580,6 +594,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns></returns>
         private KerberosApResponse GetApResponseFromToken(byte[] token, KerberosConstValue.GSSToken gssToken = KerberosConstValue.GSSToken.GSSSPNG)
         {
+            EventSource.Log.ClientSecurityContext_GetApResponseFromTokenStarted
+                (token, gssToken.ToString());
+
             if (gssToken == KerberosConstValue.GSSToken.GSSSPNG)
                 token = KerberosUtility.DecodeNegotiationToken(token);
 
@@ -625,6 +642,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
             apRep.ApEncPart.BerDecode(decodeBuffer);
 
             this.client.UpdateContext(apRep);
+
+            EventSource.Log.ClientSecurityContext_GetApResponseFromTokenCompleted(token,
+                encryptType.ToString(), cipherData, sessionKey, clearText);
 
             return apRep;
         }
@@ -899,6 +919,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
         private KerberosTicket GetTGTCachedToken(AccountCredential inputCredential, string inputServerPrincipleName)
         {
+            EventSource.Log.ClientSecurityContext_GetTGTCachedTokenStarted(inputCredential, inputServerPrincipleName);
+
             cacheLock.EnterReadLock();
             KerberosTicket cachedTGTToken = null;
 

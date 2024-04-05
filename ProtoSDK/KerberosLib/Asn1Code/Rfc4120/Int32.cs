@@ -3,12 +3,14 @@
 
 using Microsoft.Protocols.TestTools.StackSdk.Asn1;
 using System;
+using System.Diagnostics.Tracing;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 {
     /*
     Int32           ::= INTEGER (-2147483648..2147483647)
     */
+    [EventData]
     public class KerbInt32 : Asn1Integer
     {
         protected override bool VerifyConstraints()
