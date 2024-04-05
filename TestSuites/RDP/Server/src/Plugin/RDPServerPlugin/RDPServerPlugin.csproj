@@ -4,7 +4,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestManager.RDPServerPlugin</RootNamespace>
     <AssemblyName>RDPServerPlugin</AssemblyName>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 

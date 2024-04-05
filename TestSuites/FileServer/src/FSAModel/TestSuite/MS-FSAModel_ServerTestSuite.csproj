@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -36,10 +36,10 @@
     <ProjectReference Include="..\..\FSA\Adapter\MS-FSA_ServerAdapter.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-	  <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.4.0" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+	  <PackageReference Include="MSTest.TestFramework" Version="3.2.2" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.2.2" />
   </ItemGroup>
   <ItemGroup>
     <None Update="MS-FSAModel_ServerTestSuite.deployment.ptfconfig">

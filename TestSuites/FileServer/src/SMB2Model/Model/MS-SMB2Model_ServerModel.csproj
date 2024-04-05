@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.Model</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -66,6 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.4.0" />
   </ItemGroup>
 </Project>

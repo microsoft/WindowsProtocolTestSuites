@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <targetframework>net7.0</targetframework>
+    <targetframework>net8.0</targetframework>
     <AssemblyName>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx</AssemblyName>
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -18,6 +18,6 @@
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="2.88.3" />
+    <PackageReference Include="SkiaSharp" Version="2.88.7" />
   </ItemGroup>
 </Project>
