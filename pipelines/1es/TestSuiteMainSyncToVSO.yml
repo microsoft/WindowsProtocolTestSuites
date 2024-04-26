@@ -17,7 +17,7 @@ resources:
 trigger:
   branches:
     include:
-      - refs/heads/obogbo/test-main
+      - refs/heads/main
   batch: true
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
