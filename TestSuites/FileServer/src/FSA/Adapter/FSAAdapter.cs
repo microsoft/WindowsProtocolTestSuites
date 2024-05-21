@@ -3612,6 +3612,46 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        /// <summary>
+        /// Implement FsCtlSetObjID method
+        /// </summary>
+        /// <param name="requestType">FsControlRequestType is self-defined to indicate control type</param>
+        /// <param name="bufferSize">Indicate buffer size</param>
+        /// <returns>An NTSTATUS code that specifies the result</returns>
+        public MessageStatus FsCtlSetObjID(
+            FsControlRequestType requestType,
+            BufferSize bufferSize,
+            byte[] inbuffer
+            )
+        {
+            byte[] outbuffer = new byte[0];
+            uint ctlCode = 0;
+
+            // According to FSCC 2.3, the ctlCode should be as follows:
+            switch (requestType)
+            {
+                case FsControlRequestType.SET_OBJECT_ID:
+                    ctlCode = (uint)FsControlCommand.FSCTL_SET_OBJECT_ID;
+                    break;
+
+                case FsControlRequestType.SET_OBJECT_ID_EXTENDED:
+                    ctlCode = (uint)FsControlCommand.FSCTL_SET_OBJECT_ID_EXTENDED;
+                    break;
+
+                default:
+                    ctlCode = (uint)FsControlCommand.FSCTL_SET_OBJECT_ID;
+                    break;
+            }
+
+            MessageStatus returnedStatus = transAdapter.IOControl(
+                ctlCode,
+                this.transBufferSize,
+                inbuffer,
+                out outbuffer);
+
+            return returnedStatus;
+        }
+
         #endregion
 
         #region 3.1.5.9.30   FSCTL_SET_REPARSE_POINT
