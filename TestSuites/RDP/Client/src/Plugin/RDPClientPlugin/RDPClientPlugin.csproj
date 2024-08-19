@@ -15,6 +15,7 @@
 	<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.3.3">
 		<ExcludeAssets>runtime</ExcludeAssets>
 	</PackageReference>
+	<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj" />
