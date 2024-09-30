@@ -12,6 +12,7 @@ Write-Host ======================================
 
 $InvocationPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $OutDir
+iex "& { $(irm https://aka.ms/install-artifacts-credprovider.ps1) }" 
 dotnet publish "$InvocationPath/PtmCli.sln" -c $Configuration -o $OutDir
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to build PTMCli"
