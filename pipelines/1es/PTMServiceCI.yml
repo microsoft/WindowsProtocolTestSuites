@@ -35,6 +35,9 @@ extends:
                   displayName: "Publish Artifact - drop windows"
             steps:
               - checkout: self
+              - task: NuGetAuthenticate@1
+                inputs:
+                  feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
               - task: UseDotNet@2
                 displayName: Use .NET Core sdk 8.x
                 inputs:
