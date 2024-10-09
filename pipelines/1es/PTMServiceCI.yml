@@ -44,7 +44,6 @@ extends:
                   feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
               - task: npmAuthenticate@0
                 inputs:
-                  feedUrl: 'https://pkgs.dev.azure.com/microsoft/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/npm/registry/'
                   workingFile: 'ClientApp/.npmrc'
               - task: DotNetCoreCLI@2
                 displayName: dotnet restore
@@ -87,7 +86,6 @@ extends:
                   feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
               - task: npmAuthenticate@0
                 inputs:
-                  feedUrl: 'https://pkgs.dev.azure.com/microsoft/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/npm/registry/'
                   workingFile: 'ClientApp/.npmrc'
               - task: DotNetCoreCLI@2
                 displayName: dotnet restore
