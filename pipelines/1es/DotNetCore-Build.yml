@@ -29,6 +29,9 @@ extends:
           clean: false
         timeoutInMinutes: 0
         steps:
+        - task: NuGetAuthenticate@1
+          inputs:
+            feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
         - template: pipelines/build/1es//DotNetCore-Build-steps.yml@template
       - job: ''
         displayName: Build RDPSUTControlAgent (Java, CSharp, Python)
