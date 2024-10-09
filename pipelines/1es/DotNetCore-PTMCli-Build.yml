@@ -32,5 +32,5 @@ extends:
         - task: NuGetAuthenticate@1
           inputs:
             feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
-            nuGetServiceConnections: 'windowsprotocoltestsuites_PublicPackages'
+#            nuGetServiceConnections: 'windowsprotocoltestsuites_PublicPackages'
         - template: pipelines/build/1es/DotNetCore-PTMCli-Build-steps.yml@template
