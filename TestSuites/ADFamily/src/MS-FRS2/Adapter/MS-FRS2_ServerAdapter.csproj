@@ -19,7 +19,7 @@
     <ProjectReference Include="..\FileStreamDataParser\FileStreamDataParser.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.DirectoryServices" Version="6.0.0" />
-    <PackageReference Include="System.DirectoryServices.Protocols" Version="6.0.1" />
+    <PackageReference Include="System.DirectoryServices" Version="8.0.0" />
+    <PackageReference Include="System.DirectoryServices.Protocols" Version="8.0.0" />
   </ItemGroup>
 </Project>
