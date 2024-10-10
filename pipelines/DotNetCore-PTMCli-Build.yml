@@ -22,6 +22,10 @@ jobs:
   timeoutInMinutes: 0
   steps:
   - checkout: self
+  - task: UseDotNet@2
+    displayName: Use .NET Core sdk 8.x
+    inputs:
+      version: '8.x'
   - task: NuGetAuthenticate@1
     inputs:
       feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
