@@ -31,7 +31,7 @@ jobs:
       feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
   - task: npmAuthenticate@0
     inputs:
-      workingFile: '/ProtocolTestManager/PTMService/PTMService/ClientApp/.npmrc'
+      workingFile: 'ProtocolTestManager/PTMService/PTMService/ClientApp/.npmrc'
   - task: PowerShell@2
     displayName: Build
     inputs:
