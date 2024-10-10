@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rdprfx", "..\..\..\..\ProtoSDK\MS-RDPRFX\Rdprfx.csproj", "{9DD86DE1-3231-4713-9B45-493F4FE4199C}"
 EndProject
@@ -55,6 +55,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spng", "..\..\..\..\ProtoSDK\MS-SPNG\Spng.csproj", "{49D0DACF-7732-4DC4-8334-F770B68D95F0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RDPToolSet.Web", "RDPToolSet.Web\RDPToolSet.Web.csproj", "{F54E1C32-B157-40F8-8EE5-4612E22B366D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rdpeudp2", "..\..\..\..\ProtoSDK\MS-RDPEUDP2\Rdpeudp2.csproj", "{F5BEBD91-8808-484E-817D-2B73C890B7AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -330,6 +332,18 @@ Global
 		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Release|x64.ActiveCfg = Release|Any CPU
 		{F54E1C32-B157-40F8-8EE5-4612E22B366D}.Release|x64.Build.0 = Release|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.Debug|x64.Build.0 = Debug|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.fxcop|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.fxcop|Any CPU.Build.0 = Debug|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.fxcop|x64.ActiveCfg = Debug|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.fxcop|x64.Build.0 = Debug|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.Release|x64.ActiveCfg = Release|Any CPU
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -354,6 +368,7 @@ Global
 		{1430003E-B207-4313-B0E1-D5A2C875FFA9} = {5A01D1BA-8424-440C-AFD1-78E815E69FD0}
 		{C159D30A-D2CD-4002-8ED8-F39D52CF2793} = {5A01D1BA-8424-440C-AFD1-78E815E69FD0}
 		{49D0DACF-7732-4DC4-8334-F770B68D95F0} = {5A01D1BA-8424-440C-AFD1-78E815E69FD0}
+		{F5BEBD91-8808-484E-817D-2B73C890B7AA} = {5A01D1BA-8424-440C-AFD1-78E815E69FD0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F0B89693-AF4A-41B6-AA46-06DEE21EFE3C}
