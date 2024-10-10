@@ -32,4 +32,23 @@ jobs:
   - task: npmAuthenticate@0
     inputs:
       workingFile: 'WindowsProtocolTestSuites/ProtocolTestManager/PTMService/PTMService/ClientApp/.npmrc'
-  - template: pipelines/build/DotNetCore-PTMCli-Build-steps.yml@template
+  - task: PowerShell@2
+    displayName: Build
+    inputs:
+      targetType: filePath
+      filePath: './$(build.solutionFolder)/build.ps1'
+      arguments: '-Configuration $(build.configuration) -OutDir $(Build.ArtifactStagingDirectory)/staging'
+
+  - task: ArchiveFiles@2
+    displayName: 'Archive $(Build.ArtifactStagingDirectory)/staging'
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/staging'
+      includeRootFolder: false
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(build.archiveName).zip'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(build.archiveName).zip'
+    condition: succeededOrFailed()
+#  - template: pipelines/build/DotNetCore-PTMCli-Build-steps.yml@template
