@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.5" />
-    <PackageReference Include="System.IO.Packaging" Version="6.0.0" />
+    <PackageReference Include="System.IO.Packaging" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
