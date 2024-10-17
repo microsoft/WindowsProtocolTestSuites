@@ -74,7 +74,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         public void LargePointerCompatibility()
         {
             if (testConfig.windowsOSVersion.Contains("Windows Server") &&
-                testConfig.windowsOSBuildNumber < 20000)
+                testConfig.windowsOSBuildNumber < 2000)
             {
                 BaseTestSite.Assume.Inconclusive("Large pointer capability is only supported on Windows Server 2022.");
             }
