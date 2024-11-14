@@ -5,6 +5,22 @@
 # Return Value: 0 indicates task is started successfully; -1 indicates failed to run the specified task
 
 # Run Task to change remote screen orientation
+
+$cmdOutput = ""
+$userPwdInTCEn = ConvertTo-SecureString $ptfprop_SUTUserPassword -AsPlainText -Force
+$Credential = New-Object System.Management.Automation.PSCredential($ptfprop_SUTUserName,$userPwdInTCEn)
+
+$sessionM = $null;
+
+try
+{
+	$sessionM = New-PSSession -ComputerName $ptfprop_SUTName -Credential $Credential
+}
+catch
+{
+}
+
+
 $path = "/RDP-TestSuite-ClientEP/Scripts"
 $scriptblock = {
 	param([int]$width, [int]$height, [string]$path)
@@ -15,12 +31,21 @@ $scriptblock = {
 	cmd /c schtasks /Run /TN $taskname
 	cmd /c schtasks /Delete /TN $taskname /F
 	}
-	
+
 $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock -ArgumentList ($width, $height, $path)
+
+if ($null -eq $sessionM)
+{
+    $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock -ArgumentList ($width, $height, $path)
+}
+else
+{
+    $cmdOutput = Invoke-Command -Session $sessionM -ScriptBlock $scriptblock -ArgumentList ($width, $height, $path)
+}
 
 $cmdOutput | out-file "./ChangeResolution.log"
 
-if($cmdOutput -ne $null)
+if($null -ne $cmdOutput)
 {
     if($cmdOutput.GetType().IsArray)
     {
