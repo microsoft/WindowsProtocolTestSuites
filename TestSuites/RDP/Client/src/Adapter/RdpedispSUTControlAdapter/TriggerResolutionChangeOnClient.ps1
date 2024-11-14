@@ -32,8 +32,6 @@ $scriptblock = {
 	cmd /c schtasks /Delete /TN $taskname /F
 	}
 
-$cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock -ArgumentList ($width, $height, $path)
-
 if ($null -eq $sessionM)
 {
     $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock -ArgumentList ($width, $height, $path)
