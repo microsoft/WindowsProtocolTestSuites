@@ -6976,7 +6976,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.11 clients
         /// </summary>
-        V14 = 0x00080010
+        V14 = 0x00080010,
+
+        /// <summary>
+        /// RDP 10.12 clients
+        /// </summary>
+        V15 = 0x00080011
     }
 
     /// <summary>
@@ -7940,7 +7945,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// RDP 10.11 servers
         /// </summary>
-        V14 = 0x00080010
+        V14 = 0x00080010,
+
+        /// <summary>
+        /// RDP 10.12 servers
+        /// </summary>
+        V15 = 0x00080011
     }
 
     /// <summary>
@@ -17023,7 +17033,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Indicates a Fast-Path Large Pointer Update.
         /// </summary>
-        FASTPATH_UPDATETYPE_LARGE_POINTER = 0xC,    }
+        FASTPATH_UPDATETYPE_LARGE_POINTER = 0xC,
+    }
 
     /// <summary>
     /// The type of reserved.
