@@ -6,13 +6,17 @@
 
 # Run Task to change remote screen orientation
 $cmdOutput = ""
-$userPwdInTCEn = ConvertTo-SecureString $ptfprop_SUTUserPassword -AsPlainText -Force
-$Credential = New-Object System.Management.Automation.PSCredential($ptfprop_SUTUserName,$userPwdInTCEn)
+$securePassword = New-Object SecureString
+foreach ($char in $ptfprop_SUTUserPassword.ToCharArray()) {
+    $securePassword.AppendChar($char)
+}
+$Credential = New-Object System.Management.Automation.PSCredential($ptfprop_SUTUserName,$securePassword)
 
 $sessionM = $null;
 
 try
 {
+	Get-PSSession|Remove-PSSession
 	$sessionM = New-PSSession -ComputerName $ptfprop_SUTName -Credential $Credential
 }
 catch
