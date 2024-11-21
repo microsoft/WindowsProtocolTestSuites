@@ -5,6 +5,7 @@
 # Return Value: 0 indicates task is started successfully; -1 indicates failed to run the specified task
 
 # Run Task to change remote screen orientation
+$cmdOutput = ""
 $securePassword = New-Object SecureString
 foreach ($char in $ptfprop_SUTUserPassword.ToCharArray()) {
     $securePassword.AppendChar($char)
