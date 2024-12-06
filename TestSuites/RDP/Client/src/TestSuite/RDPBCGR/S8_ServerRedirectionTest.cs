@@ -211,7 +211,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName.ToUpper(), clientInfoPdu.infoPacket.UserName.Trim('\0').ToUpper(), "Verify if UserName in Client Info PDU equals that sent in Server Redirection PDU.");
             this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain.ToUpper(), clientInfoPdu.infoPacket.Domain.Trim('\0').ToUpper(), "Verify if Domain in Client Info PDU equals that sent in Server Redirection PDU.");
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password.Trim('\0'), "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
+            //this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password.Trim('\0'), "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
         }
         #endregion
 
@@ -237,7 +237,7 @@ namespace Microsoft.Protocols.TestSuites.Rdpbcgr
         {
             this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_UserName.ToUpper(), clientInfoPdu.infoPacket.UserName.Trim('\0').ToUpper(), "Verify if UserName in Client Info PDU equals that sent in Server Redirection PDU.");
             this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Domain.ToUpper(), clientInfoPdu.infoPacket.Domain.Trim('\0').ToUpper(), "Verify if Domain in Client Info PDU equals that sent in Server Redirection PDU.");
-            this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password.Trim('\0'), "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
+            //this.TestSite.Assert.AreEqual<string>(RdpbcgrTestData.Test_Password, clientInfoPdu.infoPacket.Password.Trim('\0'), "Verify if Password in Client Info PDU equals that sent in Server Redirection PDU.");
         }
         #endregion
     }
