@@ -64,6 +64,9 @@ if ($SutOSVersion -ge 10.0) {
     if ($SutOsBuildNumber -ge 26100) {
         $RDPVersion = "10.12"
     }
+    elseif ($SutOsBuildNumber -ge 20000) {
+        $RDPVersion = "10.9"
+    }
     elseif ($SutOsBuildNumber -ge 19041) {
         $RDPVersion = "10.8"
     }
