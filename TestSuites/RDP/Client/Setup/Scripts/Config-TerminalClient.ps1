@@ -84,13 +84,6 @@ Write-Host "`$compressionInTC    = $compressionInTC"
 Write-Host "Turn off firewall"
 cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
 
-#------------------------------------------------------------------------------------------
-# Add generic credentials
-#------------------------------------------------------------------------------------------
-Write-Host "Add generic credentials"
-$RDPprefix="TERMSRV"
-cmdkey /generic:"$RDPprefix/$driverComputerName" /user:"$userNameInTC" /pass:$userPwdInTC
-
 #-----------------------------------------------------
 # Get IP address of the SUT computer
 #-----------------------------------------------------
