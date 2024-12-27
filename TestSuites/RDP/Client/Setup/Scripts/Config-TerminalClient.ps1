@@ -88,8 +88,7 @@ cmd /c netsh advfirewall set allprofile state off 2>&1 | Write-Host
 # Add generic credentials
 #------------------------------------------------------------------------------------------
 Write-Host "Add generic credentials"
-$RDPprefix="TERMSRV"
-cmdkey /generic:"$RDPprefix/$driverComputerName" /user:"$userNameInTC" /pass:$userPwdInTC
+cmdkey /generic:"TERMSRV/$driverComputerName" /user:"$credSSPUser" /pass:$credSSPPwd
 
 #-----------------------------------------------------
 # Get IP address of the SUT computer
@@ -197,8 +196,10 @@ New-Item -Path $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 -ItemType 
 
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}\${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerIP}`" /user:`"${driverComputerName}\${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
+"cmd /c cmdkey /generic:`"TERMSRV/${driverComputerName}`" /user:`"${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}\${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding UTF8
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerIP}`" /user:`"${driverComputerName}\${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding UTF8
+"cmd /c cmdkey /generic:`"TERMSRV/${driverComputerName}`" /user:`"${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
 
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\Negotiate.RDP" -Append -Encoding Unicode
 "`nfull address:s:${driverComputerName}:${listeningPort}" | out-file "$dataPath\DirectCredSSP.RDP" -Append -Encoding Unicode
