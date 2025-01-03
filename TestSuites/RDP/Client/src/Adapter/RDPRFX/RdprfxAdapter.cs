@@ -147,10 +147,6 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
         /// <param name="supportedRfxCaps">Output the TS_RFX_ICAP array supported by the client.</param>
         public void ReceiveAndCheckClientCapabilities(uint serverMaxRequestSize, out TS_RFX_ICAP[] supportedRfxCaps)
         {
-            if (this.rdpbcgrSessionContext.ClientBuild >= 26100)
-            {
-                this.Site.Assume.Inconclusive("The 'Stream surface bits' command is deprecated and removed from client builds exceeding version 26100.");
-            }
             supportedRfxCaps = null;
             s2cMaxRequestSize = serverMaxRequestSize;
             ConfirmCapabilitySets = this.rdpbcgrSessionContext.ConfirmCapabilitySets;
