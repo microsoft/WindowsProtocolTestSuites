@@ -528,6 +528,10 @@ namespace Microsoft.Protocols.TestManager.RDPServerPlugin
             {
                 config.Version = "10.8";
             }
+            else if (rdpVersion == TS_UD_SC_CORE_version_Values.V12)
+            {
+                config.Version = "10.9";
+            }
             else
             {
                 logWriter.AddLog(DetectLogLevel.Warning, "Failed", false, LogStyle.StepFailed);
