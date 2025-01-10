@@ -16,7 +16,7 @@
 		<ExcludeAssets>runtime</ExcludeAssets>
 	</PackageReference>
 	<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
-	<PackageReference Include="System.Security.Cryptography.Pkcs" Version="7.0.2" />
+	<PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\ProtoSDK\MS-RDPBCGR\Rdpbcgr.csproj" />
