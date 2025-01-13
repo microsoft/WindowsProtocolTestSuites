@@ -144,6 +144,29 @@ Function Config-RDS {
     # Allow automatic reconnection from clients: this key needs a reboot to take effect
     Set-ItemProperty -path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" -name "fDisableAutoReconnect" -value "0"
 
+    $licenseServerName = $sutName
+    $licensingMode = 2 # 2 = Per Device; 4 = Per User
+    $policyPathLicensing = "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services"
+    $policyPathConnections = "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services\Connections"
+
+#    Ensure the required registry paths exist
+    if (-not (Test-Path $policyPathLicensing)) {
+        New-Item -Path $policyPathLicensing -Force | Out-Null
+    }
+    if (-not (Test-Path $policyPathConnections)) {
+        New-Item -Path $policyPathConnections -Force | Out-Null
+    }
+
+    # Configure "Use the specified Remote Desktop license servers"
+    Set-ItemProperty -Path $policyPathLicensing -Name "UseLicenseServer" -Value 1
+    Set-ItemProperty -Path $policyPathLicensing -Name "LicenseServers" -Value $licenseServerName
+
+    # Configure "Set the Remote Desktop licensing mode"
+    Set-ItemProperty -Path $policyPathLicensing -Name "LicensingMode" -Value $licensingMode
+
+    # Configure "Select network detection on the server"
+    Set-ItemProperty -Path $policyPathConnections -Name "NetworkAutoDetect" -Value 1 # Enabled
+    Set-ItemProperty -Path $policyPathConnections -Name "NetworkDetectMode" -Value 3 # Use both Connect Time Detect and Continuous Network Detect
     # Force update the GPO to make the configuration work immediately to make sure all cases runs under the correct environment.
     gpupdate /Force
 }
