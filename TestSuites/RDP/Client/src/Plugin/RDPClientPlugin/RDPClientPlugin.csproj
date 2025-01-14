@@ -13,7 +13,6 @@
   </ItemGroup>
   <ItemGroup>
 	<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.1"/>
-  <PackageReference Include="System.Management" Version="8.0.0" />
 	<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
 	<PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
   </ItemGroup>
