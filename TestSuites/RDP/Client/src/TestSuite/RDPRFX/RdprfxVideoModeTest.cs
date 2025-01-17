@@ -33,7 +33,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -123,7 +126,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -214,7 +220,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -326,7 +335,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -438,7 +450,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -550,7 +565,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -657,7 +675,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -743,7 +764,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -834,7 +858,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
             this.rdpbcgrAdapter.StartRDPListening(transportProtocol);
@@ -992,7 +1019,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             Step 6: [RDPRFX] Expect SUT sends a TS_FRAME_ACKNOWLEDGE_PDU.
             */
             #endregion
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             FourTilesComposeOneRectWithoutCommonBoundary(OperationalMode.VideoMode);
         }
 
@@ -1015,7 +1045,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             Step 6: [RDPRFX] Expect SUT sends a TS_FRAME_ACKNOWLEDGE_PDU.
             */
             #endregion
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             FourTilesComposeOneRectWithCommonBoundary(OperationalMode.VideoMode);
         }
 
@@ -1038,7 +1071,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             Step 6: [RDPRFX] Expect SUT sends a TS_FRAME_ACKNOWLEDGE_PDU.
             */
             #endregion
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             SendListOfRects(OperationalMode.VideoMode);
         }
 
@@ -1061,7 +1097,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             Step 6: [RDPRFX] Expect SUT sends a TS_FRAME_ACKNOWLEDGE_PDU.
             */
             #endregion
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             SendListOfRectsOverlap(OperationalMode.VideoMode);
         }
 
@@ -1084,7 +1123,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             Step 6: [RDPRFX] Expect SUT sends a TS_FRAME_ACKNOWLEDGE_PDU.
             */
             #endregion
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             SendListOfRectsOverlapWithDuplicateTiles(OperationalMode.VideoMode);
         }
 
@@ -1106,7 +1148,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             Step 5: [RDPRFX] Expect  the client terminates the RDP connection.
             */
             #endregion
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             NegtiveTest_DuplicatedTile(OperationalMode.VideoMode);
         }
 
@@ -1129,7 +1174,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             Step 6: [RDPRFX] Expect SUT sends a TS_FRAME_ACKNOWLEDGE_PDU.
             */
             #endregion
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             SendNumRectsSetToZero(OperationalMode.VideoMode);
         }
 
@@ -1152,7 +1200,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             Step 6: [RDPRFX] Expect SUT sends a TS_FRAME_ACKNOWLEDGE_PDU.
             */
             #endregion
-
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             SendOutOfRects(OperationalMode.VideoMode);
         }
     }

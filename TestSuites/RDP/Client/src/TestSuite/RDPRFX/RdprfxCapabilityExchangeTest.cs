@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestTools.StackSdk;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr;
 using Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdprfx;
 using Microsoft.Protocols.TestSuites.Rdpbcgr;
+using Microsoft.Protocols.TestSuites.Rdp;
 
 namespace Microsoft.Protocols.TestSuites.Rdprfx
 {
@@ -96,6 +97,10 @@ namespace Microsoft.Protocols.TestSuites.Rdprfx
             #endregion
 
             #region Test Sequence
+            if(SupportRemoteFX==false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
 
             //Start RDP listening.
             this.TestSite.Log.Add(LogEntryKind.Comment, "Starting RDP listening.");
