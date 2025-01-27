@@ -74,13 +74,13 @@ $dc = $config.lab.servers.vm | Where-Object { $_.role -match "DC" }
 $adminUserName = $config.lab.core.username
 if ($dc -eq $null) {
     # for non-domain environments, just get admin user name
-    $userFolderName = $adminUserName
+    $userFolderName = "$adminUserName.SMB-2025"
 }
 else {
     $dcName = $dc.name
     if ($dcName -match $hostName) {
         # for DC, just get admin user name
-        $userFolderName = $adminUserName
+        $userFolderName = "$adminUserName.SMB-2025"
     }
     else {
         $domainName = $dc.domain
