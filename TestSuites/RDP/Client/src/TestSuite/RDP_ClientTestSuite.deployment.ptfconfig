@@ -382,6 +382,10 @@
     <Property name="LinuxScreenshotCaptureCommand" value="gnome-screenshot --file={{fileName}}">
         <Description>The shell command to caputre screenshot from the display. {{fileName}} is the placeholder of the path to the captured screenshot file, please reserve it to the correct position in your command if you are using another tool for screenshot capture.</Description>
     </Property>
+     <Property name="SupportRemoteFX" value="false">
+      <Choice>true, false</Choice>
+      <Description>Indicates if RDP client (SUT) support RemoteFX.</Description>
+    </Property>
   </Properties>
   <Adapters>
   </Adapters>
