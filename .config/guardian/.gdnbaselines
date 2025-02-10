@@ -3255,6 +3255,171 @@
       "createdDate": "2024-04-29 16:00:01Z",
       "expirationDate": "2024-10-16 16:05:16Z",
       "justification": "This error is baselined with an expiration date of 180 days from 2024-04-29 16:05:16Z"
+    },
+    "b9aae40b96ff011d60d1659b64c661e68cd4ae2ff8aed012b483df9d60f116fa": {
+      "signature": "b9aae40b96ff011d60d1659b64c661e68cd4ae2ff8aed012b483df9d60f116fa",
+      "alternativeSignatures": [
+        "2f183fb6778d81a5a6933baefb16b2638d141e86b3e89442aa4fd3c59334f8d2"
+      ],
+      "target": "staging/Bin/CodeCoverage/CodeCoverage.exe",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "73d332d151a31afa41e8f923df95cc1b84d8568d44a5a4dbf9d83817fed8b060": {
+      "signature": "73d332d151a31afa41e8f923df95cc1b84d8568d44a5a4dbf9d83817fed8b060",
+      "alternativeSignatures": [
+        "1a147ed7854ab29665229f89ae974f5950980bbee387726c3dc67e6d0be3c8bf"
+      ],
+      "target": "staging/Bin/CodeCoverage/covrun32.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "760266c2715e6e920f38a9b0609a2918fdb2ffc569b707b52e859e9069e80d8b": {
+      "signature": "760266c2715e6e920f38a9b0609a2918fdb2ffc569b707b52e859e9069e80d8b",
+      "alternativeSignatures": [
+        "ff1aff09bc8e4b1ce64864b47ff52f987eff7716ce1582a10312dcc79cc7513f"
+      ],
+      "target": "staging/Bin/CodeCoverage/msdia140.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "f943b69703badfbb776e7585cdc74ba34bb5076bd6edc6c8398d587af49a25e5": {
+      "signature": "f943b69703badfbb776e7585cdc74ba34bb5076bd6edc6c8398d587af49a25e5",
+      "alternativeSignatures": [
+        "f94d8451fa7ab69874595d5f027772bcd897a4c239fb047fbe927581f74c9dbf"
+      ],
+      "target": "staging/Bin/CodeCoverage/amd64/CodeCoverage.exe",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "890791773ab58babe68e143397be4dcdea4fb572cbfa883ede140e3ccf20a000": {
+      "signature": "890791773ab58babe68e143397be4dcdea4fb572cbfa883ede140e3ccf20a000",
+      "alternativeSignatures": [
+        "2d416aeed8a49f88720a06e8f6b189daeffbb4ace06957aa43834413f7dd5a46"
+      ],
+      "target": "staging/Bin/CodeCoverage/amd64/covrun64.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "5def4e7c7c56170a8057c9d0ee354716e2f718b2349a5fd50a7eceb3e354d995": {
+      "signature": "5def4e7c7c56170a8057c9d0ee354716e2f718b2349a5fd50a7eceb3e354d995",
+      "alternativeSignatures": [
+        "3e055c6b7d9896dca00e80154d4f743624afacf08fba3b724fc6a580734fbfd8"
+      ],
+      "target": "staging/Bin/CodeCoverage/amd64/msdia140.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "d8ad4975836da7fae5e15a9aed1c4f8f2e9443fa1aaac7d644753eb68fd9bfb4": {
+      "signature": "d8ad4975836da7fae5e15a9aed1c4f8f2e9443fa1aaac7d644753eb68fd9bfb4",
+      "alternativeSignatures": [
+        "52416e1036febdda489c369db810f48e60db141ab5b738aff472892a84f09b09"
+      ],
+      "target": "staging/Bin/CodeCoverage/arm64/covrunarm64.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "0e76dd07b90e575c1afd32c7014dfe6e98156c37ee88c5b122e072a15c8890cc": {
+      "signature": "0e76dd07b90e575c1afd32c7014dfe6e98156c37ee88c5b122e072a15c8890cc",
+      "alternativeSignatures": [
+        "252c6b19e0954f9b0cd23b9ca516d40545670952571be737105dca15e13c4a60"
+      ],
+      "target": "staging/Bin/CodeCoverage/arm64/msdia140.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "7f6725947b96cbb59f7ac0e3ea9c28a230f644b8d7c9708fbbaa45b45c4eee2c": {
+      "signature": "7f6725947b96cbb59f7ac0e3ea9c28a230f644b8d7c9708fbbaa45b45c4eee2c",
+      "alternativeSignatures": [
+        "30fd0c6f565140ee82ff569bd10492df2f471821b7d5100b6b08e64be7c0745f"
+      ],
+      "target": "staging/Bin/runtimes/win-arm64/native/libSkiaSharp.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "b42f018d8d5a493692d68cd8735b3b69261a2e822429539134d3ee9a90fe1e79": {
+      "signature": "b42f018d8d5a493692d68cd8735b3b69261a2e822429539134d3ee9a90fe1e79",
+      "alternativeSignatures": [
+        "6f37226fca909524c9536d47b6cfeca8cb7762e47c37375c46d37f16c8b6391a"
+      ],
+      "target": "staging/Bin/runtimes/win-x64/native/libSkiaSharp.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "26ea2cfd7a3a2eac0c8bec69ad0eadf6086d4b35cb826e10597f947e4e4813d0": {
+      "signature": "26ea2cfd7a3a2eac0c8bec69ad0eadf6086d4b35cb826e10597f947e4e4813d0",
+      "alternativeSignatures": [
+        "3073d0a1adaff6b5951234fd6357ca8b0a1bb6f7cccd1cb570adbe9b70afed42"
+      ],
+      "target": "staging/Bin/runtimes/win-x86/native/libSkiaSharp.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-02-08 21:14:37Z",
+      "expirationDate": "2025-07-28 21:19:28Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
     }
   }
 }

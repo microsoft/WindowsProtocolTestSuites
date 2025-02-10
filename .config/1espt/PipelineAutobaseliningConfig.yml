@@ -27,7 +27,7 @@ pipelines:
         credscan:
           lastModifiedDate: 2024-03-01
         binskim:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2025-02-08
         spotbugs:
           lastModifiedDate: 2024-03-01
   58991:
@@ -45,7 +45,7 @@ pipelines:
         credscan:
           lastModifiedDate: 2024-03-01
         binskim:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2025-02-08
         spotbugs:
           lastModifiedDate: 2024-03-01
   58973:
@@ -99,7 +99,7 @@ pipelines:
         credscan:
           lastModifiedDate: 2024-03-01
         binskim:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2025-02-08
         spotbugs:
           lastModifiedDate: 2024-03-01
   109389:
@@ -153,7 +153,7 @@ pipelines:
         credscan:
           lastModifiedDate: 2024-03-02
         binskim:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2025-02-08
         spotbugs:
           lastModifiedDate: 2024-03-02
   126281:
