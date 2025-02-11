@@ -2091,7 +2091,7 @@ PTM on your **Driver computer** with the official
     to locate the **ProtocolTestManager.msi** under the *Assets* topic
     on GitHub.
 
-  2.  From the **Driverr** compute, double-click the
+  2.  From the **Driver** compute, double-click the
     **ProtocolTestManager.msi** to run the installer.
 
   3.  Follow the installer instructions to complete the installation.
