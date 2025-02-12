@@ -270,7 +270,7 @@ To set up a DC that is not based on the Windows operating system, see [Configuri
 
 ### <a name="_Toc396908237"/>Set Up a Windows-Based SUT
 This section provides information about how to set up a SUT for use with this test suite.
-Note: If the test environment is a domain environment, the SUT and client should use the domain administrator to login.
+If the test environment is a domain environment, the SUT and client should use the domain administrator to login.
 
 1. Log into the SUT as administrator.
 
@@ -391,11 +391,12 @@ Note: If the test environment is a domain environment, the SUT and client should
 
     ![image8.png](./image/RDP_ServerUserGuide/image8.png)
 
-The RDP SUT Control Agent should be install to SUT and running. Please see https://microsoft.visualstudio.com/WindowsProtocolTestSuites/_git/92b5e644-1832-432b-8935-30204451756a?path=/TestSuites/RDP/RDPSUTControlAgent/README.md&_a=preview for detail information.
-Goto agent foler, run RDPSUTControlAgent.exe
+8. The RDP SUT Control Agent should be install to SUT and running. Please see https://microsoft.visualstudio.com/WindowsProtocolTestSuites/_git/92b5e644-1832-432b-8935-30204451756a?path=/TestSuites/RDP/RDPSUTControlAgent/README.md&_a=preview for detail information.
+
+  Goto agent foler, run RDPSUTControlAgent.exe
  ![image7.png](./image/RDP_ServerUserGuide/image29.png)
 
-If the Remote Assistance cannot be  enabled on SUT, we need to install the "Remote Assistance" feature in as follows screenshot
+9. If the Remote Assistance cannot be  enabled on SUT, we need to install the "Remote Assistance" feature in as follows screenshot
  ![image7.png](./image/RDP_ServerUserGuide/image30.png)
 
 To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc396908242)**.**
