@@ -48,7 +48,10 @@ $DropConnectionForInvalidRequest = "true"
 [int]$SutOsBuildNumber = Invoke-Command -ComputerName $tcComputerName -ScriptBlock { [System.Environment]::OSVersion.Version.Build }
 
 if ($SutOSVersion -ge 10.0) {
-    if ($SutOsBuildNumber -ge 19041) {
+    if ($SutOsBuildNumber -ge 26100) {
+        $RDPVersion = "10.12"
+    }
+    elseif ($SutOsBuildNumber -ge 19041) {
         $RDPVersion = "10.8"
     }
     elseif ($SutOsBuildNumber -ge 18362) {

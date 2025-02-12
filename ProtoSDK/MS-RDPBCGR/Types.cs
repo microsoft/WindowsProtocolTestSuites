@@ -17033,7 +17033,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
         /// <summary>
         /// Indicates a Fast-Path Large Pointer Update.
         /// </summary>
-        FASTPATH_UPDATETYPE_LARGE_POINTER = 0xC,    }
+        FASTPATH_UPDATETYPE_LARGE_POINTER = 0xC,
+    }
 
     /// <summary>
     /// The type of reserved.
