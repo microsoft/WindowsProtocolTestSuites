@@ -62,6 +62,7 @@ namespace Microsoft.Protocols.TestSuites.Rdp
         protected bool TurnOffRDPEUSBVerification;
         protected bool TurnOffRDPRFXVerification;
         protected bool invalidCredentialSet = false;
+        protected bool SupportRemoteFX;
 
         // Variable for SUT display verification
         protected bool verifySUTDisplay = false;
@@ -563,7 +564,10 @@ namespace Microsoft.Protocols.TestSuites.Rdp
             {
                 TurnOffRDPRFXVerification = true; //if property not found, set to true as default value
             }
-
+            if(!PtfPropUtility.GetPtfPropertyValue(TestSite, "SupportRemoteFX", out SupportRemoteFX))
+            {
+                SupportRemoteFX = false;
+            }
             if (image_64X64 == null)
             {
                 String rdprfxImageFile;

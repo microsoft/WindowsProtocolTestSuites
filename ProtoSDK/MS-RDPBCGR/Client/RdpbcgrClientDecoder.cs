@@ -5571,7 +5571,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr
             pdu.saveSessionInfoPduData = ParseTsSaveSessionInfoPduData(decryptedUserData, ref userDataIndex);
 
             // Check if data length exceeded expectation
-            VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+            //VerifyDataLength(decryptedUserData.Length, userDataIndex, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
+            VerifyDataLength(decryptedUserData.Length, pdu.saveSessionInfoPduData.shareDataHeader.uncompressedLength, ConstValue.ERROR_MESSAGE_DATA_LENGTH_EXCEEDED);
             return pdu;
         }
         #endregion PDU Decoders: 1 type of PDU in login notifications

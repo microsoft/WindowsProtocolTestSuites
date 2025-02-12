@@ -68,6 +68,10 @@ namespace Microsoft.Protocols.TestSuites.Rdpedisp
             #endregion
 
             #region Test Code
+            if (SupportRemoteFX == false)
+            {
+                this.Site.Assume.Inconclusive("The SUT does not support RemoteFX, skip this test case.");
+            }
             RDPConnect(NotificationType.DeactivationReactivation);
 
             ChangeDesktopResolution(this.TestContext.TestName);
