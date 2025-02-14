@@ -567,7 +567,7 @@ Settings](#configuring-common-test-suite-mode-settings).
 | MS-RDPEUSB | - **SUT** must be a physical machine.<br/>- One OSR USB FX2 board needs to be plugged into the SUT computer before running the MS-RDPEUSB Test Cases.<br/> - Purchase an OSR USB FX2 board at the [OSR Online Store](https://store.osr.com/) and install it. <br/> - Test Cases for RDPEUSB implementations must use the Interactive mode. |
 | MS-RDPEI | - The **SUT** must be touch-enabled.<br/> - Test Cases for RDPEI implementations must use the Interactive mode, as described in [Running MS-RDPEI Test Cases in the Test Suite Modes](#running-ms-rdpei-test-cases-in-the-test-suite-modes). |
 | MS-RDPEVOR | The **SUT** must be running the Windows 8.1 or later operating system.  |
-| MS-RDPEDISP | The **SUT** operating system must support display configuration changes, including: <br/> &emsp;&emsp;- Addition, removal, and repositioning of monitors. <br/> &emsp;&emsp;- Resolution and orientation updates. |
+| MS-RDPEDISP | The **SUT** operating system must support display configuration changes, including: <br/> &emsp;&emsp;- Addition, removal, and repositioning of monitors. <br/> &emsp;&emsp;- Resolution and orientation updates. <br/>&emsp;&emsp;- Enable Enhanced Session Mode to connect to the SUT VM in Hyper-V. |
 |                               |                                     |
 
 ### Driver Computer
@@ -1184,7 +1184,7 @@ In this section, you will perform a procedure for preliminary configuration of t
       c. Select the **General** tab.
 
       d. Click **Save**.
-  13. If SUT version is windows 11, should add SSL settings by follows scripts in CipherSuitesSettings.ps1, such as:
+  13. If the SUT (System Under Test) computer is running Windows 11 or later, execute the following script to configure SSL.
     
     # Copyright (c) Microsoft. All rights reserved.
 	# Licensed under the MIT license. See LICENSE file in the project root for full license information.
@@ -2136,7 +2136,7 @@ PTM on your **Driver computer** with the official
     to locate the **ProtocolTestManager.msi** under the *Assets* topic
     on GitHub.
 
-  2.  From the **Driver** compute, double-click the
+  2.  From the **Driver** computer, double-click the
     **ProtocolTestManager.msi** to run the installer.
 
   3.  Follow the installer instructions to complete the installation.
