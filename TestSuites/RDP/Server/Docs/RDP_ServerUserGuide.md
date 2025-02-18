@@ -104,7 +104,7 @@ Note
 
 Run this test suite in a Domain environment that contains the following computers, physical or virtual: 
 
-* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0 .
+* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/8.0/) that can install .NET 8.0 .
 
 * A computer configured as the SUT (System Under Test). It can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -112,7 +112,7 @@ Run this test suite in a Domain environment that contains the following computer
 
 Run this test suite in a Workgroup environment that contains the following computers, physical or virtual: 
 
-* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0 .
+* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/8.0/) that can install .NET 8.0 .
 
 * A computer configured as the SUT (System Under Test). It  can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -122,7 +122,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0.| 
+| Operating system| [Operating System](https://dotnet.microsoft.com/download/dotnet/8.0/) that can install .NET 8.0.| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB | 
 
@@ -391,13 +391,7 @@ If the test environment is a domain environment, the SUT and client should use t
 
     ![image8.png](./image/RDP_ServerUserGuide/image8.png)
 
-8. The RDP SUT Control Agent should be install to SUT and running. Please see https://microsoft.visualstudio.com/WindowsProtocolTestSuites/_git/92b5e644-1832-432b-8935-30204451756a?path=/TestSuites/RDP/RDPSUTControlAgent/README.md&_a=preview for detail information.
-
-  Goto agent foler, run RDPSUTControlAgent.exe
- ![image7.png](./image/RDP_ServerUserGuide/image29.png)
-
-9. If the Remote Assistance cannot be  enabled on SUT, we need to install the "Remote Assistance" feature in as follows screenshot
- ![image7.png](./image/RDP_ServerUserGuide/image30.png)
+8. Deploy and run the RDPSUTControlAgent on SUT following the [RDPSUTControlAgent ReadMe.md](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/RDP/RDPSUTControlAgent/README.md).
 
 To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc396908242)**.**
 
@@ -408,7 +402,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ServerUserGuide/image6.png)
 Important 
 
->.NET 5.0 must be installed on the driver computer before you run the test suite installer.
+>.NET 8.0 must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 
