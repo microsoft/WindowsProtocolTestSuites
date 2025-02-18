@@ -104,7 +104,7 @@ Note
 
 Run this test suite in a Domain environment that contains the following computers, physical or virtual: 
 
-* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/8.0/) that can install .NET 8.0 .
+* A driver computer must be running the Operating System that can install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/) .
 
 * A computer configured as the SUT (System Under Test). It can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -112,7 +112,7 @@ Run this test suite in a Domain environment that contains the following computer
 
 Run this test suite in a Workgroup environment that contains the following computers, physical or virtual: 
 
-* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/8.0/) that can install .NET 8.0 .
+* A driver computer must be running the Operating System that can install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/) .
 
 * A computer configured as the SUT (System Under Test). It  can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -122,7 +122,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| [Operating System](https://dotnet.microsoft.com/download/dotnet/8.0/) that can install .NET 8.0.| 
+| Operating system| Operating System that can install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/).| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB | 
 
