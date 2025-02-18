@@ -579,7 +579,7 @@ the table that follows.
 
 | **Requirement**  | **Description**                                  |
 |------------------|--------------------------------------------------|
-| Operating system | It is recommended to run the Windows Server 2019 operating system on the **Driver** computer. However, it can also be running any Windows operating system version, such as Windows 8.1 client or Windows Server 2012 R2 and later, and be running Linux-based operation system, such as Ubuntu 18.04 or Ubuntu 20.04. All the operating systems would install [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/). |
+| Operating system | It is recommended to run the Windows Server 2019 operating system on the **Driver** computer. However, it can also be running any Windows operating system version, such as Windows 8.1 client or Windows Server 2012 R2 and later, and be running Linux-based operation system, such as Ubuntu 18.04 or Ubuntu 20.04. All the operating systems would install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/). |
 | Memory           | 2 GB RAM                                         |
 | Disk space       | 60 GB                                            |
 |                  |                                                  |
@@ -601,7 +601,7 @@ Requirements](#test-environment-computer-requirements).
 
 | **Requirement**  | **Description**                                  |
 |------------------|--------------------------------------------------|
-| Operating system | It is recommended to run the Windows 10 Client operating system on the SUT computer. However, given that this computer has some flexibility as the system under test (SUT), it can also be running the Windows 8.1 client and later or Windows Server 2012 R2 and later operating system, with support for the MSTSC command line tool. Note that the SUT computer could be running a non-Windows based operating system version as well. All the operating systems would install [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/). |
+| Operating system | It is recommended to run the Windows 10 Client operating system on the SUT computer. However, given that this computer has some flexibility as the system under test (SUT), it can also be running the Windows 8.1 client and later or Windows Server 2012 R2 and later operating system, with support for the MSTSC command line tool. Note that the SUT computer could be running a non-Windows based operating system version as well. All the operating systems would install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/). |
 | Memory           | 1 GB RAM                                         |
 | Disk space       | 60 GB                                            |
 |                  |                                                  |
