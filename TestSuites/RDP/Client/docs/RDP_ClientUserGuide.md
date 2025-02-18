@@ -626,7 +626,7 @@ follows.
 The required prerequisite software specified in this section must be
 installed on the **Driver** computer *before* installing the **RDP
 Client Test Suite**. Other specified software is optional. As of this
-writing, the latest Test Suite version is 4.20.9.0.
+writing, the latest Test Suite version is 4.23.9.0.
 
 ### Required Prerequisite Software
 
@@ -760,8 +760,7 @@ You can run the **RDP Test Suite** in a
 [**Domain**](#workgroup-environment) environment using either physical
 or virtual machines. This User Guide describes the Test Environment
 using physical computers only. For information about configuring virtual
-machines, see [Create Virtual Machine with Hyper-V on Windows
-10](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine).
+machines, see [https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine).
 
 For information about choosing the **Workgroup** or **Domain**
 environment in which to run your Test Cases, see [Test Environment
