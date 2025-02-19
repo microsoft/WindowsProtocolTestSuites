@@ -3,7 +3,7 @@ variables:
   - name: system.debug
     value: false
   - group: Access Tokens
-  - group: Azure Account
+  - group: Azure Account V2
 resources:
   repositories:
     - repository: 1esPipelines
@@ -13,7 +13,7 @@ resources:
     - repository: mainPipelines
       type: git
       name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
-      ref: AzurePipelines-main
+      ref: v-wangwil/AzurePipelines
 trigger:
   branches:
     include:
