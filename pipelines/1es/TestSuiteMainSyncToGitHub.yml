@@ -2,7 +2,7 @@ name: $(date:yyyyMMdd)$(rev:.r)
 variables:
   - name: system.debug
     value: false
-  - group: Access Tokens V2
+  - group: Access Tokens
   - group: Azure Account V2
 resources:
   repositories:
