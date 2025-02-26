@@ -10,6 +10,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string Failover = "Failover";
 
         public const string NonSmb = "NonSmb";
+        public const string DomainRequired = "DomainRequired";
         public const string Smb2002 = "Smb2002";
         public const string Smb21 = "Smb21";
         public const string Smb30 = "Smb30";

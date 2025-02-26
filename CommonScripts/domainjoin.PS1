@@ -34,7 +34,6 @@ Function AutoLogin {
 	Set-ItemProperty -Path "HKLM:\Software\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name AutologonCount -Value $count
 }
 
-
 # Join the domain
 Function DomainJoin {
 	
@@ -120,6 +119,11 @@ Function WriteInfo {
 	Write-Host $string "`r" -ForegroundColor Green
 }
 
+function Is-NullOrEmpty($string) {
+    return [string]::IsNullOrEmpty($string)
+}
+
+
 # Function to control all actions in phase 1
 Function Phase0 {
 
@@ -128,7 +132,7 @@ Function Phase0 {
 	# Determine if we need to join a domain
 	if (($exchserver.domain -ne $null) -and ($exchserver.domain -ne 'Workgroup')){
 		# Setup AutoLogon
-		WriteInfo "Setting AutoLogon information"
+		WriteInfo "Setting AutoLogon information - Domain"
 		AutoLogin $setup.lab.core.username $exchserver.domain $setup.lab.core.password 999
 		DomainJoin
 		
@@ -136,8 +140,18 @@ Function Phase0 {
 	# If not setup autologon for non domain logon
 	else {
 		# Setup AutoLogon
-		WriteInfo "Setting AutoLogon information"
+		WriteInfo "Setting AutoLogon information - Workgroup"
 		AutoLogin $setup.lab.core.username $exchserver.name $setup.lab.core.password 999
+
+		#Create Test Accounts
+		# Split the string into an array
+		$array = $setup.lab.core.testaccounts -split ','
+
+		# Loop through each element in the array and create user
+		foreach ($userAccount in $array) {
+			WriteInfo "Create User $userAccount"
+			CMD /C net.exe user $userAccount $setup.lab.core.password /add
+		}
 	}
 }
 
@@ -147,12 +161,24 @@ Function Phase0 {
 # Start Logging
 Start-Transcript -Path $Path\DomainJoinInstall.log -Append -Force
 
+Write-Host $Path\$EnvXmlName
+
 # Get the XML file
 [xml]$setup = Get-Content $Path\$EnvXmlName
 
 # Determine our Server
 $name = (Get-WmiObject Win32_computerSystem).Name
 $exchserver = $setup.lab.servers.vm | where {$_.name -eq $name}
+
+if ([string]::IsNullOrEmpty($exchserver)){
+    $pathString = "$Path\$EnvXmlName"
+    $pathString = $pathString -replace "Scripts\\", ""
+
+    # Get the XML file
+    [xml]$setup = Get-Content $pathString
+
+    $exchserver = $setup.lab.servers.vm | where {$_.name -eq $name}
+}
 
 Switch ($phase){
 	0 {Phase0}

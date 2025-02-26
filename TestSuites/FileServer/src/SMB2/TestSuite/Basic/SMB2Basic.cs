@@ -484,6 +484,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.QueryInfo)]
         [Description("This test case is designed to verify the behavior of querying quota information with FILE_GET_QUOTA_INFO in SidBuffer.")]
         public void BVT_SMB2Basic_Query_Quota_Info()

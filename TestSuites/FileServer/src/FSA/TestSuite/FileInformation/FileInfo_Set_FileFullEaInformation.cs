@@ -42,7 +42,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
         private void FileInfo_Set_FileFullEaInformation_IsEASupported(FileType fileType)
         {
-            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.TestConfig.Platform == Platform.WindowsServerV22H2)
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.TestConfig.Platform >= Platform.WindowsServerV22H2)
             {
                 BaseTestSite.Assert.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 22H2");
             }

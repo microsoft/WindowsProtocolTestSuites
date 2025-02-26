@@ -24,9 +24,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         {
             if (fsaAdapter.FileSystem == FileSystem.REFS  &&
                 (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2012R2 ||
-                fsaAdapter.TestConfig.Platform == Platform.WindowsServerV22H2))
+                fsaAdapter.TestConfig.Platform >= Platform.WindowsServerV22H2))
             {
-                BaseTestSite.Assert.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2012 R2 and Windows Server 2022 22H2");
+                BaseTestSite.Assert.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2012 R2, Windows Server 2022 22H2 and Windows Server 2025");
             }
             QueryFileRegions(false); 
         }

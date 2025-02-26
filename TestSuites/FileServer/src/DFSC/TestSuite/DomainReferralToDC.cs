@@ -7,6 +7,7 @@ using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 {
@@ -29,6 +30,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         {
             TestClassBase.Cleanup();
         }
+        protected override void TestInitialize()
+        {
+            base.TestInitialize();
+
+            // valid domain name matching, for example: contoso.com, local.contoso.com
+            if (!Regex.IsMatch(TestConfig.DomainName, @"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$", RegexOptions.IgnoreCase))
+            {
+                BaseTestSite.Assert.Inconclusive("DomainReferralToDC test cases are not applicable in non-domain environment");
+            }
+
+        }
 
         #endregion
 
@@ -36,6 +48,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Client sends a version 3 Domain referral request to DC and expects positive response.")]
         public void BVT_DomainReferralV3ToDC()
@@ -52,6 +65,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Client sends a v1 Domain referral request to DC and expects negative response.")]
@@ -69,6 +83,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Client send a v2 Domain referral request to DC and expects negative response.")]
@@ -86,6 +101,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a v4 Domain referral request EX to DC and expects positive response.")]
@@ -104,6 +120,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a v4 Domain referral request EX to DC and expects positive response.")]

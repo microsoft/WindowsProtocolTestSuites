@@ -928,5 +928,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Windows Server 2022 v22H2
         /// </summary>
         WindowsServerV22H2 = 0x10000012,
+
+        /// <summary>
+        /// Windows Server v2025
+        /// </summary>
+        WindowsServer2025 = 0x10000013,
     }
 }

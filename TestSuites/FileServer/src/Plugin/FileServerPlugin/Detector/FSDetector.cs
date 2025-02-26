@@ -1067,7 +1067,8 @@ namespace Microsoft.Protocols.TestManager.FileServerPlugin
                     [19042] = Platform.WindowsServerV20H2,
                     [19043] = Platform.WindowsServerV21H1,
                     [20348] = Platform.WindowsServer2022,
-                    [25120] = Platform.WindowsServerV22H2
+                    [25120] = Platform.WindowsServerV22H2,
+                    [26100] = Platform.WindowsServer2025
                 };
 
                 // Find the maximum version which is not greater than build.

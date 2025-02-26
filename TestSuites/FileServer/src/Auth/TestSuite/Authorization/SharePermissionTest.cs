@@ -11,6 +11,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Srvs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
 {
@@ -39,6 +40,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
             base.TestInitialize();
 
             CheckDriverSupportsNRPC();
+
+            // valid domain name matching, for example: contoso.com, local.contoso.com
+            if (!Regex.IsMatch(TestConfig.DomainName, @"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$", RegexOptions.IgnoreCase))
+            {
+                BaseTestSite.Assert.Inconclusive("Authentication test cases are not applicable in non-domain environment");
+            }
+
 
             if (dynamicallyConfigurableShareName == null)
             {
