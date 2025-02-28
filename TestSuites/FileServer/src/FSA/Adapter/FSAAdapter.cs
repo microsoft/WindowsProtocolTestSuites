@@ -1536,7 +1536,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             string script;
             string processName;
+            //
 
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                script = @$"
+                            #Create credential object
+                            Set-Item WSMan:\localhost\Client\TrustedHosts -Value ""{testConfig.SutComputerName}"" -Force
+	                        $PWord = ConvertTo-SecureString -String ""{testConfig.UserPassword}"" -AsPlainText -Force
+	                        $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ""{testConfig.UserName}"", $PWord
+	
+	                        $vmSession = New-PSSession -ComputerName ""{testConfig.SutComputerName}"" -Credential $credential 
+
+	                        #Create Named Pipe on the remote computer
+	                        Invoke-Command -Session $vmSession -ScriptBlock {{
+                                New-Object System.IO.Pipes.NamedPipeServerStream('{pipeName}', '{direction}');
+                                Start-Sleep -Seconds 9;
+                            }}
+                        ";
+                processName = "powershell";
+            }
+            else
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 script = @$"

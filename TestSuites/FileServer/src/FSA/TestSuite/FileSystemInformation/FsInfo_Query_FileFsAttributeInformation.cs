@@ -126,9 +126,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         /// <param name="isSupported">Is true, the FileSystemAttribute will be treated as supported.</param>
         private void FsInfo_Query_FileFsAttributeInformation_IsSupported(FileType fileType, FileSystemAttributes_Values fileSystemAttribute, bool isSupported)
         {
-            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.TestConfig.Platform == Platform.WindowsServerV22H2)
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.TestConfig.Platform >= Platform.WindowsServerV22H2)
             {
-                BaseTestSite.Assert.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 22H2");
+                BaseTestSite.Assert.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 22H2 and Windows Server 2025");
             }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");

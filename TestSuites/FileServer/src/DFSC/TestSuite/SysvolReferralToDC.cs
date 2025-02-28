@@ -6,6 +6,7 @@ using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 {
@@ -28,12 +29,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         {
             TestClassBase.Cleanup();
         }
+        protected override void TestInitialize()
+        {
+            base.TestInitialize();
+
+            // valid domain name matching, for example: contoso.com, local.contoso.com
+            if (!Regex.IsMatch(TestConfig.DomainName, @"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$", RegexOptions.IgnoreCase))
+            {
+                BaseTestSite.Assert.Inconclusive("SysvolReferralToDC test cases are not applicable in non-domain environment");
+            }
+
+        }
 
         #endregion
 
 
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.Dfsc)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Client sends a v4 Sysvol referral request with SYSVOL directory to DC and expects positive response")]
@@ -45,6 +58,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [Description("Client sends a version 3 sysvol referral request with NETLOGON directory to DC and expects positive response.")]
         public void BVT_SysvolReferralV3ToDCNetlogonPath()
@@ -54,6 +68,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a v1 Sysvol referral request(EX) with SYSVOL directory to DC and expects positive response.")]
@@ -65,6 +80,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a v1 Sysvol referral request with SYSVOL directory to DC and expects positive response.")]
@@ -75,6 +91,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.Positive)]
         [Description("Client sends a v2 Sysvol referral request(EX) with NETLOGON directory to DC and expects positive response.")]
@@ -96,6 +113,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
 
         [TestMethod]
         [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
         [TestCategory(TestCategories.NonSmb)]
         [TestCategory(TestCategories.UnexpectedFields)]
         [Description("Client sends a v1 Sysvol referral request with invalid Domain name to DC and expects negative response.")]

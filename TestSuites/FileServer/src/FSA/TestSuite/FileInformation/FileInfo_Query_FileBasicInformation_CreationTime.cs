@@ -290,7 +290,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
             switch (fileSystem)
             {
                 case FileSystem.NTFS:
-                    return 1000;
+                    return 1500;
                 case FileSystem.FAT32:
                     return 3000;
                 default:

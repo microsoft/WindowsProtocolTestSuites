@@ -104,7 +104,7 @@ Note
 
 Run this test suite in a Domain environment that contains the following computers, physical or virtual: 
 
-* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0 .
+* A driver computer must be running the Operating System that can install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/) .
 
 * A computer configured as the SUT (System Under Test). It can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -112,7 +112,7 @@ Run this test suite in a Domain environment that contains the following computer
 
 Run this test suite in a Workgroup environment that contains the following computers, physical or virtual: 
 
-* A driver computer must be running the [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0 .
+* A driver computer must be running the Operating System that can install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/) .
 
 * A computer configured as the SUT (System Under Test). It  can be any version of Windows or a SUT implementation that is not based on the Windows operating system.
 
@@ -122,7 +122,7 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| [Operating System](https://dotnet.microsoft.com/download/dotnet/5.0/) that can install .NET 5.0.| 
+| Operating system| Operating System that can install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/).| 
 | Memory| 2 GB RAM| 
 | Disk space| 60 GB | 
 
@@ -270,6 +270,7 @@ To set up a DC that is not based on the Windows operating system, see [Configuri
 
 ### <a name="_Toc396908237"/>Set Up a Windows-Based SUT
 This section provides information about how to set up a SUT for use with this test suite.
+If the test environment is a domain environment, the SUT and client should use the domain administrator to login.
 
 1. Log into the SUT as administrator.
 
@@ -390,6 +391,8 @@ This section provides information about how to set up a SUT for use with this te
 
     ![image8.png](./image/RDP_ServerUserGuide/image8.png)
 
+8. Deploy and run the RDPSUTControlAgent on SUT following the [RDPSUTControlAgent ReadMe.md](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/RDP/RDPSUTControlAgent/README.md).
+
 To set up a SUT that is not based on the Windows operating system, see [Configuring Computers that are Not Based on Windows](#_Toc396908242)**.**
 
 ### <a name="_Toc396908236"/>Set Up the Driver Computer
@@ -399,7 +402,7 @@ This section describes how to set up the driver computer.
 ![image6.png](./image/RDP_ServerUserGuide/image6.png)
 Important 
 
->.NET 5.0 must be installed on the driver computer before you run the test suite installer.
+>.NET 8.0 must be installed on the driver computer before you run the test suite installer.
 
 To set up the driver computer
 

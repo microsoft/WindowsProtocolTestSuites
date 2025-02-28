@@ -9,6 +9,7 @@ using Microsoft.Protocols.TestTools.StackSdk.Swn;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
 {
@@ -60,6 +61,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.ServerFailover.TestSuite
         protected override void TestInitialize()
         {
             base.TestInitialize();
+
+            // valid domain name matching, for example: contoso.com, local.contoso.com
+            if (!Regex.IsMatch(TestConfig.DomainName, @"^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$", RegexOptions.IgnoreCase))
+            {
+                BaseTestSite.Assert.Inconclusive("SWN test cases are not applicable in non-domain environment");
+            }
 
             swnClientForInterface = null;
             swnClientForWitness = null;

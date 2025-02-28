@@ -32,7 +32,7 @@ You should install the software listed below based on your testing purpose, incl
 
 1. .NET and related components
 
-   a. For Windows, Linux and macOS, install [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0/) to build or run test suites.
+   a. For Windows, Linux and macOS, install [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0/) to build or run test suites.
 
    b. For those who work on Windows and prefer IDE, install [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) or higher ([Visual Studio 2022 Community](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=17) recommended), together with these individual components from the installer:
  

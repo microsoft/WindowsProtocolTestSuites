@@ -567,7 +567,7 @@ Settings](#configuring-common-test-suite-mode-settings).
 | MS-RDPEUSB | - **SUT** must be a physical machine.<br/>- One OSR USB FX2 board needs to be plugged into the SUT computer before running the MS-RDPEUSB Test Cases.<br/> - Purchase an OSR USB FX2 board at the [OSR Online Store](https://store.osr.com/) and install it. <br/> - Test Cases for RDPEUSB implementations must use the Interactive mode. |
 | MS-RDPEI | - The **SUT** must be touch-enabled.<br/> - Test Cases for RDPEI implementations must use the Interactive mode, as described in [Running MS-RDPEI Test Cases in the Test Suite Modes](#running-ms-rdpei-test-cases-in-the-test-suite-modes). |
 | MS-RDPEVOR | The **SUT** must be running the Windows 8.1 or later operating system.  |
-| MS-RDPEDISP | The **SUT** operating system must support display configuration changes, including: <br/> &emsp;&emsp;- Addition, removal, and repositioning of monitors. <br/> &emsp;&emsp;- Resolution and orientation updates. |
+| MS-RDPEDISP | The **SUT** operating system must support display configuration changes, including: <br/> &emsp;&emsp;- Addition, removal, and repositioning of monitors. <br/> &emsp;&emsp;- Resolution and orientation updates. <br/>&emsp;&emsp;- Enable Enhanced Session Mode to connect to the SUT VM in Hyper-V. |
 |                               |                                     |
 
 ### Driver Computer
@@ -579,7 +579,7 @@ the table that follows.
 
 | **Requirement**  | **Description**                                  |
 |------------------|--------------------------------------------------|
-| Operating system | It is recommended to run the Windows Server 2019 operating system on the **Driver** computer. However, it can also be running any Windows operating system version, such as Windows 8.1 client or Windows Server 2012 R2 and later, and be running Linux-based operation system, such as Ubuntu 18.04 or Ubuntu 20.04. All the operating systems would install [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/). |
+| Operating system | It is recommended to run the Windows Server 2019 operating system on the **Driver** computer. However, it can also be running any Windows operating system version, such as Windows 8.1 client or Windows Server 2012 R2 and later, and be running Linux-based operation system, such as Ubuntu 18.04 or Ubuntu 20.04. All the operating systems would install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/). |
 | Memory           | 2 GB RAM                                         |
 | Disk space       | 60 GB                                            |
 |                  |                                                  |
@@ -601,7 +601,7 @@ Requirements](#test-environment-computer-requirements).
 
 | **Requirement**  | **Description**                                  |
 |------------------|--------------------------------------------------|
-| Operating system | It is recommended to run the Windows 10 Client operating system on the SUT computer. However, given that this computer has some flexibility as the system under test (SUT), it can also be running the Windows 8.1 client and later or Windows Server 2012 R2 and later operating system, with support for the MSTSC command line tool. Note that the SUT computer could be running a non-Windows based operating system version as well. All the operating systems would install [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0/). |
+| Operating system | It is recommended to run the Windows 10 Client operating system on the SUT computer. However, given that this computer has some flexibility as the system under test (SUT), it can also be running the Windows 8.1 client and later or Windows Server 2012 R2 and later operating system, with support for the MSTSC command line tool. Note that the SUT computer could be running a non-Windows based operating system version as well. All the operating systems would install [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0/). |
 | Memory           | 1 GB RAM                                         |
 | Disk space       | 60 GB                                            |
 |                  |                                                  |
@@ -626,7 +626,7 @@ follows.
 The required prerequisite software specified in this section must be
 installed on the **Driver** computer *before* installing the **RDP
 Client Test Suite**. Other specified software is optional. As of this
-writing, the latest Test Suite version is 4.20.9.0.
+writing, the latest Test Suite version is 4.23.9.0.
 
 ### Required Prerequisite Software
 
@@ -760,8 +760,7 @@ You can run the **RDP Test Suite** in a
 [**Domain**](#workgroup-environment) environment using either physical
 or virtual machines. This User Guide describes the Test Environment
 using physical computers only. For information about configuring virtual
-machines, see [Create Virtual Machine with Hyper-V on Windows
-10](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine).
+machines, see [https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/create-virtual-machine).
 
 For information about choosing the **Workgroup** or **Domain**
 environment in which to run your Test Cases, see [Test Environment
@@ -906,7 +905,7 @@ related to setup and configuration of a domain controller (DC).
 
 ## Extracted Files and Folders
 
-After you download the **RDP-TestSuite-ClientEP.zip** package to the
+After you download the **RDP-TestSuite-ClientEP.zip** package from [here](https://github.com/microsoft/WindowsProtocolTestSuites/releases) to the
 driver computer and SUT, you can extract it to a local path, for
 example: C:\\RDP-TestSuite-ClientEP on Windows
 or \$HOME/RDP-TestSuite-ClientEP on Linux.
@@ -1184,6 +1183,51 @@ In this section, you will perform a procedure for preliminary configuration of t
       c. Select the **General** tab.
 
       d. Click **Save**.
+  13. If the SUT (System Under Test) computer is running Windows 11 or later, execute the following script to configure SSL.
+    
+    # Copyright (c) Microsoft. All rights reserved.
+	# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+	
+    # Set ciphersuites SSL setting.
+	$cipherSuitesAsString = 'TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_3DES_EDE_CBC_SHA'
+	New-Item 'HKLM:\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002' -ErrorAction SilentlyContinue
+	New-ItemProperty -path 'HKLM:\SOFTWARE\Policies\Microsoft\Cryptography\Configuration\SSL\00010002' -name 'Functions' -value $cipherSuitesAsString -PropertyType 'String' -Force | Out-Null
+	# Re-create the ciphers key.
+	New-Item 'HKLM:SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers' -Force | Out-Null
+	# Enable AES and DES ciphers.
+	$myCiphers = @(
+	  'AES 128/128',
+	  'AES 256/256',
+	  'DES 56/56',
+	  'Triple DES 168'
+	)
+	Foreach ($myCipher in $myCiphers) {
+	  $key = (Get-Item HKLM:\).OpenSubKey('SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers', $true).CreateSubKey($myCipher)
+	  New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Ciphers\$myCipher" -name 'Enabled' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+	  $key.close()
+	  Write-Host "The cipher $myCipher has been enabled."
+	}
+	# Set hashes configuration.
+	New-Item 'HKLM:SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes' -Force | Out-Null
+	$secureHashes = @(
+	  'SHA',
+	  'SHA256',
+	  'SHA384',
+	  'SHA512'
+	)
+	Foreach ($secureHash in $secureHashes) {
+	  $key = (Get-Item HKLM:\).OpenSubKey('SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes', $true).CreateSubKey($secureHash)
+	  New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Hashes\$secureHash" -name 'Enabled' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+	  $key.close()
+	  Write-Host "Hash $secureHash has been enabled."
+	}
+	# Set KeyExchangeAlgorithms configuration.
+	New-Item 'HKLM:SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms' -Force | Out-Null
+	$secureKeyExchangeAlgorithm='ECDH'
+	$key = (Get-Item HKLM:\).OpenSubKey('SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms', $true).CreateSubKey($secureKeyExchangeAlgorithm)
+	New-ItemProperty -path "HKLM:\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\KeyExchangeAlgorithms\$secureKeyExchangeAlgorithm" -name 'Enabled' -value '0xffffffff' -PropertyType 'DWord' -Force | Out-Null
+	$key.close()
+	Write-Host "KeyExchangeAlgorithm $secureKeyExchangeAlgorithm has been enabled."
 
 ## Configuring the Driver Computer
 
@@ -2091,7 +2135,7 @@ PTM on your **Driver computer** with the official
     to locate the **ProtocolTestManager.msi** under the *Assets* topic
     on GitHub.
 
-  2.  From the **Driverr** compute, double-click the
+  2.  From the **Driver** computer, double-click the
     **ProtocolTestManager.msi** to run the installer.
 
   3.  Follow the installer instructions to complete the installation.

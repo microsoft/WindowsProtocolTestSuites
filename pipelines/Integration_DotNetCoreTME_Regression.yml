@@ -1,0 +1,25 @@
+trigger: none 
+
+variables:
+  - group: Build Variables
+  - group: External Repo Variables
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: WindowsProtocolTestSuites/WindowsProtocolTestSuites
+      ref: AzurePipelines-main
+
+jobs:
+  - template: pipelines/Integration_DotNetCoreTME_Regression_steps.yml@template
+    parameters:
+      build.helperUrl: $(extRepo.url)
+      build.helperBranch: $(build.helperBranch)
+      build.ptfBranch: $(build.ptfBranch)
+      build.ptfBuildPipelineName: $(build.ptfBuildPipelineName)
+      build.buildPipelineName: $(build.buildPipelineName)
+      test.testSuiteName: $(test.testSuiteName)
+      test.filterSuffix: $(test.filterSuffix)
+      test.regressionPipelineNames: $(test.regressionPipelineNames)
+      test.targetRepoCsvFile: $(test.targetRepoCsvFile)
