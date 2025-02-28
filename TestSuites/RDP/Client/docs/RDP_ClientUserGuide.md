@@ -905,7 +905,7 @@ related to setup and configuration of a domain controller (DC).
 
 ## Extracted Files and Folders
 
-After you download the **RDP-TestSuite-ClientEP.zip** package to the
+After you download the **RDP-TestSuite-ClientEP.zip** package from [here](https://github.com/microsoft/WindowsProtocolTestSuites/releases) to the
 driver computer and SUT, you can extract it to a local path, for
 example: C:\\RDP-TestSuite-ClientEP on Windows
 or \$HOME/RDP-TestSuite-ClientEP on Linux.
