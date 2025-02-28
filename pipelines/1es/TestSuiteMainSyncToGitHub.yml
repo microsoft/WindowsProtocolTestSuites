@@ -3,7 +3,7 @@ variables:
   - name: system.debug
     value: false
   - group: Access Tokens
-  - group: Azure Account
+  - group: Azure Account V2
 resources:
   repositories:
     - repository: 1esPipelines
