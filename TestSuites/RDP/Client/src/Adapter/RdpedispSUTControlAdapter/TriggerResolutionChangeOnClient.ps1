@@ -24,7 +24,6 @@ catch
 {
 }
 
-
 $path = "/RDP-TestSuite-ClientEP/Scripts"
 $scriptblock = {
 	param([int]$width, [int]$height, [string]$path)
@@ -35,7 +34,7 @@ $scriptblock = {
 	cmd /c schtasks /Run /TN $taskname
 	cmd /c schtasks /Delete /TN $taskname /F
 	}
-
+	
 if ($null -eq $sessionM)
 {
     $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock -ArgumentList ($width, $height, $path)
@@ -47,7 +46,7 @@ else
 
 $cmdOutput | out-file "./ChangeResolution.log"
 
-if($null -ne $cmdOutput)
+if($cmdOutput -ne $null)
 {
     if($cmdOutput.GetType().IsArray)
     {

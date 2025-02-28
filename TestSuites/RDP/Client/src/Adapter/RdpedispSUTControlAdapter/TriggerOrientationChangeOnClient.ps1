@@ -5,7 +5,6 @@
 # Return Value: 0 indicates task is started successfully; -1 indicates failed to run the specified task
 
 # Run Task to change remote screen orientation
-
 $cmdOutput = ""
 $securePassword = New-Object SecureString
 foreach ($char in $ptfprop_SUTUserPassword.ToCharArray()) {
@@ -34,7 +33,7 @@ $scriptblock = {
 	cmd /c schtasks /Run /TN $taskname
 	cmd /c schtasks /Delete /TN $taskname /F
 	}
-
+	
 if ($null -eq $sessionM)
 {
     $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock -ArgumentList ($orientation, $path)
