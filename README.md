@@ -1,4 +1,4 @@
-# Windows Protocol Test Suites
+# Windows Protocol Test Suites - Ready for RDP?
 
 **Windows Protocol Test Suites** provide interoperability testing against the implementation of Windows open specifications including File Services, Identity Management, Remote Desktop and etc.
 
