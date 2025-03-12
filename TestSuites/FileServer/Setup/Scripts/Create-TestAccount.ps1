@@ -1,13 +1,15 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml", $parameterConfigFile = "$workingDir\Scripts\ParamConfig.xml")
+
+# TODO: Fetch ParamConfig from Storage Account
+param($workingDir = $PSScriptRoot, $protocolConfigFile = "$workingDir\Config.json", $parameterConfigFile = "$workingDir\ParamConfig.json")
 
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath;$scriptPath\Scripts"
+$env:Path += ";$scriptPath;"
 
 Push-Location $workingDir
 #----------------------------------------------------------------------------
@@ -20,37 +22,29 @@ if(!(Test-Path "$workingDir"))
 
 if(!(Test-Path "$protocolConfigFile"))
 {
-    $protocolConfigFile = "$workingDir\Scripts\Protocol.xml"
+    $protocolConfigFile = "$workingDir\Config.json"
     if(!(Test-Path "$protocolConfigFile")) 
     {
-        .\Write-Error.ps1 "No protocol.xml found."
-        exit ExitCode
+        Write-Error.ps1 "No Config file found."
+        return $false
     }
 }
 
 if(!(Test-Path "$parameterConfigFile"))
 {
-    $parameterConfigFile = "$workingDir\Scripts\ParamConfig.xml"
+    $parameterConfigFile = "$workingDir\ParamConfig.json"
     if(!(Test-Path "$parameterConfigFile")) 
     {
-        .\Write-Error.ps1 "No ParamConfig.xml found."
-        exit ExitCode
+        .\Write-Error.ps1 "No ParamConfig.json found."
+        return $false
     }
 }
 #----------------------------------------------------------------------------
-# Start loging using start-transcript cmdlet
+# Start logging using start-transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
 try { Stop-Transcript -ErrorAction SilentlyContinue } catch {} # Ignore Stop-Transcript error messages
 Start-Transcript -Path "$logFile" -Append -Force
-
-#----------------------------------------------------------------------------
-# Define common functions
-#----------------------------------------------------------------------------
-function ExitCode()
-{ 
-    return $MyInvocation.ScriptLineNumber 
-}
 
 function StartService($serviceName)
 {
@@ -60,7 +54,7 @@ function StartService($serviceName)
     {
         .\Write-Info.ps1 "Start $serviceName service."
         Start-Service -InputObj $service -ErrorAction Continue
-        Sleep 10
+        Start-Sleep 10
         $retryTimes++ 
         $service = Get-Service -Name $serviceName
     }
@@ -76,25 +70,30 @@ function StartService($serviceName)
 }
 
 #----------------------------------------------------------------------------
-# Get content from protocol config files
+# Get content from protocol config file
 #----------------------------------------------------------------------------
-[xml]$config = Get-Content "$protocolConfigFile"
-if($config -eq $null)
-{
-    .\Write-Error.ps1 "Protocol config file $protocolConfigFile is not a valid XML file."
-    exit ExitCode
+$config = $null
+try {
+    $config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
+}
+catch {
+    Write-Error.ps1 "Failed to parse config file: $_"
+    return $false
 }
 
-[xml]$params = Get-Content "$parameterConfigFile"
-if($params -eq $null)
-{
-    .\Write-Error.ps1 "Param Config file $parameterConfigFile is not a valid XML file."
-    exit ExitCode
+$params = $null
+try {
+    $params = Get-Content -Path $parameterConfigFile -Raw | ConvertFrom-Json
 }
+catch {
+    Write-Error.ps1 "Failed to parse parameter config file: $_"
+    return $false
+}
+
 #----------------------------------------------------------------------------
 # Define common variables
 #----------------------------------------------------------------------------
-$password = $config.lab.core.password
+$password = $config.Core.Password
 if([System.String]::IsNullOrEmpty($password)) 
 {
     $password = "Password01!"
@@ -102,7 +101,7 @@ if([System.String]::IsNullOrEmpty($password))
 
 $azgroups = $params.Parameters.Groups
 $users =  $params.Parameters.Users
-$isDomainEnv = (gwmi win32_computersystem).partofdomain
+$isDomainEnv = (Get-WmiObject win32_computersystem).partofdomain
 
 #----------------------------------------------------------------------------
 # Start required services
@@ -132,7 +131,7 @@ if($isDomainEnv -eq $true)
     $domain = $null
     while ($retryTimes -lt 30) {
         $domain = Get-ADDomain $domainName
-        if ($domain -ne $null) {
+        if ($null -ne $domain) {
             break;
         }
         else {
@@ -141,7 +140,7 @@ if($isDomainEnv -eq $true)
         }
     }
 
-    if ($domain -eq $null) {
+    if ($null -eq $domain) {
         .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after strating it for 5 minutes."
     }
 }
@@ -154,16 +153,16 @@ else
 # Create and active test accounts
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Create and active test accounts"
-if($isDomainEnv -eq $true)
+if ($isDomainEnv -eq $true)
 {
-    $domainAdmin = $config.lab.core.username
+    $domainAdmin = $config.Core.Username
 
     $adminDN = dsquery user -name $domainAdmin
 
-    foreach($g in $azgroups)
+    foreach($group in $azgroups)
     {        
-        .\Write-Info.ps1 "Create group: $($g.Group.GroupName)"
-        $azGroupDN = $g.Group.GroupName 
+        .\Write-Info.ps1 "Create group: $($group.Group.GroupName)"
+        $azGroupDN = $group.Group.GroupName 
         New-ADGroup -Name $azGroupDN -GroupScope Global -GroupCategory Security
     }
 
@@ -174,7 +173,7 @@ if($isDomainEnv -eq $true)
         $userDN = "CN=$($user.Username),CN=Users,$domainDN"
         dsadd user "$userDN" -pwd $user.Password -canchpwd no -display "$($user.Username)" -disabled no -pwdneverexpires yes | .\Write-Info.ps1
 	      
-        if($user.Group -ne $null)
+        if($null -ne $user.Group)
         {
             $aduser = Get-ADUser -Identity $user.Username
             Add-ADGroupMember -Identity $user.Group -Members $aduser
@@ -191,10 +190,10 @@ if($isDomainEnv -eq $true)
 }
 else
 {
-    foreach($g in $azgroups)
+    foreach($group in $azgroups)
     {
-        .\Write-Info.ps1 "Create group: $($g.Group.GroupName)"
-        $azGroupDN = $g.Group.GroupName
+        .\Write-Info.ps1 "Create group: $($group.Group.GroupName)"
+        $azGroupDN = $group.Group.GroupName
         CMD /C net.exe localgroup $azGroupDN /ADD 2>&1 | .\Write-Info.ps1
     }
 
@@ -202,7 +201,7 @@ else
     {        
         .\Write-Info.ps1 "Create user account: $($user.Username)"
         CMD /C net.exe user $user.Username $user.Password /ADD 2>&1 | .\Write-Info.ps1
-        if($user.Group -ne $null)
+        if($null -ne $user.Group)
         {
             CMD /C net.exe localgroup $user.Group $user.Username /ADD 2>&1 | .\Write-Info.ps1
         }
@@ -213,8 +212,8 @@ else
     CMD /C net.exe user Guest $password 2>&1 | .\Write-Info.ps1
 
     .\Write-Info.ps1 "Setting password never expires"
-    Get-WmiObject -Class Win32_UserAccount | where {$_.Domain -eq $env:ComputerName}  | foreach {$_.PasswordExpires = $false;$_.Put()}
-    Get-WmiObject -Class Win32_UserAccount | where {$_.Domain -eq $env:ComputerName} | ft Caption,PasswordExpires   
+    Get-WmiObject -Class Win32_UserAccount | Where-Object {$_.Domain -eq $env:ComputerName}  | ForEach-Object {$_.PasswordExpires = $false;$_.Put()}
+    Get-WmiObject -Class Win32_UserAccount | Where-Object {$_.Domain -eq $env:ComputerName} | Format-Table Caption,PasswordExpires   
 }
 
 #----------------------------------------------------------------------------
@@ -223,4 +222,4 @@ else
 .\Write-Info.ps1 "Completed create test accounts."
 Pop-Location
 Stop-Transcript
-exit 0
+return $true

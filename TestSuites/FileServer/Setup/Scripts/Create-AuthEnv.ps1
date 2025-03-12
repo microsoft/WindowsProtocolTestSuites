@@ -4,8 +4,8 @@
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath;$scriptPath\Scripts"
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
+$env:Path += ";$scriptPath"
 $systemDrive = $ENV:SystemDrive
 $fullAccessAccount = "BUILTIN\Administrators"
 $buildinUsers = "BUILTIN\Users"
@@ -17,14 +17,6 @@ $authenticatedUsers="NT AUTHORITY\Authenticated Users"
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
 try { Stop-Transcript -ErrorAction SilentlyContinue } catch {} # Ignore Stop-Transcript error messages
 Start-Transcript -Path "$logFile" -Append -Force
-
-#----------------------------------------------------------------------------
-# Define common functions
-#----------------------------------------------------------------------------
-function ExitCode()
-{ 
-    return $MyInvocation.ScriptLineNumber 
-}
 
 function NewSMBShare([string]$Name,[string]$Path,[string[]]$FullAccess)
 {
@@ -39,7 +31,7 @@ function NewSMBShare([string]$Name,[string]$Path,[string[]]$FullAccess)
     CMD /C "icacls $Path /grant BUILTIN\Administrators`:(OI)(CI)(F)" 2>&1 | Write-Info.ps1
 
     $smbShare = Get-SmbShare | where {$_.Name -eq "$Name" -and $_.Path -eq "$Path"}
-    if($smbShare -eq $null)
+    if($null -eq $smbShare)
     {        
         New-SMBShare -name "$Name" -Path "$Path" -FullAccess $FullAccess
     }
@@ -113,4 +105,4 @@ Write-Info.ps1 "Completed creating all shared folders."
 # Ending
 #----------------------------------------------------------------------------
 Stop-Transcript
-exit 0
+return $true

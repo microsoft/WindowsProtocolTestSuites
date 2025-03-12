@@ -1,0 +1,48 @@
+{
+    "Core": {
+        "Username": "",
+        "Password": "",
+        "TestSuiteName": "FileServer",
+        "Scenario": "Workgroup",
+        "RegressionType": "Local",
+        "UseAgent": "false"
+    },
+    "Machines": {
+        "Sut": {
+            "Role": "SUT",
+            "HyperVName": "",
+            "ComputerName": "",
+            "IsClusterNode": "false",
+            "IpConfig": [
+                {
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": ""
+                },
+                {
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": ""
+                }
+            ]
+        },
+        "DriverComputer": {
+            "Role": "DriverComputer",
+            "HyperVName": "",
+            "ComputerName": "",
+            "IsClusterNode": "false",
+            "IpConfig": [
+                {
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": ""
+                },
+                {
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": ""
+                }
+            ]
+        }
+    }
+}

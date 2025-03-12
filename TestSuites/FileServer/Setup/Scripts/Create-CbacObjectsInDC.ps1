@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = "$env:SystemDrive\Temp")
+param($workingDir = $PSScriptRoot, $protocolConfigFile = "$workingDir\Config.json")
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath;$scriptPath\Scripts"
+$env:Path += ";$scriptPath"
 Push-Location $workingDir
 #----------------------------------------------------------------------------
 # if working dir is not exists. it will use scripts path as working path
@@ -16,31 +16,34 @@ if(!(Test-Path "$workingDir"))
     $workingDir = $scriptPath
 }
 
-$protocolConfigFile = "$workingDir\Protocol.xml"
-if(!(Test-Path "$protocolConfigFile")) 
+if(!(Test-Path "$protocolConfigFile"))
 {
-    .\Write-Error.ps1 "No protocol.xml found."
-    exit ExitCode
+    $protocolConfigFile = "$workingDir\Config.json"
+    if(!(Test-Path "$protocolConfigFile")) 
+    {
+        Write-Error.ps1 "No Config file found."
+        return $false
+    }
 }
 
 #----------------------------------------------------------------------------
 # Get content from protocol config files
 #----------------------------------------------------------------------------
-[xml]$config = Get-Content "$protocolConfigFile"
-if($config -eq $null)
-{
-    .\Write-Error.ps1 "Protocol config file $protocolConfigFile is not a valid XML file."
-    exit ExitCode
+$config = $null
+try {
+    $config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
+}
+catch {
+    Write-Error.ps1 "Failed to parse config file: $_"
+    return $false
 }
 
 #----------------------------------------------------------------------------
 # Define common variables
 #----------------------------------------------------------------------------
-$password = $config.lab.core.password
-if([System.String]::IsNullOrEmpty($password)) 
-{
-    $password = "Password01!"
-}
+$password = New-Object SecureString
+$config.Core.Password.ToCharArray() | ForEach-Object {$password.AppendChar($_)}
+
 
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
@@ -59,7 +62,7 @@ function StartService($serviceName)
     {
         .\Write-Info.ps1 "Start $serviceName service."
         Start-Service -InputObj $service -ErrorAction Continue
-        Sleep 10
+        Start-Sleep 10
         $retryTimes++ 
         $service = Get-Service -Name $serviceName
     }
@@ -77,8 +80,8 @@ function StartService($serviceName)
 Function CreateADGroup([String]$groupName, [String]$parentGroupName)
 {
     .\Write-Info.ps1 "Create ADGroup $groupName from AD if NOT exist."
-    $adGroup = Get-ADGroup -Filter * | where {$_.Name -eq $groupName}
-    if($adGroup -eq $null)
+    $adGroup = Get-ADGroup -Filter * | Where-Object {$_.Name -eq $groupName}
+    if($null -eq $adGroup)
     {
         .\Write-Info.ps1 "ADGroup $groupName does not exist in AD, create a new one." 
         New-ADGroup -Name $groupName -GroupScope Global -GroupCategory Security
@@ -94,8 +97,8 @@ Function CreateADGroup([String]$groupName, [String]$parentGroupName)
     }
     else
     {
-        $parentGroup = Get-ADGroup -Filter * | where {$_.Name -eq $parentGroupName}
-        if($parentGroup -eq $null)
+        $parentGroup = Get-ADGroup -Filter * | Where-Object {$_.Name -eq $parentGroupName}
+        if($null -eq $parentGroup)
         {
             .\Write-Info.ps1 "Parent group $parentGroupName does not exist, create a new one." -ForegroundColor yellow
             New-ADGroup -Name $parentGroupName -GroupScope Global -GroupCategory Security
@@ -108,8 +111,8 @@ Function CreateADGroup([String]$groupName, [String]$parentGroupName)
 
 Function CreateClaimTypes([String]$DisplayName, [String[]]$Values)
 {
-    $adClaimType = Get-ADClaimType -Filter * | Where {$_.DisplayName -eq "$DisplayName"}
-    if($adClaimType -ne $null)
+    $adClaimType = Get-ADClaimType -Filter * | Where-Object {$_.DisplayName -eq "$DisplayName"}
+    if($null -ne $adClaimType)
     {
         .\Write-Info.ps1 "Claim Type $DisplayName already exists, don't need to create it." 
         return
@@ -128,19 +131,16 @@ Function CreateClaimTypes([String]$DisplayName, [String[]]$Values)
     .\Write-Info.ps1 "Claim Type $displayName has been created successfully." -ForegroundColor Green
 }
 
-Function CreateADUser([String]$Username, [String]$Password, [String]$Group, [String]$CountryCode, [String]$Department, [String]$Company)
+Function CreateADUser([String]$Username, [SecureString]$Password, [String]$Group, [String]$CountryCode, [String]$Department, [String]$Company)
 {
-    # Variables
-    $secPassword = ConvertTo-SecureString $password -AsPlainText -Force
-
     # Create AD User
     .\Write-Info.ps1 "Create ADUser $Username if NOT exist in AD"
-    $adUser = Get-ADUser  -Filter * | Where {$_.Name -eq $Username}
-    if($adUser -eq $null)
+    $adUser = Get-ADUser  -Filter * | Where-Object {$_.Name -eq $Username}
+    if($null -eq $adUser)
     {
         .\Write-Info.ps1 "ADUser $Username does not exist in AD, create a new one."
-        New-ADUser -Name $Username -AccountPassword $secPassword -CannotChangePassword $true -DisplayName $Username  -Enabled $true -PasswordNeverExpires $true -KerberosEncryptionType DES,RC4,AES128,AES256
-        $adUser = Get-ADUser  -Filter * | Where {$_.Name -eq $Username}
+        New-ADUser -Name $Username -AccountPassword $Password -CannotChangePassword $true -DisplayName $Username  -Enabled $true -PasswordNeverExpires $true -KerberosEncryptionType DES,RC4,AES128,AES256
+        $adUser = Get-ADUser  -Filter * | Where-Object {$_.Name -eq $Username}
     }
     else
     {
@@ -150,11 +150,11 @@ Function CreateADUser([String]$Username, [String]$Password, [String]$Group, [Str
     # Add user to group
     if(![System.String]::IsNullOrEmpty($Group))
     {
-        $adGroup = Get-ADGroup -Filter * | where {$_.Name -eq $Group}
-        if($adGroup -eq $null)
+        $adGroup = Get-ADGroup -Filter * | Where-Object {$_.Name -eq $Group}
+        if($null -eq $adGroup)
         {
             CreateADGroup -groupName $Group
-            $adGroup = Get-ADGroup -Filter * | where {$_.Name -eq $Group}
+            $adGroup = Get-ADGroup -Filter * | Where-Object {$_.Name -eq $Group}
         }
         .\Write-Info.ps1 "Add ADUser $Username to group $Group."
         Add-ADGroupMember -Identity $adGroup -Members $aduser.DistinguishedName
@@ -191,8 +191,8 @@ Function CreateResourceProperty([String]$DisplayName, [String]$ValueType, [Strin
         $suggestedValues += New-Object Microsoft.ActiveDirectory.Management.ADSuggestedValueEntry($value, $value,"");  
     }
 
-    $adResourceProperty = Get-ADResourceProperty -Filter * | Where {$_.DisplayName -eq "$DisplayName"}
-    if($adResourceProperty -ne $null)
+    $adResourceProperty = Get-ADResourceProperty -Filter * | Where-Object {$_.DisplayName -eq "$DisplayName"}
+    if($null -ne $adResourceProperty)
     {
         .\Write-Info.ps1 "Resource Property $DisplayName already exists."
         .\Write-Info.ps1 "Set Resource Property with suggested values."
@@ -214,8 +214,8 @@ Function CreateADCentralAccessRule([String]$Name, [String]$RuleItem)
 {
     $acl = "O:SYG:SYD:AR(A;;FA;;;OW)(A;;FA;;;BA)(A;;FA;;;SY)"+ $RuleItem
 
-    $adCentralAccessRule = Get-ADCentralAccessRule -Filter * | Where {$_.Name -eq "$Name"}
-    if($adCentralAccessRule -ne $null)
+    $adCentralAccessRule = Get-ADCentralAccessRule -Filter * | Where-Object {$_.Name -eq "$Name"}
+    if($null -ne $adCentralAccessRule)
     {
         .\Write-Info.ps1 "ADCentralAccessRule $Name already exists."
 
@@ -232,8 +232,8 @@ Function CreateADCentralAccessRule([String]$Name, [String]$RuleItem)
 
 Function CreateADCentralAccessPolicy([String]$Name, [String[]]$Rules)
 {
-    $adCentralAccessPolicy = Get-ADCentralAccessPolicy -Filter * | Where {$_.Name -eq "$Name"}
-    if($adCentralAccessPolicy -ne $null)
+    $adCentralAccessPolicy = Get-ADCentralAccessPolicy -Filter * | Where-Object {$_.Name -eq "$Name"}
+    if($null -ne $adCentralAccessPolicy)
     {
         .\Write-Info.ps1 "ADCentralAccessPolicy $Name already exists."
 
@@ -246,8 +246,8 @@ Function CreateADCentralAccessPolicy([String]$Name, [String[]]$Rules)
         New-ADCentralAccessPolicy -Name $Name
 
         .\Write-Info.ps1 "Adding rules $Rules"
-        Sleep 5
-        $adCentralAccessPolicy = Get-ADCentralAccessPolicy -Filter * | Where {$_.Name -eq "$Name"}
+        Start-Sleep 5
+        $adCentralAccessPolicy = Get-ADCentralAccessPolicy -Filter * | Where-Object {$_.Name -eq "$Name"}
         Add-ADCentralAccessPolicyMember $adCentralAccessPolicy -Members $Rules
     }
 }
@@ -291,7 +291,7 @@ $retryTimes = 0
 $domain = $null
 while ($retryTimes -lt 30) {
     $domain = Get-ADDomain $domainName
-    if ($domain -ne $null) {
+    if ($null -ne $domain) {
         break;
     }
     else {
@@ -300,7 +300,7 @@ while ($retryTimes -lt 30) {
     }
 }
 
-if ($domain -eq $null) {
+if ($null -eq $domain) {
     .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after strating it for 5 minutes."
 }
 
@@ -368,4 +368,4 @@ EnableCbacAndArmor
 #----------------------------------------------------------------------------
 Pop-Location
 Stop-Transcript
-exit 0
+return $true

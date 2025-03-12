@@ -1,0 +1,82 @@
+{
+    "Core": {
+        "Username": "",
+        "Password": "",
+        "TestSuiteName": "FileServer",
+        "Scenario": "Domain",
+        "DomainName": "contoso.com",
+        "RegressionType": "Local",
+        "UseAgent": "false"
+    },
+    "Machines": {
+        "DC": {
+            "Role": "DC",
+            "HyperVName": "",
+            "ComputerName": "",
+            "IsClusterNode": "false",
+            "Domain": "",
+            "IpConfig": [
+                {
+                    "NIC": "",
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": "",
+                    "DNSServer": ""
+                },
+                {
+                    "NIC": "",
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": "",
+                    "DNSServer": ""
+                }
+            ]
+        },
+        "Sut": {
+            "Role": "SUT",
+            "HyperVName": "",
+            "ComputerName": "",
+            "IsClusterNode": "",
+            "Domain": "",
+            "IpConfig": [
+                {
+                    "NIC": "",
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": "",
+                    "DNSServer": ""
+                },
+                {
+                    "NIC": "",
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": "",
+                    "DNSServer": ""
+                }
+            ]
+        },
+        "DriverComputer": {
+            "Role": "DriverComputer",
+            "HyperVName": "",
+            "ComputerName": "",
+            "IsClusterNode": "",
+            "Domain": "",
+            "IpConfig": [
+                {
+                    "NIC": "",
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": "",
+                    "DNSServer": ""
+                },
+                {
+                    "NIC": "",
+                    "Ip": "",
+                    "Subnet": "",
+                    "Gateway": "",
+                    "DNSServer": ""
+                }
+            ]
+        }
+    }
+}

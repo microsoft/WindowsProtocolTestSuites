@@ -1,13 +1,13 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
+param($workingDir = $PSScriptRoot, $protocolConfigFile = "$workingDir\Config.json")
 
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath;$scriptPath\Scripts"
+$env:Path += ";$scriptPath"
 
 #----------------------------------------------------------------------------
 # if working dir is not exists. it will use scripts path as working path
@@ -19,11 +19,11 @@ if(!(Test-Path "$workingDir"))
 
 if(!(Test-Path "$protocolConfigFile"))
 {
-    $protocolConfigFile = "$workingDir\Protocol.xml"
+    $protocolConfigFile = "$workingDir\Config.json"
     if(!(Test-Path "$protocolConfigFile")) 
     {
-        Write-Error.ps1 "No protocol.xml found."
-        exit ExitCode
+        Write-Error.ps1 "No Config file found."
+        return $false
     }
 }
 
@@ -32,14 +32,6 @@ if(!(Test-Path "$protocolConfigFile"))
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
 Start-Transcript -Path "$logFile" -Append -Force
-
-#----------------------------------------------------------------------------
-# Define common functions
-#----------------------------------------------------------------------------
-function ExitCode()
-{ 
-    return $MyInvocation.ScriptLineNumber 
-}
 
 function GetDfsNsNameSuffix() {
     $curFt = [DateTime]::UtcNow.ToFileTimeUtc()
@@ -57,11 +49,13 @@ function GetDfsNsNameSuffix() {
 #----------------------------------------------------------------------------
 # Get content from protocol config file
 #----------------------------------------------------------------------------
-[xml]$config = Get-Content "$protocolConfigFile"
-if($config -eq $null)
-{
-    Write-Error.ps1 "protocolConfigFile $protocolConfigFile is not a valid XML file."
-    exit ExitCode
+$config = $null
+try {
+    $config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
+}
+catch {
+    Write-Error.ps1 "Failed to parse config file: $_"
+    return $false
 }
 
 #----------------------------------------------------------------------------
@@ -76,12 +70,19 @@ $homeDrive = $ENV:HomeDrive
 # Define servers for DFSC target
 $serverComputerName = "$ENV:ComputerName"
 
-$clusternodes = $config.lab.servers.vm | Where {$_.isclusternode -ne $null}
+$clusternodes = @()
 
-if($clusternodes -ne $null)
+# Check if there are any machines with IsClusterNode set to true
+foreach ($machine in $config.Machines.PSObject.Properties) {
+    if ($machine.Value.IsClusterNode -eq "true") {
+        $clusterNodes += $machine.Value.ComputerName
+    }
+}
+
+if($clusterNodes.Count -gt 0)
 { # Cluster Environment
-    $targetServer = $clusternodes | where {$_.name -ne "$serverComputerName"}
-    $targetServerName = $targetServer.name
+    $targetServer = $clusternodes | Where-Object {$_ -ne "$serverComputerName"}
+    $targetServerName = $targetServer
 }
 else
 { # Non-Cluster Environment
@@ -175,4 +176,4 @@ if ((Get-WmiObject Win32_ComputerSystem).PartOfDomain -eq $true) {
 # Ending
 #----------------------------------------------------------------------------
 Stop-Transcript
-exit 0
+return $true

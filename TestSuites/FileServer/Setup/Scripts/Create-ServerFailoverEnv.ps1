@@ -1,13 +1,13 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
+param($workingDir = $PSScriptRoot, $protocolConfigFile = "$workingDir\Config.json")
 
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath;$scriptPath\Scripts"
+$env:Path += ";$scriptPath"
 Push-Location $workingDir
 #----------------------------------------------------------------------------
 # if working dir is not exists. it will use scripts path as working path
@@ -19,10 +19,10 @@ if(!(Test-Path "$workingDir"))
 
 if(!(Test-Path "$protocolConfigFile"))
 {
-    $protocolConfigFile = "$workingDir\Protocol.xml"
+    $protocolConfigFile = "$workingDir\Config.json"
     if(!(Test-Path "$protocolConfigFile")) 
     {
-        .\Write-Error.ps1 "No protocol.xml found."
+        Write-Error.ps1 "No Config file found."
         exit ExitCode
     }
 }
@@ -44,7 +44,7 @@ function ExitCode()
 function Write-ConfigFailureSignal()
 {
     $startSignalFile = "$workingDir\Config_" + $env:COMPUTERNAME + "_FailureSignal.log"
-    echo "Execute Create-ServerFailoverEnv.ps1 failed, read Create-ServerFailoverEnv.ps1.log for detail." >> $startSignalFile
+    .\Write-Info.ps1 "Execute Create-ServerFailoverEnv.ps1 failed, read Create-ServerFailoverEnv.ps1.log for detail." >> $startSignalFile
 }
 
 function CreateShareFolder($fullPath)
@@ -87,11 +87,12 @@ function CheckConnectivity($computerName)
 #----------------------------------------------------------------------------
 # Get content from protocol config file
 #----------------------------------------------------------------------------
-[xml]$config = Get-Content $protocolConfigFile
-if($config -eq $null)
-{
-    .\Write-Error.ps1 "protocolConfigFile $protocolConfigFile is not a valid XML file."
-    Write-ConfigFailureSignal
+$config = $null
+try {
+    $config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
+}
+catch {
+    Write-Error.ps1 "Failed to parse config file: $_"
     exit ExitCode
 }
 
@@ -99,32 +100,32 @@ if($config -eq $null)
 # Define common variables
 #----------------------------------------------------------------------------
 $domain = (Get-WmiObject win32_computersystem).Domain
-$domainAdmin = $config.lab.core.username
+$domainAdmin = $config.Core.Username
 $domainAdmin = "$domain\$domainAdmin"
 $systemDrive = $env:SystemDrive
 
-$clusterName = $config.lab.ha.cluster.name
+$clusterName = $config.Endpoints.Cluster.Name
 $clusterNodes = @()
 $clusterIps = @()
 $generalFsIps = @()
-$infraFsName = $config.lab.ha.infrastructurefs.name
+$infraFsName = $config.Endpoints.InfrastructureFS.Name
 
-$clusterNodeList = $config.lab.servers.vm | Where-Object {$_.isclusternode -eq "true"}
+$clusterNodeList = $config.Machines.PSObject.Properties | Where-Object {$_.Value.isclusternode -eq "true"} | Select-Object -ExpandProperty Value
 foreach ($clusterNode in $clusterNodeList)
 {
-    $clusterNodes += $clusterNode.name
+    $clusterNodes += $clusterNode.ComputerName
 }
 
-$clusterIpList = $config.lab.ha.cluster.ip
+$clusterIpList = $config.Endpoints.Cluster.IpConfig
 foreach ($clusterip in $clusterIpList)
 {
-    $clusterIps += $clusterip
+    $clusterIps += $clusterip.Ip
 }
 
-$generalFsIpList = $config.lab.ha.generalfs.ip
+$generalFsIpList = $config.Endpoints.GeneralFS.IpConfig
 foreach ($generalFsIp in $generalFsIpList)
 {
-    $generalFsIps += $generalFsIp
+    $generalFsIps += $generalFsIp.Ip
 }
 
 #----------------------------------------------------------------------------
@@ -171,7 +172,7 @@ foreach ($disk in $disks)
     $diskLabelsDict.Add($diskNumber, $volumeLabel)
     
     $partition = Get-Partition | Where-Object {$_.DiskNumber -eq $diskNumber}
-    if($partition -eq $null)
+    if($null -eq $partition)
     {
         $diskpartscript=@()
         
@@ -193,9 +194,11 @@ foreach ($disk in $disks)
 .\Write-Info.ps1 "Clean Cluster"
 try {
      .\Write-Info.ps1 "Clean cluster env in single-domain environment."
-    $domainAdminPwd = ConvertTo-SecureString $config.lab.core.password -AsPlainText -force
+    $domainAdminPwd = New-Object SecureString
+    $config.Core.Password.ToCharArray() | ForEach-Object {$domainAdminPwd.AppendChar($_)}
+
     $creds = New-Object System.Management.Automation.PSCredential($domainAdmin,$domainAdminPwd)
-    $filterStr = "Name -like `"$clusterName`" -or Name -like `"$($config.lab.ha.generalfs.name)`" -or Name -like `"$($config.lab.ha.scaleoutfs.name)`""
+    $filterStr = "Name -like `"$clusterName`" -or Name -like `"$($config.Endpoints.GeneralFS.Name)`" -or Name -like `"$($config.Endpoints.ScaleoutFS.Name)`""
     Get-ADComputer -Filter $filterStr -Credential $creds | Remove-ADComputer -Credential $creds -Confirm:$false
 }
 catch {
@@ -214,7 +217,7 @@ catch {
     Write-Warning "Get-Cluster failed"
 }
 
-if($cluster -eq $null)
+if($null -eq $cluster)
 {
     .\Write-Info.ps1 "Check cluster node connectivity"
     foreach($node in $clusterNodes)
@@ -228,8 +231,8 @@ if($cluster -eq $null)
     Start-Sleep 20
 
     .\Write-Info.ps1 "Check if cluster create succeed"
-    $cluster = Get-cluster | where {$_.Name -eq $clusterName}
-    if($cluster -eq $null)
+    $cluster = Get-cluster | Where-Object {$_.Name -eq $clusterName}
+    if($null -eq $cluster)
     {
         .\Write-Info.ps1 "Create Cluster failed."
         Write-ConfigFailureSignal
@@ -279,7 +282,7 @@ if($cluster -eq $null)
 .\Write-Info.ps1 "Adding storage disk to cluster"
 
 .\Write-Info.ps1 "Check available disk number"
-$Storages = Get-ClusterResource | where {$_.ResourceType -eq "Physical Disk"}
+$Storages = Get-ClusterResource | Where-Object {$_.ResourceType -eq "Physical Disk"}
 if($Storages.Count -lt 2)
 {
     .\Write-Info.ps1 "At lease 2 available storages are required for File Sharing Cluster ENV."
@@ -288,11 +291,11 @@ if($Storages.Count -lt 2)
 }
 
 .\Write-Info.ps1 "Adding General disk"
-$SMBGeneralDisk = Get-ClusterResource | where {$_.Name -eq "SMBGeneralDisk"}
-if($SMBGeneralDisk -eq $null)
+$SMBGeneralDisk = Get-ClusterResource | Where-Object {$_.Name -eq "SMBGeneralDisk"}
+if($null -eq $SMBGeneralDisk)
 {
     .\Write-Info.ps1 "Pick one disk from available storage for general disk"
-    $clusterResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk"}
+    $clusterResources = Get-ClusterResource | Where-Object {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk"}
     $SMBGeneralDisk = $clusterResources | Select-Object -First 1
     
     foreach ($diskNumber in $Script:diskResourcesDict.Keys) {
@@ -307,14 +310,14 @@ if($SMBGeneralDisk -eq $null)
 
 .\Write-Info.ps1 "Adding Scaleout disk"
 $csv = Get-ClusterSharedVolume
-if($csv -eq $null)
+if($null -eq $csv)
 {
     .\Write-Info.ps1 "Pick one disk from available storage for scaleout disk"
-    $clusterResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
+    $clusterResources = Get-ClusterResource | Where-Object {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
     $scaleoutDisk = $clusterResources | Select-Object -First 1
     .\Write-Info.ps1 "Add the disk as cluster shared volume"
     $scaleoutDisk | Add-ClusterSharedVolume
-    sleep 10
+    Start-Sleep 10
     $csv = Get-ClusterSharedVolume
 }
 
@@ -325,21 +328,21 @@ $csv.Name = "SMBScaleOutDisk"
 # Create GeneralFS role
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Add ClusterFileServerRole"
-$fileServerGroup = Get-ClusterGroup | where {$_.Name -eq  $config.lab.ha.generalfs.name}
-if($fileServerGroup -eq $null)
+$fileServerGroup = Get-ClusterGroup | Where-Object {$_.Name -eq  $config.Endpoints.GeneralFS.Name}
+if($null -eq $fileServerGroup)
 {
-	Add-ClusterFileServerRole -Name $config.lab.ha.generalfs.name -Storage "SMBGeneralDisk" -StaticAddress $generalFsIps
+	Add-ClusterFileServerRole -Name $config.Endpoints.GeneralFS.Name -Storage "SMBGeneralDisk" -StaticAddress $generalFsIps
 }
 
 #----------------------------------------------------------------------------
 # Add shared folders to GeneralFS role
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Change the owner of GeneralFS to $env:ComputerName to access the local path of shares."
-Move-ClusterGroup -Name $config.lab.ha.generalfs.name -Node $env:ComputerName
-Sleep 15
+Move-ClusterGroup -Name $config.Endpoints.GeneralFS.Name -Node $env:ComputerName
+Start-Sleep 15
 .\Write-Info.ps1 "Add shared folders to GeneralFS role"
-$fileServerShare = Get-SmbShare | where {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.lab.ha.generalfs.name.ToLower()}
-if($fileServerShare -eq $null)
+$fileServerShare = Get-SmbShare | Where-Object {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.Endpoints.GeneralFS.Name.ToLower()}
+if($null -eq $fileServerShare)
 {
     .\Write-Info.ps1 "Get general disk volume"
     # Note: 
@@ -350,14 +353,14 @@ if($fileServerShare -eq $null)
     $retryTime = 30 
     do
     {
-        $drive = gwmi -Class Win32_volume | where {$_.FileSystem -eq "NTFS" -and $_.Label -eq $Script:SMBGeneralDiskLabel}
-        if($drive -eq $null)
+        $drive = Get-WmiObject -Class Win32_volume | Where-Object {$_.FileSystem -eq "NTFS" -and $_.Label -eq $Script:SMBGeneralDiskLabel}
+        if($null -eq $drive)
         {
-            Sleep 10
+            Start-Sleep 10
             $retryTime -= 10
             .\Write-Info.ps1 "Retry to get general disk volume"
         }
-    } while ($drive -eq $null -and $retryTime -gt 0)
+    } while ($null -eq $drive -and $retryTime -gt 0)
 
     if($retryTime -le 0)
     {
@@ -371,8 +374,8 @@ if($fileServerShare -eq $null)
 	foreach ($letter in [char[]]([char]'F'..[char]'Z')) 
     { 
       	$driveLetter = $letter + ":"
-        $logicaldisk = get-wmiobject win32_logicaldisk | where {$_.DeviceID -eq $driveLetter}
-        if ($logicaldisk -eq $null -and (Test-Path -path $driveLetter) -eq $false)
+        $logicaldisk = get-wmiobject win32_logicaldisk | Where-Object {$_.DeviceID -eq $driveLetter}
+        if ($null -eq $logicaldisk -and (Test-Path -path $driveLetter) -eq $false)
         { 
             break
         } 
@@ -381,21 +384,21 @@ if($fileServerShare -eq $null)
 
     .\Write-Info.ps1 "Assign drive letter to general disk volume"
     Set-WmiInstance -input $drive -Arguments @{DriveLetter="$driveLetter";}
-    Sleep 10
+    Start-Sleep 10
 
     # Create share folders
     .\Write-Info.ps1 "Create share folder: $driveLetter\SMBClustered"
     CreateShareFolder "$driveLetter\SMBClustered"
-    $generalfsShare1 = Get-SmbShare | where {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.lab.ha.generalfs.name.ToLower()}
-    if($generalfsShare1 -eq $null)
+    $generalfsShare1 = Get-SmbShare | Where-Object {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.Endpoints.GeneralFS.Name.ToLower()}
+    if($null -eq $generalfsShare1)
     {
         New-SMBShare -name "SMBClustered" -Path "$driveLetter\SMBClustered" -FullAccess "$domainAdmin" -ContinuouslyAvailable $true -CachingMode BranchCache 
 	}
 
     .\Write-Info.ps1 "Create share folder: $driveLetter\SMBClusteredEncrypted"
     CreateShareFolder "$driveLetter\SMBClusteredEncrypted"
-    $generalfsShare2 = Get-SmbShare | where {$_.Name -eq "SMBClusteredEncrypted" -and $_.ScopeName.ToLower() -eq $config.lab.ha.generalfs.name.ToLower()}
-    if($generalfsShare2 -eq $null)
+    $generalfsShare2 = Get-SmbShare | Where-Object {$_.Name -eq "SMBClusteredEncrypted" -and $_.ScopeName.ToLower() -eq $config.Endpoints.GeneralFS.Name.ToLower()}
+    if($null -eq $generalfsShare2)
     {
 	    New-SMBShare -name "SMBClusteredEncrypted" -Path "$driveLetter\SMBClusteredEncrypted" -FullAccess "$domainAdmin" -ContinuouslyAvailable $true -CachingMode BranchCache -EncryptData $true			
     }
@@ -404,11 +407,11 @@ if($fileServerShare -eq $null)
 #----------------------------------------------------------------------------
 # Modify IP resource of GeneralFS to make traffic go over load balancer on Azure
 #----------------------------------------------------------------------------
-$isAzureCluster = ($config.lab.core.regressiontype -match "Azure") -and ($config.lab.ha.cluster -ne $null)
+$isAzureCluster = ($config.Core.regressiontype -match "Azure") -and ($config.Core.Scenario -match "Cluster")
 if ($isAzureCluster) {
     $clusterNetworkName = (Get-ClusterNetwork)[0].Name
-    $ipResourceName = (Get-ClusterResource | Where-Object { ($_.ResourceType -eq "IP Address") -and ($_.OwnerGroup -eq $config.lab.ha.generalfs.name) })[0].Name
-    $lbIP = $config.lab.ha.generalfs.ip
+    $ipResourceName = (Get-ClusterResource | Where-Object { ($_.ResourceType -eq "IP Address") -and ($_.OwnerGroup -eq $config.Endpoints.GeneralFS.Name) })[0].Name
+    $lbIP = $config.$config.Endpoints.GeneralFS.IpConfig[0].Ip
     $params = @{
         "Address" = "$lbIP"
         "ProbePort" = "59999"
@@ -425,27 +428,27 @@ if ($isAzureCluster) {
     Start-ClusterResource -Name $ipResourceName
 
     # Start GeneralFS role
-    Start-ClusterGroup -Name $config.lab.ha.generalfs.name
+    Start-ClusterGroup -Name $config.Endpoints.GeneralFS.Name
 }
 
 #----------------------------------------------------------------------------
 # Create ScaleoutFS role
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Create ScaleoutFS role"
-$scaleOutGroup = Get-ClusterGroup | where {$_.Name -eq $config.lab.ha.scaleoutfs.name}
-if($scaleOutGroup -eq $null)
+$scaleOutGroup = Get-ClusterGroup | Where-Object {$_.Name -eq $config.Endpoints.ScaleoutFS.Name}
+if($null -eq $scaleOutGroup)
 {
-    Add-ClusterScaleOutFileServerRole -Name $config.lab.ha.scaleoutfs.name
+    Add-ClusterScaleOutFileServerRole -Name $config.Endpoints.ScaleoutFS.Name
 }
 
 #----------------------------------------------------------------------------
 # Add shared folders to ScaleoutFS role
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Change the owner of ScaleOutFS and SMBScaleOutDisk to $env:ComputerName to access the local path of shares."
-Move-ClusterGroup -Name $config.lab.ha.scaleoutfs.name -Node $env:ComputerName
-Sleep 5
+Move-ClusterGroup -Name $config.Endpoints.ScaleoutFS.Name -Node $env:ComputerName
+Start-Sleep 5
 Move-ClusterSharedVolume -Name "SMBScaleOutDisk" -Node $env:ComputerName
-Sleep 10
+Start-Sleep 10
 
 $retryTime = 30
 do
@@ -457,8 +460,8 @@ do
         .\Write-Info.ps1 "Add shared folders to ScaleoutFS role"
         .\Write-Info.ps1 "Create share folder: $systemDrive\clusterstorage\volume1\SMBClustered"
         CreateShareFolder "$systemDrive\clusterstorage\volume1\SMBClustered"
-        $scaleOutShare = Get-SmbShare | where {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.lab.ha.scaleoutfs.name.ToLower()}
-        if($scaleOutShare -eq $null)
+        $scaleOutShare = Get-SmbShare | Where-Object {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.Endpoints.ScaleoutFS.Name.ToLower()}
+        if($null -eq $scaleOutShare)
         {
             New-SMBShare -name "SMBClustered" -Path "$systemDrive\ClusterStorage\Volume1\SMBClustered" -FullAccess "$domainAdmin" -ContinuouslyAvailable $true -CachingMode BranchCache
         }
@@ -466,15 +469,15 @@ do
         .\Write-Info.ps1 "Create share folder: $systemDrive\clusterstorage\volume1\SMBClusteredForceLevel2"
         # Note: Create SMBClusteredForceLevel2 for Oplock model
         CreateShareFolder "$systemDrive\clusterstorage\volume1\SMBClusteredForceLevel2"
-        $ClusteredForceLevel2 = Get-SmbShare | where {$_.Name -eq "SMBClusteredForceLevel2" -and $_.ScopeName.ToLower() -eq $config.lab.ha.scaleoutfs.name.ToLower()}
-        if($ClusteredForceLevel2 -eq $null)
+        $ClusteredForceLevel2 = Get-SmbShare | Where-Object {$_.Name -eq "SMBClusteredForceLevel2" -and $_.ScopeName.ToLower() -eq $config.Endpoints.ScaleoutFS.Name.ToLower()}
+        if($null -eq $ClusteredForceLevel2)
         {
             New-SMBShare -name "SMBClusteredForceLevel2" -Path "$systemDrive\ClusterStorage\Volume1\SMBClusteredForceLevel2" -FullAccess "$domainAdmin"
         }
     }
     catch
     {
-        sleep 10
+        Start-Sleep 10
         $retryTime -= 10
         $catchIssue = $true
     }
@@ -494,13 +497,13 @@ if($retryTime -le 0)
 $build = [environment]::OSVersion.Version.Build
 if (($build -ge 17609) -and (![string]::IsNullOrEmpty($infraFsName)))
 {
-    $InfrastructureGroup = Get-ClusterGroup | where {$_.Name -eq $infraFsName}
-    if($InfrastructureGroup -eq $null)
+    $InfrastructureGroup = Get-ClusterGroup | Where-Object {$_.Name -eq $infraFsName}
+    if($null -eq $InfrastructureGroup)
     {
         .\Write-Info.ps1 "Create InfraFS role"
         Add-ClusterScaleOutFileServerRole -Infrastructure -Name $infraFsName
         .\Write-Info.ps1 "Add infrastructure share"
-        $clusterAvailableResources = Get-ClusterResource | where {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
+        $clusterAvailableResources = Get-ClusterResource | Where-Object {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
         if ($clusterAvailableResources.Count -lt 1)
         {
             .\Write-Error.ps1 "No available storage for infrastructure share."
@@ -525,13 +528,13 @@ if (($build -ge 17609) -and (![string]::IsNullOrEmpty($infraFsName)))
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Update FailoverThreshold for Cluster Group and File Server role"
 
-$clusgp = Get-ClusterGroup | where {$_.Name -eq "Cluster Group"}
+$clusgp = Get-ClusterGroup | Where-Object {$_.Name -eq "Cluster Group"}
 $clusgp.FailoverThreshold = 1024
 
-$clusgp = Get-ClusterGroup | where {$_.Name -eq $config.lab.ha.generalfs.name}
+$clusgp = Get-ClusterGroup | Where-Object {$_.Name -eq $config.Endpoints.GeneralFS.Name}
 $clusgp.FailoverThreshold = 1024
 
-$clusgp = Get-ClusterGroup | where {$_.Name -eq $config.lab.ha.scaleoutfs.name}
+$clusgp = Get-ClusterGroup | Where-Object {$_.Name -eq $config.Endpoints.ScaleoutFS.Name}
 $clusgp.FailoverThreshold = 1024
 
 #----------------------------------------------------------------------------

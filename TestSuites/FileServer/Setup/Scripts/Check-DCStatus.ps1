@@ -2,7 +2,7 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 param(
-    $workingDir = "$env:SystemDrive\Temp",
+    $workingDir = $PSScriptRoot,
     [ValidateSet("CreateCheckerTask", "StartChecker")]
     [string]$action="CreateCheckerTask"
 )
@@ -12,7 +12,7 @@ param(
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
 $scriptName = $MyInvocation.MyCommand.Path
-$env:Path += ";$scriptPath;$scriptPath\Scripts"
+$env:Path += ";$scriptPath"
 Push-Location $workingDir
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
@@ -31,7 +31,7 @@ function StartService($serviceName)
     {
         .\Write-Info.ps1 "Start $serviceName service."
         Start-Service -InputObj $service -ErrorAction Continue
-        Sleep 10
+        Start-Sleep 10
         $retryTimes++ 
         $service = Get-Service -Name $serviceName
     }
@@ -60,19 +60,21 @@ if($action -eq "CreateCheckerTask")
     .\Write-Info.ps1 "Do basic config of below services."
 
     .\Write-Info.ps1 "NETSH ras set type lanonly lanonly IPv4"
-    CMD /C NETSH ras set type lanonly lanonly IPv4 2>&1 | .\Write-Info.ps1
+    CMD /C NETSH ras set type lanonly lanonly IPv4 2>&1 | Write-Host
 
     .\Write-Info.ps1 "NETSH ras set conf ENABLED"
-    CMD /C NETSH ras set conf ENABLED 2>&1 | .\Write-Info.ps1
+    CMD /C NETSH ras set conf ENABLED 2>&1 | Write-Host
 
     .\Write-Info.ps1 "NET stop RemoteAccess"
-    CMD /C NET stop RemoteAccess 2>&1 | .\Write-Info.ps1
+    CMD /C NET stop RemoteAccess 2>&1 | Write-Host
 
     StartService "sstpsvc"
     StartService "rasman"
-    StartService "wanarpv6"
-    CMD /C SC config RemoteAccess start=Auto 2>&1 | .\Write-Info.ps1    
+    
+    CMD /C SC config RemoteAccess start=Auto 2>&1 | Write-Host    
     StartService "RemoteAccess" 
+
+    # StartService "wanarpv6"
 
     .\Write-Info.ps1 "Check and start Active Directory Domain Services"
     StartService "NTDS"
@@ -88,8 +90,8 @@ if($action -eq "StartChecker")
 {
     StartService "sstpsvc"
     StartService "rasman"
-    StartService "wanarpv6"
-    StartService "RemoteAccess"
+    StartService "RemoteAccess"    
+    # StartService "wanarpv6"
 
     .\Write-Info.ps1 "Check and start Active Directory Domain Services"
     StartService "NTDS"
@@ -98,7 +100,7 @@ if($action -eq "StartChecker")
     StartService "ADWS"
 
     .\Write-Info.ps1 "Finish checker."
-    Sleep 5 # To display above messages
+    Start-Sleep 5 # To display above messages
 }
 
 #----------------------------------------------------------------------------

@@ -13,30 +13,22 @@
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath;$scriptPath\Scripts"
-
-#----------------------------------------------------------------------------
-# Define common functions
-#----------------------------------------------------------------------------
-function ExitCode()
-{ 
-    return $MyInvocation.ScriptLineNumber 
-}
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
+$env:Path += ";$scriptPath"
 
 # Create FAT32 Volume for MS-FSA test suite 
 function CreateFAT32VolumeForFSA()
 {
     Write-Info.ps1 "Create Volume for SMBFAT32Share"
     $volume = Get-WmiObject -Class Win32_Volume | Where-Object { $_.FileSystem -eq "FAT32" -and $_.Label -eq "FAT32" }
-    if ($volume -eq $null) {
+    if ($null -eq $volume) {
         Write-Info.ps1 "Create Volume for SMBFAT32Share"
         # Get disk and partition
         $disk = Get-WmiObject -Class Win32_DiskDrive | Sort-Object DeviceID | Select-Object -First 1
         $diskNum = $disk.Index
         for ($i = 1; $i -le 20; $i++) {
             $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i -ErrorAction SilentlyContinue
-            if ($partition -eq $null) {
+            if ($null -eq $partition) {
                 $newPartitionId = $i
                 break
             }
@@ -77,7 +69,7 @@ function CreateShareFolderForFSA()
     if([System.String]::IsNullOrEmpty($FolderName))
     {
     	Write-Info.ps1 "Folder Name could not be null or empty." -ForegroundColor Red
-		exit ExitCode
+		return $false
     }
     $sharefolderPath = "$Path\$FolderName"
     
@@ -171,5 +163,4 @@ CreateShareFolderForFSA -Path "J:" -FolderName "SMBFAT32Share"
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Completed setup FSA ENV."
 Stop-Transcript
-exit 0
-
+return $true
