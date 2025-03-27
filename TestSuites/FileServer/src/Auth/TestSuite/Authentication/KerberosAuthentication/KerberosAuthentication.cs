@@ -88,6 +88,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Auth.TestSuite
                 KDCIP = TestConfig.DomainName.ParseIPAddress().ToString();
             }
 
+            if (TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for kerberos authentication in domain environment for Server 2025.");
+            }
+
             KDCPort = DefaultKdcPort;
             OidPkt = KerberosConstValue.OidPkt.KerberosToken;
 

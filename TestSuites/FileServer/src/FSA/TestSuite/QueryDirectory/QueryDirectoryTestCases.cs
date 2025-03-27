@@ -263,6 +263,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Verify the Query Directory response with FileDirectoryInformation from the server.")]
         public void BVT_QueryDirectory_FileDirectoryInformation()
         {
+            if (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for FileDirectoryInformation for Server 2025.");
+            }
+
             byte[] outputBuffer;
             string fileName;
             FILEID dirFileId;
@@ -287,6 +292,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Verify the Query Directory response with FileFullDirectoryInformation from the server.")]
         public void BVT_QueryDirectory_FileFullDirectoryInformation()
         {
+            if (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for FileFullDirectoryInformation for Server 2025.");
+            }
+
             byte[] outputBuffer;
             string fileName;
             FILEID dirFileId;
@@ -311,6 +321,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Verify the Query Directory response with FileIdFullDirectoryInformation from the server.")]
         public void BVT_QueryDirectory_FileIdFullDirectoryInformation()
         {
+            if (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for FileIdFullDirectoryInformation for Server 2025.");
+            }
+
             byte[] outputBuffer;
             string fileName;
             FILEID dirFileId;
@@ -369,6 +384,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Verify the Query Directory response with FileBothDirectoryInformation from the server.")]
         public void BVT_QueryDirectory_FileBothDirectoryInformation()
         {
+            if (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for FileBothDirectoryInformation for Server 2025.");
+            }
+
             byte[] outputBuffer;
             string fileName;
             FILEID dirFileId;
@@ -390,6 +410,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Verify the Query Directory response with FileIdBothDirectoryInformation from the server.")]
         public void BVT_QueryDirectory_FileIdBothDirectoryInformation()
         {
+            if (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for FileIdBothDirectoryInformation for Server 2025.");
+            }
+
             byte[] outputBuffer;
             string fileName;
             FILEID dirFileId;
