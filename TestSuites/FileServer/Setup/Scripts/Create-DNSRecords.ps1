@@ -16,25 +16,28 @@
 #  2. Add static DNS records to resolve host names to host IP addresses.
 ##############################################################################
 
-param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Config.json")
+param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
 
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath"
+$env:Path += ";$scriptPath;$scriptPath\Scripts"
 
 #----------------------------------------------------------------------------
 # if working dir is not exists. it will use scripts path as working path
 #----------------------------------------------------------------------------
-if (!(Test-Path "$workingDir")) {
+if(!(Test-Path "$workingDir"))
+{
     $workingDir = $scriptPath
 }
 
-if (!(Test-Path "$protocolConfigFile")) {
-    $protocolConfigFile = "$workingDir\Config.json"
-    if (!(Test-Path "$protocolConfigFile")) {
-        .\Write-Error.ps1 "No Config file found."
+if(!(Test-Path "$protocolConfigFile"))
+{
+    $protocolConfigFile = "$workingDir\Protocol.xml"
+    if(!(Test-Path "$protocolConfigFile"))
+    {
+        Write-Error.ps1 "No protocol.xml found."
         exit ExitCode
     }
 }
@@ -48,30 +51,30 @@ Start-Transcript -Path "$logFile" -Append -Force
 #----------------------------------------------------------------------------
 # Define common functions
 #----------------------------------------------------------------------------
-function ExitCode() { 
+function ExitCode()
+{ 
     return $MyInvocation.ScriptLineNumber 
 }
 
-function Add-DnsRecord {
+function Add-DnsRecord
+{
     param(
         [string]$DNSZone,
         [string]$HostName,
         [string]$HostIPv4Address
     )
 
-    .\Write-Info.ps1 "Add a new DNS record for $HostName to resolve $HostName.$DNSZone to $HostIPv4Address"
+    Write-Info.ps1 "Add a new DNS record for $HostName to resolve $HostName.$DNSZone to $HostIPv4Address"
     Add-DnsServerResourceRecordA -Name $HostName -ZoneName $DNSZone -AllowUpdateAny -IPv4Address $HostIPv4Address
 }
 
 #----------------------------------------------------------------------------
 # Get content from protocol config file
 #----------------------------------------------------------------------------
-$config = $null
-try {
-    $config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
-}
-catch {
-    .\Write-Error.ps1 "Failed to parse config file: $_"
+[xml]$config = Get-Content "$protocolConfigFile"
+if($config -eq $null)
+{
+    Write-Error.ps1 "protocolConfigFile $protocolConfigFile is not a valid XML file."
     exit ExitCode
 }
 
@@ -79,23 +82,26 @@ catch {
 # Define common variables
 #----------------------------------------------------------------------------
 # Define DNS zone
-$domainController = $config.Machines.DC
-$dnsZone = $domainController.Domain
+$domainController = $config.lab.servers.vm | Where-Object { $_.role -eq "DC" } | Select-Object -First 1
+$dnsZone = $domainController.domain
 
 # Define hosts in cluster environment
-$cluster = $config.Endpoints.Cluster
-$generalfs = $config.Endpoints.GeneralFS
+$cluster = $config.lab.ha.cluster
+$generalfs = $config.lab.ha.generalfs
 
 #----------------------------------------------------------------------------
 # Create new DNS records for hosts
 #----------------------------------------------------------------------------
 # Do not create DNS records for 12R2 environment
 $osMajorVer = [System.Environment]::OSVersion.Version.Major
-if ($osMajorVer -ge 10) {
-    foreach ($ip in $cluster.IpConfig.Ip) {
-        Add-DnsRecord -DNSZone $dnsZone -HostName $cluster.Name -HostIPv4Address $ip
-    }
-    foreach ($ip in $generalfs.IpConfig.Ip) {
-        Add-DnsRecord -DNSZone $dnsZone -HostName $generalfs.Name -HostIPv4Address $ip
-    }
+if ($osMajorVer -ge 10)
+{
+    Add-DnsRecord -DNSZone $dnsZone -HostName $cluster.name -HostIPv4Address $cluster.ip
+    Add-DnsRecord -DNSZone $dnsZone -HostName $generalfs.name -HostIPv4Address $generalfs.ip
 }
+
+#----------------------------------------------------------------------------
+# Ending
+#----------------------------------------------------------------------------
+Stop-Transcript
+exit 0

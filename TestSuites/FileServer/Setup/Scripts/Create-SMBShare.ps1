@@ -1,17 +1,17 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param([string]$Name,[string]$Path,[string]$FullAccess,[string]$CachingMode="none",[bool]$EncryptData=$false)
+param([string]$Name,[string]$Path,[string]$FullAccess,[string]$CachingMode="none",[bool]$EncryptData=$false,[bool]$CompressData=$false)
 
 #----------------------------------------------------------------------------
 # Print exection information
 #----------------------------------------------------------------------------
 Write-Host "EXECUTING [Create-SMBShare.ps1]..." -foregroundcolor cyan
-Write-Host "`$Name        = $Name" 
-Write-Host "`$Path        = $Path"
-Write-Host "`$FullAccess  = $FullAccess"
-Write-Host "`$CachingMode = $CachingMode"
-Write-Host "`$EncryptData = $EncryptData"
+Write-Host "`$Name         = $Name" 
+Write-Host "`$Path         = $Path"
+Write-Host "`$FullAccess   = $FullAccess"
+Write-Host "`$CachingMode  = $CachingMode"
+Write-Host "`$EncryptData  = $EncryptData"
 Write-Host "`$CompressData = $CompressData"
 
 #----------------------------------------------------------------------------
@@ -64,4 +64,4 @@ if($null -eq $smbShare)
 # Print verification and exit information
 #----------------------------------------------------------------------------
 Write-Host "EXECUTE [Create-SMBShare.ps1] FINISHED (NOT VERIFIED)." -foregroundcolor yellow
-return $true
+exit 0

@@ -13,22 +13,30 @@
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
-$env:Path += ";$scriptPath"
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
+$env:Path += ";$scriptPath;$scriptPath\Scripts"
+
+#----------------------------------------------------------------------------
+# Define common functions
+#----------------------------------------------------------------------------
+function ExitCode()
+{ 
+    return $MyInvocation.ScriptLineNumber 
+}
 
 # Create FAT32 Volume for MS-FSA test suite 
 function CreateFAT32VolumeForFSA()
 {
     Write-Info.ps1 "Create Volume for SMBFAT32Share"
     $volume = Get-WmiObject -Class Win32_Volume | Where-Object { $_.FileSystem -eq "FAT32" -and $_.Label -eq "FAT32" }
-    if ($null -eq $volume) {
+    if ($volume -eq $null) {
         Write-Info.ps1 "Create Volume for SMBFAT32Share"
         # Get disk and partition
         $disk = Get-WmiObject -Class Win32_DiskDrive | Sort-Object DeviceID | Select-Object -First 1
         $diskNum = $disk.Index
         for ($i = 1; $i -le 20; $i++) {
             $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i -ErrorAction SilentlyContinue
-            if ($null -eq $partition) {
+            if ($partition -eq $null) {
                 $newPartitionId = $i
                 break
             }
@@ -69,7 +77,7 @@ function CreateShareFolderForFSA()
     if([System.String]::IsNullOrEmpty($FolderName))
     {
     	Write-Info.ps1 "Folder Name could not be null or empty." -ForegroundColor Red
-		return $false
+		exit ExitCode
     }
     $sharefolderPath = "$Path\$FolderName"
     
@@ -163,4 +171,5 @@ CreateShareFolderForFSA -Path "J:" -FolderName "SMBFAT32Share"
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Completed setup FSA ENV."
 Stop-Transcript
-return $true
+exit 0
+

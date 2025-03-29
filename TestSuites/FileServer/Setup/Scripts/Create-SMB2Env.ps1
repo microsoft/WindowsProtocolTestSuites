@@ -1,13 +1,13 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = $PSScriptRoot)
+param($workingDir = "$env:SystemDrive\Temp", $protocolConfigFile = "$workingDir\Protocol.xml")
 
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath"
+$env:Path += ";$scriptPath;$scriptPath\Scripts"
 
 #----------------------------------------------------------------------------
 # if working dir is not exists. it will use scripts path as working path
@@ -17,12 +17,39 @@ if(!(Test-Path "$workingDir"))
     $workingDir = $scriptPath
 }
 
+if(!(Test-Path "$protocolConfigFile"))
+{
+    $protocolConfigFile = "$workingDir\Protocol.xml"
+    if(!(Test-Path "$protocolConfigFile")) 
+    {
+        Write-Error.ps1 "No protocol.xml found."
+        exit ExitCode
+    }
+}
+
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
 Start-Transcript -Path "$logFile" -Append -Force
 
+#----------------------------------------------------------------------------
+# Define common functions
+#----------------------------------------------------------------------------
+function ExitCode()
+{ 
+    return $MyInvocation.ScriptLineNumber 
+}
+
+#----------------------------------------------------------------------------
+# Get content from protocol config file
+#----------------------------------------------------------------------------
+[xml]$config = Get-Content "$protocolConfigFile"
+if($config -eq $null)
+{
+    Write-Error.ps1 "protocolConfigFile $protocolConfigFile is not a valid XML file."
+    exit ExitCode
+}
 
 #----------------------------------------------------------------------------
 # Define common variables
@@ -66,7 +93,7 @@ else {
 Write-Info.ps1 "Create Volume for SMBReFSShare"
 
 $volume = Get-WmiObject -Class Win32_Volume | Where-Object {$_.FileSystem -eq "REFS" -and $_.Label -eq "REFS"}
-if($null -eq $volume)
+if($volume -eq $null)
 {
     Write-Info.ps1 "Create Volume for SMBReFSShare"
     # Get disk and partition
@@ -74,10 +101,10 @@ if($null -eq $volume)
     $diskNum = $disk.Index
     for ($i = 1; $i -le 20; $i++) {
         $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i -ErrorAction SilentlyContinue
-        if (($null -ne $partition) -and ($env:SystemDrive -match $partition.DriveLetter)) {
+        if (($partition -ne $null) -and ($env:SystemDrive -match $partition.DriveLetter)) {
             $partitionId = $i
         }
-        elseif ($null -eq $partition) {
+        elseif ($partition -eq $null) {
             $newPartitionId = $i
             break
         }
@@ -122,4 +149,4 @@ Create-SMBShare.ps1 -name "SMBReFSShare" -Path "K:\SMBReFSShare" -FullAccess "$f
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Completed setup SMB2 ENV."
 Stop-Transcript
-return $true
+exit 0

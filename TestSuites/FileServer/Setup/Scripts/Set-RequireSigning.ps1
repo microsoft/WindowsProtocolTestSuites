@@ -4,8 +4,8 @@
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
-$env:Path += ";$scriptPath"
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
+$env:Path += ";$scriptPath;$scriptPath\Scripts"
 
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
@@ -24,4 +24,4 @@ Set-SmbServerConfiguration -RequireSecuritySignature $true -Confirm:$false
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Completed set SMB2 RequireSecuritySignature."
 Stop-Transcript
-return $true
+exit 0

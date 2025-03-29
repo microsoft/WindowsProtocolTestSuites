@@ -1,12 +1,12 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = $PSScriptRoot)
+param($workingDir = "$env:SystemDrive\Temp")
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
 $scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath"
+$env:Path += ";$scriptPath;$scriptPath\Scripts"
 Push-Location $workingDir
 
 #----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ Start-Transcript -Path "$logFile" -Append -Force
 #----------------------------------------------------------------------------
 # Extract GPOBackup files
 #----------------------------------------------------------------------------
-$ZipFile = "$workingDir\GPOBackup.zip"
+$ZipFile = "$workingDir\Scripts\GPOBackup.zip"
 $gpoBackupFolder = "$workingDir\GPOBackup"
 
 ## Expand-Archive is only supported in Powerhshell 5.0 or later
@@ -73,7 +73,7 @@ if($domain.name -ne "contoso") {
     }
 }
 
-.\Write-Info.ps1 "Configuring Group Policy"
+.\Write-Info.ps1 "Configurating Group Policy"
 Import-GPO -BackupId $gpoGuid -TargetName "Default Domain Policy" -Path $gpoBackupFolder -CreateIfNeeded
 
 .\Write-Info.ps1 "Publish the group policy updates to all computers by command: gpupdate /force"
@@ -84,4 +84,4 @@ CMD /C gpupdate /force 2>&1 | .\Write-Info.ps1
 #----------------------------------------------------------------------------
 Pop-Location
 Stop-Transcript
-return $true
+exit 0

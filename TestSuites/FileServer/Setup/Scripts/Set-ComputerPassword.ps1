@@ -4,8 +4,8 @@
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -Parent
-$env:Path += ";$scriptPath"
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
+$env:Path += ";$scriptPath;$scriptPath\Scripts"
 
 #----------------------------------------------------------------------------
 # Start loging using start-transcript cmdlet
@@ -24,4 +24,4 @@ ksetup /SetComputerPassword Password04!
 #----------------------------------------------------------------------------
 Write-Info.ps1 "Completed set computer password."
 Stop-Transcript
-return $true
+exit 0
