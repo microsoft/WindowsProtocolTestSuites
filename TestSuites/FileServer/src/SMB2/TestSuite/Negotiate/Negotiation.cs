@@ -687,6 +687,60 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
+        [Description(" A Boolean; if set, indicates that SMB2_TRANSPORT_CAPABILITIES negotiate context, as specified in section 2.2.3.1.5, is supported by the node.")]
+        public void Negotiate_SMB311_IsTransportCapabilitiesSupported()
+        {
+            #region Check Applicability
+            if (TestConfig.IsWindowsPlatform &&
+                TestConfig.Platform < Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assume.Inconclusive("Windows Server 2022 operating system and prior do not send or process SMB2_TRANSPORT_CAPABILITIES.");
+            }
+
+            // Check dialect
+            BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces supporting the compression of messages between client and server.");
+            #endregion
+
+            DialectRevision clientMaxDialectSupported = DialectRevision.Smb311;
+            PreauthIntegrityHashID[] preauthHashAlgs = [PreauthIntegrityHashID.SHA_512];
+            EncryptionAlgorithm[] encryptionAlgs = [
+                EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
+                EncryptionAlgorithm.ENCRYPTION_AES128_CCM ];
+
+            // Should not have transport capabilities in context
+            NegotiateWithNegotiateContexts(
+                clientMaxDialectSupported,
+                preauthHashAlgs: null,
+                encryptionAlgs: null,
+                addTransportCapabilities: false,
+                responseChecker: (Packet_Header header, Smb2NegotiateResponsePacket response) =>
+                {
+                    BaseTestSite.Assert.IsNull(response.NegotiateContext_TRANSPORT, "Transport capabilities should not be present in the response.");
+                });
+
+            NegotiateWithNegotiateContexts(
+                clientMaxDialectSupported,
+                preauthHashAlgs: preauthHashAlgs,
+                encryptionAlgs: encryptionAlgs,
+                addTransportCapabilities: true,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "{0} should succeed, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+                },
+                responseChecker: (Packet_Header header, Smb2NegotiateResponsePacket response) =>
+                {
+                    BaseTestSite.Assert.IsNotNull(response.NegotiateContext_TRANSPORT, "Transport capabilities should be present in the response.");
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_TRANSPORT.Value.Flags == SMB2_TRANSPORT_CAPABILITIES_Flags.SMB2_ACCEPT_TRANSPORT_LEVEL_SECURITY, "ACCEPT_TRANSPORT_LEVEL_SECURITY should be set");
+                    BaseTestSite.Assert.IsTrue(response.NegotiateContext_TRANSPORT.Value.Header.ContextType == SMB2_NEGOTIATE_CONTEXT_Type_Values.SMB2_TRANSPORT_CAPABILITIES, "SMB2_TRANSPORT_CAPABILITIES should be in context");
+                });
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
         [TestCategory(TestCategories.Compatibility)]
         [Description("This test case is designed to test whether server can handle NEGOTIATE with unsupported compression algorithms in SMB2_COMPRESSION_CAPABILITIES context.")]
         public void Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported()
@@ -1099,6 +1153,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             Smb2RDMATransformId[] rdmaTransformIds = null,
             SMB2_COMPRESSION_CAPABILITIES_Flags compressionFlags = SMB2_COMPRESSION_CAPABILITIES_Flags.SMB2_COMPRESSION_CAPABILITIES_FLAG_NONE,
             bool addNetNameContextId = false,
+            bool addTransportCapabilities = false,
             ResponseChecker<NEGOTIATE_Response> checker = null,
             SigningAlgorithm[] signingAlgorithms = null,
             ResponseChecker<Smb2NegotiateResponsePacket> responseChecker = null)
@@ -1124,6 +1179,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 compressionAlgorithms: compressionAlgorithms,
                 compressionFlags: compressionFlags,
                 addNetNameContextId: addNetNameContextId,
+                addTransportCapabilities: addTransportCapabilities,
                 checker: checker,
                 signingAlgorithms: signingAlgorithms);
         }
