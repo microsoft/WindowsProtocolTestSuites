@@ -49,6 +49,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Try to create a file end with invalid backslash and expect failure.")]
         public void CreateFile_EndWithInvalidBackSlash()
         {
+            if (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for files that end with backslash for Server 2025.");
+            }
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
 

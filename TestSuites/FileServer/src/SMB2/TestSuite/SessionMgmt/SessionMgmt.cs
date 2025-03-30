@@ -71,6 +71,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
         [Description("This test case is designed to test whether server can handle reauthentication successfully.")]
         public void BVT_SessionMgmt_Reauthentication()
         {
+            if (TestConfig.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for session management reauthentication for Server 2025.");
+            }
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends NEGOTIATE request.");
             client.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
 
