@@ -933,5 +933,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Windows Server v2025
         /// </summary>
         WindowsServer2025 = 0x10000013,
+
+        /// <summary>
+        /// Windows 11
+        /// </summary>
+        Windows11 = 0x10000014,
     }
 }
