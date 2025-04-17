@@ -12,7 +12,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-	<PackageReference Include="Microsoft.PowerShell.5.1.ReferenceAssemblies" Version="1.0.0" />
 	<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.1" />
 	<PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
 	<PackageReference Include="System.Runtime.Caching" Version="9.0.0" />
