@@ -5942,7 +5942,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     }
     #endregion
 
-    #region 2.4.17   FileIdBothDirectoryInformation
+    #region 2.4.22   FileIdBothDirectoryInformation
 
     /// <summary>
     /// This information class is used to query file reference  number information for the files in a directory.  The  
@@ -5997,6 +5997,58 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         ///  ignored. 
         /// </summary>
         public long FileId;
+
+        /// <summary>
+        /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
+        /// MUST be handled as a sequence of FileNameLength bytes.  For every directory that is the target of the  
+        /// FileIdBothDirectoryInformation  element, there MUST be a FILE_ID_BOTH_DIR_INFORMATION  data element with  
+        /// the FileName field containing the  relative directory names "." and "..". For more details,  see section . 
+        /// </summary>
+        [Size("FileNameLength")]
+        public byte[] FileName;
+    }
+
+    #endregion
+
+    #region 2.4.23   FileIdExtdDirectoryInformation
+
+    /// <summary>
+    /// This information class is used in directory enumeration to return extended information about the contents of a directory.
+    /// </summary>
+    //  <remarks>
+    //   MS-fscc\36172f0b-8dce-435a-8748-859978d632f8.xml
+    //  </remarks>
+    public partial struct FileIdExtdDirectoryInformation
+    {
+        /// <summary>
+        /// The common structure shared by FileDirectoryInformation, FileBothDirectoryInformation, FileFullDirectoryInformation, 
+        /// FileIdBothDirectoryInformation, FileIdFullDirectoryInformation, FileIdGlobalTxDirectoryInformation
+        /// </summary>
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
+        /// </summary>
+        public uint FileNameLength;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
+        /// for  the file. 
+        /// </summary>
+        public uint EaSize;
+
+        /// <summary>
+        /// MUST be ignored by the receiver. 
+        /// </summary>
+        public ushort ReparsePointTag;
+
+        /// <summary>
+        /// The 128-bit file ID, as specified in section 2.1.10, of the file. 
+        /// For file systems that do not support a 128-bit file ID, this field MUST be set to 0, 
+        /// and MUST be ignored 
+        /// </summary>
+        [StaticSize(16, StaticSizeMode.Elements)]
+        public byte[] FileId;
 
         /// <summary>
         /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
