@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Protocols.TestTools.StackSdk.Messages.Marshaling;
 using Microsoft.Protocols.TestTools.StackSdk.Dtyp;
+using System.Numerics;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
 {
@@ -6047,8 +6048,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// For file systems that do not support a 128-bit file ID, this field MUST be set to 0, 
         /// and MUST be ignored 
         /// </summary>
-        [StaticSize(16, StaticSizeMode.Elements)]
-        public byte[] FileId;
+        public BigInteger FileId;
 
         /// <summary>
         /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   

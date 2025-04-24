@@ -89,6 +89,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private List<string> activeTDIs;
         private uint numberOfDataCopies;
         public bool Is64bitFileIdSupported;
+        public bool Is128bitFileIdSupported;
         public bool IsChangeTimeSupported;
         // Used to generate random file names.
         private static Random randomRange = new Random();
@@ -400,6 +401,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //Other Configurations
             this.transBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
             this.Is64bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is64bitFileIdSupported"));
+            this.Is128bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is128bitFileIdSupported"));
             this.IsChangeTimeSupported = bool.Parse(testConfig.GetProperty("IsChangeTimeSupported"));
             this.numberOfDataCopies = uint.Parse(testConfig.GetProperty("NumberOfDataCopies"));
 

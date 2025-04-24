@@ -471,15 +471,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Verify the Query Directory response with FileIdExtdDirectoryInformation from the server.")]
         public void BVT_QueryDirectory_FileIdExtdDirectoryInformation()
         {
-            if (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2025)
-            {
-                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for FileIdExtdDirectoryInformation for Server 2025.");
-            }
-
             byte[] outputBuffer;
             string fileName;
             FILEID dirFileId;
-            PrepareAndQueryDirectory(FileInfoClass.FILE_ID_BOTH_DIR_INFORMATION, out outputBuffer, out fileName, out dirFileId);
+            PrepareAndQueryDirectory(FileInfoClass.FILE_ID_EXTD_DIRECTORY_INFORMATION, out outputBuffer, out fileName, out dirFileId);
 
             Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
             FileIdExtdDirectoryInformation[] directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileIdExtdDirectoryInformation>(outputBuffer);
@@ -490,19 +485,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
             Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
 
-            if (this.fsaAdapter.Is64bitFileIdSupported)
+            if(this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.NTFS)
             {
-                Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
+                //For file systems that do not support a 128 - bit file ID, this field MUST be set to 0, and MUST be ignored.
+                Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0 if the file system does not support a 128-bit file ID.");
             }
             else
             {
-                //For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
-                Site.Assert.AreEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
+                Site.Assert.AreEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0.");
             }
 
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0,  false);
-            //[MS-FSA] 2.1.5.5.3.4: Entry.FileID SHOULD<65> be set to Open.Link.ParentFile.FileId64, otherwise MUST be set to zero
-            // <65> Section 2.1.5.5.3.4: The NTFS file system on versions prior to Windows 11 and Windows Server 2022,
+            //[MS-FSA] 2.1.5.5.3.4: Entry.FileID SHOULD<65> be set to Open.Link.ParentFile.FileId128, otherwise MUST be set to zero
+            //<65> Section 2.1.5.5.3.4: The NTFS file system on versions earlier than Windows 11 and earlier than Windows Server 2022,
             // and non-NTFS file systems on all versions of Windows, always set the FileID field to zero in the ".." entry.
             if (this.fsaAdapter.FileSystem == FileSystem.NTFS && this.fsaAdapter.TestConfig.Platform >= Platform.WindowsServer2022)
             {
@@ -515,13 +510,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0);
-            if (this.fsaAdapter.Is64bitFileIdSupported)
+            if (this.fsaAdapter.Is128bitFileIdSupported)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId of the entry should not be 0.");
             }
             else
             {
-                //For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
+                //For file systems that do not support a 128 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
                 Site.Assert.AreEqual(0, directoryInformation[2].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
             }
         }
