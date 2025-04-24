@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -687,7 +688,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
-        [Description(" A Boolean; if set, indicates that SMB2_TRANSPORT_CAPABILITIES negotiate context, as specified in section 2.2.3.1.5, is supported by the node.")]
+        [Description("A Boolean; if set, indicates that SMB2_TRANSPORT_CAPABILITIES negotiate context, as specified in section 2.2.3.1.5, is supported by the node.")]
         public void Negotiate_SMB311_IsTransportCapabilitiesSupported()
         {
             #region Check Applicability
@@ -698,7 +699,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             }
 
             // Check dialect
-            BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces supporting the compression of messages between client and server.");
+            BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces support for transport capabilities");
             #endregion
 
             DialectRevision clientMaxDialectSupported = DialectRevision.Smb311;
@@ -972,6 +973,46 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     }
 
                     BaseTestSite.Assert.IsFalse(client.Smb2Client.CompressionInfo.SupportChainedCompression, "If SUT does not support chained compression and SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit is set in Flags field of negotiate request context, SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED bit MUST NOT be set in Flags field.");
+                });
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Negotiate)]
+        [Description("This test case is designed to test whether server can handle NEGOTIATE with SMB2_GLOBAL_CAP_NOTIFICATIONS set in Capabilities")]
+        public void Negotiate_SMB311_IsServerToClientNotificationsSupported()
+        {
+            #region Check Applicability
+            if (TestConfig.IsWindowsPlatform &&
+                TestConfig.Platform < Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assume.Inconclusive("Windows Server 2022, 22H2 operating system and prior, do not set IsServerToClientNotificationsSupported");
+            }
+
+            // Check dialect
+            BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces support for server-to-client notification.");
+
+            // Check if server supports notifications
+            BaseTestSite.Assume.IsTrue(TestConfig.IsServerToClientNotificationsSupported, "The server supports notifications.");
+            #endregion
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Send NEGOTIATE request with SMB2_GLOBAL_CAP_NOTIFICATIONS set in Capabilities field.");
+            status = client.Negotiate(
+                Packet_Header_Flags_Values.NONE,
+                TestConfig.RequestDialects,
+                capabilityValue: Capabilities_Values.GLOBAL_CAP_NOTIFICATIONS,
+                checker: (Packet_Header header, NEGOTIATE_Response response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_SUCCESS,
+                        header.Status,
+                        "{0} should succeed, actually server returns {1}.", header.Command, Smb2Status.GetStatusCode(header.Status));
+
+
+                    BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
+                        NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_NOTIFICATIONS,
+                        response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_NOTIFICATIONS,
+                        $"The \"Capabilities\" field of the Negotiate Response should have GLOBAL_CAP_NOTIFICATIONS set. Actual Capabilities: {response.Capabilities}");
                 });
         }
 
@@ -1276,7 +1317,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
                     NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING,
                     response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING,
-                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_LEASING set.");
+                    "The \"Capabilities\" of Negotiate Response should have the flag GLOBAL_CAP_LEASING set.");
             }
 
             // Check capability: Large MTU
@@ -1286,7 +1327,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
                     NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LARGE_MTU,
                     response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LARGE_MTU,
-                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_LARGE_MTU set.");
+                    "The \"Capabilities\" of Negotiate Response should have the flag GLOBAL_CAP_LARGE_MTU set.");
             }
 
             // Check capability: MultiChannel
@@ -1297,7 +1338,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
                     NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL,
                     response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_MULTI_CHANNEL,
-                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_MULTI_CHANNEL set.");
+                    "The \"Capabilities\" of Negotiate Response should have the flag GLOBAL_CAP_MULTI_CHANNEL set.");
             }
 
             // Check capability: Persistent Handle
@@ -1308,7 +1349,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
                     NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
                     response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_PERSISTENT_HANDLES,
-                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_PERSISTENT_HANDLES set.");
+                    "The \"Capabilities\" of Negotiate Response should have the flag GLOBAL_CAP_PERSISTENT_HANDLES set.");
             }
 
             // Check capability: Directory Leasing
@@ -1319,7 +1360,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
                     NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING,
                     response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_DIRECTORY_LEASING,
-                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_DIRECTORY_LEASING set.");
+                    "The \"Capabilities\" of Negotiate Response should have the flag GLOBAL_CAP_DIRECTORY_LEASING set.");
             }
 
             // Check capability: Encryption
@@ -1330,7 +1371,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 BaseTestSite.Assert.AreEqual<NEGOTIATE_Response_Capabilities_Values>(
                     NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
                     response.Capabilities & NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION,
-                    "The \"Capabilities\" of Negotiate Response should has flag GLOBAL_CAP_ENCRYPTION set.");
+                    "The \"Capabilities\" of Negotiate Response should have the flag GLOBAL_CAP_ENCRYPTION set.");
             }
         }
 
@@ -1368,7 +1409,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             }
 
             // Check dialect
-            BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces supporting the compression of messages between client and server.");
+            BaseTestSite.Assume.IsTrue(TestConfig.MaxSmbVersionSupported >= DialectRevision.Smb311, "The SMB 3.1.1 dialect introduces support for the compression of messages between client and server.");
 
             // Check SUT supported compression algorithms
             TestConfig.CheckCompressionAlgorithm();

@@ -202,6 +202,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public bool IsServerToClientNotificationsSupported
+        {
+            get
+            {
+                return Boolean.Parse(GetProperty("IsServerToClientNotificationsSupported"));
+            }
+        }
+
         public DialectRevision[] RequestDialects
         {
             get
@@ -610,6 +618,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     return this.IsDirectoryLeasingSupported;
                 case NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION:
                     return this.IsEncryptionSupported;
+                case NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_NOTIFICATIONS:
+                    return this.IsServerToClientNotificationsSupported;
                 default:
                     throw new Exception("Capability not supported");
             }

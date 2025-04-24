@@ -6121,6 +6121,7 @@ Scenario see section [Scenario](#3.1.6.1).
 ||Verify that server sets Connection.SigningAlgorithmCount to 1 from the response.|
 |**Cleanup**||
 
+
 |||
 |---|---|
 |**Test ID**|Negotiate_SMB311_Compression_CompressionAlgorithmNotSupported|
@@ -6193,6 +6194,18 @@ Scenario see section [Scenario](#3.1.6.1).
 |                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
 |                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED is not set in Flags field. |
 |**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Negotiate_SMB311_IsServerToClientNotificationsSupported|
+|**Description**|This test case verifies whether the server can handle a NEGOTIATE request where the SMB2_GLOBAL_CAP_NOTIFICATIONS capability is included in the **Capabilities** field of the request.|
+|**Prerequisites**|The server must support dialect 3.11 and must be running Server 2025.|
+|**Test Execution Steps**|1. The client sends a NEGOTIATE request with dialect SMB 3.11, ensuring that the SMB2_GLOBAL_CAP_NOTIFICATIONS capability is included in the **Capabilities** field of the request.|
+|                         |2. Verify that the server responds with a NEGOTIATE response where:|
+|                         |     a. The **Status** field is set to STATUS_SUCCESS.|
+|                         |     b. The SMB2_GLOBAL_CAP_NOTIFICATIONS capability is included in the **Capabilities** field of the response.|
+|**Cleanup**|No specific cleanup steps are required.|
 
 
 #### <a name="3.2.10">Oplock

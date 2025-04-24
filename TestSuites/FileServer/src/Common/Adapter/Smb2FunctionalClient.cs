@@ -697,7 +697,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             // Need to consume credit from sequence window first according to TD
             ConsumeCredit(messageId, creditCharge);
 
-            // If the client implements the SMB 3.0 dialect, the Capabilities field MUST be constructed using the flages defined in Capabilities_Values. 
+            // If the client implements the SMB 3.0 dialect, the Capabilities field MUST be constructed using the flags defined in Capabilities_Values. 
             // Otherwise, this field MUST be set to 0.
             if (null == capabilityValue)
             {
