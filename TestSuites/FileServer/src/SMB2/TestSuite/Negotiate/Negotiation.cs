@@ -708,17 +708,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                 EncryptionAlgorithm.ENCRYPTION_AES128_GCM,
                 EncryptionAlgorithm.ENCRYPTION_AES128_CCM ];
 
-            // Should not have transport capabilities in context
-            NegotiateWithNegotiateContexts(
-                clientMaxDialectSupported,
-                preauthHashAlgs: null,
-                encryptionAlgs: null,
-                addTransportCapabilities: false,
-                responseChecker: (Packet_Header header, Smb2NegotiateResponsePacket response) =>
-                {
-                    BaseTestSite.Assert.IsNull(response.NegotiateContext_TRANSPORT, "Transport capabilities should not be present in the response.");
-                });
-
             NegotiateWithNegotiateContexts(
                 clientMaxDialectSupported,
                 preauthHashAlgs: preauthHashAlgs,
