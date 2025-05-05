@@ -4969,6 +4969,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// </summary>
         FileIdFullDirectoryInformation = 38,
 
+        FileIdExtdDirectoryInformation = 60,
+
+        FileId64ExtdDirectoryInformation = 78,
+
         /// <summary>
         /// Query This information class is used to query transactional visibility information for the files in a  
         /// directory. This information class MAY be implemented for file systems that return the  
@@ -6053,7 +6057,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
         /// MUST be handled as a sequence of FileNameLength bytes.  For every directory that is the target of the  
-        /// FileIdBothDirectoryInformation  element, there MUST be a FILE_ID_BOTH_DIR_INFORMATION  data element with  
+        /// FileIdExtdDirectoryInformation  element, there MUST be a FILE_ID_EXTD_DIR_INFORMATION  data element with  
         /// the FileName field containing the  relative directory names "." and "..". For more details,  see section . 
         /// </summary>
         [Size("FileNameLength")]
@@ -6112,6 +6116,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         public byte[] FileName;
     }
 
+    #endregion
+
+    #region 2.4.19 FileId64ExtdDirectoryInformation
+    public partial struct FileId64ExtdDirectoryInformation
+    {
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
+        public uint FileNameLength;
+        public uint EaSize;
+        public uint ReparsePointTag;
+        public long FileId;
+
+        /// <summary>
+        /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
+        /// MUST be handled as a sequence of FileNameLength bytes.  For every directory that is the target of the  
+        /// FileId64ExtdDirectoryInformation  element, there MUST be a FILE_ID_64_EXTD_DIR_INFORMATION  data element with
+        /// the FileName field containing the  relative directory names "." and "..". For more details,  see section . 
+        /// </summary>
+        [Size("FileNameLength")]
+        public byte[] FileName;
+    }
     #endregion
 
     #region 2.4.19   FileIdGlobalTxDirectoryInformation
