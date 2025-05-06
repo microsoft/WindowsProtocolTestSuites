@@ -4975,6 +4975,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
 
         FileId64ExtdBothDirectoryInformation = 79,
 
+        FileIdAllExtdDirectoryInformation = 80,
+
         /// <summary>
         /// Query This information class is used to query transactional visibility information for the files in a  
         /// directory. This information class MAY be implemented for file systems that return the  
@@ -6348,6 +6350,50 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         public byte[] FileName;
     }
 
+    #endregion
+
+    #region 2.4.21 FileIdAllExtdDirectoryInformation
+    public partial struct FileIdAllExtdDirectoryInformation
+    {
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
+        /// </summary>
+        public uint FileNameLength;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
+        /// for  the file. 
+        /// </summary>
+        public uint EaSize;
+
+        /// <summary>
+        /// MUST be ignored by the receiver. 
+        /// </summary>
+        public ushort ReparsePointTag;
+
+        /// <summary>
+        /// The 64-bit file ID, as specified in section 2.1.10, of the file. 
+        /// For file systems that do not support a 64-bit file ID, this field MUST be set to 0, 
+        /// and MUST be ignored 
+        /// </summary>
+        public long FileId;
+
+        /// <summary>
+        /// The 128-bit file ID, as specified in section 2.1.10, of the file. For file systems that do not support a 128-bit file ID, this field MUST be set to 0, and MUST be ignored.
+        /// </summary>
+        public Int128 FileId128;
+
+        /// <summary>
+        /// A sequence of Unicode characters containing the file name. When working with this field, use FileNameLength to
+        /// determine the length of the file name rather than assuming the presence of a trailing null delimiter.
+        /// Dot directory names are valid for this field.
+        /// </summary>
+        [Size("FileNameLength")]
+        public byte[] FileName;
+
+    }
     #endregion
 
     #region 2.4.22   FileMailslotQueryInformation
