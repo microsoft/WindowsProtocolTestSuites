@@ -4973,6 +4973,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
 
         FileId64ExtdDirectoryInformation = 78,
 
+        FileId64ExtdBothDirectoryInformation = 79,
+
         /// <summary>
         /// Query This information class is used to query transactional visibility information for the files in a  
         /// directory. This information class MAY be implemented for file systems that return the  
@@ -5941,6 +5943,46 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// A WCHAR array whose size is given by FileNameLength  that MUST contain the Unicode string name of the  
         /// given  link. 
+        /// </summary>
+        [Size("FileNameLength")]
+        public byte[] FileName;
+    }
+    #endregion
+
+    #region 2.4.18 FileId64ExtdBothDirectoryInformation
+    public partial struct FileId64ExtdBothDirectoryInformation
+    {
+        public FileCommonDirectoryInformation FileCommonDirectoryInformation;
+
+        public uint FileNameLength;
+
+        public uint EaSize;
+
+        public uint ReparsePointTag;
+
+        public long FileId;
+
+        /// <summary>
+        /// An 8-bit value containing the length, in bytes, of the  ShortName string. 
+        /// </summary>
+        public byte ShortNameLength;
+
+        /// <summary>
+        /// MUST be ignored by the receiver. 
+        /// </summary>
+        public byte Reserved1;
+
+        /// <summary>
+        /// A NULL-terminated 12-character Unicode string containing  the short file name (8.3 name). 
+        /// </summary>
+        [StaticSize(24, StaticSizeMode.Elements)]
+        public byte[] ShortName;
+
+        /// <summary>
+        /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
+        /// MUST be handled as a sequence of FileNameLength bytes.  For every directory that is the target of the  
+        /// FileId64ExtdBothDirectoryInformation  element, there MUST be a FILE_ID_64_EXTD_BOTH_DIR_INFORMATION data element with  
+        /// the FileName field containing the  relative directory names "." and "..". For more details,  see section . 
         /// </summary>
         [Size("FileNameLength")]
         public byte[] FileName;

@@ -1332,6 +1332,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 
         FILE_ID_64_EXTD_DIRECTORY_INFORMATION = 78,
 
+        FILE_ID_64_EXTD_BOTH_DIRECTORY_INFORMATION = 79,
+
         /// <summary>
         /// If FileInformationClass is not defined in [MS-FSCC] section 2.4
         /// </summary>
