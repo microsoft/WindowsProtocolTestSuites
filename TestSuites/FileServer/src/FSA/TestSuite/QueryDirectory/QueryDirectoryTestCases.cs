@@ -734,7 +734,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileIdAllExtdBothDirectoryInformation()
         {
             #region  Check Applicability
-            if (fsaAdapter.Platform <= Platform.Windows11V23H2)
+            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
+                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
             {
                 Site.Assert.Inconclusive("Section 2.2.33: Windows 11, version 23H2 and prior and Windows Server 2022 and prior do not send or process FileIdAllExtdDirectoryInformation information class.");
             }
