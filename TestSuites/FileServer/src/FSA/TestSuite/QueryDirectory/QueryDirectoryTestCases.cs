@@ -471,7 +471,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         [Description("Verify the Query Directory response with FileIdExtdDirectoryInformation from the server.")]
         public void BVT_QueryDirectory_FileIdExtdDirectoryInformation()
         {
-            byte[] outputBuffer;
+            #region
+            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
+                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
+            {
+                BaseTestSite.Assert.Inconclusive("Windows 11, version 23H2 operating system and prior and Windows Server 2022 and prior do not send or process FileIdExtdDirectoryInformation information class");
+            }
+            #endregion
+
+                byte[] outputBuffer;
             string fileName;
             FILEID dirFileId;
             PrepareAndQueryDirectory(FileInfoClass.FILE_ID_EXTD_DIRECTORY_INFORMATION, out outputBuffer, out fileName, out dirFileId);
@@ -485,7 +493,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
             Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
 
-            if(this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.NTFS)
+            if(fsaAdapter.FileSystem == FileSystem.REFS || fsaAdapter.FileSystem == FileSystem.NTFS)
             {
                 //For file systems that do not support a 128 - bit file ID, this field MUST be set to 0, and MUST be ignored.
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0 if the file system does not support a 128-bit file ID.");
@@ -503,8 +511,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId of the entry should not be 0.");
             }
-            else if (this.fsaAdapter.FileSystem == FileSystem.NTFS || this.fsaAdapter.FileSystem == FileSystem.REFS || this.fsaAdapter.FileSystem == FileSystem.FAT
-                || this.fsaAdapter.FileSystem == FileSystem.EXFAT)
+            else if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS || fsaAdapter.FileSystem == FileSystem.FAT
+                || fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreEqual(0, directoryInformation[1].FileId, "FileId of the entry should be 0.");
             }
@@ -530,7 +538,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileId64ExtdDirectoryInformation()
         {
             #region Check Applicability
-            if(fsaAdapter.Platform <= Platform.Windows11V23H2)
+            if(fsaAdapter.Platform <= Platform.WindowsServer2022 ||
+                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
             {
                 BaseTestSite.Assert.Inconclusive("Windows 11, version 23H2 operating system and prior and Windows Server 2022 and prior do not send or process FileId64ExtdDirectoryInformation information class");
             }
@@ -594,12 +603,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileId64ExtdBothDirectoryInformation()
         {
             #region Check Applicanility
-            if (fsaAdapter.Platform <= Platform.Windows11V23H2)
+            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
+                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
             {
-                // TODO: Needs to be revisited
-                ///
-                /// Section 2.2.33: Windows 11, version 23H2 and prior and Windows Server 2022 and prior do not send or process FileId64ExtdBothDirectoryInformation information class.
-                ///
                 Site.Assert.Inconclusive("Section 2.2.33: Windows 11, version 23H2 and prior and Windows Server 2022 and prior do not send or process FileId64ExtdBothDirectoryInformation information class.");
             }
             #endregion
@@ -654,7 +660,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileIdAllExtdDirectoryInformation()
         {
             #region  Check Applicability
-            if (fsaAdapter.Platform <= Platform.Windows11V23H2)
+            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
+                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
             {
                 Site.Assert.Inconclusive("Section 2.2.33: Windows 11, version 23H2 and prior and Windows Server 2022 and prior do not send or process FileIdAllExtdDirectoryInformation information class.");
             }
@@ -716,6 +723,75 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             {
                 Site.Assert.AreEqual(0, directoryInformation[2].FileId128, "The 128-bit file ID, as specified in section 2.1.10, of the file. For file systems that do not support a 128-bit file ID, this field MUST be set to 0, and MUST be ignored.");
             }
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryDirectory)]
+        [TestCategory(TestCategories.NonSmb)]
+        [Description("Verify the Query Directory response with FileIdAllExtdBothDirectoryInformation from the server.")]
+        public void BVT_QueryDirectory_FileIdAllExtdBothDirectoryInformation()
+        {
+            #region  Check Applicability
+            if (fsaAdapter.Platform <= Platform.Windows11V23H2)
+            {
+                Site.Assert.Inconclusive("Section 2.2.33: Windows 11, version 23H2 and prior and Windows Server 2022 and prior do not send or process FileIdAllExtdDirectoryInformation information class.");
+            }
+            #endregion
+
+            byte[] outputBuffer;
+            string fileName;
+            FILEID dirFileId;
+            PrepareAndQueryDirectory(FileInfoClass.FILE_ID_ALL_EXTD_BOTH_DIRECTORY_INFORMATION, out outputBuffer, out fileName, out dirFileId);
+
+            Site.Log.Add(LogEntryKind.Debug, "Start to verify the Query Directory response.");
+            var directoryInformation = FsaUtility.UnmarshalFileInformationArray<FileIdAllExtdBothDirectoryInformation>(outputBuffer);
+            Site.Assert.AreEqual(3, directoryInformation.Length, "The returned Buffer should contain 3 entries of FileBothDirectoryInformation.");
+            Site.Assert.IsTrue(IsChangeTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+            Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
+
+            VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            // Test: FileId = 0 for "." entry on NTFS, ReFS, FAT, exFAT
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+            {
+                Site.Assert.AreEqual(0, directoryInformation[0].FileId, "FileId must be 0 for entry named \".\" in directory query operations.");
+            }
+
+            VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "");
+            // Test: FileId = 0 for ".." entry on NTFS, ReFS, FAT, exFAT
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+            {
+                Site.Assert.AreEqual(0, directoryInformation[1].FileId, "FileId must be 0 for entry named \"..\" in directory query operations.");
+            }
+
+
+            VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, fsaAdapter.ClusterSizeInKB * 1024, 0, GetShortName(fileName));
+            // Test: FileId is 64-bit if supported, else 0
+            if (fsaAdapter.Is64bitFileIdSupported)
+            {
+                Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId must be a 64-bit file ID if supported.");
+            }
+            else
+            {
+                Site.Assert.AreEqual(0, directoryInformation[2].FileId, "FileId must be 0 if 64-bit file ID is not supported.");
+            }
+
+            // Test: FileId128 is 128-bit if supported, else 0
+            if (fsaAdapter.Is128bitFileIdSupported)
+            {
+                Site.Assert.AreNotEqual(0, directoryInformation[2].FileId128, "FileId128 must be a 128-bit file ID if supported.");
+            }
+            else
+            {
+                Site.Assert.AreEqual(0, directoryInformation[2].FileId128, "FileId128 must be 0 if 128-bit file ID is not supported.");
+            }
+
+            VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.REPARSE_POINT, BytesToWrite, fsaAdapter.ClusterSizeInKB * 1024, 0, GetShortName(fileName));
+            Site.Assert.IsInstanceOfType(directoryInformation[2].ReparsePointTag, typeof(uint), "If FILE_ATTRIBUTE_REPARSE_POINT is set in the FileAttributes field, this field MUST contain a 32-bit unsigned integer value containing the reparse point.");
         }
         #endregion
 
@@ -1062,6 +1138,34 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         }
 
         /// <summary>
+        /// Verify FileIdAllExtdBothDirectoryInformation entry
+        /// </summary>
+        private void VerifyFileInformation(
+            FileIdAllExtdBothDirectoryInformation entry,
+            int index,
+            string fileName,
+            FileAttribute fileAttribute,
+            long endofFile,
+            long allocationSize,
+            uint eaSize,
+            string shortName,
+            bool verifyFileTime = true)
+        {
+            Site.Log.Add(LogEntryKind.Debug, $"Start to verify entry {index}.");
+            VerifyFileCommonDirectoryInformation(entry.FileCommonDirectoryInformation, fileAttribute, verifyFileTime);
+            Site.Assert.AreEqual(fileName, Encoding.Unicode.GetString(entry.FileName), $"FileName of the entry should be {fileName}.");
+            Site.Assert.AreEqual(endofFile, entry.FileCommonDirectoryInformation.EndOfFile, $"The EndOfFile of the entry should be {endofFile}.");
+            VerifyAllocationSize(allocationSize, entry.FileCommonDirectoryInformation.AllocationSize);
+            Site.Assert.AreEqual(eaSize, entry.EaSize, $"EaSize of the entry should be {eaSize}.");
+
+            if (this.fsaAdapter.IsShortNameSupported)
+            {
+                Site.Assert.AreEqual(shortName.Length * 2, entry.ShortNameLength, $"The ShortNameLength of the entry should be {shortName.Length * 2}."); // ShortName is unicode in protocol
+                Site.Assert.AreEqual(shortName, GetShortName(entry.ShortName, entry.ShortNameLength), $"The ShortName of the entry should be \"{shortName}\".");
+            }
+        }
+
+        /// <summary>
         /// Verify FileIdBothDirectoryInformation entry
         /// </summary>
         private void VerifyFileInformation(
@@ -1378,6 +1482,54 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         }
 
         private bool IsLastWriteTimeValid(FileIdFullDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastWriteTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsChangeTimeValid(FileIdAllExtdBothDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.ChangeTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastAccessTimeValid(FileIdAllExtdBothDirectoryInformation[] directoryInfo)
+        {
+            if (directoryInfo != null && directoryInfo.Length > 0)
+            {
+                foreach (var info in directoryInfo)
+                {
+                    if (!IfTimeIsGreaterThanOrEqualToZero(info.FileCommonDirectoryInformation.LastAccessTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsLastWriteTimeValid(FileIdAllExtdBothDirectoryInformation[] directoryInfo)
         {
             if (directoryInfo != null && directoryInfo.Length > 0)
             {
