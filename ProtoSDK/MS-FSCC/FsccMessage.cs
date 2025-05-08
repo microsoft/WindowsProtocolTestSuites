@@ -5954,16 +5954,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     #endregion
 
     #region 2.4.18 FileId64ExtdBothDirectoryInformation
+    /// <summary>
+    /// This information class is used in directory enumeration to return extended information about the contents of a directory. The
+    /// FILE_ID_64_EXTD_BOTH_DIR_INFORMATION data element is as follows.
+    /// </summary>
+    // <remarks>
+    // MS-fscc/b3a27a50-454f-4f8f-b8ea-decfedc5c454.xml
+    // </remarks>
     public partial struct FileId64ExtdBothDirectoryInformation
     {
+        /// <summary>
+        /// The common field structure shared by all the Query Directory Information Class.
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
+        /// </summary>
         public uint FileNameLength;
 
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
+        /// for  the file. 
+        /// </summary>
         public uint EaSize;
 
+        /// <summary>
+        /// If FILE_ATTRIBUTE_REPARSE_POINT is set in the FileAttributes field, this field MUST contain a 32-bit unsigned
+        /// integer value containing the reparse point tag that uniquely identifies the owner of the reparse point.
+        /// </summary>
         public uint ReparsePointTag;
 
+        /// <summary>
+        /// An 8-byte file reference number for the file. This number  is generated and assigned to the file by the  
+        /// file system.  For file systems which do not support FileId, this  field MUST be set to 0, and MUST be  
+        /// ignored. 
+        /// </summary>
         public long FileId;
 
         /// <summary>
@@ -6165,12 +6191,42 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     #endregion
 
     #region 2.4.19 FileId64ExtdDirectoryInformation
+    /// <summary>
+    /// This information class is used in directory enumeration to return extended information about the contents of a directory. The
+    /// FILE_ID_64_EXTD_DIR_INFORMATION data element is as follows.
+    /// </summary>
+    //  <remarks>
+    //   MS-fscc\174921dd-9be2-42ed-8220-58c310b1b916.xml
+    //  </remarks>
     public partial struct FileId64ExtdDirectoryInformation
     {
+        /// <summary>
+        /// The common structure shared by all the Directory Request Information Class.
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
+        /// </summary>
         public uint FileNameLength;
+
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
+        /// for  the file. 
+        /// </summary>
         public uint EaSize;
+
+        /// <summary>
+        /// If FILE_ATTRIBUTE_REPARSE_POINT is set in the FileAttributes field, this field MUST contain a 32-bit unsigned
+        /// integer value containing the reparse point tag that uniquely identifies the owner of the reparse point.
+        /// </summary>
         public uint ReparsePointTag;
+
+        /// <summary>
+        /// An 8-byte file reference number for the file. This number  is generated and assigned to the file by the  
+        /// file system.  For file systems which do not support FileId, this  field MUST be set to 0, and MUST be  
+        /// ignored. 
+        /// </summary>
         public long FileId;
 
         /// <summary>
@@ -6244,19 +6300,49 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
 
     #endregion
 
-    #region
+    #region  2.4.20 FileIdAllExtdBothDirectoryInformation
+    /// <summary>
+    /// This information class is used in directory enumeration to return extended information about the contents of a directory. The
+    /// FILE_ID_ALL_EXTD_BOTH_DIR_INFORMATION data element is as follows.
+    /// </summary>
+    // <remarks>
+    // MS-fscc/1dbb9619-873e-4834-af01-849dcce87d7d.xml
+    // </remarks>
     public partial struct FileIdAllExtdBothDirectoryInformation
     {
+        /// <summary>
+        /// The common field structre shared all the Query Directory Informaiton Class
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the length,  in bytes, of the FileName field. 
+        /// </summary>
         public uint FileNameLength;
 
+        /// <summary>
+        /// A 32-bit unsigned integer that contains the combined  length, in bytes, of the extended attributes (EA)  
+        /// for  the file. 
+        /// </summary>
         public uint EaSize;
 
+        /// <summary>
+        /// If FILE_ATTRIBUTE_REPARSE_POINT is set in the FileAttributes field, this field MUST contain a 32-bit unsigned
+        /// integer value containing the reparse point tag that uniquely identifies the owner of the reparse point.
+        /// </summary>
         public uint ReparsePointTag;
 
+        /// <summary>
+        /// An 8-byte file reference number for the file. This number  is generated and assigned to the file by the  
+        /// file system.  For file systems which do not support FileId, this  field MUST be set to 0, and MUST be  
+        /// ignored. 
+        /// </summary>
         public long FileId;
 
+        /// <summary>
+        /// The 128-bit file ID, as specified in section 2.1.10, of the file. For file systems that do not support
+        /// a 128-bit file ID, this field MUST be set to 0, and MUST be ignored.
+        /// </summary>
         public Int128 FileId128;
 
         /// <summary>
@@ -6397,8 +6483,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
     #endregion
 
     #region 2.4.21 FileIdAllExtdDirectoryInformation
+    /// <summary>
+    /// This information class is used in directory enumeration to return extended information about the contents of a directory. The
+    /// FILE_ID_ALL_EXTD_DIR_INFORMATION data element is as follows.
+    /// </summary>
+    // <remarks>
+    // MS-fscc/02991a71-6610-4127-93ef-76b8ea80fef6.xml
+    // </remarks>
     public partial struct FileIdAllExtdDirectoryInformation
     {
+        /// <summary>
+        /// The common field structure shared by all the Query Directory Information class
+        /// </summary>
         public FileCommonDirectoryInformation FileCommonDirectoryInformation;
 
         /// <summary>
