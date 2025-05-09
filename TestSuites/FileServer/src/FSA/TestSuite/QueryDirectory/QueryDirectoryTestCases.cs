@@ -323,7 +323,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
             Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
 
-            if (this.fsaAdapter.Is64bitFileIdSupported)
+            //Check if 64 bit is supported
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
             }
@@ -402,7 +404,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.IsTrue(IsLastAccessTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
             Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
 
-            if (this.fsaAdapter.Is64bitFileIdSupported)
+            //Check if 64 bit is supported
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
             }
@@ -534,7 +538,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
 
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
-            if (fsaAdapter.Is64bitFileIdSupported)
+            //Check if 64 bit is supported
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of entry MUST not be 0");
             }
@@ -553,8 +559,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, false);
-            if (directoryInformation[1].FileName.Equals("..") && fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+            if (directoryInformation[1].FileName.Equals("..") && 
+                (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT))
             {
                 Site.Assert.AreEqual(0, directoryInformation[1].FileId, "<120> Section 2.4.19: The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named \"..\" in directory query operations");
             }
@@ -565,7 +572,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, fsaAdapter.ClusterSizeInKB * 1024, 0);
-            if (fsaAdapter.Is64bitFileIdSupported)
+
+            //Check if 64 bit is supported
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId MUST not be 0");
             }
@@ -604,7 +614,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             Site.Assert.IsTrue(IsLastWriteTimeValid(directoryInformation), "This value MUST be greater than or equal to 0");
 
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0, "");
-            if (fsaAdapter.Is64bitFileIdSupported)
+
+            //Check if 64 bit is supported
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS || 
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId MUST not be 0");
             }
@@ -626,7 +639,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, this.fsaAdapter.ClusterSizeInKB * 1024, 0, GetShortName(fileName));
-            if (fsaAdapter.Is64bitFileIdSupported)
+
+            //Check if 64 bit is supported
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId MUST not be 0");
             }
@@ -678,17 +694,24 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, false);
 
-            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+            if (directoryInformation[1].FileName.Equals("..") && 
+                (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT))
             {
                 Site.Assert.AreEqual(0, directoryInformation[1].FileId, "<124> Section 2.4.21: The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named \"..\" in directory query operations.");
             }
 
-            VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.REPARSE_POINT, BytesToWrite, fsaAdapter.ClusterSizeInKB * 1024, 0);
-            Site.Assert.IsInstanceOfType(directoryInformation[2].ReparsePointTag, typeof(uint), "If FILE_ATTRIBUTE_REPARSE_POINT is set in the FileAttributes field, this field MUST contain a 32-bit unsigned integer value containing the reparse point tag that uniquely identifies the owner of the reparse point.");
-
+            var checkReparseInFileAttribute = ((FileAttribute)directoryInformation[2].FileCommonDirectoryInformation.FileAttributes).HasFlag(FileAttribute.REPARSE_POINT);
+            if (checkReparseInFileAttribute)
+            {
+                Site.Assert.IsInstanceOfType(directoryInformation[2].ReparsePointTag, typeof(uint), "If FILE_ATTRIBUTE_REPARSE_POINT is set in the FileAttributes field, this field MUST contain a 32-bit unsigned integer value containing the reparse point tag that uniquely identifies the owner of the reparse point.");
+            }
+            
             VerifyFileInformation(directoryInformation[2], 3, fileName, FileAttribute.ARCHIVE, BytesToWrite, fsaAdapter.ClusterSizeInKB * 1024, 0);
-            if (fsaAdapter.Is64bitFileIdSupported)
+            
+            //Check if 64 bit is supported
+            if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId MUST not be 0");
             }
@@ -696,6 +719,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             {
                 Site.Assert.AreEqual(0, directoryInformation[2].FileId, "For file systems that do not support a 64-bit file ID, this field MUST be set to 0, and MUST be ignored");
             }
+
+            //Check if 128 bit is supported
             if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId128, "FileId MUST not be 0");
@@ -752,7 +777,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             }
 
             VerifyFileInformation(directoryInformation[1], 2, "..", FileAttribute.DIRECTORY, 0, 0, 0, "");
-            if (directoryInformation[1].FileName.Equals("..") && (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+            if (directoryInformation[1].FileName.Equals("..") && 
+                (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
                 fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT))
             {
                 Site.Assert.AreEqual(0, directoryInformation[1].FileId, "FileId must be 0 for entry named \"..\" in directory query operations.");
