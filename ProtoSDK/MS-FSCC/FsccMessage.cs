@@ -6117,14 +6117,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// MUST be ignored by the receiver. 
         /// </summary>
-        public ushort ReparsePointTag;
+        public uint ReparsePointTag;
 
         /// <summary>
         /// The 128-bit file ID, as specified in section 2.1.10, of the file. 
         /// For file systems that do not support a 128-bit file ID, this field MUST be set to 0, 
         /// and MUST be ignored 
         /// </summary>
-        public BigInteger FileId;
+        public Int128 FileId;
 
         /// <summary>
         /// A sequence of Unicode characters containing the file  name. This field might not be NULL-terminated, and   
@@ -6511,7 +6511,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         /// <summary>
         /// MUST be ignored by the receiver. 
         /// </summary>
-        public ushort ReparsePointTag;
+        public uint ReparsePointTag;
 
         /// <summary>
         /// The 64-bit file ID, as specified in section 2.1.10, of the file. 
