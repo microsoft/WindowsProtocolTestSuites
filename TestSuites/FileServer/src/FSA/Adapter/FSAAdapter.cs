@@ -1540,7 +1540,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             string processName;
             //
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && TestConfig.Platform == Platform.WindowsServer2025)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && TestConfig.Platform >= Platform.WindowsServer2022)
             {
                 script = @$"
                             #Create credential object
