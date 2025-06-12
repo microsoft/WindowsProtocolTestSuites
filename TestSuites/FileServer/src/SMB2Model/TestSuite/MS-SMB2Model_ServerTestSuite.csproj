@@ -1,52 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-DFSC\Dfsc.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RPCE\Rpce.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj" />
-    <ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj" />
-    <ProjectReference Include="..\Adapter\MS-SMB2Model_ServerAdapter.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\Common\TestSuite\CommonTestSuite.ptfconfig">
-      <Link>CommonTestSuite.ptfconfig</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\Common\TestSuite\CommonTestSuite.deployment.ptfconfig">
-      <Link>CommonTestSuite.deployment.ptfconfig</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
-      <Link>SharedAssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.4.0" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-	  <PackageReference Include="MSTest.TestFramework" Version="3.2.2" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.2.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="MS-SMB2Model_ServerTestSuite.deployment.ptfconfig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="MS-SMB2Model_ServerTestSuite.ptfconfig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite</RootNamespace>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\FileAccessService\FileAccessService.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-DFSC\Dfsc.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-NLMP\Nlmp.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RPCE\Rpce.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB\Smb.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\SspiLib\SspiLib.csproj" />
+		<ProjectReference Include="..\..\Common\Adapter\CommonAdapter.csproj" />
+		<ProjectReference Include="..\Adapter\MS-SMB2Model_ServerAdapter.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="..\..\Common\TestSuite\CommonTestSuite.ptfconfig">
+			<Link>CommonTestSuite.ptfconfig</Link>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\..\Common\TestSuite\CommonTestSuite.deployment.ptfconfig">
+			<Link>CommonTestSuite.deployment.ptfconfig</Link>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+			<Link>SharedAssemblyInfo.cs</Link>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+		<PackageReference Include="Microsoft.Protocols.TestTools" Version="2.6.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+		<PackageReference Include="MSTest.TestFramework" Version="3.9.1" />
+		<PackageReference Include="MSTest.TestAdapter" Version="3.9.1" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="MS-SMB2Model_ServerTestSuite.deployment.ptfconfig">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="MS-SMB2Model_ServerTestSuite.ptfconfig">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

@@ -6,7 +6,7 @@
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Transport</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <EnablePreviewFeatures>true</EnablePreviewFeatures>
-    <Platforms>AnyCPU;x86</Platforms>
+    
   </PropertyGroup>
 
   <ItemGroup>

@@ -6,12 +6,15 @@
     <RootNamespace>Microsoft.Protocols.TestTools.StackSdk.Messages</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Platforms>AnyCPU;x86</Platforms>
+    
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.6.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Asn1Base\Asn1Base.csproj" />
