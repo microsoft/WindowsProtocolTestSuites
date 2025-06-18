@@ -1544,6 +1544,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 script = @$"
                             #Create credential object
+                            Import-Module -Name “C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\Microsoft.PowerShell.Security\Microsoft.PowerShell.Security.psd1” -Verbose -Force
                             Set-Item WSMan:\localhost\Client\TrustedHosts -Value ""{testConfig.SutComputerName}"" -Force
 	                        $PWord = ConvertTo-SecureString -String ""{testConfig.UserPassword}"" -AsPlainText -Force
 	                        $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ""{testConfig.UserName}"", $PWord
@@ -1563,6 +1564,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 script = @$"
                             #Create credential object
+                            Import-Module -Name “C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\Microsoft.PowerShell.Security\Microsoft.PowerShell.Security.psd1” -Verbose -Force
 	                        $PWord = ConvertTo-SecureString -String ""{testConfig.UserPassword}"" -AsPlainText -Force
 	                        $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ""{testConfig.UserName}"", $PWord
 	
