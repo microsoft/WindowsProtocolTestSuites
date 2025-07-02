@@ -23,7 +23,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Set file basic information on data file and check if file system supports -2 timestamp for ChangeTime")]
         public void FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_ChangeTime()
         {
-            if ((this.fsaAdapter.TestConfig.Platform <= Platform.WindowsServer2022 && this.fsaAdapter.FileSystem == FileSystem.REFS) || this.fsaAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if ((this.fsaAdapter.TestConfig.Platform <= Platform.WindowsServerV22H2 && this.fsaAdapter.FileSystem == FileSystem.REFS) || this.fsaAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
             {
                 this.TestSite.Assume.Inconclusive("-2 timestamp on ChangeTime is inconclusive");
             }
@@ -52,7 +52,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Set file basic information on data file and check if file system supports -2 timestamp for LastWriteTime")]
         public void FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastWriteTime()
         {
-            if ((this.fsaAdapter.TestConfig.Platform <= Platform.WindowsServer2022 && this.fsaAdapter.FileSystem == FileSystem.REFS) || this.fsaAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if ((this.fsaAdapter.TestConfig.Platform <= Platform.WindowsServerV22H2 && this.fsaAdapter.FileSystem == FileSystem.REFS) || this.fsaAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
             {
                 this.TestSite.Assume.Inconclusive("-2 timestamp on lastWriteTime is inconclusive");
             }
@@ -81,7 +81,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Set file basic information on data file and check if file system supports -2 timestamp for LastAccessTime")]
         public void FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo_File_LastAccessTime()
         {
-            if ((this.fsaAdapter.TestConfig.Platform <= Platform.WindowsServer2022 && this.fsaAdapter.FileSystem==FileSystem.REFS) || this.fsaAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
+            if ((this.fsaAdapter.TestConfig.Platform <= Platform.WindowsServerV22H2 && this.fsaAdapter.FileSystem==FileSystem.REFS) || this.fsaAdapter.TestConfig.Platform == Platform.WindowsServer2012R2)
             {
                 this.TestSite.Assume.Inconclusive("-2 timestamp on LastAccessTime is inconclusive");
             }

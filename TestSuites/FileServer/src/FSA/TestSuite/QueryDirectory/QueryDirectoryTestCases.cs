@@ -343,9 +343,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             //Check if 64 bit is supported
             if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT
+                || fsaAdapter.FileSystem == FileSystem.FAT32)
             {
-                Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
+                if(directoryInformation[1].FileName.Equals("..") &&(fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT))
+                {
+                    // <130> Section 2.4.24: The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named ".." in directory query operations.
+                    Site.Assert.AreEqual(0, directoryInformation[0].FileId, "<130> Section 2.4.24: The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named \"..\" in directory query operations.");
+                }
+                else
+                {
+                    Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
+                }
+
             }
             else
             {
@@ -441,13 +452,23 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             //Check if 64 bit is supported
             if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT 
+                || fsaAdapter.FileSystem == FileSystem.FAT32)
             {
-                Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
+                if(directoryInformation[1].FileName.Equals("..") && (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT))
+                {
+                    // <126>  Section 2.4.22:The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named ".." in directory query operations.
+                    Site.Assert.AreEqual(0, directoryInformation[0].FileId, "<126>  Section 2.4.22:The NTFS, ReFS, FAT, and exFAT file systems return a FileId value of 0 for the entry named \"..\" in directory query operations.");
+                }
+                else
+                {
+                    Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of the entry should not be 0.");
+                }
             }
             else
             {
-                //For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
+                // For file systems that do not support a 64 - bit file ID, this field MUST be set to 0, and MUST be ignored. 
                 Site.Assert.AreEqual(0, directoryInformation[0].FileId, "FileId of the entry should be 0 if the file system does not support a 64-bit file ID.");
             }
 
@@ -494,8 +515,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileIdExtdDirectoryInformation()
         {
             #region
-            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
-                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
+            if (fsaAdapter.Platform <= Platform.WindowsServerV22H2 ||
+                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2) ||
+                fsaAdapter.FileSystem==FileSystem.FAT32)
             {
                 BaseTestSite.Assert.Inconclusive("Windows 11, version 23H2 operating system and prior and Windows Server 2022 and prior do not send or process FileIdExtdDirectoryInformation information class");
             }
@@ -570,10 +592,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileId64ExtdDirectoryInformation()
         {
             #region Check Applicability
-            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
-                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
+            if (fsaAdapter.Platform <= Platform.WindowsServer2022 || fsaAdapter.Platform <= Platform.Windows11V23H2
+                ||(fsaAdapter.FileSystem!=FileSystem.NTFS && fsaAdapter.FileSystem!=FileSystem.REFS))
             {
-                BaseTestSite.Assert.Inconclusive("Windows 11, version 23H2 operating system and prior and Windows Server 2022 and prior do not send or process FileId64ExtdDirectoryInformation information class");
+                BaseTestSite.Assert.Inconclusive("FileId64ExtdDirectoryInformation information class is supported in the NTFS and ReFS file systems in Windows 11, version 23H2 and later and Windows Server 2022, 23H2 and later.");
             }
             #endregion
 
@@ -592,7 +614,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             VerifyFileInformation(directoryInformation[0], 1, ".", FileAttribute.DIRECTORY, 0, 0, 0);
             //Check if 64 bit is supported
             if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT || fsaAdapter.FileSystem == FileSystem.FAT32)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId of entry MUST not be 0");
             }
@@ -627,7 +649,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             //Check if 64 bit is supported
             if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT || fsaAdapter.FileSystem == FileSystem.FAT32)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId MUST not be 0");
             }
@@ -646,10 +668,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileId64ExtdBothDirectoryInformation()
         {
             #region Check Applicanility
-            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
-                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
+            if (fsaAdapter.Platform <= Platform.WindowsServer2022 || fsaAdapter.Platform <= Platform.Windows11V23H2
+                ||(fsaAdapter.FileSystem!=FileSystem.NTFS && fsaAdapter.FileSystem!=FileSystem.REFS))
             {
-                Site.Assert.Inconclusive("Section 2.2.33: Windows 11, version 23H2 and prior and Windows Server 2022 and prior do not send or process FileId64ExtdBothDirectoryInformation information class.");
+                Site.Assert.Inconclusive("FileId64ExtdBothDirectoryInformation information class is supported in the NTFS and ReFS file systems in Windows 11, version 23H2 operating system and later and Windows Server 2022, 23H2 operating system and later.");
             }
             #endregion
 
@@ -669,7 +691,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             //Check if 64 bit is supported
             if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS || 
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT || fsaAdapter.FileSystem == FileSystem.FAT32)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[0].FileId, "FileId MUST not be 0");
             }
@@ -702,7 +724,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
 
             //Check if 64 bit is supported
             if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT || fsaAdapter.FileSystem == FileSystem.FAT32)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId MUST not be 0");
             }
@@ -721,10 +743,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileIdAllExtdDirectoryInformation()
         {
             #region  Check Applicability
-            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
-                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
+            if (fsaAdapter.Platform <= Platform.WindowsServer2022 || fsaAdapter.Platform <= Platform.Windows11V23H2 
+                || (fsaAdapter.FileSystem!=FileSystem.NTFS && fsaAdapter.FileSystem!=FileSystem.REFS))
             {
-                Site.Assert.Inconclusive("Section 2.2.33: Windows 11, version 23H2 and prior and Windows Server 2022 and prior do not send or process FileIdAllExtdDirectoryInformation information class.");
+                Site.Assert.Inconclusive("FileIdAllExtdDirectoryInformation information class only is supported in the NTFS and ReFS file systems in Windows 11, version 23H2 and later and Windows Server 2022, 23H2 and later.");
             }
             #endregion
 
@@ -771,7 +793,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
             
             //Check if 64 bit is supported
             if (fsaAdapter.FileSystem == FileSystem.NTFS || fsaAdapter.FileSystem == FileSystem.REFS ||
-                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT)
+                fsaAdapter.FileSystem == FileSystem.FAT || fsaAdapter.FileSystem == FileSystem.EXFAT || fsaAdapter.FileSystem == FileSystem.FAT32)
             {
                 Site.Assert.AreNotEqual(0, directoryInformation[2].FileId, "FileId MUST not be 0");
             }
@@ -800,10 +822,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite.TraditionalTe
         public void BVT_QueryDirectory_FileIdAllExtdBothDirectoryInformation()
         {
             #region  Check Applicability
-            if (fsaAdapter.Platform <= Platform.WindowsServer2022 ||
-                (fsaAdapter.Platform >= Platform.Windows11 && fsaAdapter.Platform <= Platform.Windows11V23H2))
+            if (fsaAdapter.Platform <= Platform.WindowsServer2022 || fsaAdapter.Platform <= Platform.Windows11V23H2
+                ||(fsaAdapter.FileSystem!=FileSystem.NTFS && fsaAdapter.FileSystem!=FileSystem.REFS))
             {
-                Site.Assert.Inconclusive("Section 2.2.33: Windows 11, version 23H2 and prior and Windows Server 2022 and prior do not send or process FileIdAllExtdDirectoryInformation information class.");
+                Site.Assert.Inconclusive("FileIdAllExtdBothDirectoryInformation information class is supported in the NTFS and ReFS file systems in Windows 11, version 23H2 and later and Windows Server 2022, 23H2 and later.");
             }
             #endregion
 
