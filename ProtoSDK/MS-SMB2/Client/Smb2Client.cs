@@ -2483,6 +2483,29 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             return SetInfoResponse(messageId, out responseHeader, out responsePayload);
         }
 
+        public uint SetInfo_InvalidBufferLength(
+            ushort creditCharge,
+            ushort creditRequest,
+            Packet_Header_Flags_Values flags,
+            ulong messageId,
+            ulong sessionId,
+            uint treeId,
+            SET_INFO_Request_InfoType_Values infoType,
+            byte fileInfoClass,
+            SET_INFO_Request_AdditionalInformation_Values additionalInfo,
+            FILEID fileId,
+            byte[] inputBuffer,
+            out Packet_Header responseHeader,
+            out SET_INFO_Response responsePayload,
+            ushort channelSequence = 0
+            )
+        {
+            SetInfoRequest_InvalidBufferLength(creditCharge, creditRequest, flags, messageId, sessionId, treeId,
+                infoType, fileInfoClass, additionalInfo, fileId, inputBuffer, channelSequence);
+
+            return SetInfoResponse(messageId, out responseHeader, out responsePayload);
+        }
+
         public void SetInfoRequest(
             ushort creditCharge,
             ushort creditRequest,
@@ -2516,6 +2539,54 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             {
                 request.PayLoad.BufferOffset = request.BufferOffset;
                 request.PayLoad.BufferLength = (uint)inputBuffer.Length;
+                request.Buffer = inputBuffer;
+            }
+
+            request.PayLoad.AdditionalInformation = additionalInfo;
+            request.PayLoad.FileId = fileId;
+
+            SendPacket(request);
+        }
+
+        public void SetInfoRequest_InvalidBufferLength(
+            ushort creditCharge,
+            ushort creditRequest,
+            Packet_Header_Flags_Values flags,
+            ulong messageId,
+            ulong sessionId,
+            uint treeId,
+            SET_INFO_Request_InfoType_Values infoType,
+            byte fileInfoClass,
+            SET_INFO_Request_AdditionalInformation_Values additionalInfo,
+            FILEID fileId,
+            byte[] inputBuffer,
+            ushort channelSequence = 0
+            )
+        {
+            var request = new Smb2SetInfoRequestPacket();
+
+            request.Header.CreditCharge = creditCharge;
+            request.Header.Command = Smb2Command.SET_INFO;
+            request.Header.CreditRequestResponse = creditRequest;
+            request.Header.Flags = flags;
+            request.Header.MessageId = messageId;
+            request.Header.TreeId = treeId;
+            request.Header.SessionId = sessionId;
+            request.Header.Status = channelSequence;
+
+            request.PayLoad.InfoType = infoType;
+            request.PayLoad.FileInfoClass = fileInfoClass;
+
+            if (inputBuffer != null && inputBuffer.Length > 0)
+            {
+                request.PayLoad.BufferOffset = request.BufferOffset;
+                /*
+                 * If the size of the buffer is less than the size of
+                 * FILE_RENAME_INFORMATION_TYPE_2 as specified in [MS-FSCC]
+                 * section 2.4.41.2, the server MUST fail the request with
+                 * STATUS_INFO_LENGTH_MISMATCH.
+                 */
+                request.PayLoad.BufferLength = 0;
                 request.Buffer = inputBuffer;
             }
 

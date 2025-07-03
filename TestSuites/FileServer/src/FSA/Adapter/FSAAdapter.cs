@@ -1128,39 +1128,32 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <returns></returns>
         public MessageStatus CreateFile(FileType fileType, bool openStream, bool isIntermediateBufferDisabled = false)
         {
-            MessageStatus returnedStatus;
-            switch (fileType)
+            var returnedStatus = fileType switch
             {
-                case FileType.DataFile:
-                    returnedStatus = CreateFile(
-                        FileAttribute.NORMAL,
-                        isIntermediateBufferDisabled ? CreateOptions.NO_INTERMEDIATE_BUFFERING | CreateOptions.NON_DIRECTORY_FILE : CreateOptions.NON_DIRECTORY_FILE,
-                        openStream ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.NULL,
-                        FileAccess.GENERIC_ALL,
-                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
-                        CreateDisposition.OPEN_IF,
-                        StreamFoundType.StreamIsFound,
-                        SymbolicLinkType.IsNotSymbolicLink,
-                        FileType.DataFile,
-                        FileNameStatus.PathNameValid);
-
-                    break;
-                case FileType.DirectoryFile:
-                    returnedStatus = CreateFile(
-                        FileAttribute.NORMAL,
-                        CreateOptions.DIRECTORY_FILE,
-                        openStream ? StreamTypeNameToOpen.INDEX_ALLOCATION : StreamTypeNameToOpen.NULL,
-                        FileAccess.GENERIC_ALL,
-                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
-                        CreateDisposition.OPEN_IF,
-                        StreamFoundType.StreamIsFound,
-                        SymbolicLinkType.IsNotSymbolicLink,
-                        FileType.DirectoryFile,
-                        FileNameStatus.PathNameValid);
-                    break;
-                default:
-                    throw new Exception("The given openFileType is not supported");
-            }
+                FileType.DataFile => CreateFile(
+                                        FileAttribute.NORMAL,
+                                        isIntermediateBufferDisabled ? CreateOptions.NO_INTERMEDIATE_BUFFERING | CreateOptions.NON_DIRECTORY_FILE : CreateOptions.NON_DIRECTORY_FILE,
+                                        openStream ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.NULL,
+                                        FileAccess.GENERIC_ALL,
+                                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
+                                        CreateDisposition.OPEN_IF,
+                                        StreamFoundType.StreamIsFound,
+                                        SymbolicLinkType.IsNotSymbolicLink,
+                                        FileType.DataFile,
+                                        FileNameStatus.PathNameValid),
+                FileType.DirectoryFile => CreateFile(
+                                        FileAttribute.NORMAL,
+                                        CreateOptions.DIRECTORY_FILE,
+                                        openStream ? StreamTypeNameToOpen.INDEX_ALLOCATION : StreamTypeNameToOpen.NULL,
+                                        FileAccess.GENERIC_ALL,
+                                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
+                                        CreateDisposition.OPEN_IF,
+                                        StreamFoundType.StreamIsFound,
+                                        SymbolicLinkType.IsNotSymbolicLink,
+                                        FileType.DirectoryFile,
+                                        FileNameStatus.PathNameValid),
+                _ => throw new Exception("The given openFileType is not supported"),
+            };
             return returnedStatus;
         }
 
@@ -4549,8 +4542,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <param name="fileInformationClass">The type of information being applied.</param>
         /// <param name="inputBuffer">A buffer that contains the information to be applied to the object.</param>
         /// <returns></returns>
-        public MessageStatus SetFileInformation(FileInfoClass fileInformationClass, byte[] inputBuffer)
+        public MessageStatus SetFileInformation(FileInfoClass fileInformationClass, byte[] inputBuffer, bool isBufferLengthInvalid = false)
         {
+            if (isBufferLengthInvalid)
+            {
+                return transAdapter.SetFileInformation_InvalidBufferLength((uint)fileInformationClass, inputBuffer);
+            }
+
             return transAdapter.SetFileInformation((uint)fileInformationClass, inputBuffer);
         }
 
@@ -5006,8 +5004,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         {
             bool isReturnStatus = false;
             string randomFileName = this.ComposeRandomFileName();
-            List<byte> byteList = new List<byte>();
-            FileRenameInformation_SMB fileInfo = new FileRenameInformation_SMB();
+            bool replaceIfExists = replacementType == ReplacementType.ReplaceIfExists;
 
             switch (inputBufferFileName)
             {
@@ -5020,53 +5017,83 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                     break;
 
                 case InputBufferFileName.ContainsInvalid:
-                    randomFileName = randomFileName + "\\/:?<>+";
-                    break;
-
                 case InputBufferFileName.NotValid:
-                    randomFileName = randomFileName + "\\/:?<>+";
+                    randomFileName += "\\";
                     break;
 
                 default:
                     break;
             }
 
-            switch (inputBufferFileNameLength)
+            MessageStatus returnedStatus;
+
+            if (transport == Transport.SMB)
             {
-                case InputBufferFileNameLength.EqualTo_Zero:
-                    fileInfo.FileNameLength = 0;
-                    break;
+                FileRenameInformation_SMB fileInfo = new()
+                {
+                    ReplaceIfExists = (byte)(replaceIfExists ? 1 : 0),
+                    Reserved = new byte[3],
+                    RootDirectory = RootDirectory_Values.V1,
+                    FileName = Encoding.Unicode.GetBytes(randomFileName)
+                };
 
-                case InputBufferFileNameLength.Greater:
-                    fileInfo.FileNameLength = (uint)(randomFileName.Length + 255);
-                    break;
-
-                case InputBufferFileNameLength.OddNumber:
-                    fileInfo.FileNameLength = 7;
-                    break;
-
-                default:
-                    break;
+                fileInfo.FileNameLength = inputBufferFileNameLength switch
+                {
+                    InputBufferFileNameLength.EqualTo_Zero => 0,
+                    InputBufferFileNameLength.Greater => (uint)(randomFileName.Length + 255),
+                    InputBufferFileNameLength.OddNumber => 7,
+                    _ => (uint)fileInfo.FileName.Length,
+                };
+                byte[] inputBuffer = TypeMarshal.ToBytes(fileInfo);
+                returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_RENAME_INFORMATION, inputBuffer);
             }
+            else
+            {
+                FileRenameInformation_SMB2 fileInfo = new()
+                {
+                    ReplaceIfExists = (byte)(replaceIfExists ? 1 : 0),
+                    Reserved = new byte[7],
+                    RootDirectory = FileRenameInformation_SMB2_RootDirectory_Values.V1,
+                    FileName = Encoding.Unicode.GetBytes(randomFileName)
+                };
 
-            fileInfo.FileName = Encoding.Unicode.GetBytes(randomFileName);
-            fileInfo.ReplaceIfExists = (byte)(replacementType == ReplacementType.ReplaceIfExists ? 1 : 0);
-            fileInfo.Reserved = new byte[3];
-            fileInfo.RootDirectory = RootDirectory_Values.V1;
-
-            byteList.AddRange(new byte[] { fileInfo.ReplaceIfExists });
-            byteList.AddRange(fileInfo.Reserved);
-            byteList.AddRange(BitConverter.GetBytes((uint)fileInfo.RootDirectory));
-            byteList.AddRange(BitConverter.GetBytes(fileInfo.FileNameLength));
-            byteList.AddRange(fileInfo.FileName);
-
-            MessageStatus returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_RENAME_INFORMATION, byteList.ToArray());
+                fileInfo.FileNameLength = inputBufferFileNameLength switch
+                {
+                    InputBufferFileNameLength.EqualTo_Zero => 0,
+                    InputBufferFileNameLength.Greater => (uint)(randomFileName.Length + 255),
+                    InputBufferFileNameLength.OddNumber => 7,
+                    _ => (uint)fileInfo.FileName.Length,
+                };
+                byte[] inputBuffer = TypeMarshal.ToBytes(fileInfo);
+                returnedStatus = transAdapter.SetFileInformation((uint)FileInfoClass.FILE_RENAME_INFORMATION, inputBuffer);
+            }
 
             //If no exception is thrown in SetFileInformation, server response status.
             isReturnStatus = true;
-            this.VerifyServerSetFsInfo(isReturnStatus);
+            VerifyServerSetFsInfo(isReturnStatus);
 
             return returnedStatus;
+        }
+
+        /// <summary>
+        /// Implementation of set FileRenameInformation_SMB2
+        /// </summary>
+        /// <param name="fileRenameInformation">FILE_RENAME_INFORMATION structure for SMB2.</param>
+        /// <returns></returns>
+        public MessageStatus SetFileRenameInfo(FileRenameInformation_SMB2 fileRenameInformation, bool isBufferLengthInvalid = false)
+        {
+            if (fileRenameInformation.Reserved == null || fileRenameInformation.Reserved.Length <= 0)
+            {
+                fileRenameInformation.Reserved = new byte[7];
+            }
+            byte[] inputBuffer = TypeMarshal.ToBytes(fileRenameInformation);
+
+            if (isBufferLengthInvalid)
+            {
+                return SetFileInformation(FileInfoClass.FILE_RENAME_INFORMATION, inputBuffer, isBufferLengthInvalid: isBufferLengthInvalid);
+            }
+            
+            return SetFileInformation(FileInfoClass.FILE_RENAME_INFORMATION, inputBuffer);
         }
 
         #endregion
@@ -5168,7 +5195,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             ReplacementType replacementType
             )
         {
-            bool replaceIfExists = (replacementType == ReplacementType.ReplaceIfExists);
+            bool replaceIfExists = replacementType == ReplacementType.ReplaceIfExists;
             bool isReturnStatus = false;
 
             MessageStatus returnedStatus;

@@ -1222,6 +1222,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return (MessageStatus)status;
         }
 
+        public MessageStatus SetFileInformation_InvalidBufferLength(
+            UInt32 fileInfomationClass,
+            byte[] buffer)
+        {
+            uint status = this.smb2Client.SetInfo_InvalidBufferLength(
+                1,
+                1,
+                this.packetHeaderFlag,
+                this.messageId++,
+                this.sessionId,
+                this.treeId,
+                SET_INFO_Request_InfoType_Values.SMB2_0_INFO_FILE,
+                (byte)fileInfomationClass,
+                SET_INFO_Request_AdditionalInformation_Values.NONE,
+                this.fileId,
+                buffer,
+                out packetHeader,
+                out SET_INFO_Response setInfoResponse);
+
+            return (MessageStatus)status;
+        }
+
         #endregion
 
         #region 3.1.5.15   Server Requests Setting of File System Information
