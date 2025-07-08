@@ -1128,33 +1128,33 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <returns></returns>
         public MessageStatus CreateFile(FileType fileType, bool openStream, bool isIntermediateBufferDisabled = false)
         {
-            var returnedStatus = fileType switch
+            return fileType switch
             {
-                FileType.DataFile => CreateFile(
-                                        FileAttribute.NORMAL,
-                                        isIntermediateBufferDisabled ? CreateOptions.NO_INTERMEDIATE_BUFFERING | CreateOptions.NON_DIRECTORY_FILE : CreateOptions.NON_DIRECTORY_FILE,
-                                        openStream ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.NULL,
-                                        FileAccess.GENERIC_ALL,
-                                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
-                                        CreateDisposition.OPEN_IF,
-                                        StreamFoundType.StreamIsFound,
-                                        SymbolicLinkType.IsNotSymbolicLink,
-                                        FileType.DataFile,
-                                        FileNameStatus.PathNameValid),
+               FileType.DataFile => CreateFile(
+                        FileAttribute.NORMAL,
+                        isIntermediateBufferDisabled ? CreateOptions.NO_INTERMEDIATE_BUFFERING | CreateOptions.NON_DIRECTORY_FILE : CreateOptions.NON_DIRECTORY_FILE,
+                        openStream ? StreamTypeNameToOpen.DATA : StreamTypeNameToOpen.NULL,
+                        FileAccess.GENERIC_ALL,
+                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
+                        CreateDisposition.OPEN_IF,
+                        StreamFoundType.StreamIsFound,
+                        SymbolicLinkType.IsNotSymbolicLink,
+                        FileType.DataFile,
+                        FileNameStatus.PathNameValid),
+
                 FileType.DirectoryFile => CreateFile(
-                                        FileAttribute.NORMAL,
-                                        CreateOptions.DIRECTORY_FILE,
-                                        openStream ? StreamTypeNameToOpen.INDEX_ALLOCATION : StreamTypeNameToOpen.NULL,
-                                        FileAccess.GENERIC_ALL,
-                                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
-                                        CreateDisposition.OPEN_IF,
-                                        StreamFoundType.StreamIsFound,
-                                        SymbolicLinkType.IsNotSymbolicLink,
-                                        FileType.DirectoryFile,
-                                        FileNameStatus.PathNameValid),
-                _ => throw new Exception("The given openFileType is not supported"),
+                        FileAttribute.NORMAL,
+                        CreateOptions.DIRECTORY_FILE,
+                        openStream ? StreamTypeNameToOpen.INDEX_ALLOCATION : StreamTypeNameToOpen.NULL,
+                        FileAccess.GENERIC_ALL,
+                        ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
+                        CreateDisposition.OPEN_IF,
+                        StreamFoundType.StreamIsFound,
+                        SymbolicLinkType.IsNotSymbolicLink,
+                        FileType.DirectoryFile,
+                        FileNameStatus.PathNameValid),
+                _ => throw new Exception("The given openFileType is not supported")
             };
-            return returnedStatus;
         }
 
         /// </summary>
@@ -4857,6 +4857,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <summary>
         /// Implementation of set FileLinkInformation
         /// </summary>
+        /// <param name="fileLinkInformation">FILE_LINK_INFORMATION structure for SMB.</param>
+        /// <returns></returns>
+        public MessageStatus SetFileLinkInformation(FileRenameInformation_SMB fileLinkInformation)
+        {
+            if (fileLinkInformation.Reserved == null || fileLinkInformation.Reserved.Length <= 0)
+            {
+                fileLinkInformation.Reserved = new byte[3];
+            }
+            byte[] inputBuffer = TypeMarshal.ToBytes(fileLinkInformation);
+            return SetFileInformation(FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
+        }
+
+        /// <summary>
+        /// Implementation of set FileLinkInformation
+        /// </summary>
         /// <param name="fileLinkInformation">FILE_LINK_INFORMATION structure for SMB2.</param>
         /// <returns></returns>
         public MessageStatus SetFileLinkInformation(FILE_LINK_INFORMATION_TYPE_SMB2 fileLinkInformation)
@@ -4866,6 +4881,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 fileLinkInformation.Reserved = new byte[7];
             }
             byte[] inputBuffer = TypeMarshal.ToBytes<FILE_LINK_INFORMATION_TYPE_SMB2>(fileLinkInformation);
+
+            return SetFileInformation(FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
+        }
+
+        /// <summary>
+        /// Implementation of set FileLinkInformation
+        /// </summary>
+        /// <param name="fileLinkInformation">FILE_LINK_INFORMATION structure for SMB2.</param>
+        /// <returns></returns>
+        public MessageStatus SetFileLinkInformation(FileRenameInformation_SMB2 fileLinkInformation)
+        {
+            if (fileLinkInformation.Reserved == null || fileLinkInformation.Reserved.Length <= 0)
+            {
+                fileLinkInformation.Reserved = new byte[7];
+            }
+            byte[] inputBuffer = TypeMarshal.ToBytes(fileLinkInformation);
 
             return SetFileInformation(FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
         }
