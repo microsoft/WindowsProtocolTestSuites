@@ -10,7 +10,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
 {
     public class FSATestConfig : TestConfigBase
     {
-        private List<FsControlCommand> unSupportedFSCTL;
+        private readonly List<FsControlCommand> unSupportedFSCTL;
         public FSATestConfig(ITestSite site) : base(site)
         {
             this.unSupportedFSCTL = ParsePropertyToList<FsControlCommand>("FSCC_UnSupportedFSCTL", "FSA");
@@ -32,7 +32,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             // If the fsctl is shown in ptfconfig "FSCC_UnSupportedFSCTL", which means the fsctl is not supported,
             // then fail the case inconclusive.
             var fsctlCommand = (FsControlCommand)fsctl;
-            if (unSupportedFSCTL.Contains((FsControlCommand)fsctlCommand))
+            if (unSupportedFSCTL.Contains(fsctlCommand))
             {
                 Site.Assert.Inconclusive($"{fsctlCommand} is not supported by SUT according to the ptfconfig \"FSCC_UnSupportedFSCTL\". " +
                     "Please modify the ptfconfig if the FSCTL is supported.");
