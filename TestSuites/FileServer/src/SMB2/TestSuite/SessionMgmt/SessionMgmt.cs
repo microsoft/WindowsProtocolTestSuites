@@ -5,6 +5,7 @@ using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 using Microsoft.Protocols.TestSuites.FileSharing.Common.TestSuite;
 using Microsoft.Protocols.TestTools;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
+using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -62,6 +63,64 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.SessionMgmt
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "The client sends SESSION_SETUP request with SESSION_ID set to ZERO.");
             client.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, TestConfig.UseServerGssToken);
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Smb311)]
+        [TestCategory(TestCategories.Session)]
+        [Description("This test case is designed to test whether server can return error code when Session.SupportsNotifications is not equal to the incoming Connection.SupportsNotifications")]
+        public void SessionMgmt_SupportsNotificationsMismatch()
+        {
+            Guid clientGuid = Guid.NewGuid();
+
+            client.Negotiate(
+                new DialectRevision[] { DialectRevision.Smb311 },
+                false,
+                clientGuid: clientGuid,
+                ifAddGLOBAL_CAP_NOTIFICATIONS: true
+            );
+
+            client.SessionSetup(
+                SecurityPackageType.Ntlm,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken,
+                securityMode: SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
+                capabilities: SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS
+            );
+
+            client.Disconnect();
+
+            var client2 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client2.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+
+            client2.Negotiate(
+                new DialectRevision[] { DialectRevision.Smb311 },
+                false,
+                clientGuid: clientGuid,
+                ifAddGLOBAL_CAP_NOTIFICATIONS: false
+            );
+
+            client2.SessionSetup(
+                SecurityPackageType.Ntlm,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken,
+                securityMode: SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
+                capabilities: SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
+                sessionSetupFlags: SESSION_SETUP_Request_Flags.SESSION_FLAG_BINDING,
+                checker: (header, response) =>
+                {
+                    BaseTestSite.Assert.AreEqual(
+                        Smb2Status.STATUS_INVALID_PARAMETER,
+                        header.Status,
+                        "If Connection.Dialect is \"3.1.1\" and Session.SupportsNotifications is not equal to the incoming Connection.SupportsNotifications, " +
+                        "then the server MUST fail the request with STATUS_INVALID_PARAMETER. Actual received: {0}", header.Status
+                    );
+                }
+            );
+
+            client2.Disconnect();
         }
 
         [TestMethod]

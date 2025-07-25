@@ -511,7 +511,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool? ifAddGLOBAL_CAP_ENCRYPTION = null,
             bool addDefaultEncryption = false,
             bool addNetNameConetxtID = false,
-            bool addTransportCapabilities = false
+            bool addTransportCapabilities = false,
+            bool ifAddGLOBAL_CAP_NOTIFICATIONS = false
             )
         {
             if (isSmb1NegotiateEnabled)
@@ -598,7 +599,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     ifAddGLOBAL_CAP_ENCRYPTION: ifAddGLOBAL_CAP_ENCRYPTION.Value,
                     addDefaultEncryption: addDefaultEncryption,
                     addNetNameConetxtID: addNetNameConetxtID,
-                    addTransportCapabilities: addTransportCapabilities
+                    addTransportCapabilities: addTransportCapabilities,
+                    ifAddGLOBAL_CAP_NOTIFICATIONS: ifAddGLOBAL_CAP_NOTIFICATIONS
                     );
         }
 
@@ -613,8 +615,9 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool ifAddGLOBAL_CAP_ENCRYPTION = true,
             bool addDefaultEncryption = false,
             bool addNetNameConetxtID = false,
-            bool addTransportCapabilities = false
-           )
+            bool addTransportCapabilities = false,
+            bool ifAddGLOBAL_CAP_NOTIFICATIONS = false
+        )
         {
             PreauthIntegrityHashID[] preauthHashAlgs = null;
             EncryptionAlgorithm[] encryptionAlgs = null;
@@ -664,7 +667,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 ifAddGLOBAL_CAP_ENCRYPTION,
                 addDefaultEncryption,
                 addNetNameConetxtID,
-                addTransportCapabilities: addTransportCapabilities
+                addTransportCapabilities: addTransportCapabilities,
+                ifAddGLOBAL_CAP_NOTIFICATIONS: ifAddGLOBAL_CAP_NOTIFICATIONS
             );
         }
 
@@ -685,6 +689,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool addDefaultEncryption = false,
             bool addNetNameContextId = false,
             bool addTransportCapabilities = false,
+            bool ifAddGLOBAL_CAP_NOTIFICATIONS = false,
             SigningAlgorithm[] signingAlgorithms = null,
             ResponseChecker<Smb2NegotiateResponsePacket> responseChecker = null
             )
@@ -714,6 +719,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             {
                 capabilityValue |= Capabilities_Values.GLOBAL_CAP_ENCRYPTION;
             }
+            if (Array.IndexOf(dialects, DialectRevision.Smb311) >= 0 && ifAddGLOBAL_CAP_NOTIFICATIONS)
+            {
+                capabilityValue |= Capabilities_Values.GLOBAL_CAP_NOTIFICATIONS;
+            }
             // Guid should be zero when dialect is 2.0 and should not be zero when dialect is not 2.0
             if (null == clientGuid)
                 clientGuid = (dialects.Length == 1 && dialects[0] == DialectRevision.Smb2002) ? Guid.Empty : Guid.NewGuid();
@@ -730,28 +739,28 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             Smb2NegotiateResponsePacket negotiateResponse;
 
             uint status = client.Negotiate(
-               creditCharge,
-               generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-               headerFlag,
-               messageId,
-               dialects,
-               securityMode,
-               capabilityValue.Value,
-               clientGuid.Value,
-               out selectedDialect,
-               out serverGssToken,
-               out negotiateRequest,
-               out negotiateResponse,
-               preauthHashAlgs: preauthHashAlgs,
-               encryptionAlgs: encryptionAlgs,
-               compressionAlgorithms: compressionAlgorithms,
-               rdmaTransformIds: rdmaTransformIds,
-               compressionFlags: compressionFlags,
-               addDefaultEncryption: addDefaultEncryption,
-               netNameContext: netNameContext,
-               signingAlgorithms: signingAlgorithms,
-               addTransportCapabilities: addTransportCapabilities
-               );
+            creditCharge,
+            generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
+            headerFlag,
+            messageId,
+            dialects,
+            securityMode,
+            capabilityValue.Value,
+            clientGuid.Value,
+            out selectedDialect,
+            out serverGssToken,
+            out negotiateRequest,
+            out negotiateResponse,
+            preauthHashAlgs: preauthHashAlgs,
+            encryptionAlgs: encryptionAlgs,
+            compressionAlgorithms: compressionAlgorithms,
+            rdmaTransformIds: rdmaTransformIds,
+            compressionFlags: compressionFlags,
+            addDefaultEncryption: addDefaultEncryption,
+            netNameContext: netNameContext,
+            signingAlgorithms: signingAlgorithms,
+            addTransportCapabilities: addTransportCapabilities
+            );
 
             if (!ifHandleRejectUnencryptedAccessSeparately)
             {
@@ -801,11 +810,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool useServerGssToken,
             SESSION_SETUP_Request_SecurityMode_Values securityMode = SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
+            SESSION_SETUP_Request_Flags sessionSetupFlags = SESSION_SETUP_Request_Flags.NONE,
             ResponseChecker<SESSION_SETUP_Response> checker = null)
         {
             return SessionSetup(
                 Packet_Header_Flags_Values.NONE,
-                SESSION_SETUP_Request_Flags.NONE,
+                sessionSetupFlags,
                 securityMode,
                 capabilities,
                 0,
@@ -887,11 +897,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool useServerGssToken,
             SESSION_SETUP_Request_SecurityMode_Values securityMode = SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
+            SESSION_SETUP_Request_Flags sessionSetupFlags = SESSION_SETUP_Request_Flags.NONE,
             ResponseChecker<SESSION_SETUP_Response> checker = null)
         {
             return SessionSetup(
                 Packet_Header_Flags_Values.NONE,
-                SESSION_SETUP_Request_Flags.NONE,
+                sessionSetupFlags,
                 securityMode,
                 capabilities,
                 previousClient.sessionId,
