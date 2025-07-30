@@ -686,6 +686,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
         [Description("A Boolean; if set, indicates that SMB2_TRANSPORT_CAPABILITIES negotiate context, as specified in section 2.2.3.1.5, is supported by the node.")]
@@ -966,6 +967,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
 
         [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb311)]
         [TestCategory(TestCategories.Negotiate)]
         [Description("This test case is designed to test whether server can handle NEGOTIATE with SMB2_GLOBAL_CAP_NOTIFICATIONS set in Capabilities")]

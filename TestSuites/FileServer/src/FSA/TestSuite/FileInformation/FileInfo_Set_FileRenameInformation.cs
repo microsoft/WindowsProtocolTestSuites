@@ -27,14 +27,17 @@ public partial class FileInfoTestCases : PtfTestClassBase
     [Description("This test case verifies that SMB2 protocol returns STATUS_INVALID_PARAMETER when RootDirectory field is not 0.")]
     public void FileInfo_Set_FileRenameInformation_SMB2_RootDirectory_NonZero()
     {
+        // For SMB, this test is inconclusive since the requirement is SMB2-specific
         if (this.fsaAdapter.Transport == Transport.SMB)
         {
             BaseTestSite.Assert.Inconclusive("This test is not applicable to SMB transport. " +
                 "The requirement to return STATUS_INVALID_PARAMETER for filenames with RootDirectory field is not 0.");
         }
 
+        // Initialize test setup similar to SetFileRenameInformationTestCase pattern
         BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test setup: Create a file for rename operation.");
 
+        // Create a file first to perform rename operation on
         var status = this.fsaAdapter.CreateFile(FileType.DataFile);
 
         BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status,
