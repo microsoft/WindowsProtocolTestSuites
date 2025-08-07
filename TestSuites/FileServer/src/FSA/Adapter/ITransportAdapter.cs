@@ -358,6 +358,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             UInt32 fileInformationClass,
             byte[] buffer);
 
+        MessageStatus SetFileInformation_InvalidBufferLength(
+            UInt32 fileInformationClass,
+            byte[] buffer);
+
         #endregion
 
         #region 3.1.5.15   Server Requests Setting of File System Information

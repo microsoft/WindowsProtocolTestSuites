@@ -31,7 +31,6 @@ export function configureStore (initialState?: AppState) {
 
   return createStore(
     rootReducer,
-    // @ts-expect-error See https://github.com/reduxjs/redux/pull/4078
     initialState,
     composeWithDevTools(applyMiddleware(...middleware), ...enhancers)
   )

@@ -81,7 +81,15 @@
 		</Description>	
 	  </Property>
 
+	    <Property name="IsServerToClientNotificationsSupported" value="true">
+			<Choice>True, False</Choice>
+			<Description>
+                Indicates whether the server supports server-to-client notifications.
+                If the server does not support this feature, set it to false.
+			</Description>
+		</Property>
     </Group>
+	  
     <Group name="HVRS">
       <Property name="SharePath" value="\\node01.contoso.com\SMBBasic">
         <!--File_level_trim passed on smbbasic-->

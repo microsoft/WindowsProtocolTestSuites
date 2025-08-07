@@ -290,7 +290,14 @@
           To specify whether 64-bit FileId is supported or not.
         </Description>
       </Property>
-
+		
+	  <Property name="Is128bitFileIdSupported" value="false">
+		<Choice>true, false</Choice>
+		<Description>
+		  To specify whether 128-bit FileId is supported or not.
+		</Description>
+	  </Property>
+		
       <Property name="IsChangeTimeSupported" value="true">
         <Choice>true, false</Choice>
         <Description>

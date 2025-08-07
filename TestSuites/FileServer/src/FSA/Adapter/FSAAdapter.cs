@@ -89,6 +89,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         private List<string> activeTDIs;
         private uint numberOfDataCopies;
         public bool Is64bitFileIdSupported;
+        public bool Is128bitFileIdSupported;
         public bool IsChangeTimeSupported;
         // Used to generate random file names.
         private static Random randomRange = new Random();
@@ -400,6 +401,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             //Other Configurations
             this.transBufferSize = uint.Parse(testConfig.GetProperty("BufferSize"));
             this.Is64bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is64bitFileIdSupported"));
+            this.Is128bitFileIdSupported = bool.Parse(testConfig.GetProperty("Is128bitFileIdSupported"));
             this.IsChangeTimeSupported = bool.Parse(testConfig.GetProperty("IsChangeTimeSupported"));
             this.numberOfDataCopies = uint.Parse(testConfig.GetProperty("NumberOfDataCopies"));
 
@@ -1538,10 +1540,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             string processName;
             //
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && TestConfig.Platform == Platform.WindowsServer2025)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && TestConfig.Platform >= Platform.WindowsServer2022)
             {
                 script = @$"
                             #Create credential object
+                            Import-Module -Name “C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\Microsoft.PowerShell.Security\Microsoft.PowerShell.Security.psd1” -Verbose -Force
                             Set-Item WSMan:\localhost\Client\TrustedHosts -Value ""{testConfig.SutComputerName}"" -Force
 	                        $PWord = ConvertTo-SecureString -String ""{testConfig.UserPassword}"" -AsPlainText -Force
 	                        $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ""{testConfig.UserName}"", $PWord
@@ -1561,6 +1564,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             {
                 script = @$"
                             #Create credential object
+                            Import-Module -Name “C:\Windows\SysWOW64\WindowsPowerShell\v1.0\Modules\Microsoft.PowerShell.Security\Microsoft.PowerShell.Security.psd1” -Verbose -Force
 	                        $PWord = ConvertTo-SecureString -String ""{testConfig.UserPassword}"" -AsPlainText -Force
 	                        $credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList ""{testConfig.UserName}"", $PWord
 	
@@ -4550,6 +4554,20 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return transAdapter.SetFileInformation((uint)fileInformationClass, inputBuffer);
         }
 
+        /// <param name="fileInformationClass">The type of information being applied.</param>
+        /// <param name="inputBuffer">A buffer that contains the information to be applied to the object.</param>
+        /// <param name="isBufferLengthInvalid">Indicates whether we are testing if the buffer length is invalid.</param>
+        /// <returns></returns>
+        public MessageStatus SetFileInformation(FileInfoClass fileInformationClass, byte[] inputBuffer, bool isBufferLengthInvalid)
+        {
+            if (isBufferLengthInvalid)
+            {
+                return transAdapter.SetFileInformation_InvalidBufferLength((uint)fileInformationClass, inputBuffer);
+            }
+
+            return transAdapter.SetFileInformation((uint)fileInformationClass, inputBuffer);
+        }
+
         #endregion
 
         #region 3.1.5.14.2 FileBasicInformation
@@ -4855,6 +4873,21 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
         /// <summary>
         /// Implementation of set FileLinkInformation
         /// </summary>
+        /// <param name="fileLinkInformation">FILE_LINK_INFORMATION structure for SMB.</param>
+        /// <returns></returns>
+        public MessageStatus SetFileLinkInformation(FileRenameInformation_SMB fileLinkInformation)
+        {
+            if (fileLinkInformation.Reserved == null || fileLinkInformation.Reserved.Length <= 0)
+            {
+                fileLinkInformation.Reserved = new byte[3];
+            }
+            byte[] inputBuffer = TypeMarshal.ToBytes(fileLinkInformation);
+            return SetFileInformation(FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
+        }
+
+        /// <summary>
+        /// Implementation of set FileLinkInformation
+        /// </summary>
         /// <param name="fileLinkInformation">FILE_LINK_INFORMATION structure for SMB2.</param>
         /// <returns></returns>
         public MessageStatus SetFileLinkInformation(FILE_LINK_INFORMATION_TYPE_SMB2 fileLinkInformation)
@@ -4864,6 +4897,22 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
                 fileLinkInformation.Reserved = new byte[7];
             }
             byte[] inputBuffer = TypeMarshal.ToBytes<FILE_LINK_INFORMATION_TYPE_SMB2>(fileLinkInformation);
+
+            return SetFileInformation(FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
+        }
+
+        /// <summary>
+        /// Implementation of set FileLinkInformation
+        /// </summary>
+        /// <param name="fileLinkInformation">FILE_LINK_INFORMATION structure for SMB2.</param>
+        /// <returns></returns>
+        public MessageStatus SetFileLinkInformation(FileRenameInformation_SMB2 fileLinkInformation)
+        {
+            if (fileLinkInformation.Reserved == null || fileLinkInformation.Reserved.Length <= 0)
+            {
+                fileLinkInformation.Reserved = new byte[7];
+            }
+            byte[] inputBuffer = TypeMarshal.ToBytes(fileLinkInformation);
 
             return SetFileInformation(FileInfoClass.FILE_LINK_INFORMATION, inputBuffer);
         }
@@ -5065,6 +5114,27 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             return returnedStatus;
         }
 
+        /// <summary>
+        /// Implementation of set FileRenameInformation_SMB2
+        /// </summary>
+        /// <param name="fileRenameInformation">FILE_RENAME_INFORMATION structure for SMB2.</param>
+        /// <returns></returns>
+        public MessageStatus SetFileRenameInfo(FileRenameInformation_SMB2 fileRenameInformation, bool isBufferLengthInvalid = false)
+        {
+            if (fileRenameInformation.Reserved == null || fileRenameInformation.Reserved.Length <= 0)
+            {
+                fileRenameInformation.Reserved = new byte[7];
+            }
+            byte[] inputBuffer = TypeMarshal.ToBytes(fileRenameInformation);
+
+            if (isBufferLengthInvalid)
+            {
+                return SetFileInformation(FileInfoClass.FILE_RENAME_INFORMATION, inputBuffer, isBufferLengthInvalid: isBufferLengthInvalid);
+            }
+            
+            return SetFileInformation(FileInfoClass.FILE_RENAME_INFORMATION, inputBuffer);
+        }
+
         #endregion
 
         #region 3.1.5.14.11.1   Algorithm for Performing Stream Rename
@@ -5164,7 +5234,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             ReplacementType replacementType
             )
         {
-            bool replaceIfExists = (replacementType == ReplacementType.ReplaceIfExists);
+            bool replaceIfExists = replacementType == ReplacementType.ReplaceIfExists;
             bool isReturnStatus = false;
 
             MessageStatus returnedStatus;

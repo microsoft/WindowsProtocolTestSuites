@@ -202,6 +202,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             }
         }
 
+        public bool IsServerToClientNotificationsSupported
+        {
+            get
+            {
+                return Boolean.Parse(GetProperty("IsServerToClientNotificationsSupported"));
+            }
+        }
+
         public DialectRevision[] RequestDialects
         {
             get
@@ -610,6 +618,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     return this.IsDirectoryLeasingSupported;
                 case NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_ENCRYPTION:
                     return this.IsEncryptionSupported;
+                case NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_NOTIFICATIONS:
+                    return this.IsServerToClientNotificationsSupported;
                 default:
                     throw new Exception("Capability not supported");
             }
@@ -938,5 +948,25 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         /// Windows 11
         /// </summary>
         Windows11 = 0x10000014,
+
+        /// <summary>
+        /// Windows 11 2021 v21H2
+        /// </summary>
+        Windows11V21H2 = 0x10000015,
+
+        /// <summary>
+        /// Windows 11 2022 v22H2
+        /// </summary>
+        Windows11V22H2 = 0x10000016,
+
+        /// <summary>
+        /// Windows 11 2023 v23H2
+        /// </summary>
+        Windows11V23H2 = 0x10000017,
+
+        /// <summary>
+        /// Windows 11 2024 v24H2
+        /// </summary>
+        Windows11V24H2 = 0x10000018
     }
 }

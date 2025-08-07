@@ -163,8 +163,8 @@ CreateShareFolderForFSA -Path "J:" -FolderName "SMBFAT32Share"
 #----------------------------------------------------------------------------
 # Enable LastAccessTime update
 #----------------------------------------------------------------------------
- Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name NtfsDisableLastAccessUpdate 0 
- Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name RefsDisableLastAccessUpdate 0 
+ Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name NtfsDisableLastAccessUpdate 0x80000000 
+ Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name RefsDisableLastAccessUpdate 0x80000000 
 
 #----------------------------------------------------------------------------
 # Ending

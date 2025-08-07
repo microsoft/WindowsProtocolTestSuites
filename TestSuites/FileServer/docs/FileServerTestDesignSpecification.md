@@ -6112,6 +6112,7 @@ Scenario see section [Scenario](#3.1.6.1).
 ||Verify that server sets Connection.CipherId to 0 from the response.|
 |**Cleanup**||
 
+
 |||
 |---|---|
 |**Test ID**|Negotiate_SMB311_SigningCapability|
@@ -6120,6 +6121,7 @@ Scenario see section [Scenario](#3.1.6.1).
 |**Test Execution Steps**|Client sends Negotiate request with dialect SMB 3.11, SMB2_SIGNING_CAPABILITIES context and SMB2_PREAUTH_INTEGRITY_CAPABILITIES context and set SigningAlgorithmId to value: 0x0000.|
 ||Verify that server sets Connection.SigningAlgorithmCount to 1 from the response.|
 |**Cleanup**||
+
 
 |||
 |---|---|
@@ -6193,6 +6195,18 @@ Scenario see section [Scenario](#3.1.6.1).
 |                          |     b.  If server is non-Windows, CompressionAlgorithms is set to all the algorithms in the CompressionAlgorithms field of Negotiate request, in the order they are received. |
 |                          |     c.  SMB2_COMPRESSION_CAPABILITIES_FLAG_CHAINED is not set in Flags field. |
 |**Cleanup**||
+
+
+|||  
+|---|---|  
+|**Test ID**|Negotiate_SMB311_IsTransportCapabilitiesSupported|  
+|**Description**|This test case verifies whether the server can handle a NEGOTIATE request with the SMB2_TRANSPORT_CAPABILITIES context.|  
+|**Prerequisites**|The server must support dialect 3.11 and be running Server 2025 or later.|  
+|**Test Execution Steps**|1. The client sends a NEGOTIATE request with dialect SMB 3.11, without including the SMB2_TRANSPORT_CAPABILITIES context.  
+|                         |   Verify that the server responds with a NEGOTIATE response that does not include the SMB2_TRANSPORT_CAPABILITIES context.  
+|                         |2. The client sends another NEGOTIATE request with dialect SMB 3.11, this time including the SMB2_TRANSPORT_CAPABILITIES context.  
+|                         |   Verify that the server responds with a NEGOTIATE response that includes the SMB2_TRANSPORT_CAPABILITIES context.|  
+|**Cleanup**|No specific cleanup steps are required.|  
 
 
 #### <a name="3.2.10">Oplock

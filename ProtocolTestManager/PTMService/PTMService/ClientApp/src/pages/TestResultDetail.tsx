@@ -85,7 +85,7 @@ interface TestCaseResultViewProps {
   result: TestCaseResult | undefined
 }
 
-const lineHeader = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[(?<kind>\w+)\]/g
+const lineHeader = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} \[(\w+)\]/g
 
 const getLineBackgroundColor = (kind: string) => {
   if (kind.includes('Failed')) {
@@ -103,8 +103,8 @@ const renderOutputLines = (lines: string[]) => {
   return lines.reduce((res: JSX.Element[], currentLine) => {
     lineHeader.lastIndex = 0
     const matches = lineHeader.exec(currentLine)
-    if (matches !== null && matches.groups !== undefined) {
-      return [...res, <p key={res.length} style={{ overflowWrap: 'normal', backgroundColor: getLineBackgroundColor(matches.groups.kind) }}>{currentLine}</p>]
+    if (matches !== null && matches[1] !== undefined) {
+      return [...res, <p key={res.length} style={{ overflowWrap: 'normal', backgroundColor: getLineBackgroundColor(matches[1]) }}>{currentLine}</p>]
     } else {
       return [...res, <p key={res.length} style={{ overflowWrap: 'normal' }}>&nbsp;&nbsp;&nbsp;&nbsp;{currentLine}</p>]
     }

@@ -84,7 +84,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         }
         #endregion
 
-
         #region Test Case
 
         /// <summary>

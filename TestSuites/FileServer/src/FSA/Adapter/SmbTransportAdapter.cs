@@ -1086,7 +1086,14 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Adapter
             }
             return (MessageStatus)response.SmbHeader.Status;            
         }
-        
+
+        public MessageStatus SetFileInformation_InvalidBufferLength(
+            UInt32 fileInfomationClass,
+            byte[] buffer)
+        {
+            return (MessageStatus)5;
+        }
+
         #endregion
 
         #region 3.1.5.15   Server Requests Setting of File System Information

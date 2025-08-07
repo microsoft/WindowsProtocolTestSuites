@@ -123,3 +123,4 @@ TestSuites/RDP/Tools/RDPToolSet/.nuget
 ProtocolTestManager/PTMService/PTMService/PTMService/ClientApp/.eslintcache
 ProtocolTestManager/PTMService/PTMService/ClientApp/.eslintcache
 /ProtoSDK/RDMA/include
+/TestSuites/FileServer/src/testenvironments.json

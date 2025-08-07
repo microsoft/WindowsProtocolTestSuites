@@ -248,7 +248,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                                 KerberosAccountType.User,
                                 kdcIpAddress,
                                 KerberosContext.KDCPort,
-                                TransportType.TCP,
+                                KerberosLib.TransportType.TCP,
                                 this.securityContextAttributes
                             );
                         }
@@ -278,7 +278,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.SspiService
                                 kdcIpAddress,
                                 KerberosContext.KDCPort,
                                 this.securityContextAttributes,
-                                TransportType.TCP
+                                KerberosLib.TransportType.TCP
                             );
 
                             this.Context = new SpngClientSecurityContext(this.securityContextAttributes, nlmpSecurityConfig, kerberosSecurityConfig);

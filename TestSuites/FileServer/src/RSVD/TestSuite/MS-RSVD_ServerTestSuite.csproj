@@ -21,10 +21,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.4.0" />
-	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-	  <PackageReference Include="MSTest.TestFramework" Version="3.2.2" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.2.2" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.6.1" />
+	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+	  <PackageReference Include="MSTest.TestFramework" Version="3.9.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.9.1" />
   </ItemGroup>
   <ItemGroup>
     <None Update="MS-RSVD_ServerTestSuite.deployment.ptfconfig">
