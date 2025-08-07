@@ -18,6 +18,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
     using System.Reflection;
     using Microsoft.Protocols.TestTools;
     using Microsoft.Protocols.TestTools.Messages.Runtime;
+    using Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter;
 
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class CreateFileTestCase : PtfTestClassBase {
@@ -1069,6 +1070,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite {
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.NonSmb)]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategory(Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter.TestCategories.Positive)]
         public void CreateFileTestCaseS42() {
+            if(this.IFSAAdapterInstance.Platform >= Platform.WindowsServer2022)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case currently does not support Windows Server 2022 or Windows Server 2025.");
+            }
+            
             this.Manager.BeginTest("CreateFileTestCaseS42");
             this.Manager.Comment("reaching state \'S42\'");
             this.Manager.Comment("executing step \'call FsaInitial()\'");

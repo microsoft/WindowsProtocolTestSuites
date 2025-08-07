@@ -259,10 +259,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.TreeMgmt
             TestConfig.CheckPlatform(Platform.WindowsServer2022);
             if (string.IsNullOrEmpty(testConfig.CompressedFileShare))
                 Assert.Inconclusive("This test requires a share with compression enabled");
-            if (TestConfig.Platform == Platform.WindowsServer2025)
-            {
-                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for smb3 connect data for Server 2025.");
-            }
             #endregion
 
             var compressedSharePath = Smb2Utility.GetUncPath(testConfig.SutComputerName, testConfig.CompressedFileShare);

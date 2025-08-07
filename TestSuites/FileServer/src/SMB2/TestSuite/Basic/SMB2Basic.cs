@@ -1580,10 +1580,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("This test case is designed to verify CHANGE_NOTIFY with CompletionFilter FILE_NOTIFY_CHANGE_STREAM_SIZE is handled correctly.")]
         public void BVT_SMB2Basic_ChangeNotify_ChangeStreamSize()
         {
-            if (TestConfig.Platform == Platform.WindowsServer2025)
-            {
-                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for smb3 connect data for Server 2025.");
-            }
             string testDirectory = CreateTestDirectory(TestConfig.SutComputerName, TestConfig.BasicFileShare);
             BaseTestSite.Log.Add(
                 LogEntryKind.Debug,

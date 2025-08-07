@@ -73,8 +73,15 @@ $certsPath = ($vm.tools.tool | Where-Object { $_.name -eq "certs" } | Select-Obj
 $dc = $config.lab.servers.vm | Where-Object { $_.role -match "DC" }
 $adminUserName = $config.lab.core.username
 if ($dc -eq $null) {
-    # for non-domain environments, just get admin user name
-    $userFolderName = "$adminUserName.SMB-2025"
+    if($vm.domain -eq "workgroup") {
+        # for non-domain environments, just get admin user name
+        $userFolderName = $adminUserName
+    }
+    else {
+        $domainName = $vm.domain
+        $domainNetBios = $domainName.Split(".")[0].ToUpper()
+        $userFolderName = "$adminUserName.$domainNetBios"
+    }
 }
 else {
     $dcName = $dc.name

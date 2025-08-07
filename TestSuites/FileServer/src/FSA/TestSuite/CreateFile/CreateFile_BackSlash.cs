@@ -49,11 +49,6 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Try to create a file end with invalid backslash and expect failure.")]
         public void CreateFile_EndWithInvalidBackSlash()
         {
-            if (fsaAdapter.TestConfig.Platform == Platform.WindowsServer2025)
-            {
-                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for files that end with backslash for Server 2025.");
-            }
-
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
             MessageStatus status;
 
@@ -72,9 +67,17 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             //Step 2: Verify test result
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Verify returned NTSTATUS code.");
-            this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.OBJECT_NAME_INVALID, status,
+            if(fsaAdapter.Platform == Platform.WindowsServer2025)
+            {
+                BaseTestSite.Assert.Inconclusive("The Open Specification hasn't captured the change for files that end with backslash for Windows Server 2025.");
+            }
+            else
+            {
+                this.fsaAdapter.AssertAreEqual(this.Manager, MessageStatus.OBJECT_NAME_INVALID, status,
                     "[MS-FSA] Section 2.1.5.1: The operation MUST be failed with STATUS_OBJECT_NAME_INVALID under any of the following conditions: 1. If PathName is not valid as specified in [MS-FSCC] section 2.1.5; " +
                     "2. If PathName contains a trailing backslash and CreateOptions.FILE_NON_DIRECTORY_FILE is TRUE");
+            }
+
         }
 
         [TestMethod()]

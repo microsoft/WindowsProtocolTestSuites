@@ -100,9 +100,8 @@ You can use the **Test Suite** to perform test cases against your implementation
 
 Whichever environment you choose, the details in this document specify the steps you should take to set up the chosen environment in which you plan to run your tests. For example, if you choose the **WORKGROUP** environment, you would simply ignore the steps that apply to the **DOMAIN** environment and vice-versa.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The **Test Suite** examines protocol implementation behaviors that are observed over the wire only.
+>[!NOTE]
+>The **Test Suite** examines protocol implementation behaviors that are observed over the wire only.
 
 **More Information**
 
@@ -113,9 +112,8 @@ To learn more about File Server Test Suite design, see the following documentati
 * [MS-FSA Protocol Server Test Design Specification](./MS-FSA_ServerTestDesignSpecification.md)
 * [MS-SQOS Protocol Server Test Design Specification](./MS-SQOS_ServerTestDesignSpecification.md)
 
-![](./image/FileServerUserGuide/image1.png)**Tip**
-
-To learn more about the common environment in which test cases are run for all **Test Suites**, see the [Protocol Test Framework User Guide](https://github.com/microsoft/ProtocolTestFramework/blob/main/docs/PTFUserGuide.md).
+>[!Tip]
+>To learn more about the common environment in which test cases are run for all **Test Suites**, see the [Protocol Test Framework User Guide](https://github.com/microsoft/ProtocolTestFramework/blob/main/docs/PTFUserGuide.md).
 
 ## <a name="2"/> 2 Test Suite Setup Overview
 
@@ -168,9 +166,8 @@ You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN*
 
 * To run the **Test Suite** in a **WORKGROUP** environment, the test machines in the list that follows are required (either physical or virtual). See [Figure 1: Workgroup environment network configuration](#fig.1) for reference.
 
-  ![](./image/FileServerUserGuide/image1.png)**Note**
-  
-  Although you can install and run the **Test Suite** components on virtual machines, this User Guide describes the setup of physical machines only.
+ > [!NOTE]  
+ > Although you can install and run the **Test Suite** components on virtual machines, this User Guide describes the setup of physical machines only.
 
   * **Driver computer** (Client01) − this machine must be running the [Operating System](https://dotnet.microsoft.com/en-us/download) that can install .NET 8.0. 
 
@@ -184,9 +181,8 @@ You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN*
 
   * **Domain Controller** (DC01) – this machine can be running either a Windows or non-Windows operating system.
 
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    If you choose to set up a non-Windows computer, you do so at your own discretion.
+    >[!NOTE]
+    >If you choose to set up a non-Windows computer, you do so at your own discretion.
 
     See section [3.3.3 Domain Controller (DC) Minimum Requirements](#3.3.3) for hardware requirements and section [5.2.1 Set up the Domain Controller for the Domain Environment](#5.2.1) for setup instructions.
 
@@ -208,9 +204,8 @@ You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN*
 
     * **SUT computer** − this machine can be for testing either a Windows or non-Windows implementation.
 
-      ![](./image/FileServerUserGuide/image1.png)**Note**
-
-      If you want to adjust an existing environment for testing non-clustering scenarios, you can simplify your deployment steps by using a node in an existing Failover Cluster configuration as the SUT computer.
+      >[!NOTE]
+      >If you want to adjust an existing environment for testing non-clustering scenarios, you can simplify your deployment steps by using a node in an existing Failover Cluster configuration as the SUT computer.
 
 **More Information**
 
@@ -224,9 +219,8 @@ Hardware requirements for the test computers in the **WORKGROUP** and **DOMAIN**
 
 The minimum requirements for the Driver computer are specified in Table 2 that follows.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The requirements that follow apply only to a Driver computer that has .NET 8.0 installed in the **WORKGROUP** or **DOMAIN** environments.
+>[!NOTE]
+>The requirements that follow apply only to a Driver computer that has .NET 8.0 installed in the **WORKGROUP** or **DOMAIN** environments.
 
 <a name="table.2"></a>
 
@@ -244,9 +238,8 @@ The requirements that follow apply only to a Driver computer that has .NET 8.0 i
 
 The minimum requirements for the SUT computer in the Windows environment are specified herein. Table 3 below specifies the requirements that apply to the SUT computer in the **WORKGROUP** environment. Table 4 specifies the requirements that apply to both SUT computers for a Windows implementation that uses a File Server, Storage, and Failover clustering configuration in the **DOMAIN** environment.  
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The requirements that follow apply only to Windows-based SUT computers in the test environment.
+>[!NOTE]
+>The requirements that follow apply only to Windows-based SUT computers in the test environment.
 
 <a name="table.3"></a>
 
@@ -280,9 +273,8 @@ The requirements that follow apply only to Windows-based SUT computers in the te
 
 The minimum requirements for the Domain Controller computer are specified in Table 5 that follows.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The requirements that follow apply only to a Windows-based DC in the test environment.
+>[!NOTE]
+>The requirements that follow apply only to a Windows-based DC in the test environment.
 
 <a name="table.5"></a>
 
@@ -302,9 +294,8 @@ The requirements that follow apply only to a Windows-based DC in the test enviro
 
 The minimum requirements for the storage area network (SAN) server computer are as follows.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The requirements that follow apply only to a Windows-based SAN server in the test environment.
+>[!NOTE]
+>The requirements that follow apply only to a Windows-based SAN server in the test environment.
 
 <a name="table.6"></a>
 
@@ -339,17 +330,15 @@ All of the following software must be installed on the driver computer. They hav
 
     **Microsoft® Message Analyzer** (MMA) is listed here as an optional tool because the test cases of themselves neither perform live captures or capture verifications during execution. 
 
-    ![](./image/FileServerUserGuide/image1.png)Note
-
-    November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
+    >[!NOTE]
+    >November 25 2019 - Microsoft Message Analyzer (MMA) has been retired and removed from public-facing sites on microsoft.com. A private MMA build is available for testing purposes; to request it, send an email to [getmma@microsoft.com](mailto:getmma@microsoft.com).
 
 ## <a name="4"/> 4 Network Setup
 
 This section describes how to set up the network for both the **WORKGROUP** and **DOMAIN** environments, which are described earlier in section [3.2 Environment Configuration](#3.2).
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-You can deploy the **Test Suite** on either physical or virtual machines. However, the sections that follow describe the deployment on physical machines only.
+>[!NOTE]
+>You can deploy the **Test Suite** on either physical or virtual machines. However, the sections that follow describe the deployment on physical machines only.
 
 **More Information**
 
@@ -370,9 +359,8 @@ Computers in the **WORKGROUP** network environment interact with each other as f
 
 The following diagram shows the **WORKGROUP** environment with recommended network configurations for reference. Note that all the settings are configurable.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The suggested settings in the following diagram apply to both Windows-based computers and non-Windows based computers in a **WORKGROUP** environment, however, note that this User Guide documents the Windows case only.
+>[!NOTE]
+>The suggested settings in the following diagram apply to both Windows-based computers and non-Windows based computers in a **WORKGROUP** environment, however, note that this User Guide documents the Windows case only.
 
 <a name="fig.1"></a>
 
@@ -380,9 +368,8 @@ The suggested settings in the following diagram apply to both Windows-based comp
 
 Figure 1. Workgroup environment network configuration
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-As a non-Windows SUT computer, **Node01** should host an implementation-specific system under test.
+>[!NOTE]
+>As a non-Windows SUT computer, **Node01** should host an implementation-specific system under test.
 
 <a name="table.7"></a>
 
@@ -395,9 +382,8 @@ As a non-Windows SUT computer, **Node01** should host an implementation-specific
 | Node01                    | External1 | 192.168.1.11  | 255.255.255.0 |
 |                           | External2 | 192.168.1.12  | 255.255.255.0 |
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The addresses that are specified in the IPv4 column of this table and other tables are placeholders for actual addresses that you should specify. Also, note that the Driver computer (Client01) and the SUT computer (Node01) each require dual network interface cards (NICs), as indicated by the "External1" and "External2" designations, for complete testing of all scenarios.
+>[!NOTE]
+>The addresses that are specified in the IPv4 column of this table and other tables are placeholders for actual addresses that you should specify. Also, note that the Driver computer (Client01) and the SUT computer (Node01) each require dual network interface cards (NICs), as indicated by the "External1" and "External2" designations, for complete testing of all scenarios.
 
 ### <a name="4.2"/> 4.2 Domain Network Environment
 
@@ -417,9 +403,8 @@ Computers in the **DOMAIN** environment interact with each other as follows:
 
 The following diagram shows the **DOMAIN** environment with recommended network configurations for reference. Note that all settings are configurable.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The suggested settings in the following diagram apply to Windows based computers in the DOMAIN environment only.  However, non-Windows based computers are also supported in this environment. Note that dual network interface cards (NICs) are required on the Driver, SUT, and DC computers, as indicated by the "External1" and "External2" designations.
+>[!NOTE]
+>The suggested settings in the following diagram apply to Windows based computers in the DOMAIN environment only.  However, non-Windows based computers are also supported in this environment. Note that dual network interface cards (NICs) are required on the Driver, SUT, and DC computers, as indicated by the "External1" and "External2" designations.
 
 In Clustering scenarios, the Driver computer (Client01 in figure 2) contacts the **Node01** and **Node02** SUT computers, which are configured as Failover Cluster nodes. The Storage Area Network (SAN) server computer **Storage01** is on an isolated network and provides backend storage for the Failover Cluster.
 
@@ -431,9 +416,8 @@ In non-clustering scenarios as well, the Driver computer contacts whichever node
 
 Figure 2. Domain environment network configuration
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-In Figure 2, **Cluster01** represents the Failover Cluster computers that are identified as **Node01** and **Node02**, while **GeneralFS** represents the File Server role provided by the Failover Cluster, and **ScaleOutFS** represents the Scale-Out File Server role provided by the same cluster.
+>[!NOTE]
+>In Figure 2, **Cluster01** represents the Failover Cluster computers that are identified as **Node01** and **Node02**, while **GeneralFS** represents the File Server role provided by the Failover Cluster, and **ScaleOutFS** represents the Scale-Out File Server role provided by the same cluster.
 
 In non-Windows environments, the **Node01**, **Node02**, and **Storage01** computers could be replaced by  some other implementation-specific system under test (SUT).
 
@@ -469,9 +453,8 @@ After setting up the host computers and the network configurations in either the
 
 To learn more about testing computer connectivity, see the Administrative Guide for your operating system.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-Before performing the steps that follow, disable all active firewalls in the test environment . For Windows computers, see section [5.3.14 Turn off Firewalls](#5.3.14).
+>[!NOTE]
+> Before performing the steps that follow, disable all active firewalls in the test environment . For Windows computers, see section [5.3.14 Turn off Firewalls](#5.3.14).
 
 To check connectivity from the Driver computer to the SUT computer/s as well as other computers in your test environment, perform the following steps:
 
@@ -497,9 +480,8 @@ Do not proceed further with the setup until you have verified the proper connect
 
 As indicated earlier, the Test Suite can be executed in either the **WORKGROUP** or **DOMAIN** environment, as described in section [3.2 Environment Configuration](#3.2).
 
-![](./image/FileServerUserGuide/image2.png)**Important**
-
-When setting up the Driver and SUT computers in either the **WORKGROUP** or **DOMAIN** environment, the procedures specify the use of particular names for items such as passwords, sharenames, and so on. Note that in most cases these are only suggested names that you can change to accommodate your specific environment, at your discretion.
+>[!IMPORTANT]
+>When setting up the Driver and SUT computers in either the **WORKGROUP** or **DOMAIN** environment, the procedures specify the use of particular names for items such as passwords, sharenames, and so on. Note that in most cases these are only suggested names that you can change to accommodate your specific environment, at your discretion.
 
 ### <a name="5.1"/> 5.1 Workgroup Environment
 
@@ -513,19 +495,17 @@ The **WORKGROUP** environment consists of two test machines as follows:
 
 This section describes how to set up the Driver computer for the **WORKGROUP** environment.
 
-![](./image/FileServerUserGuide/image2.png)**Important**
-
-Microsoft® Visual Studio, the Protocol Test Framework, and Spec Explorer must be installed on the Driver computer **before** you run the **Test Suite** installer. See section [3.4 Software Requirements](#3.4).
+>[!IMPORTANT]
+>Microsoft® Visual Studio, the Protocol Test Framework, and Spec Explorer must be installed on the Driver computer **before** you run the **Test Suite** installer. See section [3.4 Software Requirements](#3.4).
 
 Perform the steps that follow to set up the Driver computer:
 
 1. Configure IP addresses along with subnet masks and set the computer name to **Client01**. See section [4.1 Workgroup Environment](#4.1).
 
-2. Make sure all firewall are turned off.
+2. Make sure alls firewall are turned off.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-For more information about turning off the firewall on Windows platforms, see section [5.3.14 Turn off Firewalls](#5.3.14).
+    >[!NOTE]
+    >For more information about turning off the firewall on Windows platforms, see section [5.3.14 Turn off Firewalls](#5.3.14).
 
 3. Install the required software, as described in section [3.4 Software Requirements](#3.4), which includes downloading and extracting the **FileServer-TestSuite-ServerEP.zip (tar.gz) ** package onto the Driver computer.
 
@@ -633,13 +613,10 @@ To create a share named SameWithSMBBasic, perform the steps that follow:
 
   2. For Windows platforms, proceed to section [5.3.5 Add a share SameWithSMBBasic with the same Path of Share SMBBasic](#5.3.5) for the process to create and locate the SameWithSMBBasic share.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-* The test case creates a file under the **SMBBasic** share in the first create request and a second create request creates a file of the same name under the **SameWithSMBBasic** share.
-
-* The test case then connects with the share **SameWithSMBBasic** and sends a second Create Request to the SUT with the same **AppInstanceId**.
-
-* The test case verifies that the first Open is not forced to close by the second Create Request because the second Create Request is connecting to a different share.
+>[!NOTE]
+>* The test case creates a file under the **SMBBasic** share in the first create request and a second create request creates a file of the same name under the **SameWithSMBBasic** share.
+>* The test case then connects with the share **SameWithSMBBasic** and sends a second Create Request to the SUT with the same **AppInstanceId**.
+>* The test case verifies that the first Open is not forced to close by the second Create Request because the second Create Request is connecting to a different share.
 
 ###### <a name="5.1.2.2.3.3"/> 5.1.2.2.3.3 Create a share named DifferentFromSMBBasic
 
@@ -683,9 +660,8 @@ To create a shared folder named **SMBReFSShare** in a new **ReFS**-formatted vol
 
   2. Create a shared folder named **SMBReFSShare** on the **ReFS**-formatted volume on the SUT (**Node01**) computer.
 
-  ![](./image/FileServerUserGuide/image1.png)**Note**
-  
-  The file system of the volume containing the specified share must support the use of **Integrity**, such as **ReFS**-formatted volumes do.
+     >[!NOTE]  
+     >The file system of the volume containing the specified share must support the use of **Integrity**, such as **ReFS**-formatted volumes do.
 
   3. Share the **SMBReFSShare** folder with **Read/Write** permissions to the local **Administrator** account that you enabled earlier.
 
@@ -721,17 +697,15 @@ To create a share with compression enabled, perform the steps that follow on the
     ```
 This will enforce data compression on this share
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-SMB Compression is only supported on Windows 10 version 2004 or Windows Server 2022 and later versions.
+>[!NOTE]
+>SMB Compression is only supported on Windows 10 version 2004 or Windows Server 2022 and later versions.
 
 ###### <a name="5.1.2.2.3.8"/> 5.1.2.2.3.8 Configure SMB Over QUIC
 
 This configuration is used to test the **SMB over QUIC** transport feature. If **QUIC** is not supported in your implementation, please ignore this section.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-SMB over QUIC is only supported on Windows Server 2022 **Azure Edition** and later versions.
+>[!NOTE]
+>SMB over QUIC is only supported on Windows Server 2022 **Azure Edition** and later versions.
 
 To configure SMB over QUIC, perform the steps that follow:
 
@@ -739,15 +713,20 @@ To configure SMB over QUIC, perform the steps that follow:
 2. Create a self-signed certificate for the SUT computer:
 
     ```
+    $domainName = "contoso.com" # IMPORTANT: Replace "contoso.com" with your actual domain name
     $sutName = $env:COMPUTERNAME
-    $currCert = New-SelfSignedCertificate -Subject $sutName -FriendlyName "SMB over QUIC for File Servers" -KeyUsageProperty Sign -KeyUsage DigitalSignature -CertStoreLocation Cert:\LocalMachine\My -HashAlgorithm SHA256 -Provider "Microsoft Software Key Storage Provider" -KeyAlgorithm ECDSA_P256 -KeyLength 256 -DnsName @("$sutName.yourdomain.com", $sutName)
+    $currCert = New-SelfSignedCertificate -Subject $sutName -FriendlyName "SMB over QUIC for File Servers" -KeyUsageProperty Sign -KeyUsage DigitalSignature -CertStoreLocation Cert:\LocalMachine\My -HashAlgorithm SHA256 -Provider "Microsoft Software Key Storage Provider" -KeyAlgorithm ECDSA_P256 -KeyLength 256 -DnsName @("$sutName.$domainName", $sutName)
     ```
-    Replace "yourdomain.com" with your actual domain name if in a domain environment.
+    >[!IMPORTANT] Domain vs Standalone Environment:
+    >Domain environment: Change $domainName = "contoso.com" to your actual domain name (e.g., "yourdomain.com")
+    >Standalone/Workgroup environment: You can use any valid domain name format (e.g., "workgroup.local" or "standalone.corp") - this is used for certificate naming only
 3. Map the certificate to the SMB server
    ```
+    $domainName = "contoso.com"  # Change this to your actual domain name (must match Step 2)
+    $sutName = $env:COMPUTERNAME
     $certThumbprint = $currCert.Thumbprint
     $subject = $currCert.Subject
-    New-SmbServerCertificateMapping -Name "$sutName.yourdomain.com" -Thumbprint $certThumbprint -StoreName my -Subject $subject
+    New-SmbServerCertificateMapping -Name "$sutName.$domainName" -Thumbprint $certThumbprint -StoreName my -Subject $subject
     ```
 4. Export the certificate to a PFX file and import it to the trusted root store:
     ```
@@ -769,12 +748,11 @@ To configure SMB over QUIC, perform the steps that follow:
     Restart-Service -Name lanmanserver -Force
     ```
 
-![](./image/FileServerUserGuide/image1.png)**IMPORTANT**
-
-The same certificate must be trusted on both the SUT and the Driver computers for QUIC connections to work properly. Import the certificate to the Trusted Root store on the Driver computer as well.
-
+>[!IMPORTANT]
+>The same certificate must be trusted on both the SUT and the Driver computers for QUIC connections to work properly. Import the certificate to the Trusted Root store on the Driver computer as well.
 
 
+To configure your test suites use QUIC transport, follow instructions - [Run File Server Test Suite over QUIC](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/Run-File-Server-Test-Suite-over-QUIC)
 
 
 ##### <a name="5.1.2.3"/> 5.1.2.3 Setup to test DFSC
@@ -805,15 +783,13 @@ To complete these tasks on Windows platforms, see section [5.3.11 Set up Distrib
 
 ##### <a name="5.1.2.4"/> 5.1.2.4 Setup to test RSVD
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-RSVD testing is not applicable to the Windows **WORKGROUP** environment. However, you can still perform RSVD testing if you have a non-Windows computer as the SUT and your implementation supports this feature in the **WORKGROUP** environment. To perform RSVD testing in the **DOMAIN** environment, see section [5.2.4.5 Setup to test RSVD](#5.2.4.5).
+>[!NOTE]
+>RSVD testing is not applicable to the Windows **WORKGROUP** environment. However, you can still perform RSVD testing if you have a non-Windows computer as the SUT and your implementation supports this feature in the **WORKGROUP** environment. To perform RSVD testing in the **DOMAIN** environment, see section [5.2.4.5 Setup to test RSVD](#5.2.4.5).
 
 ##### <a name="5.1.2.5"/> 5.1.2.5 Setup to test SQOS
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-Storage Quality of Service (SQOS) testing is not applicable to the Windows **WORKGROUP** environment. However, you can still perform SQOS testing if your implementation supports this feature in the **WORKGROUP** environment. To perform SQOS testing in the **DOMAIN** environment, see section [5.2.4.6 Setup to test SQOS](#5.2.4.6).
+>[!NOTE]
+>Storage Quality of Service (SQOS) testing is not applicable to the Windows **WORKGROUP** environment. However, you can still perform SQOS testing if your implementation supports this feature in the **WORKGROUP** environment. To perform SQOS testing in the **DOMAIN** environment, see section [5.2.4.6 Setup to test SQOS](#5.2.4.6).
 
 ##### <a name="5.1.2.6"/> 5.1.2.6 Setup to test the File System Algorithms (FSA)
 
@@ -849,9 +825,8 @@ The general tasks you will need to perform are outlined in the steps that follow
 
   9. Repeat steps 3 through 6 for the share **SMBReFSShare**, which should have been already created in section [5.1.2.2.3.5 Create the share on a volume supporting integrity](#5.1.2.2.3.5).
 
-      ![](./image/FileServerUserGuide/image1.png)**Note**
-
-      If **Integrity** is not supported by the file system, please ignore this step.
+      >[!NOTE]
+      >If **Integrity** is not supported by the file system, please ignore this step.
 
 ##### <a name="5.1.2.6.1"/> 5.1.2.6.1 Enable LastAccessTime Update
 
@@ -907,12 +882,12 @@ For further details, see section 5.3.25 How to start the command console with Ad
    assign letter=J
    exit
    ```
-   ![](./image/FileServerUserGuide/image1.png)**Note**   
-   Logical and extended partitions cannot be created on a GPT disk.
-   If operating on a GPT disk replace the first command with:
-   ```
-   create partition primary size=2000
-   ```
+   >[!NOTE]
+   >Logical and extended partitions cannot be created on a GPT disk.
+   >If operating on a GPT disk replace the first command with:
+   >```
+   >create partition primary size=2000
+   >```
 5. Create a share named **SMBFAT32Share** on the newly created FAT32 volume
 6. Share the **SMBFAT32Share** folder with Read/Write permissions to the **Administrator** account.
 For Windows platforms, see section [5.3.1 Create a share](#5.3.1) for additional process details
@@ -961,9 +936,8 @@ This section describes how to set up a computer as the Domain Controller (DC). F
 
   For Windows platforms, see section [5.3.10.1 Install DNS and Active Directory Domain Services](#5.3.10.1) to create a specified domain.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-In non-Windows Domain Controller environments, it may be necessary to manually configure DNS records for all test machines.
+>[!NOTE]
+>In non-Windows Domain Controller environments, it may be necessary to manually configure DNS records for all test machines.
 
 ##### <a name="5.2.1.2"/> 5.2.1.2 Start the Routing service
 
@@ -1019,9 +993,8 @@ To set up the Driver computer:
 
 Perform the following steps to set up the SAN storage server computer:
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-If you will not be testing cluster scenarios, please ignore this section.
+>[!NOTE]
+>If you will not be testing cluster scenarios, please ignore this section.
 
   1. Configure IP addresses on the SAN storage server and set the computer name to **Storage01**. See section [4.2 Domain Environment](#4.2) for IP details.
 
@@ -1079,9 +1052,8 @@ Perform the steps that follow to create the configuration that is used to test t
 
 Perform the steps that follow to create the configuration that is used to test the **MS-FSRVP**, **MS-SWN**, and **MS-SRVS** protocols. Please ignore this section, if you are not planning to test the Cluster scenarios.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-Server Failover/FSRVP/SWN testing is not applicable to the **WORKGROUP** environment on Windows platforms.
+>[!NOTE]
+>Server Failover/FSRVP/SWN testing is not applicable to the **WORKGROUP** environment on Windows platforms.
 
 1. Create a share named **SMBClustered**, set the property **Share.IsCA** to **TRUE**, set **Share.Type** to include **STYPE_CLUSTER_SOFS**, and make the share is asymmetric.
   
@@ -1107,9 +1079,8 @@ Server Failover/FSRVP/SWN testing is not applicable to the **WORKGROUP** environ
 
 Perform the steps that follow to create the configuration that is used to test the **MS-RSVD** protocol. If the **RSVD** protocol is not supported, please ignore this section.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-RSVD testing is not applicable in the **WORKGROUP** environment on Windows platforms. However, you can still test it if your implementation is on a non-windows computer that supports this feature in the **WORKGROUP** environment.
+>[!NOTE]
+>RSVD testing is not applicable in the **WORKGROUP** environment on Windows platforms. However, you can still test it if your implementation is on a non-windows computer that supports this feature in the **WORKGROUP** environment.
 
 1. Create a virtual hard disk file named **rsvd.vhdx** and **rsvd.vhds** with maximum size of 1 GB.
 
@@ -1117,15 +1088,14 @@ RSVD testing is not applicable in the **WORKGROUP** environment on Windows platf
 
 3. Save the share name to the property: **ShareContainingSharedVHD** in the [MSRSVD_ServerTestSuite.deployment.ptfconfig](#7.2) file.
 
-> To learn more about how to create a virtual hard disk (set) file on Windows platforms, see section [5.3.20 Create the virtual hard disk file](#5.3.20) and section [5.3.21 Create the virtual hard disk set file](#5.3.21).
+    > To learn more about how to create a virtual hard disk (set) file on Windows platforms, see section [5.3.20 Create the virtual hard disk file](#5.3.20) and section [5.3.21 Create the virtual hard disk set file](#5.3.21).
 
 ##### <a name="5.2.4.6"/> 5.2.4.6 Setup to test SQOS
 
 Perform the following steps to create the configuration that is used to test the **MS-SQOS** protocol. Please ignore this section if your implementation does not support **SQOS**.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-Storage Quality of Service (SQOS) protocol testing is not applicable in the **WORKGROUP** environment on Windows platforms. However, you can still test it if your implementation supports this feature in the **WORKGROUP** environment.
+>[!NOTE]
+>Storage Quality of Service (SQOS) protocol testing is not applicable in the **WORKGROUP** environment on Windows platforms. However, you can still test it if your implementation supports this feature in the **WORKGROUP** environment.
 
 1. Create a virtual hard disk file named **sqos.vhdx** with maximum size of 1 GB.
 
@@ -1143,9 +1113,8 @@ To learn more about how to create a new policy, see section [5.3.24 Create an SQ
 
 Perform the following steps to create the configuration that is used to test the authentication and authorization protocols. Create this configuration once on the Node1 computer only.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-Authorization testing is not applicable to the **WORKGROUP** environment on Windows platforms.
+>[!NOTE]
+>Authorization testing is not applicable to the **WORKGROUP** environment on Windows platforms.
 
 1. Create a share named **AzShare** with the following permissions configuration:
 
@@ -1182,9 +1151,8 @@ Authorization testing is not applicable to the **WORKGROUP** environment on Wind
     | AzShare05  | O:SYG:SYD:(A;;FA;;;BA)                                     |
     | AzShare06  | O:SYG:SYD:(D;;;;;\[SID of AzUser01\])(A;;FA;;;BA)          |
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The steps to create the above shares are similar to creating share **SMBBasic**.
+>[!NOTE]
+>The steps to create the above shares are similar to creating share **SMBBasic**.
 
 For Windows platforms, see the following sections to facilitate creating shares and permissions in the above procedure:
 
@@ -1212,9 +1180,8 @@ This section describes detailed setup steps for Windows platforms in **WORKGROUP
 
 To create a share, perform the steps that follow.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The procedure that follows specifically creates an **SMBBasic** share. However, you can use this procedure as a general guideline to create any share, for example, **AzShare**.
+>[!NOTE]
+>The procedure that follows specifically creates an **SMBBasic** share. However, you can use this procedure as a general guideline to create any share, for example, **AzShare**.
 
 1. Create new folder **%SystemDrive%\SMBBasic**, as follows:
 
@@ -1298,9 +1265,8 @@ To set NTFS permissions on the shared **AzShare** folder that you created by fol
 
 3. On the **Permissions** tab of the **Advanced Security Settings** for **AzShare** dialog, edit NTFS Permissions by selecting security principal **Administrator** (**Node01\\Administrator**) and clicking the **Edit** button.
 
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    If you want to add or remove a security principal, click Add or Remove as required.
+    >[!NOTE]
+    >If you want to add or remove a security principal, click Add or Remove as required.
 
     <a name="fig.12"></a>
 
@@ -1353,9 +1319,8 @@ To set NTFS permissions on the shared folders **AzShare01** through **AzShare06*
       icacls .\ /restore .\aclfile
     ```
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-If you want to learn more about ACL strings, see [Security Descriptor String Format](https://docs.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-string-format).
+>[!NOTE]
+>If you want to learn more about ACL strings, see [Security Descriptor String Format](https://docs.microsoft.com/en-us/windows/win32/secauthz/security-descriptor-string-format).
 
 #### <a name="5.3.4"/> 5.3.4 Set Share Permissions
 
@@ -1533,9 +1498,8 @@ To create a share on a volume that supports integrity, perform the steps that fo
 
 2. Execute the command `diskmgmt.msc` in the command console to launch the **Disk Management** MMC in order to create a Resilient File System (**ReFS**)-formatted volume.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-You will need at least **5GB** of **Unallocated** space to create a new simple volume.
+    >[!NOTE]
+    >You will need at least **5GB** of **Unallocated** space to create a new simple volume.
 
 3. In the **Disk Management** console, right-click **Disk 0** and select **Shrink volume** in the context menu that displays to free some disk space.
 
@@ -1671,9 +1635,8 @@ To set up a Windows Domain Controller (DC), perform the steps that follow.
 
 13. Repeatedly click **Next** until the **Prerequisites Check** dialog displays, verify that the check succeeded, and then click **Install**. If the check did not succeed, assess the **View Result** pane items and address issues as necessary, then click **Rerun prerequisite checks**.
 
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    If your machine does not reboot automatically after the **promote to DC process** completes, then perform a manual restart.
+    >[!NOTE]
+    >If your machine does not reboot automatically after the **promote to DC process** completes, then perform a manual restart.
 
     <a name="fig.35"></a>
 
@@ -2502,8 +2465,7 @@ To add two new folders to the **DomainBased** namespace, perform the steps that 
 
 This section describes how to set up a storage area network (SAN) storage server for use with this Test Suite.
 
-> ![](./image/FileServerUserGuide/image1.png)**Note**
->
+>[!NOTE]
 > Do not join the SAN Storage Server to the domain provided by the DC.
 
 ##### <a name="5.3.12.1"/> 5.3.12.1 Install iSCSI Target
@@ -2548,9 +2510,8 @@ To install the **File Server** and **iSCSI Target Server** roles on the Storage0
 
 To create virtual disks for the failover cluster node, perform the steps that follow.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-This procedure should be performed only after installing the iSCSI target via section [5.3.12.1 Install iSCSI Target](#5.3.12.1).
+>[!NOTE]
+>This procedure should be performed only after installing the iSCSI target via section [5.3.12.1 Install iSCSI Target](#5.3.12.1).
 
 1. Navigate to **Server Manager** -> **File and Storage Services** -> **iSCSI Virtual Disks** and then click **Launch the New Virtual Disk wizard to create a virtual disk**.
 
@@ -2616,9 +2577,8 @@ This procedure should be performed only after installing the iSCSI target via se
 
     When complete, click **OK** to return to the **Access Servers** tab in the wizard.
 
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    If you wish to add another value, repeat steps 7 and 8.
+    >[!NOTE]
+    >If you wish to add another value, repeat steps 7 and 8.
 
     <a name="fig.124"></a>
 
@@ -2674,9 +2634,8 @@ This procedure should be performed only after installing the iSCSI target via se
     | FSDisk01   | 10 GB | Storage used by file server for general use on failover cluster                |
     | FSDisk02   | 10 GB | Storage used by file server for scale-out application data on failover cluster |
 
-    ![](./image/FileServerUserGuide/image1.png)**Note**
-
-    After you finish creating the iSCSI virtual disks **FSDisk01** and **FSDisk02** for the failover cluster, you can correlate the iSCSI target names with additional details in Server Manager, as shown in the figure that follows, by selecting any one of the virtual disks in the listview.
+    >[!NOTE]
+    >After you finish creating the iSCSI virtual disks **FSDisk01** and **FSDisk02** for the failover cluster, you can correlate the iSCSI target names with additional details in Server Manager, as shown in the figure that follows, by selecting any one of the virtual disks in the listview.
 
     <a name="fig.129"></a>
 
@@ -2824,9 +2783,8 @@ To create a Failover Cluster on the **Node01** or **Node02** computer, perform t
 
 3. In **Server Manager**, click **Create Cluster...** to open the **Create Cluster Wizard**, from where you can create a cluster configuration comprising the **Node01** and **Node02** computers.
 
-    ![](./image/FileServerUserGuide/image2.png)**Important**
-
-    Before creating the cluster configuration, ensure that shared storage has been created/added to the failover cluster **Node01** and **Node02** computers. For more information,  see section [5.3.12 Set up the SAN Storage Server](#5.3.12).
+    >[!IMPORTANT]
+    >Before creating the cluster configuration, ensure that shared storage has been created/added to the failover cluster **Node01** and **Node02** computers. For more information,  see section [5.3.12 Set up the SAN Storage Server](#5.3.12).
 
     <a name="fig.143"></a>
 
@@ -3106,9 +3064,8 @@ To turn off the Firewall on the local computer, perform the steps that follow.
 
 To enable the Administrator account, perform the step that follows.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The Administrator account is enabled by default when Windows Server is the operating system, however, if it is disabled for some reason, you can enable it by using the procedure that follows.
+>[!NOTE]
+>The Administrator account is enabled by default when Windows Server is the operating system, however, if it is disabled for some reason, you can enable it by using the procedure that follows.
 
 1. If the SUT computer is running the Microsoft® Windows Server 2012 R2 or later operating system, enable a disabled built-in Administrator account by running the following command:
 
@@ -3179,11 +3136,10 @@ There are two tools you can use to create a virtual hard disk file, as follows:
 * Command line
 * New Virtual Hard Disk Wizard
 
-![](./image/FileServerUserGuide/image2.png)**Important**
+>[!IMPORTANT]
+>To use either of these tools, you will need to first install the Hyper-V Role on a server OS computer with the use of **Server Manager**.
 
-To use either of these tools, you will need to first install the Hyper-V Role on a server OS computer with the use of **Server Manager**.
-
-* **Commnad line**
+* **Command line**
 
     To create a virtual hard disk file named rsvd.vhdx by using a command string, perform the following steps.
 
@@ -3256,9 +3212,8 @@ There are two tools you can use to create a shared virtual hard disk file, as fo
 * PowerShell
 * New Virtual Hard Disk Wizard
 
-![](./image/FileServerUserGuide/image2.png)**Important**
-
-To use either of these tools, you will need to first install the Hyper-V Role on a server computer with the use of **Server Manager**.
+>[!IMPORTANT]
+>To use either of these tools, you will need to first install the Hyper-V Role on a server computer with the use of **Server Manager**.
 
 * **PowerShell**
 
@@ -3450,9 +3405,8 @@ To create a volume mount point, perform the steps that follow.
 
 Extract FileServer-TestSuite-ServerEP.zip or FileServer-TestSuite-ServerEP.tar.gz to your computer. 
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The extracted folders and files are described in the Table that follows.
+>[!NOTE]
+>The extracted folders and files are described in the Table that follows.
 
 <a name="table.11"></a>
 
@@ -3524,13 +3478,11 @@ You can also change configuration settings by editing the **\\*.deployment.ptfco
 
 * MS-FSAModel_ServerTestSuite.deployment.ptfconfig - settings in the **MS-FSAModel_ServerTestSuite.deployment.ptfconfig** file are for the FSA model test suite.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
+>[!NOTE]
+>You can locate the .ptfconfig files in the following directory location after the **File Server Protocol Family Test Suite** is unpacked:  **FileServer-TestSuite-ServerEP\\Bin\\** The data in these XML files is invoked whenever you run test cases with the use of either **batch scripts** or the **Protocol Test Manager**.
 
-You can locate the .ptfconfig files in the following directory location after the **File Server Protocol Family Test Suite** is unpacked:  **FileServer-TestSuite-ServerEP\\Bin\\** The data in these XML files is invoked whenever you run test cases with the use of either **batch scripts** or the **Protocol Test Manager**.
-
-![](./image/FileServerUserGuide/image2.png)**Important**
-
-For specific configuration details, refer to a corresponding \*.deployment.ptfconfig file. The configuration files contain &lt;Description&gt; tags that describe the purpose of configurable items.
+>[!IMPORTANT]
+>For specific configuration details, refer to a corresponding \*.deployment.ptfconfig file. The configuration files contain &lt;Description&gt; tags that describe the purpose of configurable items.
 
 ### <a name="7.3"/> 7.3 Run Test Cases with Batch Scripts
 
@@ -3562,9 +3514,8 @@ You can also review test results in the following ways:
 
 * Assessment of logged data in the **StandardOutput**, **ErrorStackTrace**, and **ErrorMessage** categories.
 
-![](./image/FileServerUserGuide/image1.png)**Note**
-
-The StandardOutput data can also be displayed separately in HTML format.
+>[!NOTE]
+>The StandardOutput data can also be displayed separately in HTML format.
 
 ## <a name="8"/> 8 Creating a Custom Test Environment
 

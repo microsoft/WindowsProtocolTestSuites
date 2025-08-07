@@ -142,6 +142,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
         [Description("This case is designed to test whether server can handle Create operation with symbolic link at last of file path.")]
         public void CreateClose_SymbolicLinkAtLast()
         {
+            if(testConfig.Platform >= Platform.WindowsServer2022)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case currently does not support Windows Server 2022 or Windows Server 2025.");
+            }
+            
             //Client1 create a directory
             OperateFileOrDirectory(
                 client1,
