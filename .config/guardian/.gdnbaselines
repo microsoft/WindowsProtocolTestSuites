@@ -3420,6 +3420,96 @@
       "createdDate": "2025-02-08 21:14:37Z",
       "expirationDate": "2025-07-28 21:19:28Z",
       "justification": "This error is baselined with an expiration date of 180 days from 2025-02-08 21:19:28Z"
+    },
+    "6725fdd306526fbaa43f3c35507fac3bb2f3623f9e386fb5184dfc8e1e489e5a": {
+      "signature": "6725fdd306526fbaa43f3c35507fac3bb2f3623f9e386fb5184dfc8e1e489e5a",
+      "alternativeSignatures": [
+        "3490a04d8373ab2adaf146a4f6d7e92a9951d83911e906414cfe54fdd5fc7034"
+      ],
+      "target": "staging/CodeCoverage/CodeCoverage.exe",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-07-11 08:55:55Z",
+      "expirationDate": "2025-12-28 08:58:06Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-07-11 08:58:06Z"
+    },
+    "662b2e15eec9bba97285284ba917f58be237426930e490aa045523f92eefae46": {
+      "signature": "662b2e15eec9bba97285284ba917f58be237426930e490aa045523f92eefae46",
+      "alternativeSignatures": [
+        "7c3ee46b623ca43d2e7d3c756e8506f2c067b1eae3eb65d961bd78f80b22b420"
+      ],
+      "target": "staging/CodeCoverage/covrun32.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-07-11 08:55:55Z",
+      "expirationDate": "2025-12-28 08:58:06Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-07-11 08:58:06Z"
+    },
+    "e5ff5918aa8ce211ef3d5d997dd67e39822ae2e3965d4d4327cbae537c8573de": {
+      "signature": "e5ff5918aa8ce211ef3d5d997dd67e39822ae2e3965d4d4327cbae537c8573de",
+      "alternativeSignatures": [
+        "94dbc3129da1f6b83b80c4b15168a286c63199c728659fb97223b5cfe561a502"
+      ],
+      "target": "staging/CodeCoverage/msdia140.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-07-11 08:55:55Z",
+      "expirationDate": "2025-12-28 08:58:06Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-07-11 08:58:06Z"
+    },
+    "ec5bdb349232cb03f10fa06498211a8997ebb15136e36225600f7d0242474223": {
+      "signature": "ec5bdb349232cb03f10fa06498211a8997ebb15136e36225600f7d0242474223",
+      "alternativeSignatures": [
+        "45090b34bd2ed2f3a408cdaca9922b5a879c7bbdaa80a36ce55b0fe3d03ea2a6"
+      ],
+      "target": "staging/CodeCoverage/amd64/CodeCoverage.exe",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-07-11 08:55:55Z",
+      "expirationDate": "2025-12-28 08:58:06Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-07-11 08:58:06Z"
+    },
+    "7db7fb61380db4bf80a9c8e954e2b258acf08f31370e42841b345bc34f67f5fe": {
+      "signature": "7db7fb61380db4bf80a9c8e954e2b258acf08f31370e42841b345bc34f67f5fe",
+      "alternativeSignatures": [
+        "c5f27a1b491113b2f18300af76c6231901e6e23e6498cd59fc2e7226b3d12a89"
+      ],
+      "target": "staging/CodeCoverage/amd64/covrun64.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-07-11 08:55:55Z",
+      "expirationDate": "2025-12-28 08:58:06Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-07-11 08:58:06Z"
+    },
+    "fd02ff30f2a1a6bd8441a7dc35df32bb99bdb7da5471f92e34cd61d3f49f6643": {
+      "signature": "fd02ff30f2a1a6bd8441a7dc35df32bb99bdb7da5471f92e34cd61d3f49f6643",
+      "alternativeSignatures": [
+        "55f4f54bfc4707b9e6fdd9b7f6e94071c5fa1c21a53fe8807fbe1ac09acc157e"
+      ],
+      "target": "staging/CodeCoverage/amd64/msdia140.dll",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "binskim",
+      "ruleId": "BA2008",
+      "createdDate": "2025-07-11 08:55:55Z",
+      "expirationDate": "2025-12-28 08:58:06Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2025-07-11 08:58:06Z"
     }
   }
 }
