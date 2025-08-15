@@ -107,6 +107,55 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Srvs
         }
 
         /// <summary>
+        /// The NetrShareAdd method creates a new share on the specified server.
+        /// </summary>
+        /// <param name="serverName">A string that identifies the server. If this parameter is NULL, the local computer is used.</param>
+        /// <param name="Level">An enumeration representing the level of information provided in the InfoStruct parameter.</param>
+        /// <param name="InfoStruct">A structure containing information about the share being added.</param>
+        /// <param name="ParmErr">A pointer to a value that receives error information if the method fails. If the method returns a nonzero error code, 
+        /// ParmErr receives additional error details; otherwise, it remains unchanged.</param>
+        /// <returns>The method returns 0x00000000 (NERR_Success) to indicate success; otherwise, it returns a nonzero error code.</returns>
+        public uint NetrShareAdd(
+            string ServerName,
+            SHARE_ENUM_STRUCT_LEVEL Level,
+            SHARE_INFO InfoStruct,
+            ref uint? ParmErr)
+        {
+            /* 	NET_API_STATUS NetrShareAdd(
+                  [in, string, unique] SRVSVC_HANDLE ServerName,
+                  [in] DWORD Level,
+                  [in, switch_is(Level)] LPSHARE_INFO InfoStruct,
+                  [in, out, unique] DWORD* ParmErr
+                );
+            */
+
+            Int3264[] paramList;
+            uint retVal = 0;
+
+            using (SafeIntPtr pServerName = Marshal.StringToHGlobalUni(ServerName),
+                pShareInfo = TypeMarshal.ToIntPtr(InfoStruct, Level, null, null),
+                pParmErr = TypeMarshal.ToIntPtr(ParmErr))
+            {
+                paramList = new Int3264[]{
+                    pServerName,
+                    (uint)Level,
+                    pShareInfo, // out value
+                    pParmErr,
+                    IntPtr.Zero // return value
+                    };
+                using (RpceInt3264Collection outParamList = RpceCall(paramList, (ushort)SRVS_OPNUM.NetrShareAdd))
+                {
+                    retVal = outParamList[paramList.Length - 1].ToUInt32();
+                    if (retVal == (uint)Win32ErrorCode_32.ERROR_INVALID_PARAMETER)
+                    {
+                        ParmErr = TypeMarshal.ToNullableStruct<uint>(outParamList[4]);
+                    }
+                }
+            }
+            return retVal;
+        }
+
+        /// <summary>
         /// The NetrShareEnum method retrieves information about each shared resource on a server.
         /// </summary>
         /// <param name="serverName">A string that identifies the server. If this parameter is NULL, the local computer is used.</param>
