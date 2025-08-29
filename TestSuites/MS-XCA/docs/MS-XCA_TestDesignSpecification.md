@@ -1,64 +1,62 @@
-
 # MS-XCA Test Design Specification
 
 ## Contents
 
-* [1 Introduction](#_Introduction)
-* [2 MS-XCA Overview](#_MS-XCA-Overview)
-* [3 Test Suite Overview](#_Test-Suite-Overview)
-* [4 Test Environment](#_Test-Environment)
-* [5 Test Types](#_Test_Types)
-    * [5.1 Static Data](#_Static_Data)
-    * [5.2 User Data](#_User_Data)
-* [6 Test Cases](#_Test_Cases)
-    * [6.1 Static Data Tests](#_Static_Data_Tests)
-    * [6.2 User Data Tests](#_User_Data_Tests)
+* [1 Introduction](#introduction)
+* [2 MS-XCA Overview](#ms-xca-overview)
+* [3 Test Suite Overview](#test-suite-overview)
+* [4 Test Environment](#test-environment)
+* [5 Test Types](#test-types)
+    * [5.1 Static Data](#static-data)
+    * [5.2 User Data](#user-data)
+* [6 Test Cases](#test-cases)
+    * [6.1 Static Data Tests](#static-data-tests)
+    * [6.2 User Data Tests](#user-data-tests)
 
-## <a name="_Introduction"/>1 Introduction
+## <a name="introduction"/>1 Introduction
 
-This document provides information about how MS-XCA test suite is designed to test the usability and accuracy of the MS-XCA technical document. It gives an analysis of the MS-XCA technical document content, and describes test assumptions, scope and constraints of the test suite. It also specifies test approach, test scenarios, detail test cases, test suite architecture and adapter design.
+This document provides information about how the MS-XCA test suite is designed to test the usability and accuracy of the MS-XCA technical document. It gives an analysis of the MS-XCA technical document content, and describes test assumptions, scope and constraints of the test suite. It also specifies test approach, test scenarios, detailed test cases, test suite architecture and adapter design.
 
-## <a name="_MS-XCA-Overview"/>2 MS-XCA Overview
+## <a name="ms-xca-overview"/>2 MS-XCA Overview
 
 MS-XCA refers to the Xpress Compression Algorithm protocol. It specifies three variants: LZ77+Huffman, Plain LZ77, LZNT1, and their respective decompression algorithms.
 
-## <a name="_Test-Suite-Overview"/>3 Test Suite Overview
+## <a name="test-suite-overview"/>3 Test Suite Overview
 
 ![MS-XCA_Overview.png](./images/MS-XCA_TestDesignSpecification/MS-XCA_Overview.png)
 
 The Test Suite is designed to ease the comparison of implementations, and so, it is designed to compare the output it generates for a given input data with another application's output. Every test is a variant of the six steps shown in the diagram above. The Test Suite reads an input file, computes the output using a given algorithm, and triggers the SUT application to perform the same operation on the same input file. Finally, the output from both the Test Suite and the SUT are compared.
 
-## <a name="_Test-Environment"/>4 Test Environment
+## <a name="test-environment"/>4 Test Environment
 
-![MS-XCA_Overview.png](./images/MS-XCA_TestDesignSpecification/MS-XCA_Environment.png)
+![MS-XCA_Environment.png](./images/MS-XCA_TestDesignSpecification/MS-XCA_Environment.png)
 
 The Test Suite and the SUT should both be on the same device, referred to as the Driver Computer. The SUT application must be in a location accessible by the permissions available to the Test Suite, and must be executable on the Driver Computer. The input folders must be readable by both the Test Suite and the SUT, the output folder must be Read/Write by the Test Suite, and needs to be writable by the SUT.
 
-## <a name="_Test_Types"/>5 Test Types
+## <a name="test-types"/>5 Test Types
 
-### <a name="_Static_Data"/>5.1 Static Data
+### <a name="static-data"/>5.1 Static Data
 
-These tests against static data where the expected output is already known. The data used for these tests are specified in the MS-XCA technical document.
+These tests are against static data where the expected output is already known. The data used for these tests are specified in the MS-XCA technical document.
 
-### <a name="_User_Data"/>5.2 User Data
+### <a name="user-data"/>5.2 User Data
 
 These tests are against input data specified by the Test Suite user. The Test Suite comes with some sample User Data included. The location of the User Data input and output files can be specified in the MS-XCA_TestSuite.deployment.ptfconfig file.
 
+```xml
+<Group name="XCA">
+    <Property name="UserDataCompressionInputFolder" />
+    <Property name="UserDataCompressionOutputFolder" />
+    <Property name="UserDataDecompressionInputFolderLZ77" />
+    <Property name="UserDataDecompressionInputFolderLZ77Huffman" />
+    <Property name="UserDataDecompressionInputFolderLZNT1" />
+    <Property name="UserDataDecompressionOutputFolder" />
+</Group>
+```
 
-  ```xml
-    <Group name="XCA">
-        <Property name="UserDataCompressionInputFolder" />
-        <Property name="UserDataCompressionOutputFolder" />
-        <Property name="UserDataDecompressionInputFolderLZ77" />
-        <Property name="UserDataDecompressionInputFolderLZ77Huffman" />
-        <Property name="UserDataDecompressionInputFolderLZNT1" />
-        <Property name="UserDataDecompressionOutputFolder" />
-    </Group>
-  ```
+## <a name="test-cases"/>6 Test Cases
 
-## <a name="_Test_Cases"/>6 Test Cases
-
-### <a name="_Static_Data_Tests"/>6.1 Static Data Tests
+### <a name="static-data-tests"/>6.1 Static Data Tests
 
 #### Compression_LZ77_StaticData_01
 
@@ -70,7 +68,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZ77_StaticData_02
 
@@ -82,7 +80,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZ77_StaticData_Large_01
 
@@ -94,7 +92,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZ77_StaticData_Large_02
 
@@ -106,7 +104,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZ77Huffman_StaticData_01
 
@@ -118,7 +116,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZ77Huffman_StaticData_02
 
@@ -130,7 +128,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZ77Huffman_StaticData_Large_01
 
@@ -142,7 +140,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZ77Huffman_StaticData_Large_02
 
@@ -154,7 +152,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZNT1_StaticData
 
@@ -166,7 +164,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Compression_LZNT1_StaticData_Large
 
@@ -178,7 +176,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZ77_StaticData_01
 
@@ -190,7 +188,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZ77_StaticData_02
 
@@ -202,7 +200,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZ77_StaticData_Large_01
 
@@ -214,7 +212,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZ77_StaticData_Large_02
 
@@ -226,7 +224,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZ77Huffman_StaticData_01
 
@@ -238,7 +236,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZ77Huffman_StaticData_02
 
@@ -250,7 +248,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZ77Huffman_StaticData_Large_01
 
@@ -262,7 +260,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZ77Huffman_StaticData_Large_02
 
@@ -274,7 +272,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZNT1_StaticData
 
@@ -286,7 +284,7 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
 #### Decompression_LZNT1_StaticData_Large
 
@@ -298,54 +296,51 @@ These tests are against input data specified by the Test Suite user. The Test Su
 | **Test Execution Steps** | Read static data file |
 | | Decompress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 
-
-### <a name="_User_Data_Tests"/>7 User Data Tests
+### <a name="user-data-tests"/>6.2 User Data Tests
 
 #### Compression_LZ77_UserData
 
 |    |    |
 |----|----|
-| **Description** | This tests compression of all the files in a User specified folder using the LZ77 algorithm|
+| **Description** | This tests compression of all the files in a User specified folder using the LZ77 algorithm |
 | **Categories** | **Compression, UserData, LZ77** |
 | **Prerequisites** | N/A |
 | **Test Execution Steps** | Get list of files in folder |
 | | Read next input file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 | | If there are more files, return to 'Read next input file' step |
-| | Verify that all TestSuite and SUT outputs match
+| | Verify that all Test Suite and SUT outputs match |
 
 #### Compression_LZ77Huffman_UserData
 
 |    |    |
 |----|----|
-| **Description** | This tests compression of all the files in a User specified folder using the LZ77 + Huffman algorithm|
+| **Description** | This tests compression of all the files in a User specified folder using the LZ77 + Huffman algorithm |
 | **Categories** | **Compression, UserData, LZ77+Huffman** |
 | **Prerequisites** | N/A |
 | **Test Execution Steps** | Get list of files in folder |
 | | Read next input file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 | | If there are more files, return to 'Read next input file' step |
-| | Verify that all TestSuite and SUT outputs match
+| | Verify that all Test Suite and SUT outputs match |
 
 #### Compression_LZNT1_UserData
 
 |    |    |
 |----|----|
-| **Description** | This tests compression of all the files in a User specified folder using the LZ77 algorithm|
+| **Description** | This tests compression of all the files in a User specified folder using the LZNT1 algorithm |
 | **Categories** | **Compression, UserData, LZNT1** |
 | **Prerequisites** | N/A |
 | **Test Execution Steps** | Get list of files in folder |
 | | Read next input file |
 | | Compress data file and write to output |
 | | Invoke SUT application with data file |
-| | Compare SUT output with TestSuite output |
+| | Compare SUT output with Test Suite output |
 | | If there are more files, return to 'Read next input file' step |
-| | Verify that all TestSuite and SUT outputs match
-
-
+| | Verify that all Test Suite and SUT outputs match |
