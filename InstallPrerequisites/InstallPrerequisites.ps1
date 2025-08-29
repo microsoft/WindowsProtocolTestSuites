@@ -43,8 +43,8 @@ Function CheckInternetConnection{
 
 	Try
 	{
-		$status = Test-Connection -ComputerName "www.microsoft.com" -count 5 -Quiet
-		return ($status -ne $false) -and ($status -ne $null)
+		$response = Invoke-WebRequest -Uri http://www.google.com -UseBasicParsing -TimeoutSec 10
+		return $response.StatusCode -eq 200
 	}
 	Catch
 	{

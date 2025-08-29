@@ -8,15 +8,18 @@ Test Suites do not cover every protocol requirement and in no way certify an imp
 However, each test suite provides users with a useful indication of interoperability.
 
 * **File Server Family Test Suite**. It is designed to test implementations of file server protocol family including [MS-SMB2], [MS-DFSC], [MS-SWN], [MS-FSRVP], [MS-FSA], [MS-FSCC], [MS-RSVD] and [MS-SQOS].
-* **RDP Client Family Test Suite**. It provides interoperability testing for client implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDISP], [MS-RDPEDYC], [MS-RDPEGFX], [MS-RDPEGT], [MS-RDPEI], [MS-RDPEMT], [MS-RDPEUDP], [MS-RDPEUSB], [MS-RDPEVOR] and [MS-RDPRFX].
-* **RDP Server Family Test Suite**. It provides interoperability testing for server implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDYC], [MS-RDPEMT] and [MS-RDPELE].  
-* **Kerberos Server Test Suite**. It is designed to test server implementations of Kerberos protocols including [MS-KILE], [MS-KKDCP] and [MS-PAC].
-* **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD] and [MS-SMB2].
-* **Branch Cache Test Suite**. It is designed to test the implementations of [MS-PCCRTP], [MS-PCCRR], [MS-PCHC] and [MS-PCCRC] protocol.
-* **AZOD Test Suite**. It is designed to test the implementations of [MS-AZOD] protocol.
-* **ADFamily Test Suite**. It is designed to test the implementations of the Active Directory protocols including [MS-ADA1], [MS-ADA2], [MS-ADA3], [MS-ADLS], [MS-ADSC], [MS-ADTS], [MS-APDS], [MS-DRSR], [MS-FRS2], [MS-LSAD], [MS-LSAT], [MS-SAMR] and [MS-NRPC]. 
-* **ADFSPIP Client Test Suite**. It is designed to test the implementations of ADFS Proxy and Web Application Proxy integration, as described in [MS-ADFSPIP].
-* **ADOD Test Suite**. It is designed to test the implementations of [MS-ADOD] protocol.
+    To get started with File Server test suite, you can refer to the [File Server Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/FileServer/docs/FileServerUserGuide.md).
+* **RDP Client Family Test Suite**. It provides interoperability testing for client implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDISP], [MS-RDPEDYC], [MS-RDPEGFX], [MS-RDPEGT], [MS-RDPEI], [MS-RDPEMT], [MS-RDPEUDP], [MS-RDPEUSB], [MS-RDPEVOR] and [MS-RDPRFX]. To get started with RDP Client test suite, you can refer to the [RDP Client Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/RDP/Client/docs/RDP_ClientUserGuide.md)
+* **RDP Server Family Test Suite**. It provides interoperability testing for server implementation of RDP family protocols including [MS-RDPBCGR], [MS-RDPEDYC], [MS-RDPEMT] and [MS-RDPELE]. To get started with RDP Server test suite, you can refer to the [RDP Server Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/RDP/Server/Docs/RDP_ServerUserGuide.md)
+* **Kerberos Server Test Suite**. It is designed to test server implementations of Kerberos protocols including [MS-KILE], [MS-KKDCP] and [MS-PAC]. To get started with Kerberos Server test suite, you can refer to the [Kerberos Server Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/Kerberos/docs/Kerberos_ServerUserGuide.md)
+* **SMBD Server Test Suite**. It is designed to test the implementations of SMB2&3 direct (RDMA) protocol, as specified in [MS-SMBD] and [MS-SMB2]. To get started with SMBD Server test suite, you can refer to the [SMBD Server Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/MS-SMBD/docs/MS-SMBD_ServerUserGuide.md)
+* **Branch Cache Test Suite**. It is designed to test the implementations of [MS-PCCRTP], [MS-PCCRR], [MS-PCHC] and [MS-PCCRC] protocol. To get started with Branch Cache test suite, you can refer to the [Branch Cache Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/BranchCache/docs/BranchCache_UserGuide.md)
+* **AZOD Test Suite**. It is designed to test the implementations of [MS-AZOD] protocol. To get started with AZOD test suite, you can refer to the [AZOD Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/MS-AZOD/docs/MS-AZOD_ODUserGuide.md)
+* **ADFamily Test Suite**. It is designed to test the implementations of the Active Directory protocols including [MS-ADA1], [MS-ADA2], [MS-ADA3], [MS-ADLS], [MS-ADSC], [MS-ADTS], [MS-APDS], [MS-DRSR], [MS-FRS2], [MS-LSAD], [MS-LSAT], [MS-SAMR] and [MS-NRPC]. To get started with ADFamily test suite, you can refer to the [ADFamily Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/ADFamily/docs/ADFamily_ServerUserGuide.md)
+* **ADFSPIP Client Test Suite**. It is designed to test the implementations of ADFS Proxy and Web Application Proxy integration, as described in [MS-ADFSPIP]. To get started with ADFSPIP Client test suite, you can refer to the [ADFSPIP Client Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/MS-ADFSPIP/Docs/MS-ADFSPIP_ClientUserGuide.md)
+* **ADOD Test Suite**. It is designed to test the implementations of [MS-ADOD] protocol. To get started with ADOD test suite, you can refer to the [ADOD Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/MS-ADOD/Docs/MS-ADOD_ODUserGuide.md)
+* **XCA Test Suite**. It is designed to test the implementations of [MS-XCA] protocol. To get started with XCA test suite, you can refer to the [XCA Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/MS-XCA/docs/MS-XCA_TestSuiteUserGuide.md)
+* **WSP Test Suite**. It is designed to test the implementations of [MS-WSP] protocol. To get started with WSP test suite, you can refer to the [WSP Test Suite User Guide](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/TestSuites/MS-WSP/docs/MS-WSP_TestSuiteUserGuide.md)
 
 ## Components
 Windows Protocol Test Suites contain below components:
@@ -50,9 +53,9 @@ You should install the software listed below based on your testing purpose, incl
 
 <a name="footnote1">[1]</a>: This individual component is required by ADFamily and MS-SMBD which have C++ code.
 
-1. [Protocol Test Framework v2.3 (build 2.3.0)](https://github.com/Microsoft/ProtocolTestFramework/releases/tag/2.3.0)
+1. [Protocol Test Framework v2.6 (build 2.6.1)](https://github.com/microsoft/ProtocolTestFramework/releases/tag/PTF2.6.1)
 
-   Protocol Test Framework is referenced by projects of ProtoSDK and TestSuites as [NuGet packages](https://www.nuget.org/packages/Microsoft.Protocols.TestTools/2.3.0).
+   Protocol Test Framework is referenced by projects of ProtoSDK and TestSuites as [NuGet packages](https://www.nuget.org/packages/Microsoft.Protocols.TestTools/2.6.1).
 
 1. [Network Direct DDK](https://www.microsoft.com/en-us/download/details.aspx?id=36043)
 
@@ -80,12 +83,17 @@ You should install the software listed below based on your testing purpose, incl
 If your work on Windows, you can use the script in `InstallPrerequisites` folder to automatically download and install these software.
 
 Tips when using the script in `InstallPrerequisites` folder:
+* The script requires internet connectivity to download some dependencies.
 
-* To run the script, open **Windows PowerShell**, and execute the commands below in the **PowerShell Window**:
+* The parameter **Category** is used to specify which set of tools need to be downloaded and installed, based on the different test suite names, such as `FileServer`, `Kerberos`, `SMBD`, `RDP`, `BranchCache`, `ADFamily`, `AZOD`, `ADFSPIP` and `ADOD`. Categories are defined in [PrerequisitesConfig.xml](https://github.com/microsoft/WindowsProtocolTestSuites/blob/main/InstallPrerequisites/PrerequisitesConfig.xml) and you can update this configuration file to achieve your desired requirement.
+
+* The parameter **ConfigPath** is used to specify prerequisites configuration file path, default value is ".\PrerequisitesConfig.xml".
+
+* To run the script for the FileServer test suite, for example, open **Windows PowerShell**, and execute the commands below in the **PowerShell Window**:
 
 ```
 cd WindowsProtocolTestSuites\InstallPrerequisites
-.\InstallPrerequisites.ps1
+.\InstallPrerequisites.ps1 -Category FileServer -ConfigPath ".\PrerequisitesConfig.xml"
 ```
 
 * If you meet errors about **Execution Policy**, make sure you run **Windows PowerShell** as **Administrator**, and type the following and enter:
@@ -119,6 +127,8 @@ After the build succeeds, the common folder structure should be generated in the
 * `Batch`: batch files (.ps1, .sh) which can be used to launch tests.
 * `Scripts`: scripts which can be used to configure test environment.
 * `Utils`: some utilities which can be used in tests.
+
+Alternatively, you can download the pre-built test suite archive from [Releases](https://github.com/microsoft/WindowsProtocolTestSuites/releases).
 
 ## Run
 
@@ -164,9 +174,9 @@ In the `Batch` folder under root path of the test suite, there are several scrip
    RunTestCasesByFilter.sh "TestCategory=BVT&TestCategory=SMB311" "list"
    ```
 
-### Configure and run test suite by Protocol Test Manager
+### Configure and run test suite by Protocol Test Manager Service
 
-Take File Server test suite as an example, you can learn how to configure and run test suite by Protocol Test Manager referring to this [tutorial](./Doc/File%20Server%20SMB2%20Test%20Suite%20Lab%20Tutorial_v2.pdf).
+**Protocol Test Manager Service (PTMService)** is a single web page application tool that helps you configure and run test cases in the Test Suites. PTMService supports multiple platforms, including Windows, Linux, and macOS. To get started with PTMService, you can refer to the [PTMService Wiki](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/PTMService).
 
 ## Documents
 
