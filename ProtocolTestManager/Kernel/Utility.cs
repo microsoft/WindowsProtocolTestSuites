@@ -92,16 +92,17 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <param name="testSuiteInfo">The information of a test suite</param>
         public void LoadTestSuiteConfig(TestSuiteInfo testSuiteInfo)
         {
+            // TODO: Validate versionCheck Change impact
             // Test suite version must match PTM version
-            Version testSuiteVersion = new Version(testSuiteInfo.TestSuiteVersion);
-            if (ptmVersion < testSuiteVersion)
-            {
-                throw new Exception(String.Format(StringResource.PTMNeedUpgrade, ptmVersion, testSuiteVersion));
-            }
-            else if (ptmVersion > testSuiteVersion)
-            {
-                throw new Exception(String.Format(StringResource.TestSuiteNeedUpgrade, ptmVersion, testSuiteVersion));
-            }
+            //Version testSuiteVersion = new Version(testSuiteInfo.TestSuiteVersion);
+            //if (ptmVersion < testSuiteVersion)
+            //{
+            //    throw new Exception(String.Format(StringResource.PTMNeedUpgrade, ptmVersion, testSuiteVersion));
+            //}
+            //else if (ptmVersion > testSuiteVersion)
+            //{
+            //    throw new Exception(String.Format(StringResource.TestSuiteNeedUpgrade, ptmVersion, testSuiteVersion));
+            //}
 
             testSuiteDir = testSuiteInfo.TestSuiteFolder + Path.DirectorySeparatorChar;
             try
