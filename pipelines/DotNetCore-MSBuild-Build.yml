@@ -21,6 +21,4 @@ jobs:
     timeoutInMinutes: 0
     steps:
       - task: NuGetAuthenticate@1
-        inputs:
-          feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
       - template: pipelines/build/DotNetCore-MSBuild-Build-steps.yml@template
