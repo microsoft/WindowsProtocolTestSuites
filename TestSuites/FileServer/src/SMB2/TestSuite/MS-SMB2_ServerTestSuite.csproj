@@ -1,40 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <AssemblyName>MS-SMB2_ServerTestSuite</AssemblyName>
-    <RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite</RootNamespace>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
-      <Link>SharedAssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.6.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.9.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.9.1" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+		<AssemblyName>MS-SMB2_ServerTestSuite</AssemblyName>
+		<RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite</RootNamespace>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Features>$(Features);experimental-data-section-string-literals</Features>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs">
+			<Link>SharedAssemblyInfo.cs</Link>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+		<PackageReference Include="Microsoft.Protocols.TestTools" Version="2.6.1" />
+		<PackageReference Include="MSTest.TestFramework" Version="3.9.1" />
+		<PackageReference Include="MSTest.TestAdapter" Version="3.9.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-DFSC\Dfsc.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-PAC\Pac.csproj" />
-    <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj" />
-    <ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj" />
-    <ProjectReference Include="..\Adapter\MS-SMB2_ServerAdapter.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-DFSC\Dfsc.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSRVP\Fsrvp.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-PAC\Pac.csproj" />
+		<ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SWN\Swn.csproj" />
+		<ProjectReference Include="..\..\Common\TestSuite\CommonTestSuite.csproj" />
+		<ProjectReference Include="..\Adapter\MS-SMB2_ServerAdapter.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="MS-SMB2_ServerTestSuite.deployment.ptfconfig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="MS-SMB2_ServerTestSuite.ptfconfig">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="MS-SMB2_ServerTestSuite.deployment.ptfconfig">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="MS-SMB2_ServerTestSuite.ptfconfig">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

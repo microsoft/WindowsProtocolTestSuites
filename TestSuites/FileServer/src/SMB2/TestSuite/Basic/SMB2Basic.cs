@@ -784,6 +784,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [TestMethod]
         [TestCategory(TestCategories.Bvt)]
         [TestCategory(TestCategories.Smb2002)]
+        [TestCategory(TestCategories.QueryDir)]
+        [Description("This test case is designed to verify QUERY_DIRECTORY with flag SMB2_REOPEN on an empty directory returns " +
+            "STATUS_NO_MORE_FILES (Windows 10 v1803 through Windows 11, Windows Server 2019) or STATUS_NO_SUCH_FILE " +
+            "(Windows 11 v22H2 and later with patches, Windows Server 2022+ with patches).")]
+        public void BVT_SMB2Basic_QueryDir_Reopen_OnEmptyDir_NoFilesReturned()
+        {
+            QueryDir_Reopen_EmptyDirectory();
+        }
+
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb2002)]
         [TestCategory(TestCategories.ChangeNotify)]
         [Description("This test case is designed to verify CHANGE_NOTIFY for CompletionFilter FILE_NOTIFY_CHANGE_FILE_NAME is handled correctly.")]
         public void BVT_SMB2Basic_ChangeNotify_ChangeFileName()
@@ -2495,6 +2507,137 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
                     Smb2Status.STATUS_SUCCESS,
                     status,
                     "QUERY_DIRECTORY is expected to success, actually server returns {0}.", Smb2Status.GetStatusCode(status));
+            }
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");
+            client1.Close(treeId, fileId);
+            client1.TreeDisconnect(treeId);
+            client1.LogOff();
+        }
+
+        /// <summary>
+        /// Test QUERY_DIRECTORY with SMB2_REOPEN flag on an empty directory where the object store does not return any files.
+        /// Windows 10 v1803 through Windows 11, and Windows Server 2019 fail the request with STATUS_NO_MORE_FILES.
+        /// Windows 11 v22H2 and later with patches, Windows Server 2022+ with patches fail the request with STATUS_NO_SUCH_FILE.
+        /// </summary>
+        private void QueryDir_Reopen_EmptyDirectory()
+        {
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, 
+                "Test Scenario: When SMB2_REOPEN is set in the Flags field of SMB2 QUERY_DIRECTORY request and " +
+                "the object store does not return any files, verify the server returns the expected status code.");
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, 
+                "Start a client to create an empty directory by sending the following requests: NEGOTIATE; SESSION_SETUP; TREE_CONNECT; CREATE");
+            
+            client1 = new Smb2FunctionalClient(TestConfig.Timeout, TestConfig, BaseTestSite);
+            client1.ConnectToServer(TestConfig.UnderlyingTransport, TestConfig.SutComputerName, TestConfig.SutIPAddress);
+
+            uint status = client1.Negotiate(
+                TestConfig.RequestDialects,
+                TestConfig.IsSMB1NegotiateEnabled);
+
+            status = client1.SessionSetup(
+                TestConfig.DefaultSecurityPackage,
+                TestConfig.SutComputerName,
+                TestConfig.AccountCredential,
+                TestConfig.UseServerGssToken);
+
+            uint treeId;
+            status = client1.TreeConnect(uncSharePath, out treeId);
+
+            FILEID fileId;
+            Smb2CreateContextResponse[] serverCreateContexts;
+
+            // Create an empty directory
+            string emptyDirName = GetTestFileName(uncSharePath);
+            status = client1.Create(
+                treeId,
+                emptyDirName,
+                CreateOptions_Values.FILE_DIRECTORY_FILE | CreateOptions_Values.FILE_DELETE_ON_CLOSE,
+                out fileId,
+                out serverCreateContexts);
+
+            BaseTestSite.Assert.AreEqual(
+                Smb2Status.STATUS_SUCCESS,
+                status,
+                "Create empty directory should succeed, actually server returns {0}.", Smb2Status.GetStatusCode(status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, 
+                "Client sends initial QUERY_DIRECTORY request to enumerate the empty directory with a non-matching pattern.");
+            
+            byte[] outputBuffer;
+            // Use a pattern that won't match anything (to ensure the object store returns no files)
+            // First query should return STATUS_NO_SUCH_FILE for non-matching pattern on first query
+            status = client1.QueryDirectory(
+                treeId,
+                FileInformationClass_Values.FileDirectoryInformation,
+                QUERY_DIRECTORY_Request_Flags_Values.NONE,
+                0,
+                fileId,
+                "NonExistentPattern_*",
+                out outputBuffer,
+                checker: (header, response) => { }
+                );
+
+            BaseTestSite.Log.Add(LogEntryKind.Comment, 
+                "Initial QUERY_DIRECTORY returned status: {0}", Smb2Status.GetStatusCode(status));
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, 
+                "Client sends QUERY_DIRECTORY request with flag SMB2_REOPEN to restart the scan with a non-matching pattern.");
+            
+            status = client1.QueryDirectory(
+                treeId,
+                FileInformationClass_Values.FileDirectoryInformation,
+                QUERY_DIRECTORY_Request_Flags_Values.REOPEN,
+                0,
+                fileId,
+                "NonExistentPattern_*",
+                out outputBuffer,
+                checker: (header, response) => { }
+                );
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify server response based on Windows version.");
+            BaseTestSite.Log.Add(LogEntryKind.Comment, 
+                "Server returned status: {0} (0x{1:X8})", Smb2Status.GetStatusCode(status), status);
+
+            // MS-SMB2 behavior note:
+            // Windows 10 v1803 through Windows 11, and Windows Server 2019 fail the request with STATUS_NO_MORE_FILES.
+            // Windows 11 v22H2 and Windows 11, version 23H2 with [MSKB 5062663], Windows 11, version 24H2 with [MSKB-5062660] and later,
+            // Windows Server 2022 with [MSKB-5063880] and Windows Server 2022, 23H2 with [MSKB-5063899] and 
+            // Windows Server 2025 with [MSKB-5062660] and later fail the request with STATUS_NO_SUCH_FILE.
+
+            if (testConfig.Platform >= Platform.WindowsServerV1803 && testConfig.Platform < Platform.WindowsServer2022)
+            {
+                // Older Windows versions: STATUS_NO_MORE_FILES
+                BaseTestSite.Assert.AreEqual(
+                    Smb2Status.STATUS_NO_MORE_FILES,
+                    status,
+                    "When SMB2_REOPEN is set in the Flags field of SMB2 QUERY_DIRECTORY request and the object store " +
+                    "does not return any files, Windows 10 v1803 through Windows 11, and Windows Server 2019 " +
+                    "fail the request with STATUS_NO_MORE_FILES (0x80000006). Actually server returns {0} (0x{1:X8}).", 
+                    Smb2Status.GetStatusCode(status), status);
+            }
+            else if (testConfig.Platform >= Platform.WindowsServer2022)
+            {
+                // Newer Windows versions with patches: STATUS_NO_SUCH_FILE
+                BaseTestSite.Assert.AreEqual(
+                    Smb2Status.STATUS_NO_SUCH_FILE,
+                    status,
+                    "When SMB2_REOPEN is set in the Flags field of SMB2 QUERY_DIRECTORY request and the object store " +
+                    "does not return any files, Windows 11 v22H2 and later with patches, Windows Server 2022+ with patches " +
+                    "fail the request with STATUS_NO_SUCH_FILE (0xC000000F). Actually server returns {0} (0x{1:X8}).", 
+                    Smb2Status.GetStatusCode(status), status);
+            }
+            else
+            {
+                // For older platforms or non-Windows platforms, accept either status code
+                BaseTestSite.Assert.IsTrue(
+                    status == Smb2Status.STATUS_NO_MORE_FILES || status == Smb2Status.STATUS_NO_SUCH_FILE,
+                    "When SMB2_REOPEN is set in the Flags field of SMB2 QUERY_DIRECTORY request and the object store " +
+                    "does not return any files, the server should fail the request with STATUS_NO_MORE_FILES (0x80000006) " +
+                    "or STATUS_NO_SUCH_FILE (0xC000000F). Actually server returns {0} (0x{1:X8}).", 
+                    Smb2Status.GetStatusCode(status), status);
             }
 
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending the following requests: CLOSE; TREE_DISCONNECT; LOG_OFF");

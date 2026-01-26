@@ -2298,6 +2298,19 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             out byte[] outputBuffer,
             ResponseChecker<QUERY_DIRECTORY_Response> checker = null)
         {
+            return QueryDirectory(treeId, fileInfoClass, queryDirectoryFlags, fileIndex, fileId, "*", out outputBuffer, checker);
+        }
+
+        public uint QueryDirectory(
+            uint treeId,
+            FileInformationClass_Values fileInfoClass,
+            QUERY_DIRECTORY_Request_Flags_Values queryDirectoryFlags,
+            uint fileIndex,
+            FILEID fileId,
+            string searchPattern,
+            out byte[] outputBuffer,
+            ResponseChecker<QUERY_DIRECTORY_Response> checker = null)
+        {
             uint status;
             uint maxOutputBufferLength = DefaultMaxOutputResponse;
             Packet_Header header;
@@ -2320,7 +2333,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 queryDirectoryFlags,
                 fileIndex,
                 fileId,
-                "*",
+                searchPattern,
                 maxOutputBufferLength,
                 out outputBuffer,
                 out header,

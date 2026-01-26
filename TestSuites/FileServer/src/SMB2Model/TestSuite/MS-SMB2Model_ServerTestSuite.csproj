@@ -4,6 +4,7 @@
 		<OutputType>Library</OutputType>
 		<RootNamespace>Microsoft.Protocols.TestSuites.FileSharing.SMB2Model.TestSuite</RootNamespace>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<Features>$(Features);experimental-data-section-string-literals</Features>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\..\ProtoSDK\Common\Common.csproj" />
