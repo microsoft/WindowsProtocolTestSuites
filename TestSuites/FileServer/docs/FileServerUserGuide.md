@@ -173,7 +173,7 @@ You can execute the Test Suite test cases in either a **WORKGROUP** or **DOMAIN*
 
     See section [3.3.1 Driver Computer Minimum Requirements](#3.3.1) for hardware requirements and section [5.1.1 Set up the Driver Computer in the Workgroup Environment](#5.1.1) for setup instructions.
 
-  * **SUT computer** (Node01) − this machine can be for hosting either a Windows or non-Windows implementation. For a Windows implementation, the SUT computer must be running the Microsoft® Windows Server 2016 (version 1607), Standard Edition or later operating system.
+  * **SUT computer** (Node01) − this machine can be for hosting either a Windows or non-Windows implementation. For a Windows implementation, the SUT computer must be running the Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later operating system.
 
     See section [3.3.2 System Under Test (SUT) Minimum Requirements](#3.3.2) for hardware requirements and section [5.1.2 Setup the SUT Computer in the Workgroup Environment](#5.1.2) for setup instructions.
 
@@ -248,10 +248,10 @@ The minimum requirements for the SUT computer in the Windows environment are spe
 | Requirement       | Description                                                                                                                                   |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Computer name     | Node01                                                                                                                                        |
-| Operating system  | Microsoft® Windows Server 2016 (version 1607), Standard Edition or later versions. Note that this computer is **not** set up as a domain controller (DC). |
+| Operating system  | Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later versions. Note that this computer is **not** set up as a domain controller (DC). |
 | Features          | N/A                                                                                                                                           |
 | Role Services     | File Server                                                                                                                                   |
-| Memory            | 2 GB RAM                                                                                                                                      |
+| Memory            | 16 GB RAM                                                                                                                                      |
 | Disk space        | 60 GB                                                                                                                                         |
 | Network interface | Requires dual network interface cards (NICs)                                                                                                  |
 
@@ -262,10 +262,10 @@ The minimum requirements for the SUT computer in the Windows environment are spe
 | Requirement       | Description                                                                              |
 | ----------------- | ---------------------------------------------------------------------------------------- |
 | Computer name     | Node01,Node02                                                                            |
-| Operating system  | Microsoft® Windows Server 2016 (version 1607), Standard Edition or later versions.                   |
+| Operating system  | Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later versions.                   |
 | Features          | Failover Clustering                                                                      |
 | Role Services     | File Server, DFS Namespaces, File Server Resource Manager, File Server VSS Agent Service |
-| Memory            | 2 GB RAM                                                                                 |
+| Memory            | 16 GB RAM                                                                                 |
 | Disk space        | 60 GB                                                                                    |
 | Network interface | Requires dual network interface cards (NICs)                                             |
 
@@ -283,10 +283,10 @@ The minimum requirements for the Domain Controller computer are specified in Tab
 | Requirement       | Description                                                            |
 | ----------------- | ---------------------------------------------------------------------- |
 | Computer name     | DC01                                                                   |
-| Operating system  | Microsoft® Windows Server 2016 (version 1607), Standard Edition or later versions. |
+| Operating system  | Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later versions. |
 | Features          | AD DS Tools, DNS Server Tools                                          |
 | Role Services     | Active Directory Domain Services (AD DS), DNS Server                   |
-| Memory            | 1 GB RAM                                                               |
+| Memory            | 16 GB RAM                                                               |
 | Disk space        | 60 GB                                                                  |
 | Network interface | Requires dual network interface cards (NICs)                           |
 
@@ -304,10 +304,10 @@ The minimum requirements for the storage area network (SAN) server computer are 
 | Requirement      | Description                                                            |
 | ---------------- | ---------------------------------------------------------------------- |
 | Computer name    | Storage01                                                              |
-| Operating system | Microsoft® Windows Server 2016 (version 1607), Standard Edition or later versions. |
+| Operating system | Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later versions. |
 | Features         | N/A                                                                    |
 | Role Services    | File Server, iSCSI Target Server                                       |
-| Memory           | 1 GB RAM                                                               |
+| Memory           | 16 GB RAM                                                               |
 | Disk space       | 60 GB                                                                  |
 
 ### <a name="3.4"/> 3.4 Software
@@ -489,7 +489,7 @@ The **WORKGROUP** environment consists of two test machines as follows:
 
 * **Driver computer** – must be running the Microsoft® Windows 10 Enterprise or later operating system version.
 
-* **SUT computer** – must be running the Microsoft® Windows Server 2016 (version 1607), Standard Edition or later version operating system for implementations in the Windows environment; in non-Windows environments, the operating system running on the SUT computer is at your own discretion, as is the implementation being tested on that computer.
+* **SUT computer** – must be running the Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later version operating system for implementations in the Windows environment; in non-Windows environments, the operating system running on the SUT computer is at your own discretion, as is the implementation being tested on that computer.
 
 #### <a name="5.1.1"/> 5.1.1 Set up the Driver Computer for the Workgroup Environment
 
