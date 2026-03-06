@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestManager.Detector;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
@@ -23,8 +24,16 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
 
             logWriter.AddLog(DetectLogLevel.Information, "Check the OS version...");
-
-            string path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetRemoteOSVersion.ps1";
+            string path;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                path = Assembly.GetExecutingAssembly().Location + "/../../Plugin/script/GetRemoteOSVersion.ps1";
+            }
+            else
+            {
+                path = Assembly.GetExecutingAssembly().Location + @"\..\.\Plugin\script\GetRemoteOSVersion.ps1";
+            }
+            
             OSVersion[] output = ExecutePowerShellCommand<OSVersion>(path, out string[] error);
 
             if (error != null)
@@ -78,7 +87,17 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             bool found = false;
             if (os.Caption.Contains("Server"))
             {
-                if (os.Version.StartsWith("10.0."))
+                if (os.Version.StartsWith("10.0") && os.Version.EndsWith("26100"))
+                {
+                    DetectionInfo.Platform = Platform.WindowsServer2025;
+                    found = true;
+                }
+                else if (os.Version.StartsWith("10.0") && os.Version.EndsWith("20348"))
+                {
+                    DetectionInfo.Platform = Platform.WindowsServer2025;
+                    found = true;
+                }
+                else if (os.Version.StartsWith("10.0."))
                 {
                     DetectionInfo.Platform = Platform.WindowsServer2016;
                     found = true;

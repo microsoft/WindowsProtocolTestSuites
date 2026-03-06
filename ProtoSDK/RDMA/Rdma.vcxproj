@@ -53,14 +53,14 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" Condition="'$(OS)' == 'Windows_NT'" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" Condition="'$(OS)' == 'Windows_NT'" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64' And '$(OS)' == 'Windows_NT'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64' And '$(OS)' == 'Windows_NT'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -89,8 +89,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/debug /debugtype:cv,fixup /opt:ref /opt:icf /incremental:no %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies Condition="'$(OS)' == 'Windows_NT'">ws2_32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions Condition="'$(OS)' == 'Windows_NT'">/debug /debugtype:cv,fixup /opt:ref /opt:icf /incremental:no %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -106,11 +106,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ws2_32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/debug /debugtype:cv,fixup /opt:ref /opt:icf /incremental:no %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies Condition="'$(OS)' == 'Windows_NT'">ws2_32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions Condition="'$(OS)' == 'Windows_NT'">/debug /debugtype:cv,fixup /opt:ref /opt:icf /incremental:no %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" Condition="'$(OS)' == 'Windows_NT'" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />
     <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="..\..\drop\ProtoSDK\Bin\" />

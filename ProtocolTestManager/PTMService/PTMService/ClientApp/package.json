@@ -27,7 +27,7 @@
     "@babel/core": "^7.16.0",
     "@babel/runtime": "^7.27.6",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
-    "@svgr/webpack": "^8.1.0",
+    "@svgr/webpack": "^5.5.0",
     "@types/history": "^4.7.9",
     "@types/jest": "^29.5.14",
     "@types/node": "^24.0.1",

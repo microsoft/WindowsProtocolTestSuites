@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft. All rights reserved.
+﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Text.Json;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
@@ -21,35 +22,63 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             try
             {
+                string psExecutable;
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    psExecutable = "powershell.exe";
+                }
+                else
+                {
+                    psExecutable = "pwsh";
+                }
+
                 ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = @"powershell.exe";
-                startInfo.Arguments = $"{System.IO.Path.GetFullPath(scriptPath)} { DetectionInfo.DomainName} {DetectionInfo.SUTName} {DetectionInfo.UserName} {DetectionInfo.Password}";
+                startInfo.FileName = psExecutable;
+
+                string fullScriptPath = System.IO.Path.GetFullPath(scriptPath);
+                startInfo.Arguments = $"-File \"{fullScriptPath}\" {DetectionInfo.DomainName} {DetectionInfo.SUTName} {DetectionInfo.UserName} {DetectionInfo.Password}";
+
                 startInfo.RedirectStandardOutput = true;
                 startInfo.RedirectStandardError = true;
                 startInfo.UseShellExecute = false;
                 startInfo.CreateNoWindow = true;
-                Process process = new Process();
-                process.StartInfo = startInfo;
-                process.Start();
 
-                string output = process.StandardOutput.ReadToEnd();
-                string errorOutput = process.StandardError.ReadToEnd();
-
-                if (!string.IsNullOrEmpty(errorOutput))
+                using (Process process = new Process())
                 {
-                    error = new string[] { errorOutput };
+                    process.StartInfo = startInfo;
+                    process.Start();
+
+                    string output = process.StandardOutput.ReadToEnd();
+                    string errorOutput = process.StandardError.ReadToEnd();
+
+                    process.WaitForExit(); 
+
+                    if (!string.IsNullOrEmpty(errorOutput))
+                    {
+                        error = new string[] { errorOutput };
+                    }
+                    else
+                    {
+                        error = null;
+                    }
+
+                    if (string.IsNullOrEmpty(output))
+                    {
+                        return new T[0];
+                    }
+
+                    return JsonSerializer.Deserialize<T[]>(output);
                 }
-                else
+            }
+            catch (System.ComponentModel.Win32Exception w32ex)
+            {
+                if (w32ex.NativeErrorCode == 2)
                 {
-                    error = null;
-                }
-
-                if (string.IsNullOrEmpty(output))
-                {
+                    error = new string[] { $"Critical Error: Cannot find PowerShell executable. Please install PowerShell on Linux ('sudo apt-get install -y powershell'). Exception: {w32ex.Message}" };
                     return new T[0];
                 }
-
-                return JsonSerializer.Deserialize<T[]>(output);
+                error = new string[] { w32ex.ToString() };
+                return new T[0];
             }
             catch (Exception ex)
             {

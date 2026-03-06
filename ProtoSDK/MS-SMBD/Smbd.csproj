@@ -10,14 +10,14 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;DEBUG;UT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;UT;</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd.xml</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;UT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;UT;</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd.xml</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -29,11 +29,17 @@
     <OutputPath>bin\x64\Release\</OutputPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Messages\Messages.csproj" />
-    <ProjectReference Include="..\RDMA\Rdma.vcxproj" />
+    <ProjectReference Include="..\RDMA\Rdma.vcxproj" Condition="'$(OS)' == 'Windows_NT'" />
+    <ProjectReference Include="..\RdmaLinux\RdmaLinux.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">

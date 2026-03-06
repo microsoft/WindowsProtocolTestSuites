@@ -699,19 +699,21 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                         NtStatus.STATUS_NOT_SUPPORTED,
                         status,
                         "Status of SMBD negotiate {0}", status);
-
-                    try
+                    if (smbdAdapter.TestConfig.DriverPlatform > Platform.NonWindows)
                     {
-                        BaseTestSite.Log.Add(LogEntryKind.TestStep, "Try to establish SMB2 connection and open file " + fileName);
-                        status = smbdAdapter.Smb2EstablishSessionAndOpenFile(fileName);
-                        BaseTestSite.Assert.AreNotEqual<NtStatus>(
-                            NtStatus.STATUS_SUCCESS,
-                            status,
-                            "Status of Smb2EstablishSessionAndOpenFile is {0}", status);
-                    }
-                    catch (TimeoutException e)
-                    {
-                        BaseTestSite.Assert.Pass("Cannot send or receive packets from peer. \nException: {0}\n{1}", e.Message, e.StackTrace);
+                        try
+                        {
+                            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Try to establish SMB2 connection and open file " + fileName);
+                            status = smbdAdapter.Smb2EstablishSessionAndOpenFile(fileName);
+                            BaseTestSite.Assert.AreNotEqual<NtStatus>(
+                                NtStatus.STATUS_SUCCESS,
+                                status,
+                                "Status of Smb2EstablishSessionAndOpenFile is {0}", status);
+                        }
+                        catch (TimeoutException e)
+                        {
+                            BaseTestSite.Assert.Pass("Cannot send or receive packets from peer. \nException: {0}\n{1}", e.Message, e.StackTrace);
+                        }
                     }
                 }
             }

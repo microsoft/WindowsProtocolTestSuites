@@ -41,6 +41,15 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         /// Windows Server 2016
         /// </summary>
         WindowsServer2016 = 0x10000008,
+        /// <summary>
+        /// Windows Server v2022
+        /// </summary>
+        WindowsServer2022 = 0x10000011,
+
+        /// <summary>
+        /// Windows Server v2025
+        /// </summary>
+        WindowsServer2025 = 0x10000013,
     }
 
     public enum RDMAEndian

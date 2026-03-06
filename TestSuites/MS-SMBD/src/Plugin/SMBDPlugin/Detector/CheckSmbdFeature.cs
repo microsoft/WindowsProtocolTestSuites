@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
     partial class SmbdDetector
     {
-        public bool CheckSMBDCapability(out RdmaAdapterInfo rdmaAdapterInfo, out bool rdmaChannelV1Supported, out bool rdmaChannelV1InvalidateSupported)
+        public bool CheckSMBDCapability(out RdmaAdapterData rdmaAdapterInfo, out bool rdmaChannelV1Supported, out bool rdmaChannelV1InvalidateSupported)
         {
             rdmaAdapterInfo = null;
             rdmaChannelV1Supported = false;
@@ -26,15 +25,21 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
 
             bool result = CheckSMBDNegotiate(out rdmaAdapterInfo);
+            logWriter.AddLog(DetectLogLevel.Information, "SMBD Negotiate successfully.");
+            logWriter.AddLog(DetectLogLevel.Information, string.Format("SUT Platform is {0}", DetectionInfo.Platform.ToString()));
             if (result)
             {
-                if (CheckSMBDReadWriteRDMAV1())
+                if (DetectionInfo.Platform < Platform.WindowsServer2025 && DetectionInfo.Platform > Platform.NonWindows)
                 {
-                    result = true;
-                    rdmaChannelV1Supported = true;
-                    if (CheckSMBDReadWriteRDMAV1Invalidate())
+                    logWriter.AddLog(DetectLogLevel.Information, "Start check SMBD Read and Write over RDMAV1");
+                    if (CheckSMBDReadWriteRDMAV1())
                     {
-                        rdmaChannelV1InvalidateSupported = true;
+                        result = true;
+                        rdmaChannelV1Supported = true;
+                        if (CheckSMBDReadWriteRDMAV1Invalidate())
+                        {
+                            rdmaChannelV1InvalidateSupported = true;
+                        }
                     }
                 }
                 logWriter.AddLog(DetectLogLevel.Warning, "Finished", false, LogStyle.StepPassed);
@@ -48,7 +53,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             }
         }
 
-        private bool CheckSMBDNegotiate(out RdmaAdapterInfo rdmaAdapterInfo)
+        private bool CheckSMBDNegotiate(out RdmaAdapterData rdmaAdapterInfo)
         {
             try
             {
@@ -56,6 +61,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 {
                     var config = DetectionInfo.SMBDClientCapability;
                     client.ConnectOverRDMA(DetectionInfo.DriverRdmaNICIPAddress, DetectionInfo.SUTRdmaNICIPAddress, DetectionInfo.SMBDPort, config.MaxReceiveSize, out rdmaAdapterInfo);
+                    logWriter.AddLog(DetectLogLevel.Information, "Connect over RDMA successfully.");
                     client.SMBDNegotiate(
                             config.CreditsRequested,
                             config.ReceiveCreditMax,
@@ -100,7 +106,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 using (var client = new SmbdClient(DetectionInfo.ConnectionTimeout))
                 {
                     var config = DetectionInfo.SMBDClientCapability;
-                    RdmaAdapterInfo rdmaAdapterInfo;
+                    RdmaAdapterData rdmaAdapterInfo;
                     client.ConnectOverRDMA(DetectionInfo.DriverRdmaNICIPAddress, DetectionInfo.SUTRdmaNICIPAddress, DetectionInfo.SMBDPort, config.MaxReceiveSize, out rdmaAdapterInfo);
                     client.SMBDNegotiate(
                             config.CreditsRequested,

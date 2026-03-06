@@ -26,7 +26,8 @@ $scriptblock = {
 }
 
 try{
-    $cmdOutput = Invoke-Command -ComputerName $ptfprop_SUTName -credential $cred -ScriptBlock $scriptblock
+    $cmdOutput = Invoke-Command -HostName $ptfprop_SUTName -UserName $ptfprop_SUTUserName -ScriptBlock $scriptblock
+
     $result = $cmdOutput | Select-Object -Property Caption, Version | ConvertTo-Json
     return "[$result]"  #operation succeed
 }

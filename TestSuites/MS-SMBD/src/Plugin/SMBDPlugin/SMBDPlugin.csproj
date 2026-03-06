@@ -5,7 +5,12 @@
         <RootNamespace>Microsoft.Protocols.TestManager.SMBDPlugin</RootNamespace>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
-
+    <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+        <DefineConstants>$(DefineConstants);WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+        <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
+    </PropertyGroup>
     <ItemGroup>
         <Folder Include="Docs\" />
         <Folder Include="Icons\" />
@@ -18,7 +23,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\..\ProtocolTestManager\PropertyValueDetector\PropertyValueDetector.csproj" />
-        <ProjectReference Include="..\..\..\..\..\ProtoSDK\RDMA\Rdma.vcxproj" />
+        <ProjectReference Include="..\..\..\..\..\ProtoSDK\RDMA\Rdma.vcxproj"  Condition="'$(OS)' == 'Windows_NT'"/>
+        <ProjectReference Include="..\..\..\..\..\ProtoSDK\RdmaLinux\RdmaLinux.csproj" />
         <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMB2\Smb2.csproj" />
         <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-SMBD\Smbd.csproj" />
     </ItemGroup>

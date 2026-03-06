@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Net;
 using System.Text;
-
+using System.Linq;
 
 namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
 {
@@ -301,7 +301,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             alternativeChannelClient.FileId = fileId;
 
             // Send each read request according to SMB2 read file limit
-            uint maxReadSize = alternativeChannelClient.Smb2MaxReadSize;
+	    uint maxReadSize = alternativeChannelClient.Smb2MaxReadSize;
             uint offset = 0;
             while (offset < lengthRead)
             {
@@ -316,7 +316,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 SmbdBufferDescriptorV1 descp;
                 alternativeChannelClient.SmbdRegisterBuffer(
                     length,
-                    SmbdBufferReadWrite.RDMA_READ_WRITE_PERMISSION_FOR_WRITE_READ_FILE,
+                    SmbdBufferReadWrite.RDMA_WRITE_PERMISSION_FOR_READ_FILE,
                     testConfig.ReversedBufferDescriptor,
                     out descp);
                 byte[] channelInfo = TypeMarshal.ToBytes<SmbdBufferDescriptorV1>(descp);
@@ -335,8 +335,9 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 BaseTestSite.Assert.AreEqual<NtStatus>(NtStatus.STATUS_SUCCESS, status, "Status of SMB2 Read File is {0}", status);
 
                 alternativeChannelClient.SmbdReadRegisteredBuffer(directMemory, descp);
-                BaseTestSite.Assert.IsTrue(SmbdUtilities.CompareByteArray(directMemory, content), "Check file content");
-
+                byte[] expected = new byte[length];
+                Array.Copy(content, offset, expected, 0, length);
+                BaseTestSite.Assert.IsTrue(SmbdUtilities.CompareByteArray(directMemory, expected), "Check file content at offset {0} length {1}", offset, length);
                 offset += length;
             }
 

@@ -31,7 +31,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         public string UserName { get; set; }
         public string Password { get; set; }
         public Platform Platform { get; private set; }
-
+        public Platform DriverPlatform { get; private set; }
         public string ClientRNicIp { get; set; }
         public string ServerRNicIp { get; set; }
 
@@ -67,6 +67,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         {
             this.site = testSite;
             this.Platform = (Platform)Enum.Parse(typeof(Platform), site.Properties["Platform"]);
+            this.DriverPlatform = (Platform)Enum.Parse(typeof(Platform), site.Properties["DriverPlatform"]);
             this.ServerName = site.Properties["SutComputerName"];
             this.ClientRNicIp = site.Properties["ClientRNicIp"];
             this.ServerRNicIp = site.Properties["ServerRNicIp"];
@@ -146,6 +147,86 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         /// <summary>
         /// Windows Server 2016 operating system
         /// </summary>
-        WindowsServer2016 = 0x10000008
+        WindowsServer2016 = 0x10000008,
+
+        /// <summary>
+        /// Windows Server v1709
+        /// </summary>
+        WindowsServerV1709 = 0x10000009,
+
+        /// <summary>
+        /// Windows Server v1803
+        /// </summary>
+        WindowsServerV1803 = 0x1000000A,
+
+        /// <summary>
+        /// Windows Server 2019 
+        /// </summary>
+        WindowsServer2019 = 0x1000000B,
+
+        /// <summary>
+        /// Windows Server v1903 
+        /// </summary>
+        WindowsServerV1903 = 0x1000000C,
+
+        /// <summary>
+        /// Windows Server v1909
+        /// </summary>
+        WindowsServerV1909 = 0x1000000D,
+
+        /// <summary>
+        /// Windows Server v2004
+        /// </summary>
+        WindowsServerV2004 = 0x1000000E,
+
+        /// <summary>
+        /// Windows Server v2020
+        /// </summary>
+        WindowsServerV20H2 = 0x1000000F,
+
+        /// <summary>
+        /// Windows 10 v21H1
+        /// </summary>
+        Windows10V21H1 = 0x10000010,
+
+        /// <summary>
+        /// Windows Server v2022
+        /// </summary>
+        WindowsServer2022 = 0x10000011,
+
+        /// <summary>
+        /// Windows Server 2022 v22H2
+        /// </summary>
+        WindowsServerV22H2 = 0x10000012,
+
+        /// <summary>
+        /// Windows Server v2025
+        /// </summary>
+        WindowsServer2025 = 0x10000013,
+
+        /// <summary>
+        /// Windows 11
+        /// </summary>
+        Windows11 = 0x10000014,
+
+        /// <summary>
+        /// Windows 11 2021 v21H2
+        /// </summary>
+        Windows11V21H2 = 0x10000015,
+
+        /// <summary>
+        /// Windows 11 2022 v22H2
+        /// </summary>
+        Windows11V22H2 = 0x10000016,
+
+        /// <summary>
+        /// Windows 11 2023 v23H2
+        /// </summary>
+        Windows11V23H2 = 0x10000017,
+
+        /// <summary>
+        /// Windows 11 2024 v24H2
+        /// </summary>
+        Windows11V24H2 = 0x10000018
     }
 }

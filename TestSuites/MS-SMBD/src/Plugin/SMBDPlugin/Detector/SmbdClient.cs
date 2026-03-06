@@ -2,7 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools.StackSdk;
+#if WINDOWS
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
+#endif
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
@@ -13,6 +15,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
+// Add using statement for our new cross-platform RDMA adapter
+using Microsoft.Protocols.TestManager.SMBDPlugin;
+
+#pragma warning disable CS0618 // Type or member is obsolete
+
 namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 {
     public class SmbdClient : Smb2Client
@@ -20,7 +27,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         #region private fields
         private TimeSpan smbdConnectionTimeout;
         private Smb2Decoder decoder;
-        private TestTools.StackSdk.FileAccessService.Smbd.SmbdClient smbdClient;
+        private IRdmaPlatformAdapter rdmaAdapter;
         private ulong messageId;
         private Guid clientGuid;
         private DialectRevision selectedDialect;
@@ -42,7 +49,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             smbdConnectionTimeout = timeout;
             decoder = new Smb2Decoder(Smb2Role.Client, new System.Collections.Generic.Dictionary<ulong, Smb2CryptoInfo>());
-            smbdClient = new TestTools.StackSdk.FileAccessService.Smbd.SmbdClient();
+            rdmaAdapter = RdmaPlatformAdapterFactory.CreateAdapter();
             messageId = 0;
             clientGuid = Guid.NewGuid();
             sessionId = 0;
@@ -381,58 +388,20 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
 
         #region SMBD procedures
-        public void ConnectOverRDMA(string localIpAddress, string remoteIpAddress, int port, uint maxReceiveSize, out RdmaAdapterInfo adapterInfo)
+        public void ConnectOverRDMA(string localIpAddress, string remoteIpAddress, int port, uint maxReceiveSize, out RdmaAdapterData adapterInfo)
         {
-            NtStatus status;
-            RdmaProviderInfo[] providers;
-            status = (NtStatus)RdmaProvider.LoadRdmaProviders(out providers);
+            var status = rdmaAdapter.Connect(localIpAddress, remoteIpAddress, port, maxReceiveSize);
             if (status != NtStatus.STATUS_SUCCESS)
             {
-                throw new InvalidOperationException("Failed to load RDMA providers!");
+                throw new InvalidOperationException($"ConnectToServerOverRdma failed! Status: {status}");
             }
 
-            RdmaAdapter adapter = null;
-            foreach (var provider in providers)
-            {
-                if (provider.Provider == null)
-                {
-                    continue;
-                }
-                RdmaAdapter outputAdapter;
-                status = (NtStatus)provider.Provider.OpenAdapter(localIpAddress, (short)AddressFamily.InterNetwork, out outputAdapter);
-                if (status == NtStatus.STATUS_SUCCESS)
-                {
-                    adapter = outputAdapter;
-                    break;
-                }
-            }
-
-            if (adapter == null)
-            {
-                throw new InvalidOperationException("Failed to find the specified RDMA adapter!");
-            }
-
-            status = (NtStatus)adapter.Query(out adapterInfo);
-            if (status != (int)NtStatus.STATUS_SUCCESS)
+            status = rdmaAdapter.Query(out adapterInfo);
+            if (status != NtStatus.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException("Failed to query RDMA provider info!");
             }
 
-            status = smbdClient.ConnectToServerOverRdma(
-                                    localIpAddress,
-                                    remoteIpAddress,
-                                    port,
-                                    AddressFamily.InterNetwork,
-                                    adapterInfo.MaxInboundRequests,
-                                    adapterInfo.MaxOutboundRequests,
-                                    adapterInfo.MaxInboundReadLimit,
-                                    maxReceiveSize
-                                    );
-
-            if (status != NtStatus.STATUS_SUCCESS)
-            {
-                throw new InvalidOperationException("ConnectToServerOverRdma failed!");
-            }
             decoder.TransportType = Smb2TransportType.Rdma;
         }
 
@@ -446,16 +415,16 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             SmbdNegotiateResponse response;
 
-            var status = smbdClient.Negotiate(
-                                        SmbdVersion.V1,
-                                        SmbdVersion.V1,
-                                        creditsRequested,
-                                        receiveCreditMax,
-                                        preferredSendSize,
-                                        maxReceiveSize,
-                                        maxFragmentedSize,
-                                        out response
-                                        );
+            var status = rdmaAdapter.Negotiate(
+                SmbdVersion.V1,
+                SmbdVersion.V1,
+                creditsRequested,
+                receiveCreditMax,
+                preferredSendSize,
+                maxReceiveSize,
+                maxFragmentedSize,
+                out response
+            );
 
             if (status != NtStatus.STATUS_SUCCESS)
             {
@@ -484,12 +453,12 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             NtStatus status;
             SmbdBufferDescriptorV1 descriptor;
 
-            status = smbdClient.RegisterBuffer(
-                                 (uint)length,
-                                 SmbdBufferReadWrite.RDMA_WRITE_PERMISSION_FOR_READ_FILE,
-                                 endianMap[endian],
-                                 out descriptor
-                                 );
+            status = rdmaAdapter.RegisterBuffer(
+                length,
+                SmbdBufferReadWrite.RDMA_WRITE_PERMISSION_FOR_READ_FILE,
+                endianMap[endian],
+                out descriptor
+            );
 
             if (status != NtStatus.STATUS_SUCCESS)
             {
@@ -529,11 +498,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
             buffer = new byte[length];
 
-            status = smbdClient.ReadRegisteredBuffer(buffer, descriptor);
+            status = rdmaAdapter.ReadRegisteredBuffer(buffer, descriptor);
 
             if (status != NtStatus.STATUS_SUCCESS)
             {
-                throw new InvalidOperationException("SMBD write buffer failed!");
+                throw new InvalidOperationException("SMBD read buffer failed!");
             }
         }
 
@@ -542,19 +511,19 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             NtStatus status;
             SmbdBufferDescriptorV1 descriptor;
 
-            status = smbdClient.RegisterBuffer(
-                                 (uint)buffer.Length,
-                                 SmbdBufferReadWrite.RDMA_READ_PERMISSION_FOR_WRITE_FILE,
-                                 endianMap[endian],
-                                 out descriptor
-                                 );
+            status = rdmaAdapter.RegisterBuffer(
+                (uint)buffer.Length,
+                SmbdBufferReadWrite.RDMA_READ_PERMISSION_FOR_WRITE_FILE,
+                endianMap[endian],
+                out descriptor
+            );
 
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException("SMBD register buffer failed!");
             }
 
-            status = smbdClient.WriteRegisteredBuffer(buffer, descriptor);
+            status = rdmaAdapter.WriteRegisteredBuffer(buffer, descriptor);
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 throw new InvalidOperationException("SMBD write buffer failed!");
@@ -604,7 +573,11 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
         {
             if (decoder.TransportType == Smb2TransportType.Rdma)
             {
-                smbdClient.SendMessage(data);
+                NtStatus sendStatus = rdmaAdapter.SendMessage(data);
+                if (sendStatus != NtStatus.STATUS_SUCCESS)
+                {
+                    throw new InvalidOperationException($"SendMessage failed with status: {sendStatus}");
+                }
             }
             else
             {
@@ -617,9 +590,21 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             if (decoder.TransportType == Smb2TransportType.Rdma)
             {
                 byte[] smb2Response = null;
+                NtStatus receiveStatus = rdmaAdapter.ReceiveMessage(smbdConnectionTimeout, out smb2Response);
+                if (receiveStatus != NtStatus.STATUS_SUCCESS && receiveStatus != NtStatus.STATUS_IO_TIMEOUT)
+                {
+                    throw new InvalidOperationException($"Initial ReceiveMessage failed with status: {receiveStatus}");
+                }
+
                 while (smb2Response == null || smb2Response.Length == 0)
                 {
-                    smbdClient.ReceiveMessage(smbdConnectionTimeout, out smb2Response);
+                    receiveStatus = rdmaAdapter.ReceiveMessage(smbdConnectionTimeout, out smb2Response);
+                    if (receiveStatus != NtStatus.STATUS_SUCCESS && receiveStatus != NtStatus.STATUS_IO_TIMEOUT)
+                    {
+                        throw new InvalidOperationException($"Repeated ReceiveMessage failed with status: {receiveStatus}");
+                    }
+                    if (smb2Response != null && smb2Response.Length > 0)
+                        break;
                 }
 
                 object endpoint = new object();
@@ -637,7 +622,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
 
         public new void Dispose()
         {
-            smbdClient.Disconnect();
+            rdmaAdapter?.Disconnect();
         }
     }
 }
