@@ -4694,6 +4694,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Fscc
         FILE_SUPPORTS_REMOTE_STORAGE = 0x00000100,
 
         /// <summary>
+        /// The file system supports POSIX-style delete and rename operations.
+        /// </summary>
+        FILE_SUPPORTS_POSIX_UNLINK_RENAME = 0x00000400,
+
+        /// <summary>
+        /// On a successful cleanup operation, the file system returns information that describes
+        /// additional actions taken during cleanup, such as deleting the file.
+        /// </summary>
+        FILE_RETURNS_CLEANUP_RESULT_INFO = 0x00000200,
+
+        /// <summary>
         /// The file system supports reparse points. 
         /// </summary>
         FILE_SUPPORTS_REPARSE_POINTS = 0x00000080,
