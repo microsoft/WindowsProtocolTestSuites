@@ -4,6 +4,8 @@
 
 Windows Protocol Test Suites provide interoperability testing for Windows open specifications across multiple protocol families (File Services, Identity Management, RDP, Kerberos, etc.). The codebase follows a consistent multi-suite architecture with shared infrastructure.
 
+IMPORTANT : DO A DEEP SCAN ON THE CODE BASE DOCUMENTATION STORED IN THE AI-DOCS (ai-docs) FOLDER
+
 ## Architecture
 
 ### Core Components
