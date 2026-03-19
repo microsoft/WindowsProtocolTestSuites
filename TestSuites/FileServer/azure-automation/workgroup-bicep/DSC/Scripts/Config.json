@@ -1,0 +1,49 @@
+{
+    "_comment": "TEMPLATE ONLY -- This file contains fallback defaults for local/manual runs. In Azure deployments, deploy.ps1 generates the authoritative Config.json via Generate-ConfigJson.ps1 and places it at the package root (WorkingPath/Config.json). That generated copy takes precedence over this template.",
+    "Core": {
+        "Username": "testadmin",
+        "Password": "<REPLACE_WITH_ADMIN_PASSWORD>",
+        "TestSuiteName": "FileServer",
+        "Scenario": "Workgroup",
+        "RegressionType": "Local",
+        "UseAgent": "false"
+    },
+    "Machines": {
+        "SUT": {
+            "Role": "SUT",
+            "HyperVName": "Node01",
+            "ComputerName": "Node01",
+            "IsClusterNode": "false",
+            "IpConfig": [
+                {
+                    "NIC": "External1",
+                    "Ip": "192.168.1.11",
+                    "Subnet": "255.255.255.0"
+                },
+                {
+                    "NIC": "External2",
+                    "Ip": "192.168.2.11",
+                    "Subnet": "255.255.255.0"
+                }
+            ]
+        },
+        "DriverComputer": {
+            "Role": "DriverComputer",
+            "HyperVName": "Client01",
+            "ComputerName": "Client01",
+            "IsClusterNode": "false",
+            "IpConfig": [
+                {
+                    "NIC": "External1",
+                    "Ip": "192.168.1.111",
+                    "Subnet": "255.255.255.0"
+                },
+                {
+                    "NIC": "External2",
+                    "Ip": "192.168.2.111",
+                    "Subnet": "255.255.255.0"
+                }
+            ]
+        }
+    }
+}
