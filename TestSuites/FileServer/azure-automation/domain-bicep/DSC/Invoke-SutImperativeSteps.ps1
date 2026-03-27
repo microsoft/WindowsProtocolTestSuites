@@ -121,6 +121,18 @@ if ($Step -eq 3) {
         $marker = Get-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'ComputerPasswordSet' -ErrorAction SilentlyContinue
         if ($null -eq $marker) {
             ksetup /SetComputerPassword Password04!
+            # Also update the AD computer account password to match, otherwise
+            # the local-only change breaks the trust relationship after reboot.
+            try {
+                if (-not (Get-Module -ListAvailable -Name ActiveDirectory -ErrorAction SilentlyContinue)) {
+                    Install-WindowsFeature RSAT-AD-PowerShell -ErrorAction Stop | Out-Null
+                }
+                $secPw = ConvertTo-SecureString 'Password04!' -AsPlainText -Force
+                Set-ADAccountPassword -Identity "$($env:COMPUTERNAME)$" -Reset -NewPassword $secPw -ErrorAction Stop
+                .\Write-Info.ps1 "[OK] AD computer account password synced" -ForegroundColor Green
+            } catch {
+                .\Write-Info.ps1 "[WARN] Failed to sync AD computer password: $($_.Exception.Message)" -ForegroundColor Yellow
+            }
             if (-not (Test-Path 'HKLM:\SOFTWARE\ProtocolTestSuites')) {
                 New-Item -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Force | Out-Null
             }

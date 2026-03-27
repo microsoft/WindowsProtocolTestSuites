@@ -528,42 +528,13 @@ if($null -eq $fileServerShare)
 }
 
 #----------------------------------------------------------------------------
-# Modify IP resource of GeneralFS to make traffic go over load balancer on Azure
+# Azure cluster: GeneralFS virtual IPs are not routable without an Azure Load
+# Balancer because Azure's SDN drops traffic to IPs not assigned to any NIC.
+# Instead of setting /32 masks + ProbePort for a non-existent LB, we leave the
+# default /24 masks from Add-ClusterFileServerRole and rely on hosts-file
+# entries (configured by DSC HostsFileEntries) on client machines to resolve
+# GeneralFS to the owning node's real IP.
 #----------------------------------------------------------------------------
-$isAzureCluster = ($config.Core.regressiontype -match "Azure") -and ($config.Core.Scenario -match "Cluster")
-if ($isAzureCluster) {
-    $clusterNetworkName = (Get-ClusterNetwork)[0].Name
-    $ipResourceName = (Get-ClusterResource | Where-Object { ($_.ResourceType -eq "IP Address") -and ($_.OwnerGroup -eq $config.Endpoints.GeneralFS.Name) })[0].Name
-    $lbIP = $config.Endpoints.GeneralFS.IpConfig[0].Ip
-    $params = @{
-        "Address" = "$lbIP"
-        "ProbePort" = "59999"
-        "SubnetMask" = "255.255.255.255"
-        "Network" = "$clusterNetworkName"
-        "OverrideAddressMatch" = 1
-        "EnableDhcp" = 0
-    }
-
-    # Pipeline binding fails in PS7 with deserialized cluster objects.
-    # Run through powershell.exe (WinPS 5.1) where objects are live.
-    powershell.exe -NoProfile -Command "
-        Get-ClusterResource -Name '$ipResourceName' | Set-ClusterParameter -Multiple @{
-            Address = '$lbIP'
-            ProbePort = '59999'
-            SubnetMask = '255.255.255.255'
-            Network = '$clusterNetworkName'
-            OverrideAddressMatch = 1
-            EnableDhcp = 0
-        }
-    "
-
-    # Take the IP resource offline and bring it online again
-    Stop-ClusterResource -Name $ipResourceName
-    Start-ClusterResource -Name $ipResourceName
-
-    # Start GeneralFS role
-    Start-ClusterGroup -Name $config.Endpoints.GeneralFS.Name
-}
 
 #----------------------------------------------------------------------------
 # Create ScaleoutFS role

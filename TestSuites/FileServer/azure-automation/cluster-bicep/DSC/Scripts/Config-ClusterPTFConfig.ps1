@@ -91,17 +91,17 @@ $infraFSName = if ($null -ne $config.Endpoints.InfrastructureFS) { $config.Endpo
 $commonPtf = "$testSuitePath\CommonTestSuite.deployment.ptfconfig"
 if (Test-Path $commonPtf) {
     .\Write-Info.ps1 "Patching CommonTestSuite.deployment.ptfconfig..." -ForegroundColor Cyan
-    Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "SutComputerName" -Value $sutName
+    Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "SutComputerName" -Value "$sutName.$domain"
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "SutIPAddress" -Value $sutIp
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "DomainName" -Value $domain
-    Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "DCServerComputerName" -Value $dcName
+    Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "DCServerComputerName" -Value "$dcName.$domain"
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "AdminUserName" -Value $adminUser
     if (-not [string]::IsNullOrEmpty($adminPassword)) {
         Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "PasswordForAllUsers" -Value $adminPassword
     }
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "IsPersistentHandlesSupported" -Value "true"
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "CAShareName" -Value "SMBClustered"
-    Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "CAShareServerName" -Value $generalFSName
+    Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "CAShareServerName" -Value "$generalFSName.$domain"
     if (-not [string]::IsNullOrEmpty($driverIp1)) {
         Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "ClientNic1IPAddress" -Value $driverIp1
     }
@@ -125,6 +125,8 @@ if (Test-Path $failoverPtf) {
     Set-PTFConfigProperty -FilePath $failoverPtf -PropertyName "WitnessClientName" -Value "$driverName.$domain"
     Set-PTFConfigProperty -FilePath $failoverPtf -PropertyName "AsymmetricShare" -Value "SMBClustered"
     Set-PTFConfigProperty -FilePath $failoverPtf -PropertyName "CAShareWithDataEncryption" -Value "SMBClusteredEncrypted"
+    Set-PTFConfigProperty -FilePath $failoverPtf -PropertyName "OptimumNodeOfAsymmetricShare" -Value "$scaleoutFSName.$domain"
+    Set-PTFConfigProperty -FilePath $failoverPtf -PropertyName "NonOptimumNodeOfAsymmetricShare" -Value "$scaleoutFSName.$domain"
 }
 
 # ============================================================
@@ -133,11 +135,20 @@ if (Test-Path $failoverPtf) {
 $smb2Ptf = "$testSuitePath\MS-SMB2_ServerTestSuite.deployment.ptfconfig"
 if (Test-Path $smb2Ptf) {
     .\Write-Info.ps1 "Patching MS-SMB2_ServerTestSuite.deployment.ptfconfig..." -ForegroundColor Cyan
-    Set-PTFConfigProperty -FilePath $smb2Ptf -PropertyName "ClusteredInfrastructureFileServerName" -Value $infraFSName
-    Set-PTFConfigProperty -FilePath $smb2Ptf -PropertyName "DriverComputerName" -Value $driverName
+    Set-PTFConfigProperty -FilePath $smb2Ptf -PropertyName "ClusteredInfrastructureFileServerName" -Value "$infraFSName.$domain"
+    Set-PTFConfigProperty -FilePath $smb2Ptf -PropertyName "DriverComputerName" -Value "$driverName.$domain"
     if (-not [string]::IsNullOrEmpty($sutAltIp)) {
         Set-PTFConfigProperty -FilePath $smb2Ptf -PropertyName "SutAlternativeIPAddress" -Value $sutAltIp
     }
+}
+
+# ============================================================
+# Patch MS-SMB2Model_ServerTestSuite.deployment.ptfconfig
+# ============================================================
+$smb2ModelPtf = "$testSuitePath\MS-SMB2Model_ServerTestSuite.deployment.ptfconfig"
+if (Test-Path $smb2ModelPtf) {
+    .\Write-Info.ps1 "Patching MS-SMB2Model_ServerTestSuite.deployment.ptfconfig..." -ForegroundColor Cyan
+    Set-PTFConfigProperty -FilePath $smb2ModelPtf -PropertyName "ScaleOutFileServerName" -Value "$scaleoutFSName.$domain"
 }
 
 .\Write-Info.ps1 "Cluster ptfconfig configuration complete." -ForegroundColor Green

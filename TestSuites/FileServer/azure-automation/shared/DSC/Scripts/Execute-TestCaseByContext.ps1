@@ -458,13 +458,6 @@ else {
 ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "ClientNic1IPAddress" $driverIP1
 ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "ClientNic2IPAddress" $driverIP2
 
-if ($ContextName -match "Domain_Cluster") {
-  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "CAShareServerName" "$generalFsName.$domain"
-}
-else {
-  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "CAShareName" ""
-  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "CAShareServerName" ""
-}
 # Update Platform
 $platform = $ContextName.Split("_") | Select-Object -First 1
 if ($platform -eq "Samba") {
@@ -508,6 +501,18 @@ if ($ContextName -match "EnableQUIC") {
   $targetName = if ($ContextName -match "Workgroup") { $sutName } else { "$sutName.$domain" }
   ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "SutComputerName" $targetName
   ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "SutIPAddress" $targetName
+}
+
+# CA share properties — set LAST for CommonTestSuite.deployment.ptfconfig to avoid
+# being reset by subsequent XML round-trips (each Modify-ConfigFileNode.ps1 call
+# does a full [xml] load/save that can corrupt earlier writes).
+if ($ContextName -match "Domain_Cluster") {
+  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "CAShareName" "SMBClustered"
+  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "CAShareServerName" "$generalFsName.$domain"
+}
+else {
+  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "CAShareName" ""
+  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "CAShareServerName" ""
 }
 
 #----------------------------------------------------------------------------
@@ -624,7 +629,7 @@ if ($ContextName -notmatch "Win2012") {
 #----------------------------------------------------------------------------
 if ($ContextName -match "Domain_Cluster") {
 
-  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $serverFailoverPtfConfig "ClusterName" $clusterName
+  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $serverFailoverPtfConfig "ClusterName" "$clusterName.$domain"
   ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $serverFailoverPtfConfig "ClusterNode01" "$sutName.$domain"
   $node02Name = $sut2.name
   ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $serverFailoverPtfConfig "ClusterNode02" "$node02Name.$domain"

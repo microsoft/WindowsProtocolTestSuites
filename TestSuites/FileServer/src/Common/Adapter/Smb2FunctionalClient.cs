@@ -1578,7 +1578,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         #region Flush
 
-        public uint Flush(uint treeId, FILEID fileId, ResponseChecker<FLUSH_Response> checker = null)
+        public uint Flush(uint treeId, FILEID fileId, ResponseChecker<FLUSH_Response> checker = null, bool isReplay = false)
         {
             uint status;
             Packet_Header header;
@@ -1593,7 +1593,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             status = client.Flush(
                 creditCharge,
                 generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE) | (isReplay ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE),
                 messageId,
                 sessionId,
                 treeId,
@@ -2296,9 +2296,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint fileIndex,
             FILEID fileId,
             out byte[] outputBuffer,
-            ResponseChecker<QUERY_DIRECTORY_Response> checker = null)
+            ResponseChecker<QUERY_DIRECTORY_Response> checker = null,
+            bool isReplay = false)
         {
-            return QueryDirectory(treeId, fileInfoClass, queryDirectoryFlags, fileIndex, fileId, "*", out outputBuffer, checker);
+            return QueryDirectory(treeId, fileInfoClass, queryDirectoryFlags, fileIndex, fileId, "*", out outputBuffer, checker, isReplay);
         }
 
         public uint QueryDirectory(
@@ -2309,7 +2310,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             FILEID fileId,
             string searchPattern,
             out byte[] outputBuffer,
-            ResponseChecker<QUERY_DIRECTORY_Response> checker = null)
+            ResponseChecker<QUERY_DIRECTORY_Response> checker = null,
+            bool isReplay = false)
         {
             uint status;
             uint maxOutputBufferLength = DefaultMaxOutputResponse;
@@ -2325,7 +2327,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             status = client.QueryDirectory(
                 creditCharge,
                 generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE) | (isReplay ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE),
                 messageId,
                 sessionId,
                 treeId,
@@ -2367,7 +2369,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             FILEID fileId,
             byte[] inputBuffer,
             out byte[] outputBuffer,
-            ResponseChecker<QUERY_INFO_Response> checker = null)
+            ResponseChecker<QUERY_INFO_Response> checker = null,
+            bool isReplay = false)
         {
             uint maxOutputBufferLength = 1024;
             Packet_Header header;
@@ -2382,7 +2385,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint status = client.QueryInfo(
                 creditCharge,
                 generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE) | (isReplay ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE),
                 messageId,
                 sessionId,
                 treeId,
@@ -2758,7 +2761,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             FILEID fileId,
             CompletionFilter_Values completionFilter,
             CHANGE_NOTIFY_Request_Flags_Values flags = CHANGE_NOTIFY_Request_Flags_Values.NONE,
-            uint maxOutputBufferLength = DefaultMaxOutputResponse)
+            uint maxOutputBufferLength = DefaultMaxOutputResponse,
+            bool isReplay = false)
         {
             ulong messageId = generateMessageId(sequenceWindow);
             ushort creditCharge = generateCreditCharge(1);
@@ -2769,7 +2773,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             client.ChangeNotify(
                 creditCharge,
                 generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE) | (isReplay ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE),
                 messageId,
                 sessionId,
                 treeId,
@@ -2792,7 +2796,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint lockSequence,
             FILEID fileId,
             LOCK_ELEMENT[] locks,
-            ResponseChecker<LOCK_Response> checker = null)
+            ResponseChecker<LOCK_Response> checker = null,
+            bool isReplay = false)
         {
             uint status;
 
@@ -2808,7 +2813,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             status = client.Lock(
                 creditCharge,
                 generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE) | (isReplay ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE),
                 messageId,
                 sessionId,
                 treeId,
@@ -2914,7 +2919,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
 
         #region Oplock Break
 
-        public uint OplockAcknowledgement(uint treeId, FILEID fileId, OPLOCK_BREAK_Acknowledgment_OplockLevel_Values oplockLevel, ResponseChecker<OPLOCK_BREAK_Response> checker = null)
+        public uint OplockAcknowledgement(uint treeId, FILEID fileId, OPLOCK_BREAK_Acknowledgment_OplockLevel_Values oplockLevel, ResponseChecker<OPLOCK_BREAK_Response> checker = null, bool isReplay = false)
         {
             Packet_Header header;
             OPLOCK_BREAK_Response oplockBreakResp;
@@ -2928,7 +2933,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint status = client.OplockBreakAcknowledgment(
                 creditCharge,
                 generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE) | (isReplay ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE),
                 messageId,
                 sessionId,
                 treeId,
@@ -2948,7 +2953,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint treeId,
             Guid leaseKey,
             LeaseStateValues leaseState,
-            ResponseChecker<LEASE_BREAK_Response> checker = null)
+            ResponseChecker<LEASE_BREAK_Response> checker = null,
+            bool isReplay = false)
         {
             Packet_Header header;
             LEASE_BREAK_Response leaseBreakResp;
@@ -2962,7 +2968,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             uint status = client.LeaseBreakAcknowledgment(
                 creditCharge,
                 generateCreditRequest(sequenceWindow, creditGoal, creditCharge),
-                testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE,
+                (testConfig.SendSignedRequest ? Packet_Header_Flags_Values.FLAGS_SIGNED : Packet_Header_Flags_Values.NONE) | (isReplay ? Packet_Header_Flags_Values.FLAGS_REPLAY_OPERATION : Packet_Header_Flags_Values.NONE),
                 messageId,
                 sessionId,
                 treeId,
