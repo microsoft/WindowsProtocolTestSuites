@@ -255,18 +255,18 @@ The common prerequisites and cleanup requirements are not listed in any of the t
 | | RDP Server requests to close DVC channel|
 |  **Cleanup**| N/A|
 
-#### S1_EDYC_SendCompressedDataSequence
+#### S1_EDYC_SendUncompressedData
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **S1_EDYCBasicTest**| |
-|  **Test ID**| S1_EDYC_SendCompressedDataSequence|
-|  **Priority**| P0|
-|  **Description** | This test case is used to verify SUT can create and close DVC channel. |
+|  **Test ID**| S1_EDYC_SendUncompressedData|
+|  **Priority**| P1|
+|  **Description** | This test case is used to verify SUT can process DYNVC_DATA data. |
 |  **Prerequisites**| RDPBCGR connection is setup|
 |  **Test Execution Steps**| Initiate and complete an RDP connection to RDP Server (SUT).|
 | | RDP Server sends Capability exchange pdu|
 | | RDP Server requests to create DVC channel|
-| | RDP Client sends data sequence (bigger than 1,590 bytes) to server and expect response|
+| | RDP Client sends uncompressed DYNVC_Data PDU to server|
 | | RDP Server requests to close DVC channel|
 |  **Cleanup**| N/A|
 

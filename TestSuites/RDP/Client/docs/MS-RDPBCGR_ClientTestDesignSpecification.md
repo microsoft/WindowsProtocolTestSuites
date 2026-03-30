@@ -798,7 +798,7 @@ The following table shows the number of test cases for each scenario.
 
 |  **Scenario**|  **Test Cases**|  **BVTs**|  **P0**|  **P1**|  **P2**| 
 | -------------| -------------| -------------| -------------| -------------| ------------- |
-| [S1\_Connection](#_Toc427051967)| 88| 7| 11| 32| 27| 
+| [S1\_Connection](#_Toc427051967)| 89| 7| 11| 32| 28|
 | [S2\_Reactivation](#_Toc427051968)| 2| 1| 1| 1| 0| 
 | [S3\_AutoReconnect](#_Toc427051969)| 2| 1| 1| 1| 0| 
 | [S4\_SlowPathInput](#_Toc427051970)| 6| 1| 1| 4| 1| 
@@ -1293,7 +1293,7 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 
 |  **S1\_Connection**| | 
 | -------------| ------------- |
-|  **Test ID**| A_S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_V1RnsUdScEdgeActionsSupported| 
+|  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_V1RnsUdScEdgeActionsSupported|
 |  **Priority**| P2| 
 |  **Description** | This test case verifies that SUT can process the earlyCapabilityFlags of the TS\_US\_SC\_CORE correctly with supporting version 1 RNS\_UD\_SC\_EDGE\_ACTIONS.| 
 |  **Prerequisites**|  | 
@@ -1394,11 +1394,24 @@ To simplify the test environment of S8 (Server Redirection), the S8 test cases r
 |  **Cleanup**| N/A| 
 
 
-|  **S1\_Connection**| | 
+|  **S1\_Connection**| |
 | -------------| ------------- |
-|  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerMessageChannelData_MaxValue| 
-|  **Priority**| P2| 
-|  **Description** | This test case verifies that SUT can process the boundary value (65535) of MCSChannelId field in Server Message Channel Data.| 
+|  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerMessageChannelData\_LessMaxValue|
+|  **Priority**| P2|
+|  **Description** | This test case verifies that SUT can process the boundary value (65534) of MCSChannelId field in Server Message Channel Data.|
+|  **Prerequisites**|  |
+|  **Test Execution Steps**| Trigger SUT to initiate an RDP connection and complete the Connection Initiation phase.|
+| | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. |
+| | Verify that received Client MCS Connect Initial PDU with GCC Conference Create Request and Test Suite responds a Server MCS Connect Response PDU with GCC Conference Create Response and set the MCSChannel field of the Server Message Channel Data to 65534.|
+| | Test Suite expects a Client MCS Erect Domain Request PDU to indicate the successful process of the Server MCS Connect Response PDU with GCC Conference Create Response.|
+|  **Cleanup**| N/A|
+
+
+|  **S1\_Connection**| |
+| -------------| ------------- |
+|  **Test ID**| S1\_ConnectionTest\_BasicSettingExchange\_PositiveTest\_MCSChannelIdOfServerMessageChannelData_MaxValue|
+|  **Priority**| P2|
+|  **Description** | This test case verifies that SUT can process the boundary value (65535) of MCSChannelId field in Server Message Channel Data.|
 |  **Prerequisites**|  | 
 |  **Test Execution Steps**| Trigger SUT to initiate an RDP connection and complete the Connection Initiation phase.| 
 | | Test Suite expects SUT continues the connection sequence by sending a Client MCS Connect Initial PDU with GCC Conference Create Request. | 

@@ -1747,6 +1747,278 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
+##### <a name="3.1.18.2"> Replay IsReplayEligible
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_Write_ReplayEligibleCleared|
+|**Description**|Verify that after a successful replay of SMB2 WRITE on a persistent handle over SMB 3.x, Open.IsReplayEligible is set to FALSE (MS-SMB2 section 3.3.5.13).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends WRITE request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of WRITE.|
+||The client sends a subsequent WRITE request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_Read_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 READ on a persistent handle over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.12).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends READ request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of READ.|
+||The client sends a subsequent READ request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_Flush_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 FLUSH on a persistent handle over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.11).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends FLUSH request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of FLUSH.|
+||The client sends a subsequent FLUSH request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_IoCtl_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 IOCTL on a persistent handle over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.15).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends IOCTL request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of IOCTL.|
+||The client sends a subsequent IOCTL request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_SetInfo_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 SET_INFO on a persistent handle over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.21).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends SET_INFO request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of SET_INFO.|
+||The client sends a subsequent SET_INFO request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_Lock_ReplayEligibleCleared|
+|**Description**|Verify that SMB2 LOCK on a persistent handle over SMB 3.x clears Open.IsReplayEligible and the lock sequence idempotency mechanism works correctly (MS-SMB2 section 3.3.5.14).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends LOCK request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of LOCK.|
+||The client sends a subsequent LOCK request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully using the lock sequence idempotency mechanism.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_QueryDirectory_ReplayEligibleCleared|
+|**Description**|Verify that SMB2 QUERY_DIRECTORY on a persistent handle over SMB 3.x clears Open.IsReplayEligible and subsequent queries work correctly (MS-SMB2 section 3.3.5.18).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set to open a directory.|
+||The client sends QUERY_DIRECTORY request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of QUERY_DIRECTORY.|
+||The client sends a subsequent QUERY_DIRECTORY request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_QueryInfo_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 QUERY_INFO on a persistent handle over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.20).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends QUERY_INFO request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of QUERY_INFO.|
+||The client sends a subsequent QUERY_INFO request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_PersistentHandle_ChangeNotify_ReplayEligibleCleared|
+|**Description**|Verify that SMB2 CHANGE_NOTIFY on a persistent handle over SMB 3.x clears Open.IsReplayEligible and subsequent watches work correctly (MS-SMB2 section 3.3.5.19).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set to open a directory.|
+||The client sends CHANGE_NOTIFY request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of CHANGE_NOTIFY.|
+||The client sends a subsequent CHANGE_NOTIFY request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_Write_ReplayEligibleCleared|
+|**Description**|Verify that after a successful replay of SMB2 WRITE on a non-persistent DurableHandleV2 over SMB 3.x, Open.IsReplayEligible is set to FALSE (MS-SMB2 section 3.3.5.13).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends WRITE request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of WRITE.|
+||The client sends a subsequent WRITE request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_Read_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 READ on a non-persistent DurableHandleV2 over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.12).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends READ request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of READ.|
+||The client sends a subsequent READ request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_Flush_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 FLUSH on a non-persistent DurableHandleV2 over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.11).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends FLUSH request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of FLUSH.|
+||The client sends a subsequent FLUSH request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_IoCtl_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 IOCTL on a non-persistent DurableHandleV2 over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.15).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends IOCTL request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of IOCTL.|
+||The client sends a subsequent IOCTL request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_SetInfo_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 SET_INFO on a non-persistent DurableHandleV2 over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.21).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends SET_INFO request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of SET_INFO.|
+||The client sends a subsequent SET_INFO request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_Lock_ReplayEligibleCleared|
+|**Description**|Verify that SMB2 LOCK on a non-persistent DurableHandleV2 over SMB 3.x clears Open.IsReplayEligible and the lock sequence idempotency mechanism works correctly (MS-SMB2 section 3.3.5.14).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends LOCK request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of LOCK.|
+||The client sends a subsequent LOCK request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully using the lock sequence idempotency mechanism.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_QueryDirectory_ReplayEligibleCleared|
+|**Description**|Verify that SMB2 QUERY_DIRECTORY on a non-persistent DurableHandleV2 over SMB 3.x clears Open.IsReplayEligible and subsequent queries work correctly (MS-SMB2 section 3.3.5.18).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set to open a directory.|
+||The client sends QUERY_DIRECTORY request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of QUERY_DIRECTORY.|
+||The client sends a subsequent QUERY_DIRECTORY request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_QueryInfo_ReplayEligibleCleared|
+|**Description**|Verify that replay of SMB2 QUERY_INFO on a non-persistent DurableHandleV2 over SMB 3.x clears Open.IsReplayEligible (MS-SMB2 section 3.3.5.20).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||The client sends QUERY_INFO request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of QUERY_INFO.|
+||The client sends a subsequent QUERY_INFO request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|Replay_NonPersistentHandle_ChangeNotify_ReplayEligibleCleared|
+|**Description**|Verify that SMB2 CHANGE_NOTIFY on a non-persistent DurableHandleV2 over SMB 3.x clears Open.IsReplayEligible and subsequent watches work correctly (MS-SMB2 section 3.3.5.19).|
+|**Prerequisites**||
+|**Test Execution Steps**|Start a client by sending the following requests: 1. NEGOTIATE (SMB 3.x dialect); 2. SESSION_SETUP; 3. TREE_CONNECT to a non-CA share.|
+||The client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 (non-persistent) create context and SMB2_FLAGS_REPLAY_OPERATION flag set to open a directory.|
+||The client sends CHANGE_NOTIFY request with SMB2_FLAGS_REPLAY_OPERATION flag set.|
+||Verify that Open.IsReplayEligible is set to FALSE after the replay of CHANGE_NOTIFY.|
+||The client sends a subsequent CHANGE_NOTIFY request without SMB2_FLAGS_REPLAY_OPERATION flag.|
+||Verify the server processes the subsequent request successfully.|
+||Tear down the client by sending the following requests: 1. CLOSE; 2. TREE_DISCONNECT; 3. LOG_OFF.|
+|**Cleanup**||
+
+
 #### <a name="3.1.19"> ResilientHandle
 
 ##### <a name="3.1.19.1"> Test Case
