@@ -1,8 +1,0 @@
-schemaVersion: 0.0.1
-isProduction: true
-accountableOwners:
-  service: 489d3b89-2996-4061-80ee-8b1362c94788
-routing:
-  defaultAreaPath:
-    org: microsoft
-    path: OS\ImPaCT\TEC\Data and Protocols
