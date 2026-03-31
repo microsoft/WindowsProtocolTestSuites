@@ -1,0 +1,19 @@
+Suppressed changes for MS-SMB2_v85.0_2026-03-09_vs_MS-SMB2_v77.0_2024-06-10
+Generated: 2026-03-30T16:12:21.704794Z
+Total suppressed: 5
+============================================================
+
+[Modified] Section 2.2.13.2.1 'SMB2_CREATE_EA_BUFFER'
+  Reason: external ref change: '[MS-FSCC] section 2.4.15.' → '[MS-FSCC] section 2.4.16.'
+
+[Modified] Section 2.2.37.1 'SMB2_QUERY_QUOTA_INFO'
+  Reason: external ref change: '[MS-FSCC] section 2.4.36.1.' → '[MS-FSCC] section 2.4.41.1.'
+
+[Modified] Section 3.2.4.3.3 'Application Requests Creating a File with Extended Attributes'
+  Reason: external ref change: '[MS-FSCC] section 2.4.15.' → '[MS-FSCC] section 2.4.16.'
+
+[Modified] Section 3.2.4.15 'Application Requests Applying Quota Information'
+  Reason: external ref change: '[MS-FSCC] section 2.4.36.' → '[MS-FSCC] section 2.4.41.'; external ref change: '[MS-FSCC] section 2.4.36.' → '[MS-FSCC] section 2.4.41.'
+
+[Modified] Section 4.6 'Writing to a Remote File'
+  Reason: external ref change: '[MS-FSCC] section 2.4.13' → '[MS-FSCC] section 2.4.14'
