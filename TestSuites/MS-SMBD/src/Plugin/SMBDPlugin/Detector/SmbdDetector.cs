@@ -2,7 +2,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestManager.Detector;
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
 using System;
 using System.Collections.Generic;
 
@@ -33,7 +32,7 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             detectActions.Add(() => { if (ConnectToShareRDMA()) { DetectionInfo.RDMATransportSupported = true; } else { DetectionInfo.RDMATransportSupported = false; } return true; });
             detectActions.Add(() =>
             {
-                bool result = CheckSMBDCapability(out RdmaAdapterInfo rdmaAdapterInfo, out bool rdmaChannelV1Supported, out bool rdmaChannelV1InvalidateSupported);
+                bool result = CheckSMBDCapability(out RdmaAdapterData rdmaAdapterInfo, out bool rdmaChannelV1Supported, out bool rdmaChannelV1InvalidateSupported);
                 DetectionInfo.InboundEntries = rdmaAdapterInfo.MaxInboundRequests;
                 DetectionInfo.OutboundEntries = rdmaAdapterInfo.MaxOutboundRequests;
                 DetectionInfo.InboundReadLimit = rdmaAdapterInfo.MaxInboundReadLimit;

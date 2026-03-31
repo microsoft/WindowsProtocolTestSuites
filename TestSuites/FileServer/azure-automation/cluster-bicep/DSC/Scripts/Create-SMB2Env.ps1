@@ -1,0 +1,125 @@
+# Copyright (c) Microsoft. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+param($workingDir = $PSScriptRoot)
+
+#----------------------------------------------------------------------------
+# Global variables
+#----------------------------------------------------------------------------
+$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
+$env:Path += ";$scriptPath"
+
+#----------------------------------------------------------------------------
+# if working dir is not exists. it will use scripts path as working path
+#----------------------------------------------------------------------------
+if(!(Test-Path "$workingDir"))
+{
+    $workingDir = $scriptPath
+}
+
+#----------------------------------------------------------------------------
+# Start loging using start-transcript cmdlet
+#----------------------------------------------------------------------------
+[string]$logFile = $MyInvocation.MyCommand.Path + ".log"
+Start-Transcript -Path "$logFile" -Append -Force
+
+
+#----------------------------------------------------------------------------
+# Define common variables
+#----------------------------------------------------------------------------
+$fullAccessAccount = "BUILTIN\Administrators"
+$systemDrive = $ENV:SystemDrive
+$OSVersion = [System.Environment]::OSVersion.Version
+#----------------------------------------------------------------------------
+# Create Share Folders
+#----------------------------------------------------------------------------
+Write-Info.ps1 "Create share folder: $systemDrive\FileShare"
+Create-SMBShare.ps1 -name "FileShare" -Path "$systemDrive\FileShare" -FullAccess "$fullAccessAccount"  
+
+Write-Info.ps1 "Create share folder: $systemDrive\SMBBasic"
+Create-SMBShare.ps1 -name "SMBBasic" -Path "$systemDrive\SMBBasic" -FullAccess "$fullAccessAccount"  
+Write-Info.ps1 "Create symboliclink: $systemDrive\SMBBasic\symboliclink"
+CMD /C "mklink /D $systemDrive\SMBBasic\symboliclink $systemDrive\Fileshare\"
+CMD /C "mkdir $systemDrive\SMBBasic\sub"
+CMD /C "mklink /D $systemDrive\SMBBasic\sub\symboliclink2 $systemDrive\Fileshare\"
+
+Write-Info.ps1 "Create SameWithSMBBasic for CreateClose model"
+Create-SMBShare.ps1 -Name "SameWithSMBBasic" -Path "$systemDrive\SMBBasic" -FullAccess "$fullAccessAccount" 
+
+Write-Info.ps1 "Create DifferentFromSMBBasic for CreateClose model"
+Create-SMBShare.ps1 -Name "DifferentFromSMBBasic" -Path "$systemDrive\DifferentFromSMBBasic" -FullAccess "$fullAccessAccount"  
+
+Write-Info.ps1 "Create share folder: $systemDrive\ShareForceLevel2"
+Create-SMBShare.ps1 -name "ShareForceLevel2" -Path "$systemDrive\ShareForceLevel2" -FullAccess "$fullAccessAccount"   
+
+Write-Info.ps1 "Create share folder: $systemDrive\SMBEncrypted"
+Create-SMBShare.ps1 -name "SMBEncrypted" -Path "$systemDrive\SMBEncrypted" -FullAccess "$fullAccessAccount"  -EncryptData $true
+
+if ($OSVersion.Major -ge 10) {
+    Write-Info.ps1 "Create share folder: $systemDrive\SMBCompressed"
+    Create-SMBShare.ps1 -name "SMBCompressed" -Path "$systemDrive\SMBCompressed" -FullAccess "$fullAccessAccount" -CompressData $true
+}
+else {
+    Write-Info.ps1 "-CompressData only support on Win2004 or later version."
+}
+
+Write-Info.ps1 "Create Volume for SMBReFSShare"
+
+$volume = Get-CimInstance -ClassName Win32_Volume | Where-Object {$_.FileSystem -eq "REFS" -and $_.Label -eq "REFS"}
+if($null -eq $volume)
+{
+    Write-Info.ps1 "Create Volume for SMBReFSShare"
+    # Get disk and partition
+    $disk = Get-CimInstance -ClassName Win32_DiskDrive | Sort-Object DeviceID | Select-Object -First 1
+    $diskNum = $disk.Index
+    for ($i = 1; $i -le 20; $i++) {
+        $partition = Get-Partition -DiskNumber $diskNum -PartitionNumber $i -ErrorAction SilentlyContinue
+        if (($null -ne $partition) -and ($env:SystemDrive -match $partition.DriveLetter)) {
+            $partitionId = $i
+        }
+        elseif ($null -eq $partition) {
+            $newPartitionId = $i
+            break
+        }
+    }
+
+    Write-Info.ps1 "Create partition using diskpart.exe"
+	$diskPartCmd = @()
+	$diskPartCmd += "select disk $diskNum"
+	$diskPartCmd += "select partition $partitionId"
+	$diskPartCmd += "shrink minimum=5120"
+
+    # assign 2000MB for ReFS, and save 2000MB for FAT32
+    if((Get-Disk -Number $diskNum).PartitionStyle -eq "GPT") {
+        # Logical and extended partitions cannot be created on a GPT disk.
+        $diskPartCmd += "create partition primary size=2000"
+    } else {
+        # Only MBR supports extended disk, and the extended partition should be enough to contain both ReFS and FAT32
+        $diskPartCmd += "create partition extended size=4096"
+        $diskPartCmd += "create partition logical size=2000"
+    }
+	$diskPartCmd += "select partition $newPartitionId"
+    if ($OSVersion.Major -ge 10)
+    {
+        Write-Info.ps1 "ReFS in Windows vNext, Windows Server vNext, and beyond uses a default cluster size of 4 KB. ReFS also supports a 64-KB cluster size."
+        Write-Info.ps1 "For current test suite, we use 64-KB cluster size."
+        $diskPartCmd += "format fs=ReFS quick label=REFS unit=64K"
+    }
+    else
+    {
+        Write-Info.ps1 "ReFS in Windows 8, Windows Server 2012, Windows 8.1, and Windows Server 2012 R2 uses a fixed cluster size of 64 KB."
+        $diskPartCmd += "format fs=ReFS quick label=REFS"
+    }
+	$diskPartCmd += "assign letter=K"
+	$diskPartCmd | diskpart.exe
+}
+
+Write-Info.ps1 "Create share folder: K:\SMBReFSShare"
+Create-SMBShare.ps1 -name "SMBReFSShare" -Path "K:\SMBReFSShare" -FullAccess "$fullAccessAccount"
+
+#----------------------------------------------------------------------------
+# Ending
+#----------------------------------------------------------------------------
+Write-Info.ps1 "Completed setup SMB2 ENV."
+Stop-Transcript
+return $true

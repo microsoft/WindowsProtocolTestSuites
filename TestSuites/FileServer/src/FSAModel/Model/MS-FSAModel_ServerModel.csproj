@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
@@ -36,7 +36,7 @@
     <Content Include="FlushCachedData\FlushCachedData.cord" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.6.1" />
+    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.7.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-FSCC\Fscc.csproj" />

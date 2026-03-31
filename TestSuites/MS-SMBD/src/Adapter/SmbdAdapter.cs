@@ -450,7 +450,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             {
                 return status;
             }
-
+            this.Site.Log.Add(LogEntryKind.Debug, "The select DialectRevsion is {0}", selectedDialect);
             // SMB2 Session Setup
             status = (NtStatus)Smb2SessionSetup(enableSigning, enableEncryption);
             if (status != NtStatus.STATUS_SUCCESS)

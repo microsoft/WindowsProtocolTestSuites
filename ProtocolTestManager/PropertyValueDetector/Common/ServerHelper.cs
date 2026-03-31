@@ -177,9 +177,13 @@ namespace Microsoft.Protocols.TestManager.Detector.Common
 
         public static Platform ConvertPlatform(string platform)
         {
-            if (platform.Contains("Windows Server 2016"))
+            if (platform.Contains("Windows Server 2025"))
+                return Platform.WindowsServer2025;
+            else if (platform.Contains("Windows Server 2022"))
+                return Platform.WindowsServer2022;
+            else if(platform.Contains("Windows Server 2016"))
                 return Platform.WindowsServer2016;
-            if (platform.Contains("Windows Server 2012 R2"))
+            else if(platform.Contains("Windows Server 2012 R2"))
                 return Platform.WindowsServer2012R2;
             else if (platform.Contains("Windows Server 2012"))
                 return Platform.WindowsServer2012;

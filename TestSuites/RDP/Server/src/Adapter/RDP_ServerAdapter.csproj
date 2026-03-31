@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -25,7 +25,7 @@
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\TransportStack\TransportStack.csproj" />
   </ItemGroup>
 
-  <ItemGroup>    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.6.1" />
+  <ItemGroup>    <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
 

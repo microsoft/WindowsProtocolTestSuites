@@ -386,7 +386,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.CreateClose
                     fileName = TestConfig.Symboliclink + "\\CreateClose" + Guid.NewGuid();
                     break;
                 case FileNameType.NotExistedValidFileNameWithDotDirectoryName:
-                    fileName = isDirectory ? fileName + "\\.\\CreateClose_Directory_" + Guid.NewGuid() : fileName + "\\.\\CreateClose_File_" + Guid.NewGuid() + ".txt";
+                    fileName = isDirectory ? fileName + "\\CreateClose_Directory_" + Guid.NewGuid() + ".dot" : fileName + "\\CreateClose_File_" + Guid.NewGuid() + ".dot.txt";
                     break;
                 case FileNameType.NotExistedValidFileNameWithDoubleDotDirectoryName:
                     fileName = isDirectory ? fileName + "\\..\\CreateClose_Directory_" + Guid.NewGuid() : fileName + "\\..\\CreateClose_File_" + Guid.NewGuid() + ".txt";

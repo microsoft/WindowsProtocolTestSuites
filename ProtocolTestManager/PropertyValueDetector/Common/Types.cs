@@ -140,5 +140,15 @@ namespace Microsoft.Protocols.TestManager.Detector.Common
         /// Windows Server 2016
         /// </summary>
         WindowsServer2016 = 0x10000008,
+
+        /// <summary>
+        /// Windows Server 2022
+        /// </summary>
+        WindowsServer2022 = 0x10000009,
+
+        /// <summary>
+        /// Windows Server 2025
+        /// </summary>
+        WindowsServer2025 = 0x10000010
     }
 }

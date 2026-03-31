@@ -150,6 +150,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_InvalidParameter_SnapshotNameLengthZero()
         {
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assume.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 and Windows Server 2025.");
+            }
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE, 
                 snapshotNameLength: (ushort)Test_Lengths.ZERO, operationInputBufferLength: (ushort)Test_Lengths.ALIGN);
@@ -177,6 +181,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid OutputBufferSize of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_CREATE to a data file and expect NTSTATUS INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_Create_InvalidParameter_OutputBufferSizeNotZero()
         {
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assume.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 and Windows Server 2025.");
+            }
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_CREATE);
             uint outputBufferSize = this.fsaAdapter.transBufferSize;
@@ -191,6 +199,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid SnapshotNameLength FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_SnapshotNameLengthZero()
         {
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assume.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 and Windows Server 2025.");
+            }
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST, 
                 snapshotNameLength: (ushort)Test_Lengths.ZERO, operationInputBufferLength: (ushort)Test_Lengths.ALIGN);
@@ -206,6 +218,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid OutputBufferSize FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_LIST to a data file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_List_InvalidParameter_OutputBufferSizeZero()
         {
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assume.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 and Windows Server 2025.");
+            }
             REFS_STREAM_SNAPSHOT_MANAGEMENT_INPUT_BUFFER refsStreamSnapshotManagementInput =
                 GetRefsStreamSnapshotManagement(RefsStreamSnapshotOperation_Values.REFS_STREAM_SNAPSHOT_OPERATION_LIST);
             Fsctl_Refs_Stream_Snapshot_Management(refsStreamSnapshotManagementInput, MessageStatus.INVALID_PARAMETER);
@@ -219,6 +235,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid SnapshotNameLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_SnapshotNameLengthZero()
         {
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assume.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 and Windows Server 2025.");
+            }
             REFS_STREAM_SNAPSHOT_QUERY_DELTAS_INPUT_BUFFER refsStreamSnapshotQueryDeltasInputBuffer = GetQueryDeltasInputBuffer();
             byte[] queryDetalsInputBuffer = TypeMarshal.ToBytes(refsStreamSnapshotQueryDeltasInputBuffer);
             ushort queryDetalsInputBufferLength = (ushort)queryDetalsInputBuffer.Length;
@@ -238,6 +258,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid OperationBufferLength of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OperationBufferLengthInvalid()
         {
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assume.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 and Windows Server 2025.");
+            }
             string fileName;
             ushort snapshotNameLength;
             byte[] snapshotNameBytes;
@@ -265,6 +289,10 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         [Description("Send invalid OutputBufferSize of FSCTL_REFS_STREAM_SNAPSHOT_MANAGEMENT request with REFS_STREAM_SNAPSHOT_OPERATION_QUERY_DELTAS to a file and expect NTSTATUS is INVALID_PARAMETER.")]
         public void FsCtl_RefsStreamSnapshotManagement_QueryDeltas_InvalidParameter_OutputBufferSizeZero()
         {
+            if (this.fsaAdapter.FileSystem == FileSystem.REFS && this.fsaAdapter.Platform >= Platform.WindowsServer2022)
+            {
+                Site.Assume.Inconclusive("If the file system is REFS, the test case is not applicable in Windows Server 2022 and Windows Server 2025.");
+            }
             string fileName;
             ushort snapshotNameLength;
             byte[] snapshotNameBytes;

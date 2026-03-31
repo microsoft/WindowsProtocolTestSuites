@@ -1013,13 +1013,24 @@ SMB2 SET_INFO is required to run these cases.
 |  **Policy Name**| CountryCodeAnyOf156Or840Policy| | | | 
 |  **Expected Results**|  **User**| Payrollmember01|  **Result**| true| 
 |  |  **User**| Payrollmember02|  **Result**| true| 
-|  |  **User**| Payrollmember03|  **Result**| false| 
+|  |  **User**| Payrollmember03|  **Result**| false|
 
 
 
 | &#32;| &#32;| &#32;| &#32;| &#32; |
 | -------------| -------------| -------------| -------------| ------------- |
-|  **Test ID**| CBAC_CountryCodeGreaterThan392Policy| | | | 
+|  **Test ID**| CBAC_CountryCodeNotAnyOf156Or840Policy| | | |
+|  **Description**| This test case is designed to test whether users can access the share if the policy CountryCodeNotAnyOf156Or840Policy is applied on the share.| | | |
+|  **Policy Name**| CountryCodeNotAnyOf156Or840Policy| | | |
+|  **Expected Results**|  **User**| Payrollmember01|  **Result**| false|
+|  |  **User**| Payrollmember02|  **Result**| false|
+|  |  **User**| Payrollmember03|  **Result**| true|
+
+
+
+| &#32;| &#32;| &#32;| &#32;| &#32; |
+| -------------| -------------| -------------| -------------| ------------- |
+|  **Test ID**| CBAC_CountryCodeGreaterThan392Policy| | | |
 |  **Description**| This test case is designed to test whether users can access the share if the policy CountryCodeGreaterThan392Policy is applied on the share.| | | | 
 |  **Policy Name**| CountryCodeGreaterThan392Policy| | | | 
 |  **Expected Results**|  **User**| Payrollmember01|  **Result**| false| 
@@ -1040,29 +1051,52 @@ SMB2 SET_INFO is required to run these cases.
 
 | &#32;| &#32;| &#32;| &#32;| &#32; |
 | -------------| -------------| -------------| -------------| ------------- |
-|  **Test ID**| CBAC_CountryCodeLessThanOrEquals392Policy| | | | 
-|  **Description**| This test case is designed to test whether users can access the share if the policy CountryCodeLessThanOrEquals392Policy is applied on the share.| | | | 
-|  **Policy Name**| CountryCodeLessThanOrEquals392Policy| | | | 
-|  **Expected Results**|  **User**| Payrollmember01|  **Result**| true| 
-|  |  **User**| Payrollmember02|  **Result**| false| 
-|  |  **User**| Payrollmember03|  **Result**| true| 
-
-
-| &#32;| &#32;| &#32;| &#32;| &#32; |
-| -------------| -------------| -------------| -------------| ------------- |
-|  **Test ID**| CBAC_CountryCodeEquals156OrITDepartmentPolicy| | | | 
-|  **Description**| This test case is designed to test whether users can access the share if the policy CountryCodeEquals156OrITDepartmentPolicy is applied on the share.| | | | 
-|  **Policy Name**| CountryCodeLessThanOrEquals392Policy| | | | 
-|  **Expected Results**|  **User**| Payrollmember01|  **Result**| true| 
-|  |  **User**| Payrollmember02|  **Result**| false| 
-|  |  **User**| ITmember01|  **Result**| true| 
-|  |  **User**| ITadmin01|  **Result**| true| 
+|  **Test ID**| CBAC_CountryCodeLessThanOrEquals392Policy| | | |
+|  **Description**| This test case is designed to test whether users can access the share if the policy CountryCodeLessThanOrEquals392Policy is applied on the share.| | | |
+|  **Policy Name**| CountryCodeLessThanOrEquals392Policy| | | |
+|  **Expected Results**|  **User**| Payrollmember01|  **Result**| true|
+|  |  **User**| Payrollmember02|  **Result**| false|
+|  |  **User**| Payrollmember03|  **Result**| true|
 
 
 
 | &#32;| &#32;| &#32;| &#32;| &#32; |
 | -------------| -------------| -------------| -------------| ------------- |
-|  **Test ID**| CBAC_NoUserClaimBlockWriteControl| | | | 
+|  **Test ID**| CBAC_CountryCodeGreaterThanOrEquals392Policy| | | |
+|  **Description**| This test case is designed to test whether users can access the share if the policy CountryCodeGreaterThanOrEquals392Policy is applied on the share.| | | |
+|  **Policy Name**| CountryCodeGreaterThanOrEquals392Policy| | | |
+|  **Expected Results**|  **User**| Payrollmember01|  **Result**| false|
+|  |  **User**| Payrollmember02|  **Result**| true|
+|  |  **User**| Payrollmember03|  **Result**| true|
+
+
+| &#32;| &#32;| &#32;| &#32;| &#32; |
+| -------------| -------------| -------------| -------------| ------------- |
+|  **Test ID**| CBAC_CountryCodeEquals156OrITDepartmentPolicy| | | |
+|  **Description**| This test case is designed to test whether users can access the share if the policy CountryCodeEquals156OrITDepartmentPolicy is applied on the share.| | | |
+|  **Policy Name**| CountryCodeEquals156OrITDepartmentPolicy| | | |
+|  **Expected Results**|  **User**| Payrollmember01|  **Result**| true|
+|  |  **User**| Payrollmember02|  **Result**| false|
+|  |  **User**| ITmember01|  **Result**| true|
+|  |  **User**| ITadmin01|  **Result**| true|
+
+
+
+| &#32;| &#32;| &#32;| &#32;| &#32; |
+| -------------| -------------| -------------| -------------| ------------- |
+|  **Test ID**| CBAC_CountryCodeEquals156AndITDepartmentPolicy| | | |
+|  **Description**| This test case is designed to test whether users can access the share if the policy CountryCodeEquals156AndITDepartmentPolicy is applied on the share.| | | |
+|  **Policy Name**| CountryCodeEquals156AndITDepartmentPolicy| | | |
+|  **Expected Results**|  **User**| Payrollmember01|  **Result**| false|
+|  |  **User**| Payrollmember02|  **Result**| false|
+|  |  **User**| ITmember01|  **Result**| false|
+|  |  **User**| ITadmin01|  **Result**| false|
+
+
+
+| &#32;| &#32;| &#32;| &#32;| &#32; |
+| -------------| -------------| -------------| -------------| ------------- |
+|  **Test ID**| CBAC_NoUserClaimBlockWriteControl| | | |
 |  **Description**| This test case is designed to test whether noclaimuser can access the share if any policy is applied on the share.| | | | 
 |  **Policy Name**| CountryCodeEquals156Policy| | | | 
 |  **Expected Results**|  **User**| noclaimuser|  **Result**| true| 

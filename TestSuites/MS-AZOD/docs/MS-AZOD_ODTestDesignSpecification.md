@@ -1133,7 +1133,300 @@ Table 4-12 describes a template of test for Central Access Policy test scenario.
 | | | and| | | | | 
 | | | Target to resource with SecurityLevel equals HBI.| | | | | 
 
-***Table 4-6: AccessCheckWithCBAC_ResourceProperty_ &#60; No. &#62;***  ***Test Cases*** 
+***Table 4-6: AccessCheckWithCBAC_ResourceProperty_ &#60; No. &#62;***  ***Test Cases***
+
+###### CBAC Policy Validation Test Cases
+
+###### CountryCodeEquals156Policy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeEquals156Policy| |
+|  **Test ID**| CountryCodeEquals156Policy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly when user's country code equals 156. Users with countryCode=156 should be granted access; users with countryCode!=156 should be denied.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule CountryCodeEquals156Rule: FullControl when User.CountryCode Equals 156.|
+| | Create users PayrollMember01 (countryCode: 156) and PayrollMember02 (countryCode: 840).|
+| | Create central access policy CountryCodeEquals156Policy and add the central access rule CountryCodeEquals156Rule.|
+| | Add CountryCodeEquals156Policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeEquals156Allowed and apply CountryCodeEquals156Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode equals 156 meets the CAP requirement.|
+| | PayrollMember02 (countryCode: 840) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 840 does not equal 156.|
+| | PayrollMember02 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 840 does not equal 156.|
+
+###### CountryCodeNotEquals156Policy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeNotEquals156Policy| |
+|  **Test ID**| CountryCodeNotEquals156Policy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly when user's country code does not equal 156. Users with countryCode!=156 should be granted access; users with countryCode=156 should be denied.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule CountryCodeNotEquals156Rule: FullControl when User.CountryCode Not Equals 156.|
+| | Create users PayrollMember01 (countryCode: 156) and PayrollMember02 (countryCode: 840).|
+| | Create central access policy CountryCodeNotEquals156Policy and add the central access rule CountryCodeNotEquals156Rule.|
+| | Add CountryCodeNotEquals156Policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeNotEquals156Allowed and apply CountryCodeNotEquals156Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 156 equals 156, violating the "Not Equals" condition.|
+| | PayrollMember01 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 156 equals 156.|
+| | PayrollMember02 (countryCode: 840) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 840 does not equal 156, meeting the CAP requirement.|
+
+###### CountryCodeLessThan392Policy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeLessThan392Policy| |
+|  **Test ID**| CountryCodeLessThan392Policy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly when user's country code is less than 392. Users with countryCode < 392 should be granted access; users with countryCode >= 392 should be denied.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule CountryCodeLessThan392Rule: FullControl when User.CountryCode Less than 392.|
+| | Create users PayrollMember01 (countryCode: 156), PayrollMember02 (countryCode: 840), and PayrollMember03 (countryCode: 392).|
+| | Create central access policy CountryCodeLessThan392Policy and add the central access rule CountryCodeLessThan392Rule.|
+| | Add CountryCodeLessThan392Policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeLessThan392Allowed and apply CountryCodeLessThan392Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 156 is less than 392.|
+| | PayrollMember02 (countryCode: 840) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 840 is not less than 392.|
+| | PayrollMember02 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 840 is not less than 392.|
+| | PayrollMember03 (countryCode: 392) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 392 is not less than 392.|
+| | PayrollMember03 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 392 is not less than 392.|
+
+###### CountryCodeLessThanOrEquals392Policy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeLessThanOrEquals392Policy| |
+|  **Test ID**| CountryCodeLessThanOrEquals392Policy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly when user's country code is less than or equal to 392. Users with countryCode <= 392 should be granted access; users with countryCode > 392 should be denied.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule CountryCodeLessThanOrEquals392Rule: FullControl when User.CountryCode Less than or equals 392.|
+| | Create users PayrollMember01 (countryCode: 156), PayrollMember02 (countryCode: 840), and PayrollMember03 (countryCode: 392).|
+| | Create central access policy CountryCodeLessThanOrEquals392Policy and add the central access rule CountryCodeLessThanOrEquals392Rule.|
+| | Add CountryCodeLessThanOrEquals392Policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeLessThanOrEquals392Allowed and apply CountryCodeLessThanOrEquals392Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 156 is less than or equal to 392.|
+| | PayrollMember02 (countryCode: 840) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 840 is not less than or equal to 392.|
+| | PayrollMember02 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 840 is not less than or equal to 392.|
+| | PayrollMember03 (countryCode: 392) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 392 is less than or equal to 392.|
+
+###### CountryCodeGreaterThan392Policy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeGreaterThan392Policy| |
+|  **Test ID**| CountryCodeGreaterThan392Policy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly when user's country code is greater than 392. Users with countryCode > 392 should be granted access; users with countryCode <= 392 should be denied.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule CountryCodeGreaterThan392Rule: FullControl when User.CountryCode Greater than 392.|
+| | Create users PayrollMember01 (countryCode: 156), PayrollMember02 (countryCode: 840), and PayrollMember03 (countryCode: 392).|
+| | Create central access policy CountryCodeGreaterThan392Policy and add the central access rule CountryCodeGreaterThan392Rule.|
+| | Add CountryCodeGreaterThan392Policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeGreaterThan392Allowed and apply CountryCodeGreaterThan392Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 156 is not greater than 392.|
+| | PayrollMember01 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 156 is not greater than 392.|
+| | PayrollMember02 (countryCode: 840) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 840 is greater than 392.|
+| | PayrollMember03 (countryCode: 392) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 392 is not greater than 392.|
+| | PayrollMember03 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 392 is not greater than 392.|
+
+###### CountryCodeGreaterThanOrEquals392Policy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeGreaterThanOrEquals392Policy| |
+|  **Test ID**| CountryCodeGreaterThanOrEquals392Policy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly when user's country code is greater than or equal to 392. Users with countryCode >= 392 should be granted access; users with countryCode < 392 should be denied.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule CountryCodeGreaterThanOrEquals392Rule: FullControl when User.CountryCode Greater than or equals 392.|
+| | Create users PayrollMember01 (countryCode: 156), PayrollMember02 (countryCode: 840), and PayrollMember03 (countryCode: 392).|
+| | Create central access policy CountryCodeGreaterThanOrEquals392Policy and add the central access rule CountryCodeGreaterThanOrEquals392Rule.|
+| | Add CountryCodeGreaterThanOrEquals392Policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeGreaterThanOrEquals392Allowed and apply CountryCodeGreaterThanOrEquals392Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 156 is not greater than or equal to 392.|
+| | PayrollMember01 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 156 is not greater than or equal to 392.|
+| | PayrollMember02 (countryCode: 840) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 840 is greater than or equal to 392.|
+| | PayrollMember03 (countryCode: 392) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 392 is greater than or equal to 392.|
+
+###### CountryCodeAnyOf156Or840Policy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeAnyOf156Or840Policy| |
+|  **Test ID**| CountryCodeAnyOf156Or840Policy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly when user's country code is any of {156, 840}. Users with countryCode in {156, 840} should be granted access; users with other country codes should be denied.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule CountryCodeAnyOf156Or840Rule: FullControl when User.CountryCode Any of {156, 840}.|
+| | Create users PayrollMember01 (countryCode: 156) and PayrollMember03 (countryCode: 392).|
+| | Create central access policy CountryCodeAnyOf156Or840Policy and add the central access rule CountryCodeAnyOf156Or840Rule.|
+| | Add CountryCodeAnyOf156Or840Policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeAnyOf156Or840Allowed and apply CountryCodeAnyOf156Or840Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 156 is in the set {156, 840}.|
+| | PayrollMember03 (countryCode: 392) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 392 is not in the set {156, 840}.|
+| | PayrollMember03 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 392 is not in the set {156, 840}.|
+
+###### CountryCodeNotAnyOf156Or840Policy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeNotAnyOf156Or840Policy| |
+|  **Test ID**| CountryCodeNotAnyOf156Or840Policy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly when user's country code is not any of {156, 840}. Users with countryCode not in {156, 840} should be granted access; users with countryCode in {156, 840} should be denied.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule CountryCodeNotAnyOf156Or840Rule: FullControl when User.CountryCode Not Any of {156, 840}.|
+| | Create users PayrollMember01 (countryCode: 156) and PayrollMember03 (countryCode: 392).|
+| | Create central access policy CountryCodeNotAnyOf156Or840Policy and add the central access rule CountryCodeNotAnyOf156Or840Rule.|
+| | Add CountryCodeNotAnyOf156Or840Policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeNotAnyOf156Or840Allowed and apply CountryCodeNotAnyOf156Or840Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode 156 is in the set {156, 840}.|
+| | PayrollMember01 on client computer attempts to read the share folder.|
+| | Expect read access to fail since countryCode 156 is in the set {156, 840}.|
+| | PayrollMember03 (countryCode: 392) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode 392 is not in the set {156, 840}.|
+
+###### CountryCodeEquals156AndITDepartmentPolicy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeEquals156AndITDepartmentPolicy| |
+|  **Test ID**| CountryCodeEquals156AndITDepartmentPolicy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly with a composite condition: user's country code equals 156 AND department equals IT. Only users satisfying both conditions should be granted access.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claims CountryCode and Department on DC.|
+| | Create a central access rule CountryCodeEquals156AndITDepartmentRule: FullControl when (User.CountryCode Equals 156) And (User.Department Equals IT).|
+| | Create users PayrollMember01 (countryCode: 156, department: Payroll), PayrollMember02 (countryCode: 840, department: Payroll), ITMember01 (countryCode: 392, department: IT), and ITAdmin01 (countryCode: 156, department: IT).|
+| | Create central access policy CountryCodeEquals156AndITDepartmentPolicy and add the central access rule CountryCodeEquals156AndITDepartmentRule.|
+| | Add CountryCodeEquals156AndITDepartmentPolicy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeEquals156AndITDepartmentAllowed and apply CountryCodeEquals156AndITDepartmentPolicy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156, department: Payroll) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since department is not IT, even though countryCode equals 156.|
+| | PayrollMember02 (countryCode: 840, department: Payroll) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since neither condition is met.|
+| | ITMember01 (countryCode: 392, department: IT) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since countryCode does not equal 156, even though department is IT.|
+| | ITAdmin01 (countryCode: 156, department: IT) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since both conditions are met: countryCode equals 156 and department equals IT.|
+
+###### CountryCodeEquals156OrITDepartmentPolicy
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| CountryCodeEquals156OrITDepartmentPolicy| |
+|  **Test ID**| CountryCodeEquals156OrITDepartmentPolicy|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server enforces the Central Access Policy correctly with a composite condition: user's country code equals 156 OR department equals IT. Users satisfying either condition should be granted access.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claims CountryCode and Department on DC.|
+| | Create a central access rule CountryCodeEquals156OrITDepartmentRule: FullControl when (User.CountryCode Equals 156) Or (User.Department Equals IT).|
+| | Create users PayrollMember01 (countryCode: 156, department: Payroll), PayrollMember02 (countryCode: 840, department: Payroll), ITMember01 (countryCode: 392, department: IT), and ITAdmin01 (countryCode: 156, department: IT).|
+| | Create central access policy CountryCodeEquals156OrITDepartmentPolicy and add the central access rule CountryCodeEquals156OrITDepartmentRule.|
+| | Add CountryCodeEquals156OrITDepartmentPolicy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder CountryCodeEquals156OrITDepartmentAllowed and apply CountryCodeEquals156OrITDepartmentPolicy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | PayrollMember01 (countryCode: 156, department: Payroll) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since countryCode equals 156, satisfying the OR condition.|
+| | ITMember01 (countryCode: 392, department: IT) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since department equals IT, satisfying the OR condition.|
+| | ITAdmin01 (countryCode: 156, department: IT) on client computer attempts to write a file to the share folder.|
+| | Expect write access to succeed since both conditions are met.|
+| | PayrollMember02 (countryCode: 840, department: Payroll) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since neither condition is met: countryCode is not 156 and department is not IT.|
+| | PayrollMember02 on client computer attempts to read the share folder.|
+| | Expect read access to fail since neither condition is met.|
+
+###### NoUserClaimBlockWriteControl
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| NoUserClaimBlockWriteControl| |
+|  **Test ID**| NoUserClaimBlockWriteControl|
+|  **Priority**| P0|
+|  **Description** | Verify the CBAC aware SMB2 file server blocks write and read access when a user has no claims defined. A user without any user claims should be denied access to a share folder protected by a Central Access Policy that requires user claims.|
+|  **Prerequisites**| KDC and all computers in domain should enable CBAC.|
+| | Create user claim CountryCode on DC.|
+| | Create a central access rule with a user claim condition.|
+| | Create a user **noclaimuser** without any claims defined.|
+| | Create central access policy and add the central access rule.|
+| | Add the policy to domain group policy.|
+| | Publish group policy to all endpoints in domain with command "gpupdate /force" in DC.|
+| | On file server, create a share folder and apply the Central Access Policy to it.|
+|  **Test Execution Steps**| Enable CBAC on client computer.|
+| | Cleanup the cached ticket on client.|
+| | User noclaimuser (no claims) on client computer attempts to write a file to the share folder.|
+| | Expect write access to fail since the user has no claims to satisfy the CAP requirement.|
+| | User noclaimuser on client computer attempts to read the share folder.|
+| | Expect read access to fail since the user has no claims to satisfy the CAP requirement.|
 
 #####S2_AccessFile_SMB2_CBAC_NTLM
 
@@ -1142,7 +1435,7 @@ Table 4-12 describes a template of test for Central Access Policy test scenario.
 | &#32;| &#32; |
 | -------------| ------------- |
 | CBACNTLMWithUserClaims| | 
-|  **Test ID**| CbacNTLMSmb2| 
+|  **Test ID**| CbacNtlmSmb2|
 |  **Priority**| P1| 
 |  **Description** | Verify the message sequence when client access file on a CBAC aware file server using NTLM| 
 |  **Prerequisites**| Has Defined test user on Domain controller.| 

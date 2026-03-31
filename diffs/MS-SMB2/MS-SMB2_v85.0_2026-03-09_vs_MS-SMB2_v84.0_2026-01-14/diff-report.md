@@ -1,0 +1,277 @@
+# Diff Report: MS-SMB2_v85.0_2026-03-09_vs_MS-SMB2_v84.0_2026-01-14
+
+**Protocol:** MS-SMB2
+**New version:** 85.0 (2026-03-09)
+**Old version:** 84.0 (2026-01-14)
+**Generated:** 2026-03-30T16:12:21.495424Z
+
+**Flagged changes:** 6
+**Suppressed (false positives):** 0
+
+---
+
+## Section 2.2.1.1: SMB2 Packet Header - ASYNC
+**Change type:** Modified
+
+### Old Content
+```
+If the SMB2_FLAGS_ASYNC_COMMAND bit is set in Flags, the header takes the following form.
+ProtocolId (4 bytes): The protocol identifier. The value MUST be set to 0x424D53FE, also represented as (in network order) 0xFE, 'S', 'M', and 'B'.
+StructureSize (2 bytes): MUST be set to 64, which is the size, in bytes, of the SMB2 header structure.
+CreditCharge (2 bytes): In the SMB 2.0.2 dialect, this field MUST NOT be used and MUST be reserved. The sender MUST set this to 0, and the receiver MUST ignore it. In all other dialects, this field indicates the number of credits that this request consumes.
+(ChannelSequence,Reserved)/Status (4 bytes): In a request, this field is interpreted in different ways depending on the SMB2 dialect.
+In the SMB 3.x dialect family, this field is interpreted as the ChannelSequence field followed by the Reserved field in a request.
+ChannelSequence (2 bytes): This field is an indication to the server about the client's Channel change.
+Reserved (2 bytes): This field SHOULD be set to zero and the server MUST ignore it on receipt.
+In the SMB 2.0.2 and SMB 2.1 dialects, this field is interpreted as the Status field in a request.
+Status (4 bytes): The client MUST set this field to 0 and the server MUST ignore it on receipt.
+In all SMB dialects for a response this field is interpreted as the Status field. This field can be set to any value. For a list of valid status codes, see [MS-ERREF] section 2.3.
+Command (2 bytes): The command code of this packet. This field MUST contain one of the following valid commands:
+CreditRequest/CreditResponse (2 bytes): On a request, this field indicates the number of credits the client is requesting. On a response, it indicates the number of credits granted to the client.
+Flags (4 bytes): A flags field, which indicates how to process the operation. This field MUST be constructed using the following values:
+NextCommand (4 bytes): For a compounded request and response, this field MUST be set to the offset, in bytes, from the beginning of this SMB2 header to the start of the subsequent 8-byte aligned SMB2 header. If this is not a compounded request or response, or this is the last header in a compounded request or response, this value MUST be 0.
+MessageId (8 bytes): A value that identifies a message request and response uniquely across all messages that are sent on the same SMB 2 Protocol transport connection.
+AsyncId (8 bytes): A unique identification number that is created by the server to handle operations asynchronously, as specified in section 3.3.4.2.
+SessionId (8 bytes): Uniquely identifies the established session for the command. This field MUST be set to 0 for an SMB2 NEGOTIATE Request (section 2.2.3) and for an SMB2 NEGOTIATE Response (section 2.2.4).
+Signature (16 bytes): The 16-byte signature of the message, if SMB2_FLAGS_SIGNED is set in the Flags field of the SMB2 header and the message is not encrypted. If the message is not signed, this field MUST be 0.
+```
+
+### New Content
+```
+If the SMB2_FLAGS_ASYNC_COMMAND bit is set in Flags, the header takes the following form.
+ProtocolId (4 bytes): The protocol identifier. The value MUST be set to 0x424D53FE, also represented as (in network order) 0xFE, 'S', 'M', and 'B'.
+StructureSize (2 bytes): MUST be set to 64, which is the size, in bytes, of the SMB2 header structure.
+CreditCharge (2 bytes): In the SMB 2.0.2 dialect, this field MUST NOT be used and MUST be reserved. The sender MUST set this to 0, and the receiver MUST ignore it. In all other dialects, this field indicates the number of credits that this request consumes.
+(ChannelSequence,Reserved)/Status (4 bytes): In a request, this field is interpreted in different ways depending on the SMB2 dialect.
+In the SMB 3.x dialect family, this field is interpreted as the ChannelSequence field followed by the Reserved field in a request.
+ChannelSequence (2 bytes): This field is an indication to the server about the client's Channel change.
+Reserved (2 bytes): This field SHOULD be set to zero and the server MUST ignore it on receipt.
+In the SMB 2.0.2 and SMB 2.1 dialects, this field is interpreted as the Status field in a request.
+Status (4 bytes): The client MUST set this field to 0 and the server MUST ignore it on receipt.
+In all SMB dialects for a response this field is interpreted as the Status field. This field can be set to any value. For a list of valid status codes, see [MS-ERREF] section 2.3.
+Command (2 bytes): The command code of this packet. This field MUST contain one of the following valid commands:
+CreditRequest/CreditResponse (2 bytes): On a request, this field indicates the number of credits the client is requesting. On a response, it indicates the number of credits granted to the client.
+Flags (4 bytes): A flags field, which indicates how to process the operation. This field MUST be constructed using the following values:
+NextCommand (4 bytes): For a compounded request and response, this field MUST be set to the offset, in bytes, from the beginning of this SMB2 header to the start of the subsequent 8-byte aligned SMB2 header. If this is not a compounded request or response, or this is the last header in a compounded request or response, this value MUST be 0.
+MessageId (8 bytes): A value that identifies a message request and response uniquely across all messages that are sent on the same SMB 2 Protocol transport connection.
+AsyncId (8 bytes): A unique identification number that is created by the server to handle operations asynchronously, as specified in section 3.3.4.2.
+SessionId (8 bytes): Uniquely identifies the established session for the command. This field MUST be set to 0 for an SMB2 NEGOTIATE Request (section 2.2.3) and for an SMB2 NEGOTIATE Response (section 2.2.4).
+Signature (16 bytes): The 16-byte signature of the message, if SMB2_FLAGS_SIGNED is set in the Flags field of the SMB2 header. If the message is not signed, this field MUST be 0.
+```
+
+## Section 2.2.1.2: SMB2 Packet Header - SYNC
+**Change type:** Modified
+
+### Old Content
+```
+If the SMB2_FLAGS_ASYNC_COMMAND bit is not set in Flags, the header takes the following form.
+ProtocolId (4 bytes): The protocol identifier. The value MUST be set to 0x424D53FE, also represented as (in network order) 0xFE, 'S', 'M', and 'B'.
+StructureSize (2 bytes): This MUST be set to 64, which is the size, in bytes, of the SMB2 header structure.
+CreditCharge (2 bytes): In the SMB 2.0.2 dialect, this field MUST NOT be used and MUST be reserved. The sender MUST set this to 0, and the receiver MUST ignore it. In all other dialects, this field indicates the number of credits that this request consumes.
+(ChannelSequence,Reserved)/Status (4 bytes): In a request, this field is interpreted in different ways depending on the SMB2 dialect.
+In the SMB 3.x dialect family, this field is interpreted as the ChannelSequence field followed by the Reserved field in a request.
+ChannelSequence (2 bytes): This field is an indication to the server about the client's Channel change.
+Reserved (2 bytes): This field SHOULD be set to zero and the server MUST ignore it on receipt.
+In the SMB 2.0.2 and SMB 2.1 dialects, this field is interpreted as the Status field in a request.
+Status (4 bytes): The client MUST set this field to 0 and the server MUST ignore it on receipt.
+In all SMB dialects for a response this field is interpreted as the Status field. This field can be set to any value. For a list of valid status codes, see [MS-ERREF] section 2.3.
+Command (2 bytes): The command code of this packet. This field MUST contain one of the following valid commands.
+CreditRequest/CreditResponse (2 bytes): On a request, this field indicates the number of credits the client is requesting. On a response, it indicates the number of credits granted to the client.
+Flags (4 bytes): A Flags field indicates how to process the operation. This field MUST be constructed using the following values:
+NextCommand (4 bytes): For a compounded request and response, this field MUST be set to the offset, in bytes, from the beginning of this SMB2 header to the start of the subsequent 8-byte aligned SMB2 header. If this is not a compounded request or response, or this is the last header in a compounded request or response, this value MUST be 0.
+MessageId (8 bytes): A value that identifies a message request and response uniquely across all messages that are sent on the same SMB 2 Protocol transport connection.
+Reserved (4 bytes): The client SHOULD<3> set this field to 0. The server MAY<4> ignore this field on receipt.
+TreeId (4 bytes): Uniquely identifies the tree connect for the command. This MUST be 0 for the SMB2 TREE_CONNECT Request. The TreeId can be any unsigned 32-bit integer that is received from a previous SMB2 TREE_CONNECT Response. TreeId SHOULD be set to 0 for the following commands:
+SMB2 NEGOTIATE Request
+SMB2 NEGOTIATE Response
+SMB2 SESSION_SETUP Request
+SMB2 SESSION_SETUP Response
+SMB2 LOGOFF Request
+SMB2 LOGOFF Response
+SMB2 ECHO Request
+SMB2 ECHO Response
+SMB2 CANCEL Request
+SessionId (8 bytes): Uniquely identifies the established session for the command. This field MUST be set to 0 for an SMB2 NEGOTIATE Request (section 2.2.3) and for an SMB2 NEGOTIATE Response (section 2.2.4).
+Signature (16 bytes): The 16-byte signature of the message, if SMB2_FLAGS_SIGNED is set in the Flags field of the SMB2 header and the message is not encrypted. If the message is not signed, this field MUST be 0.
+```
+
+### New Content
+```
+If the SMB2_FLAGS_ASYNC_COMMAND bit is not set in Flags, the header takes the following form.
+ProtocolId (4 bytes): The protocol identifier. The value MUST be set to 0x424D53FE, also represented as (in network order) 0xFE, 'S', 'M', and 'B'.
+StructureSize (2 bytes): This MUST be set to 64, which is the size, in bytes, of the SMB2 header structure.
+CreditCharge (2 bytes): In the SMB 2.0.2 dialect, this field MUST NOT be used and MUST be reserved. The sender MUST set this to 0, and the receiver MUST ignore it. In all other dialects, this field indicates the number of credits that this request consumes.
+(ChannelSequence,Reserved)/Status (4 bytes): In a request, this field is interpreted in different ways depending on the SMB2 dialect.
+In the SMB 3.x dialect family, this field is interpreted as the ChannelSequence field followed by the Reserved field in a request.
+ChannelSequence (2 bytes): This field is an indication to the server about the client's Channel change.
+Reserved (2 bytes): This field SHOULD be set to zero and the server MUST ignore it on receipt.
+In the SMB 2.0.2 and SMB 2.1 dialects, this field is interpreted as the Status field in a request.
+Status (4 bytes): The client MUST set this field to 0 and the server MUST ignore it on receipt.
+In all SMB dialects for a response this field is interpreted as the Status field. This field can be set to any value. For a list of valid status codes, see [MS-ERREF] section 2.3.
+Command (2 bytes): The command code of this packet. This field MUST contain one of the following valid commands.
+CreditRequest/CreditResponse (2 bytes): On a request, this field indicates the number of credits the client is requesting. On a response, it indicates the number of credits granted to the client.
+Flags (4 bytes): A Flags field indicates how to process the operation. This field MUST be constructed using the following values:
+NextCommand (4 bytes): For a compounded request and response, this field MUST be set to the offset, in bytes, from the beginning of this SMB2 header to the start of the subsequent 8-byte aligned SMB2 header. If this is not a compounded request or response, or this is the last header in a compounded request or response, this value MUST be 0.
+MessageId (8 bytes): A value that identifies a message request and response uniquely across all messages that are sent on the same SMB 2 Protocol transport connection.
+Reserved (4 bytes): The client SHOULD<3> set this field to 0. The server MAY<4> ignore this field on receipt.
+TreeId (4 bytes): Uniquely identifies the tree connect for the command. This MUST be 0 for the SMB2 TREE_CONNECT Request. The TreeId can be any unsigned 32-bit integer that is received from a previous SMB2 TREE_CONNECT Response. TreeId SHOULD be set to 0 for the following commands:
+SMB2 NEGOTIATE Request
+SMB2 NEGOTIATE Response
+SMB2 SESSION_SETUP Request
+SMB2 SESSION_SETUP Response
+SMB2 LOGOFF Request
+SMB2 LOGOFF Response
+SMB2 ECHO Request
+SMB2 ECHO Response
+SMB2 CANCEL Request
+SessionId (8 bytes): Uniquely identifies the established session for the command. This field MUST be set to 0 for an SMB2 NEGOTIATE Request (section 2.2.3) and for an SMB2 NEGOTIATE Response (section 2.2.4).
+Signature (16 bytes): The 16-byte signature of the message, if SMB2_FLAGS_SIGNED is set in the Flags field of the SMB2 header. If the message is not signed, this field MUST be 0.
+```
+
+## Section 3.2.4.1.1: Signing the Message
+**Change type:** Modified
+
+### Old Content
+```
+The client MUST sign the message if one of the following conditions is TRUE:
+If Connection.Dialect is equal to "2.0.2" or "2.1", the message being sent contains a nonzero value in the SessionId field and the session identified by the SessionId has Session.SigningRequired equal to TRUE.
+If Connection.Dialect belongs to 3.x dialect family, the message being sent contains a nonzero value in the SessionId field, the session identified by the SessionId has Session.SigningRequired equal to TRUE, and one of the following conditions is TRUE:
+The session identified by SessionId has Session.EncryptData equal to FALSE.
+The tree connection identified by the TreeId field has TreeConnect.EncryptData equal to FALSE.
+If Session.SigningRequired is FALSE, the client MAY<111> sign the request as specified in subsequent sections.
+If the client implements the SMB 3.x dialect family, and if the request is for session set up, the client MUST use Session.SigningKey, and for all other requests the client MUST provide Channel.SigningKey by looking up the Channel in Session.ChannelList, where the connection matches the Channel.Connection. Otherwise, the client MUST use Session.SessionKey for signing the request. The client provides the key for signing, the length of the request, and the request itself, and calculates the signature as specified in section 3.1.4.1. If the client signs the request, it MUST set the SMB2_FLAGS_SIGNED bit in the Flags field of the SMB2 header. If the client encrypts the message, as specified in section 3.1.4.3, then the client MUST set the Signature field of the SMB2 header to zero.
+```
+
+### New Content
+```
+The client MUST sign the message if one of the following conditions is TRUE:
+If Connection.Dialect is equal to "2.0.2" or "2.1", the message being sent contains a nonzero value in the SessionId field and the session identified by the SessionId has Session.SigningRequired equal to TRUE.
+If Connection.Dialect belongs to 3.x dialect family, the message being sent contains a nonzero value in the SessionId field, the session identified by the SessionId has Session.SigningRequired equal to TRUE, and one of the following conditions is TRUE:
+The session identified by SessionId has Session.EncryptData equal to FALSE.
+The tree connection identified by the TreeId field has TreeConnect.EncryptData equal to FALSE.
+If Session.SigningRequired is FALSE, the client MAY<111> sign the request as specified in subsequent sections.
+If the client implements the SMB 3.x dialect family, and if the request is for session set up, the client MUST use Session.SigningKey, and for all other requests the client MUST provide Channel.SigningKey by looking up the Channel in Session.ChannelList, where the connection matches the Channel.Connection. Otherwise, the client MUST use Session.SessionKey for signing the request. The client provides the key for signing, the length of the request, and the request itself, and calculates the signature as specified in section 3.1.4.1. If the client signs the request, it MUST set the SMB2_FLAGS_SIGNED bit in the Flags field of the SMB2 header.
+```
+
+## Section 3.3.1.4: Algorithm for Leasing in an Object Store
+**Change type:** Modified
+
+### Old Content
+```
+If the server implements the SMB 2.1 or SMB 3.x dialect family and supports leasing, the underlying object store needs to implement an algorithm that permits multiple opens to the same object, as described in [MS-FSA] section 2.1.5.1.2, to share the lease state (for valid lease states, see section 3.3.1.12). The algorithm MUST meet the following conditions:
+The algorithm MUST permit a create request from the server to the underlying object store to be accompanied by an implementation-specific<211> identifier that indicates the unique server-local context for this lease, which will be referred to as the ClientLeaseId.
+The algorithm MUST allow multiple opens to an object that shares the same ClientLeaseId. These opens MUST NOT alter the lease state on an object.
+The algorithm MUST permit three different caching capabilities within a lease: READ, WRITE, and HANDLE, with the following semantics:
+READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientLeaseId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:
+READ caching on a file:
+The file is opened in a manner that overwrites the existing file.
+Data is written to the file.
+The file size is changed.
+A byte range lock is requested for the file.
+READ caching on a directory:
+A new file or directory is added, deleted, or renamed within the directory.
+Directory metadata such as timestamps, file attributes, and file sizes are updated.
+WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:
+The file is opened by a client with a different ClientLeaseId, and requested access includes any flags other than FILE_READ_ATTRIBUTES, FILE_WRITE_ATTRIBUTES, and SYNCHRONIZE.
+HANDLE caching permits one or more SMB2 clients to delay closing handles it holds open, or to defer sending opens. Before processing one of the following operations, the underlying object store MUST request that the server revoke HANDLE caching, and the object store MUST wait for acknowledgment before proceeding with the operation:
+HANDLE caching on a file:
+A file is opened with an access or share mode incompatible with opens from clients with different ClientLeaseIds.
+The parent directory is being renamed.
+HANDLE caching on a directory:
+The directory is opened with an access/share mode incompatible with opens from a client with a different ClientLeaseId.
+Parent directory is renamed or deleted.
+The underlying object store SHOULD request that the server revoke multiple lease state flags at the same time if an operation results in the loss of several caching flags.
+The algorithm SHOULD support the following combinations of caching flags on a file: No caching, Read caching, Read + Write caching, Read + Handle caching, and Read + Write + Handle caching. The algorithm SHOULD support No caching, Read caching, and Read + Handle caching on a directory.
+The algorithm MAY<212> support other combinations of caching flags.
+The algorithm MUST allow a client to flow one or more creates with the same ClientLeaseId to the underlying object store during a lease break without blocking the create until the acknowledgment of the lease break is received.
+The algorithm SHOULD allow additional lease state flags on subsequent opens with the same ClientLeaseId to permit upgrading the lease state. The algorithm MUST NOT allow the client to release lease state flags on subsequent opens with the same ClientLeaseId to downgrade the lease state.
+If the requested lease state is not a superset of the existing lease state flags for this ClientLeaseId, then the requested lease state SHOULD be interpreted as the union of the existing lease state and the requested lease state.
+When the underlying object store requests that the server issue a lease break, it MUST also provide a new lease state for the server to pass to the client as part of the lease break packet, based on the operations that caused the lease break to occur.
+```
+
+### New Content
+```
+If the server implements the SMB 2.1 or SMB 3.x dialect family and supports leasing, the underlying object store needs to implement an algorithm that permits multiple opens to the same object, as described in [MS-FSA] section 2.1.5.1.2, to share the lease state (for valid lease states, see section 3.3.1.12). The algorithm MUST meet the following conditions:
+The algorithm MUST permit a create request from the server to the underlying object store to be accompanied by an implementation-specific<211> identifier that indicates the unique server-local context for this lease, which will be referred to as the ClientLeaseId.
+The algorithm MUST allow multiple opens to an object that shares the same ClientLeaseId. These opens MUST NOT alter the lease state on an object.
+The algorithm MUST permit three different caching capabilities within a lease: READ, WRITE, and HANDLE, with the following semantics:
+READ caching permits the SMB2 client to cache data read from the object. Before processing one of the following operations from a client with a different ClientLeaseId, the object store MUST request that the server revoke READ caching. The object store is not required to wait for acknowledgment:
+READ caching on a file:
+The file is opened in a manner that overwrites the existing file.
+Data is written to the file.
+The file size is changed.
+A byte range lock is requested for the file.
+READ caching on a directory:
+A new file or directory is added, deleted, or renamed within the directory.
+Directory metadata such as timestamps, file attributes, and file sizes are updated.
+WRITE caching permits the SMB2 client to cache writes and byte-range locks on an object. Before processing one of the following operations, the underlying object store MUST request that the server revoke WRITE caching, and the object store MUST wait for acknowledgment from the server before proceeding with the operation:
+The file is opened by a client with an access/share mode incompatible with opens from a client with a different ClientLeaseId, as described in [MS-FSA] section 2.1.4.12.
+HANDLE caching permits one or more SMB2 clients to delay closing handles it holds open, or to defer sending opens. Before processing one of the following operations, the underlying object store MUST request that the server revoke HANDLE caching, and the object store MUST wait for acknowledgment before proceeding with the operation:
+HANDLE caching on a file:
+A file is opened with an access or share mode incompatible with opens from clients with different ClientLeaseIds.
+The parent directory is being renamed.
+HANDLE caching on a directory:
+The directory is opened with an access/share mode incompatible with opens from a client with a different ClientLeaseId.
+Parent directory is renamed or deleted.
+The underlying object store SHOULD request that the server revoke multiple lease state flags at the same time if an operation results in the loss of several caching flags.
+The algorithm SHOULD support the following combinations of caching flags on a file: No caching, Read caching, Read + Write caching, Read + Handle caching, and Read + Write + Handle caching. The algorithm SHOULD support No caching, Read caching, and Read + Handle caching on a directory.
+The algorithm MAY<212> support other combinations of caching flags.
+The algorithm MUST allow a client to flow one or more creates with the same ClientLeaseId to the underlying object store during a lease break without blocking the create until the acknowledgment of the lease break is received.
+The algorithm SHOULD allow additional lease state flags on subsequent opens with the same ClientLeaseId to permit upgrading the lease state. The algorithm MUST NOT allow the client to release lease state flags on subsequent opens with the same ClientLeaseId to downgrade the lease state.
+If the requested lease state is not a superset of the existing lease state flags for this ClientLeaseId, then the requested lease state SHOULD be interpreted as the union of the existing lease state and the requested lease state.
+When the underlying object store requests that the server issue a lease break, it MUST also provide a new lease state for the server to pass to the client as part of the lease break packet, based on the operations that caused the lease break to occur.
+```
+
+## Section 3.3.4.1.1: Signing the Message
+**Change type:** Modified
+
+### Old Content
+```
+The server SHOULD<233> sign the message under the following conditions:
+If the request was signed by the client, the response message being sent contains a nonzero SessionId and a zero TreeId in the SMB2 header, and the session identified by SessionId has Session.SigningRequired equal to TRUE.
+If the request was signed by the client, the response message being sent contains a nonzero SessionId, and a nonzero TreeId in the SMB2 header, and the session identified by SessionId has Session.SigningRequired equal to TRUE, if either global EncryptData is FALSE or Connection.ClientCapabilities does not include the SMB2_GLOBAL_CAP_ENCRYPTION bit.
+If the request was signed by the client, and the response is not an interim response to an asynchronously processed request.
+If Connection.Dialect belongs to the SMB 3.x dialect family, and if the response being signed is an SMB2 SESSION_SETUP Response without a status code equal to STATUS_SUCCESS in the header, the server MUST use Session.SigningKey. For all other responses being signed the server MUST provide Channel.SigningKey by looking up the Channel in Session.ChannelList, where the connection matches the Channel.Connection.
+Otherwise, the server MUST use Session.SessionKey for signing the response.
+The server provides the key for signing, the length of the response, and the response itself, and calculates the signature as specified in section 3.1.4.1. If the server signs the message, it MUST set the SMB2_FLAGS_SIGNED bit in the Flags field of the SMB2 header. If the server encrypts the message, as specified in section 3.1.4.3, the server MUST set the Signature field of the SMB2 header to zero.
+```
+
+### New Content
+```
+If the request was not signed by the client, the server MUST set the Signature field of the SMB2 header to zero and skip the processing in this section.
+The server SHOULD<233> sign the message under the following conditions:
+If the request was signed by the client, the response message being sent contains a nonzero SessionId and a zero TreeId in the SMB2 header, and the session identified by SessionId has Session.SigningRequired equal to TRUE.
+If the request was signed by the client, the response message being sent contains a nonzero SessionId, and a nonzero TreeId in the SMB2 header, and the session identified by SessionId has Session.SigningRequired equal to TRUE, if either global EncryptData is FALSE or Connection.ClientCapabilities does not include the SMB2_GLOBAL_CAP_ENCRYPTION bit.
+If the request was signed by the client, and the response is not an interim response to an asynchronously processed request.
+If Connection.Dialect belongs to the SMB 3.x dialect family, and if the response being signed is an SMB2 SESSION_SETUP Response without a status code equal to STATUS_SUCCESS in the header, the server MUST use Session.SigningKey. For all other responses being signed the server MUST provide Channel.SigningKey by looking up the Channel in Session.ChannelList, where the connection matches the Channel.Connection.
+Otherwise, the server MUST use Session.SessionKey for signing the response.
+The server provides the key for signing, the length of the response, and the response itself, and calculates the signature as specified in section 3.1.4.1. If the server signs the message, it MUST set the SMB2_FLAGS_SIGNED bit in the Flags field of the SMB2 header.
+```
+
+## Section 3.3.5.2.4: Verifying the Signature
+**Change type:** Modified
+
+### Old Content
+```
+If Connection.Dialect belongs to the SMB 3.x dialect family and if the decryption in section 3.3.5.2.1.1 succeeds, the server MUST skip the processing in this section.
+If the SMB2 header of the SMB2 NEGOTIATE request has the SMB2_FLAGS_SIGNED bit set in the Flags field, the server MUST fail the request with STATUS_INVALID_PARAMETER.
+If the SMB2 header of the request has SMB2_FLAGS_SIGNED set in the Flags field and the message is not encrypted, the server MUST verify the signature. If the request is for binding the session, the server MUST look up the session in the GlobalSessionTable using the SessionId in the SMB2 header of the request. For all other requests, the server MUST look up the session in the Connection.SessionTable using the SessionId in the SMB2 header of the request. If the session is not found, the request MUST be failed, as specified in section Sending an Error Response (section 3.3.4.4), with the error code STATUS_USER_SESSION_DELETED. If the session is found, the server MUST verify the signature of the message as specified in section 3.1.5.1.
+If Session.Connection.Dialect belongs to the SMB 3.x dialect family, the server MUST use Session.SigningKey if the request is for binding a session, and for all other requests the server MUST use Channel.SigningKey in Session.ChannelList, where Channel.Connection matches the connection on which the request is received.
+Otherwise, the server MUST use Session.SessionKey as the session key to verify the signature.
+If Session.SigningKey, Channel.SigningKey, or Session.SessionKey is NULL, the server MUST fail the request with STATUS_NOT_SUPPORTED and MUST stop processing the request.
+If the signature verification fails, the server MUST fail the request with the error code STATUS_ACCESS_DENIED. The server MAY also disconnect the connection as specified in section 3.3.7.1. If signature verification succeeds, the server MUST continue processing on the packet.<263>
+If the SMB2 header of the request does not have SMB2_FLAGS_SIGNED set in the Flags field, the server MUST determine if the client failed to sign a packet that required it. The server MUST look up the session in the GlobalSessionTable using the SessionId in the SMB2 header of the request. If the session is found and Session.SigningRequired is equal to TRUE, the server MUST fail this request with STATUS_ACCESS_DENIED. The server MAY<264> also disconnect the connection, as specified in section 3.3.7.1. If either the session is not found, or Session.SigningRequired is FALSE, the server continues processing on the packet.
+If the connection is disconnected, the server MUST remove the connection from the ConnectionList, as specified in section 3.3.7.1.
+```
+
+### New Content
+```
+If the SMB2 header of the SMB2 NEGOTIATE request has the SMB2_FLAGS_SIGNED bit set in the Flags field, the server MUST fail the request with STATUS_INVALID_PARAMETER.
+If the SMB2 header of the request has SMB2_FLAGS_SIGNED set in the Flags field and the message is not encrypted, the server MUST verify the signature. If the request is for binding the session, the server MUST look up the session in the GlobalSessionTable using the SessionId in the SMB2 header of the request. For all other requests, the server MUST look up the session in the Connection.SessionTable using the SessionId in the SMB2 header of the request. If the session is not found, the request MUST be failed, as specified in section Sending an Error Response (section 3.3.4.4), with the error code STATUS_USER_SESSION_DELETED. If the session is found, the server MUST verify the signature of the message as specified in section 3.1.5.1.
+If Session.Connection.Dialect belongs to the SMB 3.x dialect family, the server MUST use Session.SigningKey if the request is for binding a session, and for all other requests the server MUST use Channel.SigningKey in Session.ChannelList, where Channel.Connection matches the connection on which the request is received.
+Otherwise, the server MUST use Session.SessionKey as the session key to verify the signature.
+If Session.SigningKey, Channel.SigningKey, or Session.SessionKey is NULL, the server MUST fail the request with STATUS_NOT_SUPPORTED and MUST stop processing the request.
+If the signature verification fails, the server MUST fail the request with the error code STATUS_ACCESS_DENIED. The server MAY also disconnect the connection as specified in section 3.3.7.1. If signature verification succeeds, the server MUST continue processing on the packet.<263>
+If the SMB2 header of the request does not have SMB2_FLAGS_SIGNED set in the Flags field, the server MUST determine if the client failed to sign a packet that required it. The server MUST look up the session in the GlobalSessionTable using the SessionId in the SMB2 header of the request. If the session is found and Session.SigningRequired is equal to TRUE, the server MUST fail this request with STATUS_ACCESS_DENIED. The server MAY<264> also disconnect the connection, as specified in section 3.3.7.1. If either the session is not found, or Session.SigningRequired is FALSE, the server continues processing on the packet.
+If the connection is disconnected, the server MUST remove the connection from the ConnectionList, as specified in section 3.3.7.1.
+```

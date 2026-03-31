@@ -14,6 +14,8 @@ resources:
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
   parameters:
+    settings:
+      networkIsolationPolicy: Permissive,CFSClean  
     pool:
       name: Azure-Pipelines-1ESPT-ExDShared
       image: windows-latest
@@ -29,7 +31,11 @@ extends:
           clean: false
         timeoutInMinutes: 0
         steps:
-        - task: NuGetAuthenticate@1
+        - task: UseDotNet@2
+          displayName: 'Install .NET 8 SDK'
           inputs:
-            feedUrl: 'https://microsoft.pkgs.visualstudio.com/WindowsProtocolTestSuites/_packaging/windowsprotocoltestsuites_PublicPackages/nuget/v3/index.json'
+            version: '8.0.x'
+            installationPath: $(Agent.ToolsDirectory)/dotnet
+            performMultiLevelLookup: false
+        - task: NuGetAuthenticate@1
         - template: pipelines/build/1es/DotNetCore-MSBuild-Build-steps.yml@template

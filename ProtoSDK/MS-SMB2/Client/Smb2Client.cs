@@ -449,7 +449,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                                 {
                                     uint outputBufferLength = changeNotifyResponse.PayLoad.OutputBufferLength;
                                     byte[] outputBuffer = new byte[outputBufferLength];
-                                    if (changeNotifyResponse.Error == null)
+                                    if (changeNotifyResponse.Error == null && outputBufferLength > 0)
                                     {
                                         Array.Copy(changeNotifyResponse.Buffer, changeNotifyResponse.PayLoad.OutputBufferOffset - changeNotifyResponse.BufferOffset, outputBuffer, 0, outputBufferLength);
                                     }

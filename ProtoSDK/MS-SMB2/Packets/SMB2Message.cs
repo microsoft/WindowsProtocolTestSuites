@@ -10988,6 +10988,57 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// The file system supports sharing logical clusters between files on the same volume.
         /// </summary>
         FILE_SUPPORTS_BLOCK_REFCOUNTING = 0x08000000,
+
+        /// <summary>
+        /// The file system supports integrity streams.
+        /// </summary>
+        FILE_SUPPORT_INTEGRITY_STREAMS = 0x04000000,
+
+        /// <summary>
+        /// The file system implements a USN change journal.
+        /// </summary>
+        FILE_SUPPORTS_USN_JOURNAL = 0x02000000,
+
+        /// <summary>
+        /// The file system supports opening a file by FileID or ObjectID.
+        /// </summary>
+        FILE_SUPPORTS_OPEN_BY_FILE_ID = 0x01000000,
+
+        /// <summary>
+        /// The file system persistently stores Extended Attribute information per file.
+        /// </summary>
+        FILE_SUPPORTS_EXTENDED_ATTRIBUTES = 0x00800000,
+
+        /// <summary>
+        /// The file system supports hard linking files.
+        /// </summary>
+        FILE_SUPPORTS_HARD_LINKS = 0x00400000,
+
+        /// <summary>
+        /// The volume supports transactions.
+        /// </summary>
+        FILE_SUPPORTS_TRANSACTIONS = 0x00200000,
+
+        /// <summary>
+        /// The volume supports a single sequential write, such as for a tape-based file system.
+        /// </summary>
+        FILE_SEQUENTIAL_WRITE_ONCE = 0x00100000,
+
+        /// <summary>
+        /// The file system supports POSIX-style delete and rename operations.
+        /// </summary>
+        FILE_SUPPORTS_POSIX_UNLINK_RENAME = 0x00000400,
+
+        /// <summary>
+        /// On a successful cleanup operation, the file system returns information that describes
+        /// additional actions taken during cleanup, such as deleting the file.
+        /// </summary>
+        FILE_RETURNS_CLEANUP_RESULT_INFO = 0x00000200,
+
+        /// <summary>
+        /// The file system tracks whether each cluster of a file contains valid data or invalid data.
+        /// </summary>
+        FILE_SUPPORTS_SPARSE_VDL = 0x10000000,
     }
 
     /// <summary>
@@ -11684,6 +11735,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public const uint STATUS_NO_MORE_ENTRIES = 0x8000001A;
 
         /// <summary>
+        /// No more files found which match the file specification.
+        /// </summary>
+        public const uint STATUS_NO_MORE_FILES = 0x80000006;
+
+        /// <summary>
         /// The create operation stopped after reaching a symbolic link.
         /// </summary>
         public const uint STATUS_STOPPED_ON_SYMLINK = 0x8000002D;
@@ -11958,6 +12014,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
                 case Smb2Status.STATUS_NO_MORE_ENTRIES:
                     statusCode = "STATUS_NO_MORE_ENTRIES";
+                    break;
+
+                case Smb2Status.STATUS_NO_MORE_FILES:
+                    statusCode = "STATUS_NO_MORE_FILES";
                     break;
 
                 case Smb2Status.STATUS_STOPPED_ON_SYMLINK:

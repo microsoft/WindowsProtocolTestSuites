@@ -1,10 +1,14 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+#if WINDOWS
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
+#endif
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
@@ -19,12 +23,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         private int receiveIndex = 0;
         private ReceiveEntry[] receiveEntries;
 
-
+#if WINDOWS
         private RdmaProviderInfo[] rdmaProvidersList;
         private RdmaAdapter rdmaAdapter;
         private RdmaCompletionQueue rdmaCompletionQueue;
         private RdmaConnector rdmaConnector;
         private RdmaEndpoint rdmaEndpoint;
+#else
+        private RdmaLinuxAdapter linuxAdapter;
+#endif
         private uint rdmaMaxInlineData;
 
         private NtStatus initializeStatus;
@@ -38,8 +45,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         private uint outboundReadLimit;
         private uint inboundDataSize;
         private uint completionQueueDepth;
-
-
         private List<SmbdMemoryWindow> memoryWindowList;
         /// <summary>
         /// Receive and Invalid notification request list. The result of the request is from peer.
@@ -53,15 +58,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// Result list of Receive request
         /// </summary>
         private SyncFilterQueue<SmbdRequestResult> receiveRequestResult;
-
         private Object locker;
         private SmbdLogEvent logEndpointEvent;
-
         /// <summary>
         /// Semaphore for waiting disconnect
         /// </summary>
         private Semaphore disconnectSemaphore;
-
         /// <summary>
         /// The main thread should wait util all the listen thread is started.
         /// 
@@ -69,7 +71,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// In other thread, Release should be invoked to notify that the thread is launched.
         /// </summary>
         private Semaphore threadStartSemaphore;
-
         /// <summary>
         /// When client does RDMA notification, the request(Send, Send and Invalid, Receive, Invalid, Read and Write request)
         /// should be recorded.
@@ -79,7 +80,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// </summary>
         private Semaphore rdmaNotificationSemaphore;
         private int requestCount;
-        #endregion
+#endregion
 
         #region Properties
         public bool IsConnected { get { return isConnected; } }
@@ -91,6 +92,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// Count of receive has posted.
         /// </summary>
         public int ReceivePostedCount { get; protected set; }
+        #endregion
+
+        #region Private Helper Methods
+        
+     
+        
         #endregion
 
         /// <summary>
@@ -121,6 +128,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         {
             this.logEndpointEvent = logEvent;
 
+#if WINDOWS
             LogEvent("Loading the providers of registered network drivers.");
             initializeStatus = (NtStatus)RdmaProvider.LoadRdmaProviders(out rdmaProvidersList);
 
@@ -132,6 +140,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             this.outboundReadLimit = outboundReadLimit;
             this.completionQueueDepth = (inboundEntries + outboundEntries);
             this.inboundDataSize = inboundDataSize;
+
 
             isConnected = false;
             memoryWindowList = new List<SmbdMemoryWindow>();
@@ -174,6 +183,60 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             }
             LogEvent("Loading providers is completed");
             #endregion
+#else
+            // Initialize Linux RDMA adapter with comprehensive error handling
+            try
+            {
+                this.inboundEntries = inboundEntries;
+                this.outboundEntries = outboundEntries;
+                this.inboundSegment = inboundSegment;
+                this.outboundSegment = outboundSegment;
+                this.inboundReadLimit = inboundReadLimit;
+                this.outboundReadLimit = outboundReadLimit;
+                this.completionQueueDepth = (inboundEntries + outboundEntries);
+                this.inboundDataSize = inboundDataSize;
+
+                isConnected = false;
+                memoryWindowList = new List<SmbdMemoryWindow>();
+                receiveRequestList = new List<SmbdRequest>();
+
+                locker = new Object();
+
+                otherRequestResult = new SyncFilterQueue<SmbdRequestResult>();
+                receiveRequestResult = new SyncFilterQueue<SmbdRequestResult>();
+
+                disconnectSemaphore = new Semaphore(0, 1);
+                rdmaNotificationSemaphore = new Semaphore(0, (int)completionQueueDepth + 1);
+                requestCount = 0;
+
+                ReceivePostedCount = 0;
+
+                this.linuxAdapter = new RdmaLinuxAdapter();
+                LogEvent("Linux RDMA adapter initialized successfully.");
+                initializeStatus = NtStatus.STATUS_SUCCESS;
+            }
+            catch (PlatformNotSupportedException ex)
+            {
+                LogEvent($"CRITICAL: Platform not supported for RDMA: {ex.Message}");
+                LogEvent("Ensure RDMA drivers (librdmacm, libibverbs) are properly installed.");
+                initializeStatus = NtStatus.STATUS_NOT_SUPPORTED;
+                this.linuxAdapter = null;
+            }
+            catch (DllNotFoundException ex)
+            {
+                LogEvent($"CRITICAL: Native library not found: {ex.Message}");
+                LogEvent("Ensure libRdmaLinuxAdapter.so is in the output directory.");
+                initializeStatus = NtStatus.STATUS_DLL_NOT_FOUND;
+                this.linuxAdapter = null;
+            }
+            catch (Exception ex)
+            {
+                LogEvent($"CRITICAL: Unexpected error initializing RDMA adapter: {ex.Message}");
+                LogEvent($"Stack trace: {ex.StackTrace}");
+                initializeStatus = NtStatus.STATUS_UNSUCCESSFUL;
+                this.linuxAdapter = null;
+            }
+#endif
         }
 
         #region Public method
@@ -185,17 +248,45 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <param name="port">port</param>
         /// <param name="ipFamily">IP Family</param>
         /// <returns></returns>
-        public NtStatus ConnectToServerOverRdma(
-            String localIpAddress,
-            String remoteIpAddress,
-            UInt16 port,
-            AddressFamily ipFamily)
+        public NtStatus ConnectToServerOverRdma(String localIpAddress, String remoteIpAddress, UInt16 port, AddressFamily ipFamily)
         {
             if (initializeStatus != NtStatus.STATUS_SUCCESS)
             {
                 return initializeStatus;
             }
+#if LINUX
+            // Validate Linux RDMA adapter is initialized
+            if (linuxAdapter == null)
+            {
+                LogEvent("CRITICAL: Linux RDMA adapter is not initialized.");
+                LogEvent("Please check initialization logs for detailed error information.");
+                return NtStatus.STATUS_NOT_SUPPORTED;
+            }
 
+            LogEvent($"Attempting to connect to {remoteIpAddress}:{port} via Linux RDMA...");
+            var linuxStatus = linuxAdapter.Connect(remoteIpAddress, port);
+            NtStatus status = RdmaStatusConverter.ToNtStatus(linuxStatus);
+            if (status != NtStatus.STATUS_SUCCESS)
+            {
+                LogEvent($"CRITICAL: Linux RDMA connect failed with status {status}.");
+                LogEvent($"Remote address: {remoteIpAddress}:{port}");
+                return status;
+            }
+
+            LogEvent("Linux RDMA connection established successfully.");
+            
+            // Initialize data structures after successful connection
+            isConnected = true;
+            receiveEntries = new ReceiveEntry[inboundEntries];
+            for (int i = 0; i < inboundEntries; i++)
+            {
+                receiveEntries[i] = new ReceiveEntry();
+            }
+            
+            return NtStatus.STATUS_SUCCESS;
+#endif
+
+#if WINDOWS
             rdmaAdapter = OpenAdapter(rdmaProvidersList, localIpAddress, ipFamily);
             if (rdmaAdapter == null)
             {
@@ -235,6 +326,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 0,
                 out rdmaMaxInlineData,
                 out rdmaEndpoint);
+
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 LogEvent($"CreateEndpoint failed with {status}.");
@@ -262,6 +354,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
             CompleteConnect();
             return NtStatus.STATUS_SUCCESS;
+#endif
         }
 
         /// <summary>
@@ -273,6 +366,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <returns></returns>
         public NtStatus ListenConnection(String localIpAddress, ushort port, AddressFamily ipFamily)
         {
+#if WINDOWS
             if (initializeStatus != NtStatus.STATUS_SUCCESS)
             {
                 return initializeStatus;
@@ -308,8 +402,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             }
 
             // create completion queue and endpoint
-            status = (NtStatus)rdmaAdapter.CreateCompletionQueue(this.completionQueueDepth,
-                out this.rdmaCompletionQueue);
+            status = (NtStatus)rdmaAdapter.CreateCompletionQueue(this.completionQueueDepth, out this.rdmaCompletionQueue);
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 return status;
@@ -331,6 +424,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
             // accept the arrival RDMA connection
             status = (NtStatus)this.rdmaConnector.Accept(rdmaEndpoint);
+
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 return status;
@@ -338,6 +432,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
             CompleteConnect();
             return NtStatus.STATUS_SUCCESS;
+#endif
+
+#if LINUX
+            // Linux platform does not support server mode in this implementation
+            LogEvent("Linux RDMA server mode is not supported.");
+            return NtStatus.STATUS_NOT_SUPPORTED;
+#endif
         }
 
         /// <summary>
@@ -356,11 +457,19 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             }
 
             // disconnect
-            rdmaConnector.Disconnect();
+#if LINUX
+            if (linuxAdapter != null)
+            {
+                linuxAdapter.Disconnect();
+                linuxAdapter.Dispose();
+                linuxAdapter = null;
+            }
+#endif
 
+#if WINDOWS
+            rdmaConnector.Disconnect();
             // let notify thread stop
             rdmaNotificationSemaphore.Release();
-
             for (int i = 0; i < THREAD_COUNT; ++i)
             {
                 //threadStopSemaphore.WaitOne(); // wait thread to stop
@@ -368,6 +477,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
             LogEvent("RDMA connection is disconnected by test suite.");
             this.logEndpointEvent = null;
+#endif
         }
 
         /// <summary>
@@ -377,6 +487,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <returns></returns>
         public NtStatus SendData(byte[] data)
         {
+
+#if LINUX
+            if (linuxAdapter == null || !linuxAdapter.IsConnected)
+            {
+                LogEvent("Linux RDMA adapter is not connected.");
+                return NtStatus.STATUS_CONNECTION_DISCONNECTED;
+            }
+
+            var linuxStatus = linuxAdapter.Send(data);
+            LogEvent($"Send data status is {linuxStatus}");
+            return RdmaStatusConverter.ToNtStatus(linuxStatus);
+#endif
+
+#if WINDOWS
             RdmaSegment sge = new RdmaSegment();
             sge.Length = (uint)data.LongLength;
             sge.MemoryHandler = 0;
@@ -409,6 +533,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             rdmaAdapter.DeregisterMemory(sge.MemoryHandler);
 
             return (NtStatus)item.ResultInfo.Status;
+#endif
         }
 
         /// <summary>
@@ -418,8 +543,98 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <returns></returns>
         public NtStatus ReceiveData(TimeSpan timeout, out byte[] data)
         {
+            data = null;
+            NtStatus status = NtStatus.STATUS_SUCCESS;
+#if LINUX
+
+            if (linuxAdapter == null || !linuxAdapter.IsConnected)
+            {
+                LogEvent("Linux RDMA adapter is not connected.");
+                data = null;
+                return NtStatus.STATUS_CONNECTION_DISCONNECTED;
+            }
+
+            // Poll for receive completion
+            RdmaLinux.RdmaCompletion completion;
+            var pollStatus = linuxAdapter.PollCompletion(out completion, (int)timeout.TotalMilliseconds,(int)RdmaLinuxOPCode.Recv);
+            
+            status = RdmaStatusConverter.ToNtStatus(pollStatus);
+            LogEvent($"PollCompletion status is {status}");
+            if (status != NtStatus.STATUS_SUCCESS)
+            {
+                LogEvent($"Linux RDMA receive failed or timed out. Status: {status}");
+                data = null;
+                return status;
+            }
+
+            // Validate completion data
+            if (completion.wr_id >= ulong.MaxValue || completion.byte_len > (1024 * 1024)) // Sanity check: max 1MB
+            {
+                LogEvent($"Invalid completion data: wr_id={completion.wr_id}, byte_len={completion.byte_len}");
+                data = null;
+                return NtStatus.STATUS_INTERNAL_ERROR;
+            }
+
+            // Find the entry by wr_id (slot_id)
+            LogEvent($"Find the receive entry index: {(int)completion.wr_id} and len:{completion.byte_len}");
+            int entryIndex = (int)completion.wr_id;
+            if (entryIndex < 0 || entryIndex >= receiveEntries.Length)
+            {
+                LogEvent($"Invalid receive entry index: {entryIndex}");
+                data = null;
+                return NtStatus.STATUS_INTERNAL_ERROR;
+            }
+
+            // Copy data from the registered buffer
+            if (completion.byte_len > 0 && receiveEntries[entryIndex].LinuxBuffer != null)
+            {
+                // Validate that we have a valid buffer address
+                if (receiveEntries[entryIndex].LinuxBufferAddress == 0)
+                {
+                    LogEvent($"Invalid buffer address for entry {entryIndex}");
+                    data = null;
+                    return NtStatus.STATUS_INTERNAL_ERROR;
+                }
+
+                data = new byte[completion.byte_len];
+                // Copy from registered buffer address to managed array
+                try
+                {
+                    Marshal.Copy((IntPtr)receiveEntries[entryIndex].LinuxBufferAddress, data, 0, (int)completion.byte_len);
+                }
+                catch (Exception ex)
+                {
+                    LogEvent($"Failed to copy data from buffer: {ex.Message}");
+                    data = null;
+                    return NtStatus.STATUS_INTERNAL_ERROR;
+                }
+                
+                LogEvent($"Linux RDMA received {data.Length} bytes from entry {entryIndex}.");
+            }
+            else
+            {
+                data = new byte[0];
+            }
+
+            // Clean up this receive entry
+            if (receiveEntries[entryIndex].LinuxMrHandle != 0)
+            {
+                var deregStatus = linuxAdapter.DeregisterMemory(receiveEntries[entryIndex].LinuxMrHandle);
+                if (deregStatus != RdmaLinux.RdmaLinuxStatus.SUCCESS)
+                {
+                    LogEvent($"Failed to deregister memory for entry {entryIndex}: {deregStatus}");
+                }
+                receiveEntries[entryIndex].LinuxMrHandle = 0;
+                receiveEntries[entryIndex].LinuxBuffer = null;
+                receiveEntries[entryIndex].IsOccupied = false;
+            }
+
+            return status;
+#endif
+
+#if WINDOWS
             SmbdRequestResult item = GetRequestResult(timeout, RequestType.Receive);
-            NtStatus status = (NtStatus)item.ResultInfo.Status;
+            status = (NtStatus)item.ResultInfo.Status;
 
             if (status != NtStatus.STATUS_SUCCESS)
             {
@@ -432,12 +647,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 item.EntryIndex));
 
             data = new byte[item.ResultInfo.BytesTransferred];
+
             status = (NtStatus)RdmaEndpoint.ReadFromMemory(
                 this.receiveEntries[item.EntryIndex].Segment.MemoryHandler,
                 data);
+
             // reset
             this.receiveEntries[receiveIndex].IsOccupied = false;
             return status;
+#endif
         }
 
         /// <summary>
@@ -457,9 +675,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             SmbdRequest receiveRequest = new SmbdRequest();
             receiveRequest.EntryIndex = receiveIndex;
             receiveRequest.Type = RequestType.Receive;
+#if WINDOWS
             NtStatus ret = (NtStatus)rdmaEndpoint.Receive(
                 new RdmaSegment[] { receiveEntries[receiveIndex].Segment },
                 out receiveRequest.ResultId);
+
             if (ret != NtStatus.STATUS_SUCCESS)
             {
                 this.LogEvent(string.Format("Raise receive request with error code {0}", ret));
@@ -489,7 +709,44 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             {
                 receiveIndex = 0;
             }
+#endif
+#if LINUX
+            // Linux: Post receive buffer using the adapter layer
+            if (linuxAdapter == null || !linuxAdapter.IsConnected)
+            {
+                LogEvent("Linux RDMA adapter is not connected.");
+                return NtStatus.STATUS_CONNECTION_DISCONNECTED;
+            }
 
+            // Allocate receive buffer
+            byte[] receiveBuffer = new byte[bufferSize];
+            
+            // Post receive and register the buffer
+            ulong address;
+            long mrHandle;
+            var postStatus = linuxAdapter.PostReceive(receiveBuffer, (ulong)receiveIndex, out address, out mrHandle);
+            
+            if (postStatus != RdmaLinuxStatus.SUCCESS)
+            {
+                LogEvent($"Failed to post receive: {postStatus}");
+                return RdmaStatusConverter.ToNtStatus(postStatus);
+            }
+
+            // Store the MR handle and buffer for later data retrieval
+            receiveEntries[receiveIndex].LinuxMrHandle = mrHandle;
+            receiveEntries[receiveIndex].LinuxBufferAddress = address;
+            receiveEntries[receiveIndex].LinuxBuffer = receiveBuffer;
+            receiveEntries[receiveIndex].IsOccupied = true;
+
+            LogEvent($"Post receive successfully with entry 0x{receiveIndex:X}, addr=0x{address:X}, len={bufferSize}");
+
+            // Move to next receive entry
+            receiveIndex++;
+            if ((UInt64)receiveIndex >= inboundEntries)
+            {
+                receiveIndex = 0;
+            }
+#endif
 
             return NtStatus.STATUS_SUCCESS;
         }
@@ -497,9 +754,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <summary>
         /// Get result of request
         /// </summary>
-        public SmbdRequestResult GetRequestResult(
-            TimeSpan timeout,
-            RequestType type)
+        public SmbdRequestResult GetRequestResult(TimeSpan timeout, RequestType type)
         {
             if (type == RequestType.Receive)
             {
@@ -516,14 +771,39 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <param name="reversed">if it is true, little-endian and big-endian will be reversed in bufferDescriptor</param>
         /// <param name="bufferDescriptor">Buffer Descriptor point to memory windows</param>
         /// <returns></returns>
-        public NtStatus RegisterMemoryWindow(
-            uint size,
-            RdmaOperationReadWriteFlag flag,
-            bool reversed,
-            out RdmaBufferDescriptorV1 bufferDescriptor)
+        public NtStatus RegisterMemoryWindow(uint size, uint flag, bool reversed, out RdmaBufferDescriptor bufferDescriptor)
         {
-            bufferDescriptor = new RdmaBufferDescriptorV1();
+            bufferDescriptor = new RdmaBufferDescriptor();
 
+#if LINUX
+            if (linuxAdapter == null || !linuxAdapter.IsConnected)
+            {
+                LogEvent("Linux RDMA adapter is not connected.");
+                return NtStatus.STATUS_CONNECTION_DISCONNECTED;
+            }
+               
+            // Linux: Registering a memory window using the adapter layer
+            byte[] buffer = new byte[size];
+            long mwHandle;
+            uint rkey;
+            ulong address;
+                
+            var linuxStatus = linuxAdapter.RegisterMemory(buffer, flag, out mwHandle, out rkey, out address);
+            NtStatus status = RdmaStatusConverter.ToNtStatus(linuxStatus);
+            if (status != NtStatus.STATUS_SUCCESS)
+                return status;
+
+            bufferDescriptor = new RdmaBufferDescriptor
+            {
+                Offset = address,
+                Token = rkey,
+                Length = size
+            };
+            LogEvent($"Linux RDMA memory window registered: mwHandle={mwHandle}, rkey={rkey}, addr=0x{address:X}");
+            return status;
+#endif
+
+#if WINDOWS
             // regiser the buffer
             SmbdMemoryWindow memoryWindow = new SmbdMemoryWindow();
             memoryWindow.IsValid = true;
@@ -552,7 +832,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             status = (NtStatus)rdmaEndpoint.Bind(
                 memoryWindow.MemoryHandlerId,
                 memoryWindow.RdmaMW,
-                flag,
+                (RdmaOperationReadWriteFlag)flag,
                 reversed,
                 out memoryWindow.BufferDescriptor, out resultId);
 
@@ -579,8 +859,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             }
 
             this.memoryWindowList.Add(memoryWindow);
-            bufferDescriptor = memoryWindow.BufferDescriptor;
+            bufferDescriptor = new RdmaBufferDescriptor
+            {
+                Offset = memoryWindow.BufferDescriptor.Offset,
+                Token = memoryWindow.BufferDescriptor.Token,
+                Length = memoryWindow.BufferDescriptor.Length,
+            };
             return status;
+#endif
         }
 
         /// <summary>
@@ -588,8 +874,33 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// </summary>
         /// <param name="bufferDescriptor">Buffer Descriptor point to memory windows</param>
         /// <returns></returns>
-        public void DeregisterMemoryWindow(RdmaBufferDescriptorV1 bufferDescriptor)
+        public void DeregisterMemoryWindow(RdmaBufferDescriptor bufferDescriptor)
         {
+#if LINUX
+            if (linuxAdapter == null || !linuxAdapter.IsConnected)
+            {
+                LogEvent("Linux RDMA adapter is not connected.");
+                return;
+            }
+            
+            foreach (var mw in linuxAdapter.EnumerateMemoryWindows())
+            {
+                if (mw.Token != bufferDescriptor.Token)
+                {
+                    continue;
+                }
+        
+                if (mw.IsValid)
+                {
+                    ulong resultId;
+                    var invalidateStatus = linuxAdapter.InvalidateMemoryWindow(mw.MemoryHandlerId, out resultId);
+                    var linuxStatus = linuxAdapter.DeregisterMemory(mw.MemoryHandlerId);
+                    NtStatus status = RdmaStatusConverter.ToNtStatus(linuxStatus);
+                }
+            }     
+#endif
+
+#if WINDOWS
             foreach (SmbdMemoryWindow mw in memoryWindowList)
             {
                 if (mw.BufferDescriptor.Token != bufferDescriptor.Token)
@@ -615,6 +926,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
                 return;
             }
+#endif
         }
 
         /// <summary>
@@ -622,8 +934,21 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// </summary>
         /// <param name="data"></param>
         /// <param name="bufferDescriptor">Buffer Descriptor point to memory windows</param>
-        public NtStatus WriteMemoryWindow(byte[] data, RdmaBufferDescriptorV1 bufferDescriptor)
+        public NtStatus WriteMemoryWindow(byte[] data, RdmaBufferDescriptor bufferDescriptor)
         {
+#if LINUX
+            if (linuxAdapter == null || !linuxAdapter.IsConnected)
+                return NtStatus.STATUS_CONNECTION_DISCONNECTED;
+
+            IntPtr localAddr = (IntPtr)bufferDescriptor.Offset;
+    
+            Marshal.Copy(data, 0, localAddr, data.Length);
+    
+            LogEvent($"Linux RDMA data copied to local memory at 0x{bufferDescriptor.Offset:X}");
+            return NtStatus.STATUS_SUCCESS;
+#endif
+
+#if WINDOWS
             foreach (SmbdMemoryWindow mw in memoryWindowList)
             {
                 if (mw.BufferDescriptor.Token != bufferDescriptor.Token)
@@ -638,8 +963,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 }
                 return NtStatus.STATUS_INVALID_PARAMETER_2;
             }
-
             return NtStatus.STATUS_INVALID_PARAMETER_2;
+#endif
+
         }
 
         /// <summary>
@@ -647,8 +973,36 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// </summary>
         /// <param name="data"></param>
         /// <param name="bufferDescriptor">Buffer Descriptor point to memory windows</param>
-        public NtStatus ReadMemoryWindow(byte[] data, RdmaBufferDescriptorV1 bufferDescriptor)
+        public NtStatus ReadMemoryWindow(byte[] data, RdmaBufferDescriptor bufferDescriptor)
         {
+#if LINUX
+            if (linuxAdapter == null || !linuxAdapter.IsConnected)
+            {
+                LogEvent("Linux RDMA adapter is not connected.");
+                return NtStatus.STATUS_CONNECTION_DISCONNECTED;
+            }
+
+            foreach (var mw in linuxAdapter.EnumerateMemoryWindows())
+            {
+                if (mw.Token != bufferDescriptor.Token)
+                {
+                    continue;
+                }
+        
+                if (mw.IsValid)
+                {
+                    NtStatus status = linuxAdapter.ReadFromMemory(mw.MemoryHandlerId, data);
+                    LogEvent($"Linux RDMA read completed. Status: {status}");
+                    return status;
+                }
+        
+                return NtStatus.STATUS_INVALID_PARAMETER_2;
+            }
+
+            return NtStatus.STATUS_INVALID_PARAMETER_2;
+#endif
+
+#if WINDOWS
             foreach (SmbdMemoryWindow mw in memoryWindowList)
             {
                 if (mw.BufferDescriptor.Token != bufferDescriptor.Token)
@@ -658,6 +1012,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 // get memory window
                 if (mw.IsValid)
                 {
+
                     NtStatus status = (NtStatus)RdmaEndpoint.ReadFromMemory(mw.MemoryHandlerId, data);
                     return status;
                 }
@@ -665,8 +1020,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             }
 
             return NtStatus.STATUS_INVALID_PARAMETER_2;
+#endif
         }
-
 
         /// <summary>
         /// Wait until network is disconnected, using a TimeSpan to specify the time interval.
@@ -674,21 +1029,35 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <param name="timeout"></param>
         public void WaitDisconnect(TimeSpan timeout)
         {
+#if WINDOWS
             disconnectSemaphore.WaitOne(timeout);
+#elif LINUX
+            if (linuxAdapter != null)
+            {
+                // Use Linux adapter's wait for disconnect method
+                bool disconnected = linuxAdapter.WaitForDisconnect((int)timeout.TotalMilliseconds);
+                if (disconnected)
+                {
+                    isConnected=false;
+                    LogEvent("Disconnected detected by Linux adapter wait method");
+                }
+                else
+                {
+                    LogEvent("Timeout reached while waiting for disconnect");
+                }
+            }
+#endif
         }
 
-
         #region IDisposable Members
-
         public void Dispose()
         {
             this.Disconnect();
         }
-
         #endregion
 
-        #endregion
-
+#endregion
+#if WINDOWS
         /// <summary>
         /// Open adapter with local IP address
         /// </summary>
@@ -737,7 +1106,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
                 return adapter;
             }
-
             LogEvent(string.Format("IP address \"{0}\" is not supported by all providers. Open adapter failed.", localIpAddress));
 
             return null;
@@ -803,7 +1171,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             }
         }
 
-        #region Callback
+#region Callback
         /// <summary>
         /// Notify callback
         /// </summary>
@@ -896,7 +1264,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                                 ResultId = resultId,
                                 ResultInfo = ndResult
                             });
-
                     }
 
                     // log
@@ -910,7 +1277,6 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                             ndResult.BytesTransferred,
                             segmentIndex,
                             this.receiveRequestList.Count));
-
                 }
             }
         }
@@ -958,9 +1324,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                     return;
                 }
             }
-
         }
         #endregion
+
         /// <summary>
         /// Complete the work of connection
         /// </summary>
@@ -1003,6 +1369,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             }
             LogEvent("All callback threads has launched.");
         }
+#endif
 
         /// <summary>
         /// log event
@@ -1016,5 +1383,31 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 this.logEndpointEvent(str);
             }
         }
+    }
+    /// <summary>
+    /// Rdma status.
+    /// </summary>
+    public enum RdmaStatus : int
+    {
+        RDMA_OK = 0,
+        RDMA_ERR_GENERAL = -1,
+        RDMA_ERR_TIMEOUT = -2,
+        RDMA_ERR_INVALID_ARGUMENT = -3,
+        RDMA_ERR_CONNECTION_CLOSED = -4,
+        RDMA_ERR_NO_COMPLETION = -5,
+        RDMA_ERR_RESOURCE = -6
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RdmaCompletion
+    {
+        public ulong wr_id;
+        public uint status;
+        public uint byte_len;
+        public uint qp_num;
+        public uint op_code;
+        public uint vendor_err;
     }
 }

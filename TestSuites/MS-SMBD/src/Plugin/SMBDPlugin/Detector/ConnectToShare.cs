@@ -2,6 +2,9 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestManager.Detector;
+#if WINDOWS
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
+#endif
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2;
 using System;
 using System.Linq;
@@ -65,19 +68,37 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
             {
                 using (var client = new SmbdClient(DetectionInfo.ConnectionTimeout))
                 {
-                    client.Connect(IPAddress.Parse(serverIp), IPAddress.Parse(clientIp));
-                    client.Smb2Negotiate(DetectionInfo.SupportedSmbDialects);
-                    client.Smb2SessionSetup(DetectionInfo.Authentication, DetectionInfo.DomainName, DetectionInfo.SUTName, DetectionInfo.UserName, DetectionInfo.Password);
+                    // Determine if this is an RDMA connection based on IP addresses
+                    bool isRdmaConnection = IsRdmaAddress(serverIp) && IsRdmaAddress(clientIp);
+                    logWriter.AddLog(DetectLogLevel.Information, string.Format("The isRdmaConnection is {0}", isRdmaConnection));
+                    if (isRdmaConnection)
+                    {
+                        // Connect using RDMA transport
+                        RdmaAdapterData adapterInfo;
+                        client.ConnectOverRDMA(clientIp, serverIp, 445, 8192, out adapterInfo);
+                        logWriter.AddLog(DetectLogLevel.Information, "RDMA connection successfully.");
+                    }
+                    else
+                    {
+                        // Connect using TCP transport
+                        client.Connect(IPAddress.Parse(serverIp), IPAddress.Parse(clientIp));
+                    }
 
+                    client.Smb2Negotiate(DetectionInfo.SupportedSmbDialects);
+                    logWriter.AddLog(DetectLogLevel.Information, "SMB2 Negotiate successfully.");
+                    client.Smb2SessionSetup(DetectionInfo.Authentication, DetectionInfo.DomainName, DetectionInfo.SUTName, DetectionInfo.UserName, DetectionInfo.Password);
+                    logWriter.AddLog(DetectLogLevel.Information, "SMB2 Session setup successfully.");
                     string path = Smb2Utility.GetUncPath(DetectionInfo.SUTName, DetectionInfo.ShareFolder);
                     client.Smb2TreeConnect(path, out uint treeId);
+                    logWriter.AddLog(DetectLogLevel.Information, "SMB2 Tree connection successfully.");
                     client.CreateRandomFile(treeId, out FILEID fileId);
 
-                    uint fileLength = client.CalculateSmb2MaxReadWriteSize();
+                    uint fileLength = isRdmaConnection ? client.CalculateSMBDMaxReadWriteSize() : client.CalculateSmb2MaxReadWriteSize();
                     var buffer = Smb2Utility.CreateRandomByteArray((int)fileLength);
                     client.Smb2Write(treeId, fileId, 0, buffer);
+                    logWriter.AddLog(DetectLogLevel.Information, "SMB2 Write successfully.");
                     client.Smb2Read(treeId, fileId, 0, fileLength, out byte[] output);
-
+                    logWriter.AddLog(DetectLogLevel.Information, "SMB2 Read successfully.");
                     bool result = Enumerable.SequenceEqual(buffer, output);
                     if (!result)
                     {
@@ -91,6 +112,12 @@ namespace Microsoft.Protocols.TestManager.SMBDPlugin.Detector
                 logWriter.AddLog(DetectLogLevel.Information, string.Format("ConnectToShare threw exception: {0}", ex));
                 return false;
             }
+        }
+
+        private bool IsRdmaAddress(string ipAddress)
+        {
+            // Check if the IP address matches the RDMA NIC IP addresses
+            return DetectionInfo.SUTRdmaNICIPAddress == ipAddress || DetectionInfo.DriverRdmaNICIPAddress == ipAddress;
         }
     }
 }

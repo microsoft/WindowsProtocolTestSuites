@@ -31,11 +31,37 @@
         NonWindows = 0x00000000,
         WindowsServer2012 = 0x10000006,
         WindowsServer2012R2 = 0x10000007,
-        WindowsServer2016 = 0x10000008
+        WindowsServer2016 = 0x10000008,
+        WindowsServerV1803 = 0x1000000A,
+        WindowsServer2019 = 0x1000000B,
+        WindowsServerV1903 = 0x1000000C,
+        WindowsServerV1909 = 0x1000000D,
+        WindowsServerV2004 = 0x1000000E,
+        WindowsServerV20H2 = 0x1000000F,
+        WindowsServer2022 = 0x10000011,
+        WindowsServerV22H2 = 0x10000012,
+        WindowsServer2025 = 0x10000013, 
     -->
-    <Property name="Platform" value="WindowsServer2012R2"/>
+    <Property name="Platform" value="WindowsServer2025"/>
+	  <!--
+        Platform type of the Driver
+        NonWindows = 0x00000000,
+        WindowsServer2012 = 0x10000006,
+        WindowsServer2012R2 = 0x10000007,
+        WindowsServer2016 = 0x10000008,
+        WindowsServerV1803 = 0x1000000A,
+        WindowsServer2019 = 0x1000000B,
+        WindowsServerV1903 = 0x1000000C,
+        WindowsServerV1909 = 0x1000000D,
+        WindowsServerV2004 = 0x1000000E,
+        WindowsServerV20H2 = 0x1000000F,
+        WindowsServer2022 = 0x10000011,
+        WindowsServerV22H2 = 0x10000012,
+        WindowsServer2025 = 0x10000013, 
+    -->
+	  <Property name="DriverPlatform" value="WindowsServer2025"/>
 
-    <!--Name of file which is used in test read large content-->
+	  <!--Name of file which is used in test read large content-->
     <Property name="TestFile_ReadLargeFile" value="testFile_ReadLargeFile.txt"/>
     <!--
         Supported value for SmallFileSizeInByte is from 128 bytes to SMBD negotiated MaxSendSize 

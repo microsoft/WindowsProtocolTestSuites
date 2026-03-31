@@ -114,9 +114,163 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
         }
         #endregion
 
+        #region ClearedBits (MS-SMB2 3.3.5.20.2)
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a file and verify FILE_SUPPORTS_USN_JOURNAL bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_File_FILE_SUPPORTS_USN_JOURNAL_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DataFile, FileSystemAttributes_Values.FILE_SUPPORTS_USN_JOURNAL);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a directory and verify FILE_SUPPORTS_USN_JOURNAL bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_Dir_FILE_SUPPORTS_USN_JOURNAL_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DirectoryFile, FileSystemAttributes_Values.FILE_SUPPORTS_USN_JOURNAL);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a file and verify FILE_SUPPORTS_OPEN_BY_FILE_ID bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_File_FILE_SUPPORTS_OPEN_BY_FILE_ID_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DataFile, FileSystemAttributes_Values.FILE_SUPPORTS_OPEN_BY_FILE_ID);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a directory and verify FILE_SUPPORTS_OPEN_BY_FILE_ID bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_Dir_FILE_SUPPORTS_OPEN_BY_FILE_ID_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DirectoryFile, FileSystemAttributes_Values.FILE_SUPPORTS_OPEN_BY_FILE_ID);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a file and verify FILE_SUPPORTS_TRANSACTIONS bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_File_FILE_SUPPORTS_TRANSACTIONS_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DataFile, FileSystemAttributes_Values.FILE_SUPPORTS_TRANSACTIONS);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a directory and verify FILE_SUPPORTS_TRANSACTIONS bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_Dir_FILE_SUPPORTS_TRANSACTIONS_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DirectoryFile, FileSystemAttributes_Values.FILE_SUPPORTS_TRANSACTIONS);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a file and verify FILE_RETURNS_CLEANUP_RESULT_INFO bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_File_FILE_RETURNS_CLEANUP_RESULT_INFO_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DataFile, FileSystemAttributes_Values.FILE_RETURNS_CLEANUP_RESULT_INFO);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a directory and verify FILE_RETURNS_CLEANUP_RESULT_INFO bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_Dir_FILE_RETURNS_CLEANUP_RESULT_INFO_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DirectoryFile, FileSystemAttributes_Values.FILE_RETURNS_CLEANUP_RESULT_INFO);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a file and verify FILE_SUPPORTS_POSIX_UNLINK_RENAME bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_File_FILE_SUPPORTS_POSIX_UNLINK_RENAME_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DataFile, FileSystemAttributes_Values.FILE_SUPPORTS_POSIX_UNLINK_RENAME);
+        }
+
+        [TestMethod()]
+        [TestCategory(TestCategories.Fsa)]
+        [TestCategory(TestCategories.QueryFileSystemInformation)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.Positive)]
+        [Description("Query FileFsAttributeInformation from a directory and verify FILE_SUPPORTS_POSIX_UNLINK_RENAME bit is cleared per MS-SMB2 3.3.5.20.2.")]
+        public void FsInfo_Query_FileFsAttributeInformation_Dir_FILE_SUPPORTS_POSIX_UNLINK_RENAME_Cleared()
+        {
+            FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType.DirectoryFile, FileSystemAttributes_Values.FILE_SUPPORTS_POSIX_UNLINK_RENAME);
+        }
+
+        #endregion
+
         #endregion
 
         #region Test Case Utility
+
+        /// <summary>
+        /// A utility to verify that specified bits are cleared in FileFsAttributeInformation response per MS-SMB2 3.3.5.20.2
+        /// </summary>
+        /// <param name="fileType">An Open of a DataFile or DirectoryFile.</param>
+        /// <param name="fileSystemAttribute">FileSystemAttribute bit that MUST be cleared.</param>
+        private void FsInfo_Query_FileFsAttributeInformation_BitCleared(FileType fileType, FileSystemAttributes_Values fileSystemAttribute)
+        {
+            // Per MS-SMB2 Appendix A <422>: Windows 7 through Windows 11 and Windows Server 2008 R2 through 
+            // Windows Server 2022 do not clear the bits FILE_RETURNS_CLEANUP_RESULT_INFO, FILE_SUPPORTS_POSIX_UNLINK_RENAME
+            // before sending to the client.
+            if (this.fsaAdapter.TestConfig.Platform != Platform.NonWindows &&
+                this.fsaAdapter.TestConfig.Platform <= Platform.WindowsServer2022 &&
+                (fileSystemAttribute == FileSystemAttributes_Values.FILE_RETURNS_CLEANUP_RESULT_INFO ||
+                 fileSystemAttribute == FileSystemAttributes_Values.FILE_SUPPORTS_POSIX_UNLINK_RENAME))
+            {
+                BaseTestSite.Assert.Inconclusive("[MS-SMB2 Appendix A <422>] Windows 7 through Windows 11 and Windows Server 2008 R2 through Windows Server 2022 do not clear these bits before sending to the client. Current platform: {0}", this.fsaAdapter.TestConfig.Platform);
+            }
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Test case steps:");
+            MessageStatus status;
+
+            //Step 1: Create file
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "1. Create " + fileType.ToString());
+            status = this.fsaAdapter.CreateFile(fileType);
+
+            //Step 2: Query FileFsAttributeInformation
+            FileFsAttributeInformation fsAttributeInfo = new();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "2. Query FileFsAttributeInformation");
+            status = this.fsaAdapter.QueryFileFsAttributeInformation(out fsAttributeInfo);
+            bool bitIsCleared = (fsAttributeInfo.FileSystemAttributes & fileSystemAttribute) == 0;
+
+            //Step 3: verify test result
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Verify if FileSystemAttributes bit is cleared per MS-SMB2 3.3.5.20.2.");
+            string attribute = string.Format("FileSystemAttributes.{0}", fileSystemAttribute.ToString());
+            string comment = string.Format("[MS-SMB2 3.3.5.20.2] The server SHOULD clear {0} in FileFsAttributeInformation response.", attribute);
+
+            this.fsaAdapter.AssertAreEqual(this.Manager, true, bitIsCleared, comment);
+        }
 
         /// <summary>
         /// A utility for test supported features in FileFsAttributeInformation

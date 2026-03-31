@@ -613,7 +613,7 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **RemoteInvalidation**| | 
-|  **Test ID**|  **BVT_SMB2OverRdma_SMB302_Write_RemoteInvalidation**| 
+|  **Test ID**|  **BVT_Smb2OverRdma_Smb302_Write_SMB2_CHANNEL_RDMA_V1_INVALIDATE**| 
 |  **Priority**| P0| 
 |  **Description** | Verify server responds with additional descriptor over RDMA to invalidate client’s memory window when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.02 or later dialect.| 
 |  **Prerequisites**| N/A| 
@@ -636,7 +636,7 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **RemoteInvalidation**| | 
-|  **Test ID**|  **BVT_SMB2OverRdma_SMB302_Read_RemoteInvalidation**| 
+|  **Test ID**|  **BVT_Smb2OverRdma_Smb302_Read_SMB2_CHANNEL_RDMA_V1_INVALIDATE**| 
 |  **Priority**| P0| 
 |  **Description** | Verify server responds with additional descriptor over RDMA to invalidate client’s memory window when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.02 or later dialect.| 
 |  **Prerequisites**| N/A| 
@@ -660,7 +660,7 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **SmbdNegotiate**| | 
-|  **Test ID**|  **S1_SmbdNegotiate_PreferredSendSizeWithZero**| 
+|  **Test ID**|  **SmbdNegotiate_PreferredSendSizeWithZero**| 
 |  **Priority**| P1| 
 |  **Description** | Verify SMBD negotiate will be successful when **PreferredSendSize** field is zero.| 
 |  **Prerequisites**| N/A| 
@@ -673,7 +673,7 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **SmbdNegotiate**| | 
-|  **Test ID**|  **S1_SmbdNegotiate_PreferredSendSizeLessThan128**| 
+|  **Test ID**|  **SmbdNegotiate_PreferredSendSizeLessThan128**| 
 |  **Priority**| P1| 
 |  **Description** | Verify SMBD negotiate will be successful when **PreferredSendSize** field is less than 128 bytes.| 
 |  **Prerequisites**| N/A| 
@@ -689,8 +689,8 @@ In this test suite, there is no requirement captured. So “Requirements covered
 
 | &#32;| &#32; |
 | -------------| ------------- |
-|  **S1_SmbdNegotiate**| | 
-|  **Test ID**|  **S1_SmbdNegotiate_PreferredSendSizeMaxValue**| 
+|  **SmbdNegotiate**| |
+|  **Test ID**|  **SmbdNegotiate_PreferredSendSizeMaxValue**| 
 |  **Priority**| P1| 
 |  **Description** | Verify SMBD negotiate will be successful when **PreferredSendSize** field is maximum value of unsigned integer.| 
 |  **Prerequisites**| N/A| 
@@ -702,8 +702,8 @@ In this test suite, there is no requirement captured. So “Requirements covered
 
 | &#32;| &#32; |
 | -------------| ------------- |
-|  **S1_SmbdNegotiate**| | 
-|  **Test ID**|  **S1_SmbdNegotiate_Redundancy**| 
+|  **SmbdNegotiate**| |
+|  **Test ID**|  **SmbdNegotiate_Redundancy**| 
 |  **Priority**| P1| 
 |  **Description** | Verify server can receive SMBD negotiate request with 512 bytes, 20 bytes of SMBD Negotiate request and 492 redundancy bytes| 
 |  **Prerequisites**| N/A| 
@@ -873,8 +873,86 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | | Connect the server over RDMA| 
 | | SMBD Negotiate with server| 
 | | Verify server returned Negotiate response with status **ND_SUCCESS**| 
-|  **Requirements Covered**| N/A| 
-|  **Cleanup**| N/A| 
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **SmbdNegotiate**| |
+|  **Test ID**|  **SmbdNegotiate_VersionRangeNotCover0x0100_LessThanMinVersion**|
+|  **Priority**| P1|
+|  **Description** | Verify server responses with STATUS_NOT_SUPPORTED when MinVersion is greater than 0x0100 which should be included in the range.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Connect the server over RDMA|
+| | Sends Negotiate request (**MinVersion = 0x0101**, **MaxVersion = 0xFFFF**, other fields are valid)|
+| | Verify server returned Negotiate response with **STATUS_NOT_SUPPORTED**.|
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **SmbdNegotiate**| |
+|  **Test ID**|  **SmbdNegotiate_VersionRangeNotCover0x0100_LargerThanMaxVersion**|
+|  **Priority**| P1|
+|  **Description** | Verify server responses with STATUS_NOT_SUPPORTED when MaxVersion is less than 0x0100 which should be included in the range.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Connect the server over RDMA|
+| | Sends Negotiate request (**MinVersion = 0x0000**, **MaxVersion = 0x00FF**, other fields are valid)|
+| | Verify server returned Negotiate response with **STATUS_NOT_SUPPORTED**.|
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **SmbdNegotiate**| |
+|  **Test ID**|  **SmbdNegotiate_VersionRangeCover0x0100_EqualMinVersion**|
+|  **Priority**| P1|
+|  **Description** | Verify server responses with STATUS_SUCCESS when MinVersion equals to 0x0100 which should be included in the range.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Connect the server over RDMA|
+| | Sends Negotiate request (**MinVersion = 0x0100**, **MaxVersion = 0xFFFF**, other fields are valid)|
+| | Verify server returned Negotiate response with **STATUS_SUCCESS**.|
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **SmbdNegotiate**| |
+|  **Test ID**|  **SmbdNegotiate_VersionRangeCover0x0100_EqualMaxVersion**|
+|  **Priority**| P1|
+|  **Description** | Verify server responses with STATUS_SUCCESS when MaxVersion equals to 0x0100 which should be included in the range.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Connect the server over RDMA|
+| | Sends Negotiate request (**MinVersion = 0x0000**, **MaxVersion = 0x0100**, other fields are valid)|
+| | Verify server returned Negotiate response with **STATUS_SUCCESS**.|
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **SmbdNegotiate**| |
+|  **Test ID**|  **SmbdNegotiate_VersionRangeCover0x0100_InMiddle**|
+|  **Priority**| P1|
+|  **Description** | Verify server responses with STATUS_SUCCESS when MinVersion is less than 0x0100 while MaxVersion is greater than 0x0100.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Connect the server over RDMA|
+| | Sends Negotiate request (**MinVersion = 0x00FF**, **MaxVersion = 0x0101**, other fields are valid)|
+| | Verify server returned Negotiate response with **STATUS_SUCCESS**.|
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **SmbdNegotiate**| |
+|  **Test ID**|  **SmbdNegotiate_VersionRangeCover0x0100_EqualMinVersionAndMaxVersion**|
+|  **Priority**| P1|
+|  **Description** | Verify server responses with STATUS_SUCCESS when MinVersion and MaxVersion equal to 0x0100 which should be included in the range.|
+|  **Prerequisites**| N/A|
+|  **Test Execution Steps**| Connect the server over RDMA|
+| | Sends Negotiate request (**MinVersion = 0x0100**, **MaxVersion = 0x0100**, other fields are valid)|
+| | Verify server returned Negotiate response with **STATUS_SUCCESS**.|
+|  **Requirements Covered**| N/A|
+|  **Cleanup**| N/A|
 
 #### <a name="_Toc427489515"/> SmbdDataTransfer
 
@@ -2304,7 +2382,7 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **RemoteInvalidation**| | 
-|  **Test ID**|  **SMB2OverRdma_SMB302_Write_NoRemoteInvalidation**| 
+|  **Test ID**|  **Smb2OverRdma_Write_SMB2_CHANNEL_RDMA_V1**| 
 |  **Priority**| P0| 
 |  **Description** | Verify server still responds correctly when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1 on connection negotiated SMB3.02 or later dialect.| 
 |  **Prerequisites**| N/A| 
@@ -2324,7 +2402,7 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **RemoteInvalidation**| | 
-|  **Test ID**|  **SMB2OverRdma_SMB302_Read_NoRemoteInvalidation**| 
+|  **Test ID**|  **Smb2OverRdma_Read_SMB2_CHANNEL_RDMA_V1**| 
 |  **Priority**| P0| 
 |  **Description** | Verify server still responds correctly when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1 on connection negotiated SMB3.02 or later dialect.| 
 |  **Prerequisites**| N/A| 
@@ -2344,7 +2422,7 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **RemoteInvalidation**| | 
-|  **Test ID**|  **SMB2OverRdma_SMB300_Write_RemoteInvalidation**| 
+|  **Test ID**|  **Smb2OverRdma_Smb300_Write_SMB2_CHANNEL_RDMA_V1_INVALIDATE**| 
 |  **Priority**| P0| 
 |  **Description** | Verify server responds without additional descriptor to invalidate client’s memory window when receives SMB2 WRITE request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.0 or later dialect.| 
 |  **Prerequisites**| N/A| 
@@ -2369,7 +2447,7 @@ In this test suite, there is no requirement captured. So “Requirements covered
 | &#32;| &#32; |
 | -------------| ------------- |
 |  **RemoteInvalidation**| | 
-|  **Test ID**|  **SMB2OverRdma_SMB300_Read_RemoteInvalidation**| 
+|  **Test ID**|  **Smb2OverRdma_Smb300_Read_SMB2_CHANNEL_RDMA_V1_INVALIDATE**| 
 |  **Priority**| P0| 
 |  **Description** | Verify server responds without additional descriptor to invalidate client’s memory window when receives SMB2 READ request with SMB2_CHANNEL_RDMA_V1_INVALIDATE on connection negotiated SMB3.0 or later dialect.| 
 |  **Prerequisites**| N/A| 

@@ -1,0 +1,85 @@
+{
+    "Core": {
+        "Username": "testadmin",
+        "Password": "<REPLACE_WITH_ADMIN_PASSWORD>",
+        "TestSuiteName": "FileServer",
+        "Scenario": "Domain",
+        "DomainName": "contoso.com",
+        "RegressionType": "Local",
+        "UseAgent": "false"
+    },
+    "Machines": {
+        "DC": {
+            "Role": "DC",
+            "HyperVName": "DC01",
+            "ComputerName": "DC01",
+            "IsClusterNode": "false",
+            "Domain": "contoso.com",
+            "OS": "Windows Server 2025",
+            "IpConfig": [
+                {
+                    "NIC": "External1",
+                    "Ip": "192.168.1.10",
+                    "Subnet": "255.255.255.0",
+                    "Gateway": "",
+                    "DNSServer": "127.0.0.1"
+                },
+                {
+                    "NIC": "External2",
+                    "Ip": "192.168.2.10",
+                    "Subnet": "255.255.255.0",
+                    "Gateway": "",
+                    "DNSServer": "127.0.0.1"
+                }
+            ]
+        },
+        "SUT": {
+            "Role": "SUT",
+            "HyperVName": "Node01",
+            "ComputerName": "Node01",
+            "IsClusterNode": "false",
+            "Domain": "contoso.com",
+            "OS": "Windows Server 2025",
+            "IpConfig": [
+                {
+                    "NIC": "External1",
+                    "Ip": "192.168.1.11",
+                    "Subnet": "255.255.255.0",
+                    "Gateway": "192.168.1.10",
+                    "DNSServer": "192.168.1.10"
+                },
+                {
+                    "NIC": "External2",
+                    "Ip": "192.168.2.11",
+                    "Subnet": "255.255.255.0",
+                    "Gateway": "192.168.2.10",
+                    "DNSServer": "192.168.2.10"
+                }
+            ]
+        },
+        "DriverComputer": {
+            "Role": "Driver",
+            "HyperVName": "Driver",
+            "ComputerName": "Client01",
+            "IsClusterNode": "false",
+            "Domain": "contoso.com",
+            "OS": "Windows 11",
+            "IpConfig": [
+                {
+                    "NIC": "External1",
+                    "Ip": "192.168.1.111",
+                    "Subnet": "255.255.255.0",
+                    "Gateway": "192.168.1.10",
+                    "DNSServer": "192.168.1.10"
+                },
+                {
+                    "NIC": "External2",
+                    "Ip": "192.168.2.111",
+                    "Subnet": "255.255.255.0",
+                    "Gateway": "192.168.2.10",
+                    "DNSServer": "192.168.2.10"
+                }
+            ]
+        }
+    }
+}

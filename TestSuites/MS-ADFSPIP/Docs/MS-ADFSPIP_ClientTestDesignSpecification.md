@@ -16,6 +16,25 @@
 		* [RemoveApplication_Success](#_Toc472867309)
 		* [PreAuthentication_WorkplaceJoined_Federation_AsProxy_Success](#_Toc472867310)
 		* [RenewTrust_Success](#_Toc472867311)
+    * [Establish/Renew Trust](#_Toc472867312)
+		* [S1_EstablishRenewTrust_Success](#_Toc472867313)
+    * [Publish Application](#_Toc472867314)
+		* [S2_PublishApplication_Success](#_Toc472867315)
+		* [S2_PublishApplication_AlreadyPublished_Fail](#_Toc472867316)
+    * [Remove Application](#_Toc472867317)
+		* [S3_RemoveApplication_Success](#_Toc472867318)
+		* [S3_RemoveApplication_NotPublished_Fail](#_Toc472867319)
+    * [Proxy Runtime](#_Toc472867320)
+		* [S4_ProxyRuntime_NoCertificateValidation_Success](#_Toc472867321)
+		* [S4_ProxyRuntime_SSLCertificateValidation_Success](#_Toc472867322)
+		* [S4_ProxyRuntime_DeviceCertificateValidation_Success](#_Toc472867323)
+    * [Web Access](#_Toc472867324)
+		* [S5_WebAccess_InitializePreauth_Success](#_Toc472867325)
+		* [S5_WebAccess_AdfsPreauth_QueryStringBased_Success](#_Toc472867326)
+		* [S5_WebAccess_AdfsPreauth_HttpHeaderBased_Success](#_Toc472867327)
+    * [Active Client Auth](#_Toc472867328)
+		* [S6_ActiveClientAuth_AccessDenied](#_Toc472867329)
+		* [S6_ActiveClientAuth_AccessSuccess](#_Toc472867330)
 
 ## <a name="_Toc472867297"/>Protocol Scenarios
 MS-ADFSPIP is used for protecting AD FS server and supporting pre-authentication when user access web resource inside company network. There are 4 roles in this system: AD FS Server, Proxy, and Web Application server. These 3 are inside a company network. There is a client outside the company network, used by user to access Web Application server inside company network. There are 3 scenarios involves different roles of this protocol: 
@@ -178,11 +197,205 @@ Traditional test case. Test suite will play AD FS Server, Web Application server
 
 | &#32;| &#32; |
 | -------------| ------------- |
-| Test Case Name| RenewTrust_Success| 
-| Description| Proxy can successfully renew trust with the server.| 
-| Priority| 0| 
-| Test Steps|  **Trigger the proxy to reinstall web application proxy role after deployment.**| 
-| |  **Driver waiting for renew trust request.**| 
-| |  **Driver verifies that the renew request is valid.** | 
-| |  **Driver verifies proxy has successfully renewed trust.**| 
+| Test Case Name| RenewTrust_Success|
+| Description| Proxy can successfully renew trust with the server.|
+| Priority| 0|
+| Test Steps|  **Trigger the proxy to reinstall web application proxy role after deployment.**|
+| |  **Driver waiting for renew trust request.**|
+| |  **Driver verifies that the renew request is valid.** |
+| |  **Driver verifies proxy has successfully renewed trust.**|
+
+### <a name="_Toc472867312"/>Establish/Renew Trust
+
+#### <a name="_Toc472867313"/>S1_EstablishRenewTrust_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S1_EstablishRenewTrust_Success|
+| Description| Test Proxy can successfully establish and renew trust with AD FS Server|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to establish trust with AD FS Server.**|
+| |  **Proxy sends establish trust request with a valid certificate.**|
+| |  **Driver verifies the request and returns HTTP 200 to acknowledge trust is established.**|
+| |  **Trigger Proxy to renew trust with AD FS Server.**|
+| |  **Proxy sends renew trust request with both old and new certificates.**|
+| |  **Driver verifies the renew request is valid and returns HTTP 200.**|
+| |  **Driver verifies Proxy has successfully established and renewed trust.**|
+
+### <a name="_Toc472867314"/>Publish Application
+
+#### <a name="_Toc472867315"/>S2_PublishApplication_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S2_PublishApplication_Success|
+| Description| Test Proxy can successfully publish a web application|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger proxy client to publish a new web application.**|
+| |  **Proxy client tries to retrieve all published web applications.**|
+| |  **Driver verifies that the client request is valid using the trusted certificate, and returns a list of relying party trusts.**|
+| |  **Proxy client tries to create a new set of publishing settings on a relying party trust.**|
+| |  **Driver verifies that the request is valid and using the trusted certificate, then returns HTTP 200.**|
+| |  **Driver verifies the application is successfully published on the proxy.**|
+
+#### <a name="_Toc472867316"/>S2_PublishApplication_AlreadyPublished_Fail
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S2_PublishApplication_AlreadyPublished_Fail|
+| Description| Test handling when attempting to publish an already published application|
+| Priority| 1|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger proxy client to publish a new web application.**|
+| |  **Driver verifies the application is successfully published on the proxy.**|
+| |  **Trigger proxy client to publish the same web application again.**|
+| |  **Driver verifies that the request fails with an appropriate error response.**|
+| |  **Driver verifies the proxy correctly handles the already published error.**|
+
+### <a name="_Toc472867317"/>Remove Application
+
+#### <a name="_Toc472867318"/>S3_RemoveApplication_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S3_RemoveApplication_Success|
+| Description| Test Proxy can successfully remove a published application|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger proxy client to publish a web application.**|
+| |  **Driver verifies the application is successfully published on the proxy.**|
+| |  **Trigger the proxy client to remove the published web application.**|
+| |  **Proxy tries to remove the published web application.**|
+| |  **Driver verifies that the request is valid and using the trusted certificate, then returns HTTP 200.**|
+| |  **Driver verifies the application is successfully removed from the proxy.**|
+
+#### <a name="_Toc472867319"/>S3_RemoveApplication_NotPublished_Fail
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S3_RemoveApplication_NotPublished_Fail|
+| Description| Test handling when attempting to remove an unpublished application|
+| Priority| 1|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger the proxy client to remove a web application that is not published.**|
+| |  **Driver verifies that the request fails with an appropriate error response.**|
+| |  **Driver verifies the proxy correctly handles the not published error.**|
+
+### <a name="_Toc472867320"/>Proxy Runtime
+
+#### <a name="_Toc472867321"/>S4_ProxyRuntime_NoCertificateValidation_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S4_ProxyRuntime_NoCertificateValidation_Success|
+| Description| Test Proxy endpoint with no certificate validation|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger Proxy to publish a web application with no certificate validation.**|
+| |  **Driver sends a request to the proxy endpoint without a client certificate.**|
+| |  **Driver verifies the proxy forwards the request to the backend server without certificate validation.**|
+| |  **Driver verifies the response is successfully returned to the client.**|
+
+#### <a name="_Toc472867322"/>S4_ProxyRuntime_SSLCertificateValidation_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S4_ProxyRuntime_SSLCertificateValidation_Success|
+| Description| Test Proxy endpoint with SSL certificate validation|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger Proxy to publish a web application with SSL certificate validation.**|
+| |  **Driver sends a request to the proxy endpoint with a valid SSL client certificate.**|
+| |  **Driver verifies the proxy performs SSL certificate validation on the request.**|
+| |  **Driver verifies the proxy forwards the request to the backend server after successful validation.**|
+| |  **Driver verifies the response is successfully returned to the client.**|
+
+#### <a name="_Toc472867323"/>S4_ProxyRuntime_DeviceCertificateValidation_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S4_ProxyRuntime_DeviceCertificateValidation_Success|
+| Description| Test Proxy endpoint with device certificate validation|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger Proxy to publish a web application with device certificate validation.**|
+| |  **Driver sends a request to the proxy endpoint with a valid device certificate.**|
+| |  **Driver verifies the proxy performs device certificate validation on the request.**|
+| |  **Driver verifies the proxy forwards the request to the backend server after successful validation.**|
+| |  **Driver verifies the response is successfully returned to the client.**|
+
+### <a name="_Toc472867324"/>Web Access
+
+#### <a name="_Toc472867325"/>S5_WebAccess_InitializePreauth_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S5_WebAccess_InitializePreauth_Success|
+| Description| Test initialization of pre-authentication flow|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger Proxy to publish a web application with pre-authentication enabled.**|
+| |  **Driver sends an initial HTTP request to the proxy to access the published web application.**|
+| |  **Driver verifies the proxy initializes the pre-authentication flow.**|
+| |  **Driver verifies the proxy returns a redirect response to the AD FS Server for authentication.**|
+
+#### <a name="_Toc472867326"/>S5_WebAccess_AdfsPreauth_QueryStringBased_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S5_WebAccess_AdfsPreauth_QueryStringBased_Success|
+| Description| Test ADFS pre-authentication using query string method|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger Proxy to publish a web application with pre-authentication enabled.**|
+| |  **Driver sends an HTTP request to the proxy with authentication token in the query string.**|
+| |  **Driver verifies the proxy extracts the authentication token from the query string.**|
+| |  **Driver verifies the proxy validates the token with the AD FS Server.**|
+| |  **Driver verifies the proxy forwards the request to the backend server after successful pre-authentication.**|
+| |  **Driver verifies the response is successfully returned to the client.**|
+
+#### <a name="_Toc472867327"/>S5_WebAccess_AdfsPreauth_HttpHeaderBased_Success
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S5_WebAccess_AdfsPreauth_HttpHeaderBased_Success|
+| Description| Test ADFS pre-authentication using HTTP header method|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger Proxy to publish a web application with pre-authentication enabled.**|
+| |  **Driver sends an HTTP request to the proxy with authentication token in the HTTP header.**|
+| |  **Driver verifies the proxy extracts the authentication token from the HTTP header.**|
+| |  **Driver verifies the proxy validates the token with the AD FS Server.**|
+| |  **Driver verifies the proxy forwards the request to the backend server after successful pre-authentication.**|
+| |  **Driver verifies the response is successfully returned to the client.**|
+
+### <a name="_Toc472867328"/>Active Client Auth
+
+#### <a name="_Toc472867329"/>S6_ActiveClientAuth_AccessDenied
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S6_ActiveClientAuth_AccessDenied|
+| Description| Test access denial with incorrect authentication|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger Proxy to publish a web application with authentication required.**|
+| |  **Driver sends a request to the proxy endpoint with incorrect authentication credentials.**|
+| |  **Driver verifies the proxy denies access to the web application.**|
+| |  **Driver verifies the proxy returns an appropriate access denied error response.**|
+
+#### <a name="_Toc472867330"/>S6_ActiveClientAuth_AccessSuccess
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Test Case Name| S6_ActiveClientAuth_AccessSuccess|
+| Description| Test successful access with correct authentication|
+| Priority| 0|
+| Test Steps|  **Trigger Proxy to deploy and establish trust with AD FS Server.**|
+| |  **Trigger Proxy to publish a web application with authentication required.**|
+| |  **Driver sends a request to the proxy endpoint with correct authentication credentials.**|
+| |  **Driver verifies the proxy successfully authenticates the client.**|
+| |  **Driver verifies the proxy forwards the request to the backend server.**|
+| |  **Driver verifies the response is successfully returned to the client.**|
 

@@ -9,7 +9,12 @@
       <Property name="TestName" value="FileServer Family Test" />
       <Property name="FeatureName" value="FileServer" />
       <Property name="Version" value="3.0" />
-
+      <!--
+        Controls the PTF logging mode.
+        True  - Enables multi-threaded logging.
+        False - Uses single-threaded logging.
+    -->
+      <Property name="PTF.LogProfileParserPatch.Enabled" value="false"/>
       <!--
         Supported rpce authentication level:
         RPC_C_AUTHN_LEVEL_DEFAULT,
