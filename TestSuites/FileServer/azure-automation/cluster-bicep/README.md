@@ -12,7 +12,7 @@ The cluster environment consists of:
 - **Cluster Node02**: Windows Server with Failover Clustering and File Server roles
 - **Driver Computer (Client01)**: Windows 11 Enterprise or Ubuntu Linux for running test cases
 - **Network Infrastructure**: VNet with dual subnets, Azure Bastion for secure access
-- **iSCSI Storage**: 3 virtual disks (QuorumDisk: 1GB, FSDisk01: 10GB, FSDisk02: 10GB)
+- **iSCSI Storage**: 4 virtual disks (disk1: 10GB, disk2: 10GB, disk3: 10GB, diskq: 1GB quorum)
 
 The driver computer supports both Windows and Linux. Custom Azure VM images can be used for any VM by providing a resource ID.
 
@@ -34,10 +34,11 @@ The deployment follows a **multi-phase approach** to ensure proper sequencing:
 ### Phase 3: Storage Server Deployment (parallel with DC)
 - Deploys Storage01 (NOT domain-joined per test suite requirements)
 - Installs File Server and iSCSI Target Server roles
-- Creates 3 iSCSI virtual disks:
-  - **QuorumDisk** (1GB) - For cluster quorum
-  - **FSDisk01** (10GB) - For general file server storage
-  - **FSDisk02** (10GB) - For scale-out file server storage
+- Creates 4 iSCSI virtual disks:
+  - **disk1** (10GB) - For file server storage
+  - **disk2** (10GB) - For file server storage
+  - **disk3** (10GB) - For file server storage
+  - **diskq** (1GB) - For cluster quorum
 - Configures iSCSI target for cluster nodes
 
 ### Phase 4: Cluster Nodes Deployment (after DC and Storage)
@@ -73,7 +74,6 @@ $password = Read-Host -Prompt "Enter your secure password" -AsSecureString
 .\deploy.ps1 `
   -SubscriptionId "your-subscription-id" `
   -ResourceGroupName "fileserver-cluster-test" `
-  -Location "East US" `
   -AdminPassword $password
    ```
 
@@ -91,7 +91,6 @@ $password = ConvertTo-SecureString "YourSecurePassword123!" -AsPlainText -Force
 .\deploy.ps1 `
   -SubscriptionId "your-subscription-id" `
   -ResourceGroupName "fileserver-cluster-test" `
-  -Location "East US" `
   -AdminPassword $password `
   -SkipPhase1
 ```
@@ -124,8 +123,9 @@ To deploy just the network, DC, and storage (e.g., to manually verify DC setup b
 |-----------|-------------|
 | `SubscriptionId` | Azure subscription ID |
 | `ResourceGroupName` | Target resource group name |
-| `Location` | Azure region (e.g., `East US`) |
 | `AdminPassword` | SecureString password for VM admin accounts |
+
+> **Note:** The Azure region (location) is set in `parameters/phase1.bicepparam` via the Bicep `location` parameter, not as a script parameter.
 
 #### Optional
 
@@ -140,6 +140,9 @@ To deploy just the network, DC, and storage (e.g., to manually verify DC setup b
 | `SkipPhase1` | `$false` | Skip Phase 1 and resume from Phase 2 |
 | `SkipPhase2` | `$false` | Deploy Phase 1 only |
 | `SkipDCReadyCheck` | `$false` | Skip DC readiness verification when resuming |
+| `StorageAccountName` | *(auto-generated)* | Name of the Azure Storage Account for package upload |
+| `ValidateOnly` | `$false` | Run template validation only (no deployment) |
+| `SkipDiskEncryption` | `$false` | Skip Azure Disk Encryption on all VMs |
 
 ### Template Parameters
 
@@ -156,7 +159,7 @@ Edit [parameters/phase1.bicepparam](parameters/phase1.bicepparam) and [parameter
 | `scaleOutFSName` | `ScaleOutFS` | Scale-Out File Server name |
 | `vnetAddressPrefix` | `192.168.0.0/16` | Virtual network address space |
 | `dcExternal1Ip` | `192.168.1.10` | DC primary IP address |
-| `storageExternal1Ip` | `192.168.1.100` | Storage server IP |
+| `storageExternal1Ip` | `192.168.1.50` | Storage server IP |
 | `dcCustomImageId` | *(empty)* | Custom image for DC (overrides marketplace) |
 | `storageCustomImageId` | *(empty)* | Custom image for Storage (overrides marketplace) |
 
@@ -180,14 +183,13 @@ External1 Network: 192.168.1.0/24
 ├── DC01:      192.168.1.10  (Domain Controller)
 ├── Node01:    192.168.1.11  (Cluster Node 1)
 ├── Node02:    192.168.1.12  (Cluster Node 2)
-├── Storage01: 192.168.1.100 (iSCSI Storage - NOT domain-joined)
+├── Storage01: 192.168.1.50 (iSCSI Storage - NOT domain-joined)
 └── Client01:  192.168.1.111 (Driver)
 
 External2 Network: 192.168.2.0/24
 ├── DC01:      192.168.2.10  (Domain Controller)
 ├── Node01:    192.168.2.11  (Cluster Node 1)
 ├── Node02:    192.168.2.12  (Cluster Node 2)
-├── Storage01: 192.168.2.100 (iSCSI Storage - NOT domain-joined)
 └── Client01:  192.168.2.111 (Driver)
 
 Bastion Network: 192.168.0.0/26
@@ -207,12 +209,13 @@ The deployment creates:
 
 Storage01 is configured with:
 
-- **iSCSI Target**: `TargetForCluster01`
-- **Allowed Initiators**: Node01 (192.168.1.11, 192.168.2.11), Node02 (192.168.1.12, 192.168.2.12)
+- **iSCSI Target**: `ClusterTarget` (configured in Config.json)
+- **Allowed Initiators**: IQN:* (all initiators)
 - **Virtual Disks**:
-  - QuorumDisk.vhdx (1GB)
-  - FSDisk01.vhdx (10GB)
-  - FSDisk02.vhdx (10GB)
+  - disk1.vhdx (10GB)
+  - disk2.vhdx (10GB)
+  - disk3.vhdx (10GB)
+  - diskq.vhdx (1GB)
 
 ## Monitoring Deployment Completion
 
@@ -237,11 +240,11 @@ Use the provided verification script to check when all VMs have completed their 
 ```
 
 **What it checks:**
-- ✅ DC01: `C:\Configure-DC.Completed.signal`
-- ✅ Storage01: `C:\Configure-Storage.Completed.signal`
-- ✅ Node01: `C:\Configure-Node01.Completed.signal`
-- ✅ Node02: `C:\Configure-Node02.Completed.signal`
-- ✅ Client01: `C:\Configure-Driver.Completed.signal`
+- ✅ DC01: `C:\Cluster-Package\DSC\Deploy-DC.Completed.signal`
+- ✅ Storage01: `C:\Cluster-Package\DSC\Deploy-Storage.Completed.signal`
+- ✅ Node01: `C:\Cluster-Package\DSC\Deploy-Node01.Completed.signal`
+- ✅ Node02: `C:\Cluster-Package\DSC\Deploy-Node02.Completed.signal`
+- ✅ Client01: `C:\Cluster-Package\DSC\Deploy-Driver.Completed.signal`
 
 **Options:**
 ```powershell
@@ -288,11 +291,11 @@ Connect to each VM via Bastion and check:
 
 2. **Check for signal files**:
    ```powershell
-   Test-Path C:\Configure-DC.Completed.signal          # DC01
-   Test-Path C:\Configure-Storage.Completed.signal     # Storage01
-   Test-Path C:\Configure-Node01.Completed.signal      # Node01
-   Test-Path C:\Configure-Node02.Completed.signal      # Node02
-   Test-Path C:\Configure-Driver.Completed.signal      # Client01
+   Test-Path C:\Cluster-Package\DSC\Deploy-DC.Completed.signal          # DC01
+   Test-Path C:\Cluster-Package\DSC\Deploy-Storage.Completed.signal     # Storage01
+   Test-Path C:\Cluster-Package\DSC\Deploy-Node01.Completed.signal      # Node01
+   Test-Path C:\Cluster-Package\DSC\Deploy-Node02.Completed.signal      # Node02
+   Test-Path C:\Cluster-Package\DSC\Deploy-Driver.Completed.signal      # Client01
    ```
 
 **Expected Timeline:**
@@ -353,7 +356,7 @@ On Node01, open Failover Cluster Manager or run PowerShell:
 
 ```powershell
 # Create the cluster
-New-Cluster -Name Cluster01 -Node Node01, Node02 -StaticAddress 192.168.1.50 -NoStorage
+New-Cluster -Name Cluster01 -Node Node01, Node02 -StaticAddress 192.168.1.100 -NoStorage
 
 # Configure cluster quorum
 Set-ClusterQuorum -NodeAndDiskMajority "Cluster Disk 1"
@@ -399,6 +402,16 @@ Set-SmbShare -Name SMBClusteredForceLevel2 -ForceLevelIIOplock $true -Confirm:$f
 - Network security groups allow broad access within the VNet
 - Storage01 is NOT domain-joined per test suite requirements
 - Not suitable for production use
+
+## Known Issues
+
+1. **GeneralFS virtual IP not routable in Azure**: The GeneralFS clustered file server virtual IP is not directly routable in Azure networking. As a workaround, Client01 maps `GeneralFS` to Node01's IP address via the hosts file (`C:\Windows\System32\drivers\etc\hosts`).
+
+2. **ksetup trust relationship**: The `ksetup /SetComputerPassword` command runs after domain join. AD account password synchronization is performed via `Set-ADAccountPassword` on the DC side.
+
+3. **Auto-shutdown enabled by default**: All VMs are configured with auto-shutdown at 20:00 UTC by default. Control this with the `enableAutoShutdown` parameter in the Bicep templates.
+
+4. **Azure Disk Encryption enabled by default**: All VMs have Azure Disk Encryption enabled, which requires Key Vault permissions in the subscription. Use the `-SkipDiskEncryption` script parameter to disable this if your subscription lacks Key Vault access or if encryption is not needed.
 
 ## Deployment Time
 
@@ -458,12 +471,19 @@ View detailed logs in Azure portal:
 
 ### Viewing Extension Logs
 
-Connect to each VM via Bastion and check:
-- DC01: `C:\dc-setup.log`
-- Storage01: `C:\storage-setup.log`
-- Node01: `C:\node01-setup.log`
-- Node02: `C:\node02-setup.log`
-- Client01: `C:\domain-driver-setup.log`
+Connect to each VM via Bastion and check the **extension-level logs** (created by the VM extension entry point):
+- DC01: `C:\dc-extension-setup.log`
+- Storage01: `C:\storage-extension-setup.log`
+- Node01: `C:\node01-extension-setup.log`
+- Node02: `C:\node02-extension-setup.log`
+- Client01: `C:\driver-extension-setup.log`
+
+**DSC-level logs** (created by the Deploy-*.ps1 scripts inside the Cluster-Package):
+- DC01: `C:\Cluster-Package\DSC\Deploy-DC.log`
+- Storage01: `C:\Cluster-Package\DSC\Deploy-Storage.log`
+- Node01: `C:\Cluster-Package\DSC\Deploy-Node01.log`
+- Node02: `C:\Cluster-Package\DSC\Deploy-Node02.log`
+- Client01: `C:\Cluster-Package\DSC\Deploy-Driver.log`
 
 ## File Structure
 
@@ -479,6 +499,12 @@ cluster-bicep/
 │   ├── storage-server.bicep       # Storage Server (iSCSI) VM
 │   ├── cluster-nodes.bicep        # Cluster Node VMs (Node01, Node02)
 │   └── driver-computer.bicep      # Driver Computer VM
+├── DSC/
+│   ├── Deploy-DC.ps1               # Domain Controller configuration script
+│   ├── Deploy-Storage.ps1          # Storage Server configuration script
+│   ├── Deploy-Node01.ps1           # Cluster Node 1 configuration script
+│   ├── Deploy-Node02.ps1           # Cluster Node 2 configuration script
+│   └── Deploy-Driver.ps1           # Driver computer configuration script
 ├── parameters/
 │   ├── phase1.bicepparam           # Phase 1 parameters
 │   └── phase2.bicepparam           # Phase 2 parameters

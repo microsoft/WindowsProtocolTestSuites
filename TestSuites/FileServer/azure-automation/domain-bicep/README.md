@@ -126,6 +126,9 @@ To deploy just the network and DC (e.g., to manually verify DC setup before cont
 | `SkipPhase1` | `$false` | Skip Phase 1 and resume from Phase 2 |
 | `SkipPhase2` | `$false` | Deploy Phase 1 only |
 | `SkipDCReadyCheck` | `$false` | Skip DC readiness verification when resuming |
+| `StorageAccountName` | *(auto-generated)* | Name of the storage account for DSC package upload |
+| `ValidateOnly` | `$false` | Run pre-flight validation only without deploying resources |
+| `SkipDiskEncryption` | `$false` | Skip Azure Disk Encryption on deployed VMs |
 
 ## Template Parameters
 
@@ -251,21 +254,22 @@ domain-bicep/
 |   +-- phase1.bicepparam           # Phase 1 parameters (single source of truth)
 |   +-- phase2.bicepparam           # Phase 2 parameters
 +-- DSC/
-    +-- Deploy-DC.ps1               # DC orchestrator (step 0->1->2)
-    +-- Deploy-Driver.ps1           # Driver orchestrator (step 0->1->2)
     +-- Deploy-SUT.ps1              # SUT orchestrator (step 0->1->2->3)
-    +-- DC-Configuration.ps1        # DSC: AD DS, RemoteAccess, LDAP, CBAC
-    +-- Driver-Configuration.ps1    # DSC: hosts, firewall, PS remoting
     +-- SUT-Configuration.ps1       # DSC: features, shares, FSRM, registry
-    +-- Invoke-DcImperativeSteps.ps1      # DC: promotion, accounts, CBAC, GPO, DNS
-    +-- Invoke-DriverImperativeSteps.ps1  # Driver: domain join, tools, RSA, ForceLevel2
     +-- Invoke-SutImperativeSteps.ps1     # SUT: domain join, disks, DFS, QUIC
     +-- Scripts/                    # Domain-specific scripts (domainjoin, PromoteDC, etc.)
 
 ../shared/
 +-- Deploy-Helpers.psm1             # Azure helpers (connect, storage, polling, quota)
 +-- Generate-ConfigJson.ps1         # Config.json generation from bicepparam values
-+-- DSC/Scripts/                    # Shared scripts (tools install, test run, validation)
++-- DSC/
+    +-- Deploy-DC.ps1               # DC orchestrator (step 0->1->2)
+    +-- Deploy-Driver.ps1           # Driver orchestrator (step 0->1->2)
+    +-- DC-Configuration.ps1        # DSC: AD DS, RemoteAccess, LDAP, CBAC
+    +-- Driver-Configuration.ps1    # DSC: hosts, firewall, PS remoting
+    +-- Invoke-DcImperativeSteps.ps1      # DC: promotion, accounts, CBAC, GPO, DNS
+    +-- Invoke-DriverImperativeSteps.ps1  # Driver: domain join, tools, RSA, ForceLevel2
+    +-- Scripts/                    # Shared scripts (tools install, test run, validation)
 ```
 
 ## Multi-Platform and Custom Image Support
@@ -293,6 +297,16 @@ param sutCustomImageId = '/subscriptions/.../images/my-custom-sut'
 ```
 
 When a custom image ID is provided, it overrides the marketplace image for that VM. Leave empty (`''`) to use the default. Non-driver VMs must use Windows images.
+
+## Known Issues
+
+1. **ksetup trust relationship failure on SUT**: After domain join, `Invoke-SutImperativeSteps.ps1` runs `ksetup /SetComputerPassword` to synchronize with AD. If you see "trust relationship between this workstation and the primary domain failed" errors, check the SUT deploy log at `C:\Domain-Package\DSC\Invoke-SutImperativeSteps.log` for the ksetup output.
+
+2. **Auto-shutdown enabled by default**: All VMs are configured with auto-shutdown. Check the `enableAutoShutdown` and `autoShutdownTime` parameters in your bicepparam file if VMs shut down unexpectedly.
+
+3. **Azure Disk Encryption enabled by default**: Disk encryption is applied to all VMs after deployment. This adds deployment time and requires Key Vault permissions. Use `-SkipDiskEncryption` to disable it.
+
+> **Note:** The template parameters table above covers the most commonly customized settings. Additional parameters such as `adminUsername`, `enableAutoShutdown`, `autoShutdownTime`, `enableDiskEncryption`, and `domainPackageZipUrl` are available. See the [phase1.bicepparam](parameters/phase1.bicepparam) and [phase2.bicepparam](parameters/phase2.bicepparam) files for the full list of configurable values.
 
 ## Based on FileServer User Guide
 

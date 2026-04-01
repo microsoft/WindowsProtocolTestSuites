@@ -81,6 +81,10 @@ No Domain Controller is needed for this scenario - both machines operate in work
 | `ParametersFile` | `parameters/workgroup.bicepparam` | Bicep parameters file |
 | `DscFolderPath` | `DSC/` (adjacent to deploy.ps1) | Path to DSC scripts folder |
 | `DscPackageZipUrl` | (empty) | Direct URL to pre-built DSC package zip |
+| `StorageAccountName` | (empty) | Use an existing storage account instead of creating one |
+| `ValidateOnly` | `$false` | Run Bicep validation only (no deployment) |
+| `SkipDiskEncryption` | `$false` | Skip post-deployment Azure Disk Encryption |
+| `Resume` | `$false` | Resume a previously failed deployment (skips pre-flight checks) |
 
 ## Local Accounts
 
@@ -106,16 +110,15 @@ workgroup-bicep/
 ├── deploy.ps1                    # Main deployment script
 ├── main.bicep                    # Main template
 ├── README.md                     # This file
-├── DSC/                          # DSC configuration scripts
-│   ├── Deploy-Driver.ps1         # Driver orchestrator (DSC + imperative)
+├── DSC/                          # SUT DSC configuration scripts
 │   ├── Deploy-SUT.ps1            # SUT orchestrator (DSC + imperative)
-│   ├── Driver-Configuration.ps1  # Driver DSC configuration
 │   ├── SUT-Configuration.ps1     # SUT DSC configuration
-│   ├── Invoke-DriverImperativeSteps.ps1  # Driver non-DSC steps
 │   ├── Invoke-SutImperativeSteps.ps1     # SUT non-DSC steps
 │   └── Scripts/
 │       └── Config.json                   # Workgroup scenario template
 │       (Shared scripts overlaid at deploy time from ../shared/DSC/Scripts/)
+│   # NOTE: Driver scripts (Deploy-Driver.ps1, Driver-Configuration.ps1,
+│   #   Invoke-DriverImperativeSteps.ps1) come from ../shared/DSC/ at package time.
 ├── modules/
 │   ├── network.bicep             # VNet, NSGs, Bastion
 │   └── workgroup-computers.bicep # Client01, Node01 VMs
@@ -136,8 +139,8 @@ Deploy-Driver.ps1 (VM extension, runs as SYSTEM)
   Phase 3: Register scheduled task → fires in ~30s
   → Deploy-Driver.Completed.signal
 
-Scheduled task → Invoke-TestRun.ps1 (runs as admin user)
-  1. Waits for SUT readiness (polls \\Node01\C$\...\Deploy-SUT.Completed.signal via SMB)
+Scheduled task → Invoke-TestRun.ps1 (runs as local testadmin user)
+  1. Waits for SUT readiness (polls \\192.168.1.11\C$\...\Deploy-SUT.Completed.signal via SMB using the SUT's static IP, since DNS is not available in workgroup mode)
   2. Detects SUT OS version → derives context name (e.g., Win2025_Workgroup_NonCluster_SMB311)
   3. Calls Execute-TestCaseByContext.ps1, which:
      - Patches all 9 ptfconfig files with context-aware values from Config.json
@@ -186,10 +189,10 @@ param sutExternal1Ip = '192.168.1.100'
 
 ### Change OS Versions
 
-Edit `parameters/workgroup.bicepparam`:
+Defaults are `win11-25h2-ent` (driver) and `2025-datacenter-azure-edition` (SUT). To downgrade, edit `parameters/workgroup.bicepparam`:
 ```bicep
-param driverOsVersion = 'win11-23h2-pro'
-param sutOsVersion = '2022-datacenter-g2'
+param driverOsVersion = 'win11-23h2-pro'       // downgrade from default win11-25h2-ent
+param sutOsVersion = '2022-datacenter-g2'       // downgrade from default 2025-datacenter-azure-edition
 ```
 
 ### Use a Linux Driver
@@ -211,6 +214,11 @@ param sutCustomImageId = '/subscriptions/.../images/my-custom-sut'
 ```
 
 When a custom image ID is provided, it overrides the marketplace image. Leave empty (`''`) to use the default marketplace image.
+
+## Default Behaviors
+
+- **Auto-shutdown** is enabled by default at 20:00 UTC. If a test run takes longer than expected, VMs may shut down mid-test. Disable with `param enableAutoShutdown = false` in the bicepparam file, or adjust the time with `param autoShutdownTime = '2300'`.
+- **Azure Disk Encryption** is enabled by default. A Key Vault is created automatically for encryption keys. Skip with `-SkipDiskEncryption` if not needed or to speed up deployment.
 
 ## Comparison with Domain Deployment
 
@@ -245,6 +253,16 @@ Get-CimInstance Win32_ComputerSystem | Select-Object Domain, PartOfDomain
 ```powershell
 # From Client01, test connection to Node01
 Test-NetConnection -ComputerName 192.168.1.11 -Port 445
+```
+
+### Inspect Config.json
+
+The generated `Config.json` drives all test configuration. Verify that IPs and credentials were injected correctly:
+```powershell
+# On either VM, check the deployed Config.json
+Get-Content C:\Workgroup-Package\DSC\Scripts\Config.json | ConvertFrom-Json | ConvertTo-Json -Depth 5
+# Verify: Machines.SUT.IpConfig[0].Ip should be 192.168.1.11
+# Verify: Core.Username / Core.Password match the credentials you provided
 ```
 
 ### WinRM Connectivity
