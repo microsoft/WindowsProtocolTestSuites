@@ -61,6 +61,13 @@
     -->
 	  <Property name="DriverPlatform" value="WindowsServer2025"/>
 
+	  <!--The transport of RDMA card
+	        InfiniBand,
+			RoCE,
+			iWARP
+	  -->
+	  <Property name="RDMATransport" value="RoCE"/>
+
 	  <!--Name of file which is used in test read large content-->
     <Property name="TestFile_ReadLargeFile" value="testFile_ReadLargeFile.txt"/>
     <!--
