@@ -307,102 +307,30 @@ if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
         -ResourceGroupName $ResourceGroupName -Location $config.location `
         -StorageAccountName $StorageAccountName -ContainerName "dsc-package"
 
-    $ctx = $tempStorage.Context
-    $containerName = $tempStorage.ContainerName
-
-    # Create temp directory for packaging (root = WorkingPath on the VM)
-    $tempPackagePath = Join-Path $env:TEMP "DscPackage-$(Get-Random)"
-    New-Item -ItemType Directory -Path $tempPackagePath -Force | Out-Null
-
-    # Copy DSC folder into package as DSC/ subdirectory
-    $dscDestination = Join-Path $tempPackagePath "DSC"
-    Copy-Item -Path $DscFolderPath -Destination $dscDestination -Recurse -Force
-    Write-Output "   [OK] Copied DSC folder to: $dscDestination"
-
-    # Ensure DSC\Scripts target directory exists (may already have files from the DSC folder copy)
-    $dscScriptsTarget = Join-Path $dscDestination "Scripts"
-    if (-not (Test-Path $dscScriptsTarget)) {
-        New-Item -ItemType Directory -Path $dscScriptsTarget -Force | Out-Null
-    }
-
-    # Overlay shared DSC files into package (shared is the source of truth)
-    $sharedDscPath = Join-Path $PSScriptRoot "..\shared\DSC"
-    if (Test-Path $sharedDscPath) {
-        # Root-level scripts (Deploy-DC.ps1, DC-Configuration.ps1, etc.)
-        foreach ($sharedFile in (Get-ChildItem -Path $sharedDscPath -Filter '*.ps1' -File)) {
-            Copy-Item -Path $sharedFile.FullName -Destination $dscDestination -Force
-        }
-        Write-Output "   [OK] Overlaid shared DSC root scripts"
-
-        # Scripts/ subfolder
-        $sharedScriptsPath = Join-Path $sharedDscPath "Scripts"
-        if (Test-Path $sharedScriptsPath) {
-            Copy-Item -Path "$sharedScriptsPath\*" -Destination $dscScriptsTarget -Recurse -Force
-            Write-Output "   [OK] Overlaid shared DSC/Scripts from: $sharedScriptsPath"
-        }
-    } else {
-        Write-Warning "Shared DSC folder not found at $sharedDscPath -- package may be incomplete"
-    }
-
-    # Download external assets (GPOBackup.zip, ParamConfig.json) into the package
-    $gpoSource = Join-Path $PSScriptRoot "..\..\..\Setup\Scripts\GPOBackup.zip"
-    Install-DscPackageAssets -ScriptsFolder $dscScriptsTarget -Scenario 'Domain' `
-        -LocalGpoBackupPath $gpoSource
-
-    # Copy Tools.json to package root (after overlay, it's in the packaged Scripts folder)
-    $toolsSource = Join-Path $dscScriptsTarget "Tools.json"
-    if (Test-Path $toolsSource) {
-        Copy-Item -Path $toolsSource -Destination (Join-Path $tempPackagePath "Tools.json") -Force
-        Write-Output "   [OK] Copied Tools.json to package root"
-    } else {
-        Write-Warning "Tools.json not found at $toolsSource"
-    }
-
-    # Generate Config.json at package root with deployment parameters
-    Write-Output "   Generating Config.json with deployment parameters..."
-    & $generateScript `
-        -Scenario "Domain" `
-        -OutputPath (Join-Path $tempPackagePath "Config.json") `
-        -AdminUsername $config.adminUsername `
-        -AdminPassword $plainPassword `
-        -DomainName $config.domainName `
-        -DomainNetBiosName $config.domainNetBiosName `
-        -DCExternal1Ip $config.dcExternal1Ip `
-        -DCExternal2Ip $config.dcExternal2Ip `
-        -SutExternal1Ip $config.sutExternal1Ip `
-        -SutExternal2Ip $config.sutExternal2Ip `
-        -DriverExternal1Ip $config.driverExternal1Ip `
-        -DriverExternal2Ip $config.driverExternal2Ip `
-        -DriverOSType $config.driverOsType
-    if (-not $?) { throw "Generate-ConfigJson.ps1 failed" }
-    Write-Output "   [OK] Config.json generated"
-
-    # Copy generated Config.json into DSC\Scripts (overwrite template so domain utility
-    # scripts that default to $PSScriptRoot\Config.json find the real values)
-    Copy-Item (Join-Path $tempPackagePath "Config.json") -Destination "$dscScriptsTarget\Config.json" -Force
-    Write-Output "   [OK] Copied Config.json into DSC\Scripts (overwriting template)"
-
-    # Generate ResultsUpload.json for test results upload
-    Write-Output "   Generating ResultsUpload.json for test results upload..."
-    $resultsConfig = New-ResultsUploadConfig `
+    $actualDscPackageZipUrl = Build-DscPackage `
+        -DscFolderPath $DscFolderPath `
+        -SharedDscPath (Join-Path $PSScriptRoot "..\shared\DSC") `
+        -Scenario 'Domain' `
+        -BlobName 'Domain-Package.zip' `
+        -ConfigJsonParams @{
+            Scenario          = 'Domain'
+            AdminUsername     = $config.adminUsername
+            AdminPassword     = $plainPassword
+            DomainName        = $config.domainName
+            DomainNetBiosName = $config.domainNetBiosName
+            DCExternal1Ip     = $config.dcExternal1Ip
+            DCExternal2Ip     = $config.dcExternal2Ip
+            SutExternal1Ip    = $config.sutExternal1Ip
+            SutExternal2Ip    = $config.sutExternal2Ip
+            DriverExternal1Ip = $config.driverExternal1Ip
+            DriverExternal2Ip = $config.driverExternal2Ip
+            DriverOSType      = $config.driverOsType
+        } `
+        -GenerateConfigScript $generateScript `
+        -StorageContext $tempStorage.Context `
+        -ContainerName $tempStorage.ContainerName `
         -StorageAccountName $tempStorage.Name `
-        -StorageContext $ctx
-    $resultsConfig | ConvertTo-Json -Depth 3 | Set-Content -Path (Join-Path $tempPackagePath "ResultsUpload.json") -Force
-    Write-Output "   [OK] ResultsUpload.json generated"
-
-    # Create zip file
-    $tempZipPath = Join-Path $env:TEMP "DSC-Package-$(Get-Random).zip"
-    Compress-Archive -Path (Join-Path $tempPackagePath "*") -DestinationPath $tempZipPath -Force
-    Write-Output "   [OK] Created zip: $tempZipPath"
-
-    # Upload
-    $actualDscPackageZipUrl = Send-BlobWithSasUrl `
-        -FilePath $tempZipPath -BlobName "Domain-Package.zip" `
-        -ContainerName $containerName -StorageContext $ctx
-
-    # Cleanup temp files
-    Remove-Item $tempPackagePath -Recurse -Force
-    Remove-Item $tempZipPath -Force
+        -LocalGpoBackupPath (Join-Path $PSScriptRoot "..\..\..\Setup\Scripts\GPOBackup.zip")
 
 } elseif ($DscPackageZipUrl) {
     Write-Output "[OK] Using provided DscPackageZipUrl"
