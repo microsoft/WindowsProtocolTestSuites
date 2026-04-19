@@ -16,15 +16,12 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
 
         #region Properties
         public string TestFileName_LargeFile { get; set; }
-
         public uint SmallFileSizeInByte { get; set; }
         public uint ModerateFileSizeInByte { get; set; }
         public uint LargeFileSizeInByte { get; set; }
-
         public TimeSpan Smb2ConnectionTimeout { get; set; }
         public TimeSpan DisconnectionTimeout { get; set; }
         public SecurityPackageType SecurityPackageForSmb2UserAuthentication { get; set; }
-
         public string DomainName { get; set; }
         public string ServerName { get; set; }
         public string ShareFolder { get; set; }
@@ -34,28 +31,23 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         public Platform DriverPlatform { get; private set; }
         public string ClientRNicIp { get; set; }
         public string ServerRNicIp { get; set; }
-
         public string ClientNonRNicIp { get; set; }
         public string ServerNonRNicIp { get; set; }
-
         public int SmbdTcpPort { get; set; }
-
         public uint InboundEntries { get; set; }
         public uint OutboundEntries { get; set; }
         public uint InboundReadLimit { get; set; }
         public bool ReversedBufferDescriptor { get; set; }
-
         public uint ReceiveCreditMax { get; set; }
         public uint SendCreditTarget { get; set; }
         public uint MaxSendSize { get; set; }
         public uint MaxFragmentedSize { get; set; }
         public uint MaxReceiveSize { get; set; }
         public int KeepAliveInterval { get; set; }
-
         public bool CheckDataLengthRemainingDataLength { get; set; }
         public bool RdmaLayerLoggingEnabled { get; set; }
         public List<string> ActiveTDI { get; private set; }
-
+        public RDMATransport RDMATransport { get; private set; }
         #endregion
 
         public TestConfig(ITestSite testSite)
@@ -98,6 +90,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             {
                 throw new NotSupportedException(string.Format("PTF Configuration 'Endianness' with an unsupported value '{0}'.", endianness));
             }
+            this.RDMATransport = (RDMATransport)Enum.Parse(typeof(RDMATransport), site.Properties["RDMATransport"]);
             #endregion
 
             #region SMBD
@@ -228,5 +221,12 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         /// Windows 11 2024 v24H2
         /// </summary>
         Windows11V24H2 = 0x10000018
+    }
+
+    public enum RDMATransport
+    {
+        InfiniBand,
+        RoCE,
+        iWARP
     }
 }

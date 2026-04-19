@@ -209,85 +209,19 @@ if (-not $ClusterPackageZipUrl -and ((Test-Path $ClusterPackagePath) -or (Test-P
         Remove-Item $tempZipPath -Force
 
     } elseif (Test-Path $ClusterPackagePath) {
-        # Build package from DSC folder (or provided directory)
-        $isDscFolder = (Split-Path $ClusterPackagePath -Leaf) -eq 'DSC'
-        if ($isDscFolder) {
-            Write-Output "`n📦 Building Cluster-Package from local DSC folder: $ClusterPackagePath"
-        } else {
-            Write-Output "`n📦 Found Cluster-Package directory: $ClusterPackagePath"
-        }
-        Write-Output "   Generating Config.json and creating zip package..."
+        Write-Output "`n📦 Building Cluster-Package from: $ClusterPackagePath"
 
-        $tempPackagePath = Join-Path $env:TEMP "ClusterPackage-$(Get-Random)"
-        if ($isDscFolder) {
-            # DSC folder becomes Cluster-Package/DSC/
-            New-Item -ItemType Directory -Path $tempPackagePath -Force | Out-Null
-            Copy-Item -Path $ClusterPackagePath -Destination (Join-Path $tempPackagePath "DSC") -Recurse -Force
-            $configParams['OutputPath'] = Join-Path $tempPackagePath "Config.json"
-        } else {
-            Copy-Item -Path $ClusterPackagePath -Destination $tempPackagePath -Recurse -Force
-            $configParams['OutputPath'] = Join-Path $tempPackagePath "Config.json"
-        }
-        Write-Output "   ✅ Copied package to: $tempPackagePath"
-
-        # Overlay shared DSC files into package (shared is the source of truth)
-        $dscTarget = Join-Path $tempPackagePath "DSC"
-        $dscScriptsTarget = Join-Path $dscTarget "Scripts"
-        if (-not (Test-Path $dscScriptsTarget)) {
-            New-Item -ItemType Directory -Path $dscScriptsTarget -Force | Out-Null
-        }
-        $sharedDscPath = Join-Path $PSScriptRoot "..\shared\DSC"
-        if (Test-Path $sharedDscPath) {
-            # Root-level scripts (Deploy-DC.ps1, DC-Configuration.ps1, etc.)
-            foreach ($sharedFile in (Get-ChildItem -Path $sharedDscPath -Filter '*.ps1' -File)) {
-                Copy-Item -Path $sharedFile.FullName -Destination $dscTarget -Force
-            }
-            Write-Output "   ✅ Overlaid shared DSC root scripts"
-
-            # Scripts/ subfolder
-            $sharedScriptsPath = Join-Path $sharedDscPath "Scripts"
-            if (Test-Path $sharedScriptsPath) {
-                Copy-Item -Path "$sharedScriptsPath\*" -Destination $dscScriptsTarget -Recurse -Force
-                Write-Output "   ✅ Overlaid shared DSC/Scripts from: $sharedScriptsPath"
-            }
-        } else {
-            Write-Warning "Shared DSC folder not found at $sharedDscPath -- package may be incomplete"
-        }
-
-        # Download external assets (GPOBackup.zip, ParamConfig.json) into the package
-        $gpoSource = Join-Path $PSScriptRoot "..\..\Setup\Scripts\GPOBackup.zip"
-        Install-DscPackageAssets -ScriptsFolder $dscScriptsTarget -Scenario 'Cluster' `
-            -LocalGpoBackupPath $gpoSource
-
-        # Copy Tools.json to package root
-        $toolsSource = Join-Path $dscScriptsTarget "Tools.json"
-        if (Test-Path $toolsSource) {
-            Copy-Item -Path $toolsSource -Destination (Join-Path $tempPackagePath "Tools.json") -Force
-        }
-
-        & "$PSScriptRoot\..\shared\Generate-ConfigJson.ps1" @configParams
-        Write-Output "   ✅ Config.json generated"
-
-        # Copy generated Config.json into DSC\Scripts
-        Copy-Item (Join-Path $tempPackagePath "Config.json") -Destination "$dscScriptsTarget\Config.json" -Force
-        Write-Output "   ✅ Copied Config.json into DSC\Scripts"
-
-        # Generate ResultsUpload.json for test results upload
-        $resultsConfig = New-ResultsUploadConfig `
-            -StorageAccountName $tempStorage.Name -StorageContext $ctx
-        $resultsConfig | ConvertTo-Json -Depth 3 | Set-Content -Path (Join-Path $tempPackagePath "ResultsUpload.json") -Force
-        Write-Output "   ✅ ResultsUpload.json generated"
-
-        $tempZipPath = Join-Path $env:TEMP "Cluster-Package-$(Get-Random).zip"
-        Compress-Archive -Path (Join-Path $tempPackagePath "*") -DestinationPath $tempZipPath -Force
-        Write-Output "   ✅ Created zip: $tempZipPath"
-
-        $actualClusterPackageZipUrl = Send-BlobWithSasUrl `
-            -FilePath $tempZipPath -BlobName "Cluster-Package.zip" `
-            -ContainerName $containerName -StorageContext $ctx
-
-        Remove-Item $tempPackagePath -Recurse -Force
-        Remove-Item $tempZipPath -Force
+        $actualClusterPackageZipUrl = Build-DscPackage `
+            -DscFolderPath $ClusterPackagePath `
+            -SharedDscPath (Join-Path $PSScriptRoot "..\shared\DSC") `
+            -Scenario 'Cluster' `
+            -BlobName 'Cluster-Package.zip' `
+            -ConfigJsonParams $configParams `
+            -GenerateConfigScript (Join-Path $PSScriptRoot "..\shared\Generate-ConfigJson.ps1") `
+            -StorageContext $ctx `
+            -ContainerName $containerName `
+            -StorageAccountName $tempStorage.Name `
+            -LocalGpoBackupPath (Join-Path $PSScriptRoot "..\..\Setup\Scripts\GPOBackup.zip")
     }
 } else {
     Write-Output "✅ Using provided clusterPackageZipUrl: $ClusterPackageZipUrl"

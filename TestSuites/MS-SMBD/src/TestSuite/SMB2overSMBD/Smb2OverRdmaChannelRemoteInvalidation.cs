@@ -47,6 +47,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void BVT_Smb2OverRdma_Smb302_Write_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
+            if (smbdAdapter.TestConfig.RDMATransport == RDMATransport.RoCE)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case currently does not support RDMA RoCE transport.");
+            }
             if (smbdAdapter.TestConfig.Platform >= Platform.WindowsServer2025)
             {
                 BaseTestSite.Assert.Inconclusive("This test case currently does not support Windows Server 2025.");
@@ -102,6 +106,10 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [TestCategory("Smb2OverRdmaChannelInvalidate")]
         public void BVT_Smb2OverRdma_Smb302_Read_SMB2_CHANNEL_RDMA_V1_INVALIDATE()
         {
+            if(smbdAdapter.TestConfig.RDMATransport == RDMATransport.RoCE)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case currently does not support RDMA RoCE transport.");
+            }
             if (smbdAdapter.TestConfig.Platform >= Platform.WindowsServer2025)
             {
                 BaseTestSite.Assert.Inconclusive("This test case currently does not support Windows Server 2025.");
