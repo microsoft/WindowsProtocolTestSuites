@@ -406,6 +406,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
             PtfProperty propertyNode = GetPropertyNodeByName(propertyName);
             if (propertyNode == null) return false;
 
+            propertyNode.Value = string.Join(",", propertyValue);
+
             return true;
         }
 
