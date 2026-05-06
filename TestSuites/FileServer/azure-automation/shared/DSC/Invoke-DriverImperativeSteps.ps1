@@ -39,6 +39,10 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $isLinuxDriver = $IsLinux -eq $true
+# Azure CSE invokes pwsh as root without propagating HOME; downstream Join-Path $env:HOME fails with "Path is null".
+if ($isLinuxDriver -and [string]::IsNullOrWhiteSpace($env:HOME)) {
+    $env:HOME = '/root'
+}
 $scriptsPath = Join-Path $PSScriptRoot 'Scripts'
 $pathSep = [IO.Path]::PathSeparator
 $env:Path += "${pathSep}${WorkingPath}${pathSep}${scriptsPath}"
