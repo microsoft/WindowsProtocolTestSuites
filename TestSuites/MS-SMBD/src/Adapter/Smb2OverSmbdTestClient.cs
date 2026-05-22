@@ -117,7 +117,15 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 while (smb2Response == null
                     || smb2Response.Length == 0)
                 {
-                    smbdClient.ReceiveMessage(smb2ConnectionTimeout, out smb2Response);
+                    NtStatus ret = smbdClient.ReceiveMessage(smb2ConnectionTimeout, out smb2Response);
+                    if (ret != NtStatus.STATUS_SUCCESS)
+                    {
+                        if (ret == NtStatus.STATUS_IO_TIMEOUT || ret == NtStatus.STATUS_CONNECTION_DISCONNECTED)
+                        {
+                            throw new TimeoutException();
+                        }
+                        throw new InvalidOperationException($"Underlying RDMA connection error: {ret}");
+                    }
                 }
 
                 //SmbdClient.ReceiveSmbdMessage(response.Length, response);

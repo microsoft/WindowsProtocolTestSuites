@@ -575,6 +575,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 return NtStatus.STATUS_INTERNAL_ERROR;
             }
 
+            if (completion.status != 0) // IBV_WC_SUCCESS == 0
+            {
+                LogEvent($"RDMA receive work completion failed with status {completion.status}, vendor_err {completion.vendor_err}");
+                data = null;
+                return NtStatus.STATUS_CONNECTION_DISCONNECTED;
+            }
+
             // Find the entry by wr_id (slot_id)
             LogEvent($"Find the receive entry index: {(int)completion.wr_id} and len:{completion.byte_len}");
             int entryIndex = (int)completion.wr_id;
@@ -729,6 +736,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             if (postStatus != RdmaLinuxStatus.SUCCESS)
             {
                 LogEvent($"Failed to post receive: {postStatus}");
+                // Advance receiveIndex even on failure to avoid getting stuck on a busy slot
+                receiveIndex++;
+                if ((UInt64)receiveIndex >= inboundEntries)
+                {
+                    receiveIndex = 0;
+                }
                 return RdmaStatusConverter.ToNtStatus(postStatus);
             }
 
@@ -955,13 +968,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 {
                     continue;
                 }
-                // get memory window
-                if (mw.IsValid)
-                {
-                    NtStatus status = (NtStatus)RdmaEndpoint.WriteToMemory(mw.MemoryHandlerId, data);
-                    return status;
-                }
-                return NtStatus.STATUS_INVALID_PARAMETER_2;
+                // Local write uses MemoryHandlerId, which is independent of remote MW validity.
+                NtStatus status = (NtStatus)RdmaEndpoint.WriteToMemory(mw.MemoryHandlerId, data);
+                return status;
             }
             return NtStatus.STATUS_INVALID_PARAMETER_2;
 #endif
@@ -989,14 +998,10 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                     continue;
                 }
         
-                if (mw.IsValid)
-                {
-                    NtStatus status = linuxAdapter.ReadFromMemory(mw.MemoryHandlerId, data);
-                    LogEvent($"Linux RDMA read completed. Status: {status}");
-                    return status;
-                }
-        
-                return NtStatus.STATUS_INVALID_PARAMETER_2;
+                // Local read uses MemoryHandlerId, which is independent of remote MW validity.
+                NtStatus status = linuxAdapter.ReadFromMemory(mw.MemoryHandlerId, data);
+                LogEvent($"Linux RDMA read completed. Status: {status}");
+                return status;
             }
 
             return NtStatus.STATUS_INVALID_PARAMETER_2;
@@ -1009,14 +1014,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 {
                     continue;
                 }
-                // get memory window
-                if (mw.IsValid)
-                {
-
-                    NtStatus status = (NtStatus)RdmaEndpoint.ReadFromMemory(mw.MemoryHandlerId, data);
-                    return status;
-                }
-                return NtStatus.STATUS_INVALID_PARAMETER_2;
+                // Local read uses MemoryHandlerId, which is independent of remote MW validity.
+                NtStatus status = (NtStatus)RdmaEndpoint.ReadFromMemory(mw.MemoryHandlerId, data);
+                return status;
             }
 
             return NtStatus.STATUS_INVALID_PARAMETER_2;

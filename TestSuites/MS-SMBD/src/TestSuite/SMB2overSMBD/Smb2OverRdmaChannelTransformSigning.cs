@@ -72,10 +72,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify SMB2 can write file with large size over RDMA channel with AES_GMAC signing")]
         public void Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_AES_GMAC()
         {
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_SIGNING };
             WriteOverRdma_Signing(
                 smb2RdmaTransformIds: smb2RdmaTransformIds,
@@ -90,10 +86,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify SMB2 can write file with large size over RDMA channel with AES_CMAC signing")]
         public void Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_AES_CMAC()
         {
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_SIGNING };
             WriteOverRdma_Signing(
                 smb2RdmaTransformIds: smb2RdmaTransformIds,
@@ -132,10 +124,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify SMB2 write fails over RDMA channel when an invalid signature is sent")]
         public void Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_InvalidSignature_Fails()
         {
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_SIGNING };
             WriteOverRdma_Signing(
                 smb2RdmaTransformIds: smb2RdmaTransformIds,

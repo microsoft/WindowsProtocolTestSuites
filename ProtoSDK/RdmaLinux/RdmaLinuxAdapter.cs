@@ -1,12 +1,11 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
+// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -24,8 +23,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         ERROR_CONNECTION_CLOSED = -4,
         ERROR_NO_COMPLETION = -5,
         ERROR_RESOURCE = -6,
-        ERROR_BUSY= -7,
-
+        ERROR_BUSY = -7,
     }
 
     /// <summary>
@@ -59,6 +57,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         IBV_QPS_ERR = 6,   // Error
         IBV_QPS_UNKNOWN = -1
     }
+
     /// <summary>
     /// RDMA buffer descriptor for Linux implementation
     /// </summary>
@@ -136,17 +135,44 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
             ulong remote_addr,
             uint rkey);
 
+        [DllImport(NativeLibrary, EntryPoint = "post_write", CallingConvention = CallingConvention.Cdecl)]
+        public static extern RdmaLinuxStatus post_write(
+            IntPtr handle,
+            IntPtr local_buf,
+            IntPtr len,
+            ulong remote_addr,
+            uint rkey,
+            ulong wr_id);
+
+        [DllImport(NativeLibrary, EntryPoint = "post_read", CallingConvention = CallingConvention.Cdecl)]
+        public static extern RdmaLinuxStatus post_read(
+            IntPtr handle,
+            IntPtr local_buf,
+            IntPtr len,
+            ulong remote_addr,
+            uint rkey,
+            ulong wr_id);
+
         [DllImport(NativeLibrary, EntryPoint = "wait_for_disconnect", CallingConvention = CallingConvention.Cdecl)]
         public static extern RdmaLinuxStatus wait_for_disconnect(IntPtr handle, int timeout_seconds);
 
         [DllImport(NativeLibrary, EntryPoint = "invalidate_memory_window", CallingConvention = CallingConvention.Cdecl)]
         public static extern RdmaLinuxStatus invalidate_memory_window(IntPtr handle, long mwHandle, out ulong out_result_id);
+
+        [DllImport(NativeLibrary, EntryPoint = "check_invalidate_completion", CallingConvention = CallingConvention.Cdecl)]
+        public static extern RdmaLinuxStatus check_invalidate_completion(IntPtr handle, ulong result_id, int timeout_ms);
+
+        [DllImport(NativeLibrary, EntryPoint = "rdma_alloc_aligned", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr rdma_alloc_aligned(IntPtr size);
+
+        [DllImport(NativeLibrary, EntryPoint = "rdma_free_aligned", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void rdma_free_aligned(IntPtr ptr);
     }
 
     class RegisteredMr
     {
         public IntPtr MwHandle;     // Native MW handle
-        public IntPtr BufferPtr;    // AllocHGlobal
+        public IntPtr BufferPtr;    // Page-aligned native buffer address
         public bool IsDeregistered; // Life cycle status
         public int Length;
         public uint Token;
@@ -158,14 +184,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
     public class RdmaLinuxAdapter : IDisposable
     {
         private IntPtr clientHandle;
-        private bool isConnected = false;
-        private object syncLock = new object();
+        private volatile bool isConnected;
+        private readonly object connectionLock = new object();
+
         // Track registered memory regions to prevent premature deallocation
         private readonly Dictionary<long, RegisteredMr> registeredBuffers = new Dictionary<long, RegisteredMr>();
-        // Map wr_id (Slot ID) to mrHandle. 
-        // Needed to identify which buffer contains the data upon completion.
-        private readonly Dictionary<ulong, long> pendingReceiveHandles = new Dictionary<ulong, long>();
         private readonly Dictionary<uint, long> tokenToHandleMap = new Dictionary<uint, long>();
+        private readonly object mrLock = new object();
+
+        // Map wr_id (Slot ID) to mrHandle.
+        private readonly Dictionary<ulong, long> pendingReceiveHandles = new Dictionary<ulong, long>();
+        private readonly object recvLock = new object();
+
+        // Tracks active native calls to coordinate safe disconnect
+        private int activeNativeCalls = 0;
 
         /// <summary>
         /// Gets whether the adapter is connected
@@ -189,6 +221,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
             // Native library will be loaded when first operation is performed
         }
 
+        private void EnterNativeCall()
+        {
+            Interlocked.Increment(ref activeNativeCalls);
+        }
+
+        private void ExitNativeCall()
+        {
+            Interlocked.Decrement(ref activeNativeCalls);
+        }
+
         /// <summary>
         /// Connects to a remote RDMA server
         /// </summary>
@@ -197,19 +239,27 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         /// <returns>Connection status</returns>
         public RdmaLinuxStatus Connect(string serverIp, ushort port)
         {
-            lock (syncLock)
+            lock (connectionLock)
             {
                 if (isConnected)
                     return RdmaLinuxStatus.ERROR_GENERAL;
 
                 try
                 {
-                    var status = RdmaNative.rdma_connect_client(serverIp, port.ToString(), out clientHandle);
-                    if (status == RdmaLinuxStatus.SUCCESS)
+                    EnterNativeCall();
+                    try
                     {
-                        isConnected = true;
+                        var status = RdmaNative.rdma_connect_client(serverIp, port.ToString(), out clientHandle);
+                        if (status == RdmaLinuxStatus.SUCCESS)
+                        {
+                            isConnected = true;
+                        }
+                        return status;
                     }
-                    return status;
+                    finally
+                    {
+                        ExitNativeCall();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -224,7 +274,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         /// </summary>
         public void Disconnect()
         {
-            lock (syncLock)
+            IntPtr handleToDisconnect = IntPtr.Zero;
+            lock (connectionLock)
             {
                 LogDebug($"Attempting Disconnect. isConnected: {isConnected}, Handle: {clientHandle}");
 
@@ -235,35 +286,61 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
                     return;
                 }
 
-                foreach (var kvp in pendingReceiveHandles.ToList())
-                {
-                    try
-                    {
-                        DeregisterMemory(kvp.Value);
-                        LogDebug($"Cleaned up pending receive slot {kvp.Key}");
-                    }
-                    catch (Exception ex)
-                    {
-                        LogDebug($"Failed to deregister pending receive: {ex.Message}");
-                    }
-                }
-                pendingReceiveHandles.Clear();
-
-                IntPtr handleToDisconnect = clientHandle;
-                clientHandle = IntPtr.Zero;  
                 isConnected = false;
+                handleToDisconnect = clientHandle;
+                clientHandle = IntPtr.Zero;
+            }
 
+            // Wait for in-flight native calls to complete before destroying the native client
+            var waitStart = DateTime.UtcNow;
+            while (Interlocked.CompareExchange(ref activeNativeCalls, 0, 0) > 0)
+            {
+                Thread.Sleep(10);
+                if ((DateTime.UtcNow - waitStart).TotalSeconds > 10)
+                {
+                    LogDebug("Disconnect: Timeout waiting for active native calls to complete");
+                    break;
+                }
+            }
+
+            // Clean up pending receives
+            List<long> pendingMrHandles;
+            lock (recvLock)
+            {
+                pendingMrHandles = pendingReceiveHandles.Values.ToList();
+                pendingReceiveHandles.Clear();
+            }
+
+            foreach (var mrHandle in pendingMrHandles)
+            {
                 try
                 {
-                    if (handleToDisconnect != IntPtr.Zero)
-                    {
-                        RdmaNative.disconnect(handleToDisconnect);
-                    }
+                    DeregisterMemory(mrHandle);
                 }
                 catch (Exception ex)
                 {
-                    LogDebug($"RDMA disconnect exception: {ex.Message}");
+                    LogDebug($"Failed to deregister pending receive: {ex.Message}");
                 }
+            }
+
+            try
+            {
+                if (handleToDisconnect != IntPtr.Zero)
+                {
+                    EnterNativeCall();
+                    try
+                    {
+                        RdmaNative.disconnect(handleToDisconnect);
+                    }
+                    finally
+                    {
+                        ExitNativeCall();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"RDMA disconnect exception: {ex.Message}");
             }
         }
 
@@ -274,79 +351,84 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         /// <returns>Send status</returns>
         public RdmaLinuxStatus Send(byte[] data)
         {
-            lock (syncLock)
+            if (data == null)
+                return RdmaLinuxStatus.ERROR_INVALID_ARGUMENT;
+
+            IntPtr handle;
+            lock (connectionLock)
             {
                 if (!isConnected || clientHandle == IntPtr.Zero)
                 {
                     return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
                 }
+                handle = clientHandle;
+            }
 
-                long mrHandle = 0;
+            long mrHandle = 0;
+            try
+            {
+                uint rkey;
+                ulong address;
+
+                var regStatus = RegisterMemory(data,
+                    (uint)(RdmaLinuxAccessFlags.LOCAL_WRITE | RdmaLinuxAccessFlags.REMOTE_WRITE | RdmaLinuxAccessFlags.REMOTE_READ),
+                    out mrHandle,
+                    out rkey,
+                    out address);
+
+                if (regStatus != RdmaLinuxStatus.SUCCESS)
+                {
+                    LogDebug($"[Send] ERROR: Memory registration failed with status {regStatus}");
+                    return regStatus;
+                }
+
+                EnterNativeCall();
+                RdmaLinuxStatus sendStatus;
                 try
                 {
-                    uint rkey;
-                    ulong address;
-
-                    var regStatus = RegisterMemory(data,
-                        (uint)(RdmaLinuxAccessFlags.LOCAL_WRITE | RdmaLinuxAccessFlags.REMOTE_WRITE | RdmaLinuxAccessFlags.REMOTE_READ),
-                        out mrHandle,
-                        out rkey,
-                        out address);
-
-                    if (regStatus != RdmaLinuxStatus.SUCCESS)
-                    {
-                        LogDebug($"[Send] ERROR: Memory registration failed with status {regStatus}");
-                        return regStatus;
-                    }
-
-                    var sendStatus = RdmaNative.rdma_send(clientHandle, (IntPtr)address, (IntPtr)data.Length);
-
-                    if (sendStatus != RdmaLinuxStatus.SUCCESS)
-                    {
-                        LogDebug($"[Send] ERROR: rdma_send failed with status {sendStatus}");
-                        return sendStatus;
-                    }
-
-                    RdmaCompletion completion;
-                    var pollStatus = PollCompletion(out completion, timeoutMs: 5000, completion_type: (int)RdmaLinuxOPCode.Other);
-
-                    if (pollStatus != RdmaLinuxStatus.SUCCESS)
-                    {
-                        LogDebug($"[Send] ERROR: Poll completion failed with status {pollStatus}");
-                        return pollStatus;
-                    }
-
-                    if (completion.status != 0)
-                    {
-                        LogDebug($"[Send] ERROR: Send completion error detected: status={completion.status} (0x{completion.status:X}), vendor_err={completion.vendor_err}, opcode={completion.op_code}");
-                        return RdmaLinuxStatus.ERROR_GENERAL;
-                    }
-
-                    return RdmaLinuxStatus.SUCCESS;
-                }
-                catch (Exception ex)
-                {
-                    LogDebug($"[Send] EXCEPTION: {ex.GetType().Name}: {ex.Message}, StackTrace: {ex.StackTrace}");
-                    return RdmaLinuxStatus.ERROR_GENERAL;
+                    sendStatus = RdmaNative.rdma_send(handle, (IntPtr)address, (IntPtr)data.Length);
                 }
                 finally
                 {
-                    if (mrHandle != 0)
+                    ExitNativeCall();
+                }
+
+                if (sendStatus != RdmaLinuxStatus.SUCCESS)
+                {
+                    LogDebug($"[Send] ERROR: rdma_send failed with status {sendStatus}");
+                    return sendStatus;
+                }
+
+                RdmaCompletion completion;
+                var pollStatus = PollCompletion(out completion, timeoutMs: 5000, completion_type: (int)RdmaLinuxOPCode.Other);
+
+                if (pollStatus != RdmaLinuxStatus.SUCCESS)
+                {
+                    LogDebug($"[Send] ERROR: Poll completion failed with status {pollStatus}");
+                    return pollStatus;
+                }
+
+                if (completion.status != 0)
+                {
+                    LogDebug($"[Send] ERROR: Send completion error detected: status={completion.status} (0x{completion.status:X}), vendor_err={completion.vendor_err}, opcode={completion.op_code}");
+                    return RdmaLinuxStatus.ERROR_GENERAL;
+                }
+
+                return RdmaLinuxStatus.SUCCESS;
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"[Send] EXCEPTION: {ex.GetType().Name}: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return RdmaLinuxStatus.ERROR_GENERAL;
+            }
+            finally
+            {
+                if (mrHandle != 0)
+                {
+                    var deregStatus = DeregisterMemory(mrHandle);
+                    if (deregStatus != RdmaLinuxStatus.SUCCESS)
                     {
-                        LogDebug($"[Send] Cleanup: Deregistering memory handle {mrHandle}");
-                        var deregStatus = DeregisterMemory(mrHandle);
-                        if (deregStatus != RdmaLinuxStatus.SUCCESS)
-                        {
-                            LogDebug($"[Send] WARNING: Failed to deregister memory {mrHandle}, status={deregStatus}");
-                        }
-                        else
-                        {
-                            LogDebug($"[Send] Cleanup: Memory {mrHandle} deregistered successfully");
-                        }
-                    }
-                    else
-                    {
-                        LogDebug("[Send] Cleanup: No memory handle to deregister");
+                        LogDebug($"[Send] WARNING: Failed to deregister memory {mrHandle}, status={deregStatus}");
                     }
                 }
             }
@@ -365,162 +447,231 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
             address = 0;
             mrHandle = 0;
 
-            lock (syncLock)
+            if (buffer == null)
+                return RdmaLinuxStatus.ERROR_INVALID_ARGUMENT;
+
+            IntPtr handle;
+            lock (connectionLock)
             {
                 if (!isConnected || clientHandle == IntPtr.Zero)
                     return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
+                handle = clientHandle;
+            }
 
+            lock (recvLock)
+            {
                 if (pendingReceiveHandles.ContainsKey(slotId))
                 {
                     LogDebug($"[Critical Block] PostReceive failed: Slot {slotId} is BUSY (Pending Recv). Check completion logic.");
                     return RdmaLinuxStatus.ERROR_BUSY;
                 }
+            }
 
-                long tempMrHandle = 0;
+            long tempMrHandle = 0;
+            try
+            {
+                uint rkey;
+                var regStatus = RegisterMemory(buffer, (uint)(RdmaLinuxAccessFlags.LOCAL_WRITE | RdmaLinuxAccessFlags.REMOTE_WRITE | RdmaLinuxAccessFlags.REMOTE_READ),
+                                             out tempMrHandle, out rkey, out address);
+
+                if (regStatus != RdmaLinuxStatus.SUCCESS)
+                {
+                    LogDebug($"Failed to register receive buffer: {regStatus}");
+                    return regStatus;
+                }
+
+                EnterNativeCall();
+                RdmaLinuxStatus postStatus;
                 try
                 {
-                    uint rkey;
-                    var regStatus = RegisterMemory(buffer, (uint)(RdmaLinuxAccessFlags.LOCAL_WRITE | RdmaLinuxAccessFlags.REMOTE_WRITE | RdmaLinuxAccessFlags.REMOTE_READ),
-                                                 out tempMrHandle, out rkey, out address);
-
-                    if (regStatus != RdmaLinuxStatus.SUCCESS)
-                    {
-                        LogDebug($"Failed to register receive buffer: {regStatus}");
-                        return regStatus;
-                    }
-
-                    var postStatus = RdmaNative.post_receive(
-                        clientHandle,
+                    postStatus = RdmaNative.post_receive(
+                        handle,
                         (IntPtr)address,
                         (IntPtr)buffer.Length,
-                        slotId); // wr_id
-
-                    if (postStatus != RdmaLinuxStatus.SUCCESS)
-                    {
-                        LogDebug($"Failed to post receive: {postStatus}");
-                        DeregisterMemory(tempMrHandle);
-                        address = 0;
-                        mrHandle = 0;
-                        return postStatus;
-                    }
-
-                    pendingReceiveHandles[slotId] = tempMrHandle;
-
-                    mrHandle = tempMrHandle;
-
-                    return RdmaLinuxStatus.SUCCESS;
+                        slotId);
                 }
-                catch (Exception ex)
+                finally
                 {
-                    LogDebug($"PostReceive failed with exception: {ex.Message}");
-                    if (tempMrHandle != 0)
-                    {
-                        DeregisterMemory(tempMrHandle);
-                    }
-                    if (pendingReceiveHandles.ContainsKey(slotId))
-                    {
-                        pendingReceiveHandles.Remove(slotId);
-                    }
-                    return RdmaLinuxStatus.ERROR_GENERAL;
+                    ExitNativeCall();
                 }
+
+                if (postStatus != RdmaLinuxStatus.SUCCESS)
+                {
+                    LogDebug($"Failed to post receive: {postStatus}");
+                    DeregisterMemory(tempMrHandle);
+                    address = 0;
+                    mrHandle = 0;
+                    return postStatus;
+                }
+
+                lock (recvLock)
+                {
+                    pendingReceiveHandles[slotId] = tempMrHandle;
+                }
+
+                mrHandle = tempMrHandle;
+                return RdmaLinuxStatus.SUCCESS;
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"PostReceive failed with exception: {ex.Message}");
+                if (tempMrHandle != 0)
+                {
+                    DeregisterMemory(tempMrHandle);
+                }
+                lock (recvLock)
+                {
+                    pendingReceiveHandles.Remove(slotId);
+                }
+                return RdmaLinuxStatus.ERROR_GENERAL;
             }
         }
+
         /// <summary>
         /// Polls for RDMA completion events
         /// </summary>
         /// <param name="completion">Output: Completion information</param>
         /// <param name="timeoutMs">Timeout in milliseconds</param>
+        /// <param name="completion_type">Completion type (0=Recv, 1=Other)</param>
         /// <returns>Poll status</returns>
         public RdmaLinuxStatus PollCompletion(out RdmaCompletion completion, int timeoutMs, int completion_type)
         {
             completion = new RdmaCompletion();
-            lock (syncLock)
+
+            IntPtr handle;
+            lock (connectionLock)
             {
                 if (!isConnected || clientHandle == IntPtr.Zero)
                     return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
+                handle = clientHandle;
+            }
 
+            try
+            {
+                EnterNativeCall();
+                RdmaLinuxStatus status;
                 try
                 {
-                    RdmaLinuxStatus status = RdmaNative.poll_completion(clientHandle, out completion, timeoutMs, completion_type);
-                    if (status == RdmaLinuxStatus.SUCCESS && completion_type == (int)RdmaLinuxOPCode.Recv)
+                    status = RdmaNative.poll_completion(handle, out completion, timeoutMs, completion_type);
+                }
+                finally
+                {
+                    ExitNativeCall();
+                }
+
+                if (status == RdmaLinuxStatus.SUCCESS && completion_type == (int)RdmaLinuxOPCode.Recv)
+                {
+                    lock (recvLock)
                     {
                         pendingReceiveHandles.Remove(completion.wr_id);
                     }
-                    return status;
                 }
-                catch (Exception ex)
-                {
-                    LogDebug($"RDMA poll_completion failed: {ex.Message}");
-                    return RdmaLinuxStatus.ERROR_GENERAL;
-                }
+                return status;
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"RDMA poll_completion failed: {ex.Message}");
+                return RdmaLinuxStatus.ERROR_GENERAL;
             }
         }
+
+        /// <summary>
+        /// Receives data from a previously posted receive buffer
+        /// </summary>
+        /// <param name="data">Output: Received data</param>
+        /// <param name="timeoutMs">Timeout in milliseconds</param>
+        /// <returns>Receive status</returns>
         public RdmaLinuxStatus Receive(out byte[] data, int timeoutMs = 5000)
         {
             data = null;
-            lock (syncLock)
+
+            IntPtr handle;
+            lock (connectionLock)
             {
                 if (!isConnected || clientHandle == IntPtr.Zero)
                     return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
+                handle = clientHandle;
+            }
 
+            try
+            {
+                // Poll for completion of a previously posted receive
+                RdmaCompletion completion;
+
+                EnterNativeCall();
+                RdmaLinuxStatus status;
                 try
                 {
-                    // Poll for completion of a previously posted receive
-                    RdmaCompletion completion;
-                    var status = RdmaNative.poll_completion(clientHandle, out completion, timeoutMs, (int)RdmaLinuxOPCode.Recv);
+                    status = RdmaNative.poll_completion(handle, out completion, timeoutMs, (int)RdmaLinuxOPCode.Recv);
+                }
+                finally
+                {
+                    ExitNativeCall();
+                }
 
-                    if (status != RdmaLinuxStatus.SUCCESS)
+                if (status != RdmaLinuxStatus.SUCCESS)
+                {
+                    if (status != RdmaLinuxStatus.ERROR_TIMEOUT)
                     {
-                        if (status != RdmaLinuxStatus.ERROR_TIMEOUT)
-                        {
-                            LogDebug($"RDMA poll_completion failed: {status}");
-                        }
-                        return status;
+                        LogDebug($"RDMA poll_completion failed: {status}");
+                    }
+                    return status;
+                }
+
+                if (completion.status != 0) // IBV_WC_SUCCESS == 0
+                {
+                    LogDebug($"RDMA receive work completion failed with status {completion.status}, vendor_err {completion.vendor_err}");
+                    data = null;
+                    return RdmaLinuxStatus.ERROR_GENERAL;
+                }
+
+                long mrHandle = 0;
+                lock (recvLock)
+                {
+                    pendingReceiveHandles.TryGetValue(completion.wr_id, out mrHandle);
+                }
+
+                if (mrHandle != 0)
+                {
+                    RegisteredMr mr;
+                    lock (mrLock)
+                    {
+                        registeredBuffers.TryGetValue(mrHandle, out mr);
                     }
 
-                    // Check if data was actually received
-                    if (completion.byte_len > 0)
+                    if (mr.BufferPtr != IntPtr.Zero)
                     {
-                        if (pendingReceiveHandles.TryGetValue(completion.wr_id, out long mrHandle))
-                        {
-                            if (registeredBuffers.TryGetValue(mrHandle, out RegisteredMr mr))
-                            {
-                                data = new byte[completion.byte_len];
-                                Marshal.Copy(mr.BufferPtr, data, 0, (int)completion.byte_len);
-                            }
-                            else
-                            {
-                                LogDebug($"Critical: Buffer pointer not found for MR Handle {mrHandle}");
-                                status = RdmaLinuxStatus.ERROR_RESOURCE;
-                            }
-
-
-                            DeregisterMemory(mrHandle);
-                            pendingReceiveHandles.Remove(completion.wr_id);
-                        }
-                        else
-                        {
-                            // If we receive a completion for an ID we aren't tracking, it might be 
-                            // an internal protocol message or a logic error.
-                            LogDebug($"Warning: Received completion for unknown Slot ID (wr_id): {completion.wr_id}");
-
-                            // Return empty array to indicate success but no matching user data found
-                            data = new byte[0];
-                        }
+                        int copyLen = (int)Math.Min(completion.byte_len, (uint)mr.Length);
+                        data = new byte[copyLen];
+                        Marshal.Copy(mr.BufferPtr, data, 0, copyLen);
                     }
                     else
                     {
-                        // Zero-byte receive (sometimes used for pure signals/KeepAlives)
+                        LogDebug($"Critical: Buffer pointer not found for MR Handle {mrHandle}");
                         data = new byte[0];
                     }
 
-                    return RdmaLinuxStatus.SUCCESS;
+                    DeregisterMemory(mrHandle);
+
+                    lock (recvLock)
+                    {
+                        pendingReceiveHandles.Remove(completion.wr_id);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    LogDebug($"RDMA receive failed: {ex.Message}");
-                    return RdmaLinuxStatus.ERROR_GENERAL;
+                    // If we receive a completion for an ID we aren't tracking, it might be
+                    // an internal protocol message or a logic error.
+                    LogDebug($"Warning: Received completion for unknown Slot ID (wr_id): {completion.wr_id}");
+                    data = new byte[0];
                 }
+
+                return RdmaLinuxStatus.SUCCESS;
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"RDMA receive failed: {ex.Message}");
+                return RdmaLinuxStatus.ERROR_GENERAL;
             }
         }
 
@@ -540,56 +691,72 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
             rkey = 0;
             address = 0;
 
-            lock (syncLock)
+            if (buffer == null)
+                return RdmaLinuxStatus.ERROR_INVALID_ARGUMENT;
+
+            IntPtr handle;
+            lock (connectionLock)
             {
                 if (!isConnected || clientHandle == IntPtr.Zero)
                     return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
+                handle = clientHandle;
+            }
 
-                try
+            // Allocate a page-aligned (4K) native buffer for RDMA registration
+            IntPtr alignedBuf = RdmaNative.rdma_alloc_aligned((IntPtr)buffer.Length);
+            if (alignedBuf == IntPtr.Zero)
+            {
+                LogDebug("RDMA memory registration failed: unable to allocate aligned buffer");
+                return RdmaLinuxStatus.ERROR_RESOURCE;
+            }
+
+            // Copy managed data into the aligned buffer
+            Marshal.Copy(buffer, 0, alignedBuf, buffer.Length);
+
+            EnterNativeCall();
+            IntPtr mwHandle;
+            RdmaLinuxStatus status;
+            try
+            {
+                status = RdmaNative.register_memory_window(
+                    handle,
+                    alignedBuf,
+                    (IntPtr)buffer.Length,
+                    accessFlags,
+                    out mwHandle,
+                    out rkey);
+            }
+            finally
+            {
+                ExitNativeCall();
+            }
+
+            if (status == RdmaLinuxStatus.SUCCESS)
+            {
+                mrHandle = mwHandle.ToInt64();
+                address = (ulong)alignedBuf.ToInt64();
+
+                lock (mrLock)
                 {
-                    // Allocate and pin the buffer - this memory must persist until deregistration
-                    IntPtr bufferPtr = Marshal.AllocHGlobal(buffer.Length);
-                    Marshal.Copy(buffer, 0, bufferPtr, buffer.Length);
-
-                    IntPtr mwHandle;
-                    var status = RdmaNative.register_memory_window(
-                        clientHandle,
-                        bufferPtr,
-                        (IntPtr)buffer.Length,
-                        accessFlags,
-                        out mwHandle,
-                        out rkey);
-
-                    if (status == RdmaLinuxStatus.SUCCESS)
+                    // Track this buffer to prevent premature deallocation
+                    registeredBuffers[mrHandle] = new RegisteredMr
                     {
-                        mrHandle = mwHandle.ToInt64();
-                        address = (ulong)bufferPtr.ToInt64();
-
-                        // Track this buffer to prevent premature deallocation
-                        registeredBuffers[mrHandle] = new RegisteredMr
-                        {
-                            MwHandle = mwHandle,
-                            BufferPtr = bufferPtr,
-                            IsDeregistered = false,
-                            Length = buffer.Length,
-                            Token = rkey
-                        };
-                        tokenToHandleMap[rkey] = mwHandle.ToInt64();
-                    }
-                    else
-                    {
-                        // Registration failed, free the buffer immediately
-                        Marshal.FreeHGlobal(bufferPtr);
-                    }
-
-                    return status;
-                }
-                catch (Exception ex)
-                {
-                    LogDebug($"RDMA memory registration failed: {ex.Message}");
-                    return RdmaLinuxStatus.ERROR_GENERAL;
+                        MwHandle = mwHandle,
+                        BufferPtr = alignedBuf,
+                        IsDeregistered = false,
+                        Length = buffer.Length,
+                        Token = rkey
+                    };
+                    tokenToHandleMap[rkey] = mrHandle;
                 }
             }
+            else
+            {
+                // Registration failed, free aligned buffer immediately
+                RdmaNative.rdma_free_aligned(alignedBuf);
+            }
+
+            return status;
         }
 
         /// <summary>
@@ -599,52 +766,71 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         /// <returns>Deregistration status</returns>
         public RdmaLinuxStatus DeregisterMemory(long mrHandle)
         {
-            lock (syncLock)
+            RegisteredMr mr;
+            lock (mrLock)
             {
-                if (!registeredBuffers.TryGetValue(mrHandle, out RegisteredMr mr))
+                if (!registeredBuffers.TryGetValue(mrHandle, out mr))
                     return RdmaLinuxStatus.ERROR_INVALID_ARGUMENT;
 
                 if (mr.IsDeregistered)
                     return RdmaLinuxStatus.SUCCESS;
+            }
 
-                if (clientHandle == IntPtr.Zero)
-                {
-                    LogDebug($"DeregisterMemory: Connection already closed, cleaning local resources only");
-                    mr.IsDeregistered = true;
-                    try { Marshal.FreeHGlobal(mr.BufferPtr); } catch { }
-                    registeredBuffers.Remove(mrHandle);
-                    return RdmaLinuxStatus.SUCCESS;
-                }
-     
-                if (mr.IsDeregistered)
-                {
-                    // idempotent
-                    return RdmaLinuxStatus.SUCCESS;
-                }
+            // Capture state outside the lock for native call
+            bool shouldCallNative = false;
+            IntPtr nativeHandle = IntPtr.Zero;
+            IntPtr mwHandle = IntPtr.Zero;
 
-                RdmaLinuxStatus status;
+            lock (connectionLock)
+            {
+                nativeHandle = clientHandle;
+                shouldCallNative = nativeHandle != IntPtr.Zero;
+            }
+
+            lock (mrLock)
+            {
+                // Re-check in case another thread deregistered while we were waiting
+                if (!registeredBuffers.TryGetValue(mrHandle, out mr) || mr.IsDeregistered)
+                    return RdmaLinuxStatus.SUCCESS;
+
+                mwHandle = mr.MwHandle;
+                mr.IsDeregistered = true;
+            }
+
+            RdmaLinuxStatus status = RdmaLinuxStatus.SUCCESS;
+            if (shouldCallNative && mwHandle != IntPtr.Zero)
+            {
                 try
                 {
-                    status = RdmaNative.deregister_memory_window(clientHandle, mr.MwHandle);
+                    EnterNativeCall();
+                    try
+                    {
+                        status = RdmaNative.deregister_memory_window(nativeHandle, mwHandle);
+                    }
+                    finally
+                    {
+                        ExitNativeCall();
+                    }
                 }
                 catch
                 {
                     status = RdmaLinuxStatus.ERROR_GENERAL;
                 }
-
-                mr.IsDeregistered = true;
-
-                try
-                {
-                    Marshal.FreeHGlobal(mr.BufferPtr);
-                }
-                catch { }
-
-                registeredBuffers.Remove(mrHandle);
-
-                return status;
             }
+
+            lock (mrLock)
+            {
+                if (mr.BufferPtr != IntPtr.Zero)
+                {
+                    try { RdmaNative.rdma_free_aligned(mr.BufferPtr); } catch { }
+                }
+                registeredBuffers.Remove(mrHandle);
+                tokenToHandleMap.Remove(mr.Token);
+            }
+
+            return status;
         }
+
         /// <summary>
         /// Read data from the locally registered memory window.
         /// </summary>
@@ -653,11 +839,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         /// <returns>NTSTATUS status code</returns>
         public NtStatus ReadFromMemory(long memoryHandlerId, byte[] buffer)
         {
-            lock (syncLock)
+            if (buffer == null)
+                return NtStatus.STATUS_INVALID_PARAMETER_2;
+
+            lock (mrLock)
             {
                 if (!registeredBuffers.TryGetValue(memoryHandlerId, out var mr))
                 {
-                    return NtStatus.STATUS_INVALID_PARAMETER_2; 
+                    return NtStatus.STATUS_INVALID_PARAMETER_2;
                 }
                 if (mr.IsDeregistered || mr.BufferPtr == IntPtr.Zero)
                 {
@@ -684,7 +873,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         /// </summary>
         public IEnumerable<(uint Token, long MemoryHandlerId, bool IsValid, int Length)> EnumerateMemoryWindows()
         {
-            lock (syncLock)
+            lock (mrLock)
             {
                 foreach (var kvp in tokenToHandleMap)
                 {
@@ -713,48 +902,55 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
             if ((uint)localBuffer.Length > remoteDescriptor.Length)
                 return RdmaLinuxStatus.ERROR_INVALID_ARGUMENT;
 
-            lock (syncLock)
+            IntPtr handle;
+            lock (connectionLock)
             {
                 if (!isConnected || clientHandle == IntPtr.Zero)
                     return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
+                handle = clientHandle;
+            }
 
-                IntPtr localBufferPtr = IntPtr.Zero;
-                long mrHandle = 0;
+            long mrHandle = 0;
+            try
+            {
+                uint rkey;
+                ulong address;
+                var regStatus = RegisterMemory(localBuffer, (uint)(RdmaLinuxAccessFlags.LOCAL_WRITE | RdmaLinuxAccessFlags.REMOTE_WRITE | RdmaLinuxAccessFlags.REMOTE_READ),
+                                             out mrHandle, out rkey, out address);
+                LogDebug($"RegisterMemory for write: {regStatus}");
+                if (regStatus != RdmaLinuxStatus.SUCCESS)
+                    return regStatus;
 
+                EnterNativeCall();
+                RdmaLinuxStatus writeStatus;
                 try
                 {
-                    uint rkey;
-                    ulong address;
-                    var regStatus = RegisterMemory(localBuffer, (uint)(RdmaLinuxAccessFlags.LOCAL_WRITE | RdmaLinuxAccessFlags.REMOTE_WRITE | RdmaLinuxAccessFlags.REMOTE_READ),
-                                                 out mrHandle, out rkey, out address);
-                    LogDebug($"RegisterMemory for write: {regStatus}");
-                    if (regStatus != RdmaLinuxStatus.SUCCESS)
-                        return regStatus;
-
-                    localBufferPtr = (IntPtr)address;
-
-                    var writeStatus = RdmaNative.write(clientHandle, localBufferPtr,
+                    writeStatus = RdmaNative.write(handle, (IntPtr)address,
                         (IntPtr)localBuffer.Length, remoteDescriptor.Address, remoteDescriptor.Rkey);
-                    LogDebug($"Call Write : {writeStatus}");
-                    if (writeStatus != RdmaLinuxStatus.SUCCESS)
-                        return writeStatus;
-
-                    RdmaCompletion completion;
-                    var pollStatus = PollCompletion(out completion, timeoutMs: 5000, completion_type: (int)RdmaLinuxOPCode.Other);
-                    LogDebug($"PollCompletion for Write : {pollStatus}");
-                    return pollStatus;
-                }
-                catch (Exception ex)
-                {
-                    LogDebug($"RDMA write failed: {ex.Message}");
-                    return RdmaLinuxStatus.ERROR_GENERAL;
                 }
                 finally
                 {
-                    if (mrHandle != 0)
-                    {
-                        DeregisterMemory(mrHandle);
-                    }
+                    ExitNativeCall();
+                }
+                LogDebug($"Call Write : {writeStatus}");
+                if (writeStatus != RdmaLinuxStatus.SUCCESS)
+                    return writeStatus;
+
+                RdmaCompletion completion;
+                var pollStatus = PollCompletion(out completion, timeoutMs: 5000, completion_type: (int)RdmaLinuxOPCode.Other);
+                LogDebug($"PollCompletion for Write : {pollStatus}");
+                return pollStatus;
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"RDMA write failed: {ex.Message}");
+                return RdmaLinuxStatus.ERROR_GENERAL;
+            }
+            finally
+            {
+                if (mrHandle != 0)
+                {
+                    DeregisterMemory(mrHandle);
                 }
             }
         }
@@ -762,72 +958,96 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         /// <summary>
         /// Performs RDMA read operation
         /// </summary>
-        /// <param name="localBuffer">Local buffer</param>
+        /// <param name="localBuffer">Local buffer to receive data</param>
         /// <param name="remoteDescriptor">Remote buffer descriptor</param>
         /// <returns>Read status</returns>
         public RdmaLinuxStatus Read(byte[] localBuffer, RdmaLinuxBufferDescriptor remoteDescriptor)
         {
-            lock (syncLock)
+            if (localBuffer == null)
+                return RdmaLinuxStatus.ERROR_INVALID_ARGUMENT;
+
+            IntPtr handle;
+            lock (connectionLock)
             {
                 if (!isConnected || clientHandle == IntPtr.Zero)
                     return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
+                handle = clientHandle;
+            }
 
-                IntPtr localBufferPtr = IntPtr.Zero;
-                long mrHandle = 0;
+            long mrHandle = 0;
+            try
+            {
+                uint rkey;
+                ulong address;
+                var regStatus = RegisterMemory(localBuffer, (uint)(RdmaLinuxAccessFlags.LOCAL_WRITE | RdmaLinuxAccessFlags.REMOTE_WRITE | RdmaLinuxAccessFlags.REMOTE_READ),
+                                             out mrHandle, out rkey, out address);
+                LogDebug($"RegisterMemory for read: {regStatus}");
+                if (regStatus != RdmaLinuxStatus.SUCCESS)
+                    return regStatus;
 
+                EnterNativeCall();
+                RdmaLinuxStatus readStatus;
                 try
                 {
-                    uint rkey;
-                    ulong address;
-                    var regStatus = RegisterMemory(localBuffer, (uint)(RdmaLinuxAccessFlags.LOCAL_WRITE | RdmaLinuxAccessFlags.REMOTE_WRITE | RdmaLinuxAccessFlags.REMOTE_READ),
-                                                 out mrHandle, out rkey, out address);
-                    LogDebug($"RegisterMemory for read: {regStatus}");
-                    if (regStatus != RdmaLinuxStatus.SUCCESS)
-                        return regStatus;
-
-                    localBufferPtr = (IntPtr)address;
-
-                    var readStatus = RdmaNative.read(
-                        clientHandle,
-                        localBufferPtr,
+                    readStatus = RdmaNative.read(
+                        handle,
+                        (IntPtr)address,
                         (IntPtr)localBuffer.Length,
                         remoteDescriptor.Address,
                         remoteDescriptor.Rkey);
-                    LogDebug($"Call Read : {readStatus}");
-                    if (readStatus != RdmaLinuxStatus.SUCCESS)
-                        return readStatus;
-
-                    RdmaCompletion completion;
-                    var pollStatus = PollCompletion(out completion, timeoutMs: 5000, completion_type: (int)RdmaLinuxOPCode.Other);
-                    LogDebug($"PollCompletion for Read : {pollStatus}");
-                    if (pollStatus != RdmaLinuxStatus.SUCCESS)
-                        return pollStatus;
-
-                    Marshal.Copy(localBufferPtr, localBuffer, 0, localBuffer.Length);
-                    return RdmaLinuxStatus.SUCCESS;
-                }
-                catch (Exception ex)
-                {
-                    LogDebug($"RDMA read failed: {ex.Message}");
-                    return RdmaLinuxStatus.ERROR_GENERAL;
                 }
                 finally
                 {
-                    if (mrHandle != 0)
+                    ExitNativeCall();
+                }
+                LogDebug($"Call Read : {readStatus}");
+                if (readStatus != RdmaLinuxStatus.SUCCESS)
+                    return readStatus;
+
+                RdmaCompletion completion;
+                var pollStatus = PollCompletion(out completion, timeoutMs: 5000, completion_type: (int)RdmaLinuxOPCode.Other);
+                LogDebug($"PollCompletion for Read : {pollStatus}");
+                if (pollStatus != RdmaLinuxStatus.SUCCESS)
+                    return pollStatus;
+
+                // Copy data from the page-aligned buffer back to the managed array
+                if (mrHandle != 0)
+                {
+                    RegisteredMr mr;
+                    lock (mrLock)
                     {
-                        DeregisterMemory(mrHandle);
+                        registeredBuffers.TryGetValue(mrHandle, out mr);
                     }
+                    if (mr != null && mr.BufferPtr != IntPtr.Zero)
+                    {
+                        Marshal.Copy(mr.BufferPtr, localBuffer, 0, localBuffer.Length);
+                    }
+                }
+                return RdmaLinuxStatus.SUCCESS;
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"RDMA read failed: {ex.Message}");
+                return RdmaLinuxStatus.ERROR_GENERAL;
+            }
+            finally
+            {
+                if (mrHandle != 0)
+                {
+                    DeregisterMemory(mrHandle);
                 }
             }
         }
+
         /// <summary>
-        /// Checks if the connection is stll active
+        /// Checks if the connection is still active
         /// </summary>
-        /// <returns>True is connected, false otherwise.</returns>
+        /// <returns>True if connected, false otherwise.</returns>
         public bool IsConnectionActive()
         {
             return isConnected;
         }
+
         /// <summary>
         /// Notifies when the connection is disconnected
         /// </summary>
@@ -840,42 +1060,49 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
                 return true;
             }
 
-            if (clientHandle != IntPtr.Zero)
+            IntPtr handle;
+            lock (connectionLock)
             {
-                int timeoutSeconds = timeoutMs / 1000;
-                if (timeoutSeconds <= 0) timeoutSeconds = 1;
+                if (!isConnected || clientHandle == IntPtr.Zero)
+                {
+                    return true;
+                }
+                handle = clientHandle;
+            }
 
-                var status = RdmaNative.wait_for_disconnect(clientHandle, timeoutSeconds);
-                if (status == RdmaLinuxStatus.SUCCESS)
+            int timeoutSeconds = Math.Max(1, timeoutMs / 1000);
+
+            EnterNativeCall();
+            RdmaLinuxStatus status;
+            try
+            {
+                status = RdmaNative.wait_for_disconnect(handle, timeoutSeconds);
+            }
+            finally
+            {
+                ExitNativeCall();
+            }
+
+            if (status == RdmaLinuxStatus.SUCCESS || status == RdmaLinuxStatus.ERROR_CONNECTION_CLOSED)
+            {
+                lock (connectionLock)
                 {
-                    lock (syncLock)
-                    {
-                        isConnected = false;
-                    }
-                    LogDebug($"Disconnected detected by event listener");
-                    return true;
+                    isConnected = false;
                 }
-                else if (status == RdmaLinuxStatus.ERROR_TIMEOUT)
-                {
-                    LogDebug($"Timeout reached while waiting for disconnect event");
-                    return false;
-                }
-                else if (status == RdmaLinuxStatus.ERROR_CONNECTION_CLOSED)
-                {
-                    lock (syncLock)
-                    {
-                        isConnected = false;
-                    }
-                    LogDebug($"Connection error detected by event listener");
-                    return true;
-                }
+                LogDebug($"Disconnected detected by event listener");
+                return true;
+            }
+            else if (status == RdmaLinuxStatus.ERROR_TIMEOUT)
+            {
+                LogDebug($"Timeout reached while waiting for disconnect event");
+                return false;
             }
 
             return !isConnected;
         }
 
         /// <summary>
-        /// Invalidate the memory window 
+        /// Invalidate the memory window
         /// </summary>
         /// <param name="memoryHandlerId">Memory window handle</param>
         /// <param name="resultId">Output: Asynchronous operation result ID</param>
@@ -883,20 +1110,44 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         public RdmaLinuxStatus InvalidateMemoryWindow(long memoryHandlerId, out ulong resultId)
         {
             resultId = 0;
-            lock (syncLock)
+
+            IntPtr handle;
+            lock (connectionLock)
             {
                 if (!isConnected || clientHandle == IntPtr.Zero)
                     return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
+                handle = clientHandle;
+            }
 
+            lock (mrLock)
+            {
                 if (!registeredBuffers.TryGetValue(memoryHandlerId, out var mr))
                     return RdmaLinuxStatus.ERROR_INVALID_ARGUMENT;
 
-                var status = RdmaNative.invalidate_memory_window(
-                    clientHandle,
-                    memoryHandlerId,
-                    out resultId);
+                if (mr.IsDeregistered)
+                    return RdmaLinuxStatus.ERROR_INVALID_ARGUMENT;
+            }
 
-                return status;
+            try
+            {
+                EnterNativeCall();
+                try
+                {
+                    var status = RdmaNative.invalidate_memory_window(
+                        handle,
+                        memoryHandlerId,
+                        out resultId);
+                    return status;
+                }
+                finally
+                {
+                    ExitNativeCall();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"InvalidateMemoryWindow failed: {ex.Message}");
+                return RdmaLinuxStatus.ERROR_GENERAL;
             }
         }
 
@@ -905,31 +1156,48 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
         /// </summary>
         public RdmaLinuxStatus WaitForInvalidateCompletion(ulong resultId, int timeoutMs = 5000)
         {
-            var start = DateTime.UtcNow;
-            while ((DateTime.UtcNow - start).TotalMilliseconds < timeoutMs)
+            IntPtr handle;
+            lock (connectionLock)
             {
-                var status = PollCompletion(out var completion, 100, completion_type: 1);
-
-                if (status == RdmaLinuxStatus.SUCCESS && completion.wr_id == resultId)
-                {
-                    return completion.status == 0 ? RdmaLinuxStatus.SUCCESS : RdmaLinuxStatus.ERROR_GENERAL;
-                }
-
-                if (status != RdmaLinuxStatus.ERROR_TIMEOUT)
-                    return status;
+                if (!isConnected || clientHandle == IntPtr.Zero)
+                    return RdmaLinuxStatus.ERROR_CONNECTION_CLOSED;
+                handle = clientHandle;
             }
 
-            return RdmaLinuxStatus.ERROR_TIMEOUT;
+            try
+            {
+                EnterNativeCall();
+                try
+                {
+                    return RdmaNative.check_invalidate_completion(handle, resultId, timeoutMs);
+                }
+                finally
+                {
+                    ExitNativeCall();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogDebug($"WaitForInvalidateCompletion failed: {ex.Message}");
+                return RdmaLinuxStatus.ERROR_GENERAL;
+            }
         }
 
         /// <summary>
-        /// Logs debug information if logEndpointEvent is set
+        /// Logs debug information
         /// </summary>
         /// <param name="message">Debug message</param>
         private void LogDebug(string message)
         {
-            string logMessage = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [RdmaLinuxAdapter]{message}\r\n";
-            File.AppendAllText("rdma_debug.log", logMessage);
+            try
+            {
+                string logMessage = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [RdmaLinuxAdapter]{message}" + Environment.NewLine;
+                File.AppendAllText("rdma_debug.log", logMessage);
+            }
+            catch
+            {
+                // Ignore logging failures
+            }
         }
 
         #region IDisposable Implementation
@@ -942,21 +1210,24 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux
                 if (disposing)
                 {
                     // Dispose managed resources
+                    Disconnect();
                 }
-
-                // Dispose unmanaged resources
-                // Free all registered buffers
-                foreach (var mrHandle in registeredBuffers.Keys.ToList())
+                else
                 {
-                    try
+                    // Finalizer: do not block or call native disconnect.
+                    // Just release any pinned buffers so the GC isn't hindered.
+                    lock (mrLock)
                     {
-                        DeregisterMemory(mrHandle);
+                        registeredBuffers.Clear();
                     }
-                    catch { /* Ignore errors during cleanup */ }
+                    lock (recvLock)
+                    {
+                        pendingReceiveHandles.Clear();
+                    }
+                    isConnected = false;
+                    clientHandle = IntPtr.Zero;
                 }
-                registeredBuffers.Clear();
 
-                Disconnect();
                 disposed = true;
             }
         }
