@@ -1,6 +1,8 @@
 trigger: none
 variables:
 - group: Build Variables
+- name: advancedsecurity.codeql.language
+  value: csharp
 resources:
   repositories:
   - repository: template
