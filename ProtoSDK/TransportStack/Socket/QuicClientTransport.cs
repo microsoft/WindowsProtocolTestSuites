@@ -318,7 +318,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Transport
             {
                 ApplicationProtocols = new List<SslApplicationProtocol>() { ApplicationProtocol },
                 TargetHost = this.socketConfig.TargetName,
-                RemoteCertificateValidationCallback = (_, _, _, _) => true
+                RemoteCertificateValidationCallback = (_, _, _, _) => true // CodeQL [SM02184] SMB-over-QUIC test client transport connecting to a test SMB server that presents a test/self-signed certificate in the controlled protocol-test lab; this code never runs against production endpoints. Not a security boundary.
             };
         }
 

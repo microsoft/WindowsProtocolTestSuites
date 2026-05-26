@@ -27,7 +27,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         {
             // get sign key
             byte[] signatureData = Encoding.ASCII.GetBytes(ConstValue.SIGNATURE_KEY);
-            HMACMD5 hmacMd5 = new HMACMD5(key);
+            HMACMD5 hmacMd5 = new HMACMD5(key); // CodeQL [SM02200] Required by RFC 4757: the Kerberos hmac-md5 checksum (used by the rc4-hmac etype) computes a sign key as HMAC-MD5(key, SIGNATURE_KEY) per the spec. Protocol-test interop code, not a security boundary.
             byte[] signKey = hmacMd5.ComputeHash(signatureData);
             hmacMd5.Key = signKey;
 
