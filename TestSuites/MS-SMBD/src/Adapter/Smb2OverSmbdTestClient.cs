@@ -124,7 +124,6 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                         {
                             throw new TimeoutException();
                         }
-                        throw new InvalidOperationException($"Underlying RDMA connection error: {ret}");
                     }
                 }
 
