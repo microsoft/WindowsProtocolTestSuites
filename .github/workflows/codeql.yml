@@ -1,0 +1,123 @@
+name: "CodeQL Advanced"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: '23 7 * * 3'
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: windows-latest
+    timeout-minutes: 360
+    permissions:
+      security-events: write
+      packages: read
+      actions: read
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: csharp
+            build-mode: manual
+          - language: c-cpp
+            build-mode: manual
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        if: matrix.language == 'csharp'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Setup MSBuild
+        if: matrix.language == 'c-cpp'
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+
+      - name: Build C# solutions
+        if: matrix.language == 'csharp'
+        shell: pwsh
+        run: |
+          $solutions = @(
+            'ProtoSDK\MS-SMBD\Smbd.sln',
+            'ProtoSDK\RDMA\Rdma.sln',
+            'ProtoSDK\WebProxy\WebProxy.sln',
+            'ProtocolTestManager\PtmCli.sln',
+            'ProtocolTestManager\PTMService\PTMService.sln',
+            'ProtocolTestManager\Plugins\ADFSPIPPlugin\ADFSPIPPlugin.sln',
+            'ProtocolTestManager\Plugins\ADFamilyPlugin\ADFamilyPlugin.sln',
+            'ProtocolTestManager\Plugins\ADODPlugin\ADODPlugin.sln',
+            'ProtocolTestManager\Plugins\AZODPlugin\AZODPlugin.sln',
+            'ProtocolTestManager\Plugins\BranchCachePlugin\BranchCachePlugin.sln',
+            'ProtocolTestManager\Plugins\FileServerPlugin\FileServerPlugin.sln',
+            'ProtocolTestManager\Plugins\KerberosPlugin\KerberosPlugin.sln',
+            'ProtocolTestManager\Plugins\RDPClientPlugin\RDPClientPlugin.sln',
+            'ProtocolTestManager\Plugins\RDPServerPlugin\RDPServerPlugin.sln',
+            'ProtocolTestManager\Plugins\SMBDPlugin\SMBDPlugin.sln',
+            'TestSuites\ADFamily\src\AD_Server.sln',
+            'TestSuites\BranchCache\src\BranchCache.sln',
+            'TestSuites\FileServer\src\FileServer.sln',
+            'TestSuites\FileServer\ShareUtil\ShareUtil.sln',
+            'TestSuites\Kerberos\src\Kerberos_Server.sln',
+            'TestSuites\MS-ADFSPIP\src\MS-ADFSPIP_Client.sln',
+            'TestSuites\MS-ADOD\src\MS-ADOD_OD.sln',
+            'TestSuites\MS-AZOD\src\MS-AZOD_OD.sln',
+            'TestSuites\MS-SMBD\src\MS-SMBD_Server.sln',
+            'TestSuites\MS-WSP\src\MS-WSP_Server.sln',
+            'TestSuites\MS-XCA\src\MS-XCA.sln',
+            'TestSuites\MS-XCA\XcaTestApp\XcaTestApp.sln',
+            'TestSuites\RDP\Client\src\RDP_Client.sln',
+            'TestSuites\RDP\Server\src\RDP_Server.sln',
+            'TestSuites\RDP\RDPSUTControlAgent\CSharp\RDPSUTControlAgent.sln',
+            'TestSuites\RDP\Tools\RDPToolSet\RDPToolSet.sln'
+          )
+          foreach ($sln in $solutions) {
+            if (Test-Path $sln) {
+              Write-Host "=== Building $sln ==="
+              dotnet restore $sln
+              dotnet build $sln -c Release --no-restore /p:RunCodeAnalysis=false /p:TreatWarningsAsErrors=false
+              if ($LASTEXITCODE -ne 0) {
+                Write-Warning "Build failed for $sln (continuing)"
+              }
+            } else {
+              Write-Warning "Skipping missing $sln"
+            }
+          }
+
+      - name: Build C++ projects
+        if: matrix.language == 'c-cpp'
+        shell: pwsh
+        run: |
+          $projects = @(
+            'ProtoSDK\RDMA\Rdma.vcxproj',
+            'TestSuites\ADFamily\src\MS-FRS2\FRS2Stubs\MS-FRS2_ServerFRS2Stubs.vcxproj',
+            'TestSuites\ADFamily\src\RpcStubs\MS-DRSR\IMS_DRSR_RpcAdapter_RpcStubs.vcxproj'
+          )
+          foreach ($proj in $projects) {
+            if (Test-Path $proj) {
+              Write-Host "=== Building $proj ==="
+              msbuild $proj /p:Configuration=Release /p:Platform=x64 /m
+              if ($LASTEXITCODE -ne 0) {
+                Write-Warning "Build failed for $proj (continuing)"
+              }
+            }
+          }
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
