@@ -1,8 +1,6 @@
 trigger: none
 variables:
 - group: Build Variables
-- name: advancedsecurity.codeql.language
-  value: csharp
 resources:
   repositories:
   - repository: template
@@ -18,6 +16,9 @@ extends:
   parameters:
     settings:
       networkIsolationPolicy: Permissive,CFSClean,CFSClean2
+    sdl:
+      codeql:
+        language: csharp        # CodeQL3000: scan C# only; cpp/java are not built in this pipeline
     pool:
       name: Azure-Pipelines-1ESPT-ExDShared
       image: windows-2022
