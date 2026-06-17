@@ -1,6 +1,11 @@
 trigger: none
 variables:
 - group: Build Variables
+# Scope CodeQL3000 to C# (the only language built here); cpp/java auto-detect
+# but never compile, causing "no source code was built". Do NOT remove —
+# sdl.codeql.language is not an equivalent.
+- name: advancedsecurity.codeql.language
+  value: csharp
 resources:
   repositories:
   - repository: template

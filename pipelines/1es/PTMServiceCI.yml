@@ -6,6 +6,12 @@
 # No name found, setting the default value '$(Date:yyyyMMdd).$(Rev:r)'. This value determines how your pipeline runs are numbered. Update the name as needed: https://learn.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&tabs=yaml
 
 name: $(Date:yyyyMMdd).$(Rev:r)
+variables:
+  # Scope CodeQL3000 to C# (the only language built here); cpp/java auto-detect
+  # but never compile, causing "no source code was built". Do NOT remove —
+  # sdl.codeql.language is not an equivalent.
+  - name: advancedsecurity.codeql.language
+    value: csharp
 resources:
   repositories:
     - repository: 1esPipelines

@@ -25,6 +25,11 @@ variables:
   - name: system.debug
     value: false
   - group: Build Variables
+  # Scope CodeQL3000 to C# (the only language built here); cpp/java auto-detect
+  # but never compile, causing "no source code was built". Do NOT remove —
+  # sdl.codeql.language is not an equivalent.
+  - name: advancedsecurity.codeql.language
+    value: csharp
 schedules:
   - cron: 0 0 * * 6
     branches:
