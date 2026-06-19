@@ -13,12 +13,12 @@
 # is moot. The driver's Way B -> Way A migration is a separate orchestration-repo
 # workstream, out of scope here.
 #
-# Both required values are now resolved: projectId (§6.1 GUID) and pipelineId
+# Both required values are resolved: projectId (§6.1 GUID) and pipelineId
 # ("Agency Custom Compute" definition id 195772, registered in ADO under
-# \WindowsProtocolTestSuites\Code Generation). pipelineTrialMode: true keeps the
-# blast radius to work items tagged agency:pipelineTrialMode=true until validated.
-# Still outstanding before full rollout: the 3 queue-time pipeline UI variables
-# (Phase 2) and the §6.3 working-branch checkout in the pipeline YAML.
+# \WindowsProtocolTestSuites\Code Generation). The pipeline is validated
+# end-to-end (build 150080074), so pipelineTrialMode is now false — every
+# assigned work item routes to the custom pipeline, with no per-item
+# agency:pipelineTrialMode=true tag required.
 
 # metadata
 name: Agency custom pipeline configuration
@@ -40,6 +40,7 @@ configuration:
                                          # Registered in ADO under
                                          # \WindowsProtocolTestSuites\Code Generation
                                          # URL: …/_build?definitionId=195772
-      pipelineTrialMode: true            # SAFE ROLLOUT: only work items tagged
-                                         # agency:pipelineTrialMode=true use this pipeline.
-                                         # Remove (or set false) only after Phase 3 validation.
+      pipelineTrialMode: false           # FULL ROLLOUT: pipeline validated end-to-end
+                                         # (build 150080074). Every assigned work item now uses
+                                         # the custom pipeline; the per-item
+                                         # agency:pipelineTrialMode=true tag is no longer required.
