@@ -153,7 +153,8 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             uint nInboundEntries,
             uint nOutboundEntries,
             uint inboundReadLimit,
-            uint inboundDataSize
+            uint inboundDataSize,
+            NdspiVersion ndVersion = NdspiVersion.NDv2
             )
         {
             this.decoder.TransportType = Smb2TransportType.Rdma;
@@ -166,7 +167,8 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 nInboundEntries,
                 nOutboundEntries,
                 inboundReadLimit,
-                inboundDataSize
+                inboundDataSize,
+                ndVersion
                 );
         }
 

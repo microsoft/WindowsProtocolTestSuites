@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <targetframework>net8.0</targetframework>
@@ -35,12 +35,36 @@
   <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
     <DefineConstants>$(DefineConstants);LINUX</DefineConstants>
   </PropertyGroup>
+
+  <!--
+    On Windows the SMBD stack references BOTH Network Direct (NDSPI) wrappers at
+    the same time and selects between them in code at runtime (see
+    Rdma\RdmaAbstraction.cs / Rdma\RdmaNativeAdapters.cs), driven by the
+    NDVersion test configuration. The two wrappers expose an identical public
+    surface in namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma,
+    so they are disambiguated with `extern alias`:
+      RdmaNdv1 -> ..\RDMA\Rdma.vcxproj          (assembly ...FileAccessService.Rdma)
+      RdmaNdv2 -> ..\RDMANdv2\RDMANdv2.vcxproj  (assembly ...FileAccessService.RdmaNdv2)
+    PrivateAssets=all keeps these native references from flowing transitively to
+    projects that reference Smbd (e.g. the SMBD detector plugins, which reference
+    the NDv1 wrapper directly); without it those projects would see the same
+    Rdma types from two assemblies and fail to compile (CS0433). The runtime
+    copy of both DLLs still propagates to consumers.
+  -->
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Messages\Messages.csproj" />
-    <ProjectReference Include="..\RDMA\Rdma.vcxproj" Condition="'$(OS)' == 'Windows_NT'" />
+    <ProjectReference Include="..\RDMA\Rdma.vcxproj" Condition="'$(OS)' == 'Windows_NT'">
+      <Aliases>RdmaNdv1</Aliases>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\RDMANdv2\RDMANdv2.vcxproj" Condition="'$(OS)' == 'Windows_NT'">
+      <Aliases>RdmaNdv2</Aliases>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
     <ProjectReference Include="..\RdmaLinux\RdmaLinux.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Compile Include="..\..\AssemblyInfo\SharedAssemblyInfo.cs">
       <Link>SharedAssemblyInfo.cs</Link>

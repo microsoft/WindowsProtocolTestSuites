@@ -1,9 +1,6 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
+// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#if WINDOWS
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
-#endif
 using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.RdmaLinux;
 using System;
 using System.Collections.Generic;
@@ -24,11 +21,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         private ReceiveEntry[] receiveEntries;
 
 #if WINDOWS
-        private RdmaProviderInfo[] rdmaProvidersList;
-        private RdmaAdapter rdmaAdapter;
-        private RdmaCompletionQueue rdmaCompletionQueue;
-        private RdmaConnector rdmaConnector;
-        private RdmaEndpoint rdmaEndpoint;
+        private INativeRdmaService rdmaService;
+        private NdspiVersion ndVersion;
+        private INativeRdmaProviderInfo[] rdmaProvidersList;
+        private INativeRdmaAdapter rdmaAdapter;
+        private INativeRdmaCompletionQueue rdmaCompletionQueue;
+        private INativeRdmaConnector rdmaConnector;
+        private INativeRdmaEndpoint rdmaEndpoint;
 #else
         private RdmaLinuxAdapter linuxAdapter;
 #endif
@@ -123,14 +122,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             uint inboundReadLimit,
             uint outboundReadLimit,
             uint inboundDataSize,
-            SmbdLogEvent logEvent = null
+            SmbdLogEvent logEvent = null,
+            NdspiVersion ndVersion = NdspiVersion.NDv2
             )
         {
             this.logEndpointEvent = logEvent;
 
 #if WINDOWS
+            this.ndVersion = ndVersion;
+            this.rdmaService = RdmaServiceFactory.Create(ndVersion);
+            LogEvent(string.Format("Using NDSPI version {0}.", ndVersion));
             LogEvent("Loading the providers of registered network drivers.");
-            initializeStatus = (NtStatus)RdmaProvider.LoadRdmaProviders(out rdmaProvidersList);
+            initializeStatus = (NtStatus)rdmaService.LoadProviders(out rdmaProvidersList);
 
             this.inboundEntries = inboundEntries;
             this.outboundEntries = outboundEntries;
@@ -174,7 +177,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
             LogEvent(string.Format("{0} providers of registered network drivers have been load,", rdmaProvidersList.Length));
             int providerIndex = 0;
-            foreach (RdmaProviderInfo info in rdmaProvidersList)
+            foreach (INativeRdmaProviderInfo info in rdmaProvidersList)
             {
                 if (info != null)
                 {
@@ -380,7 +383,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             }
 
             // listen and get incoming connection request
-            RdmaListen listen;
+            INativeRdmaListen listen;
             NtStatus status = (NtStatus)rdmaAdapter.Listen(6/* tcp */, port, out listen);
             if (status != NtStatus.STATUS_SUCCESS)
             {
@@ -501,18 +504,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 #endif
 
 #if WINDOWS
-            RdmaSegment sge = new RdmaSegment();
+            NdSegment sge = new NdSegment();
             sge.Length = (uint)data.LongLength;
             sge.MemoryHandler = 0;
 
             // register memory
             rdmaAdapter.RegisterMemory(sge.Length, out sge.MemoryHandler);
             // Write data to memory
-            RdmaEndpoint.WriteToMemory(sge.MemoryHandler, data);
+            rdmaService.WriteToMemory(sge.MemoryHandler, data);
 
             // send
             UInt64 resultId;
-            NtStatus status = (NtStatus)rdmaEndpoint.Send(new RdmaSegment[] { sge }, out resultId);
+            NtStatus status = (NtStatus)rdmaEndpoint.Send(new NdSegment[] { sge }, out resultId);
             if (status != NtStatus.STATUS_SUCCESS)
             {
                 return status;
@@ -655,7 +658,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
             data = new byte[item.ResultInfo.BytesTransferred];
 
-            status = (NtStatus)RdmaEndpoint.ReadFromMemory(
+            status = (NtStatus)rdmaService.ReadFromMemory(
                 this.receiveEntries[item.EntryIndex].Segment.MemoryHandler,
                 data);
 
@@ -684,7 +687,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             receiveRequest.Type = RequestType.Receive;
 #if WINDOWS
             NtStatus ret = (NtStatus)rdmaEndpoint.Receive(
-                new RdmaSegment[] { receiveEntries[receiveIndex].Segment },
+                new NdSegment[] { receiveEntries[receiveIndex].Segment },
                 out receiveRequest.ResultId);
 
             if (ret != NtStatus.STATUS_SUCCESS)
@@ -845,7 +848,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             status = (NtStatus)rdmaEndpoint.Bind(
                 memoryWindow.MemoryHandlerId,
                 memoryWindow.RdmaMW,
-                (RdmaOperationReadWriteFlag)flag,
+                (RdmaReadWriteFlag)flag,
                 reversed,
                 out memoryWindow.BufferDescriptor, out resultId);
 
@@ -870,6 +873,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             {
                 return status;
             }
+
+            // NDSPI v2: the memory window token may only become valid after the
+            // Bind completion has been processed. Refresh the descriptor token
+            // now that the bind is complete. For NDSPI v1 the property returns
+            // the same token that was already placed in the descriptor.
+            memoryWindow.BufferDescriptor.Token = memoryWindow.RdmaMW.RemoteToken;
+            LogEvent(string.Format("Bind completion descriptor: Offset=0x{0:X16}, Token=0x{1:X8}, Length={2}",
+                memoryWindow.BufferDescriptor.Offset,
+                memoryWindow.BufferDescriptor.Token,
+                memoryWindow.BufferDescriptor.Length));
 
             this.memoryWindowList.Add(memoryWindow);
             bufferDescriptor = new RdmaBufferDescriptor
@@ -969,7 +982,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                     continue;
                 }
                 // Local write uses MemoryHandlerId, which is independent of remote MW validity.
-                NtStatus status = (NtStatus)RdmaEndpoint.WriteToMemory(mw.MemoryHandlerId, data);
+                NtStatus status = (NtStatus)rdmaService.WriteToMemory(mw.MemoryHandlerId, data);
                 return status;
             }
             return NtStatus.STATUS_INVALID_PARAMETER_2;
@@ -1015,7 +1028,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                     continue;
                 }
                 // Local read uses MemoryHandlerId, which is independent of remote MW validity.
-                NtStatus status = (NtStatus)RdmaEndpoint.ReadFromMemory(mw.MemoryHandlerId, data);
+                NtStatus status = (NtStatus)rdmaService.ReadFromMemory(mw.MemoryHandlerId, data);
                 return status;
             }
 
@@ -1065,12 +1078,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <param name="localIpAddress"></param>
         /// <param name="ipFamily">IP Family, IPv4 or IPv6</param>
         /// <returns></returns>
-        private RdmaAdapter OpenAdapter(
-            RdmaProviderInfo[] providers,
+        private INativeRdmaAdapter OpenAdapter(
+            INativeRdmaProviderInfo[] providers,
             string localIpAddress,
             AddressFamily ipFamily)
         {
-            RdmaAdapter adapter;
+            INativeRdmaAdapter adapter;
 
             if (providers == null)
             {
@@ -1078,7 +1091,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
 
                 return null;
             }
-            foreach (RdmaProviderInfo providerInfo in providers)
+            foreach (INativeRdmaProviderInfo providerInfo in providers)
             {
                 if (providerInfo.Provider == null)
                 {
@@ -1114,7 +1127,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
         /// <summary>
         /// output all addresses which are supported by the provider
         /// </summary>
-        private void OutputAddressInfoSupportedByProvider(RdmaProviderInfo providerInfo)
+        private void OutputAddressInfoSupportedByProvider(INativeRdmaProviderInfo providerInfo)
         {
             if (providerInfo == null)
             {
@@ -1122,7 +1135,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 return;
             }
 
-            RdmaAddress[] addressList;
+            NdAddress[] addressList;
             NtStatus status = (NtStatus)providerInfo.Provider.QueryAddressList(out addressList);
 
             if (status != NtStatus.STATUS_SUCCESS)
@@ -1147,7 +1160,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 addressList.Length,
                 providerInfo.Path));
             int addressIndex = 0;
-            foreach (RdmaAddress address in addressList)
+            foreach (NdAddress address in addressList)
             {
                 if (address == null)
                 {
@@ -1204,7 +1217,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 while (true)
                 {
                     UInt64 resultId;
-                    RdmaNetworkDirectResult ndResult;
+                    NdResult ndResult;
                     UInt64 size = rdmaCompletionQueue.GetResult(out resultId, out ndResult);
 
                     if (size == 0)
@@ -1336,7 +1349,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             receiveEntries = new ReceiveEntry[inboundEntries];
             for (int i = 0; (UInt64)i < inboundEntries; ++i)
             {
-                receiveEntries[i].Segment = new RdmaSegment();
+                receiveEntries[i].Segment = new NdSegment();
                 receiveEntries[i].Segment.Length = inboundDataSize;
                 receiveEntries[i].IsOccupied = false;
                 NtStatus ret = (NtStatus)rdmaAdapter.RegisterMemory(

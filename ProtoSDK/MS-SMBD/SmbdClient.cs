@@ -1,9 +1,6 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
+// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-#if WINDOWS
-using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Rdma;
-#endif
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -66,7 +63,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             uint nInboundEntries,
             uint nOutboundEntries,
             uint inboundReadLimit,
-            uint inboundDataSize
+            uint inboundDataSize,
+            NdspiVersion ndVersion = NdspiVersion.NDv2
             )
         {
             Connection = new SmbdConnection();
@@ -92,7 +90,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
                 inboundReadLimit,
                 OUTBOUND_READLIMIT,
                 inboundDataSize,
-                logEvent
+                logEvent,
+                ndVersion
                 );
             NtStatus ret = (NtStatus)Connection.Endpoint.ConnectToServerOverRdma(
                 clientIp, 
@@ -564,13 +563,13 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd
             RdmaBufferDescriptor rdmaDescriptor;
             uint readWriteFlag;
 #if WINDOWS
-            RdmaOperationReadWriteFlag winFlag;
+            RdmaReadWriteFlag winFlag;
             if (flag == SmbdBufferReadWrite.RDMA_READ_PERMISSION_FOR_WRITE_FILE)
-                winFlag = RdmaOperationReadWriteFlag.Read;
+                winFlag = RdmaReadWriteFlag.Read;
             else if (flag == SmbdBufferReadWrite.RDMA_WRITE_PERMISSION_FOR_READ_FILE)
-                winFlag = RdmaOperationReadWriteFlag.Write;
+                winFlag = RdmaReadWriteFlag.Write;
             else
-                winFlag = RdmaOperationReadWriteFlag.ReadAndWrite;
+                winFlag = RdmaReadWriteFlag.ReadAndWrite;
 
             readWriteFlag = (uint)winFlag;
 #else
