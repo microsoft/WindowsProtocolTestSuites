@@ -1063,6 +1063,7 @@ In this section, you will perform a procedure for preliminary configuration of t
       | **osVersion**                | The operating system of the RDP connection. This value can be set to **Windows** or **NonWindows**. <br/>Default value: **Windows** |
       | **RDPVersion**               | The RDP version in use.  Can also be set to version 7.0, 7.1, or 8.0. <br/>Default value: **8.1** |
       | **agentPort**                | The listening port of the SUT Agent. <br/>Default value: **4488** |
+      | **rdpSigningCertSubject**    | Subject of the self-signed code-signing certificate used to sign the generated `.RDP` files on the **SUT**. The certificate is created (or reused) in `Cert:\LocalMachine\My` and trusted in `Cert:\LocalMachine\Root` at setup time, and the resulting thumbprint is registered as a trusted `.rdp` publisher via the `TrustedCertThumbprints` machine policy. Together with `RedirectionWarningDialogVersion=1`, this suppresses the RDP file security dialog introduced by the April 2026 security update ([CVE-2026-26151](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-26151)) so that the scheduled tasks created by `Config-TerminalClient.ps1` can launch `mstsc.exe` unattended. Override the value if you want a specific publisher name to appear in the RDP dialog.<br/>Default value: **CN=WPTS RDP Test Signing** |
       |                              |                                      |
 
   4.  If Windows PowerShell is not running, start it by typing
