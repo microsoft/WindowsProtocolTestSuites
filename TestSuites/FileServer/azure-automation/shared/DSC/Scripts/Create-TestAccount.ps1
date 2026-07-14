@@ -2,8 +2,16 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 
-# TODO: Fetch ParamConfig from Storage Account
-param($workingDir = $PSScriptRoot, $protocolConfigFile = "$workingDir\Config.json", $parameterConfigFile = "$workingDir\ParamConfig.json")
+# Fetch ParamConfig.json from the public asset source if it isn't already present.
+# The one-click Deploy-to-Azure package omits ParamConfig.json (it holds test-account
+# credentials and the GitHub Release asset is public), so the VM retrieves it here at
+# deploy time. deploy.ps1 bakes it into its private package, so this fetch is skipped.
+param(
+    $workingDir = $PSScriptRoot,
+    $protocolConfigFile = "$workingDir\Config.json",
+    $parameterConfigFile = "$workingDir\ParamConfig.json",
+    $paramConfigSourceUrl = "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/configs/ParamConfig.json"
+)
 
 # Ensure net.exe stderr (e.g. invalid usernames with '@') does not become a
 # terminating error when the caller sets $ErrorActionPreference = 'Stop'.
@@ -37,10 +45,22 @@ if(!(Test-Path "$protocolConfigFile"))
 if(!(Test-Path "$parameterConfigFile"))
 {
     $parameterConfigFile = "$workingDir\ParamConfig.json"
-    if(!(Test-Path "$parameterConfigFile")) 
+    if(!(Test-Path "$parameterConfigFile"))
     {
-        .\Write-Error.ps1 "No ParamConfig.json found."
-        return $false
+        # Not baked into the package (public one-click path): fetch it now.
+        if ($paramConfigSourceUrl) {
+            .\Write-Info.ps1 "ParamConfig.json not found locally; downloading from source..."
+            . "$scriptPath\Get-RemoteFile.ps1"
+            # BITS-based download (follows 307/308 redirects, unlike Invoke-WebRequest on PS 5.1).
+            if (-not (Get-RemoteFile -Url $paramConfigSourceUrl -OutputPath $parameterConfigFile)) {
+                .\Write-Error.ps1 "Failed to download ParamConfig.json from '$paramConfigSourceUrl'."
+            }
+        }
+        if(!(Test-Path "$parameterConfigFile"))
+        {
+            .\Write-Error.ps1 "No ParamConfig.json found."
+            return $false
+        }
     }
 }
 #----------------------------------------------------------------------------

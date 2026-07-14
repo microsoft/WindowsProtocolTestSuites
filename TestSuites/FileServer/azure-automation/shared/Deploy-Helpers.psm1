@@ -1197,101 +1197,176 @@ function Build-DscPackage {
     # Use Write-Host for progress messages inside this function so they don't
     # pollute the return pipeline. The only value on the output stream must be
     # the SAS URL returned at the end.
-    Write-Host "   Building DSC package from: $DscFolderPath"
 
-    # Create temp directory for packaging (root = WorkingPath on the VM)
-    $tempPackagePath = Join-Path $env:TEMP "DscPackage-$(Get-Random)"
-    New-Item -ItemType Directory -Path $tempPackagePath -Force | Out-Null
-
-    # Copy source into the package. If the source IS a DSC folder (leaf name "DSC"),
-    # nest it as a subdirectory. If it's a full package directory (already contains
-    # a DSC/ subfolder), copy its contents directly.
-    $isDscFolder = (Split-Path $DscFolderPath -Leaf) -eq 'DSC'
-    if ($isDscFolder) {
-        $dscDestination = Join-Path $tempPackagePath "DSC"
-        Copy-Item -Path $DscFolderPath -Destination $dscDestination -Recurse -Force
-    } else {
-        Copy-Item -Path $DscFolderPath -Destination $tempPackagePath -Recurse -Force
-        $dscDestination = Join-Path $tempPackagePath "DSC"
-    }
-    Write-Host "   [OK] Copied source to package"
-
-    # Ensure DSC\Scripts target directory exists
-    $dscScriptsTarget = Join-Path $dscDestination "Scripts"
-    if (-not (Test-Path $dscScriptsTarget)) {
-        New-Item -ItemType Directory -Path $dscScriptsTarget -Force | Out-Null
-    }
-
-    # Overlay shared DSC files into package (shared is the source of truth)
-    if (Test-Path $SharedDscPath) {
-        # Root-level scripts (Deploy-DC.ps1, DC-Configuration.ps1, etc.)
-        foreach ($sharedFile in (Get-ChildItem -Path $SharedDscPath -Filter '*.ps1' -File)) {
-            Copy-Item -Path $sharedFile.FullName -Destination $dscDestination -Force
-        }
-        Write-Host "   [OK] Overlaid shared DSC root scripts"
-
-        # Scripts/ subfolder
-        $sharedScriptsPath = Join-Path $SharedDscPath "Scripts"
-        if (Test-Path $sharedScriptsPath) {
-            Copy-Item -Path "$sharedScriptsPath\*" -Destination $dscScriptsTarget -Recurse -Force
-            Write-Host "   [OK] Overlaid shared DSC/Scripts"
-        }
-    } else {
-        Write-Warning "Shared DSC folder not found at $SharedDscPath -- package may be incomplete"
-    }
-
-    # Download external assets (GPOBackup.zip, ParamConfig.json)
-    $assetParams = @{
-        ScriptsFolder = $dscScriptsTarget
-        Scenario      = $Scenario
-    }
-    if ($LocalGpoBackupPath) {
-        $assetParams['LocalGpoBackupPath'] = $LocalGpoBackupPath
-    }
-    Install-DscPackageAssets @assetParams
-
-    # Copy Tools.json to package root
-    $toolsSource = Join-Path $dscScriptsTarget "Tools.json"
-    if (Test-Path $toolsSource) {
-        Copy-Item -Path $toolsSource -Destination (Join-Path $tempPackagePath "Tools.json") -Force
-        Write-Host "   [OK] Copied Tools.json to package root"
-    } else {
-        Write-Warning "Tools.json not found at $toolsSource"
-    }
-
-    # Generate Config.json at package root
-    Write-Host "   Generating Config.json..."
-    $configJsonParams['OutputPath'] = Join-Path $tempPackagePath "Config.json"
-    & $GenerateConfigScript @configJsonParams | Out-Null
-    if (-not $?) { throw "Generate-ConfigJson.ps1 failed" }
-    Write-Host "   [OK] Config.json generated"
-
-    # Copy Config.json into DSC\Scripts (overwrite template so on-VM scripts find real values)
-    Copy-Item (Join-Path $tempPackagePath "Config.json") -Destination "$dscScriptsTarget\Config.json" -Force
-    Write-Host "   [OK] Copied Config.json into DSC\Scripts"
-
-    # Generate ResultsUpload.json for test results upload
+    # Generate ResultsUpload.json config (SAS-based write token for test results).
     $resultsConfig = New-ResultsUploadConfig `
         -StorageAccountName $StorageAccountName `
         -StorageContext $StorageContext
-    $resultsConfig | ConvertTo-Json -Depth 3 |
-        Set-Content -Path (Join-Path $tempPackagePath "ResultsUpload.json") -Force
-    Write-Host "   [OK] ResultsUpload.json generated"
 
-    # Zip and upload
+    # Assemble + zip the package. New-DscPackageZip holds the shared packaging
+    # logic reused by Publish-DscPackage.ps1 (public-blob publishing).
     $tempZipPath = Join-Path $env:TEMP "DscPackage-$(Get-Random).zip"
-    Compress-Archive -Path (Join-Path $tempPackagePath "*") -DestinationPath $tempZipPath -Force
-    Write-Host "   [OK] Created zip: $tempZipPath"
+    New-DscPackageZip `
+        -DscFolderPath $DscFolderPath `
+        -SharedDscPath $SharedDscPath `
+        -Scenario $Scenario `
+        -ConfigJsonParams $ConfigJsonParams `
+        -GenerateConfigScript $GenerateConfigScript `
+        -ResultsUploadConfig $resultsConfig `
+        -LocalGpoBackupPath $LocalGpoBackupPath `
+        -OutputZipPath $tempZipPath
 
     $sasUrl = Send-BlobWithSasUrl `
         -FilePath $tempZipPath -BlobName $BlobName `
         -ContainerName $ContainerName -StorageContext $StorageContext
 
     # Cleanup temp files
-    Remove-Item $tempPackagePath -Recurse -Force
-    Remove-Item $tempZipPath -Force
+    Remove-Item $tempZipPath -Force -ErrorAction SilentlyContinue
 
     return $sasUrl
+}
+
+function New-DscPackageZip {
+    <#
+    .SYNOPSIS
+        Assembles a DSC deployment package and compresses it to a zip file.
+
+    .DESCRIPTION
+        Pure packaging step with no Azure dependency. Follows the same pattern as
+        Build-DscPackage (copy DSC folder, overlay shared scripts, download external
+        assets, generate Config.json, copy Tools.json) but stops at a local zip file.
+
+        Shared by:
+          * Build-DscPackage       -- then uploads via SAS and returns a SAS URL.
+          * Publish-DscPackage.ps1 -- then uploads the zip to a public blob.
+
+        ResultsUpload.json is written only when -ResultsUploadConfig is supplied.
+        Publicly hosted packages MUST omit it, because it embeds a write-capable
+        SAS token that must never be published.
+
+    .PARAMETER ResultsUploadConfig
+        Optional hashtable (as returned by New-ResultsUploadConfig) serialized to
+        ResultsUpload.json at the package root. Omit for public packages.
+
+    .PARAMETER OutputZipPath
+        Absolute path of the zip file to create (overwritten if it exists).
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$DscFolderPath,
+
+        [Parameter(Mandatory)]
+        [string]$SharedDscPath,
+
+        [Parameter(Mandatory)]
+        [ValidateSet('Domain', 'Cluster', 'Workgroup')]
+        [string]$Scenario,
+
+        [Parameter(Mandatory)]
+        [hashtable]$ConfigJsonParams,
+
+        [Parameter(Mandatory)]
+        [string]$GenerateConfigScript,
+
+        [hashtable]$ResultsUploadConfig,
+
+        [string]$LocalGpoBackupPath = '',
+
+        [Parameter(Mandatory)]
+        [string]$OutputZipPath
+    )
+
+    Write-Host "   Building DSC package from: $DscFolderPath"
+
+    # Create temp directory for packaging (root = WorkingPath on the VM)
+    $tempPackagePath = Join-Path $env:TEMP "DscPackage-$(Get-Random)"
+    New-Item -ItemType Directory -Path $tempPackagePath -Force | Out-Null
+
+    try {
+        # Copy source into the package. If the source IS a DSC folder (leaf name "DSC"),
+        # nest it as a subdirectory. If it's a full package directory (already contains
+        # a DSC/ subfolder), copy its contents directly.
+        $isDscFolder = (Split-Path $DscFolderPath -Leaf) -eq 'DSC'
+        if ($isDscFolder) {
+            $dscDestination = Join-Path $tempPackagePath "DSC"
+            Copy-Item -Path $DscFolderPath -Destination $dscDestination -Recurse -Force
+        } else {
+            Copy-Item -Path $DscFolderPath -Destination $tempPackagePath -Recurse -Force
+            $dscDestination = Join-Path $tempPackagePath "DSC"
+        }
+        Write-Host "   [OK] Copied source to package"
+
+        # Ensure DSC\Scripts target directory exists
+        $dscScriptsTarget = Join-Path $dscDestination "Scripts"
+        if (-not (Test-Path $dscScriptsTarget)) {
+            New-Item -ItemType Directory -Path $dscScriptsTarget -Force | Out-Null
+        }
+
+        # Overlay shared DSC files into package (shared is the source of truth)
+        if (Test-Path $SharedDscPath) {
+            # Root-level scripts (Deploy-DC.ps1, DC-Configuration.ps1, etc.)
+            foreach ($sharedFile in (Get-ChildItem -Path $SharedDscPath -Filter '*.ps1' -File)) {
+                Copy-Item -Path $sharedFile.FullName -Destination $dscDestination -Force
+            }
+            Write-Host "   [OK] Overlaid shared DSC root scripts"
+
+            # Scripts/ subfolder
+            $sharedScriptsPath = Join-Path $SharedDscPath "Scripts"
+            if (Test-Path $sharedScriptsPath) {
+                Copy-Item -Path "$sharedScriptsPath\*" -Destination $dscScriptsTarget -Recurse -Force
+                Write-Host "   [OK] Overlaid shared DSC/Scripts"
+            }
+        } else {
+            Write-Warning "Shared DSC folder not found at $SharedDscPath -- package may be incomplete"
+        }
+
+        # Download external assets (GPOBackup.zip, ParamConfig.json)
+        $assetParams = @{
+            ScriptsFolder = $dscScriptsTarget
+            Scenario      = $Scenario
+        }
+        if ($LocalGpoBackupPath) {
+            $assetParams['LocalGpoBackupPath'] = $LocalGpoBackupPath
+        }
+        Install-DscPackageAssets @assetParams
+
+        # Copy Tools.json to package root
+        $toolsSource = Join-Path $dscScriptsTarget "Tools.json"
+        if (Test-Path $toolsSource) {
+            Copy-Item -Path $toolsSource -Destination (Join-Path $tempPackagePath "Tools.json") -Force
+            Write-Host "   [OK] Copied Tools.json to package root"
+        } else {
+            Write-Warning "Tools.json not found at $toolsSource"
+        }
+
+        # Generate Config.json at package root
+        Write-Host "   Generating Config.json..."
+        $configJsonParams['OutputPath'] = Join-Path $tempPackagePath "Config.json"
+        & $GenerateConfigScript @configJsonParams | Out-Null
+        if (-not $?) { throw "Generate-ConfigJson.ps1 failed" }
+        Write-Host "   [OK] Config.json generated"
+
+        # Copy Config.json into DSC\Scripts (overwrite template so on-VM scripts find real values)
+        Copy-Item (Join-Path $tempPackagePath "Config.json") -Destination "$dscScriptsTarget\Config.json" -Force
+        Write-Host "   [OK] Copied Config.json into DSC\Scripts"
+
+        # Generate ResultsUpload.json for test results upload (only when a config is
+        # supplied -- public packages must not embed a write-capable SAS token).
+        if ($ResultsUploadConfig) {
+            $ResultsUploadConfig | ConvertTo-Json -Depth 3 |
+                Set-Content -Path (Join-Path $tempPackagePath "ResultsUpload.json") -Force
+            Write-Host "   [OK] ResultsUpload.json generated"
+        }
+
+        # Zip the assembled package
+        if (Test-Path $OutputZipPath) { Remove-Item $OutputZipPath -Force }
+        Compress-Archive -Path (Join-Path $tempPackagePath "*") -DestinationPath $OutputZipPath -Force
+        Write-Host "   [OK] Created zip: $OutputZipPath"
+    }
+    finally {
+        Remove-Item $tempPackagePath -Recurse -Force -ErrorAction SilentlyContinue
+    }
 }
 
 Export-ModuleMember -Function @(
@@ -1315,6 +1390,7 @@ Export-ModuleMember -Function @(
     'Watch-Deployment',
     'Install-DscPackageAssets',
     'Build-DscPackage',
+    'New-DscPackageZip',
     'Enable-VmDiskEncryption',
     'Invoke-DiskEncryptionForVMs'
 )

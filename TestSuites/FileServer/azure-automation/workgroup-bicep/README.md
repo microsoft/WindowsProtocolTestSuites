@@ -4,6 +4,28 @@ This directory contains Azure Bicep templates for deploying the File Server Prot
 
 > **Choosing a scenario?** See the [top-level azure-automation README](../README.md) for a comparison of Domain vs. Cluster vs. Workgroup.
 
+## One-Click Deploy ("Deploy to Azure" button)
+
+For a demo/onboarding environment with **defaults**, deploy straight from the Azure Portal — no local clone, no PowerShell, no `deploy.ps1`:
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2Ffileserver-workgroup-deploy-button-v1%2FTestSuites%2FFileServer%2Fazure-automation%2Fworkgroup-bicep%2Fazuredeploy.json)
+
+> The button points at [`azuredeploy.json`](azuredeploy.json) served from `raw.githubusercontent.com` at the **`fileserver-workgroup-deploy-button-v1`** tag, and the template pulls its DSC package from the GitHub **Release** asset at the same tag. The button goes live once a maintainer cuts that release (see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button)).
+
+The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azuredeploy.json`](azuredeploy.json)). Enter an **admin password** and deploy; the Driver + SUT come up and tests run automatically — the same outcome as `deploy.ps1`, without the local build step.
+
+**How credentials stay safe.** The button consumes a **public**, pre-built DSC package. That package must never contain secrets, so its `Config.json` ships with a placeholder token (`#{ADMIN_PASSWORD}#`) instead of a password. At deploy time the VM's Custom Script Extension — running from the extension's *encrypted* `protectedSettings` — injects the real admin password (passed base64-encoded, then JSON-escaped) into `Config.json` via [`../shared/DSC/Scripts/Set-ConfigCredential.ps1`](../shared/DSC/Scripts/Set-ConfigCredential.ps1). The single admin password is reused for the local NonAdmin test account.
+
+**Scope & limitations (step 1 — defaults only):**
+- The baked `Config.json` is valid for the **default IP topology only**. Changing the IP parameters in the Portal form will not update the peer IPs inside the package. For custom topologies, use `deploy.ps1` (which rebuilds the package) until on-VM `Config.json` regeneration lands (step 2).
+- The package embeds a **fixed test-suite drop** (a snapshot) — appropriate for demo/onboarding, not for testing an arbitrary build.
+- Marketplace **image terms** for the SUT/Driver images may need to be accepted once per subscription (see the [top-level README](../README.md)); otherwise the deployment can fail on first use.
+- **Disk encryption is on by default** (`enableDiskEncryption=true`), which creates a Key Vault. If your subscription lacks the required permissions and the deployment fails at the encryption step, re-run with `enableDiskEncryption` set to **false** in the Portal form.
+- **VM sizes default to burstable (B-series):** driver `Standard_B4ms`, SUT `Standard_B8ms` — chosen for **broad regional availability** (fewest capacity errors) and low cost for demo/onboarding. Trade-off: the driver's CPU may throttle during long test runs, so runs can be slower than `deploy.ps1` (which uses compute-optimized sizes). For faster runs, change the VM sizes in the form or use `deploy.ps1`.
+- **VM capacity / quota** can still vary by region. If the deployment fails preflight with `SkuNotAvailable`, `AllocationFailed`, or `ZonalAllocationFailed`, pick a different **Region** (the template deploys into the resource group's region) or change the **driver/SUT VM size** in the form. Unlike `deploy.ps1`, the one-click button **cannot auto-retry across SKUs**, so this is a manual choice.
+
+**Publishing / updating the package + template** (maintainers): see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button) below.
+
 ## Architecture Overview
 
 ```
@@ -246,6 +268,55 @@ When a custom image ID is provided, it overrides the marketplace image. Leave em
 
 - **Auto-shutdown** is enabled by default at 20:00 UTC. If a test run takes longer than expected, VMs may shut down mid-test. Disable with `param enableAutoShutdown = false` in the bicepparam file, or adjust the time with `param autoShutdownTime = '2300'`.
 - **Azure Disk Encryption** is enabled by default. A Key Vault is created automatically for encryption keys. Skip with `-SkipDiskEncryption` if not needed or to speed up deployment.
+
+## Publishing the public package ("Deploy to Azure" button)
+
+> **Maintainers only.** The [one-click button](#one-click-deploy-deploy-to-azure-button) consumes two public artifacts, both pinned to the **`fileserver-workgroup-deploy-button-v1`** tag on the public GitHub repo:
+> - **Package** → a GitHub **Release asset**: `https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/<tag>/Workgroup-Package.zip`
+> - **Template** → the committed [`azuredeploy.json`](azuredeploy.json) served via `raw.githubusercontent.com/.../<tag>/...` — the committed file *is* the hosted template, so there is no separate template upload and no Bicep→JSON drift.
+>
+> This avoids anonymous Azure Storage entirely (SFI-friendly). Re-publish whenever the DSC scripts, `Config.json` shape, or `main.bicep` change.
+
+[`Publish-DscPackage.ps1`](Publish-DscPackage.ps1) builds the Workgroup package with a **credential-free** `Config.json` (password fields carry the `#{ADMIN_PASSWORD}#` token — see [How credentials stay safe](#one-click-deploy-deploy-to-azure-button)) and publishes it as the Release asset.
+
+**Prerequisites:** the [GitHub CLI](https://cli.github.com) (`gh auth login`) with permission to create releases on `microsoft/WindowsProtocolTestSuites`.
+
+```powershell
+# 1. Compile the template (keeps azuredeploy.json in sync with main.bicep)
+bicep build main.bicep --outfile azuredeploy.json
+
+# 2. Commit azuredeploy.json (with the tag's dscPackageZipUrl) and push, so the
+#    raw template at the tag is consistent with the package it points to.
+
+# 3. Cut the release + upload the package asset (idempotent; --clobber re-uploads)
+gh auth login
+.\Publish-DscPackage.ps1 -Tag fileserver-workgroup-deploy-button-v1 -Target <branch-or-sha>
+#  asset -> https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/fileserver-workgroup-deploy-button-v1/Workgroup-Package.zip
+#  raw   -> https://raw.githubusercontent.com/microsoft/WindowsProtocolTestSuites/fileserver-workgroup-deploy-button-v1/TestSuites/FileServer/azure-automation/workgroup-bicep/azuredeploy.json
+#  -> prints the Deploy to Azure button URL
+```
+
+Validate the package offline first (no GitHub calls) with `-SkipUpload`:
+
+```powershell
+.\Publish-DscPackage.ps1 -SkipUpload -OutputZipPath .\Workgroup-Package.zip
+```
+
+The script refuses to publish if `Config.json` does not contain the placeholder token — a guard against ever leaking a real credential into a public asset.
+
+**When bumping the tag:** publish to the new `-Tag`, then update the `dscPackageZipUrl` default in [`main.bicep`](main.bicep), recompile `azuredeploy.json`, and update the button URL in this README to the new tag. Old templates stay pinned to their old package. The publish script prints an `[OK]`/warning comparing its asset URL against `main.bicep`'s default, so a mismatch is caught before you deploy.
+
+### Testing against your own repo (before touching the public repo)
+
+Validate end-to-end without cutting a real wpts release: push to a **public** personal repo (private repos can't be fetched anonymously by the Portal or the VM's CSE), then point the script at it.
+
+```powershell
+# Place azuredeploy.json in your test repo (root is fine) and push it, then:
+.\Publish-DscPackage.ps1 -Repo <you>/<testrepo> -Tag test-v1 -Target main -TemplateRepoPath azuredeploy.json
+```
+
+- `-TemplateRepoPath` **must match where azuredeploy.json actually lives** in the test repo (`azuredeploy.json` for a root file; the default deep path is for the real wpts repo). A mismatch gives the Portal a 404 / "template not publicly accessible".
+- The template you deploy must reference **your** asset: either set `dscPackageZipUrl` in the Portal form to the printed asset URL, or edit your test repo's `azuredeploy.json` default and re-push (the script warns when they don't match).
 
 ## Comparison with Domain Deployment
 
