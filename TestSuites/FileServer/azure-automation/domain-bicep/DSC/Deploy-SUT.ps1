@@ -9,8 +9,7 @@
 .DESCRIPTION
     Uses registry-based step tracking with deferred reboots (matching workgroup patterns):
 
-    Step 0 -> 1: Pre-Domain-Join
-      DSC-Lite: Hosts file + firewall only (features need domain context later).
+    Step 0 -> 1: Domain Join
       Imperative: Domain join via domainjoin.ps1.
       -> Deferred reboot (TKFRSAR startup task + 90s shutdown)
 
@@ -144,6 +143,11 @@ if ($null -ne $staleReboot) {
 }
 
 $signalFile = "$dscFolder\Deploy-SUT.Completed.signal"
+# Persisted marker: Full DSC (features + shares + registry) is a mandatory postcondition,
+# but it runs in an earlier boot than the completion-signal write, so an in-memory flag is
+# lost across the reboot. Gate the completion signal on this marker so a failed Full DSC
+# (e.g. missing SMB shares) does not produce a green-but-broken SUT.
+$fullDscSignal = "$scriptsPath\SUT-FullDsc.Completed.signal"
 if (Test-Path $signalFile) {
     .\Write-Info.ps1 "[OK] SUT deployment already completed (signal file exists)." -ForegroundColor Green
     Remove-ResumeTask
@@ -151,7 +155,6 @@ if (Test-Path $signalFile) {
 }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-$phase1Ok = $false
 $phase3Ok = $false
 
 # ===========================================================================
@@ -185,31 +188,20 @@ if (Test-Path $configFile) {
 }
 
 # ===========================================================================
-# Step 0 -> 1: Hosts file + Domain Join
+# Step 0 -> 1: Domain Join
 # ===========================================================================
 if ($currentStep -lt 1) {
-    # DSC-Lite: Just hosts file and firewall (full DSC needs domain context)
-    .\Write-Info.ps1 "---- Phase 1a: DSC Lite (hosts + firewall) ----" -ForegroundColor Yellow
-    $phase1sw = [System.Diagnostics.Stopwatch]::StartNew()
+    # The complete SUT configuration includes features and shares that are valid only
+    # after domain join. Running it here was not a "lite" pass; it applied the full MOF,
+    # tolerated failures, and then repeated all resources after reboot.
+    .\Write-Info.ps1 "---- Phase 1: Domain Join ----" -ForegroundColor Yellow
     try {
-        . "$dscFolder\SUT-Configuration.ps1"
-        .\Write-Info.ps1 "Compiling SUT DSC configuration (config: $configFile)..." -ForegroundColor Cyan
-        SutConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
-        .\Write-Info.ps1 "Applying SUT DSC configuration (pre-join, partial)..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
-        .\Write-Info.ps1 "[OK] DSC Lite applied in $([math]::Round($phase1sw.Elapsed.TotalSeconds))s" -ForegroundColor Green
-    }
-    catch {
-        .\Write-Info.ps1 "[WARN] DSC had partial failures (expected pre-domain-join): $($_.Exception.Message)" -ForegroundColor Yellow
-        .\Write-Info.ps1 "Continuing -- will re-apply after domain join." -ForegroundColor Yellow
-    }
-    $phase1sw.Stop()
-    .\Write-Info.ps1 ""
-
-    # Imperative Step 1 -- Domain Join
-    .\Write-Info.ps1 "---- Phase 1b: Domain Join ----" -ForegroundColor Yellow
-    try {
-        & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath
+        # Capture the imperative result: Step 1 returns $false (not throw) on join failure,
+        # so an unchecked call would advance the step on a machine that never joined.
+        $joinResult = & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath | Select-Object -Last 1
+        if ($joinResult -ne $true) {
+            throw "Domain join step returned failure (SUT did not join)."
+        }
         .\Write-Info.ps1 "[OK] Domain join complete." -ForegroundColor Green
     }
     catch {
@@ -269,14 +261,17 @@ if ($currentStep -eq 1) {
         . "$dscFolder\SUT-Configuration.ps1"
         .\Write-Info.ps1 "Compiling SUT DSC configuration (full, config: $configFile)..." -ForegroundColor Cyan
         SutConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
+        # Clear any stale marker from a previous attempt so a FAILED apply in this run cannot
+        # be mistaken for success by the completion gate (which only tests for the file).
+        if (Test-Path $fullDscSignal) { Remove-Item -Path $fullDscSignal -Force -ErrorAction SilentlyContinue }
         .\Write-Info.ps1 "Applying full SUT DSC configuration..." -ForegroundColor Yellow
         Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
-        $phase1Ok = $true
+        "FULL DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $fullDscSignal -Force
         .\Write-Info.ps1 "[OK] Full DSC applied in $([math]::Round($phase2b.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
     catch {
         .\Write-Error.ps1 "[FAIL] Full DSC failed: $($_.Exception.Message)"
-        .\Write-Info.ps1 "Continuing with remaining steps..." -ForegroundColor Yellow
+        .\Write-Info.ps1 "Continuing with remaining steps (completion signal will be withheld until Full DSC succeeds)..." -ForegroundColor Yellow
     }
     $phase2b.Stop()
     .\Write-Info.ps1 ""
@@ -356,10 +351,30 @@ if ($currentStep -ge 2 -and -not (Test-Path $signalFile)) {
     .\Write-Info.ps1 "    Environment: $([math]::Round($phase3sw.Elapsed.TotalSeconds))s" -ForegroundColor DarkGray
     .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
 
-    if ($phase3Ok) {
+    # Postcondition (domain mode): the SUT must actually be domain-joined with a working
+    # secure channel before it is declared test-ready. Test-ComputerSecureChannel is used as a
+    # gate (must be true to signal ready); its known false-positive bias only risks a missed
+    # block, never a false block, so it is safe in this direction.
+    $membershipOk = $true
+    $domainMode = -not [string]::IsNullOrWhiteSpace($cfg.Core.DomainName) -and $cfg.Core.DomainName -ne 'Workgroup'
+    if ($domainMode) {
+        $partOfDomain = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
+        $secureOk = $false
+        try { $secureOk = Test-ComputerSecureChannel -ErrorAction Stop } catch { $secureOk = $false }
+        $membershipOk = $partOfDomain -and $secureOk
+        if (-not $membershipOk) {
+            .\Write-Info.ps1 "[FAIL] Domain membership/secure-channel postcondition not met (PartOfDomain=$partOfDomain, SecureChannel=$secureOk)." -ForegroundColor Red
+        }
+    }
+
+    if ($phase3Ok -and (Test-Path $fullDscSignal) -and $membershipOk) {
         "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
         .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
         Remove-ResumeTask
+    } elseif (-not $membershipOk) {
+        .\Write-Info.ps1 "[WARN] Signal file NOT written -- domain membership/secure channel not verified; SUT is not test-ready" -ForegroundColor Yellow
+    } elseif (-not (Test-Path $fullDscSignal)) {
+        .\Write-Info.ps1 "[WARN] Signal file NOT written -- Full DSC (features/shares/registry) did not succeed; SUT is not test-ready" -ForegroundColor Yellow
     } else {
         .\Write-Info.ps1 "[WARN] Signal file NOT written -- deployment incomplete" -ForegroundColor Yellow
     }

@@ -93,6 +93,15 @@ param(
     [ValidateSet("Windows", "Linux")]
     [string]$DriverOSType = "Windows",
 
+    # When set, marks Config.json so on-VM account creation gives EVERY test account
+    # the single admin password (Core.Password). The one-click Deploy-to-Azure button
+    # lets the operator pick an arbitrary password and the framework logs in all
+    # accounts with PasswordForAllUsers (= that password); without this, ParamConfig's
+    # baked per-account passwords would cause secondary-account logon failures. The
+    # pipeline/CLI leave this off, so their behavior is unchanged.
+    [Parameter(Mandatory=$false)]
+    [switch]$UnifyAccountPasswords,
+
     [Parameter(Mandatory=$true)]
     [string]$OutputPath
 )
@@ -415,6 +424,12 @@ elseif ($Scenario -eq "Cluster") {
 }
 
 # Convert to JSON and save
+# Opt-in flag for the one-click button path: create all test accounts with the
+# single admin password (see -UnifyAccountPasswords). Off by default.
+if ($UnifyAccountPasswords) {
+    $config.Core.UsePasswordForAllUsers = "true"
+}
+
 $jsonContent = $config | ConvertTo-Json -Depth 10
 $jsonContent | Out-File -FilePath $OutputPath -Encoding UTF8 -Force
 

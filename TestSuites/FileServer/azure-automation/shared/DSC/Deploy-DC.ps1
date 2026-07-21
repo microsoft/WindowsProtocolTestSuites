@@ -122,6 +122,23 @@ function Set-DeployStep {
     Set-ItemProperty -Path $rebootRegPath -Name $stepRegName -Value $Step -Type DWord -Force
 }
 
+# Marker so a deferred-reboot resume (still at step 0) doesn't replay the whole Phase 1a
+# DSC compile+apply -- it goes straight to the pending-reboot re-check + promotion instead.
+$phase1aRegName = 'Phase1aDscApplied'
+
+function Get-Phase1aApplied {
+    $val = Get-ItemProperty -Path $rebootRegPath -Name $phase1aRegName -ErrorAction SilentlyContinue
+    if ($val) { return [int]$val.$phase1aRegName } else { return 0 }
+}
+
+function Set-Phase1aApplied {
+    param([int]$Value)
+    if (-not (Test-Path $rebootRegPath)) {
+        New-Item -Path $rebootRegPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $rebootRegPath -Name $phase1aRegName -Value $Value -Type DWord -Force
+}
+
 $currentStep = Get-DeployStep
 .\Write-Info.ps1 "Current deploy step: $currentStep" -ForegroundColor DarkGray
 
@@ -169,23 +186,58 @@ if (Test-Path $configFile) {
 # Step 0 -> 1: DSC (features) + Promote DC
 # ===========================================================================
 if ($currentStep -lt 1) {
-    .\Write-Info.ps1 "---- Phase 1a: DSC Configuration (features + baseline) ----" -ForegroundColor Yellow
-    $phase1 = [System.Diagnostics.Stopwatch]::StartNew()
+    if ((Get-Phase1aApplied) -eq 1) {
+        # Resuming after the pending-reboot gate deferred a reboot: Phase 1a DSC already ran
+        # (features installed), so skip the idempotent replay and re-check the reboot flag below.
+        .\Write-Info.ps1 "---- Phase 1a: DSC already applied (resuming after pending-reboot); skipping re-apply ----" -ForegroundColor DarkGray
+    }
+    else {
+        .\Write-Info.ps1 "---- Phase 1a: DSC Configuration (features + baseline) ----" -ForegroundColor Yellow
+        $phase1 = [System.Diagnostics.Stopwatch]::StartNew()
 
-    try {
-        . "$dscFolder\DC-Configuration.ps1"
-        .\Write-Info.ps1 "Compiling DC DSC configuration (config: $configFile)..." -ForegroundColor Cyan
-        DcConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
-        .\Write-Info.ps1 "Applying DC DSC configuration..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
-        .\Write-Info.ps1 "[OK] DSC Phase 1 applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        try {
+            . "$dscFolder\DC-Configuration.ps1"
+            .\Write-Info.ps1 "Compiling DC DSC configuration (config: $configFile)..." -ForegroundColor Cyan
+            DcConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
+            .\Write-Info.ps1 "Applying DC DSC configuration..." -ForegroundColor Yellow
+            Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+            .\Write-Info.ps1 "[OK] DSC Phase 1 applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
+            # Mark Phase 1a done ONLY after a successful apply, so the pending-reboot resume skips
+            # the idempotent replay -- but a FAILED apply leaves the marker unset so a rerun
+            # re-applies DSC (repairing missing AD DS/features) before promotion is retried.
+            Set-Phase1aApplied -Value 1
+        }
+        catch {
+            .\Write-Error.ps1 "[FAIL] DSC Phase 1 failed: $($_.Exception.Message)"
+            .\Write-Info.ps1 "Continuing with imperative steps..." -ForegroundColor Yellow
+        }
+        $phase1.Stop()
+        .\Write-Info.ps1 ""
     }
-    catch {
-        .\Write-Error.ps1 "[FAIL] DSC Phase 1 failed: $($_.Exception.Message)"
-        .\Write-Info.ps1 "Continuing with imperative steps..." -ForegroundColor Yellow
+
+    # -- Pending-reboot gate BEFORE promotion --
+    # DSC Phase 1a installs AD-DS + features; a Windows servicing/feature operation can leave
+    # a pending-reboot flag. Install-ADDSForest refuses to start while a reboot is pending
+    # ("Role change is in progress or this computer needs to be restarted") and fails the whole
+    # deploy. Mirror the SUT's guard: if a reboot is pending, defer + resume. On resume the
+    # Phase1aDscApplied marker skips the DSC replay, the reboot flag is clear, and promotion
+    # proceeds. Bounded by the reboot circuit breaker.
+    $rebootPending = (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') -or
+                     (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') -or
+                     (Test-Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations')
+    if ($rebootPending) {
+        $currentRebootCount = Get-RebootCount
+        if ($currentRebootCount -ge $maxRebootCount) {
+            .\Write-Info.ps1 "[WARN] Reboot circuit breaker triggered ($currentRebootCount >= $maxRebootCount). Proceeding to promotion despite pending reboot." -ForegroundColor Red
+        } else {
+            Set-RebootCount -Count ($currentRebootCount + 1)
+            .\Write-Info.ps1 "[WARN] A reboot is pending after DSC feature install; promotion cannot start until it clears (reboot $($currentRebootCount + 1)/$maxRebootCount)." -ForegroundColor Yellow
+            .\Write-Info.ps1 "Scheduling deferred reboot and resume (DSC re-applies fast, then promotion proceeds)..." -ForegroundColor Yellow
+            Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-DC.ps1" `
+                -WorkingPath $WorkingPath -DscFolder $dscFolder
+            Pop-Location; Stop-Transcript; return
+        }
     }
-    $phase1.Stop()
-    .\Write-Info.ps1 ""
 
     # -- Imperative Step 1 (promote + tools) --
     .\Write-Info.ps1 "---- Phase 1b: Imperative Step 1 (DC Promotion) ----" -ForegroundColor Yellow
@@ -246,6 +298,7 @@ if ($currentStep -eq 1) {
     # -- Finish --
     Set-DeployStep -Step 2
     Set-RebootCount -Count 0
+    Set-Phase1aApplied -Value 0
 
     "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
     .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green

@@ -3,15 +3,15 @@
 
 <#
 .SYNOPSIS
-    Publishes the Workgroup DSC package + template for the one-click "Deploy to
-    Azure" button. Thin wrapper over the shared publisher (../shared/Publish-DscPackage.ps1).
+    Publishes the Domain DSC package + template for the one-click "Deploy to Azure"
+    button. Thin wrapper over the shared publisher (../shared/Publish-DscPackage.ps1).
 
 .EXAMPLE
     gh auth login
-    ./Publish-DscPackage.ps1 -Tag fileserver-workgroup-deploy-button-v1
+    ./Publish-DscPackage.ps1 -Tag fileserver-domain-deploy-button-v1
 
 .EXAMPLE
-    ./Publish-DscPackage.ps1 -SkipUpload -OutputZipPath .\Workgroup-Package.zip
+    ./Publish-DscPackage.ps1 -SkipUpload -OutputZipPath .\Domain-Package.zip
 #>
 [CmdletBinding(SupportsShouldProcess = $true)]
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', 'PasswordToken',
@@ -21,16 +21,16 @@ param(
     [string]$Repo = "microsoft/WindowsProtocolTestSuites",
 
     [Parameter(Mandatory = $false)]
-    [string]$Tag = "fileserver-workgroup-deploy-button-v1",
+    [string]$Tag = "fileserver-domain-deploy-button-v1",
 
     [Parameter(Mandatory = $false)]
     [string]$Target = "",
 
     [Parameter(Mandatory = $false)]
-    [string]$TemplateRepoPath = "TestSuites/FileServer/azure-automation/workgroup-bicep/azuredeploy.json",
+    [string]$TemplateRepoPath = "TestSuites/FileServer/azure-automation/domain-bicep/azuredeploy.json",
 
     [Parameter(Mandatory = $false)]
-    [string]$AssetName = "Workgroup-Package.zip",
+    [string]$AssetName = "Domain-Package.zip",
 
     [Parameter(Mandatory = $false)]
     [string]$AdminUsername = "testadmin",
@@ -38,7 +38,20 @@ param(
     [Parameter(Mandatory = $false)]
     [string]$PasswordToken = "#{ADMIN_PASSWORD}#",
 
+    # Domain identity -- MUST match the main.bicep parameter defaults.
+    [Parameter(Mandatory = $false)]
+    [string]$DomainName = "contoso.com",
+
+    [Parameter(Mandatory = $false)]
+    [string]$DomainNetBiosName = "CONTOSO",
+
     # Default IP topology -- MUST match the main.bicep parameter defaults.
+    [Parameter(Mandatory = $false)]
+    [string]$DCExternal1Ip = "192.168.1.10",
+
+    [Parameter(Mandatory = $false)]
+    [string]$DCExternal2Ip = "192.168.2.10",
+
     [Parameter(Mandatory = $false)]
     [string]$SutExternal1Ip = "192.168.1.11",
 
@@ -69,13 +82,16 @@ $ErrorActionPreference = "Stop"
 
 $DscFolderPath = if ([System.IO.Path]::IsPathRooted($DscFolderPath)) { $DscFolderPath } else { Join-Path $PSScriptRoot $DscFolderPath }
 
-# Workgroup Config.json parameters (password fields carry the placeholder token;
-# the single admin password is reused for the local NonAdmin account).
+# Domain Config.json parameters (password field carries the placeholder token;
+# domain-join uses Core.Username/Password against the DC).
 $configJsonParams = @{
-    Scenario          = 'Workgroup'
+    Scenario          = 'Domain'
     AdminUsername     = $AdminUsername
     AdminPassword     = $PasswordToken
-    LocalUserPassword = $PasswordToken
+    DomainName        = $DomainName
+    DomainNetBiosName = $DomainNetBiosName
+    DCExternal1Ip     = $DCExternal1Ip
+    DCExternal2Ip     = $DCExternal2Ip
     SutExternal1Ip    = $SutExternal1Ip
     SutExternal2Ip    = $SutExternal2Ip
     DriverExternal1Ip = $DriverExternal1Ip
@@ -88,13 +104,13 @@ $configJsonParams = @{
 
 $shared = Join-Path $PSScriptRoot "..\shared\Publish-DscPackage.ps1"
 & $shared `
-    -Scenario 'Workgroup' `
+    -Scenario 'Domain' `
     -ConfigJsonParams $configJsonParams `
     -DscFolderPath $DscFolderPath `
     -MainBicepPath (Join-Path $PSScriptRoot 'main.bicep') `
     -AssetName $AssetName `
     -TemplateRepoPath $TemplateRepoPath `
-    -PackageUrlParamName 'dscPackageZipUrl' `
+    -PackageUrlParamName 'domainPackageZipUrl' `
     -Repo $Repo -Tag $Tag -Target $Target `
     -PasswordToken $PasswordToken `
     -OutputZipPath $OutputZipPath `

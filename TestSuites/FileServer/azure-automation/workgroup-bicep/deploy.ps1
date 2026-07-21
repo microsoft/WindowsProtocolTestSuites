@@ -120,8 +120,9 @@ if ($SkipDiskEncryption) {
 
 Write-Output "   Location (from bicepparam): $($config.location)"
 
-# Create or validate the resource group (uses location from bicepparam)
-Initialize-ResourceGroup -ResourceGroupName $ResourceGroupName -Location $config.location
+# Post-deploy Azure Disk Encryption runs only when the bicepparam enables it
+# (otherwise no Key Vault exists) and -SkipDiskEncryption was not passed.
+$diskEncryptionRequested = (-not $SkipDiskEncryption) -and ($templateParams['enableDiskEncryption'] -ne $false)
 
 $generateScript = Join-Path $PSScriptRoot "..\shared\Generate-ConfigJson.ps1"
 
@@ -139,17 +140,18 @@ if (-not $Resume) {
 # any Azure resources (storage accounts, VMs, etc.)
 # ===========================================================================
 
-Write-Output "`nValidating VM sizes and OS images in $config.location..."
+Write-Output "`nValidating VM sizes and OS images in $($config.location)..."
 
 # Fetch all VM SKUs for the region (single API call, reused for both checks)
 $vmSkus = Get-AzComputeResourceSku -Location $config.location |
     Where-Object { $_.ResourceType -eq 'virtualMachines' }
 
-# Resolve driver VM size (with fallbacks for capacity-constrained regions)
-$driverFallbacks = @('Standard_F4s_v2', 'Standard_D4s_v6', 'Standard_D4as_v6', 'Standard_D4s_v5', 'Standard_D4as_v5')
+# Resolve driver VM size (with fallbacks for capacity-constrained regions).
+# The per-role fallback lists are data, not code: ../shared/parameters/VmSizeFallbacks.psd1.
+$vmSizeFallbacks = Import-PowerShellDataFile (Join-Path $PSScriptRoot '..\shared\parameters\VmSizeFallbacks.psd1')
 $driverCandidates = Resolve-AvailableVmSize `
     -PreferredSize $templateParams['driverVmSize'] `
-    -FallbackSizes $driverFallbacks `
+    -FallbackSizes $vmSizeFallbacks.Driver `
     -AvailableSkus $vmSkus `
     -Role 'Driver' `
     -ReturnAll
@@ -158,10 +160,9 @@ $templateParams['driverVmSize'] = $resolvedDriverSize
 Write-Host "   Driver VM size: $resolvedDriverSize$(if ($driverCandidates.Count -gt 1) { " (+$($driverCandidates.Count - 1) fallbacks)" })"
 
 # Resolve SUT VM size
-$sutFallbacks = @('Standard_D8s_v6', 'Standard_D8as_v6', 'Standard_D8s_v5', 'Standard_D8as_v5', 'Standard_D8s_v4')
 $sutCandidates = Resolve-AvailableVmSize `
     -PreferredSize $templateParams['sutVmSize'] `
-    -FallbackSizes $sutFallbacks `
+    -FallbackSizes $vmSizeFallbacks.SUT `
     -AvailableSkus $vmSkus `
     -Role 'SUT' `
     -ReturnAll
@@ -189,7 +190,7 @@ if (-not $templateParams['driverCustomImageId']) {
     if ($driverImgOk) {
         Write-Output "   Driver image: $driverImgLabel"
     } else {
-        Write-Error "Driver image '$driverImgLabel' is not available in $config.location. Change driverOsVersion in the bicepparam file or deploy to a different region."
+        Write-Error "Driver image '$driverImgLabel' is not available in $($config.location). Change driverOsVersion in the bicepparam file or deploy to a different region."
     }
 }
 
@@ -200,7 +201,7 @@ if (-not $templateParams['sutCustomImageId']) {
     if ($sutImgOk) {
         Write-Output "   SUT image: $sutImgLabel"
     } else {
-        Write-Error "SUT image '$sutImgLabel' is not available in $config.location. Change sutOsVersion in the bicepparam file or deploy to a different region."
+        Write-Error "SUT image '$sutImgLabel' is not available in $($config.location). Change sutOsVersion in the bicepparam file or deploy to a different region."
     }
 }
 
@@ -234,6 +235,46 @@ if ($templateParams['enableAutoShutdown'] -eq $true) {
 }
 
 } # end if (-not $Resume) -- pre-flight validation
+
+# ===========================================================================
+# Validation-only gate -- BEFORE any resource creation (resource group, storage
+# account, package upload). ARM template validation needs an existing resource
+# group, so it runs only when one is already there.
+# ===========================================================================
+if ($ValidateOnly) {
+    if (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue) {
+        Write-Output "`nValidating Bicep template against existing resource group..."
+        $validationParams = @{} + $templateParams
+        $validationParams['adminPassword'] = $AdminPassword
+
+        $validationResult = Test-AzResourceGroupDeployment `
+            -ResourceGroupName $ResourceGroupName `
+            -TemplateFile $templateFile `
+            -TemplateParameterObject $validationParams `
+            -ErrorAction SilentlyContinue
+
+        if ($validationResult) {
+            # Capacity/SKU errors are handled by the deployment-time retry loop
+            $nonCapacityErrors = $validationResult | Where-Object {
+                $_.Code -notmatch 'SkuNotAvailable|ZonalAllocationFailed|AllocationFailed'
+            }
+            if ($nonCapacityErrors) {
+                Write-Error "Template validation failed:`n$($nonCapacityErrors | ForEach-Object { "  - [$($_.Code)] $($_.Message)" } | Out-String)"
+                exit 1
+            }
+            Write-Warning "Template validation returned capacity warnings (SkuNotAvailable) -- the deployment retry loop will handle these."
+        } else {
+            Write-Output "[OK] Template validation passed"
+        }
+    } else {
+        Write-Output "`nResource group '$ResourceGroupName' does not exist yet; skipping ARM template validation (pre-flight SKU/quota/image checks passed)."
+    }
+    Write-Output "Validation-only mode: no resources were created."
+    return
+}
+
+# Create or validate the resource group (uses location from bicepparam)
+Initialize-ResourceGroup -ResourceGroupName $ResourceGroupName -Location $config.location
 
 # Handle DSC package upload
 $actualDscPackageZipUrl = $DscPackageZipUrl
@@ -273,6 +314,10 @@ if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
             DriverExternal2Ip = $config.driverExternal2Ip
             LocalUserPassword = $plainLocalUserPassword
             DriverOSType      = $config.driverOsType
+            # Create every test account with the single admin password so secondary
+            # accounts match the framework's PasswordForAllUsers (works for any chosen
+            # password; a no-op when the admin password already matches ParamConfig).
+            UnifyAccountPasswords = $true
         } `
         -GenerateConfigScript $generateScript `
         -StorageContext $tempStorage.Context `
@@ -287,6 +332,13 @@ if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
 # Resume mode: Reconfigure existing VMs without full Bicep redeployment
 # ===========================================================================
 if ($Resume) {
+    # The on-VM resume script downloads the package from this URL; failing here is
+    # clearer than an Invoke-WebRequest error surfacing inside the VM run-command.
+    if (-not $actualDscPackageZipUrl) {
+        Write-Error "Resume requires a package: no local DSC folder was found to package and -DscPackageZipUrl was not provided."
+        return
+    }
+
     $envPrefix = if ($templateParams['environmentPrefix']) { $templateParams['environmentPrefix'] } else { 'fstest' }
     $driverVmName = "$envPrefix-client01"
     $sutVmName = "$envPrefix-node01"
@@ -414,159 +466,27 @@ Write-Output @"
 
 $deployStart = Get-Date
 
-# Add secure overrides to the already-built $templateParams
-$templateParams['adminPassword'] = $AdminPassword
+# Add secure overrides to the already-built $templateParams; the VM-size
+# parameters are supplied per-attempt by Invoke-DeploymentWithSkuFallback.
+$baseParams = @{} + $templateParams
+$baseParams.Remove('driverVmSize')
+$baseParams.Remove('sutVmSize')
+$baseParams['adminPassword'] = $AdminPassword
 if ($actualDscPackageZipUrl) {
-    $templateParams['dscPackageZipUrl'] = $actualDscPackageZipUrl
+    $baseParams['dscPackageZipUrl'] = $actualDscPackageZipUrl
 }
 
-# ===========================================================================
-# Bicep template validation (dry run)
-# ===========================================================================
-Write-Output "Validating Bicep template..."
-$validationResult = Test-AzResourceGroupDeployment `
+# Deployment-time capacity retry for Driver + SUT: static pre-flight
+# (Resolve-AvailableVmSize) filters Location/Zone restrictions, but dynamic
+# capacity exhaustion is only detected when ARM actually provisions --
+# Invoke-DeploymentWithSkuFallback pre-validates each attempt and walks the
+# candidate lists on SkuNotAvailable/AllocationFailed.
+$deploymentResult = Invoke-DeploymentWithSkuFallback `
     -ResourceGroupName $ResourceGroupName `
     -TemplateFile $templateFile `
-    -TemplateParameterObject $templateParams `
-    -ErrorAction SilentlyContinue
-
-if ($validationResult) {
-    $nonCapacityErrors = $validationResult | Where-Object {
-        $_.Code -notmatch 'SkuNotAvailable|ZonalAllocationFailed|AllocationFailed'
-    }
-    if ($nonCapacityErrors) {
-        Write-Error "Template validation failed:`n$($nonCapacityErrors | ForEach-Object { "  - [$($_.Code)] $($_.Message)" } | Out-String)"
-        throw "Bicep template validation failed. Fix the errors above before deploying."
-    }
-    Write-Warning "Template validation returned capacity warnings (SkuNotAvailable) — the deployment retry loop will handle these."
-} else {
-    Write-Output "[OK] Template validation passed"
-}
-
-if ($ValidateOnly) {
-    Write-Output "`nValidation-only mode: skipping deployment."
-    return
-}
-
-# Deployment-time capacity retry for Driver + SUT.
-# Static pre-flight (Resolve-AvailableVmSize) filters Location/Zone restrictions,
-# but dynamic capacity exhaustion is only detected when ARM actually provisions.
-$driverSizeIndex = 0
-$sutSizeIndex = 0
-$deployed = $false
-
-while (-not $deployed) {
-    $driverCurrentSize = $driverCandidates[$driverSizeIndex]
-    $sutCurrentSize    = $sutCandidates[$sutSizeIndex]
-    $deploymentName    = "Workgroup-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-
-    $templateParams['driverVmSize'] = $driverCurrentSize
-    $templateParams['sutVmSize']    = $sutCurrentSize
-
-    Write-Output "Starting workgroup deployment (Driver: $driverCurrentSize, SUT: $sutCurrentSize)..."
-
-    # Pre-validate to catch SkuNotAvailable before starting the full deployment.
-    # ARM validation errors don't produce deployment operations, so Test-CapacityError
-    # cannot detect them after the fact.
-    $preValidation = Test-AzResourceGroupDeployment `
-        -ResourceGroupName $ResourceGroupName `
-        -TemplateFile $templateFile `
-        -TemplateParameterObject $templateParams
-    if ($preValidation) {
-        $allCodes = @($preValidation | ForEach-Object { $_.Code })
-        $allCodes += $preValidation | ForEach-Object { $_.Details } | Where-Object { $_ } | ForEach-Object { $_.Code }
-        $allMessages = ($preValidation | ForEach-Object {
-            $msg = "[$($_.Code)] $($_.Message)"
-            if ($_.Details) { $msg += " Details: $(($_.Details | ForEach-Object { "[$($_.Code)] $($_.Message)" }) -join '; ')" }
-            $msg
-        }) -join "`n  "
-        Write-Output "  Pre-validation result: $allMessages"
-
-        $isSkuError = $allCodes -match 'SkuNotAvailable|AllocationFailed|ZonalAllocationFailed'
-        if ($isSkuError) {
-            $canRetry = $false
-            $skuMsg = ($preValidation | ForEach-Object { $_.Details } | Where-Object { $_ } | ForEach-Object { $_.Message }) -join ' '
-            $driverFailed = $skuMsg -match [regex]::Escape($driverCurrentSize)
-            $sutFailed    = $skuMsg -match [regex]::Escape($sutCurrentSize)
-            if ($driverFailed -and ($driverSizeIndex + 1) -lt $driverCandidates.Count) {
-                Write-Warning "Driver VM size '$driverCurrentSize' not available. Trying next fallback..."
-                $driverSizeIndex++; $canRetry = $true
-            }
-            if ($sutFailed -and ($sutSizeIndex + 1) -lt $sutCandidates.Count) {
-                Write-Warning "SUT VM size '$sutCurrentSize' not available. Trying next fallback..."
-                $sutSizeIndex++; $canRetry = $true
-            }
-            if (-not $driverFailed -and -not $sutFailed) {
-                if (($driverSizeIndex + 1) -lt $driverCandidates.Count) { $driverSizeIndex++; $canRetry = $true }
-                if (($sutSizeIndex + 1) -lt $sutCandidates.Count) { $sutSizeIndex++; $canRetry = $true }
-            }
-            if ($canRetry) { continue }
-            throw "Pre-validation failed (SkuNotAvailable) and no more fallback sizes available:`n  $allMessages"
-        } else {
-            throw "Pre-validation failed:`n  $allMessages"
-        }
-    }
-    Write-Output "  Pre-validation passed"
-
-    $deploymentJob = New-AzResourceGroupDeployment `
-        -ResourceGroupName $ResourceGroupName `
-        -Name $deploymentName `
-        -TemplateFile $templateFile `
-        -TemplateParameterObject $templateParams `
-        -ErrorAction Stop `
-        -AsJob
-
-    Watch-Deployment -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName -Job $deploymentJob
-
-    $deployment = $null
-    $deployError = $null
-    try {
-        $deployment = $deploymentJob | Receive-Job -Wait -AutoRemoveJob -ErrorAction Stop
-    } catch {
-        $deployError = $_
-        $deploymentJob | Remove-Job -Force -ErrorAction SilentlyContinue
-    }
-
-    $provState = if ($deployment) { $deployment.ProvisioningState } else { 'Failed' }
-
-    if ($provState -eq 'Succeeded' -and -not $deployError) {
-        $deployed = $true
-    } else {
-        $isCapacity = Test-CapacityError -ErrorRecord $deployError `
-            -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName
-
-        $errText = if ($deployError) { "$($deployError.Exception.Message)" } else { '' }
-        $driverFailed = $errText -match [regex]::Escape($driverCurrentSize)
-        $sutFailed    = $errText -match [regex]::Escape($sutCurrentSize)
-
-        $canRetry = $false
-        if ($isCapacity) {
-            if ($driverFailed -and ($driverSizeIndex + 1) -lt $driverCandidates.Count) {
-                Write-Warning "Driver VM size '$driverCurrentSize' hit capacity restrictions. Trying next fallback..."
-                $driverSizeIndex++
-                $canRetry = $true
-            }
-            if ($sutFailed -and ($sutSizeIndex + 1) -lt $sutCandidates.Count) {
-                Write-Warning "SUT VM size '$sutCurrentSize' hit capacity restrictions. Trying next fallback..."
-                $sutSizeIndex++
-                $canRetry = $true
-            }
-            if (-not $driverFailed -and -not $sutFailed) {
-                if (($driverSizeIndex + 1) -lt $driverCandidates.Count) {
-                    $driverSizeIndex++; $canRetry = $true
-                }
-                if (($sutSizeIndex + 1) -lt $sutCandidates.Count) {
-                    $sutSizeIndex++; $canRetry = $true
-                }
-            }
-        }
-
-        if (-not $canRetry) {
-            if ($deployError) { throw $deployError }
-            throw "Deployment '$deploymentName' finished with state: $provState"
-        }
-    }
-}
+    -BaseParameters $baseParams `
+    -SizeCandidates @{ driverVmSize = $driverCandidates; sutVmSize = $sutCandidates } `
+    -DeploymentNamePrefix 'Workgroup'
 
 $deployDuration = [math]::Round(((Get-Date) - $deployStart).TotalMinutes, 1)
 Write-Output "`n[OK] Deployment completed in $deployDuration minutes"
@@ -574,13 +494,13 @@ Write-Output "`n[OK] Deployment completed in $deployDuration minutes"
 # ===========================================================================
 # Disk Encryption — SUT + Driver (after deployment)
 # ===========================================================================
-if (-not $SkipDiskEncryption -and $deployment) {
+if ($diskEncryptionRequested -and $deploymentResult) {
     $envPrefix = if ($templateParams['environmentPrefix']) { $templateParams['environmentPrefix'] } else { 'fstest' }
     $sutVmName    = "$envPrefix-node01"
     $driverVmName = "$envPrefix-client01"
 
     Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
-        -DeploymentOutputs $deployment.Outputs `
+        -DeploymentOutputs $deploymentResult.Outputs `
         -VMNames @($sutVmName, $driverVmName)
 }
 

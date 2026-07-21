@@ -142,6 +142,17 @@ module network 'modules/network.bicep' = {
     bastionSubnetPrefix: bastionSubnetPrefix
     external1SubnetPrefix: external1SubnetPrefix
     external2SubnetPrefix: external2SubnetPrefix
+  }
+}
+
+// Bastion provisions independently from the test machines. Only the Bastion subnet
+// is required, so its slower host creation is no longer on the VM critical path.
+module bastion '../shared/modules/bastion.bicep' = {
+  name: '${environmentPrefix}-bastion-deployment'
+  params: {
+    location: location
+    environmentPrefix: environmentPrefix
+    bastionSubnetId: network.outputs.bastionSubnetId
     bastionSku: bastionSku
   }
 }
@@ -178,7 +189,7 @@ module computers 'modules/workgroup-computers.bicep' = {
 // Outputs
 output vnetId string = network.outputs.vnetId
 output vnetName string = network.outputs.vnetName
-output bastionFqdn string = network.outputs.bastionFqdn
+output bastionFqdn string = bastion.outputs.bastionFqdn
 output driverVmId string = computers.outputs.driverVmId
 output sutVmId string = computers.outputs.sutVmId
 output driverVmName string = computers.outputs.driverVmName

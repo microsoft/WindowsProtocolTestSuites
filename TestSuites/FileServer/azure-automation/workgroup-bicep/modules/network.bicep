@@ -1,37 +1,33 @@
 // Network Infrastructure for Workgroup File Server Test Suite
-// Provides VNet, Subnets, NSGs, and Azure Bastion
+// Provides VNet, subnets, and NSGs. Bastion is deployed by a sibling module so
+// its slower provisioning does not block Driver/SUT creation.
+
+// No parameter defaults in this module: defaults live only in the entry-point
+// template (main.bicep) and the bicepparam file, so the deployment paths
+// cannot drift.
 
 @description('Resource group location')
-param location string = 'West US 2'
+param location string
 
 @description('Environment name prefix (e.g., fstest)')
 param environmentPrefix string
 
 @description('Virtual network address space')
-param vnetAddressPrefix string = '192.168.0.0/16'
+param vnetAddressPrefix string
 
 @description('Azure Bastion subnet address prefix (must be /26 or larger)')
-param bastionSubnetPrefix string = '192.168.0.0/26'
+param bastionSubnetPrefix string
 
 @description('External1 subnet address prefix')
-param external1SubnetPrefix string = '192.168.1.0/24'
+param external1SubnetPrefix string
 
 @description('External2 subnet address prefix')
-param external2SubnetPrefix string = '192.168.2.0/24'
-
-@description('Azure Bastion SKU')
-@allowed([
-  'Basic'
-  'Standard'
-])
-param bastionSku string = 'Basic'
+param external2SubnetPrefix string
 
 // Variables
 var networkSecurityGroupName = '${environmentPrefix}-workgroup-nsg'
 var bastionNetworkSecurityGroupName = '${environmentPrefix}-bastion-nsg'
 var vnetName = '${environmentPrefix}-workgroup-vnet'
-var bastionName = '${environmentPrefix}-bastion'
-var bastionPublicIpName = '${bastionName}-pip'
 
 // Network Security Group for VMs (Workgroup - no domain services needed)
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-04-01' = {
@@ -250,21 +246,6 @@ resource bastionNetworkSecurityGroup 'Microsoft.Network/networkSecurityGroups@20
   }
 }
 
-// Public IP for Bastion
-resource bastionPublicIp 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
-  name: bastionPublicIpName
-  location: location
-  sku: {
-    name: 'Standard'
-  }
-  properties: {
-    publicIPAllocationMethod: 'Static'
-    dnsSettings: {
-      domainNameLabel: '${bastionName}-${uniqueString(resourceGroup().id)}'
-    }
-  }
-}
-
 // Virtual Network
 resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' = {
   name: vnetName
@@ -307,37 +288,10 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' = {
   }
 }
 
-// Azure Bastion
-resource bastion 'Microsoft.Network/bastionHosts@2023-04-01' = {
-  name: bastionName
-  location: location
-  sku: {
-    name: bastionSku
-  }
-  properties: {
-    ipConfigurations: [
-      {
-        name: 'IpConf'
-        properties: {
-          subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, 'AzureBastionSubnet')
-          }
-          publicIPAddress: {
-            id: bastionPublicIp.id
-          }
-        }
-      }
-    ]
-  }
-  dependsOn: [
-    vnet
-  ]
-}
-
 // Outputs
 output vnetId string = vnet.id
 output vnetName string = vnetName
+output bastionSubnetId string = resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, 'AzureBastionSubnet')
 output external1SubnetId string = resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, 'external1-subnet')
 output external2SubnetId string = resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, 'external2-subnet')
 output networkSecurityGroupId string = networkSecurityGroup.id
-output bastionFqdn string = bastionPublicIp.properties.dnsSettings.fqdn

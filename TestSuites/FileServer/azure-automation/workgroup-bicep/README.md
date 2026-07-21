@@ -20,7 +20,7 @@ The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azurede
 - The baked `Config.json` is valid for the **default IP topology only**. Changing the IP parameters in the Portal form will not update the peer IPs inside the package. For custom topologies, use `deploy.ps1` (which rebuilds the package) until on-VM `Config.json` regeneration lands (step 2).
 - The package embeds a **fixed test-suite drop** (a snapshot) — appropriate for demo/onboarding, not for testing an arbitrary build.
 - Marketplace **image terms** for the SUT/Driver images may need to be accepted once per subscription (see the [top-level README](../README.md)); otherwise the deployment can fail on first use.
-- **Disk encryption is on by default** (`enableDiskEncryption=true`), which creates a Key Vault. If your subscription lacks the required permissions and the deployment fails at the encryption step, re-run with `enableDiskEncryption` set to **false** in the Portal form.
+- **Disk encryption is off by default for the button** (`enableDiskEncryption=false`). Azure Disk Encryption (ADE) is applied by `deploy.ps1` as a *post-deploy* step, which the Portal button cannot run — so for the button the Key Vault would be created but never used. Managed disks are platform-encrypted at rest regardless. If you specifically want ADE and your subscription has the required Key Vault permissions, set `enableDiskEncryption` to **true** in the form.
 - **VM sizes default to burstable (B-series):** driver `Standard_B4ms`, SUT `Standard_B8ms` — chosen for **broad regional availability** (fewest capacity errors) and low cost for demo/onboarding. Trade-off: the driver's CPU may throttle during long test runs, so runs can be slower than `deploy.ps1` (which uses compute-optimized sizes). For faster runs, change the VM sizes in the form or use `deploy.ps1`.
 - **VM capacity / quota** can still vary by region. If the deployment fails preflight with `SkuNotAvailable`, `AllocationFailed`, or `ZonalAllocationFailed`, pick a different **Region** (the template deploys into the resource group's region) or change the **driver/SUT VM size** in the form. Unlike `deploy.ps1`, the one-click button **cannot auto-retry across SKUs**, so this is a manual choice.
 
@@ -88,11 +88,13 @@ $localPassword = Read-Host "Enter local user password" -AsSecureString
 
 ### 3. Wait for deployment and automatic tests
 
-The script runs a single Bicep deployment (~5 min for Azure resources). After that, VMs configure themselves in the background:
+The script runs a single Bicep deployment (~5 min for Azure resources). Bastion is deployed alongside the VMs after core networking, so Bastion provisioning does not delay VM creation. After that, VMs configure themselves in the background:
 
 1. **SUT** (~5-10 min): File Server role, SMB shares, FSRM configuration
 2. **Driver** (~10-15 min): Tools install, RSA keys, test environment setup
 3. **Tests run automatically** — a scheduled task on the Driver waits for SUT readiness, then executes the full test suite. No login required.
+
+When Azure Disk Encryption is enabled, Driver and SUT encryption operations run concurrently and all outcomes are aggregated before deployment succeeds.
 
 ### 4. Check test results
 
@@ -147,7 +149,7 @@ Edit [`parameters/workgroup.bicepparam`](parameters/workgroup.bicepparam) to cus
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `location` | `West US 2` | Azure region |
-| `environmentPrefix` | `fstest-wg` | Prefix for resource names |
+| `environmentPrefix` | `fstest` | Prefix for resource names |
 | `driverVmSize` | `Standard_F4as_v6` | Driver VM size (auto-fallback) |
 | `sutVmSize` | `Standard_D8ls_v5` | SUT VM size (auto-fallback) |
 | `driverOsType` | `Windows` | Driver OS: `Windows` or `Linux` |
@@ -166,7 +168,7 @@ The Workgroup scenario uses local accounts (no domain):
 |---------|---------|
 | `testadmin` | Administrator account (VM admin) — password provided via `-AdminPassword` |
 | `nonadmin` | Non-admin test user — password provided via `-LocalUserPassword` |
-| `Guest` | Guest account (disabled by default, no password) |
+| `Guest` | Guest account — enabled by `Create-TestAccount.ps1` with the admin password (required by Guest-access test cases) |
 
 ## Resuming a Failed Deployment
 
@@ -267,7 +269,7 @@ When a custom image ID is provided, it overrides the marketplace image. Leave em
 ## Default Behaviors
 
 - **Auto-shutdown** is enabled by default at 20:00 UTC. If a test run takes longer than expected, VMs may shut down mid-test. Disable with `param enableAutoShutdown = false` in the bicepparam file, or adjust the time with `param autoShutdownTime = '2300'`.
-- **Azure Disk Encryption** is enabled by default. A Key Vault is created automatically for encryption keys. Skip with `-SkipDiskEncryption` if not needed or to speed up deployment.
+- **Azure Disk Encryption** is enabled by default on the `deploy.ps1` path (via the bicepparam file); a Key Vault is created automatically for encryption keys. Skip with `-SkipDiskEncryption` if not needed or to speed up deployment. The one-click button defaults it **off** (see Scope & limitations above).
 
 ## Publishing the public package ("Deploy to Azure" button)
 
@@ -338,14 +340,14 @@ Validate end-to-end without cutting a real wpts release: push to a **public** pe
 |----|----------|----------|
 | Client01 (Windows) | `C:\Workgroup-Package\DSC\Deploy-Driver.log` | Driver orchestrator |
 | Client01 (Windows) | `C:\Workgroup-Package\DSC\Scripts\Invoke-TestRun.log` | Test execution |
-| Client01 (Linux) | `/var/log/dsc-driver-setup.log` | Driver bootstrap |
+| Client01 (Linux) | `/var/log/azure/custom-script/handler.log` | Driver extension output |
 | Node01 | `C:\Workgroup-Package\DSC\Deploy-SUT.log` | SUT orchestrator |
-| All (Windows) | `C:\dsc-*-setup.log` | CustomScriptExtension bootstrap |
+| All (Windows) | `C:\workgroup-*-setup.log` | CustomScriptExtension bootstrap |
 | Test results | `C:\Test\TestResults\*.trx` | TRX result files |
 
 ### Common Issues
 
-1. **VM extension failure**: Check bootstrap logs on the VM (`C:\dsc-*-setup.log`) and the orchestrator logs above.
+1. **VM extension failure**: Check bootstrap logs on the VM (`C:\workgroup-*-setup.log`) and the orchestrator logs above.
 
 2. **Tests not running**: Verify the scheduled task exists: `Get-ScheduledTask -TaskName 'RunFileServerTests'`. If it doesn't exist, the Driver configuration hasn't completed yet — check `Deploy-Driver.log`.
 
@@ -375,6 +377,8 @@ Get-Content C:\Workgroup-Package\DSC\Scripts\Config.json | ConvertFrom-Json | Co
 workgroup-bicep/
 ├── deploy.ps1                    # Main deployment script
 ├── main.bicep                    # Main template (single phase)
+├── azuredeploy.json              # Compiled template consumed by the Deploy-to-Azure button
+├── Publish-DscPackage.ps1        # Maintainer publisher for the button's package + release
 ├── README.md                     # This file
 ├── DSC/                          # SUT DSC configuration scripts
 │   ├── Deploy-SUT.ps1            # SUT orchestrator (DSC + imperative)
@@ -392,8 +396,12 @@ workgroup-bicep/
     └── workgroup.bicepparam      # Default parameters (single source of truth)
 
 ../shared/                        # Components shared with Domain/Cluster
-├── Deploy-Helpers.psm1           # Azure helpers (connect, storage, quota)
+├── Deploy-Helpers.psm1           # Azure helpers (connect, storage, quota, SKU-fallback deploy)
 ├── Generate-ConfigJson.ps1       # Config.json generation from bicepparam values
+├── scripts/
+│   └── cse-bootstrap.ps1 / .sh   # Tokenized Custom Script Extension bootstrap (all scenarios)
+├── parameters/
+│   └── VmSizeFallbacks.psd1      # Per-role fallback VM sizes (data, not code)
 └── DSC/
     ├── Deploy-Driver.ps1         # Driver orchestrator
     ├── Driver-Configuration.ps1  # DSC: hosts, firewall, PS remoting

@@ -32,7 +32,11 @@ if (-not (Test-Path $ZipFile)) {
 if ($psversiontable.PSVersion.Major -ge 5)
 {
     .\Write-Info.ps1 "Extract GPOBackup files"
-    Expand-Archive $ZipFile $gpoBackupFolder
+    # Clean any prior extraction so re-runs (e.g. the DC CBAC/GPO retry, or a manual re-run)
+    # don't fail with "already exists" -- Expand-Archive without -Force errors on every
+    # existing file.
+    if (Test-Path $gpoBackupFolder) { Remove-Item -Path $gpoBackupFolder -Recurse -Force -ErrorAction SilentlyContinue }
+    Expand-Archive $ZipFile $gpoBackupFolder -Force
 }
 else
 {

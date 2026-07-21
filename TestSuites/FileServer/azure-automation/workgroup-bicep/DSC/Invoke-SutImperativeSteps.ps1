@@ -74,6 +74,30 @@ try {
 }
 
 # ===========================================================================
+# Account Lockout Policy -- DISABLE on the test SUT
+# ===========================================================================
+# The FileServer suites run negative-auth and rapid re-authentication cases
+# (e.g. SMB2Model ResilientHandle re-establish). Windows Server 2025 clean
+# installs ship with account lockout ENABLED by default (threshold 10, 10-min
+# duration) -- a baseline change introduced with Windows 11 22H2. Older images
+# shipped it disabled (0), which is what the suites were written against, so
+# nothing here ever set it. On 2025 the tests trip the threshold, the local
+# test account locks, and every subsequent SESSION_SETUP returns 0xC0000234
+# (STATUS_ACCOUNT_LOCKED_OUT). Pin the threshold back to 0 and clear any
+# already-locked local accounts. (Domain accounts are governed by the DC's
+# default domain policy -- see Invoke-DcImperativeSteps.ps1.)
+try {
+    .\Write-Info.ps1 "Disabling account lockout policy (test SUT)..." -ForegroundColor Yellow
+    & net accounts /lockoutthreshold:0 2>&1 | .\Write-Info.ps1
+    Get-LocalUser -ErrorAction SilentlyContinue | ForEach-Object {
+        try { & net user $_.Name /active:yes 2>&1 | Out-Null } catch {}
+    }
+    .\Write-Info.ps1 "[OK] Account lockout disabled (threshold 0)" -ForegroundColor Green
+} catch {
+    .\Write-Info.ps1 "[WARN] Could not disable account lockout: $($_.Exception.Message)" -ForegroundColor Yellow
+}
+
+# ===========================================================================
 # 0. LOCAL TEST ACCOUNTS -- nonadmin, Guest, AzGroup01/AzUser01
 #    In domain scenarios these are created on the DC by Create-TestAccount.ps1.
 #    In workgroup mode there is no DC, so we create them locally on the SUT.

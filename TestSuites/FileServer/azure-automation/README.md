@@ -83,7 +83,7 @@ Connect to any VM via **Azure Bastion** in the portal (no public IPs are exposed
 
 ## Deployment Flow
 
-All three scenarios follow the same core pattern. The Domain and Cluster scenarios split this into two Bicep phases so that the Domain Controller is fully promoted before domain-joined VMs attempt to join.
+All three scenarios follow the same core pattern. Domain member infrastructure can be provisioned while the Domain Controller finishes configuring, but member guest extensions and domain join remain gated on the DC readiness signal.
 
 ### Domain Scenario
 
@@ -95,17 +95,20 @@ flowchart TB
     upload --> phase1
 
     subgraph phase1 [Phase 1 — Bicep Deployment]
-        net[Network<br/>VNet, Subnets, NSGs, Bastion] --> dc[DC01<br/>Windows Server VM]
+        net[Core network<br/>VNet, Subnets, NSGs] --> dc[DC01<br/>Windows Server VM]
+        net --> bastion[Azure Bastion]
         dc --> ext_dc[CustomScriptExtension<br/>Downloads DSC package]
     end
 
+    ext_dc --> members[Provision Client01 + Node01<br/>infrastructure only]
     ext_dc --> poll{Poll DC readiness<br/>via Invoke-AzVMRunCommand}
     poll -- Signal file not found --> wait[Wait 30s] --> poll
-    poll -- Deploy-DC.Completed.signal found --> phase2
+    members --> gate{DC ready?}
+    poll -- Deploy-DC.Completed.signal found --> gate
 
-    subgraph phase2 [Phase 2 — Bicep Deployment]
-        driver[Client01<br/>Driver VM] --> ext_driver[CustomScriptExtension]
-        sut[Node01<br/>SUT VM] --> ext_sut[CustomScriptExtension]
+    subgraph phase2 [Phase 2B — Guest Configuration]
+        gate --> ext_driver[Client01 CustomScriptExtension]
+        gate --> ext_sut[Node01 CustomScriptExtension]
     end
 
     ext_driver --> done([All VMs configuring in background<br/>Check signal files for completion])
@@ -151,7 +154,8 @@ flowchart TB
     upload --> deploy
 
     subgraph deploy [Single Bicep Deployment]
-        net[Network<br/>VNet, Subnets, NSGs, Bastion]
+        net[Core network<br/>VNet, Subnets, NSGs]
+        net --> bastion[Azure Bastion]
         net --> driver[Client01 — Driver VM]
         net --> sut[Node01 — SUT VM]
     end
@@ -175,7 +179,7 @@ flowchart LR
     step0[Step 0 → 1<br/>DSC config + domain join<br/>or DC promotion]
     step0 -- deferred reboot --> step1
 
-    step1[Step 1 → 2<br/>Post-reboot DSC re-apply<br/>+ imperative config]
+    step1[Step 1 → 2<br/>Post-reboot DSC drift check/repair<br/>+ imperative config]
     step1 -- optional reboot --> step2
 
     step2[Step 2 → 3<br/>Environment setup<br/>shares, accounts, tools]
