@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.37.4.10188",
-      "templateHash": "14832988100991853768"
+      "templateHash": "5601928540608233193"
     }
   },
   "parameters": {
@@ -374,7 +374,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.37.4.10188",
-              "templateHash": "5305692692252092922"
+              "templateHash": "11128580696328616364"
             }
           },
           "parameters": {
@@ -1207,7 +1207,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.37.4.10188",
-                      "templateHash": "15574397437128060768"
+                      "templateHash": "6501665389722687946"
                     }
                   },
                   "parameters": {
@@ -1529,6 +1529,10 @@
                     "dcExternal1Ip": {
                       "type": "string",
                       "value": "[parameters('dcExternal1Ip')]"
+                    },
+                    "dcExternal2Ip": {
+                      "type": "string",
+                      "value": "[parameters('dcExternal2Ip')]"
                     }
                   }
                 }
@@ -1566,6 +1570,10 @@
             "dcExternal1Ip": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-dc-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.dcExternal1Ip.value]"
+            },
+            "dcExternal2Ip": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-dc-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.dcExternal2Ip.value]"
             },
             "keyVaultName": {
               "type": "string",
@@ -1659,7 +1667,7 @@
             "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-phase1', parameters('environmentPrefix'))), '2022-09-01').outputs.dcExternal1Ip.value]"
           },
           "dcExternal2Ip": {
-            "value": "[parameters('dcExternal2Ip')]"
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-phase1', parameters('environmentPrefix'))), '2022-09-01').outputs.dcExternal2Ip.value]"
           },
           "enableAutoShutdown": {
             "value": "[parameters('enableAutoShutdown')]"

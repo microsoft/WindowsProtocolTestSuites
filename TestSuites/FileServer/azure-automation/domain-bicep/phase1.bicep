@@ -141,6 +141,7 @@ output external1SubnetId string = network.outputs.external1SubnetId
 output external2SubnetId string = network.outputs.external2SubnetId
 output dcVmName string = domainController.outputs.dcVmName
 output dcExternal1Ip string = domainController.outputs.dcExternal1Ip
+output dcExternal2Ip string = domainController.outputs.dcExternal2Ip
 output keyVaultName string = diskEncryptionVault.outputs.keyVaultName
 output keyVaultId string = diskEncryptionVault.outputs.keyVaultId
 output keyVaultUrl string = diskEncryptionVault.outputs.keyVaultUrl

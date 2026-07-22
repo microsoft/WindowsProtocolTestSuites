@@ -268,3 +268,4 @@ output dcPrivateIps array = [
 output domainName string = domainName
 output domainNetBiosName string = domainNetBiosName
 output dcExternal1Ip string = dcExternal1Ip
+output dcExternal2Ip string = dcExternal2Ip

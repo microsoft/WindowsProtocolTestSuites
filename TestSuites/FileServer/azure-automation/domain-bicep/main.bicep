@@ -217,7 +217,7 @@ module phase2 'phase2.bicep' = {
     sutExternal1Ip: sutExternal1Ip
     sutExternal2Ip: sutExternal2Ip
     dcExternal1Ip: phase1.outputs.dcExternal1Ip
-    dcExternal2Ip: dcExternal2Ip
+    dcExternal2Ip: phase1.outputs.dcExternal2Ip
     enableAutoShutdown: enableAutoShutdown
     autoShutdownTime: autoShutdownTime
     autoShutdownTimeZone: autoShutdownTimeZone
