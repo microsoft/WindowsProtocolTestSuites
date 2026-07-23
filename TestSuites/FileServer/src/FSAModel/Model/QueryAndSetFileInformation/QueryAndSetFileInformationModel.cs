@@ -798,6 +798,13 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.Model
                         If InputBuffer.DeletePending is TRUE:If File.FileAttributes.FILE_ATTRIBUTE_READONLY is TRUE, the operation MUST be failed with STATUS_CANNOT_DELETE.");
                     return MessageStatus.CANNOT_DELETE;
                 }
+                
+                //If Open.Stream.StreamType is DirectoryStream, set Open.ChangeNotifyDirectoryMarkedDeleted to TRUE
+                if (gStreamType == StreamType.DirectoryStream)
+                {
+                    Helper.CaptureRequirement(4014, @"[In FileDispositionInformation,Pseudocode for the operation is as follows:]
+                        If InputBuffer.DeletePending is TRUE:If Open.Stream.StreamType is DirectoryStream:Set Open.ChangeNotifyDirectoryMarkedDeleted to TRUE.");
+                }
             }
             Helper.CaptureRequirement(4021, @"[In FileDispositionInformation,Pseudocode for the operation is as follows:]The operation returns STATUS_SUCCESS.");
             return MessageStatus.SUCCESS;

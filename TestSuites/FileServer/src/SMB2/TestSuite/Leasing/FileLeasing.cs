@@ -150,6 +150,87 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite.Leasing
             TestFileLeasingKey(leaseContext);
         }
 
+        [TestMethod]
+        [TestCategory(TestCategories.Bvt)]
+        [TestCategory(TestCategories.Smb30)]
+        [TestCategory(TestCategories.LeaseV2)]
+        [Description("This test case verifies that server initializes Lease.Epoch to the Epoch value from the request, then increments it during Oplock Acquisition phase.")]
+        public void BVT_Leasing_FileLeasingV2_EpochInitialization()
+        {
+            #region Check Applicability
+            TestConfig.CheckDialect(DialectRevision.Smb30);
+            TestConfig.CheckCapabilities(NEGOTIATE_Response_Capabilities_Values.GLOBAL_CAP_LEASING);
+            TestConfig.CheckCreateContext(CreateContextTypeValue.SMB2_CREATE_REQUEST_LEASE_V2);
+            #endregion
+
+            uint requestedEpoch = 12345;
+            Guid leaseKey = Guid.NewGuid();
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep,
+                "Client creates a file with LeaseV2 context with Epoch={0}", requestedEpoch);
+            
+            client1.Negotiate(TestConfig.RequestDialects, TestConfig.IsSMB1NegotiateEnabled);
+            client1.SessionSetup(TestConfig.DefaultSecurityPackage, TestConfig.SutComputerName, TestConfig.AccountCredential, false);
+            
+            uint treeId;
+            client1.TreeConnect(sharePath, out treeId);
+
+            Smb2CreateContextRequest[] createContexts = new Smb2CreateContextRequest[]
+            {
+                new Smb2CreateRequestLeaseV2
+                {
+                    LeaseKey = leaseKey,
+                    LeaseState = LeaseStateValues.SMB2_LEASE_READ_CACHING | LeaseStateValues.SMB2_LEASE_WRITE_CACHING | LeaseStateValues.SMB2_LEASE_HANDLE_CACHING,
+                    Epoch = requestedEpoch
+                }
+            };
+
+            FILEID fileId;
+            Smb2CreateContextResponse[] createContextResponse;
+            client1.Create(
+                treeId,
+                fileName,
+                CreateOptions_Values.FILE_NON_DIRECTORY_FILE,
+                out fileId,
+                out createContextResponse,
+                RequestedOplockLevel_Values.OPLOCK_LEVEL_LEASE,
+                createContexts);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep,
+                "Verify that server returns LeaseV2 response with Epoch initialized to the requested value and then incremented");
+            
+            BaseTestSite.Assert.IsNotNull(createContextResponse, "Create context response should not be null");
+            BaseTestSite.Assert.IsTrue(createContextResponse.Length > 0, "Create context response should contain at least one context");
+
+            Smb2CreateResponseLeaseV2 leaseResponse = null;
+            foreach (var context in createContextResponse)
+            {
+                if (context is Smb2CreateResponseLeaseV2)
+                {
+                    leaseResponse = context as Smb2CreateResponseLeaseV2;
+                    break;
+                }
+            }
+
+            BaseTestSite.Assert.IsNotNull(leaseResponse, "LeaseV2 response context should be present");
+            BaseTestSite.Assert.AreEqual(leaseKey, leaseResponse.LeaseKey, 
+                "LeaseKey in the response should match the request. Expected: {0}, Actual: {1}", 
+                leaseKey, leaseResponse.LeaseKey);
+            
+            // Per MS-SMB2 v86.0 section 3.3.5.9.11:
+            // - During lease allocation, Lease.Epoch is set to Epoch from the request
+            // - During Oplock Acquisition, the server increments Lease.Epoch by 1
+            // Therefore, the response Epoch should be requestedEpoch + 1
+            BaseTestSite.Assert.AreEqual((ushort)(requestedEpoch + 1), leaseResponse.Epoch,
+                "Lease.Epoch should be initialized to the Epoch value from the request and then incremented. Expected: {0}, Actual: {1}",
+                requestedEpoch + 1, leaseResponse.Epoch);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Tear down the client by sending CLOSE, TREE_DISCONNECT, and LOG_OFF");
+            client1.Close(treeId, fileId);
+            client1.TreeDisconnect(treeId);
+            client1.LogOff();
+        }
+
         #region Common Methods
         public void TestFileLeasing(Smb2CreateContextRequest leaseContext)
         {

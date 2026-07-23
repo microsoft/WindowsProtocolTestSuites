@@ -29,6 +29,7 @@ if(Test-Path -Path $settingFile)
     $osVersion          = .\Get-Parameter.ps1 $settingFile osVersion
     $workgroupDomain    = .\Get-Parameter.ps1 $settingFile workgroupDomain
     $compressionInTC    = .\Get-Parameter.ps1 $settingFile compressionInTC
+    $rdpSigningCertSubject = .\Get-Parameter.ps1 $settingFile rdpSigningCertSubject "CN=WPTS RDP Test Signing"
     .\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
 }
 else
@@ -221,6 +222,23 @@ New-Item -Path $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 -ItemType 
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPFullScreen.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\NegotiateInvalidAccount.RDP" -Append -Encoding Unicode
 "`nusbdevicestoredirect:s:*" | out-file "$dataPath\DirectCredSSPInvalidAccount.RDP" -Append -Encoding Unicode
+
+#----------------------------------------------------------------------------
+# Sign all generated .RDP files and register the cert as a trusted .rdp
+# publisher so the April 2026 RDP security dialog (CVE-2026-26151) does
+# not block unattended task execution. Signing happens here, AFTER all
+# field appends above, because rdpsign signs every field and any later
+# mutation would invalidate the signature.
+#----------------------------------------------------------------------------
+$rdpFilesToSign = @(
+    "Negotiate.RDP",
+    "DirectCredSSP.RDP",
+    "NegotiateFullScreen.RDP",
+    "DirectCredSSPFullScreen.RDP",
+    "NegotiateInvalidAccount.RDP",
+    "DirectCredSSPInvalidAccount.RDP"
+) | ForEach-Object { "$dataPath\$_" }
+.\Set-RdpFileSigning.ps1 -Subject $rdpSigningCertSubject -RdpFiles $rdpFilesToSign
 
 Write-Host "Allow RDP connecting to unkown publisher for $driverComputerName..."
 cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client\LocalDevices" /v $driverComputerName /t REG_DWORD /d 68 /F

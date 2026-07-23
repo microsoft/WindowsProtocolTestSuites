@@ -15,10 +15,10 @@ param adminUsername string = 'testadmin'
 param adminPassword string
 
 @description('Driver computer VM size')
-param driverVmSize string = 'Standard_D4s_v5'
+param driverVmSize string = 'Standard_F4as_v6'
 
 @description('SUT computer VM size')
-param sutVmSize string = 'Standard_D4s_v5'
+param sutVmSize string = 'Standard_D8ls_v5'
 
 @description('Driver computer OS type')
 @allowed([
@@ -84,8 +84,8 @@ param dcExternal1Ip string
 @description('Domain Controller External2 IP address (from Phase 1 output)')
 param dcExternal2Ip string
 
-@description('Enable auto-shutdown')
-param enableAutoShutdown bool = true
+@description('Enable auto-shutdown. Default false: auto-shutdown DEALLOCATES VMs, and a deallocate/restart of a domain-joined member can collide with machine-account password handling. Opt in explicitly to save cost.')
+param enableAutoShutdown bool = false
 
 @description('Auto-shutdown time (HH:mm in UTC)')
 param autoShutdownTime string = '20:00'
@@ -95,6 +95,9 @@ param autoShutdownTimeZone string = 'UTC'
 
 @description('URL to Domain-Package.zip file in Azure Storage')
 param domainPackageZipUrl string = ''
+
+@description('Deploy member guest-configuration extensions. Set false to provision infrastructure before the DC readiness gate.')
+param configureGuests bool = true
 
 // Deploy domain-joined computers
 module domainComputers 'modules/domain-computers.bicep' = {
@@ -123,6 +126,17 @@ module domainComputers 'modules/domain-computers.bicep' = {
     enableAutoShutdown: enableAutoShutdown
     autoShutdownTime: autoShutdownTime
     autoShutdownTimeZone: autoShutdownTimeZone
+  }
+}
+
+module memberConfiguration 'modules/domain-computer-extensions.bicep' = if (configureGuests) {
+  name: '${environmentPrefix}-computers-configuration'
+  params: {
+    location: location
+    driverVmName: domainComputers.outputs.driverVmName
+    sutVmName: domainComputers.outputs.sutVmName
+    adminPassword: adminPassword
+    driverOsType: driverOsType
     domainPackageZipUrl: domainPackageZipUrl
   }
 }

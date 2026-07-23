@@ -67,6 +67,15 @@ if ($Step -eq 1) {
         }
         .\Write-Info.ps1 "[OK] Domain join complete. REBOOT REQUIRED." -ForegroundColor Green
     }
+
+    # Prevent Netlogon from auto-rotating this cluster node's machine-account password.
+    # The DC does NOT set RefusePasswordChange, so a rotation would succeed on both
+    # sides -- but an Azure deallocate/restart in the rotation window can capture an
+    # inconsistent state, producing a broken "trust relationship" on the node. Disabling
+    # rotation keeps the local secret and AD copy in sync. Mirrors
+    # CommonScripts\Set-NetlogonRegKeyAndPolicy.ps1.
+    & reg add 'HKLM\SYSTEM\CurrentControlSet\services\Netlogon\Parameters' /v DisablePasswordChange /t REG_DWORD /d 1 /f 2>&1 | .\Write-Info.ps1
+
     Stop-Transcript; Pop-Location; return $true
   }
   catch {
@@ -170,6 +179,7 @@ if ($Step -eq 2) {
 if ($Step -eq 3) {
   $pollOk    = $false
   $sharesOk  = $false
+  $sshKeysOk = $false
 
   try {
     .\Write-Info.ps1 "---- Step 3: Poll for Cluster + Node02 Config ----" -ForegroundColor Yellow
@@ -260,13 +270,29 @@ if ($Step -eq 3) {
         try { & $checkScript } catch { .\Write-Info.ps1 "[WARN] Status check: $($_.Exception.Message)" -ForegroundColor Yellow }
     }
 
-    .\Write-Info.ps1 ""
-    .\Write-Info.ps1 "=== Node02 imperative steps completed (Poll=$pollOk, Shares=$sharesOk) ===" -ForegroundColor Cyan
+    # -- SSH server authorized_keys (PowerShell-over-SSH remoting for control adapters) --
+    # Both cluster nodes are domain members the Authorization/permission control adapters may
+    # remote into via `Invoke-Command -HostName` (PS over SSH). Windows OpenSSH reads
+    # administrators_authorized_keys for the domain admin, which the SSH-certs tool does not
+    # populate -- without it sshd falls back to a password prompt and those tests hang.
+    try {
+        .\Write-Info.ps1 "Configuring SSH authorized_keys for PowerShell-over-SSH remoting..." -ForegroundColor Yellow
+        $sshKeysOk = [bool](& "$scriptsPath\Set-SshServerAuthorizedKeys.ps1" -Config $config)
+    } catch {
+        .\Write-Info.ps1 "[WARN] SSH authorized_keys setup error: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
 
-    # Cluster poll is critical
+    .\Write-Info.ps1 ""
+    .\Write-Info.ps1 "=== Node02 imperative steps completed (Poll=$pollOk, Shares=$sharesOk, SshKeys=$sshKeysOk) ===" -ForegroundColor Cyan
+
+    # Cluster poll and SSH remoting are critical
     if (-not $pollOk) {
         Stop-Transcript; Pop-Location
         throw "Critical section failed: Cluster readiness poll."
+    }
+    if (-not $sshKeysOk) {
+        Stop-Transcript; Pop-Location
+        throw "Critical section failed: SSH remoting authorized_keys. The Authorization control adapters remote via PowerShell-over-SSH; without trusted keys they hang on a password prompt."
     }
 
     Stop-Transcript; Pop-Location; return $true

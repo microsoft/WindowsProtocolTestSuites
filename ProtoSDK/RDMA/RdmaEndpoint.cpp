@@ -178,9 +178,9 @@ HRESULT RdmaEndpoint::Bind(
 		return result;
 	}
 
-	unsigned __int64 tmpLength;
-	unsigned __int64 tmpBase;
-	unsigned __int32 tmpToken;
+	unsigned __int64 tmpLength = mwDescriptor.Length;
+	unsigned __int64 tmpBase = mwDescriptor.Base;
+	unsigned __int32 tmpToken = mwDescriptor.Token;
 
 	if(reverseMemory)
 	{
@@ -192,6 +192,8 @@ HRESULT RdmaEndpoint::Bind(
 	bufferDescriptor->Offset = tmpBase;
 	bufferDescriptor->Token = tmpToken;
 	bufferDescriptor->Length = (unsigned __int32)tmpLength;
+
+	memoryWindow->SetRemoteToken(tmpToken);
 
 	return result;
 }

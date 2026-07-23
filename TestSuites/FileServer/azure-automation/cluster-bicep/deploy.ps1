@@ -177,6 +177,10 @@ if (-not $ClusterPackageZipUrl -and ((Test-Path $ClusterPackagePath) -or (Test-P
         DriverOSType       = $config.driverOsType
         ClusterName        = $config.clusterName
         ScaleOutFSName     = $config.scaleOutFSName
+        # Create every test account with the single admin password so secondary
+        # accounts match the framework's PasswordForAllUsers (works for any chosen
+        # password; a no-op when the admin password already matches ParamConfig).
+        UnifyAccountPasswords = $true
     }
 
     if (Test-Path $ClusterPackageZip) {

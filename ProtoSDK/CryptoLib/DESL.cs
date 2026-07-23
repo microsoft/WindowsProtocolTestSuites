@@ -52,9 +52,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             //use 14-20 bytes in the paddedKey
             byte[] key3 = LMHashManaged.GenerateDesKey(paddedKey, 14);
 
-            using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
+            using (DESCryptoServiceProvider des = new DESCryptoServiceProvider()) // CodeQL [SM02192, SM00400] Required by [MS-NLMP] section 6: DESL is defined as three DES-ECB encryptions of the same 8-byte data with three derived keys, concatenated. Protocol-test interop code.
             {
-                des.Mode = CipherMode.ECB;
+                des.Mode = CipherMode.ECB; // CodeQL [SM00395, SM02199] Required by [MS-NLMP] section 6: DESL is defined as three DES-ECB encryptions of the same 8-byte data with three derived keys, concatenated. Protocol-test interop code.
                 ICryptoTransform encryptor1 = des.CreateEncryptor(key1, des.IV);
                 ICryptoTransform encryptor2 = des.CreateEncryptor(key2, des.IV);
                 ICryptoTransform encryptor3 = des.CreateEncryptor(key3, des.IV);

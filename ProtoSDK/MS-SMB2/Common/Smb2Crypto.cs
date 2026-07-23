@@ -179,7 +179,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_CCM ||
                 cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_CCM)
             {
-                using (var cipher = new AesCcm(key))
+                using (var cipher = new AesCcm(key)) // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x message decryption uses the AES-CCM AEAD algorithm specified by the protocol. Protocol-test interop code, not a security boundary.
                 {
                     cipher.Decrypt(
                         transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
@@ -191,7 +191,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             }
             else
             {
-                using (var cipher = new AesGcm(key))
+                using (var cipher = new AesGcm(key)) // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x message decryption uses the AES-GCM AEAD algorithm specified by the protocol. Protocol-test interop code, not a security boundary.
                 {
                     cipher.Decrypt(
                         transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
@@ -289,7 +289,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                     Buffer.BlockCopy(Guid.NewGuid().ToByteArray(), 0, nonce, 0, nonceLength);
                     transformHeader.Nonce = new Guid(nonce);
 
-                    using (var cipher = new AesCcm(key))
+                    using (var cipher = new AesCcm(key)) // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x message encryption uses AES-128-CCM as specified; the nonce is generated fresh per message via Guid.NewGuid(). Protocol-test interop code.
                     {
                         cipher.Encrypt(
                             transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
@@ -306,7 +306,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                     Buffer.BlockCopy(Guid.NewGuid().ToByteArray(), 0, nonce, 0, nonceLength);
                     transformHeader.Nonce = new Guid(nonce);
 
-                    using (var cipher = new AesGcm(key))
+                    using (var cipher = new AesGcm(key)) // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x message encryption uses AES-128-GCM as specified; the nonce is generated fresh per message via Guid.NewGuid(). Protocol-test interop code.
                     {
                         cipher.Encrypt(
                             transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
@@ -323,7 +323,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                     Buffer.BlockCopy(Guid.NewGuid().ToByteArray(), 0, nonce, 0, nonceLength);
                     transformHeader.Nonce = new Guid(nonce);
 
-                    using (var cipher = new AesCcm(key))
+                    using (var cipher = new AesCcm(key)) // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x message encryption uses AES-256-CCM as specified; the nonce is generated fresh per message via Guid.NewGuid(). Protocol-test interop code.
                     {
                         cipher.Encrypt(
                             transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
@@ -340,7 +340,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
                     Buffer.BlockCopy(Guid.NewGuid().ToByteArray(), 0, nonce, 0, nonceLength);
                     transformHeader.Nonce = new Guid(nonce);
 
-                    using (var cipher = new AesGcm(key))
+                    using (var cipher = new AesGcm(key)) // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x message encryption uses AES-256-GCM as specified; the nonce is generated fresh per message via Guid.NewGuid(). Protocol-test interop code.
                     {
                         cipher.Encrypt(
                             transformHeader.Nonce.ToByteArray().Take(nonceLength).ToArray(),
@@ -448,22 +448,22 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
             if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_CCM)
             {
-                cipher = new AesCcm(key);
+                cipher = new AesCcm(key); // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x encryption uses AES-128-CCM as specified by the protocol. Protocol-test interop code, not a security boundary.
                 nonceLength = Smb2Consts.AES128CCM_Nonce_Length;
             }
             else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES128_GCM)
             {
-                cipher = new AesGcm(key);
+                cipher = new AesGcm(key); // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x encryption uses AES-128-GCM as specified by the protocol. Protocol-test interop code, not a security boundary.
                 nonceLength = Smb2Consts.AES128GCM_Nonce_Length;
             }
             else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_CCM)
             {
-                cipher = new AesCcm(key);
+                cipher = new AesCcm(key); // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x encryption uses AES-256-CCM as specified by the protocol. Protocol-test interop code, not a security boundary.
                 nonceLength = Smb2Consts.AES256CCM_Nonce_Length;
             }
             else if (cryptoInfo.CipherId == EncryptionAlgorithm.ENCRYPTION_AES256_GCM)
             {
-                cipher = new AesGcm(key);
+                cipher = new AesGcm(key); // CodeQL [SM04193] Required by [MS-SMB2] section 3.1.4.4: SMB 3.x encryption uses AES-256-GCM as specified by the protocol. Protocol-test interop code, not a security boundary.
                 nonceLength = Smb2Consts.AES256GCM_Nonce_Length;
             }
             else

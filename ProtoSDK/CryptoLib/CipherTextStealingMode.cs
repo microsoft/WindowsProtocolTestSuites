@@ -54,7 +54,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
 
             // set the symmetric algorithm's mode to ECB
             // (for single block encryption and decryption)
-            symmetricAlgorithm.Mode = CipherMode.ECB;
+            symmetricAlgorithm.Mode = CipherMode.ECB; // CodeQL [SM00395, SM02199] ECB is used here as the underlying block-cipher primitive to implement CipherText Stealing (CTS) mode per RFC 3962; CTS, not raw ECB, is the exposed encryption mode.
 
             // get the symmetric algorithm's block size in bytes
             blockSize = symmetricAlgorithm.BlockSize / 8;

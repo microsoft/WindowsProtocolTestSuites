@@ -249,10 +249,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                     + "So there are a large number of SMBD Data Transfer messages in one fragment. Verify SUT can receive all segments and reassemble data correctly.")]
         public void SmbdDataTransfer_SmallLengthSegment()
         {
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             // define data for test case
             const uint MAX_SEND_SIZE = 1024;
             const uint MAX_FRAGMENT_SIZE = 128 * 1024; // 128 KiB

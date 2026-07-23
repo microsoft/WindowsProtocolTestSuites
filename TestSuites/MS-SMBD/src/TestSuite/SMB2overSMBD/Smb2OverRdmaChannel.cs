@@ -231,10 +231,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify server will not crash if Offset in Buffer Descriptor is not correct.")]
         public void Smb2OverRdmaChannel_InvalidBufferDescriptor_Offset()
         {
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             InitSmbdConnectionForTestCases(smbdAdapter.TestConfig.TestFileName_LargeFile);
 
             // SMB2 Read file
@@ -283,10 +279,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify server will not crash if Length in Buffer Descriptor is not correct.")]
         public void Smb2OverRdmaChannel_InvalidBufferDescriptor_Length()
         {
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             InitSmbdConnectionForTestCases(smbdAdapter.TestConfig.TestFileName_LargeFile);
 
             // SMB2 Read file
@@ -333,10 +325,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify server will not crash if Token in Buffer Descriptor is not correct.")]
         public void Smb2OverRdmaChannel_InvalidBufferDescriptor_Token()
         {
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             InitSmbdConnectionForTestCases(smbdAdapter.TestConfig.TestFileName_LargeFile);
 
             // SMB2 Read file
@@ -383,10 +371,6 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify server will not crash if buffer descriptor in channel info is deregistered.")]
         public void Smb2OverRdmaChannel_InvalidBufferDescriptor_DeregisteredBuffer()
         {
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             InitSmbdConnectionForTestCases(smbdAdapter.TestConfig.TestFileName_LargeFile);
 
             // SMB2 Read file

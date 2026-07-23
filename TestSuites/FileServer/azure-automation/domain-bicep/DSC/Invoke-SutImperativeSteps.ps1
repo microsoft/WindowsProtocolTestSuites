@@ -70,8 +70,10 @@ if ($Step -eq 1) {
     }
     else {
         .\Write-Info.ps1 "Joining domain..." -ForegroundColor Cyan
-        $result = & "$scriptsPath\domainjoin.ps1"
-        if (-not $result) {
+        # Capture only the script's final return value (see domainjoin.ps1): stray
+        # success-stream output makes a multi-element array truthy even on a failed join.
+        $result = & "$scriptsPath\domainjoin.ps1" | Select-Object -Last 1
+        if ($result -ne $true) {
             .\Write-Error.ps1 "Domain join failed."
             Stop-Transcript; Pop-Location; return $false
         }
@@ -97,6 +99,8 @@ if ($Step -eq 3) {
   $fsaOk       = $false
   $dfsOk       = $false
   $quicOk      = $false
+  $computerPwdOk = $false
+  $sshKeysOk   = $false
 
   try {
     .\Write-Info.ps1 "---- Step 3: Environment Configuration ----" -ForegroundColor Yellow
@@ -112,37 +116,155 @@ if ($Step -eq 3) {
         .\Write-Info.ps1 "[WARN] TLS cipher suite config failed: $($_.Exception.Message)" -ForegroundColor Yellow
     }
 
-    # -- Computer Password (ksetup) --
-    # Must run AFTER domain join (matches pipeline's Set-ComputerPassword.ps1
-    # which runs in <postscript> after domainjoin.ps1). Sets the local
-    # Kerberos key to Password04! for Auth/Kerberos protocol tests.
-    .\Write-Info.ps1 "Setting computer password (ksetup)..." -ForegroundColor Yellow
+    # -- Account Lockout Policy (local) -- DISABLE on the test SUT --
+    # The FileServer suites run negative-auth / rapid re-auth cases. Windows Server 2025
+    # clean installs enable account lockout by default (threshold 10) -- a Win11 22H2
+    # baseline change; older images shipped it disabled (0), which the suites assume.
+    # Without this, tests trip the threshold and every subsequent SESSION_SETUP returns
+    # 0xC0000234 (STATUS_ACCOUNT_LOCKED_OUT). This covers local SUT accounts; DOMAIN test
+    # accounts are governed by the DC's default domain policy (see Invoke-DcImperativeSteps.ps1).
     try {
+        .\Write-Info.ps1 "Disabling local account lockout policy (test SUT)..." -ForegroundColor Yellow
+        & net accounts /lockoutthreshold:0 2>&1 | .\Write-Info.ps1
+        .\Write-Info.ps1 "[OK] Local account lockout disabled (threshold 0)" -ForegroundColor Green
+    } catch {
+        .\Write-Info.ps1 "[WARN] Could not disable local account lockout: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+
+    # The Auth/Kerberos suite derives the file server's service key from
+    # ServicePassword (Password04!) + ServiceSaltString, and that key only matches
+    # the SUT if the computer-account password is Password04! on BOTH the local LSA
+    # secret AND in AD. If the two diverge, the KDC issues service tickets the SUT
+    # cannot decrypt: the Kerberos AP exchange then BLOCKS the SMB2 SESSION_SETUP
+    # response, surfacing as a multi-hour Auth test hang instead of a clean failure.
+    # ksetup /SetComputerPassword sets both sides in one operation (the pipeline's
+    # canonical approach in Set-ComputerPassword.ps1) -- but only when the DC is
+    # reachable. So wait for the DC, set, VERIFY the secure channel, retry, and treat
+    # failure as a critical section so the problem surfaces at deploy time.
+    .\Write-Info.ps1 "Setting computer password (ksetup) for Kerberos..." -ForegroundColor Yellow
+    try {
+        # Sync the machine-account password to the Kerberos constant Password04! on BOTH
+        # the local LSA secret AND in AD. The Auth suite derives the file server's service
+        # key from ServicePassword (Password04!) + salt; if AD's machine key is anything
+        # else, service tickets fail the HMAC integrity check and the Kerberos AP exchange
+        # blocks SMB2 SESSION_SETUP.
+        #
+        # IMPORTANT: do NOT gate success on Test-ComputerSecureChannel alone. It returns
+        # True whenever the local secret == AD -- including when BOTH are still the OLD
+        # domain-join password (ksetup's local change is pending a reboot). Trusting it
+        # skips the AD-side reset, leaving AD != Password04!, which breaks Kerberos AND
+        # breaks machine trust after the next reboot. So ALWAYS force AD explicitly first,
+        # then the local secret, then restart Netlogon so the running LSA reloads to match.
+        $secPw       = ConvertTo-SecureString 'Password04!' -AsPlainText -Force
+        $adDomain    = (Get-CimInstance Win32_ComputerSystem).Domain
+        $machineAcct = "$($env:COMPUTERNAME)$"
+
+        # Idempotency: the marker is only ever written AFTER a forced AD reset + Netlogon
+        # restart + live verification below, so a marker + verified channel is authoritative.
         $marker = Get-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'ComputerPasswordSet' -ErrorAction SilentlyContinue
-        if ($null -eq $marker) {
-            ksetup /SetComputerPassword Password04!
-            # Also update the AD computer account password to match, otherwise
-            # the local-only change breaks the trust relationship after reboot.
-            try {
-                if (-not (Get-Module -ListAvailable -Name ActiveDirectory -ErrorAction SilentlyContinue)) {
-                    Install-WindowsFeature RSAT-AD-PowerShell -ErrorAction Stop | Out-Null
+        if ($null -ne $marker) {
+            $secureOk = $false
+            try { $secureOk = Test-ComputerSecureChannel -ErrorAction Stop } catch { $secureOk = $false }
+            if ($secureOk) {
+                $computerPwdOk = $true
+                .\Write-Info.ps1 "[OK] Computer password already forced + verified (marker present) -- skipping" -ForegroundColor Green
+            } else {
+                Remove-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'ComputerPasswordSet' -ErrorAction SilentlyContinue
+            }
+        }
+
+        if (-not $computerPwdOk) {
+            if (-not (Get-Module -ListAvailable -Name ActiveDirectory -ErrorAction SilentlyContinue)) {
+                try { Install-WindowsFeature RSAT-AD-PowerShell -ErrorAction Stop | Out-Null }
+                catch { .\Write-Info.ps1 "[WARN] Could not install RSAT-AD-PowerShell: $($_.Exception.Message)" -ForegroundColor Yellow }
+            }
+            for ($attempt = 1; $attempt -le 10 -and -not $computerPwdOk; $attempt++) {
+                .\Write-Info.ps1 "  Computer password sync attempt $attempt/10..." -ForegroundColor DarkGray
+
+                # Wait for the DC to be reachable before touching the account.
+                $dcReady = $false
+                try { $dcReady = [bool](Get-ADDomainController -Discover -ErrorAction Stop) } catch { $dcReady = $false }
+                if (-not $dcReady) {
+                    & nltest "/dsgetdc:$adDomain" 2>&1 | Out-Null
+                    $dcReady = ($LASTEXITCODE -eq 0)
                 }
-                $secPw = ConvertTo-SecureString 'Password04!' -AsPlainText -Force
-                Set-ADAccountPassword -Identity "$($env:COMPUTERNAME)$" -Reset -NewPassword $secPw -ErrorAction Stop
-                .\Write-Info.ps1 "[OK] AD computer account password synced" -ForegroundColor Green
-            } catch {
-                .\Write-Info.ps1 "[WARN] Failed to sync AD computer password: $($_.Exception.Message)" -ForegroundColor Yellow
+                if (-not $dcReady) {
+                    .\Write-Info.ps1 "  DC not reachable yet; waiting 30s..." -ForegroundColor DarkGray
+                    Start-Sleep -Seconds 30
+                    continue
+                }
+
+                # 1) Force the AD copy to Password04! (authoritative). This is NOT a fallback:
+                #    ksetup cannot be relied on to update AD, and this must run BEFORE
+                #    DisablePasswordChange is set (which would block the AD update).
+                try {
+                    Set-ADAccountPassword -Identity $machineAcct -Reset -NewPassword $secPw -ErrorAction Stop
+                } catch {
+                    .\Write-Info.ps1 "  AD machine-password reset failed: $($_.Exception.Message); retrying in 30s..." -ForegroundColor DarkGray
+                    Start-Sleep -Seconds 30
+                    continue
+                }
+
+                # 2) Set the local LSA secret to the same value.
+                $ksetupOut = ksetup /SetComputerPassword Password04! 2>&1
+                $ksetupExit = $LASTEXITCODE
+                $ksetupOut | .\Write-Info.ps1
+                if ($ksetupExit -ne 0) {
+                    .\Write-Info.ps1 "  ksetup failed (exit $ksetupExit); retrying in 30s..." -ForegroundColor DarkGray
+                    Start-Sleep -Seconds 30
+                    continue
+                }
+
+                # 3) Restart Netlogon so the RUNNING LSA reloads the on-disk secret (ksetup
+                #    otherwise "requires a reboot to take effect"). This closes the window where
+                #    running != on-disk that would break trust on the next reboot.
+                try { Restart-Service Netlogon -Force -ErrorAction Stop } catch {
+                    .\Write-Info.ps1 "  [WARN] Netlogon restart failed: $($_.Exception.Message)" -ForegroundColor Yellow
+                }
+                Start-Sleep -Seconds 5
+
+                # 4) Verify the LIVE secure channel now that all three (AD, on-disk, running)
+                #    should be Password04!.
+                $secureOk = $false
+                try { $secureOk = Test-ComputerSecureChannel -ErrorAction Stop } catch { $secureOk = $false }
+
+                if ($secureOk) {
+                    $computerPwdOk = $true
+                    if (-not (Test-Path 'HKLM:\SOFTWARE\ProtocolTestSuites')) {
+                        New-Item -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Force | Out-Null
+                    }
+                    New-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'ComputerPasswordSet' -Value 1 -PropertyType DWord -Force | Out-Null
+                    .\Write-Info.ps1 "[OK] Computer account password (Password04!) forced in AD + local, Netlogon restarted, secure channel verified" -ForegroundColor Green
+                } else {
+                    .\Write-Info.ps1 "  Secure channel not verified yet; retrying in 30s..." -ForegroundColor DarkGray
+                    Start-Sleep -Seconds 30
+                }
             }
-            if (-not (Test-Path 'HKLM:\SOFTWARE\ProtocolTestSuites')) {
-                New-Item -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Force | Out-Null
+            if (-not $computerPwdOk) {
+                .\Write-Error.ps1 "Failed to force computer account password (Password04!) in AD + local / verify secure channel after 10 attempts. The Auth/Kerberos suite will hang without this."
             }
-            New-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'ComputerPasswordSet' -Value 1 -PropertyType DWord -Force | Out-Null
-            .\Write-Info.ps1 "[OK] Computer password set" -ForegroundColor Green
-        } else {
-            .\Write-Info.ps1 "[OK] Computer password already set -- skipping" -ForegroundColor Green
+        }
+
+        # 5) Only NOW prevent Netlogon from auto-rotating the (now-correct) password. Setting
+        #    DisablePasswordChange BEFORE the sync can block the authoritative AD update above.
+        if ($computerPwdOk) {
+            & reg add 'HKLM\SYSTEM\CurrentControlSet\services\Netlogon\Parameters' /v DisablePasswordChange /t REG_DWORD /d 1 /f 2>&1 | .\Write-Info.ps1
         }
     } catch {
-        .\Write-Info.ps1 "[WARN] ksetup failed: $($_.Exception.Message)" -ForegroundColor Yellow
+        .\Write-Info.ps1 "[WARN] Computer password setup error: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+
+    # -- SSH server authorized_keys (PowerShell-over-SSH remoting for control adapters) --
+    # The Authorization/permission control adapters (GetGroupSid, GetUserSid, GetGroups, ...)
+    # reach the SUT/DC via `Invoke-Command -HostName` (PS remoting over SSH). Windows OpenSSH
+    # reads administrators_authorized_keys for the domain admin, which the SSH-certs tool does
+    # not populate -- without it sshd falls back to an interactive password prompt and the whole
+    # Authorization test group hangs (no SMB/KDC traffic, flat CPU). Install + verify as critical.
+    try {
+        .\Write-Info.ps1 "Configuring SSH authorized_keys for PowerShell-over-SSH remoting..." -ForegroundColor Yellow
+        $sshKeysOk = [bool](& "$scriptsPath\Set-SshServerAuthorizedKeys.ps1" -Config $config)
+    } catch {
+        .\Write-Info.ps1 "[WARN] SSH authorized_keys setup error: $($_.Exception.Message)" -ForegroundColor Yellow
     }
 
     # -- Initialize RAW Azure disks --
@@ -448,12 +570,16 @@ if ($Step -eq 3) {
   }
 
   .\Write-Info.ps1 ""
-  .\Write-Info.ps1 "=== SUT imperative steps (Step 3) completed (Disk=$diskOk, DataShares=$dataShareOk, Symlinks=$symlinkOk, FSA=$fsaOk, DFS=$dfsOk, QUIC=$quicOk) ===" -ForegroundColor Cyan
+  .\Write-Info.ps1 "=== SUT imperative steps (Step 3) completed (Disk=$diskOk, DataShares=$dataShareOk, Symlinks=$symlinkOk, FSA=$fsaOk, DFS=$dfsOk, QUIC=$quicOk, ComputerPwd=$computerPwdOk, SshKeys=$sshKeysOk) ===" -ForegroundColor Cyan
 
-  # Critical sections: FSA and DFS must succeed for tests to work.
+  # Critical sections: FSA, DFS, the Kerberos computer-account password, and SSH remoting
+  # must succeed for tests to work. A broken computer key or missing SSH key trust silently
+  # hangs the Auth / Authorization suites for hours, so treat them as fatal at deploy time.
   $criticalFailures = @()
-  if (-not $fsaOk)  { $criticalFailures += 'FSA' }
-  if (-not $dfsOk)  { $criticalFailures += 'DFS' }
+  if (-not $fsaOk)         { $criticalFailures += 'FSA' }
+  if (-not $dfsOk)         { $criticalFailures += 'DFS' }
+  if (-not $computerPwdOk) { $criticalFailures += 'ComputerPassword' }
+  if (-not $sshKeysOk)     { $criticalFailures += 'SshRemoting' }
 
   if ($criticalFailures.Count -gt 0) {
     Stop-Transcript

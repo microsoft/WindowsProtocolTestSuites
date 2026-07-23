@@ -112,13 +112,36 @@ public:
 	/// Destructor
 	/// </summary>
 	~RdmaMemoryWindow();
+
+	/// <summary>
+	/// Remote token (R_Key) of the memory window. For NDSPI v1 this is the token
+	/// captured when the window is bound; for NDSPI v2 it is obtained on demand
+	/// from IND2MemoryWindow::GetRemoteToken.
+	/// </summary>
+	property unsigned __int32 RemoteToken
+	{
+		unsigned __int32 get()
+		{
+			return _remoteToken;
+		}
+	}
 internal:
 	/// <summary>
 	/// Constructor
 	/// </summary>
 	/// <param name="memoryWindow">Memory window entity with NDSPI type</param>
 	RdmaMemoryWindow(INDMemoryWindow *memoryWindow);
+
+	/// <summary>
+	/// Stores the remote token captured from ND_MW_DESCRIPTOR during Bind.
+	/// </summary>
+	void SetRemoteToken(unsigned __int32 token)
+	{
+		_remoteToken = token;
+	}
+
 	INDMemoryWindow *_memoryWindow;
+	unsigned __int32 _remoteToken;
 };
 
 

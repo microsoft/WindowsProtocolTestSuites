@@ -450,7 +450,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             int keySize = (int)keyType / ConstValue.BYTE_SIZE;
             
             // generate the intermediate key
-            Rfc2898DeriveBytes PBKDF2 = new Rfc2898DeriveBytes(passwordBytes, saltBytes, (int)iterationCount);
+            Rfc2898DeriveBytes PBKDF2 = new Rfc2898DeriveBytes(passwordBytes, saltBytes, (int)iterationCount); // CodeQL [SM05371, SM02197] Required by RFC 3962 section 4: the Kerberos AES string-to-key uses PBKDF2 with HMAC-SHA1 as the pseudorandom function (etypes 17/18: aes128-cts-hmac-sha1-96 and aes256-cts-hmac-sha1-96), and the iteration count is supplied by the caller per the spec (4096 is the RFC 3962 default). Protocol-test interop code, not a security boundary.
             byte[] intermediateKey = PBKDF2.GetBytes(keySize);
             intermediateKey = RandomToKey(intermediateKey);
 

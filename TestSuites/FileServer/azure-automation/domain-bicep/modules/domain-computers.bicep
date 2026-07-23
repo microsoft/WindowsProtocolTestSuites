@@ -1,28 +1,32 @@
+// No parameter defaults in this module: defaults live only in the entry-point
+// templates (main.bicep / phase2.bicep) and the bicepparam files, so the two
+// deployment paths cannot drift.
+
 @description('Resource group location')
-param location string = 'West US 2'
+param location string
 
 @description('Environment name prefix')
 param environmentPrefix string
 
 @description('Admin username for VMs')
-param adminUsername string = 'testadmin'
+param adminUsername string
 
 @description('Admin password for VMs')
 @secure()
 param adminPassword string
 
 @description('Driver computer VM size')
-param driverVmSize string = 'Standard_F4as_v6'
+param driverVmSize string
 
 @description('SUT computer VM size')
-param sutVmSize string = 'Standard_D8ls_v5'
+param sutVmSize string
 
 @description('Driver computer OS type')
 @allowed([
   'Windows'
   'Linux'
 ])
-param driverOsType string = 'Windows'
+param driverOsType string
 
 @description('Driver computer Windows OS version')
 @allowed([
@@ -34,17 +38,17 @@ param driverOsType string = 'Windows'
   'win10-22h2-pro'
   'win10-22h2-ent'
 ])
-param driverOsVersion string = 'win11-25h2-ent'
+param driverOsVersion string
 
 @description('Driver computer Linux OS version (Ubuntu SKU)')
 @allowed([
   'server'
   'server-arm64'
 ])
-param driverLinuxOsVersion string = 'server'
+param driverLinuxOsVersion string
 
 @description('Custom image resource ID for driver VM (overrides marketplace image when set)')
-param driverCustomImageId string = ''
+param driverCustomImageId string
 
 @description('SUT computer OS version')
 @allowed([
@@ -52,10 +56,10 @@ param driverCustomImageId string = ''
   '2022-datacenter-g2'
   '2025-datacenter-azure-edition'
 ])
-param sutOsVersion string = '2025-datacenter-azure-edition'
+param sutOsVersion string
 
 @description('Custom image resource ID for SUT VM (overrides marketplace image when set). Must be a Windows image.')
-param sutCustomImageId string = ''
+param sutCustomImageId string
 
 @description('External1 subnet ID')
 param external1SubnetId string
@@ -64,34 +68,31 @@ param external1SubnetId string
 param external2SubnetId string
 
 @description('Driver computer External1 IP address')
-param driverExternal1Ip string = '192.168.1.111'
+param driverExternal1Ip string
 
 @description('Driver computer External2 IP address')
-param driverExternal2Ip string = '192.168.2.111'
+param driverExternal2Ip string
 
 @description('SUT computer External1 IP address')
-param sutExternal1Ip string = '192.168.1.11'
+param sutExternal1Ip string
 
 @description('SUT computer External2 IP address')
-param sutExternal2Ip string = '192.168.2.11'
+param sutExternal2Ip string
 
 @description('Domain Controller External1 IP address')
-param dcExternal1Ip string = '192.168.1.10'
+param dcExternal1Ip string
 
 @description('Domain Controller External2 IP address')
-param dcExternal2Ip string = '192.168.2.10'
+param dcExternal2Ip string
 
 @description('Enable auto-shutdown')
-param enableAutoShutdown bool = true
+param enableAutoShutdown bool
 
 @description('Auto-shutdown time (HH:mm in UTC)')
-param autoShutdownTime string = '20:00'
+param autoShutdownTime string
 
 @description('Auto-shutdown timezone')
-param autoShutdownTimeZone string = 'UTC'
-
-@description('URL to Domain-Package.zip file in Azure Storage')
-param domainPackageZipUrl string = ''
+param autoShutdownTimeZone string
 
 // Variables
 var driverIsLinux = driverOsType == 'Linux'
@@ -437,68 +438,6 @@ resource sutVmShutdownSchedule 'Microsoft.DevTestLab/schedules@2018-09-15' = if 
     targetResourceId: sutVm.id
     notificationSettings: {
       status: 'Disabled'
-    }
-  }
-}
-
-// Windows VM Extension for Domain Driver configuration
-resource driverWinExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03-01' = if (!driverIsLinux && !empty(domainPackageZipUrl)) {
-  name: 'ConfigureDomainDriver'
-  parent: driverVm
-  location: location
-  properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.10'
-    autoUpgradeMinorVersion: true
-    settings: {
-      fileUris: [
-        domainPackageZipUrl
-      ]
-    }
-    protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\domain-driver-setup.log -Append; Write-Output \\"Starting Domain Driver Setup...\\"; New-Item -ItemType Directory -Path C:\\Domain-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Domain-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-Driver.ps1 (DSC + imperative)...\\"; if (Test-Path C:\\Domain-Package\\DSC\\Deploy-Driver.ps1) { Set-Location C:\\Domain-Package\\DSC; .\\Deploy-Driver.ps1 -WorkingPath C:\\Domain-Package; } else { Write-Output \\"Deploy-Driver.ps1 not found, skipping configuration\\"; }; Write-Output \\"Driver configuration completed\\"; Stop-Transcript"'
-    }
-  }
-}
-
-// Linux VM Extension for Domain Driver configuration
-resource driverLinuxExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03-01' = if (driverIsLinux && !empty(domainPackageZipUrl)) {
-  name: 'ConfigureDomainDriverLinux'
-  parent: driverVm
-  location: location
-  properties: {
-    publisher: 'Microsoft.Azure.Extensions'
-    type: 'CustomScript'
-    typeHandlerVersion: '2.1'
-    autoUpgradeMinorVersion: true
-    settings: {
-      fileUris: [
-        domainPackageZipUrl
-      ]
-    }
-    protectedSettings: {
-      commandToExecute: 'bash -c "set -e; exec > >(tee -a /var/log/domain-driver-setup.log) 2>&1; echo Starting Domain Driver Setup...; mkdir -p /opt/Domain-Package; zipfile=\\$(find /var/lib/waagent/custom-script/download/0 -maxdepth 1 -name *.zip 2>/dev/null | head -1); if [ -n \\"\\$zipfile\\" ]; then echo Extracting \\$zipfile...; apt-get update -qq && apt-get install -y -qq unzip powershell; unzip -o \\"\\$zipfile\\" -d /opt/Domain-Package; rm -f \\"\\$zipfile\\"; else echo No zip file found; exit 1; fi; echo Starting Deploy-Driver.ps1 (DSC + imperative)...; if [ -f /opt/Domain-Package/DSC/Deploy-Driver.ps1 ]; then cd /opt/Domain-Package/DSC; pwsh -ExecutionPolicy Unrestricted -File /opt/Domain-Package/DSC/Deploy-Driver.ps1 -WorkingPath /opt/Domain-Package; else echo Deploy-Driver.ps1 not found, skipping configuration; fi; echo Driver configuration completed"'
-    }
-  }
-}
-
-resource sutVmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03-01' = if (!empty(domainPackageZipUrl)) {
-  name: 'ConfigureDomainSUT'
-  parent: sutVm
-  location: location
-  properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.10'
-    autoUpgradeMinorVersion: true
-    settings: {
-      fileUris: [
-        domainPackageZipUrl
-      ]
-    }
-    protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\domain-sut-setup.log -Append; Write-Output \\"Starting Domain SUT Setup...\\"; New-Item -ItemType Directory -Path C:\\Domain-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Domain-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-SUT.ps1 (DSC + imperative)...\\"; if (Test-Path C:\\Domain-Package\\DSC\\Deploy-SUT.ps1) { Set-Location C:\\Domain-Package\\DSC; .\\Deploy-SUT.ps1 -WorkingPath C:\\Domain-Package; } else { Write-Output \\"Deploy-SUT.ps1 not found, skipping configuration\\"; }; Write-Output \\"SUT configuration completed\\"; Stop-Transcript"'
     }
   }
 }

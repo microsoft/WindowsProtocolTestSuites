@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TestSite xmlns="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig" 
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig http://schemas.microsoft.com/windows/ProtocolsTest/2007/07/TestConfig.xsd">
@@ -67,6 +67,14 @@
 			iWARP
 	  -->
 	  <Property name="RDMATransport" value="RoCE"/>
+
+	  <!--
+	    The Network Direct Service Provider Interface (NDSPI) version used by the RDMA layer.
+	    Must match the NDVersion the Smbd project (ProtoSDK\MS-SMBD\Smbd.csproj) was built with.
+	        NDv1 - uses the wrapper defined in ProtoSDK\RDMA
+	        NDv2 - uses the wrapper defined in ProtoSDK\RDMANdv2
+	  -->
+	  <Property name="NDVersion" value="NDv2"/>
 
 	  <!--Name of file which is used in test read large content-->
     <Property name="TestFile_ReadLargeFile" value="testFile_ReadLargeFile.txt"/>

@@ -49,8 +49,7 @@ namespace Microsoft.Protocols.TestSuites.Identity.ADFSPIP
             _proxyAddress = proxyEndpoint;
 
             // make the client trust all server certificates
-            ServicePointManager.ServerCertificateValidationCallback +=
-                (sender, cert, chain, sslPolicyErrors) => true;
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true; // CodeQL [SM02184] MS-ADFSPIP MockClient: protocol test mock connecting to a test ADFS proxy that presents a test/self-signed certificate in the controlled protocol-test lab; this code never runs against production endpoints. Not a security boundary.
         }
 
         #endregion

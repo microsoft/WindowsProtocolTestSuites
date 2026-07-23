@@ -333,14 +333,25 @@ else {
   ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "SutComputerName" "$sutName.$domain"
   ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "DomainName" $domain
 
-  # Resolve DC name: prefer Config.json, fall back to DNS/AD discovery
+  # Resolve DC name so DCServerComputerName is ALWAYS non-empty in a domain/cluster env.
+  # The Authorization control adapters (GetUserSid/GetGroupSid/GetGroups/...) reach the DC
+  # via `Invoke-Command -HostName <DCServerComputerName>`; an empty value makes every
+  # SID-resolution test throw ArgumentNullException in DtypUtility.ToSid. Prefer Config.json
+  # (by key, then by Role), then DNS/AD discovery, then a hard default -- and always write it.
   $dcName = $null
   if ($config.Machines.DC -and $config.Machines.DC.ComputerName) {
     $dcName = $config.Machines.DC.ComputerName
   }
   if (-not $dcName) {
+    # Scan for any machine whose Role is DC (in case the key isn't literally "DC").
+    $dcMachine = $config.Machines.PSObject.Properties |
+      Where-Object { $_.Value.Role -eq 'DC' -or $_.Name -match '^DC' } |
+      Select-Object -First 1
+    if ($dcMachine -and $dcMachine.Value.ComputerName) { $dcName = $dcMachine.Value.ComputerName }
+  }
+  if (-not $dcName) {
     try {
-      # Try AD discovery first, then DNS reverse lookup on the DC IP (not driver IP)
+      # Try DNS reverse lookup on the DC IP (not driver IP), then AD discovery.
       $dcIpForLookup = if ($config.Machines.DC -and $config.Machines.DC.IpConfig) {
         @($config.Machines.DC.IpConfig)[0].Ip
       } else { "" }
@@ -350,16 +361,19 @@ else {
         $dcName = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain().DomainControllers[0].Name.Split(".")[0]
       }
     } catch {
-      Write-Warning "Could not resolve DC name: $($_.Exception.Message)"
+      Write-Warning "Could not resolve DC name via discovery: $($_.Exception.Message)"
     }
   }
-  if ($dcName) {
-    ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "DCServerComputerName" "$dcName.$domain"
+  if (-not $dcName) {
+    $dcName = "DC01"
+    Write-Warning "DCServerComputerName could not be resolved from Config.json or discovery; defaulting to '$dcName'. Verify Config.json Machines.DC.ComputerName -- an empty value breaks the Authorization SID-resolution tests."
   }
+  # Always write it (never leave empty in a domain/cluster env).
+  ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "DCServerComputerName" "$dcName.$domain"
 }
 
 ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "AdminUserName" $adminUserName
-."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "PasswordForAllUsers" $adminPassword
+."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "PasswordForAllUsers" $adminPassword -ValueClassification Secret
 ."$PSScriptRoot\Modify-ConfigFileNode.ps1" $commonTestSuitePtfConfig "SutIPAddress" $sutIP
 
 if ($ContextName -match "Samba") {

@@ -84,14 +84,14 @@
                 "name": "PTMCli",
                 "ZipName": "PTMCli.zip",
                 "targetFolder": "%SystemDrive%\\PTMCli",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/PTMCli.zip"
+                "Url": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.25.8.0/PTMCli.zip"
             }
         ],
         "TestsuiteZips": [
             {
                 "ZipName": "FileServer-TestSuite-ServerEP.zip",
                 "targetFolder": "%SystemDrive%\\FileServer-TestSuite-ServerEP",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/testsuites/FileServer-TestSuite-ServerEP.zip"
+                "Url": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/latest/download/FileServer-TestSuite-ServerEP.zip"
             }
         ]
     },

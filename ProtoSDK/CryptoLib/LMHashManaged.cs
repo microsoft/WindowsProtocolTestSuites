@@ -133,8 +133,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
 
             //use Des with ECB CipherMode and NONE padding option to encrypt "KGS!@#$%"
             byte[] hashDataBuffer = Encoding.ASCII.GetBytes(this.lmHashData);
-            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
-            des.Mode = CipherMode.ECB;
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider(); // CodeQL [SM02192, SM00400] Required by [MS-NLMP] section 6: LM hash and LMOWFv1 are defined as DES-based primitives. Protocol-test interop code, not a security boundary.
+            des.Mode = CipherMode.ECB; // CodeQL [SM00395, SM02199] Required by LM hash definition in [MS-NLMP] section 6: DES-ECB encrypts the constant "KGS!@#$%" with each password-derived 7-byte key. Protocol-test interop code, not a security boundary.
             des.Padding = PaddingMode.None;
 
             // DES class performs weak key check so that some short-length keys may fail
@@ -150,11 +150,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         }
 
         //this method is used to replace _NewEncryptor method. 
-        public byte[] EncryptData(byte[] data, int offset, int length, byte[] key, byte[] iv)
+        public byte[] EncryptData(byte[] data, int offset, int length, byte[] key, byte[] iv) // CodeQL [SM02205] BouncyCastle is required here because the LM hash construction defined by [MS-NLMP] section 6 produces DES keys that .NET's DESCryptoServiceProvider rejects via its hardcoded weak-key check; BC's DesEngine bypasses that check so the protocol-test code can match the spec. Protocol-test interop code, not a security boundary.
         {
             try
             {
-                var desEngine = new DesEngine();
+                var desEngine = new DesEngine(); // CodeQL [SM02742] LM hash is defined by [MS-NLMP] section 6 as DES-based; BouncyCastle's DesEngine is used here to bypass .NET's weak-key check that LM hash inputs can trigger. Protocol-test interop code, not a security boundary.
                 var cbcBlockCipher = new CbcBlockCipher(desEngine);
                 var bufferedBlockCipher = new BufferedBlockCipher(cbcBlockCipher);
 

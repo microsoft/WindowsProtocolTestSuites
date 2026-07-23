@@ -18,72 +18,72 @@ pipelines:
         credscan:
           lastModifiedDate: 2024-03-01
         eslint:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-23
         psscriptanalyzer:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-23
         armory:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-23
       binary:
         credscan:
           lastModifiedDate: 2024-03-01
         binskim:
-          lastModifiedDate: 2025-02-08
+          lastModifiedDate: 2026-05-23
         spotbugs:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-23
   58991:
     retail:
       source:
         credscan:
           lastModifiedDate: 2024-03-01
         eslint:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-22
         psscriptanalyzer:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-22
         armory:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-22
       binary:
         credscan:
           lastModifiedDate: 2024-03-01
         binskim:
-          lastModifiedDate: 2025-02-08
+          lastModifiedDate: 2026-05-22
         spotbugs:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-22
   58973:
     retail:
       source:
         credscan:
           lastModifiedDate: 2024-03-01
         eslint:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-22
         psscriptanalyzer:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-22
         armory:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-22
       binary:
         credscan:
           lastModifiedDate: 2024-03-01
         binskim:
-          lastModifiedDate: 2025-02-15
+          lastModifiedDate: 2026-05-22
         spotbugs:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-22
   58985:
     retail:
       source:
         credscan:
           lastModifiedDate: 2024-03-02
         eslint:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2026-05-22
         psscriptanalyzer:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2026-05-22
         armory:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2026-05-22
       binary:
         credscan:
           lastModifiedDate: 2024-03-02
         binskim:
-          lastModifiedDate: 2025-02-12
+          lastModifiedDate: 2026-05-22
         spotbugs:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2026-05-22
     usedNonDefaultBranch: true
   58710:
     retail:
@@ -91,18 +91,19 @@ pipelines:
         credscan:
           lastModifiedDate: 2024-03-01
         eslint:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-21
         psscriptanalyzer:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-21
         armory:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-21
       binary:
         credscan:
           lastModifiedDate: 2024-03-01
         binskim:
-          lastModifiedDate: 2025-02-08
+          lastModifiedDate: 2026-05-21
         spotbugs:
-          lastModifiedDate: 2024-03-01
+          lastModifiedDate: 2026-05-21
+    usedNonDefaultBranch: true
   109389:
     retail:
       source:
@@ -145,18 +146,18 @@ pipelines:
         credscan:
           lastModifiedDate: 2024-03-02
         eslint:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2026-05-23
         psscriptanalyzer:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2026-05-23
         armory:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2026-05-23
       binary:
         credscan:
           lastModifiedDate: 2024-03-02
         binskim:
-          lastModifiedDate: 2025-02-08
+          lastModifiedDate: 2026-05-23
         spotbugs:
-          lastModifiedDate: 2024-03-02
+          lastModifiedDate: 2026-05-23
   126281:
     retail:
       source:

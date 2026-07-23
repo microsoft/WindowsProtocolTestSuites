@@ -106,6 +106,7 @@ export function AutoDetection (props: StepWizardProps) {
 
     const timer = setTimeout(() => {
       dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionStepsUpdateCallback))
+      dispatch(AutoDetectionDataSrv.getAutoDetectionLog(() => { }))
     }, 1000)
 
     return () => clearTimeout(timer)
@@ -169,6 +170,8 @@ export function AutoDetection (props: StepWizardProps) {
 
   const onFailedClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
 
+  const onViewLogClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
+
   const onCloseAutoDetectionWarningDialogClick = () => {
     hideAutoDetectionWarningDialog()
   }
@@ -188,6 +191,15 @@ export function AutoDetection (props: StepWizardProps) {
                                         {status}
                                     </Link>
                             )
+                          } else if (status === 'Finished') {
+                            return (
+                                    <Link
+                                        underline
+                                        style={getStyle(status)}
+                                        onClick={onViewLogClick}>
+                                        {status}
+                                    </Link>
+                            )
                           } else if ((status === 'Pending' || status === 'Detecting') && autoDetection.detecting) {
                             return (
                                     <Stack horizontal>
@@ -203,7 +215,7 @@ export function AutoDetection (props: StepWizardProps) {
                 </div>
             </Label>
     )
-  }, [autoDetection.detecting, onFailedClick])
+  }, [autoDetection.detecting, onFailedClick, onViewLogClick])
 
   const stepColumns = useMemo<IColumn[]>(() => [{
     key: 'DetectingContent',
@@ -262,6 +274,7 @@ export function AutoDetection (props: StepWizardProps) {
                     </div>
                     <div className='buttonPanel'>
                         <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
+                            <PrimaryButton text="View Log" onClick={onViewLogClick} disabled={autoDetection.detectionSteps?.Result.Status === DetectionStatus.NotStart} />
                             <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
                             <PrimaryButton text="Previous" onClick={onPreviousButtonClick} />
                             <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />

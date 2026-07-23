@@ -99,7 +99,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService
             }
 
             // Calculate the one-way hash
-            return new HMACMD5(sessionKey).ComputeHash(SSKeyHash);
+            return new HMACMD5(sessionKey).ComputeHash(SSKeyHash); // CodeQL [SM02200] Required by [MS-CIFS] / [MS-NLMP] section 6: NTLM session-key derivation for SMB1 file-service signing uses HMAC-MD5 over the session key. Protocol-test interop code, not a security boundary.
         }
 
         #endregion

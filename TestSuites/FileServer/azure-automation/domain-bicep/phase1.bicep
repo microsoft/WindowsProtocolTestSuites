@@ -15,7 +15,7 @@ param adminUsername string = 'testadmin'
 param adminPassword string
 
 @description('Domain Controller VM size')
-param dcVmSize string = 'Standard_D4s_v5'
+param dcVmSize string = 'Standard_D2s_v5'
 
 @description('Domain Controller OS version')
 @allowed([
@@ -56,8 +56,8 @@ param domainName string = 'contoso.com'
 @description('Domain NetBIOS name')
 param domainNetBiosName string = 'CONTOSO'
 
-@description('Enable auto-shutdown')
-param enableAutoShutdown bool = true
+@description('Enable auto-shutdown. Default false: auto-shutdown DEALLOCATES VMs, and a deallocate/restart of a domain-joined member can collide with machine-account password handling. Opt in explicitly to save cost.')
+param enableAutoShutdown bool = false
 
 @description('Auto-shutdown time (HH:mm in UTC)')
 param autoShutdownTime string = '20:00'
@@ -94,6 +94,17 @@ module network 'modules/network.bicep' = {
     bastionSubnetPrefix: bastionSubnetPrefix
     external1SubnetPrefix: external1SubnetPrefix
     external2SubnetPrefix: external2SubnetPrefix
+  }
+}
+
+// Bastion is intentionally separate from core networking. The DC can provision as
+// soon as the VNet/subnets exist instead of waiting for Bastion host creation.
+module bastion '../shared/modules/bastion.bicep' = {
+  name: '${environmentPrefix}-bastion-deployment'
+  params: {
+    location: location
+    environmentPrefix: environmentPrefix
+    bastionSubnetId: network.outputs.bastionSubnetId
     bastionSku: bastionSku
   }
 }
@@ -123,12 +134,14 @@ module domainController 'modules/domain-controller.bicep' = {
 }
 
 // Outputs consumed by Phase 2
+output vnetId string = network.outputs.vnetId
 output vnetName string = network.outputs.vnetName
-output bastionFqdn string = network.outputs.bastionFqdn
+output bastionFqdn string = bastion.outputs.bastionFqdn
 output external1SubnetId string = network.outputs.external1SubnetId
 output external2SubnetId string = network.outputs.external2SubnetId
 output dcVmName string = domainController.outputs.dcVmName
 output dcExternal1Ip string = domainController.outputs.dcExternal1Ip
+output dcExternal2Ip string = domainController.outputs.dcExternal2Ip
 output keyVaultName string = diskEncryptionVault.outputs.keyVaultName
 output keyVaultId string = diskEncryptionVault.outputs.keyVaultId
 output keyVaultUrl string = diskEncryptionVault.outputs.keyVaultUrl
