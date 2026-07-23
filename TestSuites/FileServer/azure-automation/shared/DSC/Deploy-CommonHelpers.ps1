@@ -46,7 +46,13 @@ function Register-DeferredRebootAndResume {
 
         [string]$RunAsPassword,
 
-        [int]$RebootDelaySec = 90
+        [int]$RebootDelaySec = 90,
+
+        # Hold the resume task this long after startup so the network logon / domain
+        # session is fully established before the deploy script runs. Mitigates BITS
+        # 0x800704DD (ERROR_NOT_LOGGED_ON) and similar not-yet-logged-on races on a
+        # fast post-reboot resume (complements the HttpClient download fallback).
+        [int]$ResumeStartupDelaySec = 30
     )
 
     # 1. Unregister existing resume task if present
@@ -55,12 +61,17 @@ function Register-DeferredRebootAndResume {
         Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false
     }
 
-    # 2. Register resume task (AtStartup + 5-min repetition fallback)
+    # 2. Register resume task (AtStartup + ~30s delay, plus a 5-min repetition fallback)
     $action = New-ScheduledTaskAction -Execute 'powershell.exe' `
         -Argument "-ExecutionPolicy Bypass -NonInteractive -File `"$DeployScript`" -WorkingPath `"$WorkingPath`"" `
         -WorkingDirectory $DscFolder
+    $startupTrigger = New-ScheduledTaskTrigger -AtStartup
+    if ($ResumeStartupDelaySec -gt 0) {
+        # ISO-8601 duration; PT30S = 30 seconds after startup.
+        $startupTrigger.Delay = "PT${ResumeStartupDelaySec}S"
+    }
     $trigger = @(
-        (New-ScheduledTaskTrigger -AtStartup),
+        $startupTrigger,
         (New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5) -RepetitionInterval (New-TimeSpan -Minutes 5))
     )
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
@@ -68,12 +79,12 @@ function Register-DeferredRebootAndResume {
         # Run as domain user (needed for cross-node operations like New-Cluster)
         Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger `
             -Settings $settings -User $RunAsUser -Password $RunAsPassword -RunLevel Highest -Force | Out-Null
-        .\Write-Info.ps1 "[OK] Startup task '$TaskName' registered (as $RunAsUser)." -ForegroundColor Green
+        .\Write-Info.ps1 "[OK] Startup task '$TaskName' registered (as $RunAsUser, ~${ResumeStartupDelaySec}s startup delay)." -ForegroundColor Green
     } else {
         $principal = New-ScheduledTaskPrincipal -UserId 'SYSTEM' -RunLevel Highest -LogonType ServiceAccount
         Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger `
             -Principal $principal -Settings $settings -Force | Out-Null
-        .\Write-Info.ps1 "[OK] Startup task '$TaskName' registered (as SYSTEM)." -ForegroundColor Green
+        .\Write-Info.ps1 "[OK] Startup task '$TaskName' registered (as SYSTEM, ~${ResumeStartupDelaySec}s startup delay)." -ForegroundColor Green
     }
 
     # 3. Schedule deferred reboot

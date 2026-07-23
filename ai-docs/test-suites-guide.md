@@ -70,6 +70,10 @@ FileServer/src/
 └── Auth/               Authentication test cases
 ```
 
+### Azure Automation
+
+`TestSuites/FileServer/azure-automation/` contains Bicep and PowerShell deployment entry points for Domain, Workgroup, and Cluster environments. Shared infrastructure belongs under `shared/modules/`; for example, `bastion.bicep` deploys Bastion independently from core networking so VM provisioning is not serialized behind it. Domain deployment separates member infrastructure (`domain-computers.bicep`) from guest extensions (`domain-computer-extensions.bicep`), allowing VM provisioning to overlap DC configuration while keeping domain join behind the DC readiness gate. Reuse these modules rather than embedding equivalent resources in scenario network modules.
+
 ### Key Classes
 
 | Class | File | Purpose |

@@ -15,7 +15,7 @@
     <Compile Include="..\..\..\..\..\AssemblyInfo\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.15" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\ProtoSDK\MS-RDPEDYC\Rdpedyc.csproj">

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+# Visual Studio Version 18
+VisualStudioVersion = 18.7.11903.348 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProtoSDK", "ProtoSDK", "{220563EF-BC8C-43A0-9E76-E69AEB5DD9D9}"
 EndProject
@@ -50,6 +50,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyValueDetector", "..\..\..\ProtocolTestManager\PropertyValueDetector\PropertyValueDetector.csproj", "{5111E839-AAE1-45C7-9477-993855CDE5E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdmaLinux", "..\..\..\ProtoSDK\RdmaLinux\RdmaLinux.csproj", "{7F72E25C-E617-B5FB-81FB-E5155EC19764}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RDMANdv2", "..\..\..\ProtoSDK\RDMANdv2\RDMANdv2.vcxproj", "{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,6 +229,14 @@ Global
 		{7F72E25C-E617-B5FB-81FB-E5155EC19764}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7F72E25C-E617-B5FB-81FB-E5155EC19764}.Release|x64.ActiveCfg = Release|x64
 		{7F72E25C-E617-B5FB-81FB-E5155EC19764}.Release|x64.Build.0 = Release|x64
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}.Debug|Any CPU.Build.0 = Debug|x64
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}.Debug|x64.ActiveCfg = Debug|x64
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}.Debug|x64.Build.0 = Debug|x64
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}.Release|Any CPU.ActiveCfg = Release|x64
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}.Release|Any CPU.Build.0 = Release|x64
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}.Release|x64.ActiveCfg = Release|x64
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -251,6 +261,7 @@ Global
 		{E4DE43FD-8BB0-448A-AEE7-C6E844DD2483} = {4B2E7D37-F5B4-4642-8257-007AE7536BD7}
 		{5111E839-AAE1-45C7-9477-993855CDE5E6} = {4B2E7D37-F5B4-4642-8257-007AE7536BD7}
 		{7F72E25C-E617-B5FB-81FB-E5155EC19764} = {220563EF-BC8C-43A0-9E76-E69AEB5DD9D9}
+		{C5DD316A-1A3D-4D11-9AE9-FA77FA5F686C} = {220563EF-BC8C-43A0-9E76-E69AEB5DD9D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6A9B6022-B81D-486D-B89B-314834EF1724}

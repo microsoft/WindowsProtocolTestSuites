@@ -28,6 +28,7 @@ RdmaMemoryWindow::~RdmaMemoryWindow()
 RdmaMemoryWindow::RdmaMemoryWindow(INDMemoryWindow *memoryWindow)
 {
 	_memoryWindow = memoryWindow;
+	_remoteToken = 0;
 }
 
 END_RDMA_NAMESPACE

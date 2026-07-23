@@ -730,7 +730,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
 
             byte[] result = ArrayUtility.ConcatenateArrays(preData, data);
 
-            MD5CryptoServiceProvider md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            MD5CryptoServiceProvider md5CryptoServiceProvider = new MD5CryptoServiceProvider(); // CodeQL [SM02196] Required by RFC 1964: the rc4-hmac MIC computes MD5 over (DES-CBC of reversed key prepended to the data); replicates the spec checksum for Kerberos legacy etype interop. Protocol-test interop code, not a security boundary.
             byte[] md5 = md5CryptoServiceProvider.ComputeHash(result);
             return md5;
         }
@@ -745,7 +745,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns>The computed result.</returns>
         public static byte[] DesCbcMac(byte[] key, byte[] iv, byte[] data)
         {
-            DESCryptoServiceProvider desEncrypt = new DESCryptoServiceProvider();
+            DESCryptoServiceProvider desEncrypt = new DESCryptoServiceProvider(); // CodeQL [SM02192, SM00400] Required by RFC 3961 / [MS-KILE]: Kerberos legacy etype 1 (des-cbc-crc) and etype 3 (des-cbc-md5) use DES-CBC-MAC. Protocol-test interop code, not a security boundary.
             desEncrypt.IV = iv;
             desEncrypt.Key = key;
             desEncrypt.Mode = CipherMode.CBC;
@@ -766,7 +766,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns>The computed result.</returns>
         public static byte[] DesCbcEncrypt(byte[] key, byte[] iv, byte[] data)
         {
-            DESCryptoServiceProvider desEncrypt = new DESCryptoServiceProvider();
+            DESCryptoServiceProvider desEncrypt = new DESCryptoServiceProvider(); // CodeQL [SM02192, SM00400] Required by RFC 3961 / [MS-KILE]: Kerberos legacy etypes 1 (des-cbc-crc) and 3 (des-cbc-md5) use DES-CBC encryption. Protocol-test interop code, not a security boundary.
             desEncrypt.IV = iv;
             desEncrypt.Key = key;
             desEncrypt.Mode = CipherMode.CBC;
@@ -786,7 +786,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         /// <returns>The computed result.</returns>
         public static byte[] DesCbcDecrypt(byte[] key, byte[] iv, byte[] data)
         {
-            DESCryptoServiceProvider desDecrypt = new DESCryptoServiceProvider();
+            DESCryptoServiceProvider desDecrypt = new DESCryptoServiceProvider(); // CodeQL [SM02192, SM00400] Required by RFC 3961 / [MS-KILE]: Kerberos legacy etypes 1 (des-cbc-crc) and 3 (des-cbc-md5) use DES-CBC decryption. Protocol-test interop code, not a security boundary.
             desDecrypt.IV = iv;
             desDecrypt.Key = key;
             desDecrypt.Mode = CipherMode.CBC;

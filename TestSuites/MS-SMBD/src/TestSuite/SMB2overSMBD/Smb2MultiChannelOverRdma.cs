@@ -255,7 +255,8 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 testConfig.InboundEntries,
                 testConfig.OutboundEntries,
                 testConfig.InboundReadLimit,
-                testConfig.MaxReceiveSize);
+                testConfig.MaxReceiveSize,
+                testConfig.NDVersion);
 
             BaseTestSite.Assert.AreEqual<NtStatus>(
                 NtStatus.STATUS_SUCCESS,

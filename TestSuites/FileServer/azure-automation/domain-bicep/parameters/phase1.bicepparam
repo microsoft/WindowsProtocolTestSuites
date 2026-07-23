@@ -33,7 +33,9 @@ param domainName = 'contoso.com'
 param domainNetBiosName = 'CONTOSO'
 
 // Auto-shutdown Configuration
-param enableAutoShutdown = true
+// Default false for the domain lab: auto-shutdown DEALLOCATES VMs, which can collide with
+// domain-member machine-account password handling. Set to true to opt in and save cost.
+param enableAutoShutdown = false
 param autoShutdownTime = '20:00'
 param autoShutdownTimeZone = 'Eastern Standard Time'
 

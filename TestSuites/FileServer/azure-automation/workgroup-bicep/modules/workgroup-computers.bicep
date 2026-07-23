@@ -1,31 +1,35 @@
 // Workgroup Computers Module
 // Deploys Driver (Client01) and SUT (Node01) VMs in workgroup mode
 
+// No parameter defaults in this module: defaults live only in the entry-point
+// template (main.bicep) and the bicepparam file, so the deployment paths
+// cannot drift.
+
 @description('Resource group location')
-param location string = 'West US 2'
+param location string
 
 @description('Environment name prefix')
 param environmentPrefix string
 
 @description('Admin username for VMs')
-param adminUsername string = 'testadmin'
+param adminUsername string
 
 @description('Admin password for VMs')
 @secure()
 param adminPassword string
 
 @description('Driver computer VM size')
-param driverVmSize string = 'Standard_F4as_v6'
+param driverVmSize string
 
 @description('SUT computer VM size')
-param sutVmSize string = 'Standard_D8ls_v5'
+param sutVmSize string
 
 @description('Driver computer OS type')
 @allowed([
   'Windows'
   'Linux'
 ])
-param driverOsType string = 'Windows'
+param driverOsType string
 
 @description('Driver computer Windows OS version (win10-* or win11-* SKU)')
 @allowed([
@@ -37,17 +41,17 @@ param driverOsType string = 'Windows'
   'win10-22h2-pro'
   'win10-22h2-ent'
 ])
-param driverOsVersion string = 'win11-25h2-ent'
+param driverOsVersion string
 
 @description('Driver computer Linux OS version (Ubuntu SKU)')
 @allowed([
   'server'
   'server-arm64'
 ])
-param driverLinuxOsVersion string = 'server'
+param driverLinuxOsVersion string
 
 @description('Custom image resource ID for driver VM (overrides marketplace image when set)')
-param driverCustomImageId string = ''
+param driverCustomImageId string
 
 @description('SUT computer OS version')
 @allowed([
@@ -55,10 +59,10 @@ param driverCustomImageId string = ''
   '2022-datacenter-g2'
   '2025-datacenter-azure-edition'
 ])
-param sutOsVersion string = '2025-datacenter-azure-edition'
+param sutOsVersion string
 
 @description('Custom image resource ID for SUT VM (overrides marketplace image when set). Must be a Windows image.')
-param sutCustomImageId string = ''
+param sutCustomImageId string
 
 @description('External1 subnet ID')
 param external1SubnetId string
@@ -67,31 +71,72 @@ param external1SubnetId string
 param external2SubnetId string
 
 @description('Driver computer External1 IP address')
-param driverExternal1Ip string = '192.168.1.111'
+param driverExternal1Ip string
 
 @description('Driver computer External2 IP address')
-param driverExternal2Ip string = '192.168.2.111'
+param driverExternal2Ip string
 
 @description('SUT computer External1 IP address')
-param sutExternal1Ip string = '192.168.1.11'
+param sutExternal1Ip string
 
 @description('SUT computer External2 IP address')
-param sutExternal2Ip string = '192.168.2.11'
+param sutExternal2Ip string
 
 @description('Enable auto-shutdown')
-param enableAutoShutdown bool = true
+param enableAutoShutdown bool
 
 @description('Auto-shutdown time (HHmm in UTC)')
-param autoShutdownTime string = '2000'
+param autoShutdownTime string
 
 @description('Auto-shutdown timezone')
-param autoShutdownTimeZone string = 'UTC'
+param autoShutdownTimeZone string
 
 @description('URL to the DSC package zip file in Azure Storage (contains DSC/ folder, Config.json, Tools.json)')
-param dscPackageZipUrl string = ''
+param dscPackageZipUrl string
 
 // Variables
 var driverIsLinux = driverOsType == 'Linux'
+
+// CSE bootstrap: the shared scripts (../shared/scripts/cse-bootstrap.ps1/.sh)
+// are loaded at compile time, scenario/role/package tokens are substituted, and
+// the result travels base64-encoded inside the extensions' ENCRYPTED
+// protectedSettings. Windows has no 'script' property, so its commandToExecute
+// materializes the script to a file and runs it; the Linux CustomScript v2
+// extension takes the base64 directly via 'script' and downloads the package
+// itself (never relying on the waagent download directory, whose sequence
+// number changes when the extension re-runs).
+var packageHost = empty(dscPackageZipUrl) ? '' : split(dscPackageZipUrl, '/')[2]
+var bootstrapPs = loadTextContent('../../shared/scripts/cse-bootstrap.ps1')
+var driverBootstrap = replace(replace(replace(replace(replace(replace(replace(
+  bootstrapPs,
+  '__SCENARIO__', 'workgroup'),
+  '__ROLE__', 'driver'),
+  '__PACKAGE_NAME__', 'Workgroup-Package'),
+  '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'),
+  '__PACKAGE_URL__', dscPackageZipUrl),
+  '__PACKAGE_HOST__', packageHost),
+  '__PASSWORD_B64__', base64(adminPassword))
+var sutBootstrap = replace(replace(replace(replace(replace(replace(replace(
+  bootstrapPs,
+  '__SCENARIO__', 'workgroup'),
+  '__ROLE__', 'sut'),
+  '__PACKAGE_NAME__', 'Workgroup-Package'),
+  '__DEPLOY_SCRIPT__', 'Deploy-SUT.ps1'),
+  '__PACKAGE_URL__', dscPackageZipUrl),
+  '__PACKAGE_HOST__', packageHost),
+  '__PASSWORD_B64__', base64(adminPassword))
+var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(replace(
+  loadTextContent('../../shared/scripts/cse-bootstrap.sh'),
+  '__SCENARIO__', 'workgroup'),
+  '__ROLE__', 'driver'),
+  '__PACKAGE_NAME__', 'Workgroup-Package'),
+  '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'),
+  '__PACKAGE_URL__', dscPackageZipUrl),
+  '__PACKAGE_HOST__', packageHost),
+  '__PASSWORD_B64__', base64(adminPassword))
+var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\workgroup-driver-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(driverBootstrap)}\'))); & \'C:\\workgroup-driver-bootstrap.ps1\'; exit $LASTEXITCODE"'
+var sutCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\workgroup-sut-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(sutBootstrap)}\'))); & \'C:\\workgroup-sut-bootstrap.ps1\'; exit $LASTEXITCODE"'
+
 var driverWindowsOffer = startsWith(driverOsVersion, 'win10-') ? 'Windows-10' : 'Windows-11'
 var driverImageRef = !empty(driverCustomImageId) ? {
   id: driverCustomImageId
@@ -424,7 +469,7 @@ resource driverWinExtension 'Microsoft.Compute/virtualMachines/extensions@2023-0
       ]
     }
     protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\dsc-driver-setup.log -Append; Write-Output \\"Starting DSC Driver Setup...\\"; New-Item -ItemType Directory -Path C:\\Workgroup-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Workgroup-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-Driver.ps1 (DSC + imperative)...\\"; if (Test-Path C:\\Workgroup-Package\\DSC\\Deploy-Driver.ps1) { Set-Location C:\\Workgroup-Package\\DSC; .\\Deploy-Driver.ps1 -WorkingPath C:\\Workgroup-Package; } else { Write-Output \\"Deploy-Driver.ps1 not found, skipping configuration\\"; }; Write-Output \\"Driver DSC configuration completed\\"; Stop-Transcript"'
+      commandToExecute: driverCommandToExecute
     }
   }
 }
@@ -439,13 +484,9 @@ resource driverLinuxExtension 'Microsoft.Compute/virtualMachines/extensions@2023
     type: 'CustomScript'
     typeHandlerVersion: '2.1'
     autoUpgradeMinorVersion: true
-    settings: {
-      fileUris: [
-        dscPackageZipUrl
-      ]
-    }
+    settings: {}
     protectedSettings: {
-      commandToExecute: 'bash -c "set -e; exec > >(tee -a /var/log/dsc-driver-setup.log) 2>&1; echo Starting DSC Driver Setup...; mkdir -p /opt/Workgroup-Package; zipfile=\\$(find /var/lib/waagent/custom-script/download/0 -maxdepth 1 -name *.zip 2>/dev/null | head -1); if [ -n \\"\\$zipfile\\" ]; then echo Extracting \\$zipfile...; apt-get update -qq && apt-get install -y -qq unzip powershell; unzip -o \\"\\$zipfile\\" -d /opt/Workgroup-Package; rm -f \\"\\$zipfile\\"; else echo No zip file found; exit 1; fi; echo Starting Deploy-Driver.ps1 (DSC + imperative)...; if [ -f /opt/Workgroup-Package/DSC/Deploy-Driver.ps1 ]; then cd /opt/Workgroup-Package/DSC; pwsh -ExecutionPolicy Unrestricted -File /opt/Workgroup-Package/DSC/Deploy-Driver.ps1 -WorkingPath /opt/Workgroup-Package; else echo Deploy-Driver.ps1 not found, skipping configuration; fi; echo Driver DSC configuration completed"'
+      script: base64(driverLinuxBootstrap)
     }
   }
 }
@@ -466,7 +507,7 @@ resource sutVmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03-01
       ]
     }
     protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\dsc-sut-setup.log -Append; Write-Output \\"Starting DSC SUT Setup...\\"; New-Item -ItemType Directory -Path C:\\Workgroup-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Workgroup-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-SUT.ps1 (DSC + imperative)...\\"; if (Test-Path C:\\Workgroup-Package\\DSC\\Deploy-SUT.ps1) { Set-Location C:\\Workgroup-Package\\DSC; .\\Deploy-SUT.ps1 -WorkingPath C:\\Workgroup-Package; } else { Write-Output \\"Deploy-SUT.ps1 not found, skipping configuration\\"; }; Write-Output \\"SUT DSC configuration completed\\"; Stop-Transcript"'
+      commandToExecute: sutCommandToExecute
     }
   }
 }

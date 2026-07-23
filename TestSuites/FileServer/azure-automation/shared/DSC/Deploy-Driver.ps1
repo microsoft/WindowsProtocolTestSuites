@@ -17,7 +17,7 @@
       -> Deferred reboot (TKFRSAR startup task + 90s shutdown)
 
     Step 1 -> 2: Tools + PTF Config + RSA Keys + ForceLevel2
-      DSC: Re-apply to catch any drift.
+      DSC: Verify the persisted configuration and repair only when drifted.
       Imperative: Tools install (DotNetCore, OpenSSH, PowerShellCore, PTMService,
                   PTMCli, TestSuite, certs), cluster ptfconfig patching (if applicable),
                   RSA key copy, sshd restart, ForceLevel2 via ShareUtil.exe.
@@ -155,6 +155,7 @@ if (-not $isLinuxDriver) {
 }
 
 $signalFile = "$dscFolder\Deploy-Driver.Completed.signal"
+$driverDscSignal = "$dscFolder\Driver-DSC.Completed.signal"
 if (Test-Path $signalFile) {
     .\Write-Info.ps1 "[OK] Driver deployment already completed (signal file exists)." -ForegroundColor Green
     if (-not $isLinuxDriver) { Remove-ResumeTask }
@@ -209,6 +210,7 @@ if ($currentStep -lt 1) {
         .\Write-Info.ps1 "Applying Driver DSC configuration..." -ForegroundColor Yellow
         Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
         $phase1Ok = $true
+        "DRIVER DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $driverDscSignal -Force
         .\Write-Info.ps1 "[OK] DSC applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
     catch {
@@ -263,19 +265,34 @@ $currentStep = Get-DeployStep
 if ($currentStep -eq 1) {
     Start-Sleep -Seconds 5  # Post-reboot stabilization
 
-    # Re-apply DSC to catch any drift
-    .\Write-Info.ps1 "---- Phase 2a: DSC Re-Apply ----" -ForegroundColor Yellow
+    # Verify the successful pre-join application. Repair only when the persisted MOF
+    # reports drift or the success marker is absent.
+    .\Write-Info.ps1 "---- Phase 2a: DSC Drift Check ----" -ForegroundColor Yellow
     $phase2a = [System.Diagnostics.Stopwatch]::StartNew()
+    $driverDscReady = $false
     try {
-        . "$dscFolder\Driver-Configuration.ps1"
-        .\Write-Info.ps1 "Re-applying Driver DSC configuration (config: $configFile)..." -ForegroundColor Yellow
-        DriverConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
-        $phase1Ok = $true
-        .\Write-Info.ps1 "[OK] DSC re-applied in $([math]::Round($phase2a.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        $mofPath = Join-Path $mofFolder 'localhost.mof'
+        $inDesiredState = $false
+        if ((Test-Path $driverDscSignal) -and (Test-Path $mofPath)) {
+            .\Write-Info.ps1 "Checking Driver DSC drift against the persisted MOF..." -ForegroundColor Cyan
+            $inDesiredState = [bool](Test-DscConfiguration -Path $mofFolder -ErrorAction Stop)
+        }
+
+        if ($inDesiredState) {
+            $driverDscReady = $true
+            .\Write-Info.ps1 "[OK] Driver DSC remains in desired state; re-apply skipped." -ForegroundColor Green
+        } else {
+            . "$dscFolder\Driver-Configuration.ps1"
+            .\Write-Info.ps1 "Driver DSC is missing or drifted; compiling repair configuration..." -ForegroundColor Yellow
+            DriverConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
+            Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+            "DRIVER DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $driverDscSignal -Force
+            $driverDscReady = $true
+            .\Write-Info.ps1 "[OK] Driver DSC repaired in $([math]::Round($phase2a.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        }
     }
     catch {
-        .\Write-Info.ps1 "[WARN] DSC re-apply had issues: $($_.Exception.Message)" -ForegroundColor Yellow
+        .\Write-Error.ps1 "[FAIL] Driver DSC verification/repair failed: $($_.Exception.Message)"
     }
     $phase2a.Stop()
     .\Write-Info.ps1 ""
@@ -291,13 +308,17 @@ if ($currentStep -eq 1) {
         $imperativeArgs['SkipForceLevel2'] = $true
     }
 
-    try {
-        & "$dscFolder\Invoke-DriverImperativeSteps.ps1" @imperativeArgs
-        $phase2Ok = $true
-        .\Write-Info.ps1 "[OK] Driver configuration complete in $([math]::Round($phase2b.Elapsed.TotalSeconds))s" -ForegroundColor Green
-    }
-    catch {
-        .\Write-Error.ps1 "[FAIL] Driver configuration failed: $($_.Exception.Message)"
+    if ($driverDscReady) {
+        try {
+            & "$dscFolder\Invoke-DriverImperativeSteps.ps1" @imperativeArgs
+            $phase2Ok = $true
+            .\Write-Info.ps1 "[OK] Driver configuration complete in $([math]::Round($phase2b.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        }
+        catch {
+            .\Write-Error.ps1 "[FAIL] Driver configuration failed: $($_.Exception.Message)"
+        }
+    } else {
+        .\Write-Info.ps1 "[SKIP] Driver tools and test setup blocked because DSC is not ready." -ForegroundColor Yellow
     }
     $phase2b.Stop()
     .\Write-Info.ps1 ""
@@ -376,8 +397,10 @@ if ($currentStep -eq 1) {
     # ===========================================================================
     # Summary
     # ===========================================================================
-    Set-DeployStep -Step 2
-    Set-RebootCount -Count 0
+    if ($phase2Ok) {
+        Set-DeployStep -Step 2
+        Set-RebootCount -Count 0
+    }
 
     $stopwatch.Stop()
     .\Write-Info.ps1 ""

@@ -125,7 +125,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         /// <returns>the Hmac-Sha1 hash data</returns>
         internal static byte[] ComputeHmacSha1(byte[] key, byte[] input)
         {
-            HMACSHA1 hmacSha1 = new HMACSHA1(key);
+            HMACSHA1 hmacSha1 = new HMACSHA1(key); // CodeQL [SM02200] Required by RFC 3962: Kerberos AES etypes 17/18 (aes128/256-cts-hmac-sha1-96) specify HMAC-SHA1 as the MAC. Protocol-test interop code, not a security boundary.
             return hmacSha1.ComputeHash(input);
         }
 
@@ -138,7 +138,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5350:MD5CannotBeUsed")]
         internal static byte[] ComputeMd5(byte[] input)
         {
-            MD5CryptoServiceProvider md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            MD5CryptoServiceProvider md5CryptoServiceProvider = new MD5CryptoServiceProvider(); // CodeQL [SM02196] MD5 is required by multiple protocol specs that this helper serves: [MS-NLMP] section 6 (NTLMv1/v2 derivation), RFC 4757 (Kerberos rc4-hmac MIC), [MS-CIFS] SSP. Protocol-test interop code, not a security boundary.
             return md5CryptoServiceProvider.ComputeHash(input);
         }
 
@@ -152,7 +152,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5350:MD5CannotBeUsed")]
         public static byte[] ComputeMd5Hmac(byte[] key, byte[] input)
         {
-            HMACMD5 hmacMd5 = new HMACMD5(key);
+            HMACMD5 hmacMd5 = new HMACMD5(key); // CodeQL [SM02200] HMAC-MD5 is required by multiple protocol specs served by this helper: [MS-NLMP] section 6 (NTLMv2 NTOWFv2/LMOWFv2 derivation, MIC) and RFC 4757 (Kerberos rc4-hmac). Protocol-test interop code, not a security boundary.
             return hmacMd5.ComputeHash(input);
         }
 
@@ -178,7 +178,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security.Cryptography", "CA5354:SHA1CannotBeUsed")]
         internal static byte[] ComputeSha1(byte[] input)
         {
-            SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider();
+            SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider(); // CodeQL [SM02196] SHA-1 is required by RFC 3962 (Kerberos AES etypes 17/18 use HMAC-SHA1-96) and other protocol specs this helper serves. Protocol-test interop code, not a security boundary.
             return sha1.ComputeHash(input);
         }
         #endregion Hash Algorithms
@@ -209,7 +209,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             }
 
             // Set crypto to DES-CBC mode
-            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider(); // CodeQL [SM02192, SM00400] Required for Kerberos legacy etype 1 (des-cbc-crc) and etype 3 (des-cbc-md5) per RFC 3961 and related protocol interop. Protocol-test interop code, not a security boundary.
             des.Mode = CipherMode.CBC;
             des.BlockSize = ConstValue.DES_CBC_BLOCK_SIZE;
 
@@ -245,7 +245,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Cryptographic
             }
 
             // Set crypto to DES-CBC mode
-            DESCryptoServiceProvider des = new DESCryptoServiceProvider();
+            DESCryptoServiceProvider des = new DESCryptoServiceProvider(); // CodeQL [SM02192, SM00400] Required for Kerberos legacy etype 1 (des-cbc-crc) and etype 3 (des-cbc-md5) per RFC 3961 and related protocol interop. Protocol-test interop code, not a security boundary.
             des.Mode = CipherMode.CBC;
             des.BlockSize = ConstValue.DES_CBC_BLOCK_SIZE;
 

@@ -39,6 +39,10 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $isLinuxDriver = $IsLinux -eq $true
+# Azure CSE invokes pwsh as root without propagating HOME; downstream Join-Path $env:HOME fails with "Path is null".
+if ($isLinuxDriver -and [string]::IsNullOrWhiteSpace($env:HOME)) {
+    $env:HOME = '/root'
+}
 $scriptsPath = Join-Path $PSScriptRoot 'Scripts'
 $pathSep = [IO.Path]::PathSeparator
 $env:Path += "${pathSep}${WorkingPath}${pathSep}${scriptsPath}"
@@ -108,11 +112,23 @@ try {
                 }
                 else {
                     .\Write-Info.ps1 'Joining domain...' -ForegroundColor Cyan
-                    $joined = & "$scriptsPath\domainjoin.ps1"
-                    if (-not $joined) {
+                    # Capture only the script's final return value. domainjoin.ps1 may emit
+                    # stray success-stream output; a multi-element array is truthy even when
+                    # the real result is $false, which would silently mask a failed join.
+                    $joined = & "$scriptsPath\domainjoin.ps1" | Select-Object -Last 1
+                    if ($joined -ne $true) {
                         throw 'Domain join failed.'
                     }
                 }
+
+                # Prevent Netlogon from auto-rotating this member's machine-account
+                # password. The DC does NOT set RefusePasswordChange, so a rotation
+                # would succeed locally AND in AD -- but an Azure deallocate/restart in
+                # the rotation window can capture an inconsistent state, producing the
+                # "trust relationship between this workstation and the primary domain
+                # failed" error. Disabling rotation keeps the local secret and AD copy
+                # permanently in sync. Mirrors CommonScripts\Set-NetlogonRegKeyAndPolicy.ps1.
+                & reg add 'HKLM\SYSTEM\CurrentControlSet\services\Netlogon\Parameters' /v DisablePasswordChange /t REG_DWORD /d 1 /f 2>&1 | .\Write-Info.ps1
             }
 
             .\Write-Info.ps1 'Step 1 complete.' -ForegroundColor Green
@@ -203,7 +219,10 @@ try {
                         Write-Warning "Tool installation returned non-success"
                     }
                 }
-                $toolsOk = $true
+                # Postcondition: the tools signal exists only after a successful install
+                # (InstallMSIAndTools writes it after all MSIs; the Linux/extract branch writes
+                # it at the end of its steps). The critical-throw at end of script fires if false.
+                $toolsOk = Test-Path $signalFile
             }
             catch {
                 .\Write-Info.ps1 "[FAIL] Tools installation failed: $($_.Exception.Message)" -ForegroundColor Red

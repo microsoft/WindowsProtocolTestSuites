@@ -76,7 +76,8 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 nInboundEntries,
                 nOutboundEntries,
                 inboundReadLimit,
-                (uint)testConfig.MaxReceiveSize
+                (uint)testConfig.MaxReceiveSize,
+                this.testConfig.NDVersion
                 );
         }
 

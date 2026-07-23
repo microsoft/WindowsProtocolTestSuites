@@ -29,6 +29,7 @@ if(Test-Path -Path $settingFile)
     $osVersion          = .\Get-Parameter.ps1 $settingFile osVersion
     $workgroupDomain    = .\Get-Parameter.ps1 $settingFile workgroupDomain
     $compressionInTC    = .\Get-Parameter.ps1 $settingFile compressionInTC
+    $rdpSigningCertSubject = .\Get-Parameter.ps1 $settingFile rdpSigningCertSubject "CN=WPTS RDP Test Signing"
     .\Set-Parameter.ps1 $settingFile LogFile $logFile "If no log file path specified, this value should be used."
 }
 else
@@ -130,6 +131,22 @@ New-Item -Path $dataPath\CredentialManager_InvalidAccount_Reverse.ps1 -ItemType 
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerIP}`" /user:`"${driverComputerName}\${credSSPUser}_`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount.ps1" -Append -Encoding UTF8
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerName}`" /user:`"${driverComputerName}\${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding UTF8
 "cmd /c cmdkey /add:`"Domain:target=TERMSRV/${driverComputerIP}`" /user:`"${driverComputerName}\${credSSPUser}`" /pass:${credSSPPwd}" | out-file "$dataPath\CredentialManager_InvalidAccount_Reverse.ps1" -Append -Encoding UTF8
+
+#----------------------------------------------------------------------------
+# Sign Negotiate.RDP (if present) and register the cert as a trusted .rdp
+# publisher so the April 2026 RDP security dialog (CVE-2026-26151) does
+# not block unattended task execution. Idempotent: if the file was already
+# signed by Config-TerminalClient.ps1, rdpsign re-signs the same content.
+#----------------------------------------------------------------------------
+$negotiateRdpPath = Join-Path $dataPath "Negotiate.RDP"
+if (Test-Path -Path $negotiateRdpPath)
+{
+    .\Set-RdpFileSigning.ps1 -Subject $rdpSigningCertSubject -RdpFiles @($negotiateRdpPath)
+}
+else
+{
+    Write-Host "Skip signing: '$negotiateRdpPath' not found."
+}
 
 Write-Host "Allow RDP connecting to unkown publisher for $driverComputerName..."
 cmd /c reg add "HKCU\Software\Microsoft\Terminal Server Client" /v "AuthenticationLevelOverride" /t "REG_DWORD" /d 0 /f

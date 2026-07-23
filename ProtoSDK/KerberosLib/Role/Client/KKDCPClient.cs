@@ -44,7 +44,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
         {
             this.config = config;
             //Client do not verify server certificate
-            ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
+            ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true); // CodeQL [SM02184] KKDCP ([MS-KKDCP]) test client connects to a test KDC Proxy that presents a self-signed certificate in the controlled protocol-test lab; this code never runs against production endpoints. Not a security boundary.
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
             Error = KKDCPError.STATUS_SUCCESS;
         }

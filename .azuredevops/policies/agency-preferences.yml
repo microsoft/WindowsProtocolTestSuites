@@ -1,0 +1,46 @@
+# Tells Agency to use our customer-owned ("custom compute") pipeline for compute
+# when it operates on this repository, instead of the failing default managed compute.
+#
+# REQUIRED LOCATION (hard constraint): this file MUST be at
+#   .azuredevops/policies/agency-preferences.yml
+# in the repo Agency operates on (WindowsProtocolTestSuites). Do not move it.
+#
+# SELECTION (resolved — handover §6.2): invocation is Way A — work-item
+# assignment / `agency remote create`. The Customizing Agency Compute doc
+# confirms Way A reads this file from the repo and routes to the custom pipeline
+# (honoring pipelineTrialMode). Authoring this file is therefore SUFFICIENT for
+# the custom pipeline to be selected — the earlier REST-API (Way B) uncertainty
+# is moot. The driver's Way B -> Way A migration is a separate orchestration-repo
+# workstream, out of scope here.
+#
+# Both required values are resolved: projectId (§6.1 GUID) and pipelineId
+# ("Agency Custom Compute" definition id 195772, registered in ADO under
+# \WindowsProtocolTestSuites\Code Generation). The pipeline is validated
+# end-to-end (build 150080074), so pipelineTrialMode is now false — every
+# assigned work item routes to the custom pipeline, with no per-item
+# agency:pipelineTrialMode=true tag required.
+
+# metadata
+name: Agency custom pipeline configuration
+description: Configure Agency to use customer-owned pipeline for compute
+
+# filters
+resource: repository
+
+# configuration
+configuration:
+  agencyPreferences:
+    pipelineConfig:
+      organization: microsoft
+      projectId: b67fd756-1c65-48ef-9824-eeb3cb9b2728   # WindowsProtocolTestSuites project GUID
+                                         # (§6.1 resolved — fetched from the ADO REST projects API:
+                                         #  GET https://dev.azure.com/microsoft/_apis/projects/
+                                         #      WindowsProtocolTestSuites?api-version=7.0  -> .id)
+      pipelineId: 195772                 # "Agency Custom Compute" definition (Phase 2 done).
+                                         # Registered in ADO under
+                                         # \WindowsProtocolTestSuites\Code Generation
+                                         # URL: …/_build?definitionId=195772
+      pipelineTrialMode: false           # FULL ROLLOUT: pipeline validated end-to-end
+                                         # (build 150080074). Every assigned work item now uses
+                                         # the custom pipeline; the per-item
+                                         # agency:pipelineTrialMode=true tag is no longer required.

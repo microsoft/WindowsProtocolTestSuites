@@ -1792,8 +1792,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
                     string.Format("the length of key must be 8 bytes, actually {0} bytes", key.Length), "key");
             }
 
-            DES des = System.Security.Cryptography.DES.Create();
-            des.Mode = CipherMode.ECB;
+            DES des = System.Security.Cryptography.DES.Create(); // CodeQL [SM02192] Required by [MS-NLMP] section 6: the NTLM DES(K,D) primitive is defined as a single 8-byte DES-ECB block, used to build NTOWFv1 and LM challenge response. Protocol-test interop code.
+            des.Mode = CipherMode.ECB; // CodeQL [SM00395, SM02199] Required by [MS-NLMP] section 6: the NTLM DES(K,D) primitive is defined as a single 8-byte DES-ECB block; used to build NTOWFv1 / LM challenge response in protocol-test interop code.
             des.Key = key;
 
             return des.CreateEncryptor(des.Key, des.IV).TransformFinalBlock(data, 0, data.Length);
@@ -1843,7 +1843,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             byte[] data
             )
         {
-            return new HMACMD5(key).ComputeHash(data);
+            return new HMACMD5(key).ComputeHash(data); // CodeQL [SM02200] Required by [MS-NLMP] section 6: HMAC_MD5 is the primitive used throughout NTLMv2 for NTOWFv2/LMOWFv2 derivation and MIC computation. Protocol-test interop code, not a security boundary.
         }
 
 
@@ -1875,7 +1875,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.Nlmp
             byte[] data
             )
         {
-            return System.Security.Cryptography.MD5.Create().ComputeHash(data);
+            return System.Security.Cryptography.MD5.Create().ComputeHash(data); // CodeQL [SM02196] Required by [MS-NLMP] section 6 / RFC 1321: MD5 is part of NTLMv1/v2 key and checksum derivation. Protocol-test interop code, not a security boundary.
         }
 
 
