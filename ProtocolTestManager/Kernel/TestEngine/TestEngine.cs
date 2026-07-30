@@ -3,6 +3,7 @@
 
 using Microsoft.Protocols.TestManager.Common;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -34,6 +35,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private const int ProcessWaitInterval = 100;
 
+        private readonly ConcurrentDictionary<string, StringBuilder> testLogs =
+            new ConcurrentDictionary<string, StringBuilder>(StringComparer.Ordinal);
+
+        private readonly ConcurrentDictionary<Guid, string> testNamesByPipeConnection =
+            new ConcurrentDictionary<Guid, string>();
+
+        private HashSet<string> testCaseFullNames = new HashSet<string>(StringComparer.Ordinal);
+
         public TestEngine(string enginePath)
         {
             EnginePath = enginePath;
@@ -44,6 +53,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             tsLogManager = new TestSuiteLogManager();
             tsLogManager.Initialize(testcases);
             this.testcases = testcases;
+            testCaseFullNames = testcases.Select(test => test.FullName).ToHashSet(StringComparer.Ordinal);
         }
 
         /// <summary>
@@ -52,6 +62,23 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public TestSuiteLogManager GetTestSuiteLogManager()
         {
             return tsLogManager;
+        }
+
+        /// <summary>
+        /// Gets the log lines received for a test during the current run.
+        /// </summary>
+        public string GetTestLogs(string testCaseFullName)
+        {
+            if (string.IsNullOrEmpty(testCaseFullName) ||
+                !testLogs.TryGetValue(testCaseFullName, out var logs))
+            {
+                return null;
+            }
+
+            lock (logs)
+            {
+                return logs.Length > 0 ? logs.ToString() : null;
+            }
         }
 
         /// <summary>
@@ -317,13 +344,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
             return null;
         }
 
-        private void ParseLogMessage(string message)
+        private void ParseLogMessage(Guid connectionId, string message)
         {
             if (message.IndexOf(StringResource.InprogressTag) != -1 ||
                 message.IndexOf(StringResource.PassedTag) != -1 ||
                 message.IndexOf(StringResource.FailedTag) != -1 ||
                 message.IndexOf(StringResource.InconclusiveTag) != -1)
             {
+                // Status message: extract full test name
                 string[] strings = message.Split(' ');
                 string testCaseName = strings[strings.Length - 1];
 
@@ -332,6 +360,19 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     return;
                 }
 
+                if (message.Contains(StringResource.InprogressTag))
+                {
+                    testNamesByPipeConnection[connectionId] = testCaseName;
+                    var logs = testLogs.GetOrAdd(testCaseName, _ => new StringBuilder());
+                    lock (logs)
+                    {
+                        logs.Clear();
+                    }
+                }
+
+                AppendTestLog(testCaseName, message);
+
+                // Update test status for UI
                 if (message.Contains(StringResource.InprogressTag))
                 {
                     tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Running);
@@ -350,10 +391,58 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
                 else
                 {
-                    // Case status from Running -> Waiting.
-                    // Waiting QT close or Html Report.
+                    // Case status from Running -> Waiting
                     tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Waiting);
                 }
+
+                if (!message.Contains(StringResource.InprogressTag))
+                {
+                    testNamesByPipeConnection.TryRemove(connectionId, out _);
+                }
+            }
+            else if (TryGetTaggedTestLog(message, out var taggedTestName, out var taggedLog))
+            {
+                AppendTestLog(taggedTestName, taggedLog);
+            }
+            else if (testNamesByPipeConnection.TryGetValue(connectionId, out var testCaseName))
+            {
+                AppendTestLog(testCaseName, message);
+            }
+        }
+
+        private bool TryGetTaggedTestLog(string message, out string testCaseName, out string log)
+        {
+            testCaseName = null;
+            log = null;
+
+            int separatorIndex = message.IndexOf('|');
+            if (separatorIndex <= 0)
+            {
+                return false;
+            }
+
+            string candidate = message.Substring(0, separatorIndex);
+            if (!testCaseFullNames.Contains(candidate))
+            {
+                return false;
+            }
+
+            testCaseName = candidate;
+            log = message.Substring(separatorIndex + 1);
+            return true;
+        }
+
+        private void AppendTestLog(string testCaseName, string message)
+        {
+            if (string.IsNullOrEmpty(testCaseName) || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+
+            var logs = testLogs.GetOrAdd(testCaseName, _ => new StringBuilder());
+            lock (logs)
+            {
+                logs.AppendLine(message);
             }
         }
 

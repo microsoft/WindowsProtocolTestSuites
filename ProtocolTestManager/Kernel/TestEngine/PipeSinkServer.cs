@@ -14,6 +14,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
     {
         static string PipeName;
         static List<Listener> listeners;
+        static readonly object listenersLock = new object();
         static NamedPipeServerStream waitingServer = null;
         public static void serverCallback(IAsyncResult result)
         {
@@ -23,7 +24,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             server.EndWaitForConnection(result);
             StreamReader reader = new StreamReader(server);
             Listener listener = new Listener(reader, server);
-            listeners.Add(listener);
+            lock (listenersLock)
+            {
+                listeners.Add(listener);
+            }
             waitingServer = new NamedPipeServerStream(PipeName, PipeDirection.InOut, NamedPipeServerStream.MaxAllowedServerInstances, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
             waitingServer.BeginWaitForConnection(new AsyncCallback(serverCallback), waitingServer);
         }
@@ -49,24 +53,37 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public static void Stop()
         {
             Listener.IgnoreLogs = true;
-            if(listeners != null && listeners.Count > 0)
-                foreach (var listener in listeners)
+            lock (listenersLock)
+            {
+                if (listeners != null)
                 {
-                    listener.Stop();
+                    foreach (var listener in listeners)
+                    {
+                        listener.Stop();
+                    }
+
+                    listeners.Clear();
                 }
+            }
         }
 
-        public delegate void ParseLogMessageCallback(string message);
+        public delegate void ParseLogMessageCallback(Guid connectionId, string message);
         public static ParseLogMessageCallback ParseLogMessage;
         
         private static void CleanUnusedListener()
         {
-            if(listeners != null && listeners.Count > 0)
+            lock (listenersLock)
             {
-                foreach (var listener in listeners)
-                    listener.Stop();
+                listeners?.RemoveAll(listener =>
+                {
+                    if (!listener.IsCompleted)
+                    {
+                        return false;
+                    }
 
-                listeners.Clear();
+                    listener.Stop();
+                    return true;
+                });
             }
         }
     
@@ -78,10 +95,13 @@ namespace Microsoft.Protocols.TestManager.Kernel
     public class Listener
     {
         public static bool IgnoreLogs;
+        private readonly Guid connectionId = Guid.NewGuid();
         StreamReader SR;
         NamedPipeServerStream serverStream;
         CancellationTokenSource source;
         Task task;
+
+        public bool IsCompleted => task?.IsCompleted ?? true;
         public Listener(StreamReader reader, NamedPipeServerStream server)
         {
             serverStream = server;
@@ -116,7 +136,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             while ((line = SR.ReadLine()) != null)
             {
                 if (!IgnoreLogs && PipeSinkServer.ParseLogMessage != null)
-                    PipeSinkServer.ParseLogMessage(line);
+                    PipeSinkServer.ParseLogMessage(connectionId, line);
             }
         }
     }

@@ -154,7 +154,7 @@ A command-line interface for PTM operations. Useful for headless CI scenarios. S
 2. `PTMKernelService_TestRun.cs` resolves the test suite binary path from the installed package.
 3. It constructs a `dotnet vstest` (or `vstest.console.exe`) command with a filter expression derived from the selected test cases.
 4. The process is started with `stdout` redirected. Output is parsed line by line to extract test pass/fail events.
-5. A `PipeSink` (configured in `.ptfconfig`) sends real-time PTF log events to PTM, which streams them to the client via SignalR or polling.
+5. A `PipeSink` (configured in `.ptfconfig`) sends real-time PTF log events to PTM. PTM correlates each pipe connection with the fully qualified test name, buffers logs by that name, and serves them through the per-test result endpoint while the UI polls.
 6. Results are stored in the SQLite database via `TestRunResult` entities.
 
 ## How to Add Test Suite Support to PTM

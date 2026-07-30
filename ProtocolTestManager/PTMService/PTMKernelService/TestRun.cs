@@ -48,9 +48,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public int? Inconclusive { get; private set; }
 
-        private record TestCaseInfo(TestCaseState Status, TestCaseResult Detail, Task Task);
+        private record TestCaseInfo(TestCaseState Status, TestCaseResult Detail);
 
         private ConcurrentDictionary<string, TestCaseInfo> runningTestResult;
+
+        private volatile TestEngine testEngine;
 
         private TestRun(string testEnginePath, TestResult testResult, IConfiguration configuration, IStorageNode storageRoot, TestResultUpdateDelegate update)
         {
@@ -103,7 +105,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public void Run(IEnumerable<string> selectedTestCases)
         {
-            var testEngine = new TestEngine(TestEnginePath)
+            testEngine = new TestEngine(TestEnginePath)
             {
                 WorkingDirectory = $"{Configuration.TestSuite.StorageRoot.AbsolutePath}{Path.DirectorySeparatorChar}",
                 TestAssemblies = Configuration.TestSuite.GetTestAssemblies().ToList(),
@@ -134,7 +136,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             StorageRoot.CreateFile(TestRunConsts.TestCaseListFile, stream);
 
-            runningTestResult = new ConcurrentDictionary<string, TestCaseInfo>(tests.Select(t => new KeyValuePair<string, TestCaseInfo>(t.FullName, new TestCaseInfo(TestCaseState.NotRun, null, null))));
+            runningTestResult = new ConcurrentDictionary<string, TestCaseInfo>(tests.Select(t => new KeyValuePair<string, TestCaseInfo>(t.FullName, new TestCaseInfo(TestCaseState.NotRun, null))));
 
             testEngine.InitializeLogger(tests.ToList());
 
@@ -268,11 +270,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 var info = runningTestResult[name];
 
-                if (info.Task != null)
+                if (info.Detail == null && info.Status != TestCaseState.NotRun && info.Status != TestCaseState.Running)
                 {
-                    info.Task.Wait();
-
-                    info = runningTestResult[name];
+                    var (found, testCaseResult) = GetTestCaseResultInternal(name);
+                    if (found)
+                    {
+                        info = new TestCaseInfo(info.Status, testCaseResult);
+                        runningTestResult.AddOrUpdate(name, info, (_, _) => info);
+                    }
                 }
 
                 var result = new TestCaseResult
@@ -284,7 +289,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     },
                     StartTime = info.Detail?.StartTime,
                     EndTime = info.Detail?.EndTime,
-                    Output = info.Detail?.Output,
+                    Output = info.Detail?.Output ?? testEngine?.GetTestLogs(name),
                 };
 
                 return result;
@@ -324,16 +329,34 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public (bool found, TestCaseDetail detail) GetTestCaseDetail(string name)
         {
+            // The PTM per-case logger names each file by the test's short/display name
+            // (e.g. "MyTestMethod.html"), while "name" here is the fully qualified
+            // "Namespace.Class.Method". Try the fully qualified name first, then fall back
+            // to the trailing segment so the per-case detail is still located.
             var filePaths = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{name}.html", SearchOption.AllDirectories);
             if (!filePaths.Any())
             {
-                return (false, null);
+                var shortName = name.Split('.').Last();
+                if (!string.IsNullOrEmpty(shortName) && shortName != name)
+                {
+                    filePaths = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{shortName}.html", SearchOption.AllDirectories);
+                }
+
+                if (!filePaths.Any())
+                {
+                    return (false, null);
+                }
             }
 
             var filePath = filePaths.First();
             var content = File.ReadAllLines(filePath);
 
             var detailLine = content.Where(l => l.StartsWith(AppConfig.DetailKeyword));
+            if (!detailLine.Any())
+            {
+                return (false, null);
+            }
+
             var detailStr = detailLine.First();
 
             int startIndex = AppConfig.DetailKeyword.Length;
@@ -375,31 +398,17 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             if (state != TestCaseState.Running)
             {
-                var task = Task.Run(() =>
-                {
-                    // Need to wait before HTML file is generated.
-                    Task.Delay(5000).Wait();
-
-                    var (found, testCaseResult) = GetTestCaseResultInternal(testCase.FullName);
-                    if (found)
-                    {
-                        var info = new TestCaseInfo(state, testCaseResult, null);
-
-                        runningTestResult.AddOrUpdate(testCase.FullName, info, (k, old) => info);
-                    }
-                });
-
-                var info = new TestCaseInfo(state, null, task);
-
+                var (found, testCaseResult) = GetTestCaseResultInternal(testCase.FullName);
+                var info = new TestCaseInfo(state, found ? testCaseResult : null);
                 runningTestResult.AddOrUpdate(testCase.FullName, info, (k, old) => info);
             }
             else
             {
-                var info = new TestCaseInfo(state, null, null);
-
+                var info = new TestCaseInfo(state, null);
                 runningTestResult.AddOrUpdate(testCase.FullName, info, (k, old) => info);
             }
         }
+
 
         private (bool found, TestCaseResult result) GetTestCaseResultInternal(string name)
         {
@@ -417,6 +426,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 _ => TestCaseState.NotRun,
             };
 
+            var outputFromFile = String.Join("\n", detail.StandardOut.Select(output => output.Content));
             var result = new TestCaseResult
             {
                 Overview = new TestCaseOverview
@@ -426,7 +436,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 },
                 StartTime = detail.StartTime,
                 EndTime = detail.EndTime,
-                Output = String.Join("\n", detail.StandardOut.Select(output => output.Content)),
+                Output = !String.IsNullOrEmpty(outputFromFile) ? outputFromFile : null,
             };
 
             return (true, result);
