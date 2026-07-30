@@ -5,6 +5,7 @@ import { RequestMethod, FetchService } from '.'
 import { AutoDetectionActions, TestSuiteAutoDetectionActionTypes } from '../actions/AutoDetectionAction'
 import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
 import { AppThunkAction } from '../store/configureStore'
+import { DetectionLogChunk, DetectionStartResponse } from '../model/AutoDetectionData'
 
 export const AutoDetectionDataSrv = {
   getAutoDetectionPrerequisite: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
@@ -71,6 +72,22 @@ export const AutoDetectionDataSrv = {
       }
     })
   },
+  getAutoDetectionLogChunk: (completeCallback: (logChunk: DetectionLogChunk | undefined) => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
+    const state = getState()
+    const configurationId = state.configurations.selectedConfiguration?.Id
+    const safeOffset = Math.max(0, state.autoDetection.logOffset)
+    await FetchService({
+      url: `api/configuration/${configurationId}/autodetect/log/stream?offset=${safeOffset}`,
+      method: RequestMethod.GET,
+      dispatch,
+      onRequest: AutoDetectionActions.getAutoDetectionLogAction_Request,
+      onComplete: AutoDetectionActions.appendAutoDetectionLogChunkAction,
+      onError: AutoDetectionActions.getAutoDetectionLogAction_Failure,
+      onCompleteCallback: (logChunk: DetectionLogChunk | undefined) => {
+        completeCallback(logChunk)
+      }
+    })
+  },
   startAutoDetection: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
@@ -83,7 +100,12 @@ export const AutoDetectionDataSrv = {
       onComplete: AutoDetectionActions.startAutoDetectionAction_Success,
       onError: AutoDetectionActions.startAutoDetectionAction_Failure,
       body: JSON.stringify(body),
-      onCompleteCallback: completeCallback
+      onCompleteCallback: (response: DetectionStartResponse | undefined) => {
+        if (response !== undefined) {
+          dispatch(AutoDetectionActions.resetAutoDetectionLogStreamAction(response.RunId))
+          completeCallback()
+        }
+      }
     })
   },
   stopAutoDetection: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {

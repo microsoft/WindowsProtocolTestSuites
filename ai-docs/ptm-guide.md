@@ -123,6 +123,8 @@ Each test suite has a corresponding detector plugin. The plugin implements `IVal
 - `GetDetectedProperty(string name)` — returns detected property values for the test suite configuration
 - `RunDetection()` — performs actual network probing/WMI/registry queries against the SUT
 
+PTM monitors detector progress and may treat an unresponsive detector as failed based on the service's configured monitoring behavior. Each run has isolated cancellation, terminal state, detector, and log state so a non-cooperative detector cannot affect or block a later run. Incremental log chunks include the run ID and an `IsComplete` flag; the React client rejects stale chunks and continues fetching until the detector has stopped and the log writer has flushed all content.
+
 | Plugin | Suite |
 |---|---|
 | `FileServerPlugin/` | FileServer |

@@ -83,18 +83,13 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPost]
         public IActionResult StartAutoDetection(List<Property> properties, int configurationId)
         {
-            PTMKernelService.Reset(configurationId);
-            var setPrerequisite = PTMKernelService.SetPrerequisites(properties, configurationId);
-            if (setPrerequisite)
+            var runId = PTMKernelService.StartDetection(properties, configurationId, (o) => { });
+            if (runId != null)
             {
-                PTMKernelService.StartDetection(configurationId, (o) => { });
+                return Ok(new { RunId = runId });
+            }
 
-                return Ok();
-            }
-            else
-            {
-                return BadRequest("There's errors when set prerequisites");
-            }
+            return BadRequest("There's errors when set prerequisites");
         }
 
         /// <summary>
@@ -153,6 +148,21 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         public IActionResult GetDetectionLog(int configurationId)
         {
             var response = PTMKernelService.GetDetectionLog(configurationId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Get an incremental AutoDetection log chunk.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration Id.</param>
+        /// <param name="offset">The starting byte offset.</param>
+        /// <returns>Incremental log content and next offset.</returns>
+        [Route("{configurationId}/autodetect/log/stream")]
+        [HttpGet]
+        public IActionResult GetDetectionLogStream(int configurationId, [FromQuery] long offset = 0)
+        {
+            var response = PTMKernelService.GetDetectionLogChunk(configurationId, offset);
 
             return Ok(response);
         }

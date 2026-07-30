@@ -22,6 +22,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 
         void StartDetection(DetectionCallback callback);
 
+        string StartDetection(List<Property> prerequisiteProperties, DetectionCallback callback);
+
         void StopDetection(Action callback);
 
         List<ResultItemMap> GetDetectionSummary();
@@ -33,6 +35,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         void ApplyDetectedRules(out IEnumerable<Common.Types.RuleGroup> ruleGroupsBySelectedRules, int targetFilterIndex, int mappingFilterIndex);
 
         string GetDetectionLog();
+
+        DetectionLogChunk GetDetectionLogChunk(long offset);
 
         List<string> GetHiddenPropertiesInValueDetectorAssembly(List<CaseSelectRule> rules);
     }

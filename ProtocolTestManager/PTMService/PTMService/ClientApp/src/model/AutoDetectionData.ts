@@ -37,6 +37,18 @@ export interface DetectionSteps {
   Result: DetectionResult
 }
 
+export interface DetectionLogChunk {
+  RunId: string
+  Offset: number
+  NextOffset: number
+  Content: string
+  IsComplete: boolean
+}
+
+export interface DetectionStartResponse {
+  RunId: string
+}
+
 export enum DetectionStatus {
   // Detection not start.
   NotStart = 'NotStart',

@@ -21,6 +21,7 @@ build/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+.vscode/
 
 # SQL Server files
 *.mdf
@@ -36,6 +37,7 @@ ipch/
 *.cachefile
 *.VC.db
 *.VC.VC.opendb
+*.db
 
 # NuGet Packages
 *.nupkg

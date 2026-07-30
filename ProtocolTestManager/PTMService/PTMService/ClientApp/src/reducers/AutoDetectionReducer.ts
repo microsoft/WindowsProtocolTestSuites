@@ -23,15 +23,21 @@ import {
   GET_AUTO_DETECTION_LOG_REQUEST,
   GET_AUTO_DETECTION_LOG_FAILURE,
   SET_AUTO_DETECTION_LOG,
+  APPEND_AUTO_DETECTION_LOG_CHUNK,
+  RESET_AUTO_DETECTION_LOG_STREAM,
   TestSuiteAutoDetectionActionTypes
 } from '../actions/AutoDetectionAction'
 import { Prerequisite, DetectionSteps, DetectionStatus } from '../model/AutoDetectionData'
+import { createAsyncHandlers } from '../utils/AsyncReducerFactory'
 
 export interface AutoDetectionState {
   isPrerequisiteLoading: boolean
   isDetectionStepsLoading: boolean
   errorMsg?: string
-  log?: string
+  log: string
+  logRunId?: string
+  logOffset: number
+  isLogStreamComplete: boolean
   prerequisite?: Prerequisite
   detectionSteps?: DetectionSteps
   detecting: boolean
@@ -42,126 +48,95 @@ const initialAutoDetectionState: AutoDetectionState = {
   isPrerequisiteLoading: false,
   isDetectionStepsLoading: false,
   errorMsg: undefined,
-  log: undefined,
+  log: '',
+  logRunId: undefined,
+  logOffset: 0,
+  isLogStreamComplete: false,
   prerequisite: undefined,
   detectionSteps: undefined,
   detecting: false,
   canceling: false
 }
 
+// Reducer handler factories for common async patterns
+const prerequisiteHandlers = createAsyncHandlers<AutoDetectionState, 'isPrerequisiteLoading', 'prerequisite', 'errorMsg'>('isPrerequisiteLoading', 'prerequisite', 'errorMsg')
+const stepsHandlers = createAsyncHandlers<AutoDetectionState, 'isDetectionStepsLoading', 'detectionSteps', 'errorMsg'>('isDetectionStepsLoading', 'detectionSteps', 'errorMsg')
+
 export const getAutoDetectionReducer = (state = initialAutoDetectionState, action: TestSuiteAutoDetectionActionTypes): AutoDetectionState => {
   switch (action.type) {
+    // Prerequisite handlers
     case GET_AUTO_DETECTION_PREREQUISITE_REQUEST:
-      return {
-        ...state,
-        isPrerequisiteLoading: true,
-        errorMsg: undefined,
-        prerequisite: undefined
-      }
-
+      return prerequisiteHandlers.request(state)
     case GET_AUTO_DETECTION_PREREQUISITE_SUCCESS:
-      return {
-        ...state,
-        isPrerequisiteLoading: false,
-        errorMsg: undefined,
-        prerequisite: action.payload
-      }
-
+      return prerequisiteHandlers.success(state, action.payload)
     case GET_AUTO_DETECTION_PREREQUISITE_FAILURE:
-      return {
-        ...state,
-        isPrerequisiteLoading: false,
-        errorMsg: action.errorMsg
-      }
+      return prerequisiteHandlers.failure(state, action.errorMsg)
 
     case UPDATE_AUTO_DETECTION_PREREQUISITE:
       if (state.prerequisite !== undefined) {
-        const updatedProperties = state.prerequisite.Properties.map((item) => {
-          if (item.Name === action.payload.Name) {
-            return { ...item, Value: action.payload.Value }
-          } else {
-            return item
-          }
-        })
+        const updatedProperties = state.prerequisite.Properties.map((item) =>
+          item.Name === action.payload.Name ? { ...item, Value: action.payload.Value } : item
+        )
         return {
           ...state,
           prerequisite: { ...state.prerequisite, Properties: updatedProperties }
         }
-      } else {
-        return state
       }
+      return state
 
+    // Start/Stop detection handlers
     case START_AUTO_DETECTION_REQUEST:
-      return {
-        ...state,
-        isDetectionStepsLoading: true,
-        errorMsg: undefined
-      }
-
+      return { ...state, isDetectionStepsLoading: true, errorMsg: undefined }
     case START_AUTO_DETECTION_SUCCESS:
-      return {
-        ...state,
-        isDetectionStepsLoading: false,
-        errorMsg: undefined
-      }
-
+      return { ...state, isDetectionStepsLoading: false, errorMsg: undefined }
     case START_AUTO_DETECTION_FAILURE:
-      return {
-        ...state,
-        isDetectionStepsLoading: false,
-        errorMsg: action.errorMsg
-      }
+      return { ...state, isDetectionStepsLoading: false, errorMsg: action.errorMsg }
 
     case STOP_AUTO_DETECTION_REQUEST:
-      return {
-        ...state,
-        isDetectionStepsLoading: true,
-        canceling: true,
-        errorMsg: undefined
-      }
-
+      return { ...state, isDetectionStepsLoading: true, canceling: true, errorMsg: undefined }
     case STOP_AUTO_DETECTION_SUCCESS:
-      return {
-        ...state,
-        isDetectionStepsLoading: false,
-        canceling: true,
-        errorMsg: undefined
-      }
-
+      return { ...state, isDetectionStepsLoading: false, canceling: true, errorMsg: undefined }
     case STOP_AUTO_DETECTION_FAILURE:
-      return {
-        ...state,
-        isDetectionStepsLoading: false,
-        canceling: false,
-        errorMsg: action.errorMsg
-      }
+      return { ...state, isDetectionStepsLoading: false, canceling: false, errorMsg: action.errorMsg }
 
+    // Result/Log request handlers
     case APPLY_AUTO_DETECTION_RESULT_REQUEST:
     case GET_AUTO_DETECTION_LOG_REQUEST:
-      return {
-        ...state,
-        errorMsg: undefined
-      }
+      return { ...state, errorMsg: undefined }
 
     case APPLY_AUTO_DETECTION_RESULT_FAILURE:
     case GET_AUTO_DETECTION_LOG_FAILURE:
-      return {
-        ...state,
-        errorMsg: action.errorMsg
-      }
+      return { ...state, errorMsg: action.errorMsg }
 
+    // Log content handlers
     case SET_AUTO_DETECTION_LOG:
+      return { ...state, log: action.payload }
+
+    case APPEND_AUTO_DETECTION_LOG_CHUNK:
+      if ((state.logRunId !== undefined && action.payload.RunId !== state.logRunId) ||
+          action.payload.Offset !== state.logOffset) {
+        return state
+      }
       return {
         ...state,
-        log: action.payload
+        log: `${state.log}${action.payload.Content}`,
+        logRunId: action.payload.RunId,
+        logOffset: action.payload.NextOffset,
+        isLogStreamComplete: action.payload.IsComplete
       }
 
-    case GET_AUTO_DETECTION_STEPS_REQUEST:
+    case RESET_AUTO_DETECTION_LOG_STREAM:
       return {
         ...state,
-        isDetectionStepsLoading: true,
-        errorMsg: undefined
+        log: '',
+        logRunId: action.payload,
+        logOffset: 0,
+        isLogStreamComplete: false
       }
+
+    // Get/Update steps handlers
+    case GET_AUTO_DETECTION_STEPS_REQUEST:
+      return { ...state, isDetectionStepsLoading: true, errorMsg: undefined }
 
     case GET_AUTO_DETECTION_STEPS_SUCCESS:
       return {
@@ -174,17 +149,10 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case GET_AUTO_DETECTION_STEPS_FAILURE:
-      return {
-        ...state,
-        isDetectionStepsLoading: false,
-        errorMsg: action.errorMsg
-      }
+      return { ...state, isDetectionStepsLoading: false, errorMsg: action.errorMsg }
 
     case UPDATE_AUTO_DETECTION_STEPS_REQUEST:
-      return {
-        ...state,
-        errorMsg: undefined
-      }
+      return { ...state, errorMsg: undefined }
 
     case UPDATE_AUTO_DETECTION_STEPS_SUCCESS:
       return {
@@ -196,10 +164,7 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
       }
 
     case UPDATE_AUTO_DETECTION_STEPS_FAILURE:
-      return {
-        ...state,
-        errorMsg: action.errorMsg
-      }
+      return { ...state, errorMsg: action.errorMsg }
 
     default:
       return state
