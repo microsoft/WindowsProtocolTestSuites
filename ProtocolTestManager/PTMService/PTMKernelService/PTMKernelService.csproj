@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Microsoft.Protocols.TestManager.PTMService.PTMKernelService</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Kernel is assembly-marked preview; suppress internal consumption without marking this assembly's stable API surface. -->
+    <NoWarn>$(NoWarn);CA2252</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

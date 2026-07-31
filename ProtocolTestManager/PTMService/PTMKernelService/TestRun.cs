@@ -22,6 +22,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
     internal class TestRun : ITestRun
     {
+        private const string FileServerTestSuiteName = "FileServer";
+        private const string ParallelExecutionPropertyName = "Common.PTF.LogProfileParserPatch.Enabled";
+
         private string TestEnginePath { get; init; }
 
         public IConfiguration Configuration { get; init; }
@@ -120,7 +123,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 selectedTestCases = Configuration.GetApplicableTestCases();
             }
 
-            var tests = testEngine.LoadTestCases().Join(selectedTestCases, o => o.FullName, i => i, (o, i) => o);
+            var tests = testEngine.LoadTestCases()
+                .Join(selectedTestCases, o => o.FullName, i => i, (o, i) => o)
+                .ToList();
 
             using var stream = new MemoryStream();
 
@@ -138,7 +143,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             runningTestResult = new ConcurrentDictionary<string, TestCaseInfo>(tests.Select(t => new KeyValuePair<string, TestCaseInfo>(t.FullName, new TestCaseInfo(TestCaseState.NotRun, null))));
 
-            testEngine.InitializeLogger(tests.ToList());
+            testEngine.InitializeLogger(tests);
 
             testEngine.GetTestSuiteLogManager().GroupByOutcome.UpdateTestCaseList = (_, testCase) =>
             {
@@ -146,7 +151,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     UpdateTestCase(testCase);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Add exception log.
                 }
@@ -160,7 +165,21 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                     UpdateItem();
 
-                    testEngine.RunByCase(new Stack<TestCase>(tests), CancellationTokenSource.Token);
+                    if (IsFileServerParallelExecutionEnabled())
+                    {
+                        var plan = new FileServerExecutionPlanBuilder().Build(tests, parallelEnabled: true);
+                        var result = testEngine.RunExecutionPlan(plan, CancellationTokenSource.Token);
+                        if (!result.Succeeded)
+                        {
+                            throw new AggregateException(
+                                "Parallel test execution failed.",
+                                result.Failures.Select(failure => failure.Exception));
+                        }
+                    }
+                    else
+                    {
+                        testEngine.RunByCase(new Stack<TestCase>(tests), CancellationTokenSource.Token);
+                    }
 
                     State = TestResultState.Finished;
 
@@ -178,6 +197,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
                 catch (Exception ex)
                 {
+                    Logger.AddLog(LogLevel.Error, $"Test run {Id} failed with {ex}");
                     State = TestResultState.Failed;
 
                     Total = runningTestResult.Count();
@@ -193,6 +213,22 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     UpdateItem();
                 }
             });
+        }
+
+        private bool IsFileServerParallelExecutionEnabled()
+        {
+            if (!string.Equals(
+                Configuration.TestSuite.TestSuiteName,
+                FileServerTestSuiteName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            var ptfConfigStorage = Configuration.StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
+            var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
+            string value = ptfConfig.GetPropertyNodeByName(ParallelExecutionPropertyName)?.Value;
+            return bool.TryParse(value, out bool enabled) && enabled;
         }
 
         public void Abort()
@@ -329,43 +365,67 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public (bool found, TestCaseDetail detail) GetTestCaseDetail(string name)
         {
-            // The PTM per-case logger names each file by the test's short/display name
-            // (e.g. "MyTestMethod.html"), while "name" here is the fully qualified
-            // "Namespace.Class.Method". Try the fully qualified name first, then fall back
-            // to the trailing segment so the per-case detail is still located.
-            var filePaths = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{name}.html", SearchOption.AllDirectories);
-            if (!filePaths.Any())
+            foreach (string filePath in Directory.EnumerateFiles(
+                StorageRoot.AbsolutePath,
+                $"{name}.html",
+                SearchOption.AllDirectories))
             {
-                var shortName = name.Split('.').Last();
-                if (!string.IsNullOrEmpty(shortName) && shortName != name)
+                if (TryReadTestCaseDetail(filePath, out TestCaseDetail detail))
                 {
-                    filePaths = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{shortName}.html", SearchOption.AllDirectories);
-                }
-
-                if (!filePaths.Any())
-                {
-                    return (false, null);
+                    return (true, detail);
                 }
             }
 
-            var filePath = filePaths.First();
-            var content = File.ReadAllLines(filePath);
-
-            var detailLine = content.Where(l => l.StartsWith(AppConfig.DetailKeyword));
-            if (!detailLine.Any())
+            string shortName = name.Split('.').Last();
+            if (string.IsNullOrEmpty(shortName) || shortName == name)
             {
                 return (false, null);
             }
 
-            var detailStr = detailLine.First();
+            TestCaseDetail onlyCandidate = null;
+            int candidateCount = 0;
+            foreach (string filePath in Directory.EnumerateFiles(
+                StorageRoot.AbsolutePath,
+                $"{shortName}.html",
+                SearchOption.AllDirectories))
+            {
+                if (!TryReadTestCaseDetail(filePath, out TestCaseDetail detail))
+                {
+                    continue;
+                }
+
+                if (string.Equals(detail.FullyQualifiedName, name, StringComparison.Ordinal))
+                {
+                    return (true, detail);
+                }
+
+                onlyCandidate = detail;
+                candidateCount++;
+            }
+
+            // Older result files may not include FullyQualifiedName. They are safe only when
+            // the short name identifies a single result across all parallel worker directories.
+            return candidateCount == 1
+                ? (true, onlyCandidate)
+                : (false, null);
+        }
+
+        private static bool TryReadTestCaseDetail(string filePath, out TestCaseDetail detail)
+        {
+            detail = null;
+            string detailLine = File.ReadLines(filePath)
+                .FirstOrDefault(line => line.StartsWith(AppConfig.DetailKeyword));
+            if (detailLine == null)
+            {
+                return false;
+            }
 
             int startIndex = AppConfig.DetailKeyword.Length;
-            int endIndex = detailStr.Length - 1;
-            string detailJson = detailStr.Substring(startIndex, endIndex - startIndex);
+            int endIndex = detailLine.Length - 1;
+            string detailJson = detailLine.Substring(startIndex, endIndex - startIndex);
 
-            var detail = JsonSerializer.Deserialize<TestCaseDetail>(detailJson);
-
-            return (true, detail);
+            detail = JsonSerializer.Deserialize<TestCaseDetail>(detailJson);
+            return detail != null;
         }
 
         private void UpdateItem()

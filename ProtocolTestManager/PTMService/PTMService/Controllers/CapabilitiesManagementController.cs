@@ -139,6 +139,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         /// <summary>
         /// Saves a capabilities file.
         /// </summary>
+        /// <param name="id">The capabilities file identifier.</param>
         /// <param name="request">The create request.</param>
         /// <returns>The action result.</returns>
         [Route("save/{id}")]

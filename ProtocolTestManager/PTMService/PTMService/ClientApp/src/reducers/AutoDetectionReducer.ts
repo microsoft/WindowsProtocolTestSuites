@@ -18,6 +18,7 @@ import {
   STOP_AUTO_DETECTION_SUCCESS,
   STOP_AUTO_DETECTION_FAILURE,
   APPLY_AUTO_DETECTION_RESULT_REQUEST,
+  APPLY_AUTO_DETECTION_RESULT_SUCCESS,
   APPLY_AUTO_DETECTION_RESULT_FAILURE,
   UPDATE_AUTO_DETECTION_PREREQUISITE,
   GET_AUTO_DETECTION_LOG_REQUEST,
@@ -42,6 +43,7 @@ export interface AutoDetectionState {
   detectionSteps?: DetectionSteps
   detecting: boolean
   canceling: boolean
+  applyingResult: boolean
 }
 
 const initialAutoDetectionState: AutoDetectionState = {
@@ -55,7 +57,8 @@ const initialAutoDetectionState: AutoDetectionState = {
   prerequisite: undefined,
   detectionSteps: undefined,
   detecting: false,
-  canceling: false
+  canceling: false,
+  applyingResult: false
 }
 
 // Reducer handler factories for common async patterns
@@ -101,10 +104,17 @@ export const getAutoDetectionReducer = (state = initialAutoDetectionState, actio
 
     // Result/Log request handlers
     case APPLY_AUTO_DETECTION_RESULT_REQUEST:
+      return { ...state, applyingResult: true, errorMsg: undefined }
+
+    case APPLY_AUTO_DETECTION_RESULT_SUCCESS:
+      return { ...state, applyingResult: false, errorMsg: undefined }
+
     case GET_AUTO_DETECTION_LOG_REQUEST:
       return { ...state, errorMsg: undefined }
 
     case APPLY_AUTO_DETECTION_RESULT_FAILURE:
+      return { ...state, applyingResult: false, errorMsg: action.errorMsg }
+
     case GET_AUTO_DETECTION_LOG_FAILURE:
       return { ...state, errorMsg: action.errorMsg }
 

@@ -4,6 +4,7 @@
 using Microsoft.Protocols.TestManager.Common;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 
 namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
 {
@@ -87,6 +88,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// Get test case filter.
         /// </summary>
         /// <returns>The testcase filter.</returns>
+        [RequiresPreviewFeatures]
         TestManager.Kernel.TestCaseFilter GetTestCaseFilter();
 
         /// <summary>

@@ -21,6 +21,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
     internal class Configuration : IConfiguration
     {
+        private const string ParallelExecutionPropertyKey = "Common.PTF.LogProfileParserPatch.Enabled";
+        private const string ParallelExecutionPropertyDisplayName = "Enable Parallel Test Execution";
+
         private Configuration(TestSuiteConfiguration testSuiteConfiguration, ITestSuite testSuite, IStorageNode storageRoot)
         {
             Id = testSuiteConfiguration.Id;
@@ -619,11 +622,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 else
                 {
                     string groupName = string.IsNullOrEmpty(parentGroupName) ? propertyView.Name : string.Format("{0}.{1}", parentGroupName, propertyView.Name);
+                    string key = groupName == PtfConfig.DefaultGroup ? item.Name : string.Format("{0}.{1}", groupName, item.Name);
 
                     propertyList.Add(new Property()
                     {
-                        Key = groupName == PtfConfig.DefaultGroup ? item.Name : string.Format("{0}.{1}", groupName, item.Name),
-                        Name = item.Name,
+                        Key = key,
+                        Name = key == ParallelExecutionPropertyKey
+                            ? ParallelExecutionPropertyDisplayName
+                            : item.Name,
                         Choices = item.ChoiceItems,
                         Description = item.Description,
                         Value = item.Value,

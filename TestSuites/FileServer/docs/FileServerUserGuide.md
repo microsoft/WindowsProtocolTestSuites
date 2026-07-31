@@ -3448,6 +3448,20 @@ On how to use PTM to configure and run test suite, please refer to this [tutoria
 
 On how to use PTMCli to run test cases, please refer to this [guide](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/PtmCli).
 
+#### Parallel FileServer execution
+
+Set **Common.PTF.LogProfileParserPatch.Enabled** to **true** in the PTM configuration to enable parallel FileServer execution. The same property enables the collision-safe PTF logging required when multiple test hosts run concurrently.
+
+PTM runs the selected tests in sequential stages that match the FileServer automation baseline:
+
+1. Four round-robin SMB2Model shards.
+2. SMB2 tests.
+3. AppInstanceId tests.
+4. FSA and FSAModel tests.
+5. The remaining FileServer assemblies.
+
+Independent workers within a stage run concurrently, with a maximum of five workers. Stages remain ordered, and each worker writes to an isolated result directory. The default property value is **false**, which preserves the existing single-process sequential execution behavior.
+
 ### <a name="7.2"/> 7.2 Configure the Test Suite Manually
 
 The **File Server Protocol Family Test Suite** is installed with default configuration settings. However, you have the option to modify these settings according to your specific test environment needs. For example, you can configure the **Test Suite** in the following ways:

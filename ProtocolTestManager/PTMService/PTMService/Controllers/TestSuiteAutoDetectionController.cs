@@ -4,6 +4,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
@@ -15,6 +16,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
     [ApiController]
     public class TestSuiteAutoDetectionController : PTMServiceControllerBase
     {
+        private static readonly ConcurrentDictionary<int, byte> ApplyingDetectionResults =
+            new ConcurrentDictionary<int, byte>();
+
         /// <summary>
         /// Constructor of test suite auto detection controller.
         /// </summary>
@@ -115,10 +119,20 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
         [HttpPost]
         public IActionResult ApplyAutoDetectionResult(int configurationId)
         {
-            // Apply Detection Result.
-            PTMKernelService.ApplyDetectionResult(configurationId);
+            if (!ApplyingDetectionResults.TryAdd(configurationId, 0))
+            {
+                return Conflict("The auto-detection result is already being applied.");
+            }
 
-            return Ok();
+            try
+            {
+                PTMKernelService.ApplyDetectionResult(configurationId);
+                return Ok();
+            }
+            finally
+            {
+                ApplyingDetectionResults.TryRemove(configurationId, out _);
+            }
         }
 
         /// <summary>

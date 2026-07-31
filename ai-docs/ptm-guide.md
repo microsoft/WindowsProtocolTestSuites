@@ -152,10 +152,11 @@ A command-line interface for PTM operations. Useful for headless CI scenarios. S
 
 1. PTM receives a `StartTestRun` request with a configuration ID and selected test case names.
 2. `PTMKernelService_TestRun.cs` resolves the test suite binary path from the installed package.
-3. It constructs a `dotnet vstest` (or `vstest.console.exe`) command with a filter expression derived from the selected test cases.
-4. The process is started with `stdout` redirected. Output is parsed line by line to extract test pass/fail events.
-5. A `PipeSink` (configured in `.ptfconfig`) sends real-time PTF log events to PTM. PTM correlates each pipe connection with the fully qualified test name, buffers logs by that name, and serves them through the per-test result endpoint while the UI polls.
-6. Results are stored in the SQLite database via `TestRunResult` entities.
+3. It constructs `dotnet test` commands with filter expressions derived from the selected test cases.
+4. A `PipeSink` configured in `.ptfconfig` sends real-time PTF status and log events to PTM. PTM correlates each pipe connection with the fully qualified test name, buffers logs by that name, and serves them through the per-test result endpoint while the UI polls.
+5. Each process writes HTML results under the test run storage directory, and PTM aggregates the status and detail files into the run result.
+6. FileServer configurations with `Common.PTF.LogProfileParserPatch.Enabled=true` use a staged execution plan matching `Execute-TestCaseByContext.ps1`: four SMB2Model shards, SMB2, AppInstanceId, FSA/FSAModel, then remaining assemblies. Up to five units in a stage run concurrently with isolated result directories and runsettings files.
+7. Other suites, and FileServer configurations where the property is false, retain the existing sequential execution path.
 
 ## How to Add Test Suite Support to PTM
 

@@ -7,6 +7,8 @@ import { AutoDetectionState } from '../reducers/AutoDetectionReducer'
 import { AppThunkAction } from '../store/configureStore'
 import { DetectionLogChunk, DetectionStartResponse } from '../model/AutoDetectionData'
 
+const applyingDetectionResults = new Set<number>()
+
 export const AutoDetectionDataSrv = {
   getAutoDetectionPrerequisite: (): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
     const state = getState()
@@ -121,17 +123,25 @@ export const AutoDetectionDataSrv = {
     })
   },
   applyDetectionResult: (completeCallback: () => void): AppThunkAction<TestSuiteAutoDetectionActionTypes> => async (dispatch, getState) => {
-    console.log('applyDetectionResult')
     const state = getState()
     const configurationId = state.configurations.selectedConfiguration?.Id
-    await FetchService({
-      url: `api/configuration/${configurationId}/autodetect/apply`,
-      method: RequestMethod.POST,
-      dispatch,
-      onRequest: AutoDetectionActions.applyAutoDetectionResultAction_Request,
-      onComplete: AutoDetectionActions.applyAutoDetectionResultAction_Success,
-      onError: AutoDetectionActions.applyAutoDetectionResultAction_Failure,
-      onCompleteCallback: completeCallback
-    })
+    if (configurationId === undefined || applyingDetectionResults.has(configurationId)) {
+      return
+    }
+
+    applyingDetectionResults.add(configurationId)
+    try {
+      await FetchService({
+        url: `api/configuration/${configurationId}/autodetect/apply`,
+        method: RequestMethod.POST,
+        dispatch,
+        onRequest: AutoDetectionActions.applyAutoDetectionResultAction_Request,
+        onComplete: AutoDetectionActions.applyAutoDetectionResultAction_Success,
+        onError: AutoDetectionActions.applyAutoDetectionResultAction_Failure,
+        onCompleteCallback: completeCallback
+      })
+    } finally {
+      applyingDetectionResults.delete(configurationId)
+    }
   }
 }

@@ -122,14 +122,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 if(RunningTestCase.Status == TestCaseStatus.Running)
                 {
-                    GroupByOutcome.ChangeStatus(RunningTestCase.Name, TestCaseStatus.NotRun);
+                    GroupByOutcome.ChangeStatus(RunningTestCase.FullName, TestCaseStatus.NotRun);
                 }
                 RunningTestCase = null;
             }
             foreach (var testcase in AllTestCases)
             {
                 // Clear Running cases. Should not be here
-                if(testcase.Status == TestCaseStatus.Running && CurrentPageCaseList.Contains(testcase.Name))
+                if(testcase.Status == TestCaseStatus.Running && CurrentPageCaseList.Contains(testcase.FullName))
                 {
                     testcase.Status = TestCaseStatus.NotRun;
                     RunningTestCase = null;

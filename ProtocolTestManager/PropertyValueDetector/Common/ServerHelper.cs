@@ -9,6 +9,7 @@ using System.Linq;
 using System.Management;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 
 namespace Microsoft.Protocols.TestManager.Detector.Common
@@ -217,6 +218,7 @@ namespace Microsoft.Protocols.TestManager.Detector.Common
             return true;
         }
 
+        [SupportedOSPlatform("windows")]
         public static bool DetectDC(DomainInfo domain, Server dc, DetectLogger logWriter)
         {
             logWriter.AddLog(DetectLogLevel.Warning, string.Format("===== Detect DC in Domain {0} =====", domain.Name));
@@ -275,6 +277,7 @@ namespace Microsoft.Protocols.TestManager.Detector.Common
             return true;
         }
 
+        [SupportedOSPlatform("windows")]
         public static bool FetchPlatformInfo(string computerName, DetectLogger logWriter)
         {
             bool isWindows = true;
@@ -295,6 +298,7 @@ namespace Microsoft.Protocols.TestManager.Detector.Common
             return isWindows;
         }
 
+        [SupportedOSPlatform("windows")]
         private static ManagementObjectCollection QueryWmiObject(string machineName, string queryString)
         {
             ConnectionOptions options = new ConnectionOptions() { Timeout = new TimeSpan(0, 0, 5) };

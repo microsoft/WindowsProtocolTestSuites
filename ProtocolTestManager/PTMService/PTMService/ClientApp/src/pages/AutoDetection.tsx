@@ -161,7 +161,8 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const onNextButtonClick = () => {
-    if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished) {
+    if (!autoDetection.applyingResult &&
+        autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished) {
       dispatch(PropertyGroupsActions.setUpdatedAction(false))
       dispatch(AutoDetectionDataSrv.applyDetectionResult(() => {
         // Next page
@@ -187,7 +188,10 @@ export function AutoDetection (props: StepWizardProps) {
     }
   }
 
-  const isNextButtonDisabled = (): boolean => autoDetection.detecting || autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
+  const isNextButtonDisabled = (): boolean =>
+    autoDetection.detecting ||
+    autoDetection.applyingResult ||
+    autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
 
   const isDetectButtonDisabled = (): boolean => autoDetection.canceling
 
@@ -265,7 +269,7 @@ export function AutoDetection (props: StepWizardProps) {
 
   return (
         <div>
-            <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading} errorMsg={autoDetection.errorMsg} >
+            <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading || autoDetection.applyingResult} errorMsg={autoDetection.errorMsg} >
                 <Stack horizontal={showDockedLogPanel} tokens={{ childrenGap: 16 }} style={{ height: showDockedLogPanel ? winSize.height - HeaderMenuHeight : undefined, paddingLeft: 10, paddingRight: 20 }}>
                     <Stack style={{ height: showDockedLogPanel ? '100%' : undefined, minWidth: 0, flexGrow: 1 }}>
                         <Stack style={{ paddingLeft: 30 }}>

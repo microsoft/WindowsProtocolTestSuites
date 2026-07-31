@@ -6,6 +6,7 @@ using ICSharpCode.SharpZipLib.Tar;
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 
 namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 {
@@ -27,7 +28,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     {
                         using var gzip = new GZipInputStream(archive);
 
-                        using var tar = TarArchive.CreateInputTarArchive(gzip);
+                        using var tar = TarArchive.CreateInputTarArchive(gzip, Encoding.UTF8);
 
                         tar.ExtractContents(targetDirectory);
                     }

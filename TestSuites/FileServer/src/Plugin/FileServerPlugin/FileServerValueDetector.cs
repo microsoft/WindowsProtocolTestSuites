@@ -42,6 +42,7 @@ namespace Microsoft.Protocols.TestManager.Detector
         private const string userTitle = "User Name";
         private const string passwordTitle = "Password";
         private const string securityPackageTitle = "Authentication";
+        private const string parallelExecutionProperty = "Common.PTF.LogProfileParserPatch.Enabled";
 
         #endregion
 
@@ -760,6 +761,7 @@ namespace Microsoft.Protocols.TestManager.Detector
             // The two ptfconfig files is only used for configuring sut control adapter.
             // No need to show to the user.
             hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("CommonTestSuite.ptfconfig"));
+            hiddenPropertiesList.Remove(parallelExecutionProperty);
             hiddenPropertiesList.AddRange(DetectorUtil.GetPropertiesByFile("ServerFailoverTestSuite.ptfconfig"));
 
             // Hide common configure
