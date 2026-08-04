@@ -67,7 +67,7 @@ FileServer/src/
 ├── RSVD/               Remote Shared Virtual Disk test cases
 ├── SQOS/               Storage Quality of Service test cases
 ├── ServerFailover/     Server failover scenarios
-└── Auth/               Authentication test cases
+└── Auth/               Authentication (Kerberos, NTLM) and Authorization test cases
 ```
 
 ### Azure Automation

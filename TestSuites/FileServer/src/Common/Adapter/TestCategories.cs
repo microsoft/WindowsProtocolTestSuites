@@ -35,6 +35,7 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
         public const string FileAccessCheck = "FileAccessCheck";
         public const string CBAC = "CBAC";
         public const string KerberosAuthentication = "KerberosAuthentication";
+        public const string NtlmAuthentication = "NtlmAuthentication";
 
         // SMB2&3 features
         // Note: For one case, only one feature category could be set

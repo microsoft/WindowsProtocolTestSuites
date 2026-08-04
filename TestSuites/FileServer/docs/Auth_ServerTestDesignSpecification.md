@@ -13,6 +13,9 @@
 		* [Test Case Design](#_Toc427487699)
 		* [BVT cases](#_Toc427487700)
 		* [Other traditional cases](#_Toc427487701)
+    * [NTLM Authentication](#_Toc_NtlmAuth)
+		* [Test Case Design](#_Toc_NtlmAuth_Design)
+		* [BVT cases](#_Toc_NtlmAuth_Bvt)
     * [Share Permission Check](#_Toc427487702)
 		* [Test Case Design](#_Toc427487703)
 		* [Preconditions](#_Toc427487704)
@@ -33,7 +36,7 @@
 
 ## <a name="_Toc427487691"/>Summary
 The Auth_ServerTestSuite is designed to test Authentication and Authorization scenarios of MS-SMB2.
-The Authentication cases cover Kerberos Authentication;
+The Authentication cases cover Kerberos Authentication and NTLM Authentication;
 The Authorization cases cover Share Permission Check, Folder Permission Check, File Permission Check, and Claim-Based Access Control scenario.
 
 ## <a name="_Toc427487692"/>Test Scope
@@ -505,6 +508,34 @@ Service password/keytab file may be needed in order for synthetic Kerberos clien
 | | SMB2 client sends SMB2 SESSION_SETUP request to AP with GSS Token| 
 | | SMB2 client expects SMB2 SESSION_SETUP response with GSS Token| 
 | | Session Setup should fail because of the invalid checksum in mechListMIC| 
+
+
+
+### <a name="_Toc_NtlmAuth"/>NTLM Authentication
+
+#### <a name="_Toc_NtlmAuth_Design"/>Test Case Design
+The synthetic SMB2 client uses the NTLM (NTLMSSP) security package to authenticate against the SUT through the SMB2 SESSION_SETUP exchange. The underlying NTLMSSP three-way handshake (NEGOTIATE_MESSAGE, CHALLENGE_MESSAGE, AUTHENTICATE_MESSAGE) is carried inside the SESSION_SETUP request/response tokens. The test verifies that the SUT processes the NTLM authentication token correctly according to MS-NLMP section 3 and MS-SMB2 section 3.3.5.5 (Receiving an SMB2 SESSION_SETUP Request), and grants access to a share.
+1 BVT case is designed to cover this scenario.
+
+#### <a name="_Toc_NtlmAuth_Bvt"/>BVT cases
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| BVT_NtlmAuth_Success| 
+|  **Description** | This test case is designed to test whether the server can handle NTLM (NTLMSSP) Authentication through the SMB2 SESSION_SETUP exchange (Negotiate -> Challenge -> Authenticate) correctly| 
+|  **Test Execution Steps**| SMB2 client sends SMB2 NEGOTIATE request to SUT| 
+| | SMB2 client expects SMB2 NEGOTIATE response from SUT| 
+| | SMB2 client sends SMB2 SESSION_SETUP request using the NTLM security package (NTLMSSP NEGOTIATE_MESSAGE)| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with STATUS_MORE_PROCESSING_REQUIRED carrying the NTLMSSP CHALLENGE_MESSAGE| 
+| | SMB2 client sends SMB2 SESSION_SETUP request carrying the NTLMSSP AUTHENTICATE_MESSAGE| 
+| | SMB2 client expects SMB2 SESSION_SETUP response with STATUS_SUCCESS| 
+| | SMB2 client sends TREE_CONNECT request| 
+| | SMB2 client expects TREE_CONNECT response with STATUS_SUCCESS| 
+| | SMB2 client sends TREE_DISCONNECT request| 
+| | SMB2 client expects TREE_DISCONNECT response| 
+| | SMB2 client sends LogOff request| 
+| | SMB2 client expects LogOff response| 
+| | SMB2 client sends Disconnect request| 
 
 
 

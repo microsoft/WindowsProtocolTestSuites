@@ -275,6 +275,7 @@ The base URL for all specs: `https://learn.microsoft.com/en-us/openspecs/windows
 - NTLMv2 uses HMAC-MD5-based response. Session key used for signing/sealing.
 - Used by SMB2 session setup when Kerberos is not available (workgroup or when KDC is unreachable).
 - ProtoSDK's `MS-NLMP` is used internally by the SSPI layer.
+- **Test coverage:** The FileServer Auth suite validates NTLM authentication through SMB2 SESSION_SETUP via `BVT_NtlmAuth_Success` (`TestSuites/FileServer/src/Auth/TestSuite/Authentication/NtlmAuthentication/NtlmAuthentication.cs`), which drives `Smb2FunctionalClient.SessionSetup(SecurityPackageType.Ntlm, ...)`. Covers MS-NLMP 3 and MS-SMB2 3.3.5.5. Category: `NtlmAuthentication`.
 
 **Spec link:** https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-nlmp/b38c36ed-2804-4868-a9ff-8dd3182128e4
 
