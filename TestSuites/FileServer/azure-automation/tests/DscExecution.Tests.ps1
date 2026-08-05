@@ -149,3 +149,42 @@ Describe 'Verified DSC execution' {
         }
     }
 }
+
+Describe 'Deployment state helpers' {
+    It 'detects non-empty PendingFileRenameOperations registry values' {
+        Mock Test-Path { $false }
+        Mock Get-ItemProperty {
+            [pscustomobject]@{
+                PendingFileRenameOperations = @(
+                    '\??\C:\Windows\Temp\pending.tmp',
+                    ''
+                )
+            }
+        }
+
+        Test-PendingSystemReboot | Should Be $true
+    }
+
+    It 'ignores an empty PendingFileRenameOperations registry value' {
+        Mock Test-Path { $false }
+        Mock Get-ItemProperty {
+            [pscustomobject]@{
+                PendingFileRenameOperations = @('')
+            }
+        }
+
+        Test-PendingSystemReboot | Should Be $false
+    }
+
+    It 'writes a non-empty verified deployment signal' {
+        $signal = Join-Path $env:TEMP "deployment-signal-$([guid]::NewGuid().ToString('N')).signal"
+        try {
+            Write-VerifiedDeploymentSignal -Path $signal -Content 'DEPLOY FINISHED'
+
+            (Get-Item $signal).Length | Should BeGreaterThan 0
+        }
+        finally {
+            Remove-Item -Path $signal -Force -ErrorAction SilentlyContinue
+        }
+    }
+}

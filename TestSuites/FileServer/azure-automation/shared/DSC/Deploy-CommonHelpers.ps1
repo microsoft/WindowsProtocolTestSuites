@@ -133,6 +133,22 @@ function Test-PendingSystemReboot {
            ($pendingRenameOperations.Count -gt 0)
 }
 
+function Write-VerifiedDeploymentSignal {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path,
+
+        [Parameter(Mandatory)]
+        [string]$Content
+    )
+
+    $Content | Set-Content -LiteralPath $Path -Force -ErrorAction Stop
+    $signal = Get-Item -LiteralPath $Path -ErrorAction Stop
+    if ($signal.Length -le 0) {
+        throw "Deployment completion signal '$Path' is empty."
+    }
+}
+
 function Get-DeploymentPhase {
     param(
         [Parameter(Mandatory)]

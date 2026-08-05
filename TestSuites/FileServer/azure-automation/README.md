@@ -186,7 +186,14 @@ flowchart LR
     step2 --> signal[Write .Completed.signal]
 ```
 
-Domain, Cluster, and Driver steps use `HKLM:\SOFTWARE\ProtocolTestSuites\DeployStep`. The Workgroup SUT uses `WorkgroupSutDeployPhase`: feature preparation, post-reboot convergence, environment setup, then completion. Its feature bundle and any pending rename are coalesced into one planned reboot; an unexpected second reboot is treated as a failure rather than another silent loop. A **TKFRSAR** scheduled task resumes the orchestrator after the planned reboot.
+Current phased orchestrators persist role-specific phase values under
+`HKLM:\SOFTWARE\ProtocolTestSuites` while retaining `DeployStep` only for
+backward migration. Workgroup uses `WorkgroupSutDeployPhase`; Domain uses
+`DomainSutDeployPhase` and `DcDeployPhase`. The Domain SUT has one normal
+feature/domain-join reboot. The DC has one foundation reboot and one mandatory
+promotion reboot. The Driver verifies its one domain-join reboot and secure
+channel before continuing. Unexpected extra reboots are fatal. A **TKFRSAR**
+scheduled task resumes each orchestrator only across its planned boundary.
 
 ## Network Architecture
 
@@ -264,7 +271,14 @@ Each scenario README has detailed troubleshooting for its specific issues:
 
 While DSC is active, Windows PowerShell 5.1 can report that `Start-DscConfiguration` is still in progress when status is queried. This is an expected busy response: the verifier suppresses it, continues bounded polling, and surfaces only a final LCM failure or timeout.
 
-The Workgroup SUT compiles disruptive features into a dedicated feature MOF and applies directories, shares, routing, remoting, and registry state through a separate post-reboot convergence MOF. Tool packages download to unique temporary files in parallel and are promoted atomically into the cache; installation remains serial and post-reboot. `Deploy-SUT.heartbeat.json` records the current phase, operation, elapsed time, deadline, and last checkpoint while DSC, downloads, installers, or imperative setup are active.
+Workgroup and Domain SUTs compile disruptive features into dedicated feature
+MOFs and apply shares, routing, remoting, and registry state through separate
+post-reboot convergence MOFs. The DC similarly separates role features from
+post-promotion convergence. Tool packages download to unique temporary files in
+parallel and are promoted atomically into the cache; installation remains
+serial and post-reboot. Role heartbeat JSON files record the current phase,
+operation, elapsed time, deadline, and last checkpoint while DSC, downloads,
+installers, readiness probes, or imperative setup are active.
 
 **VM extension failure** — Check the bootstrap log on the VM:
 | VM Role | Log file |

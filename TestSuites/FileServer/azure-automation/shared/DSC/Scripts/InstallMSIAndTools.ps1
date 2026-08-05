@@ -114,6 +114,9 @@ function Get-RequiredFile {
 
 function Assert-ExitCode {
     param([int]$ExitCode, [string]$Operation)
+    if ($script:Operation -eq 'Install' -and $ExitCode -in @(1641, 3010)) {
+        throw "$Operation requested another reboot (exit code $ExitCode) during the post-reboot install phase."
+    }
     if ($successExitCodes -notcontains $ExitCode) {
         throw "$Operation exited with code $ExitCode."
     }

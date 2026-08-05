@@ -3,15 +3,15 @@
 
 <#
 .SYNOPSIS
-    DSC Configuration for the Domain SUT (Node01).
-    Handles Windows features, SMB shares, firewall, registry, hosts file,
-    and directories declaratively.
+    Post-reboot convergence configuration for the Domain SUT (Node01).
+    Handles SMB shares, firewall, registry, hosts file, and directories
+    declaratively. SUT-FeatureConfiguration.ps1 owns disruptive features.
 
 .DESCRIPTION
     Covers the same resources as the Workgroup SUT-Configuration plus
     domain-specific considerations:
     - Domain join happens imperatively (requires reboot)
-    - WindowsFeatureSet includes file-server features (batched)
+    - Disruptive file-server features are already installed
     - All SMB shares on C: drive
     - Registry keys for FSA, FSRM classification
     - SMB require-signing, computer password
@@ -128,71 +128,6 @@ Configuration SutConfiguration {
                 $block += "$marker END`r`n"
                 Set-Content -Path $hostsPath -Value ($content + $block) -Force -Encoding ASCII
             }
-        }
-        #endregion
-
-        #region -- Windows Features (batched) ---------------------------------
-        WindowsFeatureSet FileServerFeatures {
-            Name   = @(
-                'File-Services',
-                'FS-BranchCache',
-                'FS-VSS-Agent',
-                'BranchCache',
-                'FS-DFS-Namespace',
-                'RSAT-File-Services',
-                'RSAT-DFS-Mgmt-Con',
-                'FS-Resource-Manager'
-            )
-            Ensure = 'Present'
-        }
-
-        # FS-SMB1: conditionally install on OS builds < 26100
-        Script FSSMB1Feature {
-            DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
-            GetScript  = {
-                $f = Get-WindowsFeature FS-SMB1 -ErrorAction SilentlyContinue
-                @{ Result = if ($f) { $f.InstallState } else { 'NotAvailable' } }
-            }
-            TestScript = {
-                $osBuild = [System.Environment]::OSVersion.Version.Build
-                if ($osBuild -ge 26100) { return $true }
-                $f = Get-WindowsFeature FS-SMB1 -ErrorAction SilentlyContinue
-                if ($null -eq $f) { return $true }
-                return ($f.InstallState -eq 'Installed')
-            }
-            SetScript  = {
-                $result = Add-WindowsFeature FS-SMB1 -IncludeAllSubFeature -IncludeManagementTools -ErrorAction SilentlyContinue
-                if ($null -eq $result -or -not $result.Success) {
-                    Write-Warning 'FS-SMB1 installation failed (source files may not be available on this image).'
-                }
-            }
-        }
-
-        # Hyper-V needs Enable-WindowsOptionalFeature -- use Script resource
-        Script HyperV {
-            DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
-            GetScript  = {
-                $hv = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -ErrorAction SilentlyContinue
-                @{ Result = if ($hv) { $hv.State } else { 'NotAvailable' } }
-            }
-            TestScript = {
-                $hv = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -ErrorAction SilentlyContinue
-                return ($null -ne $hv -and $hv.State -eq 'Enabled')
-            }
-            SetScript  = {
-                try {
-                    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart -ErrorAction Stop
-                } catch {
-                    Write-Warning "Hyper-V install failed (nested virt may not be supported): $($_.Exception.Message)"
-                }
-            }
-        }
-
-        WindowsFeature RSATHyperV {
-            DependsOn            = '[Script]HyperV'
-            Name                 = 'RSAT-Hyper-V-Tools'
-            Ensure               = 'Present'
-            IncludeAllSubFeature = $true
         }
         #endregion
 
@@ -472,7 +407,6 @@ Configuration SutConfiguration {
             $shareCompress = $share.Compress
 
             Script "Share_$shareName" {
-                DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
                 GetScript  = {
                     $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='$($using:shareName)'" -ErrorAction SilentlyContinue
                     @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -508,7 +442,6 @@ Configuration SutConfiguration {
             $sharePath = $share.Path
 
             Script "Share_$shareName" {
-                DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
                 GetScript  = {
                     $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='$($using:shareName)'" -ErrorAction SilentlyContinue
                     @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -540,7 +473,6 @@ Configuration SutConfiguration {
         }
 
         Script Share_AzCBAC {
-            DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
             GetScript  = {
                 $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='AzCBAC'" -ErrorAction SilentlyContinue
                 @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -562,7 +494,6 @@ Configuration SutConfiguration {
         # Uses a registry sentinel to track whether Update-FSRMClassificationPropertyDefinition
         # has been run, since the command's presence alone doesn't indicate initialization.
         Script FSRMClassification {
-            DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
             GetScript  = {
                 $marker = Get-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'FSRMClassificationUpdated' -ErrorAction SilentlyContinue
                 @{ Result = if ($marker) { 'Updated' } else { 'NotUpdated' } }

@@ -49,6 +49,7 @@ $dscFolder    = $PSScriptRoot
 $scriptsPath  = Join-Path $dscFolder 'Scripts'
 $mofFolder    = Join-Path (Join-Path $dscFolder 'MOF') 'Driver'
 $logFile      = Join-Path $dscFolder 'Deploy-Driver.log'
+$heartbeatFile = Join-Path $dscFolder 'Deploy-Driver.heartbeat.json'
 
 # Put Scripts folder on PATH so Write-Info.ps1, Write-Error.ps1 etc. resolve via .\
 $env:Path += "$([IO.Path]::PathSeparator)$scriptsPath"
@@ -99,7 +100,7 @@ if (Test-Path $toolsJsonPath) {
 # ===========================================================================
 # Reboot circuit breaker + Step tracking (Windows: registry, Linux: no-op)
 # ===========================================================================
-$maxRebootCount = 3
+$maxRebootCount = 1
 
 if ($isLinuxDriver) {
     function Get-RebootCount { return 0 }
@@ -157,7 +158,77 @@ if (-not $isLinuxDriver) {
 $signalFile = "$dscFolder\Deploy-Driver.Completed.signal"
 $driverDscSignal = "$dscFolder\Driver-DSC.Completed.signal"
 $driverToolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
+$driverToolsPreparedSignal = "$scriptsPath\InstallMSIAndTools.Prepared.signal"
+$driverToolsInstaller = "$scriptsPath\InstallMSIAndTools.ps1"
 $forceLevel2Signal = "$dscFolder\ForceLevel2.Completed.signal"
+$joinRebootPendingName = 'DriverJoinRebootPending'
+$joinPreBootTimeName = 'DriverJoinPreRebootBootTimeUtc'
+$joinRebootCountName = 'DriverJoinRebootCount'
+$toolsJobTimeoutSeconds = 3600
+
+function Start-DriverToolsPreparationJob {
+    if ($isLinuxDriver -or
+        (Test-Path $driverToolsPreparedSignal) -or
+        (Test-Path $driverToolsSignal)) {
+        return $null
+    }
+    .\Write-Info.ps1 'Starting parallel Driver tool package preparation...' -ForegroundColor Cyan
+    $jobLog = "$scriptsPath\InstallMSIAndTools.prepare.job.log"
+    return Start-Job -ScriptBlock {
+        param($installer, $scriptsDirectory, $preparedSignal, $log)
+        Set-Location $scriptsDirectory
+        $env:Path += ";$scriptsDirectory"
+        $output = @(& $installer -Role 'DriverComputer' -Operation Prepare `
+            -PreparedSignalFile $preparedSignal -NoTranscript *>&1)
+        $output | Out-File -FilePath $log -Force
+        if ($output.Count -eq 0 -or $output[-1] -ne $true) {
+            throw 'Required Driver package preparation failed.'
+        }
+    } -ArgumentList $driverToolsInstaller, $scriptsPath, $driverToolsPreparedSignal, $jobLog
+}
+
+function Stop-DriverToolsPreparationJob {
+    param([System.Management.Automation.Job]$Job)
+    if ($null -eq $Job) { return }
+    if ($Job.State -in @('NotStarted', 'Running', 'Blocked')) { Stop-Job -Job $Job }
+    Remove-Job -Job $Job -Force -ErrorAction SilentlyContinue
+}
+
+function Complete-DriverToolsPreparationJob {
+    param([System.Management.Automation.Job]$Job)
+    if ($null -eq $Job) { return }
+    try {
+        Wait-DeploymentJob -Job $Job -TimeoutSeconds $toolsJobTimeoutSeconds `
+            -Phase 'ToolsPrepare' -Operation 'Parallel Driver package preparation' `
+            -HeartbeatPath $heartbeatFile -LastCheckpoint 'Driver orchestration active' | Out-Null
+    }
+    finally {
+        Remove-Job -Job $Job -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Wait-DriverDomainReadiness {
+    param([int]$TimeoutSeconds = 600)
+    if ($isLinuxDriver) { return }
+    $domainName = if ($cfg.Core) { $cfg.Core.DomainName } else { $null }
+    $isWorkgroup = [string]::IsNullOrWhiteSpace($domainName) -or $domainName -eq 'Workgroup'
+    if ($isWorkgroup) { return }
+
+    $startedAt = Get-Date
+    $deadline = $startedAt.AddSeconds($TimeoutSeconds)
+    while ((Get-Date) -lt $deadline) {
+        $partOfDomain = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
+        $secureChannel = $false
+        try { $secureChannel = Test-ComputerSecureChannel -ErrorAction Stop } catch {}
+        Write-DeploymentHeartbeat -Phase 'DomainReadiness' `
+            -Operation 'Waiting for Driver domain membership and secure channel' `
+            -StartedAt $startedAt -Deadline $deadline -HeartbeatPath $heartbeatFile `
+            -LastCheckpoint "PartOfDomain=$partOfDomain; SecureChannel=$secureChannel"
+        if ($partOfDomain -and $secureChannel) { return }
+        Start-Sleep -Seconds 10
+    }
+    throw "Driver domain membership and secure channel did not become ready within $TimeoutSeconds seconds."
+}
 
 function Test-RequiredDriverDscState {
     if ($isLinuxDriver) { return $true }
@@ -174,9 +245,32 @@ function Test-RequiredDriverDscState {
     }
 }
 
+function Test-DriverDomainReadyState {
+    if ($isLinuxDriver) { return $true }
+    if ($null -eq $cfg -or $null -eq $cfg.Core) { return $false }
+
+    $domainName = $cfg.Core.DomainName
+    $isWorkgroup = [string]::IsNullOrWhiteSpace($domainName) -or $domainName -eq 'Workgroup'
+    if ($isWorkgroup) { return $true }
+
+    try {
+        $partOfDomain = (Get-CimInstance Win32_ComputerSystem -ErrorAction Stop).PartOfDomain
+        $secureChannel = Test-ComputerSecureChannel -ErrorAction Stop
+        return $partOfDomain -and $secureChannel
+    }
+    catch {
+        .\Write-Info.ps1 "[WARN] Driver domain readiness verification failed: $($_.Exception.Message)" -ForegroundColor Yellow
+        return $false
+    }
+}
+
 function Test-RequiredDriverReadyState {
     $forceLevel2Ready = $isLinuxDriver -or $SkipForceLevel2 -or (Test-Path $forceLevel2Signal)
+    if (-not $isLinuxDriver -and (Test-PendingSystemReboot)) {
+        return $false
+    }
     return (Test-RequiredDriverDscState) -and
+           (Test-DriverDomainReadyState) -and
            (Test-Path $driverToolsSignal) -and
            $forceLevel2Ready
 }
@@ -186,13 +280,22 @@ if ((Test-Path $signalFile) -and (Test-RequiredDriverReadyState)) {
     if (-not $isLinuxDriver) { Remove-ResumeTask }
     Pop-Location; Stop-Transcript; return
 }
+$toolsPreparationJob = $null
 if ((Test-Path $signalFile) -and (-not (Test-RequiredDriverReadyState))) {
     .\Write-Info.ps1 "[WARN] Removing stale Driver completion signal because required deployment state is incomplete." -ForegroundColor Yellow
     Remove-Item -Path $signalFile -Force
     if (-not $isLinuxDriver) {
+        $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
+        if ($null -ne $staleTestTask) {
+            Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
+        }
         Set-DeployStep -Step 1
         $currentStep = 1
     }
+
+}
+if (-not $isLinuxDriver) {
+    $toolsPreparationJob = Start-DriverToolsPreparationJob
 }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
@@ -209,13 +312,15 @@ if (-not $isLinuxDriver -and (Test-Path $configFile)) {
         if (-not [string]::IsNullOrWhiteSpace($expectedName) -and $env:COMPUTERNAME -ne $expectedName) {
             $currentRebootCount = Get-RebootCount
             if ($currentRebootCount -ge $maxRebootCount) {
-                .\Write-Info.ps1 "[WARN] Reboot circuit breaker triggered ($currentRebootCount >= $maxRebootCount). Skipping rename reboot -- continuing with hostname '$env:COMPUTERNAME'." -ForegroundColor Red
+                Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
+                throw "The Driver hostname is still '$env:COMPUTERNAME' after its one allowed rename reboot; expected '$expectedName'."
             } else {
                 Set-RebootCount -Count ($currentRebootCount + 1)
                 .\Write-Info.ps1 "Renaming computer from $env:COMPUTERNAME to $expectedName (reboot $($currentRebootCount + 1)/$maxRebootCount)..." -ForegroundColor Yellow
                 Rename-Computer -NewName $expectedName -Force
 
                 .\Write-Info.ps1 "Scheduling Deploy-Driver.ps1 to re-run after reboot..." -ForegroundColor Yellow
+                Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
                 Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Driver.ps1" `
                     -WorkingPath $WorkingPath -DscFolder $dscFolder
 
@@ -247,12 +352,14 @@ if ($currentStep -lt 1) {
         }
         Invoke-VerifiedDscConfiguration -Path $mofFolder `
             -OperationName 'Driver DSC configuration' `
-            -Postcondition { Test-RequiredDriverDscState } | Out-Null
+            -Postcondition { Test-RequiredDriverDscState } `
+            -HeartbeatPath $heartbeatFile -PhaseName 'DriverBaseline' | Out-Null
         $phase1Ok = $true
         "DRIVER DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $driverDscSignal -Force
         .\Write-Info.ps1 "[OK] DSC applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
     catch {
+        Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
         .\Write-Error.ps1 "[FAIL] DSC failed: $($_.Exception.Message)"
         Pop-Location
         Stop-Transcript
@@ -268,6 +375,7 @@ if ($currentStep -lt 1) {
         .\Write-Info.ps1 "[OK] Domain join complete." -ForegroundColor Green
     }
     catch {
+        Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
         .\Write-Error.ps1 "[FAIL] Domain join failed: $($_.Exception.Message)"
         Pop-Location; Stop-Transcript; throw
     }
@@ -282,8 +390,29 @@ if ($currentStep -lt 1) {
         Set-DeployStep -Step 1
         # Fall through to Step 1 -> 2 below
     } else {
+        if ($null -ne $toolsPreparationJob -and $toolsPreparationJob.State -eq 'Completed') {
+            try { Complete-DriverToolsPreparationJob -Job $toolsPreparationJob } catch {
+                .\Write-Info.ps1 "[WARN] Package preparation will retry after reboot: $($_.Exception.Message)" -ForegroundColor Yellow
+            }
+        } else {
+            Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
+            .\Write-Info.ps1 '[INFO] Paused unfinished package preparation for the domain-join reboot.' -ForegroundColor Yellow
+        }
+        $toolsPreparationJob = $null
+
+        $joinRebootCount = [int](Get-ItemPropertyValue -Path $rebootRegPath `
+            -Name $joinRebootCountName -ErrorAction SilentlyContinue)
+        if ($joinRebootCount -ge 1) {
+            Pop-Location
+            Stop-Transcript
+            throw 'The Driver requested another domain-join reboot after its planned reboot.'
+        }
         # Schedule deferred reboot + resume
         Set-DeployStep -Step 1
+        Set-ItemProperty -Path $rebootRegPath -Name $joinRebootCountName -Value 1 -Type DWord -Force
+        Set-ItemProperty -Path $rebootRegPath -Name $joinRebootPendingName -Value 1 -Type DWord -Force
+        $bootTime = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime.ToUniversalTime().ToString('o')
+        Set-ItemProperty -Path $rebootRegPath -Name $joinPreBootTimeName -Value $bootTime -Type String -Force
         .\Write-Info.ps1 "Scheduling deferred reboot and resume..." -ForegroundColor Yellow
         # After domain join, resume as domain admin for cross-machine operations
         $domainNetBios = if ($cfg.Domain -and $cfg.Domain.NetBiosName) { $cfg.Domain.NetBiosName } else { $cfg.Core.DomainName.Split('.')[0].ToUpper() }
@@ -304,7 +433,37 @@ if ($currentStep -lt 1) {
 # ===========================================================================
 $currentStep = Get-DeployStep
 if ($currentStep -eq 1) {
-    Start-Sleep -Seconds 5  # Post-reboot stabilization
+    if (-not $isLinuxDriver) {
+        $joinPending = [int](Get-ItemPropertyValue -Path $rebootRegPath `
+            -Name $joinRebootPendingName -ErrorAction SilentlyContinue)
+        if ($joinPending -eq 1) {
+            $recordedBoot = [datetime](Get-ItemPropertyValue -Path $rebootRegPath `
+                -Name $joinPreBootTimeName -ErrorAction Stop)
+            $currentBoot = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+            if ($currentBoot.ToUniversalTime() -le $recordedBoot.ToUniversalTime()) {
+                Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
+                Pop-Location
+                Stop-Transcript
+                throw 'The Driver domain-join reboot was persisted but not observed.'
+            }
+            Set-ItemProperty -Path $rebootRegPath -Name $joinRebootPendingName -Value 0 -Type DWord -Force
+        }
+        Wait-DriverDomainReadiness
+    }
+
+    Complete-DriverToolsPreparationJob -Job $toolsPreparationJob
+    $toolsPreparationJob = $null
+    if (-not (Test-Path $driverToolsPreparedSignal) -and
+        -not (Test-Path $driverToolsSignal) -and
+        -not $isLinuxDriver) {
+        $prepared = & $driverToolsInstaller -Role 'DriverComputer' -Operation Prepare `
+            -PreparedSignalFile $driverToolsPreparedSignal -NoTranscript | Select-Object -Last 1
+        if (-not $prepared -or -not (Test-Path $driverToolsPreparedSignal)) {
+            Pop-Location
+            Stop-Transcript
+            throw 'Required Driver packages could not be prepared.'
+        }
+    }
 
     # Verify the successful pre-join application. Repair only when the persisted MOF
     # reports drift or the success marker is absent.
@@ -331,7 +490,8 @@ if ($currentStep -eq 1) {
             }
             Invoke-VerifiedDscConfiguration -Path $mofFolder `
                 -OperationName 'Driver DSC repair configuration' `
-                -Postcondition { Test-RequiredDriverDscState } | Out-Null
+                -Postcondition { Test-RequiredDriverDscState } `
+                -HeartbeatPath $heartbeatFile -PhaseName 'DriverRepair' | Out-Null
             "DRIVER DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $driverDscSignal -Force
             $driverDscReady = $true
             .\Write-Info.ps1 "[OK] Driver DSC repaired in $([math]::Round($phase2a.Elapsed.TotalSeconds))s" -ForegroundColor Green
@@ -350,6 +510,7 @@ if ($currentStep -eq 1) {
         Step        = 2
         WorkingPath = $WorkingPath
         NoTranscript = $true
+        HeartbeatPath = $heartbeatFile
     }
     if ($SkipForceLevel2) {
         $imperativeArgs['SkipForceLevel2'] = $true
@@ -370,6 +531,19 @@ if ($currentStep -eq 1) {
     $phase2b.Stop()
     .\Write-Info.ps1 ""
 
+    $fl2Required = -not $isLinuxDriver -and -not $SkipForceLevel2
+    $fl2Done = -not $fl2Required -or (Test-Path $forceLevel2Signal)
+
+    if ($phase2Ok -and $fl2Done -and (Test-PendingSystemReboot)) {
+        $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
+        if ($null -ne $staleTestTask) {
+            Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
+        }
+        Pop-Location
+        Stop-Transcript
+        throw 'An unexpected second Driver reboot became pending before test scheduling.'
+    }
+
     # ===========================================================================
     # Phase 3: Schedule test run (fire-and-forget)
     # ===========================================================================
@@ -380,6 +554,13 @@ if ($currentStep -eq 1) {
     if (-not $phase2Ok) {
         $phase3.Stop()
         .\Write-Info.ps1 "[SKIP] Not scheduling test run -- earlier phases failed" -ForegroundColor Yellow
+    } elseif (-not $fl2Done) {
+        $phase3.Stop()
+        $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
+        if ($null -ne $staleTestTask) {
+            Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
+        }
+        .\Write-Info.ps1 "[WAIT] Not scheduling tests until ForceLevel2 is confirmed." -ForegroundColor Yellow
     } elseif (-not (Test-Path $testRunScript)) {
         $phase3.Stop()
         .\Write-Info.ps1 "[SKIP] Invoke-TestRun.ps1 not found at $testRunScript" -ForegroundColor Yellow
@@ -444,15 +625,10 @@ if ($currentStep -eq 1) {
     # ===========================================================================
     # Summary
     # ===========================================================================
-    if ($phase2Ok) {
-        Set-DeployStep -Step 2
-        Set-RebootCount -Count 0
-    }
-
     $stopwatch.Stop()
     .\Write-Info.ps1 ""
     .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
-    .\Write-Info.ps1 "  Driver Deployment Complete" -ForegroundColor Cyan
+    .\Write-Info.ps1 "  Driver Configuration Complete" -ForegroundColor Cyan
     .\Write-Info.ps1 "  Total time  : $([math]::Round($stopwatch.Elapsed.TotalMinutes, 1)) min" -ForegroundColor Cyan
     .\Write-Info.ps1 "    DSC       : $([math]::Round($phase2a.Elapsed.TotalSeconds))s" -ForegroundColor DarkGray
     .\Write-Info.ps1 "    Imperative: $([math]::Round($phase2b.Elapsed.TotalSeconds))s" -ForegroundColor DarkGray
@@ -462,16 +638,26 @@ if ($currentStep -eq 1) {
     # Only write signal file if all phases succeeded, including ForceLevel2.
     # ForceLevel2 writes its own signal file on success; if missing, the Driver
     # deployment is incomplete and should re-run on next boot.
-    $fl2SignalFile = "$dscFolder\ForceLevel2.Completed.signal"
-    $fl2Required = -not $isLinuxDriver -and -not $SkipForceLevel2
-    $fl2Done = -not $fl2Required -or (Test-Path $fl2SignalFile)
-
     if ($phase2Ok -and $fl2Done) {
-        "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
+        if (Test-PendingSystemReboot) {
+            $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
+            if ($null -ne $staleTestTask) {
+                Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
+            }
+            Pop-Location
+            Stop-Transcript
+            throw 'An unexpected second Driver reboot became pending after tool and test configuration.'
+        }
+        Write-VerifiedDeploymentSignal -Path $signalFile `
+            -Content "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+        Set-DeployStep -Step 2
+        Set-RebootCount -Count 0
+        Set-ItemProperty -Path $rebootRegPath -Name $joinRebootCountName -Value 0 -Type DWord -Force
         .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
         Remove-ResumeTask
+        Remove-Item -Path $heartbeatFile -Force -ErrorAction SilentlyContinue
     } elseif ($phase2Ok -and -not $fl2Done) {
-        .\Write-Info.ps1 "[WARN] Signal file NOT written -- ForceLevel2 not yet confirmed. Deployment will re-run on next boot." -ForegroundColor Yellow
+        .\Write-Info.ps1 "[WARN] Completion remains blocked. The ForceLevel2 retry task will finalize the Driver and schedule tests when the SUT share is ready." -ForegroundColor Yellow
     } else {
         .\Write-Info.ps1 "[WARN] Signal file NOT written -- deployment incomplete" -ForegroundColor Yellow
     }
@@ -495,8 +681,17 @@ if (-not $isLinuxDriver -and $currentStep -ge 2 -and -not (Test-Path $signalFile
     $fl2Required = -not $SkipForceLevel2
     $fl2Done = -not $fl2Required -or (Test-Path $fl2SignalFile)
 
+    if ($fl2Done -and (Test-PendingSystemReboot)) {
+        $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
+        if ($null -ne $staleTestTask) {
+            Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
+        }
+        Set-DeployStep -Step 1
+        throw 'An unexpected second Driver reboot remains pending; completion and tests are blocked.'
+    }
     if ($fl2Done -and (Test-RequiredDriverReadyState)) {
-        "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
+        Write-VerifiedDeploymentSignal -Path $signalFile `
+            -Content "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
         .\Write-Info.ps1 "[OK] ForceLevel2 now confirmed. Signal file written: $signalFile" -ForegroundColor Green
         Remove-ResumeTask
     } elseif ($fl2Done) {
@@ -551,7 +746,8 @@ if ($isLinuxDriver) {
 
     $signalFile = Join-Path $dscFolder 'Deploy-Driver.Completed.signal'
     if ($phase2Ok) {
-        "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
+        Write-VerifiedDeploymentSignal -Path $signalFile `
+            -Content "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
         .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
     }
 }

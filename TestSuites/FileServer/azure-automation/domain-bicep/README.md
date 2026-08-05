@@ -397,8 +397,9 @@ domain-bicep/
 │   ├── phase2.bicepparam           # Phase 2 parameters
 │   └── VmSizeFallbacks.psd1        # Per-role VM size fallback lists (DC/Driver/SUT)
 └── DSC/
-    ├── Deploy-SUT.ps1              # SUT orchestrator (step 0→1→2→3)
-    ├── SUT-Configuration.ps1       # DSC: features, shares, FSRM, registry
+    ├── Deploy-SUT.ps1              # SUT orchestrator (features/join → convergence → environment)
+    ├── SUT-FeatureConfiguration.ps1 # DSC: disruptive File Server features
+    ├── SUT-Configuration.ps1       # DSC: post-reboot shares, FSRM, registry
     ├── Invoke-SutImperativeSteps.ps1     # SUT: domain join, disks, DFS, QUIC
     └── Scripts/                    # Domain-specific scripts
 
@@ -406,14 +407,24 @@ domain-bicep/
 ├── Deploy-Helpers.psm1             # Azure helpers (connect, storage, polling, quota)
 ├── Generate-ConfigJson.ps1         # Config.json generation from bicepparam values
 └── DSC/
-    ├── Deploy-DC.ps1               # DC orchestrator (step 0→1→2)
-    ├── Deploy-Driver.ps1           # Driver orchestrator (step 0→1→2)
-    ├── DC-Configuration.ps1        # DSC: AD DS, RemoteAccess, LDAP, CBAC
+    ├── Deploy-DC.ps1               # DC orchestrator (foundation reboot → promotion reboot → convergence)
+    ├── Deploy-Driver.ps1           # Driver orchestrator (baseline/join → tools/tests)
+    ├── DC-FeatureConfiguration.ps1 # DSC: AD DS and RemoteAccess role features
+    ├── DC-Configuration.ps1        # DSC: post-promotion routing, LDAP, CBAC, services
     ├── Driver-Configuration.ps1    # DSC: hosts, firewall, PS remoting
     ├── Invoke-DcImperativeSteps.ps1      # DC: promotion, accounts, CBAC, GPO, DNS
     ├── Invoke-DriverImperativeSteps.ps1  # Driver: domain join, tools, RSA, ForceLevel2
     └── Scripts/                    # Shared scripts (tools install, test run, validation)
 ```
+
+The normal Domain reboot contract is deterministic: the SUT and Windows Driver
+each use one domain-member reboot, while the DC uses one foundation reboot for
+features/hostname and one mandatory promotion reboot. Tool packages are prepared
+in parallel before those reboots and installed serially afterward. Additional
+pending reboots are treated as failures, not silently retried. Long operations
+publish `Deploy-SUT.heartbeat.json`, `Deploy-DC.heartbeat.json`, or
+`Deploy-Driver.heartbeat.json`; `deploy.ps1` prints the DC heartbeat when its
+readiness gate times out.
 
 ## Based on FileServer User Guide
 

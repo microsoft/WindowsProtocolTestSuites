@@ -67,14 +67,25 @@ FileServer/src/
 ├── RSVD/               Remote Shared Virtual Disk test cases
 ├── SQOS/               Storage Quality of Service test cases
 ├── ServerFailover/     Server failover scenarios
-└── Auth/               Authentication (Kerberos, NTLM) and Authorization test cases
+└── Auth/               Authentication test cases
 ```
 
 ### Azure Automation
 
 `TestSuites/FileServer/azure-automation/` contains Bicep and PowerShell deployment entry points for Domain, Workgroup, and Cluster environments. Shared infrastructure belongs under `shared/modules/`; for example, `bastion.bicep` deploys Bastion independently from core networking so VM provisioning is not serialized behind it. Domain deployment separates member infrastructure (`domain-computers.bicep`) from guest extensions (`domain-computer-extensions.bicep`), allowing VM provisioning to overlap DC configuration while keeping domain join behind the DC readiness gate. On-VM orchestrators must reuse `shared/DSC/Deploy-CommonHelpers.ps1` and `Invoke-VerifiedDscConfiguration` rather than `Start-DscConfiguration -Wait`; fresh LCM status polling survives WinRM restarts and postcondition gates prevent stale completion signals or imperative setup against incomplete DSC state.
 
-The Workgroup SUT is the reference phased implementation. `SUT-FeatureConfiguration.ps1` installs all disruptive features through one DSC resource before a single planned reboot, while `SUT-Configuration.ps1` contains only post-reboot convergence resources. `Deploy-SUT.ps1` persists `WorkgroupSutDeployPhase`, verifies that the planned reboot occurred, prepares tool downloads in parallel using atomic cache promotion, installs tools serially after reboot, and writes `Deploy-SUT.heartbeat.json` during long operations. Reuse the phase, verified DSC, job-wait, and heartbeat helpers from `shared/DSC/Deploy-CommonHelpers.ps1` when extending the same model to Domain or Cluster; do not duplicate the Workgroup state machine.
+Workgroup and Domain use the deterministic phased model. Dedicated feature
+configurations install disruptive roles before planned reboot boundaries;
+convergence configurations contain only non-disruptive post-reboot state. The
+Domain SUT persists `DomainSutDeployPhase` and coalesces feature servicing with
+domain join into one normal reboot. The DC persists `DcDeployPhase`, using one
+foundation reboot for features/hostname and a separate mandatory promotion
+reboot. The shared Driver prepares tools before its join reboot, then verifies
+`PartOfDomain` and `Test-ComputerSecureChannel` before test setup. All roles use
+atomic parallel package preparation, serial cached installation, concrete
+postconditions, and heartbeat JSON files. Reuse phase, verified DSC, job-wait,
+reboot-proof, and heartbeat helpers from `shared/DSC/Deploy-CommonHelpers.ps1`;
+never continue through an unexpected pending reboot.
 
 ### Key Classes
 

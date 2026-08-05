@@ -8,7 +8,7 @@
 
 .DESCRIPTION
     Handles (in order):
-    1. DC Promotion (Install-ADDSForest) + tools install  <- REQUIRES REBOOT
+    1. DC Promotion (Install-ADDSForest)                  <- REQUIRES REBOOT
     2. Test account creation (AD users, groups, Guest)
     3. CBAC objects (claim types, resource properties, central access
        rules & policies)
@@ -39,6 +39,7 @@ param(
     [ValidateSet(1, 2)]
     [int]$Step = 1,
     [string]$ConfigureFile = "$WorkingPath\Config.json",
+    [string]$HeartbeatPath,
     [switch]$NoTranscript
 )
 
@@ -57,6 +58,23 @@ if (-not $NoTranscript) {
 function Stop-LocalTranscript {
     if ($transcriptStarted) {
         Stop-Transcript
+    }
+}
+
+$operationStartedAt = Get-Date
+if (-not [string]::IsNullOrWhiteSpace($HeartbeatPath)) {
+    . "$PSScriptRoot\Deploy-CommonHelpers.ps1"
+}
+
+function Write-DcOperationHeartbeat {
+    param(
+        [string]$Operation,
+        [string]$Checkpoint
+    )
+    if (-not [string]::IsNullOrWhiteSpace($HeartbeatPath)) {
+        Write-DeploymentHeartbeat -Phase "ImperativeStep$Step" -Operation $Operation `
+            -StartedAt $operationStartedAt -HeartbeatPath $HeartbeatPath `
+            -LastCheckpoint $Checkpoint
     }
 }
 
@@ -91,6 +109,8 @@ $systemDrive = $env:SystemDrive
 if ($Step -eq 1) {
   try {
     .\Write-Info.ps1 "---- Step 1: Promote to Domain Controller ----" -ForegroundColor Yellow
+    Write-DcOperationHeartbeat -Operation 'Domain Controller promotion' `
+        -Checkpoint 'Checking existing directory role'
 
     # Check if already a DC
     $isDc = $false
@@ -116,17 +136,12 @@ if ($Step -eq 1) {
                       else { throw "Config.json Core.Password is required for DC configuration" }
 
         .\Write-Info.ps1 "Promoting to DC for domain $domainName..." -ForegroundColor Cyan
+        Write-DcOperationHeartbeat -Operation 'Domain Controller promotion' `
+            -Checkpoint "Promoting the server into $domainName"
         $result = & "$scriptsPath\PromoteDomainController.ps1" -DomainName $domainName -AdminPwd $adminPwd -AdminUser $adminUser
         if (-not $result) {
             .\Write-Error.ps1 "DC promotion failed."
             Stop-LocalTranscript; Pop-Location; return $false
-        }
-
-        # Install tools in background before reboot
-        $toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
-        if (-not (Test-Path $toolsSignal)) {
-            .\Write-Info.ps1 "Installing tools (background)..." -ForegroundColor Cyan
-            & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'DC' -NoTranscript
         }
 
         .\Write-Info.ps1 "[OK] DC promotion complete. REBOOT REQUIRED." -ForegroundColor Green
@@ -147,6 +162,8 @@ if ($Step -eq 1) {
 if ($Step -eq 2) {
   try {
     .\Write-Info.ps1 "---- Step 2: Post-Reboot DC Configuration ----" -ForegroundColor Yellow
+    Write-DcOperationHeartbeat -Operation 'AD operational readiness' `
+        -Checkpoint 'Waiting for stable AD read, write, share, and advertising signals'
 
     # Wait for AD DS to be *fully operational*, not just ADWS-responsive. A freshly-promoted
     # DC answers Get-ADDomain within seconds but still reports "server is not operational" for
@@ -162,6 +179,8 @@ if ($Step -eq 2) {
                                # success flickers True for minutes post-promotion while AD
                                # writes still throw "server is not operational".
     for ($i = 0; $i -lt 60 -and -not $adOperational; $i++) {
+        Write-DcOperationHeartbeat -Operation 'AD operational readiness' `
+            -Checkpoint "Probe $($i + 1)/60; consecutive successes $consecutive/$requiredConsecutive"
         $adwsOk = $false
         try { $domain = Get-ADDomain -ErrorAction Stop; $adwsOk = ($null -ne $domain) } catch { $adwsOk = $false }
         $sysvolOk   = Test-Path "\\$($env:COMPUTERNAME)\SYSVOL"
@@ -198,6 +217,8 @@ if ($Step -eq 2) {
         throw "AD DS did not become stably operational within ~15 minutes (ADWS read+write / SYSVOL / NETLOGON / advertising, $requiredConsecutive consecutive passes). CBAC and claims-GPO setup would fail; failing Step 2 so the DC does not signal readiness."
     }
     .\Write-Info.ps1 "[OK] AD DS is fully operational" -ForegroundColor Green
+    Write-DcOperationHeartbeat -Operation 'Post-promotion provisioning' `
+        -Checkpoint 'AD operational readiness gate passed'
 
     # -- Account Lockout Policy -- DISABLE for domain test accounts --
     # The Auth/FileServer suites run negative-auth and rapid re-authentication cases; on a
@@ -353,6 +374,8 @@ if ($Step -eq 2) {
 
     # -- DC Status checker task --
     .\Write-Info.ps1 "Configuring DC status checker..." -ForegroundColor Yellow
+    Write-DcOperationHeartbeat -Operation 'Post-promotion provisioning' `
+        -Checkpoint 'Configuring status checks, tools, services, and SSH'
     try {
         $dcStatusResult = & "$scriptsPath\Check-DCStatus.ps1" -action 'CreateCheckerTask' -NoTranscript
         if (-not $dcStatusResult) {
@@ -405,6 +428,8 @@ if ($Step -eq 2) {
     }
 
     .\Write-Info.ps1 ""
+    Write-DcOperationHeartbeat -Operation 'Post-promotion provisioning' `
+        -Checkpoint 'All post-promotion imperative sections completed'
     .\Write-Info.ps1 "=== DC imperative steps (Step 2) completed (Accounts=$accountsOk, DomainAdmin=$domainAdminOk, CBAC=$cbacOk, GPO=$gpoOk, DNS=$dnsOk, Tools=$toolsOk, SshKeys=$sshKeysOk) ===" -ForegroundColor Cyan
 
     # Gate readiness: a DC that failed CBAC/GPO/SSH provisioning must NOT report ready, or the
