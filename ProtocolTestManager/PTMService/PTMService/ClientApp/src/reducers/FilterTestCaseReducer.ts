@@ -82,6 +82,7 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
       return {
         ...state,
         isRulesLoading: false,
+        errorMsg: undefined,
         ruleGroup: action.payload.AllRules,
         targetFilterIndex: action.payload.TargetFilterIndex,
         mappingFilterIndex: action.payload.MappingFilterIndex,
@@ -112,6 +113,7 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
       return {
         ...state,
         isCasesLoading: false,
+        errorMsg: undefined,
         listTestCases: listTestCases,
         listSelectedCases: getFilteredTestCases(state.selectedRules, state.ruleGroup, action.payload, state)
       }
@@ -167,7 +169,8 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
     case SET_RULES_SUCCESS:
       return {
         ...state,
-        isPosting: false
+        isPosting: false,
+        errorMsg: undefined
       }
     case SET_RULES_FAILURE:
       return {
@@ -249,6 +252,7 @@ export const getFilterTestCaseReducer = (state = initialFilterTestCaseState, act
 
       return {
         ...state,
+        errorMsg: undefined,
         groups: groups,
         selectedCategories: categories,
         listSelectedCases: testCases

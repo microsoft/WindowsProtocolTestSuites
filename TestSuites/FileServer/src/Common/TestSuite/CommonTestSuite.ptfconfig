@@ -10,11 +10,16 @@
       <Property name="FeatureName" value="FileServer" />
       <Property name="Version" value="3.0" />
       <!--
-        Controls the PTF logging mode.
-        True  - Enables multi-threaded logging.
-        False - Uses single-threaded logging.
-    -->
-      <Property name="PTF.LogProfileParserPatch.Enabled" value="false"/>
+        Controls parallel FileServer execution in PTM and PTMCli and the required
+        collision-safe PTF logging mode.
+        True  - Enables staged parallel execution and multi-threaded logging.
+        False - Uses sequential execution and single-threaded logging.
+      -->
+      <Property name="PTF.LogProfileParserPatch.Enabled" value="false">
+        <Description>Run FileServer tests using the staged parallel execution plan with up to five concurrent workers.</Description>
+        <Type>Bool</Type>
+        <Choice>true,false</Choice>
+      </Property>
       <!--
         Supported rpce authentication level:
         RPC_C_AUTHN_LEVEL_DEFAULT,

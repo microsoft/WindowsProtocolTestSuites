@@ -2,21 +2,31 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestManager.Common;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Utilities;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Runtime.Loader;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Microsoft.Protocols.TestManager.Kernel
 {
     public class TestEngine
     {
+        private const string TestHostErrorLogFileName = "TestHostError.log";
+
+        private static readonly TimeSpan ProcessTerminationTimeout = TimeSpan.FromSeconds(30);
+        private static readonly TimeSpan StreamDrainTimeout = TimeSpan.FromSeconds(5);
+        private static readonly TimeSpan TestStatusPropagationTimeout = TimeSpan.FromSeconds(2);
+
         private string EnginePath;
         private TestSuiteLogManager tsLogManager;
         public string PipeName { get; set; }
@@ -32,7 +42,15 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private List<TestCase> filteredTestcases;
 
-        private const int ProcessWaitInterval = 100;
+        private readonly ConcurrentDictionary<int, Process> activeProcesses = new ConcurrentDictionary<int, Process>();
+
+        private readonly ConcurrentDictionary<string, StringBuilder> testLogs =
+            new ConcurrentDictionary<string, StringBuilder>(StringComparer.Ordinal);
+
+        private readonly ConcurrentDictionary<Guid, string> testNamesByPipeConnection =
+            new ConcurrentDictionary<Guid, string>();
+
+        private HashSet<string> testCaseFullNames = new HashSet<string>(StringComparer.Ordinal);
 
         public TestEngine(string enginePath)
         {
@@ -44,6 +62,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             tsLogManager = new TestSuiteLogManager();
             tsLogManager.Initialize(testcases);
             this.testcases = testcases;
+            testCaseFullNames = testcases.Select(test => test.FullName).ToHashSet(StringComparer.Ordinal);
         }
 
         /// <summary>
@@ -52,6 +71,23 @@ namespace Microsoft.Protocols.TestManager.Kernel
         public TestSuiteLogManager GetTestSuiteLogManager()
         {
             return tsLogManager;
+        }
+
+        /// <summary>
+        /// Gets the log lines received for a test during the current run.
+        /// </summary>
+        public string GetTestLogs(string testCaseFullName)
+        {
+            if (string.IsNullOrEmpty(testCaseFullName) ||
+                !testLogs.TryGetValue(testCaseFullName, out var logs))
+            {
+                return null;
+            }
+
+            lock (logs)
+            {
+                return logs.Length > 0 ? logs.ToString() : null;
+            }
         }
 
         /// <summary>
@@ -108,32 +144,53 @@ namespace Microsoft.Protocols.TestManager.Kernel
         /// <returns>A StringBuilder</returns>
         private StringBuilder ConstructVstestArgs(Stack<TestCase> caseStack = null)
         {
+            return ConstructVstestArgs(
+                TestAssemblies,
+                ResultOutputFolder,
+                RunSettingsPath,
+                PtfConfigDirectory,
+                caseStack,
+                useFullyQualifiedName: false);
+        }
+
+        private StringBuilder ConstructVstestArgs(
+            IEnumerable<string> testAssemblies,
+            string resultOutputFolder,
+            string runSettingsPath,
+            string ptfConfigDirectory,
+            Stack<TestCase> caseStack,
+            bool useFullyQualifiedName)
+        {
             StringBuilder args = new StringBuilder();
             Uri wd = new Uri(WorkingDirectory);
-            foreach (string file in TestAssemblies)
+            foreach (string file in testAssemblies)
             {
                 args.AppendFormat("{0} ", wd.MakeRelativeUri(new Uri(file)).ToString().Replace('/', Path.DirectorySeparatorChar));
             }
 
-            args.AppendFormat("--results-directory \"{0}\" ", ResultOutputFolder);
+            args.AppendFormat("--results-directory \"{0}\" ", resultOutputFolder);
             args.AppendFormat("--test-adapter-path {0} ", Directory.GetCurrentDirectory());
             args.AppendFormat("--logger html ");
 
-            ConstructRunSettings(RunSettingsPath);
-            args.AppendFormat("--settings \"{0}\" ", RunSettingsPath);
+            ConstructRunSettings(runSettingsPath, ptfConfigDirectory);
+            args.AppendFormat("--settings \"{0}\" ", runSettingsPath);
 
             if (caseStack != null)
             {
                 args.Append("--filter \"");
                 TestCase testcase = caseStack.Pop();
-                args.AppendFormat("Name={0}", testcase.Name);
+                string filterProperty = useFullyQualifiedName ? "FullyQualifiedName" : "Name";
+                string testCaseIdentifier = useFullyQualifiedName ? testcase.FullName : testcase.Name;
+                args.AppendFormat("{0}={1}", filterProperty, EscapeFilterValue(testCaseIdentifier));
                 while (caseStack.Count > 0)
                 {
                     TestCase test = caseStack.Peek();
-                    if (args.Length + test.Name.Length + 9 + EnginePath.Length < 32000) //Max arg length for command line is 32699. For safety, use a shorter length, 32000.
+                    string testIdentifier = useFullyQualifiedName ? test.FullName : test.Name;
+                    string escapedTestIdentifier = EscapeFilterValue(testIdentifier);
+                    if (args.Length + escapedTestIdentifier.Length + filterProperty.Length + 3 + EnginePath.Length < 32000) //Max arg length for command line is 32699. For safety, use a shorter length, 32000.
                     {
                         test = caseStack.Pop();
-                        args.AppendFormat("|Name={0}", test.Name);
+                        args.AppendFormat("|{0}={1}", filterProperty, escapedTestIdentifier);
                     }
                     else break;
                 }
@@ -144,10 +201,22 @@ namespace Microsoft.Protocols.TestManager.Kernel
             return args;
         }
 
+        private static string EscapeFilterValue(string value)
+        {
+            return FilterHelper.Escape(value)
+                .Replace(",", "%2C")
+                .Replace("\"", "%22");
+        }
+
         /// <summary>
         /// Construct .runsettings file to specify the location of ptfconfig files.
         /// </summary>
         private void ConstructRunSettings(string runsettingsPath)
+        {
+            ConstructRunSettings(runsettingsPath, PtfConfigDirectory);
+        }
+
+        private void ConstructRunSettings(string runsettingsPath, string ptfConfigDirectory)
         {
             //<RunSettings>
             //  <TestRunParameters>
@@ -163,7 +232,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
             nameAttr.Value = "PtfconfigDirectory";
             parameterNode.Attributes.Append(nameAttr);
             XmlAttribute valueAttr = doc.CreateAttribute("value");
-            valueAttr.Value = Path.Combine(Directory.GetCurrentDirectory(), this.PtfConfigDirectory);
+            valueAttr.Value = Path.Combine(Directory.GetCurrentDirectory(), ptfConfigDirectory);
             parameterNode.Attributes.Append(valueAttr);
 
             XmlNode testRunParametersNode = doc.CreateElement("TestRunParameters");
@@ -251,6 +320,104 @@ namespace Microsoft.Protocols.TestManager.Kernel
             ExecutionFinished(exception);
         }
 
+        public TestExecutionPlanResult RunExecutionPlan(
+            TestExecutionPlan plan,
+            CancellationToken cancellationToken)
+        {
+            if (plan == null)
+            {
+                throw new ArgumentNullException(nameof(plan));
+            }
+
+            TestExecutionPlanResult result = null;
+            OperationCanceledException cancellation = null;
+            try
+            {
+                PipeSinkServer.ParseLogMessage = ParseLogMessage;
+                PipeSinkServer.Start(PipeName);
+                tsLogManager.GroupByOutcome.ConcurrentExecution = true;
+
+                var runner = new TestExecutionPlanRunner();
+                result = runner.RunAsync(
+                    plan,
+                    RunExecutionUnitAsync,
+                    cancellationToken).GetAwaiter().GetResult();
+            }
+            catch (OperationCanceledException exception) when (cancellationToken.IsCancellationRequested)
+            {
+                cancellation = exception;
+            }
+            catch (Exception exception)
+            {
+                result = new TestExecutionPlanResult(
+                    new[]
+                    {
+                        new TestExecutionFailure("Execution plan", "coordinator", exception),
+                    });
+            }
+            finally
+            {
+                // The pipe sink has to be released before the run is finalized, otherwise late
+                // log messages can still change test case status after the final status is computed.
+                PipeSinkServer.Stop();
+                PipeSinkServer.ParseLogMessage = null;
+                tsLogManager.GroupByOutcome.ConcurrentExecution = false;
+            }
+
+            if (cancellation != null)
+            {
+                ExecutionFinished(new List<Exception> { cancellation });
+                ExceptionDispatchInfo.Capture(cancellation).Throw();
+            }
+
+            ExecutionFinished(result.Failures.Select(failure => failure.Exception).ToList());
+            return result;
+        }
+
+        private async Task RunExecutionUnitAsync(
+            TestExecutionUnit unit,
+            CancellationToken cancellationToken)
+        {
+            string unitOutputFolder = Path.Combine(ResultOutputFolder, unit.Id);
+            Directory.CreateDirectory(unitOutputFolder);
+
+            string runSettingsPath = Path.Combine(unitOutputFolder, $"{unit.Id}.runsettings");
+            var cases = new Stack<TestCase>(unit.TestCases);
+
+            while (cases.Count > 0)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                TestCase[] pendingCases = cases.ToArray();
+                string arguments = ConstructVstestArgs(
+                    unit.Assemblies,
+                    unitOutputFolder,
+                    runSettingsPath,
+                    PtfConfigDirectory,
+                    cases,
+                    useFullyQualifiedName: true).ToString();
+                int selectedCaseCount = pendingCases.Length - cases.Count;
+                IReadOnlyList<TestCase> selectedCases = pendingCases
+                    .Take(selectedCaseCount)
+                    .ToList();
+
+                ProcessExecutionResult processResult = await RunProcessAsync(
+                    arguments,
+                    cancellationToken,
+                    diagnosticsFolder: unitOutputFolder,
+                    trackAsCurrentProcess: false).ConfigureAwait(false);
+
+                if (processResult.ExitCode != 0 &&
+                    !await HaveAllTerminalStatusesAsync(selectedCases, cancellationToken).ConfigureAwait(false))
+                {
+                    throw new InvalidOperationException(
+                        $"Execution unit '{unit.Id}' exited with code {processResult.ExitCode} " +
+                        $"before every selected test case reported a final status. " +
+                        $"See '{Path.Combine(unitOutputFolder, TestHostErrorLogFileName)}' for diagnostics.");
+                }
+            }
+        }
+
         private Exception Run(string runArgs)
         {
             using var cancellationTokenSource = new CancellationTokenSource();
@@ -264,47 +431,9 @@ namespace Microsoft.Protocols.TestManager.Kernel
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                vstestProcess = new Process()
-                {
-                    StartInfo = new ProcessStartInfo()
-                    {
-                        WorkingDirectory = WorkingDirectory,
-                        FileName = EnginePath,
-                        UseShellExecute = false,
-                        CreateNoWindow = false,
-                        Arguments = "test " + runArgs,
-                        RedirectStandardError = true,
-                    }
-                };
-
                 PipeSinkServer.ParseLogMessage = ParseLogMessage;
                 PipeSinkServer.Start(PipeName);
-
-                vstestProcess.Start();
-
-                while (true)
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        TerminateProcessTree(vstestProcess.Id);
-
-                        cancellationToken.ThrowIfCancellationRequested();
-                    }
-
-                    if (vstestProcess.WaitForExit(ProcessWaitInterval))
-                    {
-                        break;
-                    }
-                }
-
-                int err = vstestProcess.ExitCode;
-                if (err != 0)
-                {
-                    string errorMsg = vstestProcess.StandardError.ReadToEnd();
-                    Console.Error.WriteLine();
-                    Console.Error.WriteLine(StringResource.RunCaseError);
-                    Console.Error.WriteLine(errorMsg);
-                };
+                RunProcessAsync(runArgs, cancellationToken).GetAwaiter().GetResult();
             }
             catch (Exception exception)
             {
@@ -317,13 +446,172 @@ namespace Microsoft.Protocols.TestManager.Kernel
             return null;
         }
 
-        private void ParseLogMessage(string message)
+        private async Task<ProcessExecutionResult> RunProcessAsync(
+            string runArgs,
+            CancellationToken cancellationToken,
+            string diagnosticsFolder = null,
+            bool trackAsCurrentProcess = true)
+        {
+            using var process = new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    WorkingDirectory = WorkingDirectory,
+                    FileName = EnginePath,
+                    UseShellExecute = false,
+                    CreateNoWindow = false,
+                    Arguments = "test " + runArgs,
+                    RedirectStandardError = true,
+                },
+            };
+
+            process.Start();
+
+            // Concurrent execution units must not publish themselves as the current process,
+            // otherwise the field ends up pointing at an arbitrary, already disposed process.
+            if (trackAsCurrentProcess)
+            {
+                vstestProcess = process;
+            }
+
+            activeProcesses.TryAdd(process.Id, process);
+
+            Task<string> errorTask = process.StandardError.ReadToEndAsync();
+
+            try
+            {
+                await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                TerminateProcessTree(process.Id);
+
+                // Drain the redirected stream before the process is disposed, otherwise the
+                // pending read faults on a disposed handle as an unobserved task exception.
+                await DrainAsync(errorTask, StreamDrainTimeout).ConfigureAwait(false);
+                throw;
+            }
+            finally
+            {
+                activeProcesses.TryRemove(process.Id, out _);
+            }
+
+            string errorMessage = await DrainAsync(errorTask, StreamDrainTimeout).ConfigureAwait(false);
+            if (process.ExitCode != 0)
+            {
+                Console.Error.WriteLine();
+                Console.Error.WriteLine(StringResource.RunCaseError);
+                Console.Error.WriteLine(errorMessage);
+
+                ReportProcessError(diagnosticsFolder, process.ExitCode, errorMessage);
+            }
+
+            return new ProcessExecutionResult(process.ExitCode);
+        }
+
+        private static async Task<string> DrainAsync(Task<string> readTask, TimeSpan timeout)
+        {
+            try
+            {
+                Task completedTask = await Task.WhenAny(readTask, Task.Delay(timeout)).ConfigureAwait(false);
+                if (ReferenceEquals(completedTask, readTask))
+                {
+                    return await readTask.ConfigureAwait(false);
+                }
+
+                ObserveFault(readTask);
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private static void ObserveFault(Task task)
+        {
+            _ = task.ContinueWith(
+                completedTask => _ = completedTask.Exception,
+                CancellationToken.None,
+                TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnFaulted,
+                TaskScheduler.Default);
+        }
+
+        private static async Task<bool> HaveAllTerminalStatusesAsync(
+            IReadOnlyList<TestCase> selectedCases,
+            CancellationToken cancellationToken)
+        {
+            DateTime deadline = DateTime.UtcNow + TestStatusPropagationTimeout;
+            do
+            {
+                if (selectedCases.All(testCase => IsTerminalStatus(testCase.Status)))
+                {
+                    return true;
+                }
+
+                await Task.Delay(50, cancellationToken).ConfigureAwait(false);
+            }
+            while (DateTime.UtcNow < deadline);
+
+            return selectedCases.All(testCase => IsTerminalStatus(testCase.Status));
+        }
+
+        private static bool IsTerminalStatus(TestCaseStatus status)
+        {
+            return status == TestCaseStatus.Passed ||
+                status == TestCaseStatus.Failed ||
+                status == TestCaseStatus.Other;
+        }
+
+        private sealed class ProcessExecutionResult
+        {
+            public ProcessExecutionResult(int exitCode)
+            {
+                ExitCode = exitCode;
+            }
+
+            public int ExitCode { get; }
+        }
+
+        /// <summary>
+        /// Persists the diagnostics of a failed test host process.
+        /// A non zero exit code is also produced by ordinary test failures, so the run is not
+        /// failed here. The output is persisted so that a unit which never executed any test
+        /// case, for example because the test host could not start, is discoverable.
+        /// </summary>
+        private static void ReportProcessError(string diagnosticsFolder, int exitCode, string errorMessage)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(diagnosticsFolder) && Directory.Exists(diagnosticsFolder))
+                {
+                    string diagnostics = string.IsNullOrWhiteSpace(errorMessage)
+                        ? "The test host did not write diagnostic output to stderr."
+                        : errorMessage;
+                    File.AppendAllText(
+                        Path.Combine(diagnosticsFolder, TestHostErrorLogFileName),
+                        $"[{DateTime.Now:o}] Test host exited with code {exitCode}.{Environment.NewLine}{diagnostics}{Environment.NewLine}");
+                }
+
+                Utility.LogException(new List<Exception>
+                {
+                    new Exception($"Test host exited with code {exitCode}. {errorMessage ?? string.Empty}"),
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+        }
+
+        private void ParseLogMessage(Guid connectionId, string message)
         {
             if (message.IndexOf(StringResource.InprogressTag) != -1 ||
                 message.IndexOf(StringResource.PassedTag) != -1 ||
                 message.IndexOf(StringResource.FailedTag) != -1 ||
                 message.IndexOf(StringResource.InconclusiveTag) != -1)
             {
+                // Status message: extract full test name
                 string[] strings = message.Split(' ');
                 string testCaseName = strings[strings.Length - 1];
 
@@ -332,6 +620,19 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     return;
                 }
 
+                if (message.Contains(StringResource.InprogressTag))
+                {
+                    testNamesByPipeConnection[connectionId] = testCaseName;
+                    var logs = testLogs.GetOrAdd(testCaseName, _ => new StringBuilder());
+                    lock (logs)
+                    {
+                        logs.Clear();
+                    }
+                }
+
+                AppendTestLog(testCaseName, message);
+
+                // Update test status for UI
                 if (message.Contains(StringResource.InprogressTag))
                 {
                     tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Running);
@@ -350,10 +651,58 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 }
                 else
                 {
-                    // Case status from Running -> Waiting.
-                    // Waiting QT close or Html Report.
+                    // Case status from Running -> Waiting
                     tsLogManager.GroupByOutcome.ChangeStatus(testCaseName, TestCaseStatus.Waiting);
                 }
+
+                if (!message.Contains(StringResource.InprogressTag))
+                {
+                    testNamesByPipeConnection.TryRemove(connectionId, out _);
+                }
+            }
+            else if (TryGetTaggedTestLog(message, out var taggedTestName, out var taggedLog))
+            {
+                AppendTestLog(taggedTestName, taggedLog);
+            }
+            else if (testNamesByPipeConnection.TryGetValue(connectionId, out var testCaseName))
+            {
+                AppendTestLog(testCaseName, message);
+            }
+        }
+
+        private bool TryGetTaggedTestLog(string message, out string testCaseName, out string log)
+        {
+            testCaseName = null;
+            log = null;
+
+            int separatorIndex = message.IndexOf('|');
+            if (separatorIndex <= 0)
+            {
+                return false;
+            }
+
+            string candidate = message.Substring(0, separatorIndex);
+            if (!testCaseFullNames.Contains(candidate))
+            {
+                return false;
+            }
+
+            testCaseName = candidate;
+            log = message.Substring(separatorIndex + 1);
+            return true;
+        }
+
+        private void AppendTestLog(string testCaseName, string message)
+        {
+            if (string.IsNullOrEmpty(testCaseName) || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+
+            var logs = testLogs.GetOrAdd(testCaseName, _ => new StringBuilder());
+            lock (logs)
+            {
+                logs.AppendLine(message);
             }
         }
 
@@ -411,7 +760,11 @@ namespace Microsoft.Protocols.TestManager.Kernel
         {
             if (runningCaseStack != null) runningCaseStack.Clear();
 
-            TerminateProcessTree(vstestProcess.Id);
+            foreach (var process in activeProcesses.Values)
+            {
+                TerminateProcessTree(process.Id);
+            }
+
         }
 
         private void TerminateProcessTree(int pid)
@@ -419,12 +772,10 @@ namespace Microsoft.Protocols.TestManager.Kernel
             try
             {
                 var process = Process.GetProcessById(pid);
+                process.Kill(true);
 
-                process.CloseMainWindow();
-
-                process.Kill();
-
-                process.WaitForExit();
+                // Never block the caller indefinitely; Abort runs on the request thread.
+                process.WaitForExit((int)ProcessTerminationTimeout.TotalMilliseconds);
             }
             catch (Exception ex)
             {
@@ -546,7 +897,8 @@ namespace Microsoft.Protocols.TestManager.Kernel
                                     FullName = caseFullName,
                                     Category = categories.ToList(),
                                     Description = description,
-                                    Name = method.Name
+                                    Name = method.Name,
+                                    Assembly = DllFileName
                                 };
 
                                 var testcaseToolTipBuilder = new StringBuilder();
@@ -647,6 +999,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                     Category = info.Category.ToList(),
                     ToolTipOnUI = info.ToolTipOnUI,
                     Description = info.Description,
+                    Assembly = info.Assembly,
                 }).ToList();
 
                 Directory.Delete(tempPath, true);

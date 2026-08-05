@@ -20,4 +20,5 @@
 	<Parameter Name="compressionInTC" Value="No" Comment="Whether compression is used in terminal client" />
 	<Parameter Name="agentPort" Value="4488" Comment="The listening port of SUT Agent." />
 	<Parameter Name="agentRemoteClient" Value="mstsc" Comment="The RDP client name used by SUT Agent, e. g. mstsc or xfreerdp." />
+	<Parameter Name="rdpSigningCertSubject" Value="CN=WPTS RDP Test Signing" Comment="Subject of the self-signed code-signing certificate used to sign generated .RDP files on the SUT. Suppresses the April 2026 RDP security dialog (CVE-2026-26151)." />
 </Parameters>

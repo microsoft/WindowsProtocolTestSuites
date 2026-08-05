@@ -2420,7 +2420,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 toChecksumText = ArrayUtility.ConcatenateArrays(BitConverter.GetBytes((int)usage), toChecksumText);
             }
 
-            var md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            var md5CryptoServiceProvider = new MD5CryptoServiceProvider(); // CodeQL [SM02196] Required by RFC 1964 / RFC 4757: the Kerberos GSS token uses MD5 in the DES-MAC-MD5 and rc4-hmac signing algorithms (SGN_ALG.DES_MAC_MD5). Protocol-test interop code, not a security boundary.
             byte[] md5 = md5CryptoServiceProvider.ComputeHash(toChecksumText);
 
             switch (tokenHeader.sng_alg)
@@ -2592,7 +2592,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.Security.KerberosLib
                 toChecksumText = ArrayUtility.ConcatenateArrays(BitConverter.GetBytes((int)usage), toChecksumText);
             }
 
-            var md5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            var md5CryptoServiceProvider = new MD5CryptoServiceProvider(); // CodeQL [SM02196] Required by RFC 1964 / RFC 4757: the Kerberos GSS token uses MD5 in the DES-MAC-MD5 and rc4-hmac signing algorithms (SGN_ALG.DES_MAC_MD5). Protocol-test interop code, not a security boundary.
             byte[] md5 = md5CryptoServiceProvider.ComputeHash(toChecksumText);
 
             switch (sngAlg)

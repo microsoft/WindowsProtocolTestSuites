@@ -12,8 +12,14 @@
 Param(
 [string]$sourceFileName, 
 [string]$nodeName, 
-[string]$newContent
+[string]$newContent,
+[ValidateSet("Public","Secret")][string]$ValueClassification = "Public"
 )
+
+# Redact the value in all console/transcript output when it is classified Secret
+# (e.g. PasswordForAllUsers). The value is still written to the ptfconfig; only logging
+# is suppressed so credentials do not leak into deployment/test transcripts.
+$displayValue = if ($ValueClassification -eq "Secret") { "<redacted>" } else { $newContent }
 
 #----------------------------------------------------------------------------
 # Starting script
@@ -21,7 +27,7 @@ Param(
 Write-Host "EXECUTING [Modify-ConfigFileNode.ps1] ..." -foregroundcolor cyan
 Write-Host "`$sourceFileName = $sourceFileName"
 Write-Host "`$nodeName       = $nodeName"
-Write-Host "`$newContent     = $newContent"
+Write-Host "`$newContent     = $displayValue"
 
 #----------------------------------------------------------------------------
 # Function: Show-ScriptUsage
@@ -85,7 +91,7 @@ if($ifFileExist -eq $true)
     {
         Set-ItemProperty -Path $sourceFileName -Name IsReadOnly -Value $false
         $configContent.save((Resolve-Path $sourceFileName))
-        Write-Host "Config success: Set $nodeName to $newContent" -ForegroundColor green
+        Write-Host "Config success: Set $nodeName to $displayValue" -ForegroundColor green
     }
     else
     {

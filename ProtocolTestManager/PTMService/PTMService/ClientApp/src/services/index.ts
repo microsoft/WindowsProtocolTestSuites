@@ -37,11 +37,8 @@ export async function FetchService<T>(requestOption: FetchOption<T>) {
           : { Accept: 'application/json', 'Content-Type': 'application/json' }
       })
       if (response.status >= 400 && response.status < 600) {
-        const data = await parseJson(response)
-        if (data !== '') {
-          throw new Error(data)
-        }
-        throw new Error('Bad response from server')
+        const data = await parseResponseBody(response)
+        throw new Error(getErrorMessage(data, response.status))
       }
 
       const jsonHeader = response.headers.get('Content-Type')
@@ -74,4 +71,76 @@ async function parseJson(response: Response) {
   return await response.text().then(function (text: string) {
     return text ? JSON.parse(text) : {}
   })
+}
+
+async function parseResponseBody(response: Response): Promise<unknown> {
+  const text = await response.text()
+  if (!text) {
+    return undefined
+  }
+
+  try {
+    return JSON.parse(text)
+  } catch {
+    return text
+  }
+}
+
+function getErrorMessage(data: unknown, status: number): string {
+  if (typeof data === 'string' && data.trim() !== '') {
+    return data
+  }
+
+  if (data !== null && typeof data === 'object') {
+    const error = data as Record<string, unknown>
+    const detail = getNonEmptyString(error.detail)
+    const message = getNonEmptyString(error.message)
+    const title = getNonEmptyString(error.title)
+    const validationErrors = getValidationErrors(error.errors)
+
+    if (detail) {
+      return detail
+    }
+    if (message) {
+      return message
+    }
+    if (title && validationErrors) {
+      return `${title}: ${validationErrors}`
+    }
+    if (title) {
+      return title
+    }
+    if (validationErrors) {
+      return validationErrors
+    }
+
+    const serialized = JSON.stringify(data)
+    if (serialized !== '{}') {
+      return serialized
+    }
+  }
+
+  return `Request failed with status ${status}`
+}
+
+function getNonEmptyString(value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim() !== ''
+    ? value
+    : undefined
+}
+
+function getValidationErrors(value: unknown): string | undefined {
+  if (value === null || typeof value !== 'object') {
+    return undefined
+  }
+
+  const messages = Object.values(value as Record<string, unknown>)
+    .flatMap(item => Array.isArray(item) ? item : [item])
+    .filter((item): item is string => typeof item === 'string' && item.trim() !== '')
+
+  const uniqueMessages = Array.from(new Set(messages))
+
+  return uniqueMessages.length > 0
+    ? uniqueMessages.join(' ')
+    : undefined
 }

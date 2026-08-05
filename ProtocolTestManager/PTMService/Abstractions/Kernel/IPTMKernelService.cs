@@ -228,6 +228,15 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         void StartDetection(int configurationId, DetectionCallback callback);
 
         /// <summary>
+        /// Resets, configures, and starts auto-detection as one operation.
+        /// </summary>
+        /// <param name="prerequisiteProperties">Properties required by the detector.</param>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <param name="callback">Callback function when detection finishes.</param>
+        /// <returns>The identifier of the new detection run, or null when prerequisites are invalid.</returns>
+        string StartDetection(List<Property> prerequisiteProperties, int configurationId, DetectionCallback callback);
+
+        /// <summary>
         /// Stop the auto-detection
         /// </summary>
         /// <param name="configurationId">Test suite configuration id.</param>
@@ -254,6 +263,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="configurationId">Test suite configuration id.</param>
         /// <returns>AutoDetection Log Content</returns>
         string GetDetectionLog(int configurationId);
+
+        /// <summary>
+        /// Gets an incremental AutoDetection log chunk from the provided offset.
+        /// </summary>
+        /// <param name="configurationId">Test suite configuration id.</param>
+        /// <param name="offset">The starting byte offset.</param>
+        /// <returns>Log chunk and next offset.</returns>
+        DetectionLogChunk GetDetectionLogChunk(int configurationId, long offset);
 
         IEnumerable<PropertyGroup> GetConfigurationProperties(int configurationId);
 

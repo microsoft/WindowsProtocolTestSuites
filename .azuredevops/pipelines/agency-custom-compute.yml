@@ -1,0 +1,95 @@
+# Custom Agency compute pipeline for WindowsProtocolTestSuites.
+#
+# WHY: the default Agency (ADO SWE Agent) managed compute is failing at the
+# repository clone step for this repo. This customer-owned pipeline takes over
+# the environment and performs its OWN clone using the build identity, so the
+# agent run no longer depends on the failing built-in sync.
+#
+# HARD CONSTRAINTS (do not violate):
+#   - This YAML MUST live in the repo Agency operates on (this repo). It is
+#     resolved from this repo's branch and selected via
+#     .azuredevops/policies/agency-preferences.yml in this same repo.
+#   - Do NOT define the three queue-time variables here. They are set ONLY in
+#     the pipeline UI as queue-time-settable (Phase 2). In YAML they break
+#     invocation:
+#       Agency.Consent.WindowsProtocolTestSuites
+#       Agency_Context
+#       system.connection.accessTokenScope   (must include vso.code for the clone)
+#   - Do NOT run `agency copilot …` yourself. Custom compute means we own the
+#     ENVIRONMENT; Agency still drives the agent via its own task.
+#
+# Template ref is Public Preview — pin refs and expect churn.
+
+trigger: none            # Agency triggers this pipeline; no CI trigger.
+
+resources:
+  repositories:
+    - repository: 1esPipelines
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/canary        # canary == latest/unstable. Pin to a stable
+                                    # tag once validated, and re-test on bumps.
+
+extends:
+  template: v1/1ES.Agency.PipelineTemplate.yml@1esPipelines
+  parameters:
+    pool:
+      useAgencyManagedPool: true   # D2: shared Agency-Prod-Default pool (recommended
+                                   # Option A). No provisioning, no pool authorization,
+                                   # no deadlock risk with PR-policy builds.
+      os: windows                  # matches the driver's current windows-latest.
+
+    agentContextRoot: $(Build.SourcesDirectory)   # working tree the agent operates on
+                                                   # (passed to the Agency task as repoRoot).
+
+    skipSourceSync: true           # D3: we clone the repo ourselves below. If the product
+                                   # team later fixes built-in sync, remove this and the
+                                   # custom clone step. (checkout: none still always runs.)
+
+    preAgentSteps:
+      - pwsh: |
+          $ErrorActionPreference = 'Stop'
+          $dst = "$(Build.SourcesDirectory)"
+
+          # `checkout: none` has already run, so $dst should be empty
+          # (git clone requires an empty target).
+          $repo = "https://dev.azure.com/microsoft/WindowsProtocolTestSuites/_git/WindowsProtocolTestSuites"
+
+          Write-Host "Cloning $repo into $dst"
+          # Authenticate with the build identity via an Authorization header.
+          # Do NOT embed a PAT/token in the URL (it can leak into error output).
+          git -c http.extraHeader="AUTHORIZATION: bearer $(System.AccessToken)" clone $repo $dst
+          if ($LASTEXITCODE -ne 0) { throw "git clone failed with exit code $LASTEXITCODE" }
+
+          # OPEN ITEM 6.3: check out Agency's working branch (ai-work/{workItemId}).
+          # With skipSourceSync the built-in step we skipped ALSO did this checkout,
+          # so we must replicate it or the agent runs against the wrong ref.
+          # The working branch lives in the Agency_Context JSON, but the exact field
+          # name is NOT documented here — do NOT guess it. Get the schema from the
+          # Agency team or by inspecting a real run's logged Agency_Context value,
+          # then uncomment and replace <workingBranchField>:
+          #
+          # $ctx = $env:AGENCY_CONTEXT | ConvertFrom-Json
+          # $branch = $ctx.<workingBranchField>
+          # Write-Host "Checking out working branch: $branch"
+          # git -C $dst checkout $branch
+          # if ($LASTEXITCODE -ne 0) { throw "git checkout '$branch' failed" }
+
+          # OPTIONAL large-repo mitigations if clone proves slow/unstable:
+          #   - shallow:    git ... clone --depth 1 --no-single-branch $repo $dst
+          #   - partial:    git ... clone --filter=blob:none $repo $dst
+          #   - LFS:        git -C $dst lfs pull        (only if the repo uses LFS)
+          #   - submodules: git -C $dst submodule update --init --recursive
+        displayName: 'Custom clone (WindowsProtocolTestSuites)'
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          AGENCY_CONTEXT: $(Agency_Context)
+
+    # postAgentSteps: []           # add cleanup/notifications here if needed later
+
+    # If 1ES network isolation (default Enforce) blocks the clone or the agent
+    # from reaching additional hosts, allow them here (internal dev.azure.com
+    # traffic is normally fine):
+    # settings:
+    #   networkIsolationAdditionalDomainAllowList:
+    #     - <host>

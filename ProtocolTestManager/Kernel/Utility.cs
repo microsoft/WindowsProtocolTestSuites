@@ -265,13 +265,6 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         #endregion
 
-        #region Auto-detection
-
-        private StreamWriter logWriter;
-        private int stepIndex;
-
-        #endregion
-
         #region Test case filter
         /// <summary>
         /// Gets the TestCaseFilter object for current test suite.
@@ -1214,7 +1207,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
                 {
                     return File.ReadAllText(filePath);
                 }
-                catch (IOException e)
+                catch (IOException)
                 {
                 }
             }

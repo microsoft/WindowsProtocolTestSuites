@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+#nullable enable annotations
+
 using Microsoft.Protocols.TestManager.Common;
 using Microsoft.Protocols.TestManager.PTMService.Common.Types;
 using Microsoft.Protocols.TestManager.PTMService.PTMKernelService;
@@ -43,11 +45,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
     {
         public bool? IsSelected { get; set; }
 
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
         public string Name { get; set; }
 
-        public string[] Categories { get; set; }
+        public string[]? Categories { get; set; }
 
         public Rule[]? Rules { get; set; }
 
@@ -56,7 +58,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
 
     public class RuleGroup
     {
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
         public string Name { get; set; }
 

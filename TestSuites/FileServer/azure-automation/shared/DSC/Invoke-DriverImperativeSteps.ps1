@@ -24,6 +24,12 @@
 .PARAMETER SkipForceLevel2
     Skip the ForceLevel2 configuration. Useful when SUT is not ready yet.
 
+.PARAMETER NoTranscript
+    Preserve the parent orchestrator transcript when invoked by Deploy-Driver.ps1.
+
+.PARAMETER HeartbeatPath
+    Optional deployment heartbeat file updated at major operations.
+
 .EXAMPLE
     .\Invoke-DriverImperativeSteps.ps1 -Step 1 -WorkingPath C:\Domain-Package
     .\Invoke-DriverImperativeSteps.ps1 -Step 2 -WorkingPath C:\Cluster-Package
@@ -34,18 +40,51 @@ param(
     [ValidateSet(1, 2)]
     [int]$Step = 1,
     [string]$ConfigureFile = "$WorkingPath\Config.json",
-    [switch]$SkipForceLevel2
+    [switch]$SkipForceLevel2,
+    [string]$HeartbeatPath,
+    [switch]$NoTranscript
 )
 
 $ErrorActionPreference = 'Stop'
 $isLinuxDriver = $IsLinux -eq $true
+# Azure CSE invokes pwsh as root without propagating HOME; downstream Join-Path $env:HOME fails with "Path is null".
+if ($isLinuxDriver -and [string]::IsNullOrWhiteSpace($env:HOME)) {
+    $env:HOME = '/root'
+}
 $scriptsPath = Join-Path $PSScriptRoot 'Scripts'
 $pathSep = [IO.Path]::PathSeparator
 $env:Path += "${pathSep}${WorkingPath}${pathSep}${scriptsPath}"
 Push-Location $scriptsPath
 
 [string]$logFile = "$PSScriptRoot\Invoke-DriverImperativeSteps.log"
-Start-Transcript -Path $logFile -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force
+    $transcriptStarted = $true
+}
+
+function Stop-LocalTranscript {
+    if ($transcriptStarted) {
+        Stop-Transcript
+    }
+}
+
+$operationStartedAt = Get-Date
+if (-not [string]::IsNullOrWhiteSpace($HeartbeatPath)) {
+    . "$PSScriptRoot\Deploy-CommonHelpers.ps1"
+}
+
+function Write-DriverOperationHeartbeat {
+    param(
+        [string]$Operation,
+        [string]$Checkpoint
+    )
+    if (-not [string]::IsNullOrWhiteSpace($HeartbeatPath)) {
+        Write-DeploymentHeartbeat -Phase "ImperativeStep$Step" -Operation $Operation `
+            -StartedAt $operationStartedAt -HeartbeatPath $HeartbeatPath `
+            -LastCheckpoint $Checkpoint
+    }
+}
 
 $systemDrive = $env:SystemDrive
 
@@ -89,6 +128,8 @@ try {
         # ==================================================================
         1 {
             .\Write-Info.ps1 '=== Driver Step 1: Domain Join ===' -ForegroundColor Cyan
+            Write-DriverOperationHeartbeat -Operation 'Driver domain join' `
+                -Checkpoint 'Checking scenario and current membership'
 
             # Detect workgroup mode from Config.json
             # Note: Generate-ConfigJson sets Core.DomainName to "" for workgroup,
@@ -108,11 +149,25 @@ try {
                 }
                 else {
                     .\Write-Info.ps1 'Joining domain...' -ForegroundColor Cyan
-                    $joined = & "$scriptsPath\domainjoin.ps1"
-                    if (-not $joined) {
+                    Write-DriverOperationHeartbeat -Operation 'Driver domain join' `
+                        -Checkpoint 'Submitting domain membership change'
+                    # Capture only the script's final return value. domainjoin.ps1 may emit
+                    # stray success-stream output; a multi-element array is truthy even when
+                    # the real result is $false, which would silently mask a failed join.
+                    $joined = & "$scriptsPath\domainjoin.ps1" -NoTranscript | Select-Object -Last 1
+                    if ($joined -ne $true) {
                         throw 'Domain join failed.'
                     }
                 }
+
+                # Prevent Netlogon from auto-rotating this member's machine-account
+                # password. The DC does NOT set RefusePasswordChange, so a rotation
+                # would succeed locally AND in AD -- but an Azure deallocate/restart in
+                # the rotation window can capture an inconsistent state, producing the
+                # "trust relationship between this workstation and the primary domain
+                # failed" error. Disabling rotation keeps the local secret and AD copy
+                # permanently in sync. Mirrors CommonScripts\Set-NetlogonRegKeyAndPolicy.ps1.
+                & reg add 'HKLM\SYSTEM\CurrentControlSet\services\Netlogon\Parameters' /v DisablePasswordChange /t REG_DWORD /d 1 /f 2>&1 | .\Write-Info.ps1
             }
 
             .\Write-Info.ps1 'Step 1 complete.' -ForegroundColor Green
@@ -123,9 +178,8 @@ try {
         # ==================================================================
         2 {
             .\Write-Info.ps1 '=== Driver Step 2: Tools + PTF Config + RSA Keys + ForceLevel2 ===' -ForegroundColor Cyan
-
-            # Brief stabilization wait after reboot
-            Start-Sleep -Seconds 5
+            Write-DriverOperationHeartbeat -Operation 'Driver post-reboot configuration' `
+                -Checkpoint 'Starting tools and test configuration'
 
             # -- Tool installation --
             try {
@@ -196,20 +250,29 @@ try {
                     "Completed" | Out-File -FilePath $signalFile -Force
                 } else {
                     .\Write-Info.ps1 'Installing tools (DotNetCore, OpenSSH, PowerShellCore, PTMService, PTMCli, TestSuite, certs)...' -ForegroundColor Yellow
-                    $result = & (Join-Path $scriptsPath 'InstallMSIAndTools.ps1') -Role 'DriverComputer'
+                    $preparedSignal = Join-Path $scriptsPath 'InstallMSIAndTools.Prepared.signal'
+                    $operation = if (Test-Path $preparedSignal) { 'Install' } else { 'All' }
+                    $result = & (Join-Path $scriptsPath 'InstallMSIAndTools.ps1') `
+                        -Role 'DriverComputer' -Operation $operation `
+                        -PreparedSignalFile $preparedSignal -NoTranscript
                     if ($result -eq $true) {
                         .\Write-Info.ps1 "[OK] Tools installed successfully" -ForegroundColor Green
                     } else {
                         Write-Warning "Tool installation returned non-success"
                     }
                 }
-                $toolsOk = $true
+                # Postcondition: the tools signal exists only after a successful install
+                # (InstallMSIAndTools writes it after all MSIs; the Linux/extract branch writes
+                # it at the end of its steps). The critical-throw at end of script fires if false.
+                $toolsOk = Test-Path $signalFile
             }
             catch {
                 .\Write-Info.ps1 "[FAIL] Tools installation failed: $($_.Exception.Message)" -ForegroundColor Red
             }
 
             # -- PTF config patching (cluster-specific, no-op for domain) --
+            Write-DriverOperationHeartbeat -Operation 'Driver test configuration' `
+                -Checkpoint 'Configuring PTF, credentials, and ForceLevel2'
             $ptfScript = "$scriptsPath\Config-ClusterPTFConfig.ps1"
             if (Test-Path $ptfScript) {
                 try {
@@ -353,6 +416,10 @@ try {
                     .\Write-Info.ps1 '[SKIP] ForceLevel2 -- ShareUtil.exe is Windows-only' -ForegroundColor DarkGray
                     $fl2Ok = $true
                 }
+                elseif (Test-Path "$PSScriptRoot\ForceLevel2.Completed.signal") {
+                    .\Write-Info.ps1 '[OK] ForceLevel2 was already confirmed; live reconfiguration skipped.' -ForegroundColor Green
+                    $fl2Ok = $true
+                }
                 else {
                     .\Write-Info.ps1 'Configuring ForceLevel2 oplock on SUT...' -ForegroundColor Yellow
 
@@ -441,6 +508,9 @@ try {
 `$ConfigPath = '$ConfigureFile'
 `$logPath = '$PSScriptRoot\Config-ForceLevel2.log'
 `$fl2SignalFile = '$fl2SignalFile'
+`$driverSignalFile = '$PSScriptRoot\Deploy-Driver.Completed.signal'
+`$driverDeployScript = '$PSScriptRoot\Deploy-Driver.ps1'
+`$workingPath = '$WorkingPath'
 Add-Content -Path `$logPath -Value "[`$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Checking SUT readiness..."
 `$cfg = Get-Content -Path `$ConfigPath -Raw | ConvertFrom-Json
 `$SutName = (`$cfg.Machines.PSObject.Properties | Where-Object { `$_.Name -match 'Sut|Node01' -or `$_.Value.Role -match 'SUT' } | Select-Object -First 1).Value.ComputerName
@@ -456,10 +526,17 @@ if (-not (Test-Connection -ComputerName `$SutName -Count 1 -Quiet -ErrorAction S
 Start-Process -FilePath 'net.exe' -ArgumentList `$netArgs -Wait -NoNewWindow -ErrorAction SilentlyContinue
 & `$ShareUtil `$SutName ShareForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true 2>&1 | Out-Null
 if (`$LASTEXITCODE -eq 0) {
-    Add-Content -Path `$logPath -Value "[`$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] ForceLevel2 configured successfully. Cleaning up task."
+    Add-Content -Path `$logPath -Value "[`$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] ForceLevel2 configured successfully. Finalizing Driver deployment."
     "FL2 OK `$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath `$fl2SignalFile -Force
-    Unregister-ScheduledTask -TaskName '$fl2TaskName' -Confirm:`$false
-    Remove-Item -Path `$MyInvocation.MyCommand.Path -Force -ErrorAction SilentlyContinue
+    Set-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'DeployStep' -Value 1 -Type DWord -Force
+    & `$driverDeployScript -WorkingPath `$workingPath
+    if (Test-Path `$driverSignalFile) {
+        Unregister-ScheduledTask -TaskName '$fl2TaskName' -Confirm:`$false
+        Remove-Item -Path `$MyInvocation.MyCommand.Path -Force -ErrorAction SilentlyContinue
+    } else {
+        Add-Content -Path `$logPath -Value "[`$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] Driver completion signal is still absent. Will retry."
+        exit 1
+    }
 } else {
     Add-Content -Path `$logPath -Value "[`$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] ShareUtil failed (exit `$LASTEXITCODE). Will retry."
     exit 1
@@ -503,7 +580,7 @@ if (`$LASTEXITCODE -eq 0) {
 }
 catch {
     .\Write-Error.ps1 "Driver imperative step $Step failed: $_"
-    Stop-Transcript
+    Stop-LocalTranscript
     Pop-Location
     throw
 }
@@ -511,10 +588,10 @@ catch {
 # Tools installation is critical -- throw if it failed so the parent
 # orchestrator (Deploy-Driver.ps1) can catch and report the failure.
 if ($Step -eq 2 -and -not $toolsOk) {
-    Stop-Transcript
+    Stop-LocalTranscript
     Pop-Location
     throw "Critical section failed: Tools installation. Check Invoke-DriverImperativeSteps.log for details."
 }
 
-Stop-Transcript
+Stop-LocalTranscript
 Pop-Location

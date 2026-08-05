@@ -1,6 +1,6 @@
-﻿// RDMA Client for SMB Direct Compatibility (Debug Enhanced)
+// RDMA Client for SMB Direct Compatibility
 // Compile with: g++ -o rdma_client rdma_client.cpp -libverbs -lrdmacm -lpthread
-#include "rdma_wrapper.h" 
+#include "rdma_wrapper.h"
 #include <rdma/rdma_cma.h>
 #include <rdma/rdma_verbs.h>
 #include <iostream>
@@ -16,12 +16,14 @@
 #include <sstream>
 #include <thread>
 #include <unordered_map>
-#include <unordered_set> 
+#include <unordered_set>
 #include <cstdint>
-#include <cstdlib> 
-#include <atomic> 
+#include <cstdlib>
+#include <atomic>
 #include <algorithm>
-#include <arpa/inet.h> // For htons/htonl (if needed for fix)
+#include <arpa/inet.h>
+#include <memory>
+#include <map>
 
 // ------------------- Logger ------------------- //
 class Logger {
@@ -53,12 +55,13 @@ public:
             + get_thread_id_str() + "] [" + func + "] " + msg;
 
         file_ << output << std::endl;
-        // std::cout << output << std::endl; 
     }
 
 private:
     Logger() {
-        file_.open("rdma_debug.log", std::ios::out | std::ios::app);
+        const char* log_path = std::getenv("RDMA_LOG_PATH");
+        if (!log_path) log_path = "rdma_debug.log";
+        file_.open(log_path, std::ios::out | std::ios::app);
     }
     ~Logger() {
         if (file_.is_open()) file_.close();
@@ -81,55 +84,45 @@ enum class WrType : uint64_t {
     SEND = 0x1000000000000000ULL,
     RECV = 0x2000000000000000ULL,
     READ = 0x3000000000000000ULL,
-    WRITE = 0x4000000000000000ULL
+    WRITE = 0x4000000000000000ULL,
+    BIND = 0x5000000000000000ULL,
+    INVALIDATE = 0x6000000000000000ULL
 };
+
 static std::atomic<uint64_t> s_seq{ 1 };
 
 uint64_t generate_wr_id(WrType type) {
     uint64_t seq = s_seq.fetch_add(1, std::memory_order_relaxed) & 0x0FFFFFFFFFFFFFFFULL;
     return static_cast<uint64_t>(type) | seq;
 }
+
 // ------------------- Helper: Hex Dump ------------------- //
 static void log_buffer_hex(const std::string& tag, const void* data, size_t len) {
+    const size_t max_dump = 256;
     std::ostringstream oss;
     const uint8_t* bytes = static_cast<const uint8_t*>(data);
+    size_t dump_len = std::min(len, max_dump);
     oss << tag << " (" << len << " bytes): ";
     oss << std::hex << std::setfill('0');
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < dump_len; ++i) {
         oss << std::setw(2) << static_cast<int>(bytes[i]) << " ";
     }
+    if (len > max_dump) oss << "...";
     LOG_DEBUG(oss.str());
 }
 
-// ------------------- Global MR Registry ------------------- //
-static std::mutex mr_registry_mutex;
-static std::unordered_map<uintptr_t, struct ibv_mr*> active_mrs;
-static std::atomic<uint64_t> g_result_id_counter{ 0x10000000 };
+// ------------------- Per-client MR Registry ------------------- //
+struct MrEntry {
+    struct ibv_mr* mr;
+    uintptr_t start;
+    size_t length;
+};
 
-static void mr_track(struct ibv_mr* mr) {
-    if (!mr) return;
-    std::lock_guard<std::mutex> lock(mr_registry_mutex);
-    active_mrs[reinterpret_cast<uintptr_t>(mr->addr)] = mr;
-    LOG_DEBUG("Tracked MR: Addr=" + std::to_string(reinterpret_cast<uintptr_t>(mr->addr)) +
-        " Len=" + std::to_string(mr->length) + " LKey=" + std::to_string(mr->lkey));
-}
-
-static void mr_untrack(struct ibv_mr* mr) {
-    if (!mr) return;
-    std::lock_guard<std::mutex> lock(mr_registry_mutex);
-    active_mrs.erase(reinterpret_cast<uintptr_t>(mr->addr));
-}
-
-static void mr_registry_clear() {
-    std::lock_guard<std::mutex> lock(mr_registry_mutex);
-    active_mrs.clear();
-}
-
-// ------------------- RDMA client struct ------------------- //
 struct MwContext {
     struct ibv_mw* mw;
     struct ibv_mr* mr;
     bool is_type_2;
+    std::atomic<bool> invalidated{false};
 };
 
 struct RdmaClient {
@@ -154,26 +147,88 @@ struct RdmaClient {
     std::unordered_set<uint64_t> active_recv_slots;
     std::mutex slot_mutex;
 
+    // Per-client MR registry for fast lookup
+    std::mutex mr_mutex;
+    std::map<uintptr_t, MrEntry> active_mrs; // sorted by start address for range search
+
+    // General QP-operation mutex
+    std::mutex qp_mutex;
+
+    // Connection lifecycle flag
+    std::atomic<bool> disconnecting{ false };
+
+    bool valid{ false };
+
     RdmaClient() {
         if (posix_memalign(&send_buf_aligned, 4096, BUF_SZ) != 0) {
             LOG_ERROR("Failed to allocate aligned send buffer");
+            return;
         }
         if (posix_memalign(&recv_buf_aligned, 4096, BUF_SZ) != 0) {
             LOG_ERROR("Failed to allocate aligned recv buffer");
+            free(send_buf_aligned);
+            send_buf_aligned = nullptr;
+            return;
         }
-        if (send_buf_aligned) memset(send_buf_aligned, 0, BUF_SZ);
-        if (recv_buf_aligned) memset(recv_buf_aligned, 0, BUF_SZ);
+        memset(send_buf_aligned, 0, BUF_SZ);
+        memset(recv_buf_aligned, 0, BUF_SZ);
+        valid = true;
     }
 
     ~RdmaClient();
+
+    bool is_valid() const { return valid; }
+
+    void track_mr(struct ibv_mr* mr) {
+        if (!mr) return;
+        std::lock_guard<std::mutex> lock(mr_mutex);
+        MrEntry entry{ mr, reinterpret_cast<uintptr_t>(mr->addr), mr->length };
+        active_mrs[entry.start] = entry;
+        LOG_DEBUG("Tracked MR: Addr=0x" + std::to_string(entry.start) +
+            " Len=" + std::to_string(entry.length) + " LKey=" + std::to_string(mr->lkey));
+    }
+
+    void untrack_mr(struct ibv_mr* mr) {
+        if (!mr) return;
+        std::lock_guard<std::mutex> lock(mr_mutex);
+        active_mrs.erase(reinterpret_cast<uintptr_t>(mr->addr));
+    }
+
+    bool find_lkey(uintptr_t addr, size_t len, uint32_t& out_lkey) {
+        std::lock_guard<std::mutex> lock(mr_mutex);
+        // Exact match first
+        auto it = active_mrs.find(addr);
+        if (it != active_mrs.end()) {
+            if (len > it->second.length) return false;
+            out_lkey = it->second.mr->lkey;
+            return true;
+        }
+        // Range search using sorted map
+        auto candidate = active_mrs.upper_bound(addr);
+        if (candidate != active_mrs.begin()) {
+            --candidate;
+            uintptr_t start = candidate->second.start;
+            uintptr_t end = start + candidate->second.length;
+            if (addr >= start && (addr + len) <= end) {
+                out_lkey = candidate->second.mr->lkey;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void clear_mrs() {
+        std::lock_guard<std::mutex> lock(mr_mutex);
+        active_mrs.clear();
+    }
 };
 
 #pragma pack(push, 1)
 struct SmbDirectNegotiateReq {
-    uint16_t MinVersion;        // Must be 0x0100 (Big Endian)
-    uint16_t MaxVersion;        // Must be 0x0100 (Big Endian)
-    uint16_t Reserved;          // Must be 0x0000
-    uint16_t CreditsRequested;  // Send Credits 
+    uint16_t MinVersion;
+    uint16_t MaxVersion;
+    uint16_t Reserved;
+    uint16_t CreditsRequested;
     uint16_t PreferredSendSize;
     uint32_t MaxReceiveSize;
     uint32_t MaxFragmentedSize;
@@ -182,15 +237,21 @@ struct SmbDirectNegotiateReq {
 
 // ------------------- Destructor ------------------- //
 RdmaClient::~RdmaClient() {
+    disconnecting.store(true, std::memory_order_release);
+
     if (send_mr) {
-        mr_untrack(send_mr);
+        untrack_mr(send_mr);
         ibv_dereg_mr(send_mr);
         send_mr = nullptr;
     }
     if (recv_mr) {
-        mr_untrack(recv_mr);
+        untrack_mr(recv_mr);
         ibv_dereg_mr(recv_mr);
         recv_mr = nullptr;
+    }
+
+    if (id && id->qp) {
+        rdma_destroy_qp(id);
     }
 
     if (id) {
@@ -218,58 +279,23 @@ RdmaClient::~RdmaClient() {
         ec = nullptr;
     }
 
-    if (send_buf_aligned) free(send_buf_aligned);
-    if (recv_buf_aligned) free(recv_buf_aligned);
+    if (send_buf_aligned) { free(send_buf_aligned); send_buf_aligned = nullptr; }
+    if (recv_buf_aligned) { free(recv_buf_aligned); recv_buf_aligned = nullptr; }
 }
 
 // ------------------- Helper for SGE ------------------- //
-static bool prepare_sge_for_buf(struct ibv_sge& sge, const void* buf, size_t len) {
+static bool prepare_sge_for_buf(RdmaClient* client, struct ibv_sge& sge, const void* buf, size_t len) {
+    if (!client || !buf || len == 0) return false;
     uintptr_t addr = reinterpret_cast<uintptr_t>(buf);
     sge.addr = addr;
     sge.length = static_cast<uint32_t>(len);
 
-    std::lock_guard<std::mutex> lock(mr_registry_mutex);
-
-    auto it = active_mrs.find(addr);
-    if (it != active_mrs.end()) {
-        struct ibv_mr* mr = it->second;
-        if (len > mr->length) {
-            LOG_ERROR("Requested length " + std::to_string(len) +
-                " exceeds registered MR length " + std::to_string(mr->length));
-            return false;
-        }
-        sge.lkey = mr->lkey;
-        LOG_DEBUG("Found MR by exact match: addr=0x" + std::to_string(addr) +
-            " lkey=" + std::to_string(mr->lkey));
+    if (client->find_lkey(addr, len, sge.lkey)) {
         return true;
     }
 
-    for (const auto& entry : active_mrs) {
-        struct ibv_mr* mr = entry.second;
-        uintptr_t start = reinterpret_cast<uintptr_t>(mr->addr);
-        uintptr_t end = start + mr->length;
-
-        if (addr >= start && (addr + len) <= end) {
-            sge.lkey = mr->lkey;
-            LOG_DEBUG("Found MR by range: buf=0x" + std::to_string(addr) +
-                " in [0x" + std::to_string(start) + "-0x" + std::to_string(end) +
-                "] lkey=" + std::to_string(mr->lkey));
-            return true;
-        }
-    }
-
-    LOG_ERROR("Buffer NOT registered in global map: 0x" + std::to_string(addr) +
+    LOG_ERROR("Buffer NOT registered in client MR map: 0x" + std::to_string(addr) +
         " Len: " + std::to_string(len));
-    LOG_ERROR("Active MR count: " + std::to_string(active_mrs.size()));
-
-    for (const auto& entry : active_mrs) {
-        struct ibv_mr* mr = entry.second;
-        LOG_ERROR("  Registered MR: addr=0x" +
-            std::to_string(reinterpret_cast<uintptr_t>(mr->addr)) +
-            " len=" + std::to_string(mr->length) +
-            " lkey=" + std::to_string(mr->lkey));
-    }
-
     return false;
 }
 
@@ -301,14 +327,7 @@ static void poll_and_distribute_completions(RdmaClient* client) {
             RdmaCompletion comp = {};
             comp.wr_id = wc[i].wr_id;
             comp.status = static_cast<uint32_t>(wc[i].status);
-
-            if (wc[i].status == IBV_WC_SUCCESS) {
-                comp.byte_len = wc[i].byte_len;
-            }
-            else {
-                comp.byte_len = 0;
-            }
-
+            comp.byte_len = (wc[i].status == IBV_WC_SUCCESS) ? wc[i].byte_len : 0;
             comp.qp_num = wc[i].qp_num;
             comp.op_code = static_cast<uint32_t>(wc[i].opcode);
             comp.vendor_err = wc[i].vendor_err;
@@ -324,6 +343,9 @@ static void poll_and_distribute_completions(RdmaClient* client) {
                 client->send_completion_queue.push(comp);
             }
         }
+    }
+    else if (num_comp < 0) {
+        LOG_ERROR("ibv_poll_cq returned error");
     }
 }
 
@@ -388,13 +410,13 @@ static RdmaStatus create_rdma_resources(RdmaClient* client) {
         return RDMA_ERR_RESOURCE;
     }
 
-    mr_track(client->send_mr);
-    mr_track(client->recv_mr);
+    client->track_mr(client->send_mr);
+    client->track_mr(client->recv_mr);
 
     if (ibv_req_notify_cq(client->cq, 0)) {
         LOG_ERROR("Failed to request CQ notification");
-        mr_untrack(client->send_mr);
-        mr_untrack(client->recv_mr);
+        client->untrack_mr(client->send_mr);
+        client->untrack_mr(client->recv_mr);
         ibv_dereg_mr(client->send_mr);
         ibv_dereg_mr(client->recv_mr);
         rdma_destroy_qp(client->id);
@@ -406,9 +428,12 @@ static RdmaStatus create_rdma_resources(RdmaClient* client) {
 
     return RDMA_OK;
 }
+
 // ------------------- C ABI Implementation ------------------- //
 
 extern "C" RdmaStatus rdma_connect_client(const char* host, const char* port, RdmaClientHandle* out_handle) {
+    if (!host || !port || !out_handle) return RDMA_ERR_INVALID_ARGUMENT;
+
     LOG_DEBUG(std::string("Connecting to ") + host + ":" + port);
     struct rdma_addrinfo hints = {}, * addrinfo = nullptr;
     hints.ai_port_space = RDMA_PS_TCP;
@@ -421,6 +446,12 @@ extern "C" RdmaStatus rdma_connect_client(const char* host, const char* port, Rd
 
     auto client = new (std::nothrow) RdmaClient();
     if (!client) {
+        rdma_freeaddrinfo(addrinfo);
+        return RDMA_ERR_RESOURCE;
+    }
+
+    if (!client->is_valid()) {
+        delete client;
         rdma_freeaddrinfo(addrinfo);
         return RDMA_ERR_RESOURCE;
     }
@@ -448,6 +479,7 @@ extern "C" RdmaStatus rdma_connect_client(const char* host, const char* port, Rd
 
     struct rdma_cm_event* event = nullptr;
     bool connected = false;
+    RdmaStatus result = RDMA_ERR_GENERAL;
 
     while (rdma_get_cm_event(client->ec, &event) == 0) {
         struct rdma_cm_event e = *event;
@@ -458,9 +490,9 @@ extern "C" RdmaStatus rdma_connect_client(const char* host, const char* port, Rd
             LOG_DEBUG("Address resolved, resolving route...");
             if (rdma_resolve_route(client->id, 2000)) {
                 LOG_ERROR("Failed to resolve route");
-                delete client;
-                rdma_freeaddrinfo(addrinfo);
-                return RDMA_ERR_GENERAL;
+                result = RDMA_ERR_GENERAL;
+                connected = false;
+                goto connect_done;
             }
             break;
 
@@ -468,15 +500,14 @@ extern "C" RdmaStatus rdma_connect_client(const char* host, const char* port, Rd
             LOG_DEBUG("Route resolved, creating QP...");
             ret = create_rdma_resources(client);
             if (ret != RDMA_OK) {
-                delete client;
-                rdma_freeaddrinfo(addrinfo);
-                return RDMA_ERR_GENERAL;
+                result = RDMA_ERR_GENERAL;
+                connected = false;
+                goto connect_done;
             }
 
             LOG_DEBUG("Initial credits posted. Constructing Negotiate Request...");
 
             SmbDirectNegotiateReq priv_data = {};
-
             priv_data.MinVersion = 0x0100;
             priv_data.MaxVersion = 0x0100;
             priv_data.CreditsRequested = 20;
@@ -497,9 +528,9 @@ extern "C" RdmaStatus rdma_connect_client(const char* host, const char* port, Rd
 
             if (rdma_connect(client->id, &param)) {
                 LOG_ERROR("rdma_connect failed");
-                delete client;
-                rdma_freeaddrinfo(addrinfo);
-                return RDMA_ERR_GENERAL;
+                result = RDMA_ERR_GENERAL;
+                connected = false;
+                goto connect_done;
             }
             break;
         }
@@ -507,33 +538,33 @@ extern "C" RdmaStatus rdma_connect_client(const char* host, const char* port, Rd
         case RDMA_CM_EVENT_ESTABLISHED:
             LOG_DEBUG("RC connection established successfully!");
             connected = true;
-            break;
+            result = RDMA_OK;
+            goto connect_done;
 
         case RDMA_CM_EVENT_REJECTED:
         case RDMA_CM_EVENT_UNREACHABLE:
         case RDMA_CM_EVENT_CONNECT_ERROR:
             LOG_ERROR("Connection failed/rejected: " + std::string(rdma_event_str(e.event)));
-            delete client;
-            rdma_freeaddrinfo(addrinfo);
-            return RDMA_ERR_GENERAL;
+            result = RDMA_ERR_GENERAL;
+            connected = false;
+            goto connect_done;
 
         default:
             break;
         }
-
-        if (connected) break;
     }
+
+connect_done:
+    rdma_freeaddrinfo(addrinfo);
 
     if (!connected) {
         LOG_ERROR("Failed to establish connection");
         delete client;
-    }
-    else {
-        *out_handle = reinterpret_cast<RdmaClientHandle>(client);
+        return result;
     }
 
-    rdma_freeaddrinfo(addrinfo);
-    return connected ? RDMA_OK : RDMA_ERR_GENERAL;
+    *out_handle = reinterpret_cast<RdmaClientHandle>(client);
+    return RDMA_OK;
 }
 
 extern "C" RdmaStatus disconnect(RdmaClientHandle handle) {
@@ -541,30 +572,30 @@ extern "C" RdmaStatus disconnect(RdmaClientHandle handle) {
     auto client = reinterpret_cast<RdmaClient*>(handle);
 
     LOG_DEBUG("Disconnecting client handle...");
+    client->disconnecting.store(true, std::memory_order_release);
 
     if (client->id) {
         rdma_disconnect(client->id);
     }
 
-    mr_registry_clear();
-
+    client->clear_mrs();
     delete client;
     return RDMA_OK;
 }
 
 extern "C" RdmaStatus rdma_send(RdmaClientHandle handle, const void* data, size_t len) {
-    if (!handle) return RDMA_ERR_INVALID_ARGUMENT;
+    if (!handle || !data || len == 0) return RDMA_ERR_INVALID_ARGUMENT;
     auto client = reinterpret_cast<RdmaClient*>(handle);
 
     struct ibv_sge sge = {};
-    if (!prepare_sge_for_buf(sge, data, len)) {
+    if (!prepare_sge_for_buf(client, sge, data, len)) {
         return RDMA_ERR_GENERAL;
     }
 
     std::atomic_thread_fence(std::memory_order_release);
 
     struct ibv_send_wr wr = {};
-    wr.wr_id = generate_wr_id(WrType::SEND);//1001;
+    wr.wr_id = generate_wr_id(WrType::SEND);
     wr.sg_list = &sge;
     wr.num_sge = 1;
     wr.opcode = IBV_WR_SEND;
@@ -572,9 +603,9 @@ extern "C" RdmaStatus rdma_send(RdmaClientHandle handle, const void* data, size_
 
     struct ibv_send_wr* bad_wr = nullptr;
 
-    // Debug log
     LOG_DEBUG("Posting SEND. wr_id=" + std::to_string(wr.wr_id) + " len=" + std::to_string(len));
 
+    std::lock_guard<std::mutex> lock(client->qp_mutex);
     if (ibv_post_send(client->id->qp, &wr, &bad_wr)) {
         LOG_ERROR("ibv_post_send failed. errno=" + std::to_string(errno));
         return RDMA_ERR_GENERAL;
@@ -583,7 +614,7 @@ extern "C" RdmaStatus rdma_send(RdmaClientHandle handle, const void* data, size_
 }
 
 extern "C" RdmaStatus post_receive(RdmaClientHandle handle, void* buf, size_t len, uint64_t recv_slot_id) {
-    if (!handle) return RDMA_ERR_INVALID_ARGUMENT;
+    if (!handle || !buf || len == 0) return RDMA_ERR_INVALID_ARGUMENT;
     auto client = reinterpret_cast<RdmaClient*>(handle);
 
     if (len > RdmaClient::BUF_SZ) {
@@ -598,7 +629,7 @@ extern "C" RdmaStatus post_receive(RdmaClientHandle handle, void* buf, size_t le
     }
 
     struct ibv_sge sge = {};
-    if (!prepare_sge_for_buf(sge, buf, len)) {
+    if (!prepare_sge_for_buf(client, sge, buf, len)) {
         return RDMA_ERR_GENERAL;
     }
 
@@ -612,9 +643,9 @@ extern "C" RdmaStatus post_receive(RdmaClientHandle handle, void* buf, size_t le
 
     struct ibv_recv_wr* bad_wr = nullptr;
 
-    // Debug log
     LOG_DEBUG("Posting RECV. wr_id=" + std::to_string(recv_slot_id) + " len=" + std::to_string(len));
 
+    std::lock_guard<std::mutex> qp_lock(client->qp_mutex);
     if (ibv_post_recv(client->id->qp, &wr, &bad_wr)) {
         LOG_ERROR("ibv_post_recv failed");
         client->active_recv_slots.erase(recv_slot_id);
@@ -627,15 +658,15 @@ extern "C" RdmaStatus poll_completion(
     RdmaClientHandle handle,
     RdmaCompletion* completion_ptr,
     int timeout_ms,
-    int completion_type // 0: Recv, 1: Send/Other
-) {
+    int completion_type)
+{
     if (!handle || !completion_ptr) return RDMA_ERR_INVALID_ARGUMENT;
     auto client = reinterpret_cast<RdmaClient*>(handle);
 
     auto start_time = std::chrono::steady_clock::now();
     auto deadline = start_time + std::chrono::milliseconds(timeout_ms);
 
-    std::queue<RdmaCompletion>* target_queue;
+    std::queue<RdmaCompletion>* target_queue = nullptr;
 
     if (completion_type == 0) {
         target_queue = &client->recv_completion_queue;
@@ -678,16 +709,16 @@ extern "C" RdmaStatus poll_completion(
 }
 
 extern "C" RdmaStatus write(RdmaClientHandle handle, const void* local_buf, size_t len, uint64_t remote_addr, uint32_t rkey) {
-    if (!handle) return RDMA_ERR_INVALID_ARGUMENT;
+    if (!handle || !local_buf || len == 0) return RDMA_ERR_INVALID_ARGUMENT;
     auto client = reinterpret_cast<RdmaClient*>(handle);
 
     struct ibv_sge sge = {};
-    if (!prepare_sge_for_buf(sge, local_buf, len)) return RDMA_ERR_GENERAL;
+    if (!prepare_sge_for_buf(client, sge, local_buf, len)) return RDMA_ERR_GENERAL;
 
     std::atomic_thread_fence(std::memory_order_release);
 
     struct ibv_send_wr wr = {};
-    wr.wr_id = 2;
+    wr.wr_id = generate_wr_id(WrType::WRITE);
     wr.sg_list = &sge;
     wr.num_sge = 1;
     wr.opcode = IBV_WR_RDMA_WRITE;
@@ -696,6 +727,7 @@ extern "C" RdmaStatus write(RdmaClientHandle handle, const void* local_buf, size
     wr.wr.rdma.rkey = rkey;
 
     struct ibv_send_wr* bad_wr = nullptr;
+    std::lock_guard<std::mutex> lock(client->qp_mutex);
     if (ibv_post_send(client->id->qp, &wr, &bad_wr)) {
         LOG_ERROR("write failed");
         return RDMA_ERR_GENERAL;
@@ -704,16 +736,16 @@ extern "C" RdmaStatus write(RdmaClientHandle handle, const void* local_buf, size
 }
 
 extern "C" RdmaStatus read(RdmaClientHandle handle, void* local_buf, size_t len, uint64_t remote_addr, uint32_t rkey) {
-    if (!handle) return RDMA_ERR_INVALID_ARGUMENT;
+    if (!handle || !local_buf || len == 0) return RDMA_ERR_INVALID_ARGUMENT;
     auto client = reinterpret_cast<RdmaClient*>(handle);
 
     struct ibv_sge sge = {};
-    if (!prepare_sge_for_buf(sge, local_buf, len)) return RDMA_ERR_GENERAL;
+    if (!prepare_sge_for_buf(client, sge, local_buf, len)) return RDMA_ERR_GENERAL;
 
     std::atomic_thread_fence(std::memory_order_acquire);
 
     struct ibv_send_wr wr = {};
-    wr.wr_id = 3;
+    wr.wr_id = generate_wr_id(WrType::READ);
     wr.sg_list = &sge;
     wr.num_sge = 1;
     wr.opcode = IBV_WR_RDMA_READ;
@@ -722,8 +754,75 @@ extern "C" RdmaStatus read(RdmaClientHandle handle, void* local_buf, size_t len,
     wr.wr.rdma.rkey = rkey;
 
     struct ibv_send_wr* bad_wr = nullptr;
+    std::lock_guard<std::mutex> lock(client->qp_mutex);
     if (ibv_post_send(client->id->qp, &wr, &bad_wr)) {
         LOG_ERROR("read failed");
+        return RDMA_ERR_GENERAL;
+    }
+    return RDMA_OK;
+}
+
+extern "C" RdmaStatus post_write(RdmaClientHandle handle,
+    const void* local_buf,
+    size_t len,
+    uint64_t remote_addr,
+    uint32_t rkey,
+    uint64_t wr_id)
+{
+    if (!handle || !local_buf || len == 0) return RDMA_ERR_INVALID_ARGUMENT;
+    auto client = reinterpret_cast<RdmaClient*>(handle);
+
+    struct ibv_sge sge = {};
+    if (!prepare_sge_for_buf(client, sge, local_buf, len)) return RDMA_ERR_GENERAL;
+
+    std::atomic_thread_fence(std::memory_order_release);
+
+    struct ibv_send_wr wr = {};
+    wr.wr_id = wr_id;
+    wr.sg_list = &sge;
+    wr.num_sge = 1;
+    wr.opcode = IBV_WR_RDMA_WRITE;
+    wr.send_flags = IBV_SEND_SIGNALED;
+    wr.wr.rdma.remote_addr = remote_addr;
+    wr.wr.rdma.rkey = rkey;
+
+    struct ibv_send_wr* bad_wr = nullptr;
+    std::lock_guard<std::mutex> lock(client->qp_mutex);
+    if (ibv_post_send(client->id->qp, &wr, &bad_wr)) {
+        LOG_ERROR("post_write failed");
+        return RDMA_ERR_GENERAL;
+    }
+    return RDMA_OK;
+}
+
+extern "C" RdmaStatus post_read(RdmaClientHandle handle,
+    void* local_buf,
+    size_t len,
+    uint64_t remote_addr,
+    uint32_t rkey,
+    uint64_t wr_id)
+{
+    if (!handle || !local_buf || len == 0) return RDMA_ERR_INVALID_ARGUMENT;
+    auto client = reinterpret_cast<RdmaClient*>(handle);
+
+    struct ibv_sge sge = {};
+    if (!prepare_sge_for_buf(client, sge, local_buf, len)) return RDMA_ERR_GENERAL;
+
+    std::atomic_thread_fence(std::memory_order_acquire);
+
+    struct ibv_send_wr wr = {};
+    wr.wr_id = wr_id;
+    wr.sg_list = &sge;
+    wr.num_sge = 1;
+    wr.opcode = IBV_WR_RDMA_READ;
+    wr.send_flags = IBV_SEND_SIGNALED;
+    wr.wr.rdma.remote_addr = remote_addr;
+    wr.wr.rdma.rkey = rkey;
+
+    struct ibv_send_wr* bad_wr = nullptr;
+    std::lock_guard<std::mutex> lock(client->qp_mutex);
+    if (ibv_post_send(client->id->qp, &wr, &bad_wr)) {
+        LOG_ERROR("post_read failed");
         return RDMA_ERR_GENERAL;
     }
     return RDMA_OK;
@@ -771,15 +870,13 @@ extern "C" RdmaStatus register_memory_window(
         return RDMA_ERR_RESOURCE;
     }
 
-    bool use_type_2 = false;
-
+    bool use_type_2 = true;
     struct ibv_mw* mw = nullptr;
 
-    if (use_type_2) {
-        mw = ibv_alloc_mw(client->pd, IBV_MW_TYPE_2);
-        if (!mw) {
-            use_type_2 = false;
-        }
+    mw = ibv_alloc_mw(client->pd, IBV_MW_TYPE_2);
+    if (!mw) {
+        LOG_DEBUG("register_memory_window: Type 2 MW alloc failed, falling back to Type 1: " + std::string(strerror(errno)));
+        use_type_2 = false;
     }
 
     if (!mw) {
@@ -791,33 +888,62 @@ extern "C" RdmaStatus register_memory_window(
         }
     }
 
-    int mw_access = accessFlags;
+    int mw_access = accessFlags & (IBV_ACCESS_REMOTE_READ | IBV_ACCESS_REMOTE_WRITE | IBV_ACCESS_REMOTE_ATOMIC);
     struct ibv_mw_bind_info bind_info = {};
     bind_info.mr = mr;
     bind_info.addr = reinterpret_cast<uintptr_t>(buf);
     bind_info.length = len;
     bind_info.mw_access_flags = mw_access;
 
-    struct ibv_mw_bind mw_bind = {};
-    mw_bind.wr_id = 0xBEEF0001;
-    mw_bind.send_flags = IBV_SEND_SIGNALED;
-    mw_bind.bind_info = bind_info;
+    uint64_t bind_wr_id = generate_wr_id(WrType::BIND);
+    int bind_ret = 0;
 
-    int bind_ret = ibv_bind_mw(client->qp, mw, &mw_bind);
+    if (use_type_2) {
+        struct ibv_send_wr wr = {};
+        struct ibv_send_wr* bad_wr = nullptr;
+        wr.wr_id = bind_wr_id;
+        wr.opcode = IBV_WR_BIND_MW;
+        wr.send_flags = IBV_SEND_SIGNALED;
+        wr.bind_mw.mw = mw;
+        wr.bind_mw.rkey = mw->rkey;
+        wr.bind_mw.bind_info = bind_info;
+
+        std::lock_guard<std::mutex> lock(client->qp_mutex);
+        bind_ret = ibv_post_send(client->qp, &wr, &bad_wr);
+        if (bind_ret != 0) {
+            LOG_DEBUG("register_memory_window: Type 2 bind via ibv_post_send failed, return=" +
+                std::to_string(bind_ret) + " errno=" + std::to_string(errno));
+        }
+    }
+    else {
+        struct ibv_mw_bind mw_bind = {};
+        mw_bind.wr_id = bind_wr_id;
+        mw_bind.send_flags = IBV_SEND_SIGNALED;
+        mw_bind.bind_info = bind_info;
+
+        std::lock_guard<std::mutex> lock(client->qp_mutex);
+        bind_ret = ibv_bind_mw(client->qp, mw, &mw_bind);
+        if (bind_ret != 0) {
+            LOG_ERROR("register_memory_window: ibv_bind_mw failed, return=" + std::to_string(bind_ret) +
+                " errno=" + std::to_string(errno));
+        }
+    }
+
     if (bind_ret != 0) {
-        LOG_ERROR("register_memory_window: ibv_bind_mw failed, return=" + std::to_string(bind_ret) +
-            " errno=" + std::to_string(errno));
-
         if (use_type_2) {
             ibv_dealloc_mw(mw);
-
             mw = ibv_alloc_mw(client->pd, IBV_MW_TYPE_1);
             if (!mw) {
                 LOG_ERROR("register_memory_window: Type 1 MW alloc failed on retry");
                 ibv_dereg_mr(mr);
                 return RDMA_ERR_RESOURCE;
             }
+            struct ibv_mw_bind mw_bind = {};
+            mw_bind.wr_id = bind_wr_id;
+            mw_bind.send_flags = IBV_SEND_SIGNALED;
+            mw_bind.bind_info = bind_info;
 
+            std::lock_guard<std::mutex> lock(client->qp_mutex);
             bind_ret = ibv_bind_mw(client->qp, mw, &mw_bind);
             if (bind_ret != 0) {
                 LOG_ERROR("register_memory_window: Type 1 bind also failed");
@@ -843,7 +969,7 @@ extern "C" RdmaStatus register_memory_window(
         int num = ibv_poll_cq(client->cq, 1, &wc);
 
         if (num > 0) {
-            if (wc.wr_id == 0xBEEF0001) {
+            if (wc.wr_id == bind_wr_id) {
                 bind_completed = true;
                 if (wc.status != IBV_WC_SUCCESS) {
                     LOG_ERROR("register_memory_window: Bind CQE failed, status=" +
@@ -864,6 +990,10 @@ extern "C" RdmaStatus register_memory_window(
 
                 std::lock_guard<std::mutex> lock(client->completion_mutex);
                 if (wc.opcode & IBV_WC_RECV) {
+                    {
+                        std::lock_guard<std::mutex> sl(client->slot_mutex);
+                        client->active_recv_slots.erase(wc.wr_id);
+                    }
                     client->recv_completion_queue.push(comp);
                 }
                 else {
@@ -901,8 +1031,9 @@ extern "C" RdmaStatus register_memory_window(
     ctx->mw = mw;
     ctx->mr = mr;
     ctx->is_type_2 = use_type_2;
+    ctx->invalidated = false;
 
-    mr_track(mr);
+    client->track_mr(mr);
 
     *out_mwHandle = reinterpret_cast<intptr_t>(ctx);
     *out_rkey = mw->rkey;
@@ -921,10 +1052,8 @@ extern "C" RdmaStatus deregister_memory_window(RdmaClientHandle handle, intptr_t
     auto client = reinterpret_cast<RdmaClient*>(handle);
     auto ctx = reinterpret_cast<MwContext*>(mwHandle);
 
-    if (!ctx->mr || !ctx->mw) {
-        LOG_ERROR("deregister_memory_window: Corrupted context (mr=" +
-            std::to_string(reinterpret_cast<uintptr_t>(ctx->mr)) +
-            ", mw=" + std::to_string(reinterpret_cast<uintptr_t>(ctx->mw)) + ")");
+    if (!ctx || (!ctx->mr && !ctx->mw)) {
+        LOG_ERROR("deregister_memory_window: Corrupted context");
         delete ctx;
         return RDMA_ERR_INVALID_ARGUMENT;
     }
@@ -932,17 +1061,27 @@ extern "C" RdmaStatus deregister_memory_window(RdmaClientHandle handle, intptr_t
     RdmaStatus status = RDMA_OK;
 
     if (ctx->mw) {
-        int ret = ibv_dealloc_mw(ctx->mw);
-        if (ret != 0) {
-            LOG_ERROR("deregister_memory_window: ibv_dealloc_mw failed: " +
-                std::string(strerror(errno)) + " (ret=" + std::to_string(ret) + ")");
-            status = RDMA_ERR_GENERAL;
+        if (ctx->is_type_2 && ctx->invalidated.load()) {
+            LOG_DEBUG("deregister_memory_window: Type 2 MW already invalidated, skipping ibv_dealloc_mw");
+        }
+        else {
+            int ret = ibv_dealloc_mw(ctx->mw);
+            if (ret != 0) {
+                if (ctx->is_type_2) {
+                    LOG_DEBUG("deregister_memory_window: ibv_dealloc_mw failed for Type 2 MW (may already be invalidated): " +
+                        std::string(strerror(errno)) + " (ret=" + std::to_string(ret) + ")");
+                }
+                else {
+                    LOG_ERROR("deregister_memory_window: ibv_dealloc_mw failed: " +
+                        std::string(strerror(errno)) + " (ret=" + std::to_string(ret) + ")");
+                    status = RDMA_ERR_GENERAL;
+                }
+            }
         }
     }
 
     if (ctx->mr) {
-        mr_untrack(ctx->mr);
-
+        client->untrack_mr(ctx->mr);
         int ret = ibv_dereg_mr(ctx->mr);
         if (ret != 0) {
             LOG_ERROR("deregister_memory_window: ibv_dereg_mr failed: " +
@@ -952,18 +1091,18 @@ extern "C" RdmaStatus deregister_memory_window(RdmaClientHandle handle, intptr_t
     }
 
     delete ctx;
-
     return status;
 }
 
 extern "C" RdmaStatus wait_for_disconnect(RdmaClientHandle handle, int timeout_seconds) {
-    if (!handle) {
-        LOG_DEBUG("wait_for_disconnect: Invalid handle");
+    if (!handle || timeout_seconds <= 0) {
+        LOG_DEBUG("wait_for_disconnect: Invalid arguments");
         return RDMA_ERR_INVALID_ARGUMENT;
     }
 
     auto client = reinterpret_cast<RdmaClient*>(handle);
-    if (!client->ec) {
+    rdma_event_channel* ec = client->ec;
+    if (!ec) {
         LOG_DEBUG("wait_for_disconnect: No event channel available");
         return RDMA_ERR_GENERAL;
     }
@@ -973,6 +1112,11 @@ extern "C" RdmaStatus wait_for_disconnect(RdmaClientHandle handle, int timeout_s
     auto start = std::chrono::steady_clock::now();
 
     while (true) {
+        if (client->disconnecting.load(std::memory_order_acquire)) {
+            LOG_DEBUG("wait_for_disconnect: Client is disconnecting, aborting wait");
+            return RDMA_ERR_CONNECTION_CLOSED;
+        }
+
         auto now = std::chrono::steady_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
         if (elapsed >= timeout_seconds) {
@@ -982,27 +1126,24 @@ extern "C" RdmaStatus wait_for_disconnect(RdmaClientHandle handle, int timeout_s
 
         fd_set read_fds;
         FD_ZERO(&read_fds);
-        FD_SET(client->ec->fd, &read_fds);
+        FD_SET(ec->fd, &read_fds);
 
         struct timeval tv;
         tv.tv_sec = 1;
         tv.tv_usec = 0;
 
-        int ret = select(client->ec->fd + 1, &read_fds, NULL, NULL, &tv);
+        int ret = select(ec->fd + 1, &read_fds, NULL, NULL, &tv);
         if (ret <= 0) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
 
-        if (!FD_ISSET(client->ec->fd, &read_fds)) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        if (!FD_ISSET(ec->fd, &read_fds)) {
             continue;
         }
 
         struct rdma_cm_event* event;
-        ret = rdma_get_cm_event(client->ec, &event);
+        ret = rdma_get_cm_event(ec, &event);
         if (ret) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
 
@@ -1029,7 +1170,6 @@ extern "C" RdmaStatus wait_for_disconnect(RdmaClientHandle handle, int timeout_s
     return RDMA_ERR_GENERAL;
 }
 
-
 extern "C" RdmaStatus invalidate_memory_window(
     RdmaClientHandle handle,
     intptr_t mwHandle,
@@ -1045,10 +1185,17 @@ extern "C" RdmaStatus invalidate_memory_window(
         LOG_ERROR("invalidate_memory_window: Invalid MW context");
         return RDMA_ERR_INVALID_ARGUMENT;
     }
-    uint64_t result_id = g_result_id_counter.fetch_add(1);
+
+    uint64_t result_id = generate_wr_id(WrType::INVALIDATE);
 
     struct ibv_send_wr wr = {};
     struct ibv_send_wr* bad_wr = nullptr;
+
+    if (ctx->invalidated.load()) {
+        LOG_DEBUG("invalidate_memory_window: MW already invalidated, returning success");
+        *out_result_id = result_id;
+        return RDMA_OK;
+    }
 
     if (ctx->is_type_2) {
         wr.wr_id = result_id;
@@ -1058,7 +1205,7 @@ extern "C" RdmaStatus invalidate_memory_window(
         wr.num_sge = 0;
         wr.sg_list = nullptr;
 
-        LOG_DEBUG("invalidate_memory_window: Posting SEND_WITH_INV for MW rkey=" +
+        LOG_DEBUG("invalidate_memory_window: Posting SEND_WITH_INV for Type 2 MW rkey=" +
             std::to_string(ctx->mw->rkey));
     }
     else {
@@ -1070,11 +1217,19 @@ extern "C" RdmaStatus invalidate_memory_window(
         LOG_DEBUG("invalidate_memory_window: Type 1 MW, posting empty SEND as invalidate signal");
     }
 
+    std::lock_guard<std::mutex> lock(client->qp_mutex);
     if (ibv_post_send(client->id->qp, &wr, &bad_wr)) {
+        if (ctx->is_type_2 && errno == EINVAL) {
+            LOG_DEBUG("invalidate_memory_window: ibv_post_send failed with EINVAL, assuming Type 2 MW already invalidated by remote peer");
+            ctx->invalidated = true;
+            *out_result_id = result_id;
+            return RDMA_OK;
+        }
         LOG_ERROR("invalidate_memory_window: ibv_post_send failed, errno=" + std::to_string(errno));
         return RDMA_ERR_GENERAL;
     }
 
+    ctx->invalidated = true;
     *out_result_id = result_id;
     LOG_DEBUG("invalidate_memory_window: Success, result_id=" + std::to_string(result_id));
     return RDMA_OK;
@@ -1085,6 +1240,8 @@ extern "C" RdmaStatus check_invalidate_completion(
     uint64_t result_id,
     int timeout_ms)
 {
+    if (!handle || timeout_ms <= 0) return RDMA_ERR_INVALID_ARGUMENT;
+
     auto client = reinterpret_cast<RdmaClient*>(handle);
     auto start = std::chrono::steady_clock::now();
 
@@ -1134,4 +1291,18 @@ extern "C" RdmaStatus check_invalidate_completion(
     }
 
     return RDMA_OK;
+}
+
+// ------------------- Aligned Memory Allocation Helpers ------------------- //
+
+extern "C" void* rdma_alloc_aligned(size_t size) {
+    void* ptr = nullptr;
+    if (posix_memalign(&ptr, 4096, size) != 0) {
+        return nullptr;
+    }
+    return ptr;
+}
+
+extern "C" void rdma_free_aligned(void* ptr) {
+    free(ptr);
 }

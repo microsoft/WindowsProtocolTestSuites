@@ -267,8 +267,27 @@ export function TestResultDetail (props: any) {
   useEffect(() => {
     if (selectedItems !== undefined && selectedItems?.length === 1) {
       dispatch(TestCaseResultDataSrv.getTestCaseResult(selectedItems[0].FullName))
+    } else {
+      dispatch(TestCaseResultActions.clearSelectedTestCaseResultAction())
     }
   }, [dispatch, selectedItems])
+
+  // Poll the selected case while the overall run is active so its completed result
+  // appears as soon as the per-test artifact has been written.
+  useEffect(() => {
+    const runStatus = testResults.selectedTestResult?.Overview.Status
+    const isRunActive = runStatus === 'Created' || runStatus === 'Running'
+    if (!isRunActive || selectedItems === undefined || selectedItems.length !== 1) {
+      return
+    }
+
+    const fullName = selectedItems[0].FullName
+    const interval = setInterval(() => {
+      dispatch(TestCaseResultDataSrv.getTestCaseResult(fullName))
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [dispatch, selectedItems, testResults.selectedTestResult])
 
   const getUpdatedGroups = useCallback((resultList: TestCaseOverview[]) => {
     const updatedResult = groupKeys.Keys.reduce((result: { groups: IGroup[], startIndex: number }, currentKey) => {
@@ -317,6 +336,7 @@ export function TestResultDetail (props: any) {
 
   const [selection, setSelection] = useState<Selection<IObjectWithKey>>(() => {
     const s = new Selection<SelectionItem>({
+      getKey: item => item.FullName,
       onSelectionChanged: () => {
         setSelectedItems(s.getSelection())
         setSelection(s)

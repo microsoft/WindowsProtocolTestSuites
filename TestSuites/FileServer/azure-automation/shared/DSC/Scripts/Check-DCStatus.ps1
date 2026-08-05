@@ -4,7 +4,8 @@
 param(
     $workingDir = $PSScriptRoot,
     [ValidateSet("CreateCheckerTask", "StartChecker")]
-    [string]$action="CreateCheckerTask"
+    [string]$action="CreateCheckerTask",
+    [switch]$NoTranscript
 )
 
 #----------------------------------------------------------------------------
@@ -18,7 +19,11 @@ Push-Location $workingDir
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
-Start-Transcript -Path "$logFile" -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path "$logFile" -Append -Force
+    $transcriptStarted = $true
+}
 
 #----------------------------------------------------------------------------
 # Define common functions
@@ -107,5 +112,5 @@ if($action -eq "StartChecker")
 # Ending
 #----------------------------------------------------------------------------
 Pop-Location
-Stop-Transcript
-exit 0
+if ($transcriptStarted) { Stop-Transcript }
+return $true

@@ -3,6 +3,7 @@
 
 import { FetchService, RequestMethod } from '.'
 import { TestCaseResultActions, TestCaseResultActionTypes } from '../actions/TestCaseResultAction'
+import { TestCaseResult } from '../model/TestCaseResult'
 import { AppThunkAction } from '../store/configureStore'
 
 export const TestCaseResultDataSrv = {
@@ -11,12 +12,12 @@ export const TestCaseResultDataSrv = {
 
     const testResultId = state.testResults.selectedTestResultId
     await FetchService({
-      url: `api/testresult/${testResultId}/testcase?testCaseName=${testCaseName}`,
+      url: `api/testresult/${testResultId}/testcase?testCaseName=${encodeURIComponent(testCaseName)}`,
       method: RequestMethod.GET,
       dispatch,
-      onRequest: TestCaseResultActions.getTestCaseResultAction_Request,
-      onComplete: TestCaseResultActions.getTestCaseResultAction_Success,
-      onError: TestCaseResultActions.getTestCaseResultAction_Failure
+      onRequest: () => TestCaseResultActions.getTestCaseResultAction_Request(testCaseName),
+      onComplete: (result: TestCaseResult) => TestCaseResultActions.getTestCaseResultAction_Success(testCaseName, result),
+      onError: (error: string) => TestCaseResultActions.getTestCaseResultAction_Failure(testCaseName, error)
     })
   }
 }

@@ -41,6 +41,7 @@ namespace Microsoft.Protocols.TestManager.Detector
                     break;
                 case DetectLogLevel.Warning:
                     ProcessStepStatus(style);
+                    DetectorUtil.WriteLog(msg, startNewLine, style);
                     break;
                 case DetectLogLevel.Error:
                     AddLog(DetectLogLevel.Information, msg);

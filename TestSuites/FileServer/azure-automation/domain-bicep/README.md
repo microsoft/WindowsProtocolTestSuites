@@ -4,6 +4,27 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 
 > **Choosing a scenario?** See the [top-level azure-automation README](../README.md) for a comparison of Domain vs. Cluster vs. Workgroup.
 
+## One-Click Deploy ("Deploy to Azure" button)
+
+For a demo/onboarding environment with **defaults**, deploy straight from the Azure Portal — no local clone, no PowerShell, no `deploy.ps1`:
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.8.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fdomain-bicep%2Fazuredeploy.json)
+
+> The button points at [`azuredeploy.json`](azuredeploy.json) served from `raw.githubusercontent.com` at the **`4.26.8.0`** release tag, and the template pulls its DSC package from the same GitHub **Release**. It goes live once a maintainer publishes that release (see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button)).
+
+The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azuredeploy.json`](azuredeploy.json)) — the single-template equivalent of the two-phase `deploy.ps1` flow. Enter an **admin password** and deploy; the DC, SUT, and Driver come up, the members domain-join, and tests run automatically.
+
+**How the two phases collapse into one click.** `deploy.ps1` deploys the DC, waits for AD DS promotion, then deploys the members. The button can't run that imperative wait, so `main.bicep` handles it **declaratively**: the members' module `dependsOn` the DC, their NICs use the DC as DNS, and the on-VM domain join ([`../shared/DSC/Scripts/domainjoin.ps1`](../shared/DSC/Scripts/domainjoin.ps1)) already **retries DNS/DC reachability and `Add-Computer` with exponential backoff** — so the members wait out DC promotion on their own.
+
+**How credentials stay safe.** The button consumes a **public**, pre-built DSC package whose `Config.json` ships with a placeholder token (`#{ADMIN_PASSWORD}#`) instead of a password. At deploy time each VM's Custom Script Extension — from the extension's *encrypted* `protectedSettings` — injects the real admin password (base64-encoded, then JSON-escaped) into `Config.json` via [`../shared/DSC/Scripts/Set-ConfigCredential.ps1`](../shared/DSC/Scripts/Set-ConfigCredential.ps1) before the DC/member deploy scripts run. The credential-bearing bootstrap runs in a separate PowerShell process so transcript headers contain only the script path, then deletes itself on success or failure.
+
+**Scope & limitations (defaults only):**
+- The baked `Config.json` is valid for the **default IP topology and domain** (`contoso.com` / `CONTOSO`) only. Changing IP/domain parameters in the form will not update the peer values inside the package. For custom topologies, use `deploy.ps1` (which rebuilds the package).
+- The package embeds a **fixed test-suite drop** (a snapshot) — appropriate for demo/onboarding, not for testing an arbitrary build.
+- Marketplace **image terms** for the SUT/Driver/DC images may need to be accepted once per subscription (see the [top-level README](../README.md)).
+- **VM sizes default to burstable (B-series)** (`Standard_B4ms`) for broad regional availability. If a size is capacity-constrained, pick a different **Region** (the template deploys into the resource group's region) or change the VM sizes in the form. Unlike `deploy.ps1`, the button **cannot auto-retry across SKUs**.
+- **Disk encryption is off by default for the button** (`enableDiskEncryption=false`). Azure Disk Encryption (ADE) is applied by `deploy.ps1` as a *post-deploy* step, which the Portal button cannot run — so for the button the Key Vault would be created but never used. Managed disks are platform-encrypted at rest regardless. If you specifically want ADE and your subscription has the required Key Vault permissions, set `enableDiskEncryption` to **true** in the form.
+
 ## Architecture Overview
 
 ```
@@ -68,11 +89,13 @@ Location, VM sizes, OS versions, and all other settings are read from the bicepp
 
 ### 3. Wait for deployment to complete
 
-The script deploys in two phases with progress output:
+The script overlaps independent work while preserving the domain-readiness gate:
 
-1. **Phase 1** (~5 min): Network infrastructure + Domain Controller VM
-2. **DC readiness poll** (~15-25 min): Script waits for AD DS promotion to finish
-3. **Phase 2** (~10 min): Driver + SUT VMs
+1. **Phase 1**: Core network, Bastion, and Domain Controller deployment. Bastion no longer blocks the DC.
+2. **Phase 2A**: Driver + SUT infrastructure provisions while AD DS promotion continues.
+3. **DC readiness poll**: The script waits for `Deploy-DC.Completed.signal`.
+4. **Phase 2B**: Driver + SUT guest extensions start only after the DC is ready.
+5. **Disk encryption**: Driver and SUT encryption runs concurrently; DC encryption remains ordered before member domain joins because ADE may reboot the DC.
 
 After Phase 2 finishes, VMs continue configuring in the background (domain join, feature installation, test environment setup). Azure Portal will show "Succeeded" before this completes.
 
@@ -108,12 +131,12 @@ Connect to any VM via **Azure Bastion** in the portal (no public IPs are exposed
 
 | What | Duration | Notes |
 |------|----------|-------|
-| Phase 1 (Network + DC VM) | ~5 min | Bicep deployment |
-| DC configuration | ~15-25 min | AD DS promotion, accounts, CBAC, GPO |
-| Phase 2 (Driver + SUT VMs) | ~10 min | Bicep deployment |
+| Phase 1 (core network + DC VM + Bastion) | ~5 min | DC and Bastion start together after core networking |
+| DC configuration + Phase 2A member infrastructure | ~15-25 min | AD DS promotion overlaps Driver/SUT provisioning |
+| Phase 2B member guest configuration | ~1 min | Extensions start after the DC readiness signal |
 | SUT configuration | ~10-15 min | Domain join, File Server role, shares |
-| Driver configuration | ~10-15 min | Domain join, tools install |
-| **Total** | **~30-40 min** | SUT and Driver configure in parallel |
+| Driver configuration | ~10-15 min | Domain join, tools install; DSC re-applies only when drifted |
+| **Total** | **~25-35 min** | Actual time varies by image, region, and AD promotion |
 
 ## Resuming a Deployment
 
@@ -241,7 +264,7 @@ When a custom image ID is provided, it overrides the marketplace image for that 
 
 ## How On-VM Configuration Works
 
-Each VM uses a **CustomScriptExtension** that downloads a DSC package zip and runs an orchestrator script ([`Deploy-DC.ps1`](../shared/DSC/Deploy-DC.ps1), [`Deploy-Driver.ps1`](../shared/DSC/Deploy-Driver.ps1), or [`Deploy-SUT.ps1`](DSC/Deploy-SUT.ps1)). These orchestrators use **registry-based step tracking** with deferred reboots:
+Each VM uses a **CustomScriptExtension** driven by a single shared bootstrap script ([`scripts/cse-bootstrap.ps1`](scripts/cse-bootstrap.ps1) for Windows, [`scripts/cse-bootstrap.sh`](scripts/cse-bootstrap.sh) for the Linux driver). The Bicep modules `loadTextContent()` the bootstrap at compile time, substitute per-role tokens (role, deploy script, package URL, base64 admin password), and carry it base64-encoded inside the extension's **encrypted `protectedSettings`**. The bootstrap downloads the DSC package zip (members wait for DC-provided DNS first), injects the credential, and runs the role's orchestrator script ([`Deploy-DC.ps1`](../shared/DSC/Deploy-DC.ps1), [`Deploy-Driver.ps1`](../shared/DSC/Deploy-Driver.ps1), or [`Deploy-SUT.ps1`](DSC/Deploy-SUT.ps1)). These orchestrators use **registry-based step tracking** with deferred reboots:
 
 1. **Step 0 → 1**: DSC configuration + domain join (or DC promotion) → scheduled reboot
 2. **Step 1 → 2** (and beyond): Post-reboot DSC re-apply + imperative configuration (tools, accounts, shares, etc.)
@@ -265,6 +288,35 @@ Before creating any Azure resources, deploy.ps1 validates:
 > - AutoLogon is enabled on all VMs for scheduled task execution
 > - Not suitable for production use
 
+## Publishing the public package ("Deploy to Azure" button)
+
+> **Maintainers only.** The [one-click button](#one-click-deploy-deploy-to-azure-button) consumes two public artifacts, both pinned to the **`4.26.8.0`** FileServer release:
+> - **Package** → a GitHub **Release asset** `Domain-Package.zip`
+> - **Template** → the committed [`azuredeploy.json`](azuredeploy.json) served via `raw.githubusercontent.com/.../<tag>/...` — the committed file *is* the hosted template, so there is no separate template upload and no Bicep→JSON drift.
+>
+> This avoids anonymous Azure Storage entirely (SFI-friendly). Re-publish whenever the DSC scripts, `Config.json` shape, or `main.bicep` change.
+
+[`Publish-DscPackage.ps1`](Publish-DscPackage.ps1) is a thin wrapper over the shared publisher [`../shared/Publish-DscPackage.ps1`](../shared/Publish-DscPackage.ps1) (the same one the Workgroup scenario uses). It builds the Domain package with a **credential-free** `Config.json` (password field carries the `#{ADMIN_PASSWORD}#` token), strips `ParamConfig.json`, and publishes the Release asset.
+
+**Prerequisites:** the [GitHub CLI](https://cli.github.com) (`gh auth login`) with permission to create releases on `microsoft/WindowsProtocolTestSuites`.
+
+```powershell
+# 1. Compile the template (keeps azuredeploy.json in sync with main.bicep)
+bicep build main.bicep --outfile azuredeploy.json
+
+# 2. Commit azuredeploy.json and push, so the raw template at the tag is consistent
+#    with the package it points to.
+
+# 3. Cut the release + upload the package asset (idempotent; --clobber re-uploads)
+gh auth login
+.\Publish-DscPackage.ps1 -Tag 4.26.8.0 -Target <branch-or-sha>
+#  asset -> https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/Domain-Package.zip
+#  raw   -> https://raw.githubusercontent.com/microsoft/WindowsProtocolTestSuites/4.26.8.0/TestSuites/FileServer/azure-automation/domain-bicep/azuredeploy.json
+#  -> prints the Deploy to Azure button URL
+```
+
+Validate the package offline first (no GitHub calls) with `-SkipUpload`. The publisher prints an `[OK]`/warning comparing its asset URL against `main.bicep`'s `domainPackageZipUrl` default, so a mismatch is caught before you deploy. To test end-to-end against a **public** personal repo, pass `-Repo <you>/<testrepo> -TemplateRepoPath <path-to-azuredeploy.json-in-that-repo>` and point the template's `domainPackageZipUrl` at your asset.
+
 ## Troubleshooting
 
 ### Log Files
@@ -277,6 +329,8 @@ Before creating any Azure resources, deploy.ps1 validates:
 | Client01 | `C:\Domain-Package\DSC\Invoke-DriverImperativeSteps.log` | Domain join, tools, RSA keys, ForceLevel2 |
 | Node01 | `C:\Domain-Package\DSC\Deploy-SUT.log` | SUT orchestrator (DSC + features + environment) |
 | Node01 | `C:\Domain-Package\DSC\Invoke-SutImperativeSteps.log` | Domain join, disks, DFS, QUIC |
+| Node01 | `C:\Domain-Package\DSC\Scripts\InstallMSIAndTools.ps1.log` | Required tool installation and per-tool failures |
+| Node01 | `C:\Domain-Package\DSC\Scripts\*.install.stderr.log` | Standard error from ZIP-based child installers |
 | All | `C:\domain-*-setup.log` | CustomScriptExtension bootstrap log |
 
 ### Common Issues
@@ -314,30 +368,38 @@ Invoke-AzVMRunCommand -ResourceGroupName 'myRG' -VMName $dcVm.Name `
 
 ## Known Issues
 
-1. **ksetup trust relationship failure on SUT**: After domain join, `Invoke-SutImperativeSteps.ps1` runs `ksetup /SetComputerPassword` to synchronize with AD. If you see "trust relationship between this workstation and the primary domain failed" errors, check the SUT deploy log at `C:\Domain-Package\DSC\Invoke-SutImperativeSteps.log` for the ksetup output.
+1. **"Trust relationship failed" on a domain member**: Every domain member (DC promotes AD; Driver/SUT/cluster nodes join) sets `Netlogon\DisablePasswordChange=1` so its machine-account password is never auto-rotated out of sync with AD, and the DC deliberately does **not** set `RefusePasswordChange` (which would break secure channels for any member that still rotates). The SUT additionally runs `ksetup /SetComputerPassword` to pin `Password04!` for the Auth suite. If you still see "trust relationship between this workstation and the primary domain failed", it is almost always because a VM was **deallocated** (e.g. auto-shutdown — now off by default, see below) mid-rotation; check the member deploy log (`C:\Domain-Package\DSC\Invoke-SutImperativeSteps.log` on the SUT) for the ksetup/DisablePasswordChange output.
 
-2. **Auto-shutdown enabled by default**: All VMs are configured with auto-shutdown. Check the `enableAutoShutdown` and `autoShutdownTime` parameters in your bicepparam file if VMs shut down unexpectedly.
+2. **Auto-shutdown disabled by default**: Auto-shutdown is OFF by default for the domain lab because it DEALLOCATES VMs, and a deallocate/restart of a domain-joined member can collide with machine-account password handling (a source of "trust relationship failed" errors). Domain members also set `Netlogon\DisablePasswordChange` to stay safe. Set `enableAutoShutdown = true` in your bicepparam file (and check `autoShutdownTime`) if you want VMs to shut down automatically to save cost.
 
-3. **Azure Disk Encryption enabled by default**: Disk encryption is applied to all VMs after deployment. This adds deployment time and requires Key Vault permissions. Use `-SkipDiskEncryption` to disable it.
+3. **Azure Disk Encryption**: Off by default for the one-click **button** (`enableDiskEncryption=false`; ADE is a post-deploy step the Portal cannot run — see "Scope & limitations" above). The **`deploy.ps1`** path enables it by default (via the bicepparam file) and applies it to all VMs after deployment, which adds time and requires Key Vault permissions. Use `-SkipDiskEncryption` with `deploy.ps1` to skip it. Managed disks are platform-encrypted at rest regardless.
 
 ## File Structure
 
 ```
 domain-bicep/
 ├── deploy.ps1                       # Phased deployment orchestrator
-├── phase1.bicep                     # Phase 1: Network + DC
+├── main.bicep                       # One-click button entry point (composes phase1 + phase2)
+├── azuredeploy.json                 # Compiled main.bicep (what the Deploy-to-Azure button deploys)
+├── phase1.bicep                     # Phase 1: Key Vault + Network + Bastion + DC
 ├── phase2.bicep                     # Phase 2: Driver + SUT
 ├── README.md                        # This file
 ├── modules/
 │   ├── network.bicep               # VNet, subnets, NSGs, Bastion
 │   ├── domain-controller.bicep     # DC VM, NICs, extension
 │   └── domain-computers.bicep      # Driver + SUT VMs, NICs, extensions
+├── scripts/
+│   ├── cse-bootstrap.ps1           # Shared Windows CSE bootstrap (token-substituted per role)
+│   ├── cse-bootstrap.sh            # Shared Linux driver CSE bootstrap
+│   └── Remove-StaleComputerAccounts.ps1  # Pre-deploy DC cleanup of stale computer objects
 ├── parameters/
 │   ├── phase1.bicepparam           # Phase 1 parameters (single source of truth)
-│   └── phase2.bicepparam           # Phase 2 parameters
+│   ├── phase2.bicepparam           # Phase 2 parameters
+│   └── VmSizeFallbacks.psd1        # Per-role VM size fallback lists (DC/Driver/SUT)
 └── DSC/
-    ├── Deploy-SUT.ps1              # SUT orchestrator (step 0→1→2→3)
-    ├── SUT-Configuration.ps1       # DSC: features, shares, FSRM, registry
+    ├── Deploy-SUT.ps1              # SUT orchestrator (features/join → convergence → environment)
+    ├── SUT-FeatureConfiguration.ps1 # DSC: disruptive File Server features
+    ├── SUT-Configuration.ps1       # DSC: post-reboot shares, FSRM, registry
     ├── Invoke-SutImperativeSteps.ps1     # SUT: domain join, disks, DFS, QUIC
     └── Scripts/                    # Domain-specific scripts
 
@@ -345,14 +407,24 @@ domain-bicep/
 ├── Deploy-Helpers.psm1             # Azure helpers (connect, storage, polling, quota)
 ├── Generate-ConfigJson.ps1         # Config.json generation from bicepparam values
 └── DSC/
-    ├── Deploy-DC.ps1               # DC orchestrator (step 0→1→2)
-    ├── Deploy-Driver.ps1           # Driver orchestrator (step 0→1→2)
-    ├── DC-Configuration.ps1        # DSC: AD DS, RemoteAccess, LDAP, CBAC
+    ├── Deploy-DC.ps1               # DC orchestrator (foundation reboot → promotion reboot → convergence)
+    ├── Deploy-Driver.ps1           # Driver orchestrator (baseline/join → tools/tests)
+    ├── DC-FeatureConfiguration.ps1 # DSC: AD DS and RemoteAccess role features
+    ├── DC-Configuration.ps1        # DSC: post-promotion routing, LDAP, CBAC, services
     ├── Driver-Configuration.ps1    # DSC: hosts, firewall, PS remoting
     ├── Invoke-DcImperativeSteps.ps1      # DC: promotion, accounts, CBAC, GPO, DNS
     ├── Invoke-DriverImperativeSteps.ps1  # Driver: domain join, tools, RSA, ForceLevel2
     └── Scripts/                    # Shared scripts (tools install, test run, validation)
 ```
+
+The normal Domain reboot contract is deterministic: the SUT and Windows Driver
+each use one domain-member reboot, while the DC uses one foundation reboot for
+features/hostname and one mandatory promotion reboot. Tool packages are prepared
+in parallel before those reboots and installed serially afterward. Additional
+pending reboots are treated as failures, not silently retried. Long operations
+publish `Deploy-SUT.heartbeat.json`, `Deploy-DC.heartbeat.json`, or
+`Deploy-Driver.heartbeat.json`; `deploy.ps1` prints the DC heartbeat when its
+readiness gate times out.
 
 ## Based on FileServer User Guide
 

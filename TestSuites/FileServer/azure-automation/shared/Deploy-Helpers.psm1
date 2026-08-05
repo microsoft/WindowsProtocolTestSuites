@@ -181,7 +181,10 @@ function Wait-ForDomainController {
         [int]$TimeoutMinutes = 45,
 
         [Parameter(Mandatory=$false)]
-        [int]$PollIntervalSeconds = 30
+        [int]$PollIntervalSeconds = 30,
+
+        [Parameter(Mandatory=$false)]
+        [int]$ProbeTimeoutSeconds = 120
     )
 
     Write-Output "`n⏳ Waiting for Domain Controller to be ready..."
@@ -198,10 +201,21 @@ function Wait-ForDomainController {
             Select-Object -First 1
 
         if ($dcVm) {
+            $probeJob = $null
             try {
-                $result = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+                $remainingSeconds = [Math]::Max(1, [int]($deadline - (Get-Date)).TotalSeconds)
+                $probeWaitSeconds = [Math]::Min($ProbeTimeoutSeconds, $remainingSeconds)
+                $probeJob = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
                     -VMName $dcVm.Name -CommandId 'RunPowerShellScript' `
-                    -ScriptString $CheckScript -ErrorAction Stop
+                    -ScriptString $CheckScript -AsJob -ErrorAction Stop
+                $completedProbe = Wait-Job -Job $probeJob -Timeout $probeWaitSeconds
+                if ($null -eq $completedProbe) {
+                    Stop-Job -Job $probeJob
+                    Write-Output "[$elapsed min] ⚠️  DC readiness probe exceeded ${probeWaitSeconds}s; retrying with a fresh Run Command."
+                    Start-Sleep -Seconds $PollIntervalSeconds
+                    continue
+                }
+                $result = Receive-Job -Job $probeJob -ErrorAction Stop
 
                 if ($result.Value[0].Message -match "True") {
                     $duration = [math]::Round(((Get-Date) - $startTime).TotalMinutes, 1)
@@ -211,6 +225,10 @@ function Wait-ForDomainController {
                 Write-Output "[$elapsed min] ⏳ DC still configuring..."
             } catch {
                 Write-Output "[$elapsed min] ⚠️  Error checking DC: $($_.Exception.Message)"
+            } finally {
+                if ($null -ne $probeJob) {
+                    Remove-Job -Job $probeJob -Force -ErrorAction SilentlyContinue
+                }
             }
         } else {
             Write-Output "[$elapsed min] ⚠️  DC VM not found yet..."
@@ -464,6 +482,163 @@ function Test-CapacityError {
     }
 
     return $errorText -match 'SkuNotAvailable|Capacity Restriction|not currently available in location|not available in location'
+}
+
+function Invoke-DeploymentWithSkuFallback {
+    <#
+    .SYNOPSIS
+        Runs a resource-group deployment with per-role VM-size fallback on capacity
+        errors. Consolidates the pre-validate -> deploy -> classify-capacity-error ->
+        advance-candidate loop that phase deployments previously duplicated inline.
+    .PARAMETER ResourceGroupName
+        Target resource group.
+    .PARAMETER TemplateFile
+        Path to the Bicep template.
+    .PARAMETER BaseParameters
+        Template parameters EXCLUDING the VM-size parameters named in SizeCandidates.
+    .PARAMETER SizeCandidates
+        Hashtable: template size-parameter name -> string[] of candidate sizes in
+        preference order (e.g. @{ dcVmSize = $dcCandidates }). On a capacity error the
+        failing role's candidate index advances; if the error text names no role's
+        current size, every role with candidates left advances.
+    .PARAMETER DeploymentNamePrefix
+        Prefix for the timestamped deployment name (e.g. 'Phase1').
+    .OUTPUTS
+        The successful deployment object (with .Outputs). Throws when candidates are
+        exhausted or the failure is not capacity-related.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$ResourceGroupName,
+
+        [Parameter(Mandatory=$true)]
+        [string]$TemplateFile,
+
+        [Parameter(Mandatory=$true)]
+        [hashtable]$BaseParameters,
+
+        [Parameter(Mandatory=$true)]
+        [hashtable]$SizeCandidates,
+
+        [Parameter(Mandatory=$true)]
+        [string]$DeploymentNamePrefix
+    )
+
+    $indices = @{}
+    foreach ($k in $SizeCandidates.Keys) { $indices[$k] = 0 }
+    $currentSizes = @{}
+
+    # Advance the candidate index of any role whose CURRENT size appears in the
+    # error text; if the text names none of them, advance every role that still
+    # has candidates left. Returns $true if at least one role advanced.
+    $stepFailedSizes = {
+        param([string]$ErrorText)
+        $advanced = $false
+        $anyMatched = $false
+        foreach ($k in @($SizeCandidates.Keys)) {
+            if ($ErrorText -match [regex]::Escape($currentSizes[$k])) {
+                $anyMatched = $true
+                if (($indices[$k] + 1) -lt $SizeCandidates[$k].Count) {
+                    Write-Warning "VM size '$($currentSizes[$k])' ($k) hit capacity restrictions. Trying next fallback..."
+                    $indices[$k]++
+                    $advanced = $true
+                }
+            }
+        }
+        if (-not $anyMatched) {
+            foreach ($k in @($SizeCandidates.Keys)) {
+                if (($indices[$k] + 1) -lt $SizeCandidates[$k].Count) {
+                    Write-Warning "Capacity error did not name a VM size; advancing $k to next fallback..."
+                    $indices[$k]++
+                    $advanced = $true
+                }
+            }
+        }
+        return $advanced
+    }
+
+    while ($true) {
+        foreach ($k in @($SizeCandidates.Keys)) { $currentSizes[$k] = $SizeCandidates[$k][$indices[$k]] }
+
+        $deployParams = @{} + $BaseParameters
+        foreach ($k in $currentSizes.Keys) { $deployParams[$k] = $currentSizes[$k] }
+
+        $sizeDesc = ($currentSizes.GetEnumerator() | Sort-Object Name | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join ', '
+        $deploymentName = "$DeploymentNamePrefix-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+        Write-Output "`nStarting $DeploymentNamePrefix deployment ($sizeDesc)..."
+
+        # Pre-validate to catch SkuNotAvailable before starting the full deployment.
+        # ARM validation errors don't produce deployment operations, so Test-CapacityError
+        # cannot classify them after the fact.
+        $preValidation = Test-AzResourceGroupDeployment `
+            -ResourceGroupName $ResourceGroupName `
+            -TemplateFile $TemplateFile `
+            -TemplateParameterObject $deployParams
+        if ($preValidation) {
+            $allCodes = @($preValidation | ForEach-Object { $_.Code })
+            $allCodes += $preValidation | ForEach-Object { $_.Details } | Where-Object { $_ } | ForEach-Object { $_.Code }
+            $allMessages = ($preValidation | ForEach-Object {
+                $msg = "[$($_.Code)] $($_.Message)"
+                if ($_.Details) { $msg += " Details: $(($_.Details | ForEach-Object { "[$($_.Code)] $($_.Message)" }) -join '; ')" }
+                $msg
+            }) -join "`n  "
+
+            $isSkuError = $allCodes -match 'SkuNotAvailable|AllocationFailed|ZonalAllocationFailed'
+            if ($isSkuError) {
+                if (& $stepFailedSizes $allMessages) { continue }
+                throw "$DeploymentNamePrefix pre-validation failed (SkuNotAvailable) and no more fallback sizes available:`n  $allMessages"
+            }
+            throw "$DeploymentNamePrefix pre-validation failed:`n  $allMessages"
+        }
+        Write-Output "  Pre-validation passed"
+
+        $job = New-AzResourceGroupDeployment `
+            -ResourceGroupName $ResourceGroupName `
+            -Name $deploymentName `
+            -TemplateFile $TemplateFile `
+            -TemplateParameterObject $deployParams `
+            -ErrorAction Stop `
+            -AsJob
+
+        Watch-Deployment -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName -Job $job
+
+        $deployment = $null
+        $deployError = $null
+        try {
+            $deployment = $job | Receive-Job -Wait -AutoRemoveJob -ErrorAction Stop
+        } catch {
+            $deployError = $_
+            $job | Remove-Job -Force -ErrorAction SilentlyContinue
+        }
+
+        $provState = if ($deployment) { $deployment.ProvisioningState } else { 'Failed' }
+        if ($provState -eq 'Succeeded' -and -not $deployError) {
+            return $deployment
+        }
+
+        if ($deployError) {
+            Write-Output "`n$DeploymentNamePrefix deployment error details:"
+            Write-Output "  Message: $($deployError.Exception.Message)"
+            $inner = $deployError.Exception.InnerException
+            while ($inner) {
+                Write-Output "  Inner: $($inner.Message)"
+                $inner = $inner.InnerException
+            }
+            if ($deployError.ErrorDetails) {
+                Write-Output "  ErrorDetails: $($deployError.ErrorDetails.Message)"
+            }
+        }
+
+        $isCapacity = Test-CapacityError -ErrorRecord $deployError `
+            -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName
+        $errText = if ($deployError) { "$($deployError.Exception.Message)" } else { '' }
+
+        if ($isCapacity -and (& $stepFailedSizes $errText)) { continue }
+
+        if ($deployError) { throw $deployError }
+        throw "$DeploymentNamePrefix deployment '$deploymentName' finished with state: $provState"
+    }
 }
 
 function Test-RegionalVCpuQuota {
@@ -949,6 +1124,20 @@ function Enable-VmDiskEncryption {
 
     Write-Output "   Encrypting VM '$VMName'..."
 
+    # Resume-safe idempotency: avoid reapplying ADE (and another reboot) when a
+    # previous run already completed OS-volume encryption.
+    try {
+        $encryptionStatus = Get-AzVMDiskEncryptionStatus `
+            -ResourceGroupName $ResourceGroupName -VMName $VMName -ErrorAction Stop
+        if ($encryptionStatus.OsVolumeEncrypted -eq 'Encrypted') {
+            Write-Output "   [OK] Disk encryption is already enabled for '$VMName'"
+            return $true
+        }
+    }
+    catch {
+        Write-Output "   Could not read existing encryption status for '$VMName'; applying ADE."
+    }
+
     # Wait for VM to be in running state (may be rebooting from TKFRSAR)
     $maxWaitSeconds = 300
     $waited = 0
@@ -1015,6 +1204,9 @@ function Invoke-DiskEncryptionForVMs {
         keyVaultId and keyVaultUrl).
     .PARAMETER VMNames
         Array of VM names to encrypt.
+    .PARAMETER ThrottleLimit
+        Maximum number of VMs encrypted concurrently. A single VM remains sequential,
+        which preserves the required DC-before-domain-members ordering.
     #>
     [CmdletBinding()]
     param(
@@ -1025,7 +1217,10 @@ function Invoke-DiskEncryptionForVMs {
         $DeploymentOutputs,
 
         [Parameter(Mandatory)]
-        [string[]]$VMNames
+        [string[]]$VMNames,
+
+        [ValidateRange(1, 16)]
+        [int]$ThrottleLimit = 2
     )
 
     $kvId  = $DeploymentOutputs.keyVaultId.Value
@@ -1036,11 +1231,83 @@ function Invoke-DiskEncryptionForVMs {
         return
     }
 
-    Write-Output "`n  Encrypting VM disks..."
-    foreach ($vmName in $VMNames) {
-        Enable-VmDiskEncryption -ResourceGroupName $ResourceGroupName `
-            -VMName $vmName -KeyVaultUrl $kvUrl -KeyVaultId $kvId
+    $uniqueVmNames = @($VMNames | Where-Object { $_ } | Select-Object -Unique)
+    if ($uniqueVmNames.Count -eq 0) {
+        return
     }
+
+    Write-Output "`n  Encrypting VM disks..."
+    $results = [System.Collections.Generic.List[object]]::new()
+    $threadJobCommand = Get-Command Start-ThreadJob -ErrorAction SilentlyContinue
+
+    if ($uniqueVmNames.Count -gt 1 -and $threadJobCommand) {
+        Write-Output "   Encrypting $($uniqueVmNames.Count) VMs concurrently (throttle: $ThrottleLimit)..."
+        $encryptionFunction = ${function:Enable-VmDiskEncryption}.ToString()
+        $azureContext = Get-AzContext
+        $jobs = foreach ($vmName in $uniqueVmNames) {
+            $job = Start-ThreadJob -ThrottleLimit $ThrottleLimit -ArgumentList @(
+                $ResourceGroupName, $vmName, $kvUrl, $kvId, $encryptionFunction, $azureContext
+            ) -ScriptBlock {
+                param($rg, $vm, $vaultUrl, $vaultId, $functionBody, $context)
+
+                Set-AzContext -Context $context -ErrorAction Stop | Out-Null
+                Set-Item -Path Function:\Enable-VmDiskEncryption -Value ([scriptblock]::Create($functionBody))
+                $output = @(Enable-VmDiskEncryption -ResourceGroupName $rg `
+                    -VMName $vm -KeyVaultUrl $vaultUrl -KeyVaultId $vaultId)
+
+                [PSCustomObject]@{
+                    VMName  = $vm
+                    Success = ($output.Count -gt 0 -and $output[-1] -eq $true)
+                    Output  = @($output | Select-Object -SkipLast 1)
+                }
+            }
+            $job | Add-Member -NotePropertyName TargetVMName -NotePropertyValue $vmName
+            $job
+        }
+
+        foreach ($job in $jobs) {
+            try {
+                $result = $job | Receive-Job -Wait -AutoRemoveJob -ErrorAction Stop
+                foreach ($message in $result.Output) {
+                    Write-Output $message
+                }
+                $results.Add($result)
+            }
+            catch {
+                $results.Add([PSCustomObject]@{
+                    VMName  = $job.TargetVMName
+                    Success = $false
+                    Output  = @("Disk encryption job failed: $($_.Exception.Message)")
+                })
+                $job | Remove-Job -Force -ErrorAction SilentlyContinue
+            }
+        }
+    }
+    else {
+        if ($uniqueVmNames.Count -gt 1) {
+            Write-Warning 'Start-ThreadJob is unavailable; encrypting VMs sequentially.'
+        }
+        foreach ($vmName in $uniqueVmNames) {
+            $output = @(Enable-VmDiskEncryption -ResourceGroupName $ResourceGroupName `
+                -VMName $vmName -KeyVaultUrl $kvUrl -KeyVaultId $kvId)
+            foreach ($message in @($output | Select-Object -SkipLast 1)) {
+                Write-Output $message
+            }
+            $results.Add([PSCustomObject]@{
+                VMName  = $vmName
+                Success = ($output.Count -gt 0 -and $output[-1] -eq $true)
+                Output  = @()
+            })
+        }
+    }
+
+    $failed = @($results | Where-Object { -not $_.Success })
+    if ($failed.Count -gt 0) {
+        $failedNames = ($failed.VMName | Sort-Object -Unique) -join ', '
+        throw "Disk encryption failed for: $failedNames"
+    }
+
+    return @($results)
 }
 
 function Install-DscPackageAssets {
@@ -1197,101 +1464,356 @@ function Build-DscPackage {
     # Use Write-Host for progress messages inside this function so they don't
     # pollute the return pipeline. The only value on the output stream must be
     # the SAS URL returned at the end.
-    Write-Host "   Building DSC package from: $DscFolderPath"
 
-    # Create temp directory for packaging (root = WorkingPath on the VM)
-    $tempPackagePath = Join-Path $env:TEMP "DscPackage-$(Get-Random)"
-    New-Item -ItemType Directory -Path $tempPackagePath -Force | Out-Null
-
-    # Copy source into the package. If the source IS a DSC folder (leaf name "DSC"),
-    # nest it as a subdirectory. If it's a full package directory (already contains
-    # a DSC/ subfolder), copy its contents directly.
-    $isDscFolder = (Split-Path $DscFolderPath -Leaf) -eq 'DSC'
-    if ($isDscFolder) {
-        $dscDestination = Join-Path $tempPackagePath "DSC"
-        Copy-Item -Path $DscFolderPath -Destination $dscDestination -Recurse -Force
-    } else {
-        Copy-Item -Path $DscFolderPath -Destination $tempPackagePath -Recurse -Force
-        $dscDestination = Join-Path $tempPackagePath "DSC"
-    }
-    Write-Host "   [OK] Copied source to package"
-
-    # Ensure DSC\Scripts target directory exists
-    $dscScriptsTarget = Join-Path $dscDestination "Scripts"
-    if (-not (Test-Path $dscScriptsTarget)) {
-        New-Item -ItemType Directory -Path $dscScriptsTarget -Force | Out-Null
-    }
-
-    # Overlay shared DSC files into package (shared is the source of truth)
-    if (Test-Path $SharedDscPath) {
-        # Root-level scripts (Deploy-DC.ps1, DC-Configuration.ps1, etc.)
-        foreach ($sharedFile in (Get-ChildItem -Path $SharedDscPath -Filter '*.ps1' -File)) {
-            Copy-Item -Path $sharedFile.FullName -Destination $dscDestination -Force
-        }
-        Write-Host "   [OK] Overlaid shared DSC root scripts"
-
-        # Scripts/ subfolder
-        $sharedScriptsPath = Join-Path $SharedDscPath "Scripts"
-        if (Test-Path $sharedScriptsPath) {
-            Copy-Item -Path "$sharedScriptsPath\*" -Destination $dscScriptsTarget -Recurse -Force
-            Write-Host "   [OK] Overlaid shared DSC/Scripts"
-        }
-    } else {
-        Write-Warning "Shared DSC folder not found at $SharedDscPath -- package may be incomplete"
-    }
-
-    # Download external assets (GPOBackup.zip, ParamConfig.json)
-    $assetParams = @{
-        ScriptsFolder = $dscScriptsTarget
-        Scenario      = $Scenario
-    }
-    if ($LocalGpoBackupPath) {
-        $assetParams['LocalGpoBackupPath'] = $LocalGpoBackupPath
-    }
-    Install-DscPackageAssets @assetParams
-
-    # Copy Tools.json to package root
-    $toolsSource = Join-Path $dscScriptsTarget "Tools.json"
-    if (Test-Path $toolsSource) {
-        Copy-Item -Path $toolsSource -Destination (Join-Path $tempPackagePath "Tools.json") -Force
-        Write-Host "   [OK] Copied Tools.json to package root"
-    } else {
-        Write-Warning "Tools.json not found at $toolsSource"
-    }
-
-    # Generate Config.json at package root
-    Write-Host "   Generating Config.json..."
-    $configJsonParams['OutputPath'] = Join-Path $tempPackagePath "Config.json"
-    & $GenerateConfigScript @configJsonParams | Out-Null
-    if (-not $?) { throw "Generate-ConfigJson.ps1 failed" }
-    Write-Host "   [OK] Config.json generated"
-
-    # Copy Config.json into DSC\Scripts (overwrite template so on-VM scripts find real values)
-    Copy-Item (Join-Path $tempPackagePath "Config.json") -Destination "$dscScriptsTarget\Config.json" -Force
-    Write-Host "   [OK] Copied Config.json into DSC\Scripts"
-
-    # Generate ResultsUpload.json for test results upload
+    # Generate ResultsUpload.json config (SAS-based write token for test results).
     $resultsConfig = New-ResultsUploadConfig `
         -StorageAccountName $StorageAccountName `
         -StorageContext $StorageContext
-    $resultsConfig | ConvertTo-Json -Depth 3 |
-        Set-Content -Path (Join-Path $tempPackagePath "ResultsUpload.json") -Force
-    Write-Host "   [OK] ResultsUpload.json generated"
 
-    # Zip and upload
+    # Assemble + zip the package. New-DscPackageZip holds the shared packaging
+    # logic reused by Publish-DscPackage.ps1 (public-blob publishing).
     $tempZipPath = Join-Path $env:TEMP "DscPackage-$(Get-Random).zip"
-    Compress-Archive -Path (Join-Path $tempPackagePath "*") -DestinationPath $tempZipPath -Force
-    Write-Host "   [OK] Created zip: $tempZipPath"
+    New-DscPackageZip `
+        -DscFolderPath $DscFolderPath `
+        -SharedDscPath $SharedDscPath `
+        -Scenario $Scenario `
+        -ConfigJsonParams $ConfigJsonParams `
+        -GenerateConfigScript $GenerateConfigScript `
+        -ResultsUploadConfig $resultsConfig `
+        -LocalGpoBackupPath $LocalGpoBackupPath `
+        -OutputZipPath $tempZipPath
 
     $sasUrl = Send-BlobWithSasUrl `
         -FilePath $tempZipPath -BlobName $BlobName `
         -ContainerName $ContainerName -StorageContext $StorageContext
 
     # Cleanup temp files
-    Remove-Item $tempPackagePath -Recurse -Force
-    Remove-Item $tempZipPath -Force
+    Remove-Item $tempZipPath -Force -ErrorAction SilentlyContinue
 
     return $sasUrl
+}
+
+function New-DscPackageZip {
+    <#
+    .SYNOPSIS
+        Assembles a DSC deployment package and compresses it to a zip file.
+
+    .DESCRIPTION
+        Pure packaging step with no Azure dependency. Follows the same pattern as
+        Build-DscPackage (copy DSC folder, overlay shared scripts, download external
+        assets, generate Config.json, copy Tools.json) but stops at a local zip file.
+
+        Shared by:
+          * Build-DscPackage       -- then uploads via SAS and returns a SAS URL.
+          * Publish-DscPackage.ps1 -- then uploads the zip to a public blob.
+
+        ResultsUpload.json is written only when -ResultsUploadConfig is supplied.
+        Publicly hosted packages MUST omit it, because it embeds a write-capable
+        SAS token that must never be published.
+
+    .PARAMETER ResultsUploadConfig
+        Optional hashtable (as returned by New-ResultsUploadConfig) serialized to
+        ResultsUpload.json at the package root. Omit for public packages.
+
+    .PARAMETER OutputZipPath
+        Absolute path of the zip file to create (overwritten if it exists).
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$DscFolderPath,
+
+        [Parameter(Mandatory)]
+        [string]$SharedDscPath,
+
+        [Parameter(Mandatory)]
+        [ValidateSet('Domain', 'Cluster', 'Workgroup')]
+        [string]$Scenario,
+
+        [Parameter(Mandatory)]
+        [hashtable]$ConfigJsonParams,
+
+        [Parameter(Mandatory)]
+        [string]$GenerateConfigScript,
+
+        [hashtable]$ResultsUploadConfig,
+
+        [string]$LocalGpoBackupPath = '',
+
+        [Parameter(Mandatory)]
+        [string]$OutputZipPath
+    )
+
+    Write-Host "   Building DSC package from: $DscFolderPath"
+
+    # Create temp directory for packaging (root = WorkingPath on the VM)
+    $tempPackagePath = Join-Path $env:TEMP "DscPackage-$(Get-Random)"
+    New-Item -ItemType Directory -Path $tempPackagePath -Force | Out-Null
+
+    try {
+        # Copy source into the package. If the source IS a DSC folder (leaf name "DSC"),
+        # nest it as a subdirectory. If it's a full package directory (already contains
+        # a DSC/ subfolder), copy its contents directly.
+        $isDscFolder = (Split-Path $DscFolderPath -Leaf) -eq 'DSC'
+        if ($isDscFolder) {
+            $dscDestination = Join-Path $tempPackagePath "DSC"
+            Copy-Item -Path $DscFolderPath -Destination $dscDestination -Recurse -Force
+        } else {
+            Copy-Item -Path $DscFolderPath -Destination $tempPackagePath -Recurse -Force
+            $dscDestination = Join-Path $tempPackagePath "DSC"
+        }
+        Write-Host "   [OK] Copied source to package"
+
+        # Ensure DSC\Scripts target directory exists
+        $dscScriptsTarget = Join-Path $dscDestination "Scripts"
+        if (-not (Test-Path $dscScriptsTarget)) {
+            New-Item -ItemType Directory -Path $dscScriptsTarget -Force | Out-Null
+        }
+
+        # Overlay shared DSC files into package (shared is the source of truth)
+        if (Test-Path $SharedDscPath) {
+            # Root-level scripts (Deploy-DC.ps1, DC-Configuration.ps1, etc.)
+            foreach ($sharedFile in (Get-ChildItem -Path $SharedDscPath -Filter '*.ps1' -File)) {
+                Copy-Item -Path $sharedFile.FullName -Destination $dscDestination -Force
+            }
+            Write-Host "   [OK] Overlaid shared DSC root scripts"
+
+            # Scripts/ subfolder
+            $sharedScriptsPath = Join-Path $SharedDscPath "Scripts"
+            if (Test-Path $sharedScriptsPath) {
+                Copy-Item -Path "$sharedScriptsPath\*" -Destination $dscScriptsTarget -Recurse -Force
+                Write-Host "   [OK] Overlaid shared DSC/Scripts"
+            }
+        } else {
+            Write-Warning "Shared DSC folder not found at $SharedDscPath -- package may be incomplete"
+        }
+
+        # Download external assets (GPOBackup.zip, ParamConfig.json)
+        $assetParams = @{
+            ScriptsFolder = $dscScriptsTarget
+            Scenario      = $Scenario
+        }
+        if ($LocalGpoBackupPath) {
+            $assetParams['LocalGpoBackupPath'] = $LocalGpoBackupPath
+        }
+        Install-DscPackageAssets @assetParams
+
+        # Copy Tools.json to package root
+        $toolsSource = Join-Path $dscScriptsTarget "Tools.json"
+        if (Test-Path $toolsSource) {
+            Copy-Item -Path $toolsSource -Destination (Join-Path $tempPackagePath "Tools.json") -Force
+            Write-Host "   [OK] Copied Tools.json to package root"
+        } else {
+            Write-Warning "Tools.json not found at $toolsSource"
+        }
+
+        # Generate Config.json at package root
+        Write-Host "   Generating Config.json..."
+        $configJsonParams['OutputPath'] = Join-Path $tempPackagePath "Config.json"
+        & $GenerateConfigScript @configJsonParams | Out-Null
+        if (-not $?) { throw "Generate-ConfigJson.ps1 failed" }
+        Write-Host "   [OK] Config.json generated"
+
+        # Copy Config.json into DSC\Scripts (overwrite template so on-VM scripts find real values)
+        Copy-Item (Join-Path $tempPackagePath "Config.json") -Destination "$dscScriptsTarget\Config.json" -Force
+        Write-Host "   [OK] Copied Config.json into DSC\Scripts"
+
+        # Generate ResultsUpload.json for test results upload (only when a config is
+        # supplied -- public packages must not embed a write-capable SAS token).
+        if ($ResultsUploadConfig) {
+            $ResultsUploadConfig | ConvertTo-Json -Depth 3 |
+                Set-Content -Path (Join-Path $tempPackagePath "ResultsUpload.json") -Force
+            Write-Host "   [OK] ResultsUpload.json generated"
+        }
+
+        # Zip the assembled package
+        if (Test-Path $OutputZipPath) { Remove-Item $OutputZipPath -Force }
+        Compress-Archive -Path (Join-Path $tempPackagePath "*") -DestinationPath $OutputZipPath -Force
+        Write-Host "   [OK] Created zip: $OutputZipPath"
+    }
+    finally {
+        Remove-Item $tempPackagePath -Recurse -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Resolve-FreeSubnetIp {
+    <#
+    .SYNOPSIS
+        Selects free private IPv4 host addresses inside a subnet CIDR (pure, offline, testable).
+    .DESCRIPTION
+        Given a subnet prefix, the set of already-allocated addresses, and an ordered list of
+        DESIRED addresses, returns an ordered list of the same length where each entry is a
+        usable host address in the subnet that is not already allocated and not duplicated across
+        the returned set. A desired address is preserved verbatim when it is a valid host in the
+        subnet and still free; otherwise it is replaced with the next free host address.
+
+        Azure reserves the first four addresses of every subnet (network, gateway ".1", and two
+        further reserved addresses ".2"/".3") plus the broadcast address, so selection starts at
+        network+4 and stops at broadcast-1. This function performs NO Azure calls -- callers gather
+        the prefix and used set (see Resolve-VmNicIp) and pass them in, which keeps the arithmetic
+        unit-testable without a live subscription.
+    .PARAMETER SubnetPrefix
+        Subnet CIDR, e.g. '10.1.3.0/24'.
+    .PARAMETER UsedIp
+        Addresses already allocated in the subnet (any out-of-subnet/invalid entries are ignored).
+    .PARAMETER DesiredIp
+        Ordered preferred addresses. Out-of-subnet or taken entries are auto-reassigned. The
+        returned array preserves this order and length.
+    .OUTPUTS
+        [string[]] resolved addresses, one per DesiredIp entry, all unique/free/in-subnet.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$SubnetPrefix,
+
+        [string[]]$UsedIp = @(),
+
+        [Parameter(Mandatory = $true)]
+        [string[]]$DesiredIp
+    )
+
+    if ($SubnetPrefix -notmatch '^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$') {
+        throw "Resolve-FreeSubnetIp: '$SubnetPrefix' is not a valid IPv4 CIDR (expected e.g. 10.1.3.0/24)."
+    }
+    $baseStr = $Matches[1]
+    $maskLen = [int]$Matches[2]
+    if ($maskLen -lt 0 -or $maskLen -gt 32) { throw "Resolve-FreeSubnetIp: invalid prefix length /$maskLen." }
+
+    # Integer octet math only (no [System.Net.IPAddress]) so this stays constrained-language safe.
+    $toInt = {
+        param([string]$ip)
+        if ([string]::IsNullOrWhiteSpace($ip)) { return $null }
+        $o = $ip.Trim().Split('.')
+        if ($o.Count -ne 4) { return $null }
+        foreach ($p in $o) { if ($p -notmatch '^\d{1,3}$' -or [int]$p -gt 255) { return $null } }
+        return ([long]$o[0] * 16777216) + ([long]$o[1] * 65536) + ([long]$o[2] * 256) + [long]$o[3]
+    }
+    $toIp = {
+        param([long]$v)
+        '{0}.{1}.{2}.{3}' -f [long](($v -shr 24) -band 255), [long](($v -shr 16) -band 255), `
+            [long](($v -shr 8) -band 255), [long]($v -band 255)
+    }
+
+    $baseInt = & $toInt $baseStr
+    $size = [long]1 -shl (32 - $maskLen)          # total addresses in the block
+    $mask = if ($maskLen -eq 0) { [long]0 } else { ([long]0xFFFFFFFF -shl (32 - $maskLen)) -band [long]0xFFFFFFFF }
+    $network = $baseInt -band $mask
+    $broadcast = $network + $size - 1
+    $usableStart = $network + 4                       # skip network + .1/.2/.3 (Azure-reserved)
+    $usableEnd = $broadcast - 1                        # skip broadcast
+
+    if ($usableStart -gt $usableEnd) {
+        throw "Resolve-FreeSubnetIp: subnet $SubnetPrefix has no assignable host addresses (too small)."
+    }
+
+    # Pre-compute the allocated set as integers (ignoring anything outside this subnet).
+    $usedInts = @()
+    foreach ($u in $UsedIp) {
+        $ui = & $toInt $u
+        if ($null -ne $ui -and $ui -ge $network -and $ui -le $broadcast) { $usedInts += $ui }
+    }
+
+    $claimed = @()
+    $result = @()
+    foreach ($d in $DesiredIp) {
+        $dInt = & $toInt $d
+        $chosen = $null
+
+        if ($null -ne $dInt -and $dInt -ge $usableStart -and $dInt -le $usableEnd -and
+            ($usedInts -notcontains $dInt) -and ($claimed -notcontains $dInt)) {
+            $chosen = $dInt
+        }
+        else {
+            for ($c = $usableStart; $c -le $usableEnd; $c++) {
+                if (($usedInts -notcontains $c) -and ($claimed -notcontains $c)) { $chosen = $c; break }
+            }
+            if ($null -eq $chosen) {
+                throw "Resolve-FreeSubnetIp: no free host address left in $SubnetPrefix (requested $($DesiredIp.Count))."
+            }
+        }
+
+        $claimed += $chosen
+        $result += (& $toIp $chosen)
+    }
+
+    return , $result
+}
+
+function Resolve-VmNicIp {
+    <#
+    .SYNOPSIS
+        Resolves collision-free static private IPs for a set of NICs against a live Azure VNet.
+    .DESCRIPTION
+        Thin Azure-facing orchestrator over Resolve-FreeSubnetIp. For each request it looks up the
+        target subnet's address prefix and the private IPs already allocated to NICs referencing
+        that subnet (across the subscription), then delegates the arithmetic to Resolve-FreeSubnetIp
+        so a desired IP is kept when free and reassigned when taken or out-of-subnet. Requests that
+        share a subnet are resolved together so the returned IPs never collide with each other.
+
+        Selection must happen ONCE per run (before the shared DSC package bakes Config.json), which
+        is why this is called from the pipeline wrapper rather than per-VM inside Deploy-PipelineVm.
+    .PARAMETER VnetName
+        Name of the existing virtual network the NICs attach to.
+    .PARAMETER VnetResourceGroup
+        Resource group that holds the VNet.
+    .PARAMETER Request
+        Ordered array of hashtables, each @{ Key = <resultKey>; Subnet = <subnetName>; DesiredIp = <preferredIp> }.
+    .OUTPUTS
+        [hashtable] mapping each request Key to its resolved IP string.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$VnetName,
+
+        [Parameter(Mandatory = $true)]
+        [string]$VnetResourceGroup,
+
+        [Parameter(Mandatory = $true)]
+        [object[]]$Request
+    )
+
+    $vnet = Get-AzVirtualNetwork -Name $VnetName -ResourceGroupName $VnetResourceGroup -ErrorAction Stop
+    $allNics = @(Get-AzNetworkInterface -ErrorAction SilentlyContinue)
+
+    $result = @{}
+    $subnetOrder = @($Request | ForEach-Object { "$($_.Subnet)" } | Select-Object -Unique)
+
+    foreach ($sn in $subnetOrder) {
+        $subnet = $vnet.Subnets | Where-Object { $_.Name -eq $sn } | Select-Object -First 1
+        if (-not $subnet) { throw "Resolve-VmNicIp: subnet '$sn' not found in VNet '$VnetName' (RG '$VnetResourceGroup')." }
+        $prefix = @($subnet.AddressPrefix)[0]
+        $subnetId = $subnet.Id
+
+        # Private IPs already claimed on this subnet (authoritative for VM/NIC collisions).
+        $used = @()
+        foreach ($nic in $allNics) {
+            foreach ($ipc in @($nic.IpConfigurations)) {
+                if ($ipc.Subnet -and $ipc.Subnet.Id -eq $subnetId -and $ipc.PrivateIpAddress) {
+                    $used += "$($ipc.PrivateIpAddress)"
+                }
+            }
+        }
+
+        $reqForSubnet = @($Request | Where-Object { "$($_.Subnet)" -eq $sn })
+        $desired = @($reqForSubnet | ForEach-Object { "$($_.DesiredIp)" })
+        $resolved = @(Resolve-FreeSubnetIp -SubnetPrefix $prefix -UsedIp $used -DesiredIp $desired)
+
+        for ($i = 0; $i -lt $reqForSubnet.Count; $i++) {
+            $key = "$($reqForSubnet[$i].Key)"
+            $result[$key] = $resolved[$i]
+            $orig = "$($reqForSubnet[$i].DesiredIp)"
+            if ($orig -ne $resolved[$i]) {
+                Write-Host "   [IP] $key : '$orig' in use/out-of-subnet on '$sn' -> reassigned to '$($resolved[$i])'"
+            }
+            else {
+                Write-Host "   [IP] $key : '$($resolved[$i])' (free on '$sn')"
+            }
+        }
+    }
+
+    return $result
 }
 
 Export-ModuleMember -Function @(
@@ -1312,9 +1834,13 @@ Export-ModuleMember -Function @(
     'Test-RegionalVCpuQuota',
     'Test-VmImageAvailability',
     'Test-CapacityError',
+    'Invoke-DeploymentWithSkuFallback',
     'Watch-Deployment',
     'Install-DscPackageAssets',
     'Build-DscPackage',
+    'New-DscPackageZip',
     'Enable-VmDiskEncryption',
-    'Invoke-DiskEncryptionForVMs'
+    'Invoke-DiskEncryptionForVMs',
+    'Resolve-FreeSubnetIp',
+    'Resolve-VmNicIp'
 )

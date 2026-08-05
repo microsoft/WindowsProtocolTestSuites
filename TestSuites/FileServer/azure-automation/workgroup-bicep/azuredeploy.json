@@ -1,0 +1,1522 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.37.4.10188",
+      "templateHash": "3901938781572484745"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "minLength": 1,
+      "metadata": {
+        "description": "Resource group location. Defaults to the resource group's region so the \"Deploy to Azure\" button deploys where you have quota/capacity (capacity is per-region). deploy.ps1 sets this explicitly from the bicepparam file."
+      }
+    },
+    "environmentPrefix": {
+      "type": "string",
+      "defaultValue": "fstest",
+      "minLength": 1,
+      "metadata": {
+        "description": "Environment name prefix"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "defaultValue": "testadmin",
+      "minLength": 1,
+      "metadata": {
+        "description": "Admin username for VMs"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "minLength": 12,
+      "metadata": {
+        "description": "Admin password for VMs (12+ chars; must meet Azure Windows complexity: 3 of upper/lower/digit/symbol)"
+      }
+    },
+    "driverVmSize": {
+      "type": "string",
+      "defaultValue": "Standard_B4ms",
+      "minLength": 1,
+      "metadata": {
+        "description": "Driver computer VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button; deploy.ps1 uses a compute-optimized size from the bicepparam file. Note: burstable CPU may throttle during long test runs."
+      }
+    },
+    "sutVmSize": {
+      "type": "string",
+      "defaultValue": "Standard_B8ms",
+      "minLength": 1,
+      "metadata": {
+        "description": "SUT computer VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button; deploy.ps1 uses a compute-optimized size from the bicepparam file."
+      }
+    },
+    "driverOsType": {
+      "type": "string",
+      "defaultValue": "Windows",
+      "allowedValues": [
+        "Windows",
+        "Linux"
+      ],
+      "metadata": {
+        "description": "Driver computer OS type"
+      }
+    },
+    "driverOsVersion": {
+      "type": "string",
+      "defaultValue": "win11-25h2-ent",
+      "allowedValues": [
+        "win11-25h2-pro",
+        "win11-25h2-ent",
+        "win11-24h2-ent",
+        "win11-23h2-pro",
+        "win11-23h2-ent",
+        "win10-22h2-pro",
+        "win10-22h2-ent"
+      ],
+      "metadata": {
+        "description": "Driver computer Windows OS version (win10-* or win11-* SKU)"
+      }
+    },
+    "driverLinuxOsVersion": {
+      "type": "string",
+      "defaultValue": "server",
+      "allowedValues": [
+        "server",
+        "server-arm64"
+      ],
+      "metadata": {
+        "description": "Driver computer Linux OS version (Ubuntu SKU)"
+      }
+    },
+    "driverCustomImageId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Custom image resource ID for driver VM (overrides marketplace image when set)"
+      }
+    },
+    "sutOsVersion": {
+      "type": "string",
+      "defaultValue": "2025-datacenter-azure-edition",
+      "allowedValues": [
+        "2019-datacenter-gensecond",
+        "2022-datacenter-g2",
+        "2025-datacenter-azure-edition"
+      ],
+      "metadata": {
+        "description": "SUT computer OS version"
+      }
+    },
+    "sutCustomImageId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Custom image resource ID for SUT VM (overrides marketplace image when set). Must be a Windows image."
+      }
+    },
+    "vnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.0.0/16",
+      "minLength": 1,
+      "metadata": {
+        "description": "Virtual network address space"
+      }
+    },
+    "bastionSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.0.0/26",
+      "minLength": 1,
+      "metadata": {
+        "description": "Azure Bastion subnet address prefix (must be /26 or larger)"
+      }
+    },
+    "external1SubnetPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.1.0/24",
+      "minLength": 1,
+      "metadata": {
+        "description": "External1 subnet address prefix"
+      }
+    },
+    "external2SubnetPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.2.0/24",
+      "minLength": 1,
+      "metadata": {
+        "description": "External2 subnet address prefix"
+      }
+    },
+    "bastionSku": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Standard"
+      ],
+      "metadata": {
+        "description": "Azure Bastion SKU"
+      }
+    },
+    "driverExternal1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.111",
+      "minLength": 1,
+      "metadata": {
+        "description": "Driver computer External1 IP address"
+      }
+    },
+    "driverExternal2Ip": {
+      "type": "string",
+      "defaultValue": "192.168.2.111",
+      "minLength": 1,
+      "metadata": {
+        "description": "Driver computer External2 IP address"
+      }
+    },
+    "sutExternal1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.11",
+      "minLength": 1,
+      "metadata": {
+        "description": "SUT computer External1 IP address"
+      }
+    },
+    "sutExternal2Ip": {
+      "type": "string",
+      "defaultValue": "192.168.2.11",
+      "minLength": 1,
+      "metadata": {
+        "description": "SUT computer External2 IP address"
+      }
+    },
+    "enableAutoShutdown": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable auto-shutdown"
+      }
+    },
+    "autoShutdownTime": {
+      "type": "string",
+      "defaultValue": "2000",
+      "minLength": 1,
+      "metadata": {
+        "description": "Auto-shutdown time (HHmm in UTC)"
+      }
+    },
+    "autoShutdownTimeZone": {
+      "type": "string",
+      "defaultValue": "UTC",
+      "minLength": 1,
+      "metadata": {
+        "description": "Auto-shutdown timezone"
+      }
+    },
+    "dscPackageZipUrl": {
+      "type": "string",
+      "defaultValue": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/Workgroup-Package.zip",
+      "metadata": {
+        "description": "URL to the DSC package zip file (contains DSC/ folder, Config.json, Tools.json). Defaults to the public GitHub Release asset that the \"Deploy to Azure\" button consumes; the on-VM Custom Script Extension injects the real admin password into the package's placeholder Config.json at deploy time. deploy.ps1 overrides this with a freshly built, credential-baked package."
+      }
+    },
+    "enableDiskEncryption": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Enable Azure Disk Encryption (creates a Key Vault for encryption keys). Defaults OFF for the one-click button: ADE is applied by deploy.ps1 as a post-deploy step (which the Portal button cannot run), so for the button the vault would be created but never used. Managed disks are platform-encrypted at rest regardless. deploy.ps1 sets this true via the bicepparam file."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}-disk-encryption-vault', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "enableDiskEncryption": {
+            "value": "[parameters('enableDiskEncryption')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.37.4.10188",
+              "templateHash": "13929165660475341590"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix (used for unique Key Vault naming)"
+              }
+            },
+            "enableDiskEncryption": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Enable Azure Disk Encryption (creates a Key Vault for encryption keys)"
+              }
+            }
+          },
+          "resources": [
+            {
+              "condition": "[parameters('enableDiskEncryption')]",
+              "type": "Microsoft.KeyVault/vaults",
+              "apiVersion": "2023-07-01",
+              "name": "[format('kv{0}', uniqueString(resourceGroup().id, parameters('environmentPrefix')))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "sku": {
+                  "family": "A",
+                  "name": "standard"
+                },
+                "tenantId": "[subscription().tenantId]",
+                "enabledForDiskEncryption": true,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 7,
+                "accessPolicies": []
+              }
+            }
+          ],
+          "outputs": {
+            "keyVaultName": {
+              "type": "string",
+              "value": "[if(parameters('enableDiskEncryption'), format('kv{0}', uniqueString(resourceGroup().id, parameters('environmentPrefix'))), '')]"
+            },
+            "keyVaultId": {
+              "type": "string",
+              "value": "[if(parameters('enableDiskEncryption'), resourceId('Microsoft.KeyVault/vaults', format('kv{0}', uniqueString(resourceGroup().id, parameters('environmentPrefix')))), '')]"
+            },
+            "keyVaultUrl": {
+              "type": "string",
+              "value": "[if(parameters('enableDiskEncryption'), reference(resourceId('Microsoft.KeyVault/vaults', format('kv{0}', uniqueString(resourceGroup().id, parameters('environmentPrefix')))), '2023-07-01').vaultUri, '')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}-network-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "vnetAddressPrefix": {
+            "value": "[parameters('vnetAddressPrefix')]"
+          },
+          "bastionSubnetPrefix": {
+            "value": "[parameters('bastionSubnetPrefix')]"
+          },
+          "external1SubnetPrefix": {
+            "value": "[parameters('external1SubnetPrefix')]"
+          },
+          "external2SubnetPrefix": {
+            "value": "[parameters('external2SubnetPrefix')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.37.4.10188",
+              "templateHash": "17058699627222442794"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix (e.g., fstest)"
+              }
+            },
+            "vnetAddressPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Virtual network address space"
+              }
+            },
+            "bastionSubnetPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Azure Bastion subnet address prefix (must be /26 or larger)"
+              }
+            },
+            "external1SubnetPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "External1 subnet address prefix"
+              }
+            },
+            "external2SubnetPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "External2 subnet address prefix"
+              }
+            }
+          },
+          "variables": {
+            "networkSecurityGroupName": "[format('{0}-workgroup-nsg', parameters('environmentPrefix'))]",
+            "bastionNetworkSecurityGroupName": "[format('{0}-bastion-nsg', parameters('environmentPrefix'))]",
+            "vnetName": "[format('{0}-workgroup-vnet', parameters('environmentPrefix'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('networkSecurityGroupName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "AllowSMB",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "445",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 100,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowRPCEndpointMapper",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "135",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 101,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowWinRM",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "5985",
+                        "5986"
+                      ],
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 102,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowRPCDynamic",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "49152-65535",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 103,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowICMP",
+                    "properties": {
+                      "protocol": "Icmp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 104,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowBastion",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "22",
+                        "3389"
+                      ],
+                      "sourceAddressPrefix": "[parameters('bastionSubnetPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 105,
+                      "direction": "Inbound"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('bastionNetworkSecurityGroupName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "AllowHttpsInbound",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "Internet",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 1000,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowGatewayManagerInbound",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "GatewayManager",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 1001,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowAzureLoadBalancerInbound",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "AzureLoadBalancer",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 1002,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowBastionHostCommunication",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "8080",
+                        "5701"
+                      ],
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 1003,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowSshRdpOutbound",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "22",
+                        "3389"
+                      ],
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 1000,
+                      "direction": "Outbound"
+                    }
+                  },
+                  {
+                    "name": "AllowAzureCloudOutbound",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "AzureCloud",
+                      "access": "Allow",
+                      "priority": 1001,
+                      "direction": "Outbound"
+                    }
+                  },
+                  {
+                    "name": "AllowBastionCommunication",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "8080",
+                        "5701"
+                      ],
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 1002,
+                      "direction": "Outbound"
+                    }
+                  },
+                  {
+                    "name": "AllowGetSessionInformation",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "80",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "Internet",
+                      "access": "Allow",
+                      "priority": 1003,
+                      "direction": "Outbound"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('vnetName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "addressSpace": {
+                  "addressPrefixes": [
+                    "[parameters('vnetAddressPrefix')]"
+                  ]
+                },
+                "subnets": [
+                  {
+                    "name": "AzureBastionSubnet",
+                    "properties": {
+                      "addressPrefix": "[parameters('bastionSubnetPrefix')]",
+                      "networkSecurityGroup": {
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('bastionNetworkSecurityGroupName'))]"
+                      }
+                    }
+                  },
+                  {
+                    "name": "external1-subnet",
+                    "properties": {
+                      "addressPrefix": "[parameters('external1SubnetPrefix')]",
+                      "networkSecurityGroup": {
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+                      }
+                    }
+                  },
+                  {
+                    "name": "external2-subnet",
+                    "properties": {
+                      "addressPrefix": "[parameters('external2SubnetPrefix')]",
+                      "networkSecurityGroup": {
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+                      }
+                    }
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('bastionNetworkSecurityGroupName'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "vnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+            },
+            "vnetName": {
+              "type": "string",
+              "value": "[variables('vnetName')]"
+            },
+            "bastionSubnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'AzureBastionSubnet')]"
+            },
+            "external1SubnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'external1-subnet')]"
+            },
+            "external2SubnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'external2-subnet')]"
+            },
+            "networkSecurityGroupId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}-bastion-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "bastionSubnetId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.bastionSubnetId.value]"
+          },
+          "bastionSku": {
+            "value": "[parameters('bastionSku')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.37.4.10188",
+              "templateHash": "14919081938689329756"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix (e.g., fstest)"
+              }
+            },
+            "bastionSubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "Azure Bastion subnet resource ID"
+              }
+            },
+            "bastionSku": {
+              "type": "string",
+              "allowedValues": [
+                "Basic",
+                "Standard"
+              ],
+              "metadata": {
+                "description": "Azure Bastion SKU"
+              }
+            }
+          },
+          "variables": {
+            "bastionName": "[format('{0}-bastion', parameters('environmentPrefix'))]",
+            "bastionPublicIpName": "[format('{0}-pip', variables('bastionName'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/publicIPAddresses",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('bastionPublicIpName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "Standard"
+              },
+              "properties": {
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                  "domainNameLabel": "[format('{0}-{1}', variables('bastionName'), uniqueString(resourceGroup().id))]"
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Network/bastionHosts",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('bastionName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[parameters('bastionSku')]"
+              },
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "IpConf",
+                    "properties": {
+                      "subnet": {
+                        "id": "[parameters('bastionSubnetId')]"
+                      },
+                      "publicIPAddress": {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('bastionPublicIpName'))]"
+                      }
+                    }
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('bastionPublicIpName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "bastionFqdn": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('bastionPublicIpName')), '2023-04-01').dnsSettings.fqdn]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}-computers-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "driverVmSize": {
+            "value": "[parameters('driverVmSize')]"
+          },
+          "sutVmSize": {
+            "value": "[parameters('sutVmSize')]"
+          },
+          "driverOsType": {
+            "value": "[parameters('driverOsType')]"
+          },
+          "driverOsVersion": {
+            "value": "[parameters('driverOsVersion')]"
+          },
+          "driverLinuxOsVersion": {
+            "value": "[parameters('driverLinuxOsVersion')]"
+          },
+          "driverCustomImageId": {
+            "value": "[parameters('driverCustomImageId')]"
+          },
+          "sutOsVersion": {
+            "value": "[parameters('sutOsVersion')]"
+          },
+          "sutCustomImageId": {
+            "value": "[parameters('sutCustomImageId')]"
+          },
+          "external1SubnetId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.external1SubnetId.value]"
+          },
+          "external2SubnetId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.external2SubnetId.value]"
+          },
+          "driverExternal1Ip": {
+            "value": "[parameters('driverExternal1Ip')]"
+          },
+          "driverExternal2Ip": {
+            "value": "[parameters('driverExternal2Ip')]"
+          },
+          "sutExternal1Ip": {
+            "value": "[parameters('sutExternal1Ip')]"
+          },
+          "sutExternal2Ip": {
+            "value": "[parameters('sutExternal2Ip')]"
+          },
+          "enableAutoShutdown": {
+            "value": "[parameters('enableAutoShutdown')]"
+          },
+          "autoShutdownTime": {
+            "value": "[parameters('autoShutdownTime')]"
+          },
+          "autoShutdownTimeZone": {
+            "value": "[parameters('autoShutdownTimeZone')]"
+          },
+          "dscPackageZipUrl": {
+            "value": "[parameters('dscPackageZipUrl')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.37.4.10188",
+              "templateHash": "10593664369712116021"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix"
+              }
+            },
+            "adminUsername": {
+              "type": "string",
+              "metadata": {
+                "description": "Admin username for VMs"
+              }
+            },
+            "adminPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Admin password for VMs"
+              }
+            },
+            "driverVmSize": {
+              "type": "string",
+              "metadata": {
+                "description": "Driver computer VM size"
+              }
+            },
+            "sutVmSize": {
+              "type": "string",
+              "metadata": {
+                "description": "SUT computer VM size"
+              }
+            },
+            "driverOsType": {
+              "type": "string",
+              "allowedValues": [
+                "Windows",
+                "Linux"
+              ],
+              "metadata": {
+                "description": "Driver computer OS type"
+              }
+            },
+            "driverOsVersion": {
+              "type": "string",
+              "allowedValues": [
+                "win11-25h2-pro",
+                "win11-25h2-ent",
+                "win11-24h2-ent",
+                "win11-23h2-pro",
+                "win11-23h2-ent",
+                "win10-22h2-pro",
+                "win10-22h2-ent"
+              ],
+              "metadata": {
+                "description": "Driver computer Windows OS version (win10-* or win11-* SKU)"
+              }
+            },
+            "driverLinuxOsVersion": {
+              "type": "string",
+              "allowedValues": [
+                "server",
+                "server-arm64"
+              ],
+              "metadata": {
+                "description": "Driver computer Linux OS version (Ubuntu SKU)"
+              }
+            },
+            "driverCustomImageId": {
+              "type": "string",
+              "metadata": {
+                "description": "Custom image resource ID for driver VM (overrides marketplace image when set)"
+              }
+            },
+            "sutOsVersion": {
+              "type": "string",
+              "allowedValues": [
+                "2019-datacenter-gensecond",
+                "2022-datacenter-g2",
+                "2025-datacenter-azure-edition"
+              ],
+              "metadata": {
+                "description": "SUT computer OS version"
+              }
+            },
+            "sutCustomImageId": {
+              "type": "string",
+              "metadata": {
+                "description": "Custom image resource ID for SUT VM (overrides marketplace image when set). Must be a Windows image."
+              }
+            },
+            "external1SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External1 subnet ID"
+              }
+            },
+            "external2SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External2 subnet ID"
+              }
+            },
+            "driverExternal1Ip": {
+              "type": "string",
+              "metadata": {
+                "description": "Driver computer External1 IP address"
+              }
+            },
+            "driverExternal2Ip": {
+              "type": "string",
+              "metadata": {
+                "description": "Driver computer External2 IP address"
+              }
+            },
+            "sutExternal1Ip": {
+              "type": "string",
+              "metadata": {
+                "description": "SUT computer External1 IP address"
+              }
+            },
+            "sutExternal2Ip": {
+              "type": "string",
+              "metadata": {
+                "description": "SUT computer External2 IP address"
+              }
+            },
+            "enableAutoShutdown": {
+              "type": "bool",
+              "metadata": {
+                "description": "Enable auto-shutdown"
+              }
+            },
+            "autoShutdownTime": {
+              "type": "string",
+              "metadata": {
+                "description": "Auto-shutdown time (HHmm in UTC)"
+              }
+            },
+            "autoShutdownTimeZone": {
+              "type": "string",
+              "metadata": {
+                "description": "Auto-shutdown timezone"
+              }
+            },
+            "dscPackageZipUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "URL to the DSC package zip file in Azure Storage (contains DSC/ folder, Config.json, Tools.json)"
+              }
+            }
+          },
+          "variables": {
+            "$fxv#0": "#!/bin/bash\n# Copyright (c) Microsoft. All rights reserved.\n# Licensed under the MIT license. See LICENSE file in the project root for full license information.\n#\n# Custom Script Extension bootstrap shared by the Linux Driver across scenarios\n# (Workgroup, Domain). The Bicep module loads this file with loadTextContent(),\n# substitutes the __TOKENS__ (same set as cse-bootstrap.ps1), and delivers it\n# base64-encoded via the extension's encrypted protectedSettings 'script'\n# property. The script downloads the package itself (no fileUris), so it never\n# depends on the waagent download directory layout, whose sequence number\n# changes when the extension re-runs.\n\nset -e\nexport DEBIAN_FRONTEND=noninteractive\n\necho 'Starting __SCENARIO__ __ROLE__ setup...'\nmkdir -p '/opt/__PACKAGE_NAME__'\napt-get update -qq\napt-get install -y -qq wget unzip apt-transport-https\n\nif ! command -v pwsh >/dev/null 2>&1; then\n    wget -q https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb\n    dpkg -i /tmp/packages-microsoft-prod.deb\n    rm -f /tmp/packages-microsoft-prod.deb\n    apt-get update -qq\n    apt-get install -y -qq powershell\nfi\n\necho 'Waiting for DNS resolution of __PACKAGE_HOST__ (DNS may still be coming up)...'\ndns=0\nfor i in $(seq 1 60); do\n    if getent hosts '__PACKAGE_HOST__' >/dev/null 2>&1; then\n        dns=1\n        break\n    fi\n    sleep 30\ndone\nif [ $dns -ne 1 ]; then\n    echo 'DNS resolution failed'\n    exit 1\nfi\n\ndl=0\nfor i in $(seq 1 10); do\n    if wget -q '__PACKAGE_URL__' -O '/opt/__PACKAGE_NAME__.zip'; then\n        dl=1\n        break\n    fi\n    sleep 30\ndone\nif [ $dl -ne 1 ]; then\n    echo 'Package download failed'\n    exit 1\nfi\n\nunzip -o '/opt/__PACKAGE_NAME__.zip' -d '/opt/__PACKAGE_NAME__'\nrm -f '/opt/__PACKAGE_NAME__.zip'\n\nif [ -f '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' ]; then\n    echo 'Injecting credential into Config.json...'\n    pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' -PasswordBase64 '__PASSWORD_B64__'\nfi\n\nif [ -f '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' ]; then\n    echo 'Starting __DEPLOY_SCRIPT__ (DSC + imperative)...'\n    cd '/opt/__PACKAGE_NAME__/DSC'\n    pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' -WorkingPath '/opt/__PACKAGE_NAME__'\nelse\n    echo '__DEPLOY_SCRIPT__ not found, skipping configuration'\nfi\n\necho '__SCENARIO__ __ROLE__ setup completed'\n",
+            "driverIsLinux": "[equals(parameters('driverOsType'), 'Linux')]",
+            "packageHost": "[if(empty(parameters('dscPackageZipUrl')), '', split(parameters('dscPackageZipUrl'), '/')[2])]",
+            "bootstrapPs": "# Copyright (c) Microsoft. All rights reserved.\r\n# Licensed under the MIT license. See LICENSE file in the project root for full license information.\r\n\r\n# Custom Script Extension bootstrap shared by ALL Windows VMs across scenarios\r\n# (Workgroup Driver/SUT; Domain DC/Driver/SUT). The Bicep modules load this file\r\n# with loadTextContent(), substitute the __TOKENS__, base64 it into the\r\n# extension's encrypted protectedSettings, and the commandToExecute decodes and\r\n# runs it on the VM.\r\n#\r\n# Tokens injected at compile/deploy time:\r\n#   __SCENARIO__       workgroup | domain              (log file name, messages)\r\n#   __ROLE__           dc | driver | sut               (log file name, messages)\r\n#   __PACKAGE_NAME__   Workgroup-Package | Domain-Package (C:\\<name> extract root)\r\n#   __DEPLOY_SCRIPT__  Deploy-DC.ps1 | Deploy-Driver.ps1 | Deploy-SUT.ps1\r\n#   __PACKAGE_URL__    URL of the package zip\r\n#   __PACKAGE_HOST__   host part of the URL (DNS readiness probe)\r\n#   __PASSWORD_B64__   base64 admin password for Set-ConfigCredential.ps1\r\n#\r\n# When the extension pre-downloads the package via fileUris, the zip is found in\r\n# the CWD and used directly. Otherwise this script waits for DNS and downloads it\r\n# itself -- needed by domain members whose only DNS server is the DC, which may\r\n# still be promoting when the extension fires.\r\n\r\n$ErrorActionPreference = 'Stop'\r\nSet-ExecutionPolicy -ExecutionPolicy Unrestricted -Force\r\nStart-Transcript -Path 'C:\\__SCENARIO__-__ROLE__-setup.log' -Append\r\n\r\nfunction Complete-Bootstrap {\r\n    param([int]$ExitCode)\r\n\r\n    Stop-Transcript -ErrorAction SilentlyContinue\r\n    Remove-Item -LiteralPath $PSCommandPath -Force -ErrorAction SilentlyContinue\r\n    exit $ExitCode\r\n}\r\n\r\ntrap {\r\n    Write-Output \"Bootstrap failed: $($_.Exception.Message)\"\r\n    Complete-Bootstrap -ExitCode 1\r\n}\r\n\r\nWrite-Output 'Starting __SCENARIO__ __ROLE__ setup...'\r\nNew-Item -ItemType Directory -Path 'C:\\__PACKAGE_NAME__' -Force | Out-Null\r\n\r\n# Package already present? (fileUris path: the extension downloaded it into its\r\n# working directory, which is the CWD of this script.)\r\n$zipFile = Get-ChildItem -Path . -Filter *.zip -ErrorAction SilentlyContinue | Select-Object -First 1\r\n\r\nif (-not $zipFile) {\r\n    Write-Output 'Waiting for DNS resolution of __PACKAGE_HOST__ (DNS may still be coming up)...'\r\n    $dns = $false\r\n    for ($i = 0; $i -lt 60; $i++) {\r\n        try {\r\n            Resolve-DnsName -Name '__PACKAGE_HOST__' -ErrorAction Stop | Out-Null\r\n            $dns = $true\r\n            break\r\n        } catch {\r\n            Start-Sleep -Seconds 30\r\n        }\r\n    }\r\n    if (-not $dns) {\r\n        Write-Output 'DNS resolution of __PACKAGE_HOST__ failed after retries'\r\n        Complete-Bootstrap -ExitCode 1\r\n    }\r\n\r\n    $zipPath = 'C:\\__PACKAGE_NAME__.zip'\r\n    $dl = $false\r\n    for ($i = 0; $i -lt 10; $i++) {\r\n        try {\r\n            Start-BitsTransfer -Source '__PACKAGE_URL__' -Destination $zipPath -ErrorAction Stop\r\n            $dl = $true\r\n            break\r\n        } catch {\r\n            Write-Output \"Download attempt failed: $($_.Exception.Message)\"\r\n            Start-Sleep -Seconds 30\r\n        }\r\n    }\r\n    if (-not $dl) {\r\n        Write-Output 'Package download failed'\r\n        Complete-Bootstrap -ExitCode 1\r\n    }\r\n    $zipFile = Get-Item $zipPath\r\n}\r\n\r\nWrite-Output \"Extracting $($zipFile.Name)...\"\r\nExpand-Archive -Path $zipFile.FullName -DestinationPath 'C:\\__PACKAGE_NAME__' -Force\r\nRemove-Item $zipFile.FullName -Force\r\nWrite-Output 'Package extracted successfully'\r\n\r\nif (Test-Path 'C:\\__PACKAGE_NAME__\\DSC\\Scripts\\Set-ConfigCredential.ps1') {\r\n    Write-Output 'Injecting credential into Config.json...'\r\n    & 'C:\\__PACKAGE_NAME__\\DSC\\Scripts\\Set-ConfigCredential.ps1' -PasswordBase64 '__PASSWORD_B64__'\r\n}\r\n\r\nif (Test-Path 'C:\\__PACKAGE_NAME__\\DSC\\__DEPLOY_SCRIPT__') {\r\n    Write-Output 'Starting __DEPLOY_SCRIPT__ (DSC + imperative)...'\r\n    Set-Location 'C:\\__PACKAGE_NAME__\\DSC'\r\n    try {\r\n        & '.\\__DEPLOY_SCRIPT__' -WorkingPath 'C:\\__PACKAGE_NAME__'\r\n    } catch {\r\n        Write-Output \"__DEPLOY_SCRIPT__ failed: $($_.Exception.Message)\"\r\n        Complete-Bootstrap -ExitCode 1\r\n    }\r\n} else {\r\n    Write-Output '__DEPLOY_SCRIPT__ not found, skipping configuration'\r\n    Complete-Bootstrap -ExitCode 1\r\n}\r\n\r\nWrite-Output '__SCENARIO__ __ROLE__ extension setup completed'\r\nComplete-Bootstrap -ExitCode 0\r\n",
+            "driverBootstrap": "[replace(replace(replace(replace(replace(replace(replace(variables('bootstrapPs'), '__SCENARIO__', 'workgroup'), '__ROLE__', 'driver'), '__PACKAGE_NAME__', 'Workgroup-Package'), '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'), '__PACKAGE_URL__', parameters('dscPackageZipUrl')), '__PACKAGE_HOST__', variables('packageHost')), '__PASSWORD_B64__', base64(parameters('adminPassword')))]",
+            "sutBootstrap": "[replace(replace(replace(replace(replace(replace(replace(variables('bootstrapPs'), '__SCENARIO__', 'workgroup'), '__ROLE__', 'sut'), '__PACKAGE_NAME__', 'Workgroup-Package'), '__DEPLOY_SCRIPT__', 'Deploy-SUT.ps1'), '__PACKAGE_URL__', parameters('dscPackageZipUrl')), '__PACKAGE_HOST__', variables('packageHost')), '__PASSWORD_B64__', base64(parameters('adminPassword')))]",
+            "driverLinuxBootstrap": "[replace(replace(replace(replace(replace(replace(replace(variables('$fxv#0'), '__SCENARIO__', 'workgroup'), '__ROLE__', 'driver'), '__PACKAGE_NAME__', 'Workgroup-Package'), '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'), '__PACKAGE_URL__', parameters('dscPackageZipUrl')), '__PACKAGE_HOST__', variables('packageHost')), '__PASSWORD_B64__', base64(parameters('adminPassword')))]",
+            "driverCommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"[System.IO.File]::WriteAllText(''C:\\workgroup-driver-bootstrap.ps1'', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(''{0}''))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\workgroup-driver-bootstrap.ps1''; exit $LASTEXITCODE\"', base64(variables('driverBootstrap')))]",
+            "sutCommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"[System.IO.File]::WriteAllText(''C:\\workgroup-sut-bootstrap.ps1'', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(''{0}''))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\workgroup-sut-bootstrap.ps1''; exit $LASTEXITCODE\"', base64(variables('sutBootstrap')))]",
+            "driverWindowsOffer": "[if(startsWith(parameters('driverOsVersion'), 'win10-'), 'Windows-10', 'Windows-11')]",
+            "driverImageRef": "[if(not(empty(parameters('driverCustomImageId'))), createObject('id', parameters('driverCustomImageId')), if(variables('driverIsLinux'), createObject('publisher', 'Canonical', 'offer', 'ubuntu-24_04-lts', 'sku', parameters('driverLinuxOsVersion'), 'version', 'latest'), createObject('publisher', 'MicrosoftWindowsDesktop', 'offer', variables('driverWindowsOffer'), 'sku', parameters('driverOsVersion'), 'version', 'latest')))]",
+            "sutIsHotpatch": "[contains(parameters('sutOsVersion'), 'azure-edition')]",
+            "sutImageRef": "[if(not(empty(parameters('sutCustomImageId'))), createObject('id', parameters('sutCustomImageId')), createObject('publisher', 'MicrosoftWindowsServer', 'offer', 'WindowsServer', 'sku', parameters('sutOsVersion'), 'version', 'latest'))]",
+            "driverVmName": "[format('{0}-client01', parameters('environmentPrefix'))]",
+            "sutVmName": "[format('{0}-node01', parameters('environmentPrefix'))]",
+            "driverNic1Name": "[format('{0}-nic1', variables('driverVmName'))]",
+            "driverNic2Name": "[format('{0}-nic2', variables('driverVmName'))]",
+            "sutNic1Name": "[format('{0}-nic1', variables('sutVmName'))]",
+            "sutNic2Name": "[format('{0}-nic2', variables('sutVmName'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('driverNic1Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external1-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('driverExternal1Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external1SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": false
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('driverNic2Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external2-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('driverExternal2Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external2SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": false
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('sutNic1Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external1-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('sutExternal1Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external1SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": false
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('sutNic2Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external2-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('sutExternal2Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external2SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": false
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2023-03-01",
+              "name": "[variables('driverVmName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "[parameters('driverVmSize')]"
+                },
+                "osProfile": {
+                  "computerName": "Client01",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]",
+                  "windowsConfiguration": "[if(variables('driverIsLinux'), null(), createObject('enableAutomaticUpdates', false(), 'provisionVMAgent', true(), 'winRM', createObject('listeners', createArray(createObject('protocol', 'Http'))), 'patchSettings', createObject('patchMode', 'Manual', 'assessmentMode', 'ImageDefault'), 'additionalUnattendContent', createArray(createObject('passName', 'OobeSystem', 'componentName', 'Microsoft-Windows-Shell-Setup', 'settingName', 'AutoLogon', 'content', format('<AutoLogon><Username>{0}</Username><Password><Value>{1}</Value><PlainText>true</PlainText></Password><Enabled>true</Enabled></AutoLogon>', parameters('adminUsername'), parameters('adminPassword'))))))]",
+                  "linuxConfiguration": "[if(variables('driverIsLinux'), createObject('disablePasswordAuthentication', false(), 'provisionVMAgent', true(), 'patchSettings', createObject('patchMode', 'AutomaticByPlatform', 'assessmentMode', 'AutomaticByPlatform')), null())]"
+                },
+                "storageProfile": {
+                  "imageReference": "[variables('driverImageRef')]",
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "diskSizeGB": 128,
+                    "managedDisk": {
+                      "storageAccountType": "Premium_LRS"
+                    }
+                  },
+                  "dataDisks": [
+                    {
+                      "createOption": "Empty",
+                      "diskSizeGB": 64,
+                      "lun": 0,
+                      "managedDisk": {
+                        "storageAccountType": "Premium_LRS"
+                      }
+                    }
+                  ]
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('driverNic1Name'))]",
+                      "properties": {
+                        "primary": true
+                      }
+                    },
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('driverNic2Name'))]",
+                      "properties": {
+                        "primary": false
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('driverNic1Name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('driverNic2Name'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2023-03-01",
+              "name": "[variables('sutVmName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "[parameters('sutVmSize')]"
+                },
+                "osProfile": {
+                  "computerName": "Node01",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]",
+                  "windowsConfiguration": {
+                    "enableAutomaticUpdates": "[variables('sutIsHotpatch')]",
+                    "provisionVMAgent": true,
+                    "winRM": {
+                      "listeners": [
+                        {
+                          "protocol": "Http"
+                        }
+                      ]
+                    },
+                    "patchSettings": {
+                      "patchMode": "[if(variables('sutIsHotpatch'), 'AutomaticByPlatform', 'Manual')]",
+                      "assessmentMode": "ImageDefault"
+                    },
+                    "additionalUnattendContent": [
+                      {
+                        "passName": "OobeSystem",
+                        "componentName": "Microsoft-Windows-Shell-Setup",
+                        "settingName": "AutoLogon",
+                        "content": "[format('<AutoLogon><Username>{0}</Username><Password><Value>{1}</Value><PlainText>true</PlainText></Password><Enabled>true</Enabled></AutoLogon>', parameters('adminUsername'), parameters('adminPassword'))]"
+                      }
+                    ]
+                  }
+                },
+                "storageProfile": {
+                  "imageReference": "[variables('sutImageRef')]",
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "diskSizeGB": 128,
+                    "managedDisk": {
+                      "storageAccountType": "Premium_LRS"
+                    }
+                  },
+                  "dataDisks": [
+                    {
+                      "createOption": "Empty",
+                      "diskSizeGB": 64,
+                      "lun": 0,
+                      "managedDisk": {
+                        "storageAccountType": "Premium_LRS"
+                      }
+                    }
+                  ]
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('sutNic1Name'))]",
+                      "properties": {
+                        "primary": true
+                      }
+                    },
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('sutNic2Name'))]",
+                      "properties": {
+                        "primary": false
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('sutNic1Name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('sutNic2Name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('enableAutoShutdown')]",
+              "type": "Microsoft.DevTestLab/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('shutdown-computevm-{0}', variables('driverVmName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]",
+                "notificationSettings": {
+                  "status": "Disabled"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('enableAutoShutdown')]",
+              "type": "Microsoft.DevTestLab/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('shutdown-computevm-{0}', variables('sutVmName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', variables('sutVmName'))]",
+                "notificationSettings": {
+                  "status": "Disabled"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('sutVmName'))]"
+              ]
+            },
+            {
+              "condition": "[and(not(variables('driverIsLinux')), not(empty(parameters('dscPackageZipUrl'))))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('driverVmName'), 'ConfigureWorkgroupDriver')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                  "fileUris": [
+                    "[parameters('dscPackageZipUrl')]"
+                  ]
+                },
+                "protectedSettings": {
+                  "commandToExecute": "[variables('driverCommandToExecute')]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]"
+              ]
+            },
+            {
+              "condition": "[and(variables('driverIsLinux'), not(empty(parameters('dscPackageZipUrl'))))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('driverVmName'), 'ConfigureWorkgroupDriverLinux')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.1",
+                "autoUpgradeMinorVersion": true,
+                "settings": {},
+                "protectedSettings": {
+                  "script": "[base64(variables('driverLinuxBootstrap'))]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]"
+              ]
+            },
+            {
+              "condition": "[not(empty(parameters('dscPackageZipUrl')))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('sutVmName'), 'ConfigureWorkgroupSUT')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                  "fileUris": [
+                    "[parameters('dscPackageZipUrl')]"
+                  ]
+                },
+                "protectedSettings": {
+                  "commandToExecute": "[variables('sutCommandToExecute')]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('sutVmName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "driverVmId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]"
+            },
+            "sutVmId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('sutVmName'))]"
+            },
+            "driverVmName": {
+              "type": "string",
+              "value": "[variables('driverVmName')]"
+            },
+            "sutVmName": {
+              "type": "string",
+              "value": "[variables('sutVmName')]"
+            },
+            "driverPrivateIps": {
+              "type": "array",
+              "value": [
+                "[parameters('driverExternal1Ip')]",
+                "[parameters('driverExternal2Ip')]"
+              ]
+            },
+            "sutPrivateIps": {
+              "type": "array",
+              "value": [
+                "[parameters('sutExternal1Ip')]",
+                "[parameters('sutExternal2Ip')]"
+              ]
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix')))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "vnetId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.vnetId.value]"
+    },
+    "vnetName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.vnetName.value]"
+    },
+    "bastionFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-bastion-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.bastionFqdn.value]"
+    },
+    "driverVmId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-computers-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.driverVmId.value]"
+    },
+    "sutVmId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-computers-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.sutVmId.value]"
+    },
+    "driverVmName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-computers-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.driverVmName.value]"
+    },
+    "sutVmName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-computers-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.sutVmName.value]"
+    },
+    "driverPrivateIps": {
+      "type": "array",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-computers-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.driverPrivateIps.value]"
+    },
+    "sutPrivateIps": {
+      "type": "array",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-computers-deployment', parameters('environmentPrefix'))), '2022-09-01').outputs.sutPrivateIps.value]"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-disk-encryption-vault', parameters('environmentPrefix'))), '2022-09-01').outputs.keyVaultName.value]"
+    },
+    "keyVaultId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-disk-encryption-vault', parameters('environmentPrefix'))), '2022-09-01').outputs.keyVaultId.value]"
+    },
+    "keyVaultUrl": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-disk-encryption-vault', parameters('environmentPrefix'))), '2022-09-01').outputs.keyVaultUrl.value]"
+    }
+  }
+}

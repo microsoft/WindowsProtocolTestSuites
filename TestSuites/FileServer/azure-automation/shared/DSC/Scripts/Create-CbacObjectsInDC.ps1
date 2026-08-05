@@ -1,7 +1,11 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = $PSScriptRoot, $protocolConfigFile = "$workingDir\Config.json")
+param(
+    $workingDir = $PSScriptRoot,
+    $protocolConfigFile = "$workingDir\Config.json",
+    [switch]$NoTranscript
+)
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
@@ -49,7 +53,11 @@ $config.Core.Password.ToCharArray() | ForEach-Object {$password.AppendChar($_)}
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
-Start-Transcript -Path "$logFile" -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path "$logFile" -Append -Force
+    $transcriptStarted = $true
+}
 
 #----------------------------------------------------------------------------
 # Common Functions
@@ -303,7 +311,7 @@ while ($retryTimes -lt 30) {
 if ($null -eq $domain) {
     .\Write-Error.ps1 "Failed to get correct responses from the ADWS service after starting it for 5 minutes."
     Pop-Location
-    Stop-Transcript
+    if ($transcriptStarted) { Stop-Transcript }
     return $false
 }
 
@@ -370,5 +378,5 @@ EnableCbacAndArmor
 # Ending
 #----------------------------------------------------------------------------
 Pop-Location
-Stop-Transcript
+if ($transcriptStarted) { Stop-Transcript }
 return $true

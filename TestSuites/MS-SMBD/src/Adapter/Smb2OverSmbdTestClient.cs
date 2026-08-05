@@ -117,7 +117,14 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 while (smb2Response == null
                     || smb2Response.Length == 0)
                 {
-                    smbdClient.ReceiveMessage(smb2ConnectionTimeout, out smb2Response);
+                    NtStatus ret = smbdClient.ReceiveMessage(smb2ConnectionTimeout, out smb2Response);
+                    if (ret != NtStatus.STATUS_SUCCESS)
+                    {
+                        if (ret == NtStatus.STATUS_IO_TIMEOUT || ret == NtStatus.STATUS_CONNECTION_DISCONNECTED)
+                        {
+                            throw new TimeoutException();
+                        }
+                    }
                 }
 
                 //SmbdClient.ReceiveSmbdMessage(response.Length, response);
@@ -146,7 +153,8 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
             uint nInboundEntries,
             uint nOutboundEntries,
             uint inboundReadLimit,
-            uint inboundDataSize
+            uint inboundDataSize,
+            NdspiVersion ndVersion = NdspiVersion.NDv2
             )
         {
             this.decoder.TransportType = Smb2TransportType.Rdma;
@@ -159,7 +167,8 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 nInboundEntries,
                 nOutboundEntries,
                 inboundReadLimit,
-                inboundDataSize
+                inboundDataSize,
+                ndVersion
                 );
         }
 

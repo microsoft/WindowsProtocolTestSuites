@@ -81,5 +81,6 @@ namespace Microsoft.Protocols.TestManager.PTMService.Abstractions.Kernel
         /// <param name="name">The name of test case.</param>
         /// <returns>Whether test case detail is found and the test case detail found.</returns>
         (bool found, TestCaseDetail detail) GetTestCaseDetail(string name);
+
     }
 }

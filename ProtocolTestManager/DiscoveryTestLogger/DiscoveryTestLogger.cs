@@ -96,6 +96,7 @@ namespace Microsoft.Protocols.TestManager.DiscoveryTestLogger
                     Description = description,
                     FullName = testCase.FullyQualifiedName,
                     Name = testCase.DisplayName,
+                    Assembly = testCase.Source,
                     ToolTipOnUI = testcaseToolTipBuilder.ToString(),
                 };
             }));

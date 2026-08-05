@@ -1,7 +1,8 @@
-﻿// Copyright (c) Microsoft. All rights reserved.
+// Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using Microsoft.Protocols.TestTools;
+using Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smbd;
 using Microsoft.Protocols.TestTools.StackSdk.Security.SspiLib;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,7 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
         public bool RdmaLayerLoggingEnabled { get; set; }
         public List<string> ActiveTDI { get; private set; }
         public RDMATransport RDMATransport { get; private set; }
+        public NdspiVersion NDVersion { get; private set; }
         #endregion
 
         public TestConfig(ITestSite testSite)
@@ -91,6 +93,20 @@ namespace Microsoft.Protocols.TestSuites.Smbd.Adapter
                 throw new NotSupportedException(string.Format("PTF Configuration 'Endianness' with an unsupported value '{0}'.", endianness));
             }
             this.RDMATransport = (RDMATransport)Enum.Parse(typeof(RDMATransport), site.Properties["RDMATransport"]);
+
+            // NDVersion selects the Network Direct Service Provider Interface version used by the
+            // RDMA layer: "NDv1" maps to the wrapper in ProtoSDK\RDMA, "NDv2" maps to the wrapper in
+            // ProtoSDK\RDMANdv2. This must match the NDVersion the Smbd project was built with.
+            // The property is optional for backward compatibility and defaults to NDv2 when absent.
+            string ndVersion = site.Properties["NDVersion"];
+            if (string.IsNullOrEmpty(ndVersion))
+            {
+                this.NDVersion = NdspiVersion.NDv2;
+            }
+            else
+            {
+                this.NDVersion = (NdspiVersion)Enum.Parse(typeof(NdspiVersion), ndVersion, true);
+            }
             #endregion
 
             #region SMBD

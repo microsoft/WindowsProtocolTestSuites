@@ -80,6 +80,14 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public TestCase RunningTestCase { get; set; }
 
+        /// <summary>
+        /// Indicates test cases are reported by several concurrent execution units.
+        /// When enabled, status updates are serialized with a write lock and the previously
+        /// reported case is never demoted, because more than one case can be running at a time.
+        /// When disabled, the original single threaded behavior is preserved.
+        /// </summary>
+        public bool ConcurrentExecution { get; set; }
+
         private List<TestCaseGroup> groupList = null;
         public List<TestCaseGroup> GetList()
         {
@@ -96,31 +104,54 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         public void ChangeStatus(string testCaseName, TestCaseStatus status)
         {
-            locker.EnterReadLock();
+            bool concurrent = ConcurrentExecution;
+
+            if (concurrent)
+            {
+                locker.EnterWriteLock();
+            }
+            else
+            {
+                locker.EnterReadLock();
+            }
+
             try
             {
-                TestCaseGroup from = testcasemap[testCaseName];
-                TestCaseGroup to = OtherTestCases;
-                if (from == null) return;
-                TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.FullName == testCaseName);
-                // If changed to Running/Waiting status, no need to change group.
-
-                if (RunningTestCase != null)
+                if (!testcasemap.TryGetValue(testCaseName, out TestCaseGroup from) || from == null)
                 {
-                    if (RunningTestCase.Status == TestCaseStatus.Running)
-                        RunningTestCase.Status = TestCaseStatus.Waiting;
+                    return;
                 }
+
+                TestCase testcase = from.TestCaseList.FirstOrDefault(c => c.FullName == testCaseName);
+                if (testcase == null)
+                {
+                    return;
+                }
+
+                // Only a single case can be running when execution is sequential, so the case
+                // reported previously is put back into Waiting if it never reached a final status.
+                // Concurrent execution units report interleaved, so demoting is not valid there.
+                if (!concurrent &&
+                    RunningTestCase != null &&
+                    RunningTestCase.Status == TestCaseStatus.Running)
+                {
+                    RunningTestCase.Status = TestCaseStatus.Waiting;
+                }
+
                 RunningTestCase = testcase;
                 RunningTestCase.Status = status;
-                if (UpdateTestCaseList != null)
-                {
-                    UpdateTestCaseList(from, RunningTestCase);
-                }
-                return;
+                UpdateTestCaseList?.Invoke(from, RunningTestCase);
             }
             finally
             {
-                locker.ExitReadLock();
+                if (concurrent)
+                {
+                    locker.ExitWriteLock();
+                }
+                else
+                {
+                    locker.ExitReadLock();
+                }
             }
         }
 

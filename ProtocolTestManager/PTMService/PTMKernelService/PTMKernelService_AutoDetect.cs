@@ -83,6 +83,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             GetAutoDetection(configurationId).StartDetection(callback);
         }
 
+        public string StartDetection(List<Property> prerequisiteProperties, int configurationId, DetectionCallback callback)
+        {
+            return GetAutoDetection(configurationId).StartDetection(prerequisiteProperties, callback);
+        }
+
         public void StopDetection(int configurationId, Action callback)
         {
             GetAutoDetection(configurationId).StopDetection(callback);
@@ -112,6 +117,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
         public string GetDetectionLog(int configurationId)
         {
             return GetAutoDetection(configurationId).GetDetectionLog();
+        }
+
+        public DetectionLogChunk GetDetectionLogChunk(int configurationId, long offset)
+        {
+            return GetAutoDetection(configurationId).GetDetectionLogChunk(offset);
         }
 
         public IEnumerable<PropertyGroup> GetConfigurationProperties(int configurationId)

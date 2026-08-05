@@ -96,6 +96,40 @@ if (-not (Test-Path $helpersPath)) {
 }
 Import-Module $helpersPath -Force
 
+function Write-DcDeploymentHeartbeat {
+    param(
+        [string]$ResourceGroupName,
+        [string]$VMNamePattern = '*-dc01'
+    )
+    try {
+        $vm = Get-AzVM -ResourceGroupName $ResourceGroupName |
+            Where-Object { $_.Name -like $VMNamePattern } |
+            Select-Object -First 1
+        if ($null -eq $vm) {
+            Write-Warning "DC heartbeat unavailable because no VM matched '$VMNamePattern'."
+            return
+        }
+        $result = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+            -VMName $vm.Name -CommandId 'RunPowerShellScript' -ScriptString @'
+$heartbeat = 'C:\Domain-Package\DSC\Deploy-DC.heartbeat.json'
+if (Test-Path $heartbeat) {
+    Get-Content -Path $heartbeat -Raw
+} else {
+    '{"Status":"Heartbeat file is not present; inspect Deploy-DC.log."}'
+}
+'@
+        $messages = @($result.Value | ForEach-Object { $_.Message } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+        if ($messages.Count -gt 0) {
+            Write-Output "Last DC deployment heartbeat:"
+            $messages | ForEach-Object { Write-Output "  $_" }
+        }
+    }
+    catch {
+        Write-Warning "Could not retrieve the DC deployment heartbeat: $($_.Exception.Message)"
+    }
+}
+
 # Initialize Azure connection
 Import-AzureModules
 Connect-AzureSubscription -SubscriptionId $SubscriptionId
@@ -149,8 +183,9 @@ if ($SkipDiskEncryption) {
 
 Write-Output "   Location (from bicepparam): $($config.location)"
 
-# Create or validate the resource group (uses location from bicepparam)
-Initialize-ResourceGroup -ResourceGroupName $ResourceGroupName -Location $config.location
+# Post-deploy Azure Disk Encryption runs only when the bicepparam enables it
+# (otherwise no Key Vault exists) and -SkipDiskEncryption was not passed.
+$diskEncryptionRequested = (-not $SkipDiskEncryption) -and ($phase1Params['enableDiskEncryption'] -ne $false)
 
 $generateScript = Join-Path $PSScriptRoot "..\shared\Generate-ConfigJson.ps1"
 
@@ -167,7 +202,7 @@ if ($phase2Params['sutCustomImageId']) {
 # any Azure resources (storage accounts, VMs, etc.)
 # ===========================================================================
 
-Write-Output "`nValidating VM sizes and OS images in $config.location..."
+Write-Output "`nValidating VM sizes and OS images in $($config.location)..."
 
 # Fetch all VM SKUs for the region (single API call, reused for all checks)
 $vmSkus = Get-AzComputeResourceSku -Location $config.location |
@@ -176,10 +211,11 @@ $vmSkus = Get-AzComputeResourceSku -Location $config.location |
 # Resolve VM sizes (with fallbacks for capacity-constrained regions).
 # -ReturnAll gives us ALL statically-valid sizes so we can retry at deployment
 # time if the first choice hits dynamic capacity restrictions (SkuNotAvailable).
-$dcFallbacks = @('Standard_D2s_v6', 'Standard_D2as_v6', 'Standard_D2s_v5', 'Standard_D2as_v5', 'Standard_B2s_v2', 'Standard_D2s_v4')
+# The per-role fallback lists are data, not code: parameters/VmSizeFallbacks.psd1.
+$vmSizeFallbacks = Import-PowerShellDataFile (Join-Path $PSScriptRoot '..\shared\parameters\VmSizeFallbacks.psd1')
 $dcCandidates = Resolve-AvailableVmSize `
     -PreferredSize $phase1Params['dcVmSize'] `
-    -FallbackSizes $dcFallbacks `
+    -FallbackSizes $vmSizeFallbacks.DC `
     -AvailableSkus $vmSkus `
     -Role 'DC' `
     -ReturnAll
@@ -187,10 +223,9 @@ $resolvedDcSize = $dcCandidates[0]
 $phase1Params['dcVmSize'] = $resolvedDcSize
 Write-Host "   DC VM size: $resolvedDcSize$(if ($dcCandidates.Count -gt 1) { " (+$($dcCandidates.Count - 1) fallbacks)" })"
 
-$driverFallbacks = @('Standard_F4s_v2', 'Standard_D4s_v6', 'Standard_D4as_v6', 'Standard_D4s_v5', 'Standard_D4as_v5')
 $driverCandidates = Resolve-AvailableVmSize `
     -PreferredSize $phase2Params['driverVmSize'] `
-    -FallbackSizes $driverFallbacks `
+    -FallbackSizes $vmSizeFallbacks.Driver `
     -AvailableSkus $vmSkus `
     -Role 'Driver' `
     -ReturnAll
@@ -198,10 +233,9 @@ $resolvedDriverSize = $driverCandidates[0]
 $phase2Params['driverVmSize'] = $resolvedDriverSize
 Write-Host "   Driver VM size: $resolvedDriverSize$(if ($driverCandidates.Count -gt 1) { " (+$($driverCandidates.Count - 1) fallbacks)" })"
 
-$sutFallbacks = @('Standard_D8s_v6', 'Standard_D8as_v6', 'Standard_D8s_v5', 'Standard_D8as_v5', 'Standard_D8s_v4')
 $sutCandidates = Resolve-AvailableVmSize `
     -PreferredSize $phase2Params['sutVmSize'] `
-    -FallbackSizes $sutFallbacks `
+    -FallbackSizes $vmSizeFallbacks.SUT `
     -AvailableSkus $vmSkus `
     -Role 'SUT' `
     -ReturnAll
@@ -222,7 +256,7 @@ if (-not $phase1Params['dcCustomImageId']) {
     if ($dcImgOk) {
         Write-Output "   DC image: $dcImgLabel"
     } else {
-        Write-Error "DC image '$dcImgLabel' is not available in $config.location. Change dcOsVersion in the bicepparam file or deploy to a different region."
+        Write-Error "DC image '$dcImgLabel' is not available in $($config.location). Change dcOsVersion in the bicepparam file or deploy to a different region."
     }
 }
 
@@ -240,7 +274,7 @@ if (-not $phase2Params['driverCustomImageId']) {
     if ($driverImgOk) {
         Write-Output "   Driver image: $driverImgLabel"
     } else {
-        Write-Error "Driver image '$driverImgLabel' is not available in $config.location. Change driverOsVersion in the bicepparam file or deploy to a different region."
+        Write-Error "Driver image '$driverImgLabel' is not available in $($config.location). Change driverOsVersion in the bicepparam file or deploy to a different region."
     }
 }
 
@@ -251,7 +285,7 @@ if (-not $phase2Params['sutCustomImageId']) {
     if ($sutImgOk) {
         Write-Output "   SUT image: $sutImgLabel"
     } else {
-        Write-Error "SUT image '$sutImgLabel' is not available in $config.location. Change sutOsVersion in the bicepparam file or deploy to a different region."
+        Write-Error "SUT image '$sutImgLabel' is not available in $($config.location). Change sutOsVersion in the bicepparam file or deploy to a different region."
     }
 }
 
@@ -282,6 +316,48 @@ if ($phase1Params['enableAutoShutdown'] -eq $true) {
         }
     }
 }
+
+# ===========================================================================
+# Validation-only gate -- BEFORE any resource creation (resource group, storage
+# account, package upload). ARM template validation needs an existing resource
+# group, so it runs only when one is already there.
+# ===========================================================================
+if ($ValidateOnly) {
+    if (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue) {
+        Write-Output "`nValidating Phase 1 template against existing resource group..."
+        $phase1ValidationParams = @{} + $phase1Params
+        $phase1ValidationParams['dcVmSize'] = $dcCandidates[0]
+        $phase1ValidationParams['adminPassword'] = $AdminPassword
+
+        $validationResult = Test-AzResourceGroupDeployment `
+            -ResourceGroupName $ResourceGroupName `
+            -TemplateFile (Join-Path $PSScriptRoot 'phase1.bicep') `
+            -TemplateParameterObject $phase1ValidationParams `
+            -ErrorAction SilentlyContinue
+
+        if ($validationResult) {
+            # Capacity/SKU errors are handled by the deployment-time retry loop
+            $nonCapacityErrors = $validationResult | Where-Object {
+                $_.Code -notmatch 'SkuNotAvailable|ZonalAllocationFailed|AllocationFailed'
+            }
+            if ($nonCapacityErrors) {
+                Write-Error "Phase 1 template validation failed:`n$($nonCapacityErrors | ForEach-Object { "  - [$($_.Code)] $($_.Message)" } | Out-String)"
+                exit 1
+            }
+            Write-Warning "Template validation returned capacity warnings (SkuNotAvailable) -- the deployment retry loop will handle these."
+        } else {
+            Write-Output "[OK] Phase 1 template validation passed"
+        }
+    } else {
+        Write-Output "`nResource group '$ResourceGroupName' does not exist yet; skipping ARM template validation (pre-flight SKU/quota/image checks passed)."
+    }
+    Write-Output "Validation-only mode: no resources were created."
+    Write-Output "Note: Phase 2 template depends on Phase 1 outputs and cannot be validated without deploying Phase 1."
+    return
+}
+
+# Create or validate the resource group (uses location from bicepparam)
+Initialize-ResourceGroup -ResourceGroupName $ResourceGroupName -Location $config.location
 
 # ===========================================================================
 # Handle DSC package upload
@@ -325,6 +401,10 @@ if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
             DriverExternal1Ip = $config.driverExternal1Ip
             DriverExternal2Ip = $config.driverExternal2Ip
             DriverOSType      = $config.driverOsType
+            # Create every test account with the single admin password so secondary
+            # accounts match the framework's PasswordForAllUsers (works for any chosen
+            # password; a no-op when the admin password already matches ParamConfig).
+            UnifyAccountPasswords = $true
         } `
         -GenerateConfigScript $generateScript `
         -StorageContext $tempStorage.Context `
@@ -337,45 +417,8 @@ if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
 }
 
 # ===========================================================================
-# Bicep template validation (dry run)
-# ===========================================================================
-Write-Output "Validating Bicep templates..."
-
-$phase1ValidationParams = @{} + $phase1Params
-$phase1ValidationParams['dcVmSize'] = $dcCandidates[0]
-$phase1ValidationParams['adminPassword'] = $AdminPassword
-if ($actualDscPackageZipUrl) {
-    $phase1ValidationParams['domainPackageZipUrl'] = $actualDscPackageZipUrl
-}
-
-$validationResult = Test-AzResourceGroupDeployment `
-    -ResourceGroupName $ResourceGroupName `
-    -TemplateFile (Join-Path $PSScriptRoot 'phase1.bicep') `
-    -TemplateParameterObject $phase1ValidationParams `
-    -ErrorAction SilentlyContinue
-
-if ($validationResult) {
-    # Filter out capacity/SKU errors — those are handled by the deployment retry loop
-    $nonCapacityErrors = $validationResult | Where-Object {
-        $_.Code -notmatch 'SkuNotAvailable|ZonalAllocationFailed|AllocationFailed'
-    }
-    if ($nonCapacityErrors) {
-        Write-Error "Phase 1 template validation failed:`n$($nonCapacityErrors | ForEach-Object { "  - [$($_.Code)] $($_.Message)" } | Out-String)"
-        throw "Bicep template validation failed. Fix the errors above before deploying."
-    }
-    Write-Warning "Template validation returned capacity warnings (SkuNotAvailable) — the deployment retry loop will handle these."
-} else {
-    Write-Output "[OK] Phase 1 template validation passed"
-}
-
-if ($ValidateOnly) {
-    Write-Output "`nValidation-only mode: skipping deployment."
-    Write-Output "Note: Phase 2 template depends on Phase 1 outputs and cannot be validated without deploying Phase 1."
-    return
-}
-
-# ===========================================================================
 # PHASE 1: Deploy Network + Domain Controller
+# (Invoke-DeploymentWithSkuFallback pre-validates the template each attempt.)
 # ===========================================================================
 
 if (-not $SkipPhase1) {
@@ -389,140 +432,50 @@ if (-not $SkipPhase1) {
 
     $phase1Start = Get-Date
 
-    # Deployment-time capacity retry: if SkuNotAvailable, try next fallback size.
-    # Static pre-flight (Resolve-AvailableVmSize) filters Location/Zone restrictions,
-    # but dynamic capacity exhaustion is only detected when ARM actually provisions.
-    $dcSizeIndex = 0
-    $phase1Deployed = $false
-
-    while (-not $phase1Deployed -and $dcSizeIndex -lt $dcCandidates.Count) {
-        $dcCurrentSize = $dcCandidates[$dcSizeIndex]
-        $deploymentName = "Phase1-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-
-        $phase1DeployParams = @{} + $phase1Params
-        $phase1DeployParams['dcVmSize'] = $dcCurrentSize
-        $phase1DeployParams['adminPassword'] = $AdminPassword
-        if ($actualDscPackageZipUrl) {
-            $phase1DeployParams['domainPackageZipUrl'] = $actualDscPackageZipUrl
-        }
-
-        if ($dcSizeIndex -gt 0) {
-            Write-Output "`nRetrying Phase 1 with fallback DC size: $dcCurrentSize"
-        }
-        Write-Output "Starting Phase 1 deployment (DC: $dcCurrentSize)..."
-
-        # Pre-validate to catch SkuNotAvailable before starting the full deployment.
-        $preValidation = Test-AzResourceGroupDeployment `
-            -ResourceGroupName $ResourceGroupName `
-            -TemplateFile (Join-Path $PSScriptRoot 'phase1.bicep') `
-            -TemplateParameterObject $phase1DeployParams
-        if ($preValidation) {
-            $allCodes = @($preValidation | ForEach-Object { $_.Code })
-            $allCodes += $preValidation | ForEach-Object { $_.Details } | Where-Object { $_ } | ForEach-Object { $_.Code }
-            $allMessages = ($preValidation | ForEach-Object {
-                $msg = "[$($_.Code)] $($_.Message)"
-                if ($_.Details) { $msg += " Details: $(($_.Details | ForEach-Object { "[$($_.Code)] $($_.Message)" }) -join '; ')" }
-                $msg
-            }) -join "`n  "
-
-            $isSkuError = $allCodes -match 'SkuNotAvailable|AllocationFailed|ZonalAllocationFailed'
-            if ($isSkuError -and ($dcSizeIndex + 1) -lt $dcCandidates.Count) {
-                Write-Warning "DC VM size '$dcCurrentSize' not available: $allMessages"
-                Write-Warning "Trying next fallback..."
-                $dcSizeIndex++
-                continue
-            }
-            throw "Phase 1 pre-validation failed:`n  $allMessages"
-        }
-        Write-Output "  Pre-validation passed"
-
-        $phase1Job = New-AzResourceGroupDeployment `
-            -ResourceGroupName $ResourceGroupName `
-            -Name $deploymentName `
-            -TemplateFile (Join-Path $PSScriptRoot 'phase1.bicep') `
-            -TemplateParameterObject $phase1DeployParams `
-            -ErrorAction Stop `
-            -AsJob
-
-        Watch-Deployment -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName -Job $phase1Job
-
-        $deployment = $null
-        $phase1Error = $null
-        try {
-            $deployment = $phase1Job | Receive-Job -Wait -AutoRemoveJob -ErrorAction Stop
-        } catch {
-            $phase1Error = $_
-            $phase1Job | Remove-Job -Force -ErrorAction SilentlyContinue
-        }
-
-        $provState = if ($deployment) { $deployment.ProvisioningState } else { 'Failed' }
-
-        if ($provState -eq 'Succeeded' -and -not $phase1Error) {
-            $phase1Deployed = $true
-            $phase1DeploymentResult = $deployment  # Preserve for KV outputs
-        } else {
-            $isCapacity = Test-CapacityError -ErrorRecord $phase1Error `
-                -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName
-
-            if ($isCapacity -and ($dcSizeIndex + 1) -lt $dcCandidates.Count) {
-                Write-Warning "DC VM size '$dcCurrentSize' hit capacity restrictions in $config.location. Trying next fallback..."
-                $dcSizeIndex++
-            } else {
-                if ($phase1Error) { throw $phase1Error }
-                throw "Phase 1 deployment '$deploymentName' finished with state: $provState"
-            }
-        }
+    # Deployment-time capacity retry: static pre-flight (Resolve-AvailableVmSize)
+    # filters Location/Zone restrictions, but dynamic capacity exhaustion is only
+    # detected when ARM actually provisions -- Invoke-DeploymentWithSkuFallback
+    # walks the candidate list on SkuNotAvailable/AllocationFailed.
+    $phase1BaseParams = @{} + $phase1Params
+    $phase1BaseParams.Remove('dcVmSize')
+    $phase1BaseParams['adminPassword'] = $AdminPassword
+    if ($actualDscPackageZipUrl) {
+        $phase1BaseParams['domainPackageZipUrl'] = $actualDscPackageZipUrl
     }
+
+    # Preserved for KV outputs (disk encryption)
+    $phase1DeploymentResult = Invoke-DeploymentWithSkuFallback `
+        -ResourceGroupName $ResourceGroupName `
+        -TemplateFile (Join-Path $PSScriptRoot 'phase1.bicep') `
+        -BaseParameters $phase1BaseParams `
+        -SizeCandidates @{ dcVmSize = $dcCandidates } `
+        -DeploymentNamePrefix 'Phase1'
 
     $phase1Duration = [math]::Round(((Get-Date) - $phase1Start).TotalMinutes, 1)
     Write-Output "`n[OK] Phase 1 completed in $phase1Duration minutes"
 
-    # ===========================================================================
-    # Wait for Domain Controller to be fully configured
-    # ===========================================================================
+    # A Phase-1-only run has no member provisioning to overlap with DC
+    # configuration, so retain the original readiness and encryption contract.
+    if ($SkipPhase2) {
+        if (-not $SkipDCReadyCheck) {
+            $dcReady = Wait-ForDomainController `
+                -ResourceGroupName $ResourceGroupName `
+                -VMNamePattern "*-dc01" `
+                -CheckScript "Test-Path 'C:\Domain-Package\DSC\Deploy-DC.Completed.signal'" `
+                -TimeoutMinutes $DCReadyTimeoutMinutes `
+                -PollIntervalSeconds 30
+            if (-not $dcReady) {
+                Write-DcDeploymentHeartbeat -ResourceGroupName $ResourceGroupName
+                throw "Domain Controller did not signal readiness within $DCReadyTimeoutMinutes minutes."
+            }
+        }
 
-    Write-Output @"
-
-  Waiting for Domain Controller Configuration
-  DC must be fully configured before Client01/Node01 deploy
-
-"@
-
-    $dcReady = Wait-ForDomainController `
-        -ResourceGroupName $ResourceGroupName `
-        -VMNamePattern "*-dc01" `
-        -CheckScript "Test-Path 'C:\Domain-Package\DSC\Deploy-DC.Completed.signal'" `
-        -TimeoutMinutes $DCReadyTimeoutMinutes `
-        -PollIntervalSeconds 30
-
-    if (-not $dcReady) {
-        Write-Output @"
-
-Domain Controller did not signal readiness within the timeout.
-
-Options:
-1. Increase timeout with -DCReadyTimeoutMinutes parameter
-2. Connect to DC via Bastion and check: C:\Domain-Package\DSC\Deploy-DC.log
-3. Resume Phase 2 later once DC is ready:
-
-   .\deploy.ps1 ``
-       -SubscriptionId '$SubscriptionId' ``
-       -ResourceGroupName '$ResourceGroupName' ``
-       -AdminPassword (ConvertTo-SecureString '<password>' -AsPlainText -Force) ``
-       -SkipPhase1$(if ($actualDscPackageZipUrl) { " ``
-       -DscPackageZipUrl '$actualDscPackageZipUrl'" })
-"@
-        exit 1
-    }
-
-    # ===========================================================================
-    # Disk Encryption — DC (after configuration is complete)
-    # ===========================================================================
-    if (-not $SkipDiskEncryption -and $phase1DeploymentResult) {
-        $dcVmName = $phase1DeploymentResult.Outputs.dcVmName.Value
-        Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
-            -DeploymentOutputs $phase1DeploymentResult.Outputs `
-            -VMNames @($dcVmName)
+        if ($diskEncryptionRequested -and $phase1DeploymentResult) {
+            $dcVmName = $phase1DeploymentResult.Outputs.dcVmName.Value
+            Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
+                -DeploymentOutputs $phase1DeploymentResult.Outputs `
+                -VMNames @($dcVmName)
+        }
     }
 }
 
@@ -549,6 +502,7 @@ if (-not $SkipPhase2) {
             -PollIntervalSeconds 15
 
         if (-not $dcReady) {
+            Write-DcDeploymentHeartbeat -ResourceGroupName $ResourceGroupName
             Write-Output @"
 
 Domain Controller does not appear to be ready.
@@ -569,58 +523,10 @@ Otherwise, connect to DC via Bastion and check: C:\Domain-Package\DSC\Deploy-DC.
         $envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest' }
         $dcVmName = "$envPrefix-dc01"
 
-        # Read machine names from Config.json on the DC to avoid hardcoding.
-        $cleanupScript = @"
-Import-Module ActiveDirectory -ErrorAction Stop
-
-# Discover names from the Config.json left by the previous deployment
-`$configPaths = @(
-    'C:\Domain-Package\Config.json',
-    'C:\Domain-Package\DSC\Scripts\Config.json'
-)
-`$config = `$null
-foreach (`$p in `$configPaths) {
-    if (Test-Path `$p) {
-        `$config = Get-Content `$p -Raw | ConvertFrom-Json
-        break
-    }
-}
-
-`$staleNames = @()
-if (`$config) {
-    # Machine computer names (Node01, Client01, etc.)
-    foreach (`$prop in `$config.Machines.PSObject.Properties) {
-        if (`$prop.Value.ComputerName) { `$staleNames += `$prop.Value.ComputerName }
-    }
-    # Deduplicate and exclude the DC itself
-    `$dcName = (`$config.Machines.PSObject.Properties | Where-Object { `$_.Name -match 'DC' }).Value.ComputerName
-    `$staleNames = `$staleNames | Where-Object { `$_ -ne `$dcName } | Select-Object -Unique
-} else {
-    Write-Output "WARNING: Config.json not found on DC - cannot discover machine names."
-    Write-Output "Skipping stale account cleanup."
-    return
-}
-
-Write-Output "Cleaning up stale accounts for: `$(`$staleNames -join ', ')"
-`$cleaned = @()
-foreach (`$name in `$staleNames) {
-    `$acct = Get-ADComputer -Filter "Name -eq '`$name'" -ErrorAction SilentlyContinue
-    if (`$acct) {
-        `$acct | Remove-ADObject -Recursive -Confirm:`$false
-        `$cleaned += `$name
-    }
-}
-if (`$cleaned.Count -gt 0) {
-    Write-Output "Removed stale computer accounts: `$(`$cleaned -join ', ')"
-} else {
-    Write-Output "No stale computer accounts found."
-}
-"@
-
         try {
             $result = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
                 -VMName $dcVmName -CommandId 'RunPowerShellScript' `
-                -ScriptString $cleanupScript
+                -ScriptPath (Join-Path $PSScriptRoot 'scripts\Remove-StaleComputerAccounts.ps1')
             if ($result.Value) {
                 foreach ($v in $result.Value) {
                     if ($v.Message) {
@@ -636,14 +542,14 @@ if (`$cleaned.Count -gt 0) {
 
     Write-Output @"
 
-  PHASE 2: Deploying Domain-Joined VMs
+  PHASE 2A: Provisioning Domain Member Infrastructure
   - Driver Computer (Client01)
   - SUT Computer (Node01)
+  Guest configuration waits for DC readiness
 
 "@
 
     $phase2Start = Get-Date
-    $deploymentName = "Phase2-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
 
     # Get Phase 1 outputs
     $phase1Deployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName |
@@ -692,166 +598,123 @@ if (`$cleaned.Count -gt 0) {
         }
     }
 
-    # Deployment-time capacity retry for Phase 2 (Driver + SUT).
-    # Track candidate index per role; on SkuNotAvailable, advance the failing role's index.
-    $driverSizeIndex = 0
-    $sutSizeIndex = 0
-    $phase2Deployed = $false
-
-    while (-not $phase2Deployed) {
-        $driverCurrentSize = $driverCandidates[$driverSizeIndex]
-        $sutCurrentSize    = $sutCandidates[$sutSizeIndex]
-        $deploymentName    = "Phase2-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-
-        $phase2DeployParams = @{} + $phase2Params
-        $phase2DeployParams['driverVmSize'] = $driverCurrentSize
-        $phase2DeployParams['sutVmSize']    = $sutCurrentSize
-        $phase2DeployParams['adminPassword'] = $AdminPassword
-        $phase2DeployParams['external1SubnetId'] = $external1SubnetId
-        $phase2DeployParams['external2SubnetId'] = $external2SubnetId
-        $phase2DeployParams['dcExternal1Ip'] = $dcExternal1Ip
-        $phase2DeployParams['dcExternal2Ip'] = $config.dcExternal2Ip
-        if ($actualDscPackageZipUrl) {
-            $phase2DeployParams['domainPackageZipUrl'] = $actualDscPackageZipUrl
-        }
-
-        Write-Output "`nStarting Phase 2 deployment (Driver: $driverCurrentSize, SUT: $sutCurrentSize)..."
-        Write-Output "Phase 2 parameters:"
-        foreach ($k in ($phase2DeployParams.Keys | Sort-Object)) {
-            $v = $phase2DeployParams[$k]
-            if ($k -match 'password|Password') { $v = '***' }
-            Write-Output "   $k = $v"
-        }
-
-        # Pre-validate to catch SkuNotAvailable before starting the full deployment.
-        # ARM validation errors don't produce deployment operations, so Test-CapacityError
-        # cannot detect them after the fact. Test-AzResourceGroupDeployment returns
-        # structured error objects with .Code and .Details we can inspect.
-        $preValidation = Test-AzResourceGroupDeployment `
-            -ResourceGroupName $ResourceGroupName `
-            -TemplateFile (Join-Path $PSScriptRoot 'phase2.bicep') `
-            -TemplateParameterObject $phase2DeployParams
-        if ($preValidation) {
-            $allCodes = @($preValidation | ForEach-Object { $_.Code })
-            $allCodes += $preValidation | ForEach-Object { $_.Details } | Where-Object { $_ } | ForEach-Object { $_.Code }
-            $allMessages = ($preValidation | ForEach-Object {
-                $msg = "[$($_.Code)] $($_.Message)"
-                if ($_.Details) { $msg += " Details: $(($_.Details | ForEach-Object { "[$($_.Code)] $($_.Message)" }) -join '; ')" }
-                $msg
-            }) -join "`n  "
-            Write-Output "  Pre-validation result: $allMessages"
-
-            $isSkuError = $allCodes -match 'SkuNotAvailable|AllocationFailed|ZonalAllocationFailed'
-            if ($isSkuError) {
-                $canRetry = $false
-                $skuMsg = ($preValidation | ForEach-Object { $_.Details } | Where-Object { $_ } | ForEach-Object { $_.Message }) -join ' '
-                $driverFailed = $skuMsg -match [regex]::Escape($driverCurrentSize)
-                $sutFailed    = $skuMsg -match [regex]::Escape($sutCurrentSize)
-                if ($driverFailed -and ($driverSizeIndex + 1) -lt $driverCandidates.Count) {
-                    Write-Warning "Driver VM size '$driverCurrentSize' not available. Trying next fallback..."
-                    $driverSizeIndex++; $canRetry = $true
-                }
-                if ($sutFailed -and ($sutSizeIndex + 1) -lt $sutCandidates.Count) {
-                    Write-Warning "SUT VM size '$sutCurrentSize' not available. Trying next fallback..."
-                    $sutSizeIndex++; $canRetry = $true
-                }
-                if (-not $driverFailed -and -not $sutFailed) {
-                    if (($driverSizeIndex + 1) -lt $driverCandidates.Count) { $driverSizeIndex++; $canRetry = $true }
-                    if (($sutSizeIndex + 1) -lt $sutCandidates.Count) { $sutSizeIndex++; $canRetry = $true }
-                }
-                if ($canRetry) { continue }
-                throw "Phase 2 pre-validation failed (SkuNotAvailable) and no more fallback sizes available:`n  $allMessages"
-            } else {
-                # Non-capacity validation error -- fail immediately
-                throw "Phase 2 pre-validation failed:`n  $allMessages"
-            }
-        }
-        Write-Output "  Pre-validation passed"
-
-        $phase2Job = New-AzResourceGroupDeployment `
-            -ResourceGroupName $ResourceGroupName `
-            -Name $deploymentName `
-            -TemplateFile (Join-Path $PSScriptRoot 'phase2.bicep') `
-            -TemplateParameterObject $phase2DeployParams `
-            -ErrorAction Stop `
-            -AsJob
-
-        Watch-Deployment -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName -Job $phase2Job
-
-        $deployment = $null
-        $phase2Error = $null
-        try {
-            $deployment = $phase2Job | Receive-Job -Wait -AutoRemoveJob -ErrorAction Stop
-        } catch {
-            $phase2Error = $_
-            $phase2Job | Remove-Job -Force -ErrorAction SilentlyContinue
-        }
-
-        $provState = if ($deployment) { $deployment.ProvisioningState } else { 'Failed' }
-
-        if ($provState -eq 'Succeeded' -and -not $phase2Error) {
-            $phase2Deployed = $true
-            $phase2DeploymentResult = $deployment  # Preserve for VM name outputs
-        } else {
-            # Dump full error details for diagnosis
-            if ($phase2Error) {
-                Write-Output "`nPhase 2 deployment error details:"
-                Write-Output "  Message: $($phase2Error.Exception.Message)"
-                $inner = $phase2Error.Exception.InnerException
-                while ($inner) {
-                    Write-Output "  Inner: $($inner.Message)"
-                    $inner = $inner.InnerException
-                }
-                if ($phase2Error.ErrorDetails) {
-                    Write-Output "  ErrorDetails: $($phase2Error.ErrorDetails.Message)"
-                }
-            }
-
-            $isCapacity = Test-CapacityError -ErrorRecord $phase2Error `
-                -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName
-
-            # Identify which role's SKU failed by matching the error text
-            $errText = if ($phase2Error) { "$($phase2Error.Exception.Message)" } else { '' }
-            $driverFailed = $errText -match [regex]::Escape($driverCurrentSize)
-            $sutFailed    = $errText -match [regex]::Escape($sutCurrentSize)
-
-            $canRetry = $false
-            if ($isCapacity) {
-                if ($driverFailed -and ($driverSizeIndex + 1) -lt $driverCandidates.Count) {
-                    Write-Warning "Driver VM size '$driverCurrentSize' hit capacity restrictions. Trying next fallback..."
-                    $driverSizeIndex++
-                    $canRetry = $true
-                }
-                if ($sutFailed -and ($sutSizeIndex + 1) -lt $sutCandidates.Count) {
-                    Write-Warning "SUT VM size '$sutCurrentSize' hit capacity restrictions. Trying next fallback..."
-                    $sutSizeIndex++
-                    $canRetry = $true
-                }
-                # If we can't identify which role, try advancing both
-                if (-not $driverFailed -and -not $sutFailed) {
-                    if (($driverSizeIndex + 1) -lt $driverCandidates.Count) {
-                        $driverSizeIndex++; $canRetry = $true
-                    }
-                    if (($sutSizeIndex + 1) -lt $sutCandidates.Count) {
-                        $sutSizeIndex++; $canRetry = $true
-                    }
-                }
-            }
-
-            if (-not $canRetry) {
-                if ($phase2Error) { throw $phase2Error }
-                throw "Phase 2 deployment '$deploymentName' finished with state: $provState"
-            }
-        }
+    # Deployment-time capacity retry for Phase 2 (Driver + SUT): on a capacity
+    # error, Invoke-DeploymentWithSkuFallback advances the failing role's
+    # candidate (or both, when the error names neither size).
+    $phase2BaseParams = @{} + $phase2Params
+    $phase2BaseParams.Remove('driverVmSize')
+    $phase2BaseParams.Remove('sutVmSize')
+    $phase2BaseParams['adminPassword'] = $AdminPassword
+    $phase2BaseParams['external1SubnetId'] = $external1SubnetId
+    $phase2BaseParams['external2SubnetId'] = $external2SubnetId
+    $phase2BaseParams['dcExternal1Ip'] = $dcExternal1Ip
+    $phase2BaseParams['dcExternal2Ip'] = $config.dcExternal2Ip
+    $phase2BaseParams['configureGuests'] = $false
+    if ($actualDscPackageZipUrl) {
+        $phase2BaseParams['domainPackageZipUrl'] = $actualDscPackageZipUrl
     }
 
+    Write-Output "Phase 2 parameters:"
+    foreach ($k in ($phase2BaseParams.Keys | Sort-Object)) {
+        $v = $phase2BaseParams[$k]
+        if ($k -match 'password|Password') { $v = '***' }
+        Write-Output "   $k = $v"
+    }
+
+    # Preserved for VM name outputs (disk encryption)
+    $phase2DeploymentResult = Invoke-DeploymentWithSkuFallback `
+        -ResourceGroupName $ResourceGroupName `
+        -TemplateFile (Join-Path $PSScriptRoot 'phase2.bicep') `
+        -BaseParameters $phase2BaseParams `
+        -SizeCandidates @{ driverVmSize = $driverCandidates; sutVmSize = $sutCandidates } `
+        -DeploymentNamePrefix 'Phase2'
+
     $phase2Duration = [math]::Round(((Get-Date) - $phase2Start).TotalMinutes, 1)
-    Write-Output "`n[OK] Phase 2 completed in $phase2Duration minutes"
+    Write-Output "`n[OK] Phase 2A member infrastructure completed in $phase2Duration minutes"
+
+    # On a fresh deployment, DC post-reboot configuration has been running while
+    # member NICs/disks/VMs provisioned. Gate only the guest extensions/domain join.
+    if (-not $SkipPhase1 -and -not $SkipDCReadyCheck) {
+        Write-Output @"
+
+  Waiting for Domain Controller Configuration
+  Member VMs are provisioned; guest configuration remains blocked until DC readiness.
+
+"@
+
+        $dcReady = Wait-ForDomainController `
+            -ResourceGroupName $ResourceGroupName `
+            -VMNamePattern "*-dc01" `
+            -CheckScript "Test-Path 'C:\Domain-Package\DSC\Deploy-DC.Completed.signal'" `
+            -TimeoutMinutes $DCReadyTimeoutMinutes `
+            -PollIntervalSeconds 30
+
+        if (-not $dcReady) {
+            Write-DcDeploymentHeartbeat -ResourceGroupName $ResourceGroupName
+            Write-Output @"
+
+Domain Controller did not signal readiness within the timeout.
+Member VM infrastructure is preserved, but guest configuration was not started.
+
+Options:
+1. Increase timeout with -DCReadyTimeoutMinutes parameter
+2. Connect to DC via Bastion and check: C:\Domain-Package\DSC\Deploy-DC.log
+3. Resume Phase 2 later once DC is ready:
+
+   .\deploy.ps1 ``
+       -SubscriptionId '$SubscriptionId' ``
+       -ResourceGroupName '$ResourceGroupName' ``
+       -AdminPassword (ConvertTo-SecureString '<password>' -AsPlainText -Force) ``
+       -SkipPhase1$(if ($actualDscPackageZipUrl) { " ``
+       -DscPackageZipUrl '$actualDscPackageZipUrl'" })
+"@
+            exit 1
+        }
+        Write-Output "[OK] Domain Controller is ready"
+    }
+
+    # Preserve the existing safe ordering: ADE may reboot the DC, so finish it and
+    # wait for the DC to return before starting member domain joins.
+    if ($diskEncryptionRequested -and $phase1Deployment) {
+        $dcVmName = $phase1Deployment.Outputs.dcVmName.Value
+        Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
+            -DeploymentOutputs $phase1Deployment.Outputs `
+            -VMNames @($dcVmName)
+    }
+
+    # Deploy only the guest extensions after readiness. This avoids an idempotent
+    # second PUT of every NIC/disk/VM and keeps the readiness dependency explicit.
+    if ($actualDscPackageZipUrl) {
+        Write-Output @"
+
+  PHASE 2B: Starting Domain Member Guest Configuration
+  - Domain join and post-join configuration now have a ready DC
+
+"@
+        $configurationStart = Get-Date
+        $configurationParams = @{
+            location            = $config.location
+            environmentPrefix   = if ($phase2Params['environmentPrefix']) { $phase2Params['environmentPrefix'] } else { 'fstest' }
+            adminPassword       = $AdminPassword
+            driverOsType        = $config.driverOsType
+            domainPackageZipUrl = $actualDscPackageZipUrl
+        }
+        New-AzResourceGroupDeployment `
+            -ResourceGroupName $ResourceGroupName `
+            -Name "Phase2-Configuration-$(Get-Date -Format 'yyyyMMdd-HHmmss')" `
+            -TemplateFile (Join-Path $PSScriptRoot 'phase2-configuration.bicep') `
+            @configurationParams `
+            -ErrorAction Stop | Out-Null
+        $configurationDuration = [math]::Round(((Get-Date) - $configurationStart).TotalMinutes, 1)
+        Write-Output "[OK] Phase 2B guest configuration initiated in $configurationDuration minutes"
+    } else {
+        Write-Warning "No Domain-Package URL is available. Member VMs were provisioned, but guest configuration was not started."
+    }
 
     # ===========================================================================
     # Disk Encryption — Driver + SUT (after Phase 2 deployment)
     # ===========================================================================
-    if (-not $SkipDiskEncryption -and $phase2DeploymentResult) {
+    if ($diskEncryptionRequested -and $phase2DeploymentResult) {
         $driverVmName = $phase2DeploymentResult.Outputs.driverVmName.Value
         $sutVmName    = $phase2DeploymentResult.Outputs.sutVmName.Value
 

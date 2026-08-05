@@ -70,6 +70,23 @@ FileServer/src/
 └── Auth/               Authentication test cases
 ```
 
+### Azure Automation
+
+`TestSuites/FileServer/azure-automation/` contains Bicep and PowerShell deployment entry points for Domain, Workgroup, and Cluster environments. Shared infrastructure belongs under `shared/modules/`; for example, `bastion.bicep` deploys Bastion independently from core networking so VM provisioning is not serialized behind it. Domain deployment separates member infrastructure (`domain-computers.bicep`) from guest extensions (`domain-computer-extensions.bicep`), allowing VM provisioning to overlap DC configuration while keeping domain join behind the DC readiness gate. On-VM orchestrators must reuse `shared/DSC/Deploy-CommonHelpers.ps1` and `Invoke-VerifiedDscConfiguration` rather than `Start-DscConfiguration -Wait`; fresh LCM status polling survives WinRM restarts and postcondition gates prevent stale completion signals or imperative setup against incomplete DSC state.
+
+Workgroup and Domain use the deterministic phased model. Dedicated feature
+configurations install disruptive roles before planned reboot boundaries;
+convergence configurations contain only non-disruptive post-reboot state. The
+Domain SUT persists `DomainSutDeployPhase` and coalesces feature servicing with
+domain join into one normal reboot. The DC persists `DcDeployPhase`, using one
+foundation reboot for features/hostname and a separate mandatory promotion
+reboot. The shared Driver prepares tools before its join reboot, then verifies
+`PartOfDomain` and `Test-ComputerSecureChannel` before test setup. All roles use
+atomic parallel package preparation, serial cached installation, concrete
+postconditions, and heartbeat JSON files. Reuse phase, verified DSC, job-wait,
+reboot-proof, and heartbeat helpers from `shared/DSC/Deploy-CommonHelpers.ps1`;
+never continue through an unexpected pending reboot.
+
 ### Key Classes
 
 | Class | File | Purpose |

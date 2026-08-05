@@ -32,5 +32,10 @@ namespace Microsoft.Protocols.TestManager.Common
         /// The fully qualified name of the test case
         /// </summary>
         public string FullName { get; set; }
+
+        /// <summary>
+        /// The assembly containing the test case.
+        /// </summary>
+        public string Assembly { get; set; }
     }
 }

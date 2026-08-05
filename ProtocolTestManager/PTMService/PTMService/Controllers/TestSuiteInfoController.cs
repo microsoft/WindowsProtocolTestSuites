@@ -90,7 +90,8 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMService.Controllers
                 return fileExtension switch
                 {
                     ".html" => "text/html",
-                    ".png" => "image/png"
+                    ".png" => "image/png",
+                    _ => "application/octet-stream",
                 };
             }
 

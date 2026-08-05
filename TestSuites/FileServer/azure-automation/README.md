@@ -30,6 +30,32 @@ These apply to all three scenarios:
   ```
 - **Bicep CLI** (installed automatically by the deploy scripts if missing, or install manually via `az bicep install`)
 
+## Release packages
+
+The official OneClick release pipeline is
+`pipelines/1es/FileServer-OneClick-Release.yml`. Run it only after the signed
+FileServer, PTMService, and PTMCli archives are final. Supply the HTTPS URL and
+SHA-256 hash for each signed archive.
+
+The pipeline copies the deployment sources into an isolated staging directory,
+pins those release assets in each publishable scenario's `Tools.json`, signs
+the staged PowerShell files through ESRP, runs the tests under
+`azure-automation/tests`, and builds these public, credential-free artifacts:
+
+- `Workgroup-Package.zip`
+- `Domain-Package.zip`
+- `SHA256SUMS.txt`
+
+Cluster is not included because it currently uses the phased `deploy.ps1`
+workflow and does not have a `Publish-DscPackage.ps1` wrapper or a single
+deploy-to-Azure template.
+
+The pipeline publishes the files as the `FileServer-OneClick-Packages` pipeline
+artifact. A release owner must download that artifact, complete the clean Azure
+deployment checks, and upload the unchanged ZIP files to the `4.26.8.0`
+FileServer GitHub release alongside the primary test-suite assets. Do not
+rebuild or replace packages after signing.
+
 ## Quick Start
 
 ### 1. Navigate to the scenario folder
@@ -83,7 +109,7 @@ Connect to any VM via **Azure Bastion** in the portal (no public IPs are exposed
 
 ## Deployment Flow
 
-All three scenarios follow the same core pattern. The Domain and Cluster scenarios split this into two Bicep phases so that the Domain Controller is fully promoted before domain-joined VMs attempt to join.
+All three scenarios follow the same core pattern. Domain member infrastructure can be provisioned while the Domain Controller finishes configuring, but member guest extensions and domain join remain gated on the DC readiness signal.
 
 ### Domain Scenario
 
@@ -95,17 +121,20 @@ flowchart TB
     upload --> phase1
 
     subgraph phase1 [Phase 1 — Bicep Deployment]
-        net[Network<br/>VNet, Subnets, NSGs, Bastion] --> dc[DC01<br/>Windows Server VM]
+        net[Core network<br/>VNet, Subnets, NSGs] --> dc[DC01<br/>Windows Server VM]
+        net --> bastion[Azure Bastion]
         dc --> ext_dc[CustomScriptExtension<br/>Downloads DSC package]
     end
 
+    ext_dc --> members[Provision Client01 + Node01<br/>infrastructure only]
     ext_dc --> poll{Poll DC readiness<br/>via Invoke-AzVMRunCommand}
     poll -- Signal file not found --> wait[Wait 30s] --> poll
-    poll -- Deploy-DC.Completed.signal found --> phase2
+    members --> gate{DC ready?}
+    poll -- Deploy-DC.Completed.signal found --> gate
 
-    subgraph phase2 [Phase 2 — Bicep Deployment]
-        driver[Client01<br/>Driver VM] --> ext_driver[CustomScriptExtension]
-        sut[Node01<br/>SUT VM] --> ext_sut[CustomScriptExtension]
+    subgraph phase2 [Phase 2B — Guest Configuration]
+        gate --> ext_driver[Client01 CustomScriptExtension]
+        gate --> ext_sut[Node01 CustomScriptExtension]
     end
 
     ext_driver --> done([All VMs configuring in background<br/>Check signal files for completion])
@@ -151,7 +180,8 @@ flowchart TB
     upload --> deploy
 
     subgraph deploy [Single Bicep Deployment]
-        net[Network<br/>VNet, Subnets, NSGs, Bastion]
+        net[Core network<br/>VNet, Subnets, NSGs]
+        net --> bastion[Azure Bastion]
         net --> driver[Client01 — Driver VM]
         net --> sut[Node01 — SUT VM]
     end
@@ -175,14 +205,21 @@ flowchart LR
     step0[Step 0 → 1<br/>DSC config + domain join<br/>or DC promotion]
     step0 -- deferred reboot --> step1
 
-    step1[Step 1 → 2<br/>Post-reboot DSC re-apply<br/>+ imperative config]
+    step1[Step 1 → 2<br/>Post-reboot DSC drift check/repair<br/>+ imperative config]
     step1 -- optional reboot --> step2
 
     step2[Step 2 → 3<br/>Environment setup<br/>shares, accounts, tools]
     step2 --> signal[Write .Completed.signal]
 ```
 
-Each step is tracked in the registry at `HKLM:\SOFTWARE\ProtocolTestSuites\DeployStep`. A **TKFRSAR** scheduled task re-runs the orchestrator after each reboot, with a circuit breaker (max 3-4 reboots) to prevent infinite loops.
+Current phased orchestrators persist role-specific phase values under
+`HKLM:\SOFTWARE\ProtocolTestSuites` while retaining `DeployStep` only for
+backward migration. Workgroup uses `WorkgroupSutDeployPhase`; Domain uses
+`DomainSutDeployPhase` and `DcDeployPhase`. The Domain SUT has one normal
+feature/domain-join reboot. The DC has one foundation reboot and one mandatory
+promotion reboot. The Driver verifies its one domain-join reboot and secure
+channel before continuing. Unexpected extra reboots are fatal. A **TKFRSAR**
+scheduled task resumes each orchestrator only across its planned boundary.
 
 ## Network Architecture
 
@@ -255,6 +292,19 @@ Each scenario README has detailed troubleshooting for its specific issues:
 ### Common across all scenarios
 
 **Azure shows "Succeeded" but VMs aren't ready** — VM extensions report success immediately after starting background configuration. Check for `.Completed.signal` files (see [step 3 above](#3-wait-for-vm-configuration-to-finish)).
+
+**Feature installation restarts WinRM** — Domain and Workgroup SUT/Driver orchestrators submit DSC asynchronously and poll fresh LCM status calls, so a transient `0x803381fa` WSMan disconnect is not treated as success. Completion signals are written only after the LCM reports `Success` and required features, commands, directories, tools, and applicable domain readiness checks pass. Imperative configuration is blocked while DSC prerequisites are incomplete instead of retrying the same broken environment setup indefinitely.
+
+While DSC is active, Windows PowerShell 5.1 can report that `Start-DscConfiguration` is still in progress when status is queried. This is an expected busy response: the verifier suppresses it, continues bounded polling, and surfaces only a final LCM failure or timeout.
+
+Workgroup and Domain SUTs compile disruptive features into dedicated feature
+MOFs and apply shares, routing, remoting, and registry state through separate
+post-reboot convergence MOFs. The DC similarly separates role features from
+post-promotion convergence. Tool packages download to unique temporary files in
+parallel and are promoted atomically into the cache; installation remains
+serial and post-reboot. Role heartbeat JSON files record the current phase,
+operation, elapsed time, deadline, and last checkpoint while DSC, downloads,
+installers, readiness probes, or imperative setup are active.
 
 **VM extension failure** — Check the bootstrap log on the VM:
 | VM Role | Log file |

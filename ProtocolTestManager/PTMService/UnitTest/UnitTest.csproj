@@ -5,6 +5,8 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>Microsoft.Protocols.TestManager.PTMService.UnitTest</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Tests intentionally exercise preview-marked Kernel implementation types. -->
+    <NoWarn>$(NoWarn);CA2252</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

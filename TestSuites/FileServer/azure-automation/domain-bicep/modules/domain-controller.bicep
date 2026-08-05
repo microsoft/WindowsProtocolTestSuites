@@ -1,18 +1,22 @@
+// No parameter defaults in this module: defaults live only in the entry-point
+// templates (main.bicep / phase1.bicep) and the bicepparam files, so the two
+// deployment paths cannot drift.
+
 @description('Resource group location')
-param location string = 'West US 2'
+param location string
 
 @description('Environment name prefix')
 param environmentPrefix string
 
 @description('Admin username for VMs')
-param adminUsername string = 'testadmin'
+param adminUsername string
 
 @description('Admin password for VMs')
 @secure()
 param adminPassword string
 
 @description('Domain Controller VM size')
-param dcVmSize string = 'Standard_D2s_v5'
+param dcVmSize string
 
 @description('Domain Controller OS version')
 @allowed([
@@ -20,17 +24,16 @@ param dcVmSize string = 'Standard_D2s_v5'
   '2022-datacenter-g2'
   '2025-datacenter-azure-edition'
 ])
-param dcOsVersion string = '2025-datacenter-azure-edition'
+param dcOsVersion string
 
 @description('Custom image resource ID for DC VM (overrides marketplace image when set). Must be a Windows image.')
-param dcCustomImageId string = ''
+param dcCustomImageId string
 
 @description('Domain name')
-param domainName string = 'contoso.com'
+param domainName string
 
 @description('Domain NetBIOS name')
-param domainNetBiosName string = 'CONTOSO'
-
+param domainNetBiosName string
 
 @description('External1 subnet ID')
 param external1SubnetId string
@@ -39,25 +42,43 @@ param external1SubnetId string
 param external2SubnetId string
 
 @description('Domain Controller External1 IP address')
-param dcExternal1Ip string = '192.168.1.10'
+param dcExternal1Ip string
 
 @description('Domain Controller External2 IP address')
-param dcExternal2Ip string = '192.168.2.10'
+param dcExternal2Ip string
 
 @description('Enable auto-shutdown')
-param enableAutoShutdown bool = true
+param enableAutoShutdown bool
 
 @description('Auto-shutdown time (HH:mm in UTC)')
-param autoShutdownTime string = '20:00'
+param autoShutdownTime string
 
 @description('Auto-shutdown timezone')
-param autoShutdownTimeZone string = 'UTC'
+param autoShutdownTimeZone string
 
 @description('URL to Domain-Package.zip file in Azure Storage')
-param domainPackageZipUrl string = ''
+param domainPackageZipUrl string
 
 // Variables
 var dcIsHotpatch = contains(dcOsVersion, 'azure-edition')
+
+// CSE bootstrap: the shared script (../../shared/scripts/cse-bootstrap.ps1) is
+// loaded at compile time, role/package tokens are substituted, and the result
+// travels base64-encoded inside the extension's ENCRYPTED protectedSettings. The
+// commandToExecute materializes it to a file and runs it (the Windows
+// CustomScriptExtension has no 'script' property, and inline one-liners are
+// unreviewable and drift between roles).
+var packageHost = empty(domainPackageZipUrl) ? '' : split(domainPackageZipUrl, '/')[2]
+var dcBootstrap = replace(replace(replace(replace(replace(replace(replace(
+  loadTextContent('../../shared/scripts/cse-bootstrap.ps1'),
+  '__SCENARIO__', 'domain'),
+  '__ROLE__', 'dc'),
+  '__PACKAGE_NAME__', 'Domain-Package'),
+  '__DEPLOY_SCRIPT__', 'Deploy-DC.ps1'),
+  '__PACKAGE_URL__', domainPackageZipUrl),
+  '__PACKAGE_HOST__', packageHost),
+  '__PASSWORD_B64__', base64(adminPassword))
+var dcCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\domain-dc-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(dcBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\domain-dc-bootstrap.ps1\'; exit $LASTEXITCODE"'
 
 var dcImageRef = !empty(dcCustomImageId) ? {
   id: dcCustomImageId
@@ -88,7 +109,6 @@ resource dcNic1 'Microsoft.Network/networkInterfaces@2023-04-01' = {
         }
       }
     ]
-    enableIPForwarding: true
     // DNS will be configured by DSC\Deploy-DC.ps1 after AD DS installation
     // Initially use Azure default DNS (168.63.129.16) so extension can download packages
   }
@@ -110,7 +130,6 @@ resource dcNic2 'Microsoft.Network/networkInterfaces@2023-04-01' = {
         }
       }
     ]
-    enableIPForwarding: true
     // DNS will be configured by DSC\Deploy-DC.ps1 after AD DS installation
     // Initially use Azure default DNS (168.63.129.16) so extension can download packages
   }
@@ -234,7 +253,7 @@ resource dcVmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03-01'
       ]
     }
     protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\dc-extension-setup.log -Append; Write-Output \\"Starting Domain Controller Setup...\\"; New-Item -ItemType Directory -Path C:\\Domain-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Domain-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-DC.ps1 (DSC + imperative)...\\"; if (Test-Path C:\\Domain-Package\\DSC\\Deploy-DC.ps1) { Set-Location C:\\Domain-Package\\DSC; .\\Deploy-DC.ps1 -WorkingPath C:\\Domain-Package; } else { Write-Output \\"Deploy-DC.ps1 not found, skipping configuration\\"; }; Write-Output \\"Domain Controller extension setup completed\\"; Stop-Transcript"'
+      commandToExecute: dcCommandToExecute
     }
   }
 }
@@ -249,3 +268,4 @@ output dcPrivateIps array = [
 output domainName string = domainName
 output domainNetBiosName string = domainNetBiosName
 output dcExternal1Ip string = dcExternal1Ip
+output dcExternal2Ip string = dcExternal2Ip

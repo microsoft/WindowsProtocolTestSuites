@@ -9,7 +9,8 @@ Param (
 	[string]$install,
 	$LClient,
 	[switch]$noelevate,
-	[string]$protocolConfigFile = "$PSScriptRoot\Config.json"
+	[string]$protocolConfigFile = "$PSScriptRoot\Config.json",
+	[switch]$NoTranscript
 )
 
 $Path = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -61,24 +62,39 @@ Function DomainJoin {
 	.\Write-Info.ps1 "Staggering domain join start by ${staggerSec}s to avoid contention..." -ForegroundColor Green
 	Start-Sleep -Seconds $staggerSec
 
-	# Check if domain is ready
-	ipconfig /flushdns
+	# Probe what a join actually needs: a discoverable/advertising DC (nltest /dsgetdc).
+	# ICMP (Test-Connection) is an unreliable proxy on Azure and never proves advertising.
+	# nltest writes to STDERR (e.g. "ERROR_NO_SUCH_DOMAIN") while the DC is still promoting,
+	# which under the bootstrap's $ErrorActionPreference='Stop' would surface as a TERMINATING
+	# error and abort the retry loop on the first attempt. Neutralize EAP around the native
+	# call and decide purely on $LASTEXITCODE; all probe output is suppressed so stray pipeline
+	# text cannot make a failed join look truthy to the caller.
+	$domain = $exchserver.Value.domain
+	ipconfig /flushdns | Out-Null
 	sleep_progress 10
 	$domainReachable = $false
 	$maxDnsRetries = 20
 	$dnsBackoff = 10
 	for ($i = 0; $i -lt $maxDnsRetries; $i++) {
+		$dcOk = $false
+		$prevEap = $ErrorActionPreference
 		try {
-			Test-Connection -ComputerName $exchserver.Value.domain -ErrorAction Stop
-			.\Write-Info.ps1 "Domain controller is reachable." -ForegroundColor Green
+			$ErrorActionPreference = 'SilentlyContinue'
+			& nltest "/dsgetdc:$domain" 2>$null 1>$null
+			$dcOk = ($LASTEXITCODE -eq 0)
+		} catch {
+			$dcOk = $false
+		} finally {
+			$ErrorActionPreference = $prevEap
+		}
+		if ($dcOk) {
+			.\Write-Info.ps1 "Domain controller for $domain is discoverable and advertising." -ForegroundColor Green
 			$domainReachable = $true
 			break
 		}
-		catch {
-			.\Write-Info.ps1 "DNS check attempt $($i+1)/${maxDnsRetries} failed: $($_.Exception.Message). Retrying in ${dnsBackoff}s..." -ForegroundColor Yellow
-			sleep_progress $dnsBackoff
-			$dnsBackoff = [math]::Min($dnsBackoff * 2, 60)
-		}
+		.\Write-Info.ps1 "DC not discoverable yet (attempt $($i+1)/$maxDnsRetries). Retrying in ${dnsBackoff}s..." -ForegroundColor Yellow
+		sleep_progress $dnsBackoff
+		$dnsBackoff = [math]::Min($dnsBackoff * 2, 60)
 	}
 
 	if (-not $domainReachable) {
@@ -158,25 +174,35 @@ Function Phase0 {
 # Main Body of Script
 # ===================================================
 
-# Start Logging
-Start-Transcript -Path $Path\DomainJoinInstall.log -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+	Start-Transcript -Path $Path\DomainJoinInstall.log -Append -Force
+	$transcriptStarted = $true
+}
 
-$config = $null
 try {
-	$config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
-}
-catch {
-	.\Write-Error.ps1 "Failed to parse config file: $_"
-	return $false
-}
+	$config = $null
+	try {
+		$config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
+	}
+	catch {
+		.\Write-Error.ps1 "Failed to parse config file: $_"
+		return $false
+	}
 
-# Determine our Server
-$name = (Get-CimInstance Win32_ComputerSystem).Name
-$exchserver = $config.Machines.PSObject.Properties | Where-Object { $_.name -match $name -or $_.Value.ComputerName -match $name }
+	# Determine our Server
+	$name = (Get-CimInstance Win32_ComputerSystem).Name
+	$exchserver = $config.Machines.PSObject.Properties | Where-Object { $_.name -match $name -or $_.Value.ComputerName -match $name }
 
-if ($null -eq $exchserver) {
-	.\Write-Error.ps1 "Failed to find server in config file."
-	return $false
+	if ($null -eq $exchserver) {
+		.\Write-Error.ps1 "Failed to find server in config file."
+		return $false
+	}
+
+	return Phase0
 }
-
-return Phase0
+finally {
+	if ($transcriptStarted) {
+		Stop-Transcript
+	}
+}

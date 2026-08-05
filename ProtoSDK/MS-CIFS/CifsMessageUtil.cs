@@ -1629,7 +1629,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Cifs
             Array.Copy(challengeResponse, 0, data, sessionKey.Length, challengeResponse.Length);
             Array.Copy(message, 0, data, sessionKey.Length + challengeResponse.Length, message.Length);
 
-            MD5 md5 = MD5.Create();
+            MD5 md5 = MD5.Create(); // CodeQL [SM02196] Required by [MS-CIFS] / SMB1 session-setup signing: MD5 over sessionKey || challengeResponse || message produces the SMB1 SSP digest. Protocol-test interop code, not a security boundary.
             byte[] result = md5.ComputeHash(data);
 
             return result;

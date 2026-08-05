@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-import { Prerequisite, DetectionSteps, DetectionResultResponse } from '../model/AutoDetectionData'
+import { Prerequisite, DetectionSteps, DetectionResultResponse, DetectionLogChunk } from '../model/AutoDetectionData'
 import { Property } from '../model/Property'
 
 export const GET_AUTO_DETECTION_PREREQUISITE_REQUEST = 'AUTO_DETECTION/GET_AUTO_DETECTION_PREREQUISITE_REQUEST'
@@ -35,6 +35,8 @@ export const GET_AUTO_DETECTION_LOG_SUCCESS = 'AUTO_DETECTION/GET_AUTO_DETECTION
 export const GET_AUTO_DETECTION_LOG_FAILURE = 'AUTO_DETECTION/GET_AUTO_DETECTION_LOG_FAILURE'
 
 export const SET_AUTO_DETECTION_LOG = 'AUTO_DETECTION/SET_AUTO_DETECTION_LOG'
+export const APPEND_AUTO_DETECTION_LOG_CHUNK = 'AUTO_DETECTION/APPEND_AUTO_DETECTION_LOG_CHUNK'
+export const RESET_AUTO_DETECTION_LOG_STREAM = 'AUTO_DETECTION/RESET_AUTO_DETECTION_LOG_STREAM'
 
 // define action types
 interface GetAutoDetectionPrerequisiteActionRequestType { type: typeof GET_AUTO_DETECTION_PREREQUISITE_REQUEST }
@@ -68,6 +70,8 @@ interface GetAutoDetectionLogActionSuccessType { type: typeof GET_AUTO_DETECTION
 interface GetAutoDetectionLogActionFailureType { type: typeof GET_AUTO_DETECTION_LOG_FAILURE, errorMsg: string };
 
 interface SetAutoDetectionLogActionType { type: typeof SET_AUTO_DETECTION_LOG, payload: string }
+interface AppendAutoDetectionLogChunkActionType { type: typeof APPEND_AUTO_DETECTION_LOG_CHUNK, payload: DetectionLogChunk }
+interface ResetAutoDetectionLogStreamActionType { type: typeof RESET_AUTO_DETECTION_LOG_STREAM, payload: string }
 
 export type TestSuiteAutoDetectionActionTypes = GetAutoDetectionPrerequisiteActionRequestType
   | GetAutoDetectionPrerequisiteActionSuccessType
@@ -92,6 +96,8 @@ export type TestSuiteAutoDetectionActionTypes = GetAutoDetectionPrerequisiteActi
   | GetAutoDetectionLogActionSuccessType
   | GetAutoDetectionLogActionFailureType
   | SetAutoDetectionLogActionType
+  | AppendAutoDetectionLogChunkActionType
+  | ResetAutoDetectionLogStreamActionType
 
 // define actions
 export const AutoDetectionActions = {
@@ -213,6 +219,18 @@ export const AutoDetectionActions = {
     return {
       type: SET_AUTO_DETECTION_LOG,
       payload: log
+    }
+  },
+  appendAutoDetectionLogChunkAction: (logChunk: DetectionLogChunk): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: APPEND_AUTO_DETECTION_LOG_CHUNK,
+      payload: logChunk
+    }
+  },
+  resetAutoDetectionLogStreamAction: (runId: string): TestSuiteAutoDetectionActionTypes => {
+    return {
+      type: RESET_AUTO_DETECTION_LOG_STREAM,
+      payload: runId
     }
   },
   applyAutoDetectionResultAction_Request: (): TestSuiteAutoDetectionActionTypes => {

@@ -1,0 +1,247 @@
+trigger: none
+
+name: FileServer-OneClick-$(Date:yyyyMMdd).$(Rev:r)
+
+parameters:
+  - name: fileServerAssetUrl
+    displayName: Signed FileServer ZIP URL
+    type: string
+    default: ''
+  - name: fileServerAssetSha256
+    displayName: Signed FileServer ZIP SHA-256
+    type: string
+    default: ''
+  - name: ptmServiceAssetUrl
+    displayName: Signed PTMService ZIP URL
+    type: string
+    default: ''
+  - name: ptmServiceAssetSha256
+    displayName: Signed PTMService ZIP SHA-256
+    type: string
+    default: ''
+  - name: ptmCliAssetUrl
+    displayName: Signed PTMCli ZIP URL
+    type: string
+    default: ''
+  - name: ptmCliAssetSha256
+    displayName: Signed PTMCli ZIP SHA-256
+    type: string
+    default: ''
+  - name: workgroupTag
+    displayName: Workgroup OneClick tag
+    type: string
+    default: 4.26.8.0
+  - name: domainTag
+    displayName: Domain OneClick tag
+    type: string
+    default: 4.26.8.0
+variables:
+  - group: ESRP Variables
+  - name: codeSign.signerSubject
+    value: CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+
+resources:
+  repositories:
+    - repository: 1ESPipelineTemplates
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool:
+      name: Azure-Pipelines-1ESPT-ExDShared
+      image: windows-2022
+      os: windows
+    sdl:
+      codeql:
+        compiled:
+          enabled: false
+        interpreted:
+          enabled: true
+    customBuildTags:
+      - ES365AIMigrationTooling
+    stages:
+      - stage: Build_Sign_And_Package
+        displayName: Build, sign, and package FileServer OneClick assets
+        jobs:
+          - job: BuildOneClickPackages
+            displayName: Build signed OneClick packages
+            timeoutInMinutes: 120
+            workspace:
+              clean: true
+            templateContext:
+              outputs:
+                - output: pipelineArtifact
+                  artifactName: FileServer-OneClick-Packages
+                  targetPath: $(Build.ArtifactStagingDirectory)/drop
+                  displayName: Publish signed OneClick packages
+            steps:
+              - checkout: self
+                path: s
+                clean: true
+
+              - task: PowerShell@2
+                displayName: Stage deployment sources and pin release assets
+                env:
+                  FILESERVER_ASSET_URL: ${{ parameters.fileServerAssetUrl }}
+                  FILESERVER_ASSET_SHA256: ${{ parameters.fileServerAssetSha256 }}
+                  PTMSERVICE_ASSET_URL: ${{ parameters.ptmServiceAssetUrl }}
+                  PTMSERVICE_ASSET_SHA256: ${{ parameters.ptmServiceAssetSha256 }}
+                  PTMCLI_ASSET_URL: ${{ parameters.ptmCliAssetUrl }}
+                  PTMCLI_ASSET_SHA256: ${{ parameters.ptmCliAssetSha256 }}
+                inputs:
+                  targetType: inline
+                  pwsh: true
+                  script: |
+                    $source = "$(Pipeline.Workspace)\s\TestSuites\FileServer\azure-automation"
+                    $staging = "$(Build.ArtifactStagingDirectory)\staging\azure-automation"
+                    New-Item -ItemType Directory -Path (Split-Path $staging -Parent) -Force | Out-Null
+                    Copy-Item -LiteralPath $source -Destination $staging -Recurse -Force
+
+                    & "$staging\shared\Update-OneClickReleaseAssets.ps1" `
+                      -AutomationRoot $staging `
+                      -FileServerAssetUrl $env:FILESERVER_ASSET_URL `
+                      -FileServerAssetSha256 $env:FILESERVER_ASSET_SHA256 `
+                      -PtmServiceAssetUrl $env:PTMSERVICE_ASSET_URL `
+                      -PtmServiceAssetSha256 $env:PTMSERVICE_ASSET_SHA256 `
+                      -PtmCliAssetUrl $env:PTMCLI_ASSET_URL `
+                      -PtmCliAssetSha256 $env:PTMCLI_ASSET_SHA256
+
+              - task: SFP.build-tasks.custom-build-task-1.EsrpCodeSigning@5
+                displayName: ESRP sign OneClick PowerShell files
+                inputs:
+                  ConnectedServiceName: $(ConnectedServiceName)
+                  UseMSIAuthentication: true
+                  AppRegistrationClientId: $(AppRegistrationClientId)
+                  AppRegistrationTenantId: $(AppRegistrationTenantId)
+                  EsrpClientId: $(EsrpClientId)
+                  AuthAKVName: $(AuthAKVName)
+                  AuthSignCertName: $(AuthSignCertName)
+                  FolderPath: $(Build.ArtifactStagingDirectory)/staging/azure-automation
+                  Pattern: '*.ps1,*.psm1'
+                  SessionTimeout: 90
+                  ServiceEndpointUrl: $(ServiceEndpointUrl)
+                  MaxConcurrency: 25
+                  signConfigType: inlineSignParams
+                  inlineOperation: |
+                    [
+                      {
+                        "KeyCode": "CP-230012",
+                        "OperationCode": "SigntoolSign",
+                        "Parameters": {
+                          "OpusName": "Microsoft",
+                          "OpusInfo": "http://www.microsoft.com",
+                          "FileDigest": "/fd \"SHA256\"",
+                          "PageHash": "/NPH",
+                          "TimeStamp": "/tr \"http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer\" /td sha256"
+                        },
+                        "ToolName": "sign",
+                        "ToolVersion": "1.0"
+                      },
+                      {
+                        "KeyCode": "CP-230012",
+                        "OperationCode": "SigntoolVerify",
+                        "Parameters": {},
+                        "ToolName": "sign",
+                        "ToolVersion": "1.0"
+                      }
+                    ]
+
+              - task: PowerShell@2
+                displayName: Install Bicep CLI
+                inputs:
+                  targetType: inline
+                  script: |
+                    az bicep install
+                    az bicep version
+
+              - task: PowerShell@2
+                displayName: Run OneClick validation tests
+                inputs:
+                  targetType: inline
+                  script: |
+                    $testPath = "$(Build.ArtifactStagingDirectory)\staging\azure-automation\tests\ReleaseAssets.Tests.ps1"
+                    $pester = Get-Module Pester -ListAvailable |
+                      Sort-Object Version -Descending |
+                      Select-Object -First 1
+                    if (-not $pester) {
+                      throw 'Pester is required on the release agent.'
+                    }
+                    Import-Module $pester.Path -Force
+                    $result = if ($pester.Version.Major -ge 5) {
+                      Invoke-Pester -Path $testPath -PassThru
+                    }
+                    else {
+                      Invoke-Pester -Script $testPath -PassThru
+                    }
+                    if ($result.FailedCount -gt 0) {
+                      throw "$($result.FailedCount) OneClick validation test(s) failed."
+                    }
+
+              - task: PowerShell@2
+                displayName: Build signed public packages
+                env:
+                  WORKGROUP_TAG: ${{ parameters.workgroupTag }}
+                  DOMAIN_TAG: ${{ parameters.domainTag }}
+                inputs:
+                  targetType: inline
+                  pwsh: true
+                  script: |
+                    $root = "$(Build.ArtifactStagingDirectory)\staging\azure-automation"
+                    $output = "$(Build.ArtifactStagingDirectory)\drop"
+                    New-Item -ItemType Directory -Path $output -Force | Out-Null
+
+                    $packages = @(
+                      @{
+                        Scenario = 'Workgroup'
+                        Script = "$root\workgroup-bicep\Publish-DscPackage.ps1"
+                        Tag = [string]$env:WORKGROUP_TAG
+                      },
+                      @{
+                        Scenario = 'Domain'
+                        Script = "$root\domain-bicep\Publish-DscPackage.ps1"
+                        Tag = [string]$env:DOMAIN_TAG
+                      }
+                    )
+
+                    foreach ($package in $packages) {
+                      $zipPath = Join-Path $output "$($package.Scenario)-Package.zip"
+                      & $package.Script -Tag $package.Tag -Target "$(Build.SourceVersion)" `
+                        -SkipUpload -OutputZipPath $zipPath
+                      if (-not (Test-Path -LiteralPath $zipPath -PathType Leaf)) {
+                        throw "$($package.Scenario) package was not created."
+                      }
+                    }
+
+              - task: PowerShell@2
+                displayName: Verify packaged signatures and generate checksums
+                inputs:
+                  targetType: inline
+                  script: |
+                    $drop = "$(Build.ArtifactStagingDirectory)\drop"
+                    $checksumLines = foreach ($zip in Get-ChildItem $drop -Filter '*-Package.zip') {
+                      $extractPath = Join-Path $env:TEMP $zip.BaseName
+                      Remove-Item $extractPath -Recurse -Force -ErrorAction SilentlyContinue
+                      Expand-Archive -LiteralPath $zip.FullName -DestinationPath $extractPath
+                      try {
+                        $signableFiles = Get-ChildItem $extractPath -Recurse -File |
+                          Where-Object Extension -In '.ps1', '.psm1'
+                        foreach ($file in $signableFiles) {
+                          $signature = Get-AuthenticodeSignature -LiteralPath $file.FullName
+                          if ($signature.Status -ne 'Valid' -or
+                              $signature.SignerCertificate.Subject -ne "$(codeSign.signerSubject)") {
+                            throw "Invalid signature: $($file.FullName) ($($signature.Status))"
+                          }
+                        }
+                      }
+                      finally {
+                        Remove-Item $extractPath -Recurse -Force -ErrorAction SilentlyContinue
+                      }
+
+                      $hash = Get-FileHash -LiteralPath $zip.FullName -Algorithm SHA256
+                      "$($hash.Hash.ToLowerInvariant())  $($zip.Name)"
+                    }
+                    $checksumLines | Set-Content -LiteralPath (Join-Path $drop 'SHA256SUMS.txt') `
+                      -Encoding ASCII

@@ -72,18 +72,11 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify SMB2 can write file with large size over RDMA channel with AES_GMAC signing")]
         public void Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_AES_GMAC()
         {
-            if (smbdAdapter.TestConfig.RDMATransport == RDMATransport.RoCE)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support RDMA RoCE transport.");
-            }
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_SIGNING };
             WriteOverRdma_Signing(
                 smb2RdmaTransformIds: smb2RdmaTransformIds,
-                signingAlgorithm: SigningAlgorithm.AES_GMAC);
+                signingAlgorithm: SigningAlgorithm.AES_GMAC,
+                enableRemoteInvalidation: false);
         }
 
         [TestMethod()]
@@ -93,18 +86,11 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify SMB2 can write file with large size over RDMA channel with AES_CMAC signing")]
         public void Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_AES_CMAC()
         {
-            if (smbdAdapter.TestConfig.RDMATransport == RDMATransport.RoCE)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support RDMA RoCE transport.");
-            }
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_SIGNING };
             WriteOverRdma_Signing(
                 smb2RdmaTransformIds: smb2RdmaTransformIds,
-                signingAlgorithm: SigningAlgorithm.AES_CMAC);
+                signingAlgorithm: SigningAlgorithm.AES_CMAC,
+                enableRemoteInvalidation: false);
         }
 
         [TestMethod()]
@@ -138,19 +124,12 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
         [Description("Verify SMB2 write fails over RDMA channel when an invalid signature is sent")]
         public void Smb2OverRdmaChannelTransform_Signing_WriteLargeFile_InvalidSignature_Fails()
         {
-            if (smbdAdapter.TestConfig.RDMATransport == RDMATransport.RoCE)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support RDMA RoCE transport.");
-            }
-            if (smbdAdapter.TestConfig.DriverPlatform == Platform.NonWindows)
-            {
-                BaseTestSite.Assert.Inconclusive("This test case currently does not support Linux.");
-            }
             Smb2RDMATransformId[] smb2RdmaTransformIds = new Smb2RDMATransformId[] { Smb2RDMATransformId.SMB2_RDMA_TRANSFORM_SIGNING };
             WriteOverRdma_Signing(
                 smb2RdmaTransformIds: smb2RdmaTransformIds,
                 signingAlgorithm: SigningAlgorithm.AES_CMAC,
-                setInvalidSignature: true);
+                setInvalidSignature: true,
+                enableRemoteInvalidation: false);
         }
 
         [TestMethod()]
@@ -313,7 +292,8 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
             bool enableSigning = true,
             bool enableEncryption = false,
             bool setInvalidSignature = false,
-            bool setZeroTransformCount = false)
+            bool setZeroTransformCount = false,
+            bool enableRemoteInvalidation = true)
         {
             var isFailedTest = false;
             SigningAlgorithm[] signingAlgorithms = new SigningAlgorithm[]
@@ -375,7 +355,7 @@ namespace Microsoft.Protocol.TestSuites.Smbd.TestSuite
                 {
                     RdmaDescriptorOffset = 0,
                     RdmaDescriptorLength = 1,
-                    Channel = Smb2RdmaTransformChannel.SMB2_CHANNEL_RDMA_V1_INVALIDATE,
+                    Channel = enableRemoteInvalidation ? Smb2RdmaTransformChannel.SMB2_CHANNEL_RDMA_V1_INVALIDATE : Smb2RdmaTransformChannel.SMB2_CHANNEL_RDMA_V1,
                     TransformCount = (ushort)(setZeroTransformCount ? 0 : 1),
                     Reserved1 = 0,
                     Reserved2 = 0
