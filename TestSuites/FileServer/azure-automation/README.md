@@ -30,6 +30,32 @@ These apply to all three scenarios:
   ```
 - **Bicep CLI** (installed automatically by the deploy scripts if missing, or install manually via `az bicep install`)
 
+## Release packages
+
+The official OneClick release pipeline is
+`pipelines/1es/FileServer-OneClick-Release.yml`. Run it only after the signed
+FileServer, PTMService, and PTMCli archives are final. Supply the HTTPS URL and
+SHA-256 hash for each signed archive.
+
+The pipeline copies the deployment sources into an isolated staging directory,
+pins those release assets in each publishable scenario's `Tools.json`, signs
+the staged PowerShell files through ESRP, runs the tests under
+`azure-automation/tests`, and builds these public, credential-free artifacts:
+
+- `Workgroup-Package.zip`
+- `Domain-Package.zip`
+- `SHA256SUMS.txt`
+
+Cluster is not included because it currently uses the phased `deploy.ps1`
+workflow and does not have a `Publish-DscPackage.ps1` wrapper or a single
+deploy-to-Azure template.
+
+The pipeline publishes the files as the `FileServer-OneClick-Packages` pipeline
+artifact. A release owner must download that artifact, complete the clean Azure
+deployment checks, and upload the unchanged ZIP files to the `4.26.8.0`
+FileServer GitHub release alongside the primary test-suite assets. Do not
+rebuild or replace packages after signing.
+
 ## Quick Start
 
 ### 1. Navigate to the scenario folder

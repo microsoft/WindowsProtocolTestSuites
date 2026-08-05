@@ -8,9 +8,9 @@ This directory contains Azure Bicep templates for deploying the File Server Prot
 
 For a demo/onboarding environment with **defaults**, deploy straight from the Azure Portal — no local clone, no PowerShell, no `deploy.ps1`:
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2Ffileserver-workgroup-deploy-button-v1%2FTestSuites%2FFileServer%2Fazure-automation%2Fworkgroup-bicep%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.8.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fworkgroup-bicep%2Fazuredeploy.json)
 
-> The button points at [`azuredeploy.json`](azuredeploy.json) served from `raw.githubusercontent.com` at the **`fileserver-workgroup-deploy-button-v1`** tag, and the template pulls its DSC package from the GitHub **Release** asset at the same tag. The button goes live once a maintainer cuts that release (see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button)).
+> The button points at [`azuredeploy.json`](azuredeploy.json) served from `raw.githubusercontent.com` at the **`4.26.8.0`** release tag, and the template pulls its DSC package from the same GitHub **Release**. The button goes live once a maintainer publishes that release (see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button)).
 
 The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azuredeploy.json`](azuredeploy.json)). Enter an **admin password** and deploy; the Driver + SUT come up and tests run automatically — the same outcome as `deploy.ps1`, without the local build step.
 
@@ -288,7 +288,7 @@ When a custom image ID is provided, it overrides the marketplace image. Leave em
 
 ## Publishing the public package ("Deploy to Azure" button)
 
-> **Maintainers only.** The [one-click button](#one-click-deploy-deploy-to-azure-button) consumes two public artifacts, both pinned to the **`fileserver-workgroup-deploy-button-v1`** tag on the public GitHub repo:
+> **Maintainers only.** The [one-click button](#one-click-deploy-deploy-to-azure-button) consumes two public artifacts, both pinned to the **`4.26.8.0`** FileServer release:
 > - **Package** → a GitHub **Release asset**: `https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/<tag>/Workgroup-Package.zip`
 > - **Template** → the committed [`azuredeploy.json`](azuredeploy.json) served via `raw.githubusercontent.com/.../<tag>/...` — the committed file *is* the hosted template, so there is no separate template upload and no Bicep→JSON drift.
 >
@@ -307,9 +307,9 @@ bicep build main.bicep --outfile azuredeploy.json
 
 # 3. Cut the release + upload the package asset (idempotent; --clobber re-uploads)
 gh auth login
-.\Publish-DscPackage.ps1 -Tag fileserver-workgroup-deploy-button-v1 -Target <branch-or-sha>
-#  asset -> https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/fileserver-workgroup-deploy-button-v1/Workgroup-Package.zip
-#  raw   -> https://raw.githubusercontent.com/microsoft/WindowsProtocolTestSuites/fileserver-workgroup-deploy-button-v1/TestSuites/FileServer/azure-automation/workgroup-bicep/azuredeploy.json
+.\Publish-DscPackage.ps1 -Tag 4.26.8.0 -Target <branch-or-sha>
+#  asset -> https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/Workgroup-Package.zip
+#  raw   -> https://raw.githubusercontent.com/microsoft/WindowsProtocolTestSuites/4.26.8.0/TestSuites/FileServer/azure-automation/workgroup-bicep/azuredeploy.json
 #  -> prints the Deploy to Azure button URL
 ```
 

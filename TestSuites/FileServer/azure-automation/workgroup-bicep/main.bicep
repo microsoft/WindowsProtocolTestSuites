@@ -117,7 +117,7 @@ param autoShutdownTime string = '2000'
 param autoShutdownTimeZone string = 'UTC'
 
 @description('URL to the DSC package zip file (contains DSC/ folder, Config.json, Tools.json). Defaults to the public GitHub Release asset that the "Deploy to Azure" button consumes; the on-VM Custom Script Extension injects the real admin password into the package\'s placeholder Config.json at deploy time. deploy.ps1 overrides this with a freshly built, credential-baked package.')
-param dscPackageZipUrl string = 'https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/fileserver-workgroup-deploy-button-v1/Workgroup-Package.zip'
+param dscPackageZipUrl string = 'https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/Workgroup-Package.zip'
 
 @description('Enable Azure Disk Encryption (creates a Key Vault for encryption keys). Defaults OFF for the one-click button: ADE is applied by deploy.ps1 as a post-deploy step (which the Portal button cannot run), so for the button the vault would be created but never used. Managed disks are platform-encrypted at rest regardless. deploy.ps1 sets this true via the bicepparam file.')
 param enableDiskEncryption bool = false

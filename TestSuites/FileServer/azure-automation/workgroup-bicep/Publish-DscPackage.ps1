@@ -8,7 +8,7 @@
 
 .EXAMPLE
     gh auth login
-    ./Publish-DscPackage.ps1 -Tag fileserver-workgroup-deploy-button-v1
+    ./Publish-DscPackage.ps1 -Tag 4.26.8.0
 
 .EXAMPLE
     ./Publish-DscPackage.ps1 -SkipUpload -OutputZipPath .\Workgroup-Package.zip
@@ -21,7 +21,7 @@ param(
     [string]$Repo = "microsoft/WindowsProtocolTestSuites",
 
     [Parameter(Mandatory = $false)]
-    [string]$Tag = "fileserver-workgroup-deploy-button-v1",
+    [string]$Tag = "4.26.8.0",
 
     [Parameter(Mandatory = $false)]
     [string]$Target = "",

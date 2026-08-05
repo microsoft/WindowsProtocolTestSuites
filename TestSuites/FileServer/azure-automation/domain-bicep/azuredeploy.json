@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.37.4.10188",
-      "templateHash": "12883806188699866567"
+      "templateHash": "16852562576593928281"
     }
   },
   "parameters": {
@@ -279,7 +279,7 @@
     },
     "domainPackageZipUrl": {
       "type": "string",
-      "defaultValue": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/fileserver-domain-deploy-button-v1/Domain-Package.zip",
+      "defaultValue": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/Domain-Package.zip",
       "metadata": {
         "description": "URL to the Domain DSC package zip (contains DSC/ folder, Config.json, Tools.json). Defaults to the public GitHub Release asset that the \"Deploy to Azure\" button consumes; the on-VM Custom Script Extension injects the real admin password into the package's placeholder Config.json at deploy time. deploy.ps1 overrides this with a freshly built, credential-baked package."
       }
