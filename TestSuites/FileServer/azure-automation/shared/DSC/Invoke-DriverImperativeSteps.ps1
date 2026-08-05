@@ -24,6 +24,9 @@
 .PARAMETER SkipForceLevel2
     Skip the ForceLevel2 configuration. Useful when SUT is not ready yet.
 
+.PARAMETER NoTranscript
+    Preserve the parent orchestrator transcript when invoked by Deploy-Driver.ps1.
+
 .EXAMPLE
     .\Invoke-DriverImperativeSteps.ps1 -Step 1 -WorkingPath C:\Domain-Package
     .\Invoke-DriverImperativeSteps.ps1 -Step 2 -WorkingPath C:\Cluster-Package
@@ -34,7 +37,8 @@ param(
     [ValidateSet(1, 2)]
     [int]$Step = 1,
     [string]$ConfigureFile = "$WorkingPath\Config.json",
-    [switch]$SkipForceLevel2
+    [switch]$SkipForceLevel2,
+    [switch]$NoTranscript
 )
 
 $ErrorActionPreference = 'Stop'
@@ -49,7 +53,17 @@ $env:Path += "${pathSep}${WorkingPath}${pathSep}${scriptsPath}"
 Push-Location $scriptsPath
 
 [string]$logFile = "$PSScriptRoot\Invoke-DriverImperativeSteps.log"
-Start-Transcript -Path $logFile -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force
+    $transcriptStarted = $true
+}
+
+function Stop-LocalTranscript {
+    if ($transcriptStarted) {
+        Stop-Transcript
+    }
+}
 
 $systemDrive = $env:SystemDrive
 
@@ -115,7 +129,7 @@ try {
                     # Capture only the script's final return value. domainjoin.ps1 may emit
                     # stray success-stream output; a multi-element array is truthy even when
                     # the real result is $false, which would silently mask a failed join.
-                    $joined = & "$scriptsPath\domainjoin.ps1" | Select-Object -Last 1
+                    $joined = & "$scriptsPath\domainjoin.ps1" -NoTranscript | Select-Object -Last 1
                     if ($joined -ne $true) {
                         throw 'Domain join failed.'
                     }
@@ -522,7 +536,7 @@ if (`$LASTEXITCODE -eq 0) {
 }
 catch {
     .\Write-Error.ps1 "Driver imperative step $Step failed: $_"
-    Stop-Transcript
+    Stop-LocalTranscript
     Pop-Location
     throw
 }
@@ -530,10 +544,10 @@ catch {
 # Tools installation is critical -- throw if it failed so the parent
 # orchestrator (Deploy-Driver.ps1) can catch and report the failure.
 if ($Step -eq 2 -and -not $toolsOk) {
-    Stop-Transcript
+    Stop-LocalTranscript
     Pop-Location
     throw "Critical section failed: Tools installation. Check Invoke-DriverImperativeSteps.log for details."
 }
 
-Stop-Transcript
+Stop-LocalTranscript
 Pop-Location

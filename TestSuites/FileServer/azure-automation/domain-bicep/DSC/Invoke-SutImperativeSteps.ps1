@@ -38,7 +38,8 @@ param(
     [string]$WorkingPath = (Split-Path $PSScriptRoot -Parent),
     [ValidateSet(1, 3)]
     [int]$Step = 1,
-    [string]$ConfigureFile = "$WorkingPath\Config.json"
+    [string]$ConfigureFile = "$WorkingPath\Config.json",
+    [switch]$NoTranscript
 )
 
 $ErrorActionPreference = 'Stop'
@@ -47,7 +48,17 @@ $env:Path += ";$WorkingPath;$scriptsPath"
 Push-Location $scriptsPath
 
 [string]$logFile = "$PSScriptRoot\Invoke-SutImperativeSteps.log"
-Start-Transcript -Path $logFile -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force
+    $transcriptStarted = $true
+}
+
+function Stop-LocalTranscript {
+    if ($transcriptStarted) {
+        Stop-Transcript
+    }
+}
 
 $config = $null
 if (Test-Path $ConfigureFile) {
@@ -72,18 +83,18 @@ if ($Step -eq 1) {
         .\Write-Info.ps1 "Joining domain..." -ForegroundColor Cyan
         # Capture only the script's final return value (see domainjoin.ps1): stray
         # success-stream output makes a multi-element array truthy even on a failed join.
-        $result = & "$scriptsPath\domainjoin.ps1" | Select-Object -Last 1
+        $result = & "$scriptsPath\domainjoin.ps1" -NoTranscript | Select-Object -Last 1
         if ($result -ne $true) {
             .\Write-Error.ps1 "Domain join failed."
-            Stop-Transcript; Pop-Location; return $false
+            Stop-LocalTranscript; Pop-Location; return $false
         }
         .\Write-Info.ps1 "[OK] Domain join complete. REBOOT REQUIRED." -ForegroundColor Green
     }
-    Stop-Transcript; Pop-Location; return $true
+    Stop-LocalTranscript; Pop-Location; return $true
   }
   catch {
     .\Write-Error.ps1 "SUT imperative step 1 failed: $($_.Exception.Message)"
-    Stop-Transcript; Pop-Location; throw
+    Stop-LocalTranscript; Pop-Location; throw
   }
 }
 
@@ -371,6 +382,8 @@ if ($Step -eq 3) {
         @{ Link = "$systemDrive\SMBBasic\sub\symboliclink2"; Target = "$systemDrive\FileShare\" }
     )
     foreach ($sl in $symlinks) {
+        New-Item -ItemType Directory -Path (Split-Path $sl.Link -Parent) -Force | Out-Null
+        New-Item -ItemType Directory -Path $sl.Target -Force | Out-Null
         if (-not (Test-Path $sl.Link)) {
             cmd /C "mklink /D `"$($sl.Link)`" `"$($sl.Target)`"" 2>&1 | .\Write-Info.ps1
         }
@@ -449,6 +462,11 @@ if ($Step -eq 3) {
   # -- DFS Namespaces --
   try {
     .\Write-Info.ps1 "Setting up DFS namespaces..." -ForegroundColor Yellow
+    foreach ($commandName in @('dfsutil.exe', 'dfscmd.exe')) {
+        if (-not (Get-Command $commandName -ErrorAction SilentlyContinue)) {
+            throw "$commandName is unavailable. Install FS-DFS-Namespace and RSAT-DFS-Mgmt-Con before Phase 3."
+        }
+    }
     $computerName = $env:COMPUTERNAME
     $dfsSvc = Get-Service dfs -ErrorAction SilentlyContinue
     if ($null -ne $dfsSvc -and $dfsSvc.Status -ne 'Running') {
@@ -582,10 +600,10 @@ if ($Step -eq 3) {
   if (-not $sshKeysOk)     { $criticalFailures += 'SshRemoting' }
 
   if ($criticalFailures.Count -gt 0) {
-    Stop-Transcript
+    Stop-LocalTranscript
     Pop-Location
     throw "Critical section(s) failed: $($criticalFailures -join ', '). Check Invoke-SutImperativeSteps.log for details."
   }
 
-  Stop-Transcript; Pop-Location; return $true
+  Stop-LocalTranscript; Pop-Location; return $true
 }

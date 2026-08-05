@@ -38,7 +38,8 @@ param(
     [string]$WorkingPath = (Split-Path $PSScriptRoot -Parent),
     [ValidateSet(1, 2)]
     [int]$Step = 1,
-    [string]$ConfigureFile = "$WorkingPath\Config.json"
+    [string]$ConfigureFile = "$WorkingPath\Config.json",
+    [switch]$NoTranscript
 )
 
 $ErrorActionPreference = 'Continue'
@@ -47,7 +48,17 @@ $env:Path += ";$scriptsPath"
 Push-Location $scriptsPath
 
 [string]$logFile = "$PSScriptRoot\Invoke-DcImperativeSteps.log"
-Start-Transcript -Path $logFile -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force
+    $transcriptStarted = $true
+}
+
+function Stop-LocalTranscript {
+    if ($transcriptStarted) {
+        Stop-Transcript
+    }
+}
 
 # Section success tracking
 $promoteOk = $false
@@ -69,7 +80,7 @@ if (Test-Path $ConfigureFile) {
 
 if ($null -eq $config) {
     .\Write-Error.ps1 "Config.json not loaded. Cannot proceed."
-    Stop-Transcript; Pop-Location; return $false
+    Stop-LocalTranscript; Pop-Location; return $false
 }
 
 $systemDrive = $env:SystemDrive
@@ -108,25 +119,25 @@ if ($Step -eq 1) {
         $result = & "$scriptsPath\PromoteDomainController.ps1" -DomainName $domainName -AdminPwd $adminPwd -AdminUser $adminUser
         if (-not $result) {
             .\Write-Error.ps1 "DC promotion failed."
-            Stop-Transcript; Pop-Location; return $false
+            Stop-LocalTranscript; Pop-Location; return $false
         }
 
         # Install tools in background before reboot
         $toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
         if (-not (Test-Path $toolsSignal)) {
             .\Write-Info.ps1 "Installing tools (background)..." -ForegroundColor Cyan
-            & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'DC'
+            & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'DC' -NoTranscript
         }
 
         .\Write-Info.ps1 "[OK] DC promotion complete. REBOOT REQUIRED." -ForegroundColor Green
     }
 
     $promoteOk = $true
-    Stop-Transcript; Pop-Location; return $true
+    Stop-LocalTranscript; Pop-Location; return $true
   }
   catch {
     .\Write-Error.ps1 "DC imperative step 1 failed: $($_.Exception.Message)"
-    Stop-Transcript; Pop-Location; throw
+    Stop-LocalTranscript; Pop-Location; throw
   }
 }
 
@@ -262,7 +273,7 @@ if ($Step -eq 2) {
             # Capture only the final return value: Create-TestAccount emits stray success-stream
             # output (net.exe, Format-Table), so a raw capture would be a truthy array that masks
             # a real failure. The script returns $true on completion and throws on hard failure.
-            $accountResult = & "$scriptsPath\Create-TestAccount.ps1" | Select-Object -Last 1
+            $accountResult = & "$scriptsPath\Create-TestAccount.ps1" -NoTranscript | Select-Object -Last 1
             $accountsOk = ($accountResult -eq $true)
         } catch {
             .\Write-Info.ps1 "  Test accounts attempt $try/5 failed: $($_.Exception.Message)" -ForegroundColor DarkGray
@@ -282,7 +293,8 @@ if ($Step -eq 2) {
     $cbacOk = $false
     for ($try = 1; $try -le 5 -and -not $cbacOk; $try++) {
         try {
-            $cbacOk = [bool](& "$scriptsPath\Create-CbacObjectsInDC.ps1")
+            $cbacResult = & "$scriptsPath\Create-CbacObjectsInDC.ps1" -NoTranscript | Select-Object -Last 1
+            $cbacOk = ($cbacResult -eq $true)
         } catch {
             .\Write-Info.ps1 "  CBAC attempt $try/5 failed: $($_.Exception.Message)" -ForegroundColor DarkGray
         }
@@ -296,7 +308,8 @@ if ($Step -eq 2) {
     $gpoOk = $false
     for ($try = 1; $try -le 5 -and -not $gpoOk; $try++) {
         try {
-            $gpoOk = [bool](& "$scriptsPath\Import-GPOForClaims.ps1")
+            $gpoResult = & "$scriptsPath\Import-GPOForClaims.ps1" -NoTranscript | Select-Object -Last 1
+            $gpoOk = ($gpoResult -eq $true)
         } catch {
             .\Write-Info.ps1 "  GPO import attempt $try/5 failed: $($_.Exception.Message)" -ForegroundColor DarkGray
         }
@@ -327,7 +340,7 @@ if ($Step -eq 2) {
     # -- DNS Records --
     .\Write-Info.ps1 "Creating DNS records..." -ForegroundColor Yellow
     try {
-        $result = & "$scriptsPath\Create-DNSRecords.ps1"
+        $result = & "$scriptsPath\Create-DNSRecords.ps1" -NoTranscript
         if (-not $result) {
             Write-Warning "Create-DNSRecords.ps1 returned failure"
         } else {
@@ -341,7 +354,7 @@ if ($Step -eq 2) {
     # -- DC Status checker task --
     .\Write-Info.ps1 "Configuring DC status checker..." -ForegroundColor Yellow
     try {
-        $dcStatusResult = & "$scriptsPath\Check-DCStatus.ps1" -action 'CreateCheckerTask'
+        $dcStatusResult = & "$scriptsPath\Check-DCStatus.ps1" -action 'CreateCheckerTask' -NoTranscript
         if (-not $dcStatusResult) {
             Write-Warning "Check-DCStatus.ps1 returned failure"
         } else {
@@ -355,7 +368,7 @@ if ($Step -eq 2) {
     $toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
     if (-not (Test-Path $toolsSignal)) {
         .\Write-Info.ps1 "Installing tools..." -ForegroundColor Cyan
-        & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'DC'
+        & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'DC' -NoTranscript
     } else {
         .\Write-Info.ps1 "[OK] Tools already installed" -ForegroundColor Green
     }
@@ -409,10 +422,10 @@ if ($Step -eq 2) {
         throw ("DC post-promotion provisioning incomplete: " + ($provisioningFailures -join '; ') +
             ". Failing Step 2 so the DC does not signal readiness and the deployment does not proceed to tests against a half-provisioned DC.")
     }
-    Stop-Transcript; Pop-Location; return $true
+    Stop-LocalTranscript; Pop-Location; return $true
   }
   catch {
     .\Write-Error.ps1 "DC imperative step 2 failed: $($_.Exception.Message)"
-    Stop-Transcript; Pop-Location; throw
+    Stop-LocalTranscript; Pop-Location; throw
   }
 }

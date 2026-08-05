@@ -74,7 +74,9 @@ if (Test-Path $validateScript) {
     }
     catch {
         .\Write-Error.ps1 "[FAIL] Config.json validation failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
+        Pop-Location
+        Stop-Transcript
+        throw
     }
 }
 
@@ -148,10 +150,98 @@ $signalFile = "$dscFolder\Deploy-SUT.Completed.signal"
 # lost across the reboot. Gate the completion signal on this marker so a failed Full DSC
 # (e.g. missing SMB shares) does not produce a green-but-broken SUT.
 $fullDscSignal = "$scriptsPath\SUT-FullDsc.Completed.signal"
-if (Test-Path $signalFile) {
+$toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
+$requiredSutFeatures = @(
+    'File-Services',
+    'FS-BranchCache',
+    'FS-VSS-Agent',
+    'BranchCache',
+    'FS-DFS-Namespace',
+    'RSAT-File-Services',
+    'RSAT-DFS-Mgmt-Con',
+    'FS-Resource-Manager'
+)
+
+function Test-RequiredSutDscState {
+    $missing = @()
+    foreach ($featureName in $requiredSutFeatures) {
+        $feature = Get-WindowsFeature -Name $featureName -ErrorAction SilentlyContinue
+        if ($null -eq $feature -or $feature.InstallState -ne 'Installed') {
+            $missing += "feature:$featureName"
+        }
+    }
+
+    foreach ($commandName in @('dfsutil.exe', 'dfscmd.exe')) {
+        if (-not (Get-Command $commandName -ErrorAction SilentlyContinue)) {
+            $missing += "command:$commandName"
+        }
+    }
+
+    foreach ($path in @('C:\FileShare', 'C:\SMBBasic', 'C:\SMBBasic\sub')) {
+        if (-not (Test-Path -LiteralPath $path -PathType Container)) {
+            $missing += "directory:$path"
+        }
+    }
+
+    $requiredShares = @{
+        FileShare = 'C:\FileShare'
+        SMBBasic = 'C:\SMBBasic'
+    }
+    foreach ($shareName in $requiredShares.Keys) {
+        $share = Get-SmbShare -Name $shareName -ErrorAction SilentlyContinue
+        if ($null -eq $share -or $share.Path -ne $requiredShares[$shareName]) {
+            $missing += "share:$shareName"
+        }
+    }
+
+    if ($missing.Count -gt 0) {
+        .\Write-Info.ps1 "[WARN] Required SUT DSC state is incomplete: $($missing -join ', ')" -ForegroundColor Yellow
+        return $false
+    }
+    return $true
+}
+
+function Test-RequiredSutDomainState {
+    $domainMode = -not [string]::IsNullOrWhiteSpace($cfg.Core.DomainName) -and
+                  $cfg.Core.DomainName -ne 'Workgroup'
+    if (-not $domainMode) { return $true }
+
+    $partOfDomain = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
+    $secureOk = $false
+    try { $secureOk = Test-ComputerSecureChannel -ErrorAction Stop } catch { $secureOk = $false }
+    return $partOfDomain -and $secureOk
+}
+
+function Test-RequiredSutReadyState {
+    return (Test-Path $toolsSignal) -and
+           (Test-RequiredSutDscState) -and
+           (Test-RequiredSutDomainState)
+}
+
+if ((Test-Path $signalFile) -and (Test-RequiredSutReadyState)) {
     .\Write-Info.ps1 "[OK] SUT deployment already completed (signal file exists)." -ForegroundColor Green
     Remove-ResumeTask
     Pop-Location; Stop-Transcript; return
+}
+if ((Test-Path $signalFile) -and (-not (Test-RequiredSutReadyState))) {
+    .\Write-Info.ps1 "[WARN] Removing stale SUT completion signal because required deployment state is incomplete." -ForegroundColor Yellow
+    Remove-Item -Path $signalFile -Force
+}
+
+function Install-RequiredSutTools {
+    if (Test-Path $toolsSignal) {
+        return $true
+    }
+
+    .\Write-Info.ps1 "Installing required SUT tools..." -ForegroundColor Yellow
+    $result = & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'SUT' | Select-Object -Last 1
+    if ($result -eq $true -and (Test-Path $toolsSignal)) {
+        .\Write-Info.ps1 "[OK] Required SUT tools installed." -ForegroundColor Green
+        return $true
+    }
+
+    .\Write-Error.ps1 "[FAIL] Required SUT tools did not install successfully. Check InstallMSIAndTools.ps1.log and *.install.stderr.log."
+    return $false
 }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
@@ -198,7 +288,8 @@ if ($currentStep -lt 1) {
     try {
         # Capture the imperative result: Step 1 returns $false (not throw) on join failure,
         # so an unchecked call would advance the step on a machine that never joined.
-        $joinResult = & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath | Select-Object -Last 1
+        $joinResult = & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 1 `
+            -WorkingPath $WorkingPath -NoTranscript | Select-Object -Last 1
         if ($joinResult -ne $true) {
             throw "Domain join step returned failure (SUT did not join)."
         }
@@ -206,7 +297,9 @@ if ($currentStep -lt 1) {
     }
     catch {
         .\Write-Error.ps1 "[FAIL] Domain join failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
+        Pop-Location
+        Stop-Transcript
+        throw
     }
 
     # Schedule deferred reboot + resume
@@ -230,12 +323,14 @@ if ($currentStep -lt 1) {
 # ===========================================================================
 if ($currentStep -eq 1) {
     Start-Sleep -Seconds 10  # Post-reboot stabilization
+    $fullDscOk = $false
 
     # -- Tools install (background job) --
     .\Write-Info.ps1 "---- Phase 2a: Tools Install (background) ----" -ForegroundColor Yellow
     $phase2 = [System.Diagnostics.Stopwatch]::StartNew()
-    $toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
     $toolsJob    = $null
+    $toolsJobStart = $null
+    $toolsJobTimeoutSeconds = 3600
 
     if (Test-Path $toolsSignal) {
         .\Write-Info.ps1 "[OK] Tools already installed (signal file exists)." -ForegroundColor Green
@@ -245,6 +340,7 @@ if ($currentStep -eq 1) {
         $toolsInstaller = "$scriptsPath\InstallMSIAndTools.ps1"
         $toolsScriptsDir = $scriptsPath
         $toolsJobLog = "$scriptsPath\InstallMSIAndTools.job.log"
+        $toolsJobStart = Get-Date
         $toolsJob = Start-Job -ScriptBlock {
             param($wp, $installer, $sd, $jl)
             Set-Location $sd
@@ -265,13 +361,23 @@ if ($currentStep -eq 1) {
         # be mistaken for success by the completion gate (which only tests for the file).
         if (Test-Path $fullDscSignal) { Remove-Item -Path $fullDscSignal -Force -ErrorAction SilentlyContinue }
         .\Write-Info.ps1 "Applying full SUT DSC configuration..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
-        "FULL DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $fullDscSignal -Force
-        .\Write-Info.ps1 "[OK] Full DSC applied in $([math]::Round($phase2b.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        Invoke-VerifiedDscConfiguration -Path $mofFolder `
+            -OperationName 'Full SUT DSC configuration' `
+            -Postcondition { (Test-PendingSystemReboot) -or (Test-RequiredSutDscState) } | Out-Null
+
+        if (Test-RequiredSutDscState) {
+            "FULL DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $fullDscSignal -Force
+            $fullDscOk = $true
+            .\Write-Info.ps1 "[OK] Full DSC applied and required state verified in $([math]::Round($phase2b.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        } elseif (Test-PendingSystemReboot) {
+            .\Write-Info.ps1 "[INFO] Full DSC completed the pre-reboot resources. Remaining directories and shares will be applied after restart." -ForegroundColor Yellow
+        } else {
+            throw "Full SUT DSC reported Success, but required state is incomplete and no reboot is pending."
+        }
     }
     catch {
         .\Write-Error.ps1 "[FAIL] Full DSC failed: $($_.Exception.Message)"
-        .\Write-Info.ps1 "Continuing with remaining steps (completion signal will be withheld until Full DSC succeeds)..." -ForegroundColor Yellow
+        .\Write-Info.ps1 "Full DSC will be retried before the deployment can advance to Phase 3." -ForegroundColor Yellow
     }
     $phase2b.Stop()
     .\Write-Info.ps1 ""
@@ -280,27 +386,43 @@ if ($currentStep -eq 1) {
     if ($null -ne $toolsJob) {
         $phase2.Start()
         .\Write-Info.ps1 "Waiting for tools install to complete..." -ForegroundColor Yellow
-        $toolsJob | Wait-Job | Remove-Job -Force
+        $elapsedSeconds = [int]((Get-Date) - $toolsJobStart).TotalSeconds
+        $remainingSeconds = [Math]::Max(1, $toolsJobTimeoutSeconds - $elapsedSeconds)
+        $completedJob = Wait-Job -Job $toolsJob -Timeout $remainingSeconds
+        if ($null -eq $completedJob) {
+            .\Write-Error.ps1 "[FAIL] Tools job exceeded the $toolsJobTimeoutSeconds-second timeout and will be stopped."
+            Stop-Job -Job $toolsJob
+        } elseif ($toolsJob.State -ne 'Completed') {
+            $reason = $toolsJob.ChildJobs[0].JobStateInfo.Reason
+            .\Write-Error.ps1 "[FAIL] Tools job ended in state '$($toolsJob.State)': $reason"
+        }
+        Remove-Job -Job $toolsJob -Force
         $phase2.Stop()
         if (Test-Path $toolsSignal) {
             .\Write-Info.ps1 "[OK] Tools installed in $([math]::Round($phase2.Elapsed.TotalSeconds))s" -ForegroundColor Green
         } else {
-            .\Write-Info.ps1 "[WARN] Tools job completed but signal file not found -- check InstallMSIAndTools.ps1.log" -ForegroundColor Yellow
+            .\Write-Info.ps1 "[WARN] Tools install is incomplete and will be retried before Phase 3." -ForegroundColor Yellow
         }
     }
 
     # Check if a reboot is pending (e.g., from Hyper-V feature installation)
-    $rebootPending = (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') -or
-                     (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') -or
-                     (Test-Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations')
+    $rebootPending = Test-PendingSystemReboot
     if ($rebootPending) {
         $currentRebootCount = Get-RebootCount
         if ($currentRebootCount -ge $maxRebootCount) {
             .\Write-Info.ps1 "[WARN] Reboot circuit breaker triggered ($currentRebootCount >= $maxRebootCount). Skipping pending-reboot -- continuing without reboot." -ForegroundColor Red
-            Set-DeployStep -Step 2
+            if ($fullDscOk) {
+                Set-DeployStep -Step 2
+            } else {
+                Set-DeployStep -Step 1
+                Pop-Location
+                Stop-Transcript
+                throw "Full SUT DSC failed and the reboot circuit breaker prevents another repair reboot."
+            }
         } else {
             Set-RebootCount -Count ($currentRebootCount + 1)
-            Set-DeployStep -Step 2
+            $nextDeployStep = if ($fullDscOk) { 2 } else { 1 }
+            Set-DeployStep -Step $nextDeployStep
             .\Write-Info.ps1 "[WARN] A reboot is required to complete feature installation (reboot $($currentRebootCount + 1)/$maxRebootCount)." -ForegroundColor Yellow
             .\Write-Info.ps1 'Scheduling Deploy-SUT.ps1 to re-run after reboot...' -ForegroundColor Yellow
             $domainNetBios = if ($cfg.Domain -and $cfg.Domain.NetBiosName) { $cfg.Domain.NetBiosName } else { $cfg.Core.DomainName.Split('.')[0].ToUpper() }
@@ -316,7 +438,14 @@ if ($currentStep -eq 1) {
         }
     } else {
         .\Write-Info.ps1 'No reboot required after feature install.' -ForegroundColor Green
-        Set-DeployStep -Step 2
+        if ($fullDscOk) {
+            Set-DeployStep -Step 2
+        } else {
+            Set-DeployStep -Step 1
+            Pop-Location
+            Stop-Transcript
+            throw "Full SUT DSC failed; the resume task will retry Phase 2."
+        }
     }
 }
 
@@ -327,10 +456,27 @@ $currentStep = Get-DeployStep
 if ($currentStep -ge 2 -and -not (Test-Path $signalFile)) {
     Start-Sleep -Seconds 5  # Post-reboot stabilization
 
+    if (-not (Test-Path $fullDscSignal) -or -not (Test-RequiredSutDscState)) {
+        .\Write-Info.ps1 "[FAIL] Phase 3 prerequisites are incomplete; resetting to Phase 2 for DSC repair." -ForegroundColor Red
+        Remove-Item -Path $fullDscSignal -Force -ErrorAction SilentlyContinue
+        Set-DeployStep -Step 1
+        Pop-Location
+        Stop-Transcript
+        throw "Required SUT DSC state is incomplete; the resume task will retry Phase 2."
+    }
+
+    if (-not (Install-RequiredSutTools)) {
+        .\Write-Info.ps1 "[FAIL] Phase 3 blocked until required tools install successfully; retaining the resume task for retry." -ForegroundColor Red
+        Pop-Location
+        Stop-Transcript
+        throw "Required SUT tools are incomplete."
+    }
+
     .\Write-Info.ps1 "---- Phase 3: Environment Setup ----" -ForegroundColor Yellow
     $phase3sw = [System.Diagnostics.Stopwatch]::StartNew()
     try {
-        & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 3 -WorkingPath $WorkingPath
+        & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 3 `
+            -WorkingPath $WorkingPath -NoTranscript
         $phase3Ok = $true
         .\Write-Info.ps1 "[OK] Environment setup complete in $([math]::Round($phase3sw.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
@@ -340,7 +486,11 @@ if ($currentStep -ge 2 -and -not (Test-Path $signalFile)) {
     $phase3sw.Stop()
 
     # -- Summary --
-    Set-DeployStep -Step 3
+    if ($phase3Ok) {
+        Set-DeployStep -Step 3
+    } else {
+        Set-DeployStep -Step 2
+    }
     Set-RebootCount -Count 0
 
     $stopwatch.Stop()
@@ -367,21 +517,26 @@ if ($currentStep -ge 2 -and -not (Test-Path $signalFile)) {
         }
     }
 
-    if ($phase3Ok -and (Test-Path $fullDscSignal) -and $membershipOk) {
+    $toolsOk = Test-Path $toolsSignal
+    $dscStateOk = Test-RequiredSutDscState
+    if ($phase3Ok -and (Test-Path $fullDscSignal) -and $dscStateOk -and $toolsOk -and $membershipOk) {
         "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
         .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
         Remove-ResumeTask
     } elseif (-not $membershipOk) {
         .\Write-Info.ps1 "[WARN] Signal file NOT written -- domain membership/secure channel not verified; SUT is not test-ready" -ForegroundColor Yellow
-    } elseif (-not (Test-Path $fullDscSignal)) {
+    } elseif (-not (Test-Path $fullDscSignal) -or -not $dscStateOk) {
         .\Write-Info.ps1 "[WARN] Signal file NOT written -- Full DSC (features/shares/registry) did not succeed; SUT is not test-ready" -ForegroundColor Yellow
+    } elseif (-not $toolsOk) {
+        .\Write-Info.ps1 "[WARN] Signal file NOT written -- required tools did not install successfully; SUT is not test-ready" -ForegroundColor Yellow
     } else {
         .\Write-Info.ps1 "[WARN] Signal file NOT written -- deployment incomplete" -ForegroundColor Yellow
     }
 
-    $cleanupScript = "$scriptsPath\RestartAndRunFinish.ps1"
-    if (Test-Path $cleanupScript) {
-        & $cleanupScript
+    if (-not (Test-Path $signalFile)) {
+        Pop-Location
+        Stop-Transcript
+        throw "SUT deployment is incomplete; the resume task remains registered for retry."
     }
 }
 

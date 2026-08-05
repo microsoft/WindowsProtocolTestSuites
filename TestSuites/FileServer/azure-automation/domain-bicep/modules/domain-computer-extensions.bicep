@@ -51,8 +51,8 @@ var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(repla
   '__PACKAGE_URL__', domainPackageZipUrl),
   '__PACKAGE_HOST__', packageHost),
   '__PASSWORD_B64__', base64(adminPassword))
-var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\domain-driver-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(driverBootstrap)}\'))); & \'C:\\domain-driver-bootstrap.ps1\'; exit $LASTEXITCODE"'
-var sutCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\domain-sut-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(sutBootstrap)}\'))); & \'C:\\domain-sut-bootstrap.ps1\'; exit $LASTEXITCODE"'
+var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\domain-driver-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(driverBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\domain-driver-bootstrap.ps1\'; exit $LASTEXITCODE"'
+var sutCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\domain-sut-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(sutBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\domain-sut-bootstrap.ps1\'; exit $LASTEXITCODE"'
 
 resource driverVm 'Microsoft.Compute/virtualMachines@2023-03-01' existing = {
   name: driverVmName

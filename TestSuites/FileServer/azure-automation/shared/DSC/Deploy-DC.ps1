@@ -68,7 +68,7 @@ if (Test-Path $validateScript) {
     }
     catch {
         .\Write-Error.ps1 "[FAIL] Config.json validation failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
+        Pop-Location; Stop-Transcript; throw
     }
 }
 
@@ -146,10 +146,50 @@ $currentStep = Get-DeployStep
 . "$dscFolder\Deploy-CommonHelpers.ps1"
 
 $signalFile = "$dscFolder\Deploy-DC.Completed.signal"
+$toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
+$requiredDcFeatures = @('AD-Domain-Services', 'RSAT-AD-Tools', 'GPMC', 'RemoteAccess', 'RSAT-RemoteAccess')
+
+function Test-RequiredDcFeatures {
+    $missing = @()
+    foreach ($featureName in $requiredDcFeatures) {
+        $feature = Get-WindowsFeature -Name $featureName -ErrorAction SilentlyContinue
+        if ($null -eq $feature -or $feature.InstallState -ne 'Installed') {
+            $missing += $featureName
+        }
+    }
+    if ($missing.Count -gt 0) {
+        .\Write-Info.ps1 "[WARN] Required DC features are missing: $($missing -join ', ')" -ForegroundColor Yellow
+        return $false
+    }
+    return $true
+}
+
+function Test-RequiredDcReadyState {
+    if (-not (Test-RequiredDcFeatures)) { return $false }
+    if (-not (Test-Path $toolsSignal)) { return $false }
+
+    try {
+        $domain = Get-ADDomain -ErrorAction Stop
+        if ($null -eq $domain) { return $false }
+    }
+    catch {
+        return $false
+    }
+
+    return (Test-Path "\\$env:COMPUTERNAME\SYSVOL") -and
+           (Test-Path "\\$env:COMPUTERNAME\NETLOGON")
+}
+
 if (Test-Path $signalFile) {
-    .\Write-Info.ps1 "[OK] DC deployment already completed (signal file exists)." -ForegroundColor Green
-    Remove-ResumeTask
-    Pop-Location; Stop-Transcript; return
+    if (Test-RequiredDcReadyState) {
+        .\Write-Info.ps1 "[OK] DC deployment already completed (signal file exists)." -ForegroundColor Green
+        Remove-ResumeTask
+        Pop-Location; Stop-Transcript; return
+    }
+    .\Write-Info.ps1 "[WARN] Removing stale DC completion signal because required state is incomplete." -ForegroundColor Yellow
+    Remove-Item -Path $signalFile -Force
+    Set-DeployStep -Step 1
+    $currentStep = 1
 }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
@@ -200,7 +240,9 @@ if ($currentStep -lt 1) {
             .\Write-Info.ps1 "Compiling DC DSC configuration (config: $configFile)..." -ForegroundColor Cyan
             DcConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
             .\Write-Info.ps1 "Applying DC DSC configuration..." -ForegroundColor Yellow
-            Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+            Invoke-VerifiedDscConfiguration -Path $mofFolder `
+                -OperationName 'DC pre-promotion DSC configuration' `
+                -Postcondition { Test-RequiredDcFeatures } | Out-Null
             .\Write-Info.ps1 "[OK] DSC Phase 1 applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
             # Mark Phase 1a done ONLY after a successful apply, so the pending-reboot resume skips
             # the idempotent replay -- but a FAILED apply leaves the marker unset so a rerun
@@ -209,7 +251,9 @@ if ($currentStep -lt 1) {
         }
         catch {
             .\Write-Error.ps1 "[FAIL] DSC Phase 1 failed: $($_.Exception.Message)"
-            .\Write-Info.ps1 "Continuing with imperative steps..." -ForegroundColor Yellow
+            Pop-Location
+            Stop-Transcript
+            throw
         }
         $phase1.Stop()
         .\Write-Info.ps1 ""
@@ -222,9 +266,7 @@ if ($currentStep -lt 1) {
     # deploy. Mirror the SUT's guard: if a reboot is pending, defer + resume. On resume the
     # Phase1aDscApplied marker skips the DSC replay, the reboot flag is clear, and promotion
     # proceeds. Bounded by the reboot circuit breaker.
-    $rebootPending = (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') -or
-                     (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') -or
-                     (Test-Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations')
+    $rebootPending = Test-PendingSystemReboot
     if ($rebootPending) {
         $currentRebootCount = Get-RebootCount
         if ($currentRebootCount -ge $maxRebootCount) {
@@ -242,12 +284,16 @@ if ($currentStep -lt 1) {
     # -- Imperative Step 1 (promote + tools) --
     .\Write-Info.ps1 "---- Phase 1b: Imperative Step 1 (DC Promotion) ----" -ForegroundColor Yellow
     try {
-        & "$dscFolder\Invoke-DcImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath
+        $promotionResult = & "$dscFolder\Invoke-DcImperativeSteps.ps1" -Step 1 `
+            -WorkingPath $WorkingPath -NoTranscript | Select-Object -Last 1
+        if ($promotionResult -ne $true) {
+            throw 'DC promotion step returned failure.'
+        }
         .\Write-Info.ps1 "[OK] DC Promotion initiated." -ForegroundColor Green
     }
     catch {
         .\Write-Error.ps1 "[FAIL] DC Promotion failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
+        Pop-Location; Stop-Transcript; throw
     }
 
     # -- Schedule deferred reboot + resume at Step 1 --
@@ -260,40 +306,50 @@ if ($currentStep -lt 1) {
 }
 
 # ===========================================================================
-# Step 1 -> 2: Post-Promotion: re-apply DSC + accounts + CBAC + DNS
+# Step 1 -> 2: Post-Promotion: AD readiness + accounts + DSC drift repair
 # ===========================================================================
 if ($currentStep -eq 1) {
-    .\Write-Info.ps1 "---- Phase 2a: DSC Re-Apply (post-promote drift) ----" -ForegroundColor Yellow
-    $phase2 = [System.Diagnostics.Stopwatch]::StartNew()
-    Start-Sleep -Seconds 10  # Wait for AD DS services to stabilize
+    # Invoke-DcImperativeSteps performs the bounded ADWS read/write, SYSVOL,
+    # NETLOGON, and advertising readiness gate before changing AD objects.
+    .\Write-Info.ps1 "---- Phase 2a: Imperative Step 2 (AD readiness + objects + services) ----" -ForegroundColor Yellow
+    $phase2b = [System.Diagnostics.Stopwatch]::StartNew()
+    try {
+        $imperativeResult = & "$dscFolder\Invoke-DcImperativeSteps.ps1" -Step 2 `
+            -WorkingPath $WorkingPath -NoTranscript | Select-Object -Last 1
+        if ($imperativeResult -ne $true) {
+            throw 'DC post-promotion imperative step returned failure.'
+        }
+        .\Write-Info.ps1 "[OK] Post-promotion imperative configuration complete." -ForegroundColor Green
+    }
+    catch {
+        .\Write-Error.ps1 "[FAIL] Post-promotion steps failed: $($_.Exception.Message)"
+        Pop-Location
+        Stop-Transcript
+        throw
+    }
+    $phase2b.Stop()
+    .\Write-Info.ps1 ""
 
+    # Apply post-promotion-only registry/service state after AD is known operational.
+    .\Write-Info.ps1 "---- Phase 2b: DSC Re-Apply (post-promote drift) ----" -ForegroundColor Yellow
+    $phase2 = [System.Diagnostics.Stopwatch]::StartNew()
     try {
         . "$dscFolder\DC-Configuration.ps1"
         .\Write-Info.ps1 "Compiling DC DSC configuration (post-promote, config: $configFile)..." -ForegroundColor Cyan
         DcConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
         .\Write-Info.ps1 "Applying DC DSC configuration (catching drift)..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+        Invoke-VerifiedDscConfiguration -Path $mofFolder `
+            -OperationName 'DC post-promotion DSC configuration' `
+            -Postcondition { Test-RequiredDcReadyState } | Out-Null
         .\Write-Info.ps1 "[OK] DSC Phase 2 applied." -ForegroundColor Green
     }
     catch {
-        .\Write-Info.ps1 "[WARN] DSC re-apply had issues: $($_.Exception.Message)" -ForegroundColor Yellow
-        .\Write-Info.ps1 "Continuing -- imperative steps may cover what's needed." -ForegroundColor Yellow
+        .\Write-Error.ps1 "[FAIL] Post-promotion DSC failed: $($_.Exception.Message)"
+        Pop-Location
+        Stop-Transcript
+        throw
     }
     $phase2.Stop()
-    .\Write-Info.ps1 ""
-
-    # -- Imperative Step 2 (accounts, CBAC, GPO, DNS, services) --
-    .\Write-Info.ps1 "---- Phase 2b: Imperative Step 2 (AD objects + services) ----" -ForegroundColor Yellow
-    $phase2b = [System.Diagnostics.Stopwatch]::StartNew()
-    try {
-        & "$dscFolder\Invoke-DcImperativeSteps.ps1" -Step 2 -WorkingPath $WorkingPath
-        .\Write-Info.ps1 "[OK] Post-promotion configuration complete." -ForegroundColor Green
-    }
-    catch {
-        .\Write-Error.ps1 "[FAIL] Post-promotion steps failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
-    }
-    $phase2b.Stop()
 
     # -- Finish --
     Set-DeployStep -Step 2

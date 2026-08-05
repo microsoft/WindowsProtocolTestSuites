@@ -186,7 +186,7 @@ flowchart LR
     step2 --> signal[Write .Completed.signal]
 ```
 
-Each step is tracked in the registry at `HKLM:\SOFTWARE\ProtocolTestSuites\DeployStep`. A **TKFRSAR** scheduled task re-runs the orchestrator after each reboot, with a circuit breaker (max 3-4 reboots) to prevent infinite loops.
+Domain, Cluster, and Driver steps use `HKLM:\SOFTWARE\ProtocolTestSuites\DeployStep`. The Workgroup SUT uses `WorkgroupSutDeployPhase`: feature preparation, post-reboot convergence, environment setup, then completion. Its feature bundle and any pending rename are coalesced into one planned reboot; an unexpected second reboot is treated as a failure rather than another silent loop. A **TKFRSAR** scheduled task resumes the orchestrator after the planned reboot.
 
 ## Network Architecture
 
@@ -259,6 +259,12 @@ Each scenario README has detailed troubleshooting for its specific issues:
 ### Common across all scenarios
 
 **Azure shows "Succeeded" but VMs aren't ready** — VM extensions report success immediately after starting background configuration. Check for `.Completed.signal` files (see [step 3 above](#3-wait-for-vm-configuration-to-finish)).
+
+**Feature installation restarts WinRM** — Domain and Workgroup SUT/Driver orchestrators submit DSC asynchronously and poll fresh LCM status calls, so a transient `0x803381fa` WSMan disconnect is not treated as success. Completion signals are written only after the LCM reports `Success` and required features, commands, directories, tools, and applicable domain readiness checks pass. Imperative configuration is blocked while DSC prerequisites are incomplete instead of retrying the same broken environment setup indefinitely.
+
+While DSC is active, Windows PowerShell 5.1 can report that `Start-DscConfiguration` is still in progress when status is queried. This is an expected busy response: the verifier suppresses it, continues bounded polling, and surfaces only a final LCM failure or timeout.
+
+The Workgroup SUT compiles disruptive features into a dedicated feature MOF and applies directories, shares, routing, remoting, and registry state through a separate post-reboot convergence MOF. Tool packages download to unique temporary files in parallel and are promoted atomically into the cache; installation remains serial and post-reboot. `Deploy-SUT.heartbeat.json` records the current phase, operation, elapsed time, deadline, and last checkpoint while DSC, downloads, installers, or imperative setup are active.
 
 **VM extension failure** — Check the bootstrap log on the VM:
 | VM Role | Log file |

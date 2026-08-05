@@ -18,7 +18,11 @@
 #  3. Add static DNS records for endpoint virtual names (Cluster, GeneralFS).
 ##############################################################################
 
-param($workingDir = $PSScriptRoot, $protocolConfigFile = "$workingDir\Config.json")
+param(
+    $workingDir = $PSScriptRoot,
+    $protocolConfigFile = "$workingDir\Config.json",
+    [switch]$NoTranscript
+)
 
 #----------------------------------------------------------------------------
 # Global variables
@@ -36,8 +40,7 @@ if (!(Test-Path "$workingDir")) {
 if (!(Test-Path "$protocolConfigFile")) {
     $protocolConfigFile = "$workingDir\Config.json"
     if (!(Test-Path "$protocolConfigFile")) {
-        .\Write-Error.ps1 "No Config file found."
-        exit 1
+        throw "No Config file found at '$protocolConfigFile'."
     }
 }
 
@@ -45,7 +48,9 @@ if (!(Test-Path "$protocolConfigFile")) {
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
-Start-Transcript -Path "$logFile" -Append -Force
+if (-not $NoTranscript) {
+    Start-Transcript -Path "$logFile" -Append -Force
+}
 
 #----------------------------------------------------------------------------
 # Define common functions
@@ -73,8 +78,7 @@ try {
     $config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
 }
 catch {
-    .\Write-Error.ps1 "Failed to parse config file: $_"
-    exit ExitCode
+    throw "Failed to parse config file '$protocolConfigFile': $($_.Exception.Message)"
 }
 
 #----------------------------------------------------------------------------
@@ -123,4 +127,9 @@ if ($osMajorVer -ge 10) {
             .\Write-Info.ps1 "DNS record for $name already exists, skipping."
         }
     }
+
+    if (-not $NoTranscript) {
+        Stop-Transcript
+    }
+    return $true
 }

@@ -16,7 +16,7 @@ The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azurede
 
 **How the two phases collapse into one click.** `deploy.ps1` deploys the DC, waits for AD DS promotion, then deploys the members. The button can't run that imperative wait, so `main.bicep` handles it **declaratively**: the members' module `dependsOn` the DC, their NICs use the DC as DNS, and the on-VM domain join ([`../shared/DSC/Scripts/domainjoin.ps1`](../shared/DSC/Scripts/domainjoin.ps1)) already **retries DNS/DC reachability and `Add-Computer` with exponential backoff** — so the members wait out DC promotion on their own.
 
-**How credentials stay safe.** The button consumes a **public**, pre-built DSC package whose `Config.json` ships with a placeholder token (`#{ADMIN_PASSWORD}#`) instead of a password. At deploy time each VM's Custom Script Extension — from the extension's *encrypted* `protectedSettings` — injects the real admin password (base64-encoded, then JSON-escaped) into `Config.json` via [`../shared/DSC/Scripts/Set-ConfigCredential.ps1`](../shared/DSC/Scripts/Set-ConfigCredential.ps1) before the DC/member deploy scripts run.
+**How credentials stay safe.** The button consumes a **public**, pre-built DSC package whose `Config.json` ships with a placeholder token (`#{ADMIN_PASSWORD}#`) instead of a password. At deploy time each VM's Custom Script Extension — from the extension's *encrypted* `protectedSettings` — injects the real admin password (base64-encoded, then JSON-escaped) into `Config.json` via [`../shared/DSC/Scripts/Set-ConfigCredential.ps1`](../shared/DSC/Scripts/Set-ConfigCredential.ps1) before the DC/member deploy scripts run. The credential-bearing bootstrap runs in a separate PowerShell process so transcript headers contain only the script path, then deletes itself on success or failure.
 
 **Scope & limitations (defaults only):**
 - The baked `Config.json` is valid for the **default IP topology and domain** (`contoso.com` / `CONTOSO`) only. Changing IP/domain parameters in the form will not update the peer values inside the package. For custom topologies, use `deploy.ps1` (which rebuilds the package).
@@ -329,6 +329,8 @@ Validate the package offline first (no GitHub calls) with `-SkipUpload`. The pub
 | Client01 | `C:\Domain-Package\DSC\Invoke-DriverImperativeSteps.log` | Domain join, tools, RSA keys, ForceLevel2 |
 | Node01 | `C:\Domain-Package\DSC\Deploy-SUT.log` | SUT orchestrator (DSC + features + environment) |
 | Node01 | `C:\Domain-Package\DSC\Invoke-SutImperativeSteps.log` | Domain join, disks, DFS, QUIC |
+| Node01 | `C:\Domain-Package\DSC\Scripts\InstallMSIAndTools.ps1.log` | Required tool installation and per-tool failures |
+| Node01 | `C:\Domain-Package\DSC\Scripts\*.install.stderr.log` | Standard error from ZIP-based child installers |
 | All | `C:\domain-*-setup.log` | CustomScriptExtension bootstrap log |
 
 ### Common Issues

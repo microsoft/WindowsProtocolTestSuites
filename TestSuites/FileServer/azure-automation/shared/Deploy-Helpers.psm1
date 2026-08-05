@@ -181,7 +181,10 @@ function Wait-ForDomainController {
         [int]$TimeoutMinutes = 45,
 
         [Parameter(Mandatory=$false)]
-        [int]$PollIntervalSeconds = 30
+        [int]$PollIntervalSeconds = 30,
+
+        [Parameter(Mandatory=$false)]
+        [int]$ProbeTimeoutSeconds = 120
     )
 
     Write-Output "`n⏳ Waiting for Domain Controller to be ready..."
@@ -198,10 +201,21 @@ function Wait-ForDomainController {
             Select-Object -First 1
 
         if ($dcVm) {
+            $probeJob = $null
             try {
-                $result = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+                $remainingSeconds = [Math]::Max(1, [int]($deadline - (Get-Date)).TotalSeconds)
+                $probeWaitSeconds = [Math]::Min($ProbeTimeoutSeconds, $remainingSeconds)
+                $probeJob = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
                     -VMName $dcVm.Name -CommandId 'RunPowerShellScript' `
-                    -ScriptString $CheckScript -ErrorAction Stop
+                    -ScriptString $CheckScript -AsJob -ErrorAction Stop
+                $completedProbe = Wait-Job -Job $probeJob -Timeout $probeWaitSeconds
+                if ($null -eq $completedProbe) {
+                    Stop-Job -Job $probeJob
+                    Write-Output "[$elapsed min] ⚠️  DC readiness probe exceeded ${probeWaitSeconds}s; retrying with a fresh Run Command."
+                    Start-Sleep -Seconds $PollIntervalSeconds
+                    continue
+                }
+                $result = Receive-Job -Job $probeJob -ErrorAction Stop
 
                 if ($result.Value[0].Message -match "True") {
                     $duration = [math]::Round(((Get-Date) - $startTime).TotalMinutes, 1)
@@ -211,6 +225,10 @@ function Wait-ForDomainController {
                 Write-Output "[$elapsed min] ⏳ DC still configuring..."
             } catch {
                 Write-Output "[$elapsed min] ⚠️  Error checking DC: $($_.Exception.Message)"
+            } finally {
+                if ($null -ne $probeJob) {
+                    Remove-Job -Job $probeJob -Force -ErrorAction SilentlyContinue
+                }
             }
         } else {
             Write-Output "[$elapsed min] ⚠️  DC VM not found yet..."

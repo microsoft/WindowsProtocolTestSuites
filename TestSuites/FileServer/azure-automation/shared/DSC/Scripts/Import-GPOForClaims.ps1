@@ -1,7 +1,10 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = $PSScriptRoot)
+param(
+    $workingDir = $PSScriptRoot,
+    [switch]$NoTranscript
+)
 #----------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------
@@ -13,7 +16,11 @@ Push-Location $workingDir
 # Start loging using start-transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
-Start-Transcript -Path "$logFile" -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path "$logFile" -Append -Force
+    $transcriptStarted = $true
+}
 
 #----------------------------------------------------------------------------
 # Extract GPOBackup files
@@ -24,7 +31,7 @@ $gpoBackupFolder = "$workingDir\GPOBackup"
 if (-not (Test-Path $ZipFile)) {
     .\Write-Info.ps1 "GPOBackup.zip not found at: $ZipFile" -ForegroundColor Red
     Pop-Location
-    Stop-Transcript
+    if ($transcriptStarted) { Stop-Transcript }
     return $false
 }
 
@@ -94,5 +101,5 @@ CMD /C gpupdate /force 2>&1 | .\Write-Info.ps1
 # Ending
 #----------------------------------------------------------------------------
 Pop-Location
-Stop-Transcript
+if ($transcriptStarted) { Stop-Transcript }
 return $true

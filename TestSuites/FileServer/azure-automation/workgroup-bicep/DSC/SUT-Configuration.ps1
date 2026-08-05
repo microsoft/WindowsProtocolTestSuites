@@ -3,9 +3,10 @@
 
 <#
 .SYNOPSIS
-    DSC Configuration for the Workgroup SUT (Node01).
-    Handles Windows features, SMB shares, firewall, registry, hosts file,
-    and directories declaratively. Imperative steps (disk partitioning,
+    Post-reboot DSC configuration for the Workgroup SUT (Node01).
+    Handles SMB shares, firewall, registry, hosts file, and directories
+    declaratively. Disruptive Windows features are installed by
+    SUT-FeatureConfiguration.ps1. Imperative steps (disk partitioning,
     symlinks, QUIC certs, shadow copies, DFS namespaces, tools install)
     are handled by the companion Invoke-SutImperativeSteps.ps1.
 
@@ -113,70 +114,6 @@ Configuration SutConfiguration {
                 $block += "$marker END`r`n"
                 Set-Content -Path $hostsPath -Value ($content + $block) -Force -Encoding ASCII
             }
-        }
-        #endregion
-
-        #region -- Windows Features -----------------------------------------
-        WindowsFeatureSet FileServerFeatures {
-            Name   = @(
-                'File-Services',
-                'FS-BranchCache',
-                'FS-VSS-Agent',
-                'BranchCache',
-                'FS-DFS-Namespace',
-                'RSAT-File-Services',
-                'RSAT-DFS-Mgmt-Con',
-                'FS-Resource-Manager'
-            )
-            Ensure = 'Present'
-        }
-
-        Script FSSMB1Feature {
-            DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
-            GetScript  = {
-                $f = Get-WindowsFeature FS-SMB1 -ErrorAction SilentlyContinue
-                @{ Result = if ($f) { $f.InstallState } else { 'NotAvailable' } }
-            }
-            TestScript = {
-                $osBuild = [System.Environment]::OSVersion.Version.Build
-                if ($osBuild -ge 26100) { return $true }
-                $f = Get-WindowsFeature FS-SMB1 -ErrorAction SilentlyContinue
-                if ($null -eq $f) { return $true }
-                return ($f.InstallState -eq 'Installed')
-            }
-            SetScript  = {
-                $result = Add-WindowsFeature FS-SMB1 -IncludeAllSubFeature -IncludeManagementTools -ErrorAction SilentlyContinue
-                if ($null -eq $result -or -not $result.Success) {
-                    Write-Warning 'FS-SMB1 installation failed (source files may not be available on this image).'
-                }
-            }
-        }
-
-        Script HyperVFeature {
-            DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
-            GetScript  = {
-                $state = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -ErrorAction SilentlyContinue
-                @{ Result = if ($state) { $state.State } else { 'NotPresent' } }
-            }
-            TestScript = {
-                $state = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -ErrorAction SilentlyContinue
-                return ($null -ne $state -and $state.State -eq 'Enabled')
-            }
-            SetScript  = {
-                try {
-                    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart -ErrorAction Stop
-                }
-                catch {
-                    Write-Warning "Hyper-V install failed (nested virt may not be supported): $($_.Exception.Message)"
-                }
-            }
-        }
-
-        WindowsFeature RSATHyperV {
-            DependsOn            = '[Script]HyperVFeature'
-            Name                 = 'RSAT-Hyper-V-Tools'
-            Ensure               = 'Present'
-            IncludeAllSubFeature = $true
         }
         #endregion
 
@@ -412,7 +349,6 @@ Configuration SutConfiguration {
             $shareCompress = $share.Compress
 
             Script "SmbShare_$shareName" {
-                DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
                 GetScript  = {
                     $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='$($using:shareName)'" -ErrorAction SilentlyContinue
                     @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -447,7 +383,6 @@ Configuration SutConfiguration {
             $sharePath = $share.Path
 
             Script "SmbShare_$shareName" {
-                DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
                 GetScript  = {
                     $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='$($using:shareName)'" -ErrorAction SilentlyContinue
                     @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -479,7 +414,6 @@ Configuration SutConfiguration {
         }
 
         Script SmbShare_AzCBAC {
-            DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
             GetScript  = {
                 $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='AzCBAC'" -ErrorAction SilentlyContinue
                 @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -499,7 +433,6 @@ Configuration SutConfiguration {
 
         #region -- FSRM ----------------------------------------------------
         Script FSRMClassification {
-            DependsOn  = '[WindowsFeatureSet]FileServerFeatures'
             GetScript  = {
                 $marker = Get-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'FSRMClassificationUpdated' -ErrorAction SilentlyContinue
                 @{ Result = if ($marker) { 'Updated' } else { 'NotUpdated' } }
@@ -564,4 +497,3 @@ Configuration SutConfiguration {
         #endregion
     }
 }
-

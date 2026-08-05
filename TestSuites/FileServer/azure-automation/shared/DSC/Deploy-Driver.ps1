@@ -80,7 +80,7 @@ if (Test-Path $validateScript) {
     }
     catch {
         .\Write-Error.ps1 "[FAIL] Config.json validation failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
+        Pop-Location; Stop-Transcript; throw
     }
 }
 
@@ -156,10 +156,43 @@ if (-not $isLinuxDriver) {
 
 $signalFile = "$dscFolder\Deploy-Driver.Completed.signal"
 $driverDscSignal = "$dscFolder\Driver-DSC.Completed.signal"
-if (Test-Path $signalFile) {
+$driverToolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
+$forceLevel2Signal = "$dscFolder\ForceLevel2.Completed.signal"
+
+function Test-RequiredDriverDscState {
+    if ($isLinuxDriver) { return $true }
+
+    $mofPath = Join-Path $mofFolder 'localhost.mof'
+    if (-not (Test-Path $mofPath)) { return $false }
+
+    try {
+        return [bool](Test-DscConfiguration -Path $mofFolder -ErrorAction Stop)
+    }
+    catch {
+        .\Write-Info.ps1 "[WARN] Driver DSC state verification failed: $($_.Exception.Message)" -ForegroundColor Yellow
+        return $false
+    }
+}
+
+function Test-RequiredDriverReadyState {
+    $forceLevel2Ready = $isLinuxDriver -or $SkipForceLevel2 -or (Test-Path $forceLevel2Signal)
+    return (Test-RequiredDriverDscState) -and
+           (Test-Path $driverToolsSignal) -and
+           $forceLevel2Ready
+}
+
+if ((Test-Path $signalFile) -and (Test-RequiredDriverReadyState)) {
     .\Write-Info.ps1 "[OK] Driver deployment already completed (signal file exists)." -ForegroundColor Green
     if (-not $isLinuxDriver) { Remove-ResumeTask }
     Pop-Location; Stop-Transcript; return
+}
+if ((Test-Path $signalFile) -and (-not (Test-RequiredDriverReadyState))) {
+    .\Write-Info.ps1 "[WARN] Removing stale Driver completion signal because required deployment state is incomplete." -ForegroundColor Yellow
+    Remove-Item -Path $signalFile -Force
+    if (-not $isLinuxDriver) {
+        Set-DeployStep -Step 1
+        $currentStep = 1
+    }
 }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
@@ -192,7 +225,8 @@ if (-not $isLinuxDriver -and (Test-Path $configFile)) {
             }
         }
     } catch {
-        .\Write-Info.ps1 "[WARN] Could not validate hostname: $($_.Exception.Message)" -ForegroundColor Yellow
+        .\Write-Error.ps1 "[FAIL] Could not validate or set hostname: $($_.Exception.Message)"
+        Pop-Location; Stop-Transcript; throw
     }
 }
 
@@ -208,14 +242,21 @@ if ($currentStep -lt 1) {
         .\Write-Info.ps1 "Compiling Driver DSC configuration (config: $configFile)..." -ForegroundColor Cyan
         DriverConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
         .\Write-Info.ps1 "Applying Driver DSC configuration..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+        if (Test-Path $driverDscSignal) {
+            Remove-Item -Path $driverDscSignal -Force -ErrorAction SilentlyContinue
+        }
+        Invoke-VerifiedDscConfiguration -Path $mofFolder `
+            -OperationName 'Driver DSC configuration' `
+            -Postcondition { Test-RequiredDriverDscState } | Out-Null
         $phase1Ok = $true
         "DRIVER DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $driverDscSignal -Force
         .\Write-Info.ps1 "[OK] DSC applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
     catch {
         .\Write-Error.ps1 "[FAIL] DSC failed: $($_.Exception.Message)"
-        .\Write-Info.ps1 "Continuing with domain join..." -ForegroundColor Yellow
+        Pop-Location
+        Stop-Transcript
+        throw "Driver DSC failed; domain join and tool installation are blocked."
     }
     $phase1.Stop()
     .\Write-Info.ps1 ""
@@ -223,12 +264,12 @@ if ($currentStep -lt 1) {
     # Imperative Step 1 -- Domain Join
     .\Write-Info.ps1 "---- Phase 1b: Domain Join ----" -ForegroundColor Yellow
     try {
-        & "$dscFolder\Invoke-DriverImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath
+        & "$dscFolder\Invoke-DriverImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath -NoTranscript
         .\Write-Info.ps1 "[OK] Domain join complete." -ForegroundColor Green
     }
     catch {
         .\Write-Error.ps1 "[FAIL] Domain join failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
+        Pop-Location; Stop-Transcript; throw
     }
 
     # Detect workgroup mode -- no reboot needed if domain join was skipped
@@ -285,7 +326,12 @@ if ($currentStep -eq 1) {
             . "$dscFolder\Driver-Configuration.ps1"
             .\Write-Info.ps1 "Driver DSC is missing or drifted; compiling repair configuration..." -ForegroundColor Yellow
             DriverConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
-            Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+            if (Test-Path $driverDscSignal) {
+                Remove-Item -Path $driverDscSignal -Force -ErrorAction SilentlyContinue
+            }
+            Invoke-VerifiedDscConfiguration -Path $mofFolder `
+                -OperationName 'Driver DSC repair configuration' `
+                -Postcondition { Test-RequiredDriverDscState } | Out-Null
             "DRIVER DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $driverDscSignal -Force
             $driverDscReady = $true
             .\Write-Info.ps1 "[OK] Driver DSC repaired in $([math]::Round($phase2a.Elapsed.TotalSeconds))s" -ForegroundColor Green
@@ -303,6 +349,7 @@ if ($currentStep -eq 1) {
     $imperativeArgs = @{
         Step        = 2
         WorkingPath = $WorkingPath
+        NoTranscript = $true
     }
     if ($SkipForceLevel2) {
         $imperativeArgs['SkipForceLevel2'] = $true
@@ -448,10 +495,13 @@ if (-not $isLinuxDriver -and $currentStep -ge 2 -and -not (Test-Path $signalFile
     $fl2Required = -not $SkipForceLevel2
     $fl2Done = -not $fl2Required -or (Test-Path $fl2SignalFile)
 
-    if ($fl2Done) {
+    if ($fl2Done -and (Test-RequiredDriverReadyState)) {
         "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
         .\Write-Info.ps1 "[OK] ForceLevel2 now confirmed. Signal file written: $signalFile" -ForegroundColor Green
         Remove-ResumeTask
+    } elseif ($fl2Done) {
+        Set-DeployStep -Step 1
+        .\Write-Info.ps1 "[WARN] ForceLevel2 is complete, but Driver DSC/tools state is incomplete. Resetting to Step 1 for repair." -ForegroundColor Yellow
     } else {
         .\Write-Info.ps1 "[WARN] ForceLevel2 still not confirmed. Will check again on next boot." -ForegroundColor Yellow
     }
@@ -468,6 +518,7 @@ if ($isLinuxDriver) {
     $imperativeArgs = @{
         Step        = 2
         WorkingPath = $WorkingPath
+        NoTranscript = $true
     }
     if ($SkipForceLevel2) { $imperativeArgs['SkipForceLevel2'] = $true }
 

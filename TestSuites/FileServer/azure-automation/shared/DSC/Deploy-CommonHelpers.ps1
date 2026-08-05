@@ -116,3 +116,255 @@ function Remove-ResumeTask {
         .\Write-Info.ps1 "[OK] Unregistered '$TaskName' scheduled task." -ForegroundColor Green
     }
 }
+
+function Test-PendingSystemReboot {
+    $pendingRenames = Get-ItemProperty `
+        -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager' `
+        -Name 'PendingFileRenameOperations' -ErrorAction SilentlyContinue
+    $pendingRenameOperations = if ($null -ne $pendingRenames) {
+        @($pendingRenames.PendingFileRenameOperations |
+            Where-Object { -not [string]::IsNullOrWhiteSpace("$_") })
+    } else {
+        @()
+    }
+
+    return (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') -or
+           (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') -or
+           ($pendingRenameOperations.Count -gt 0)
+}
+
+function Get-DeploymentPhase {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+
+        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+    )
+
+    $value = Get-ItemProperty -Path $RegistryPath -Name $Name -ErrorAction SilentlyContinue
+    if ($null -eq $value) { return 0 }
+    return [int]$value.$Name
+}
+
+function Set-DeploymentPhase {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+
+        [Parameter(Mandatory)]
+        [ValidateRange(0, 100)]
+        [int]$Phase,
+
+        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+    )
+
+    if (-not (Test-Path $RegistryPath)) {
+        New-Item -Path $RegistryPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $RegistryPath -Name $Name -Value $Phase -Type DWord -Force
+}
+
+function Write-DeploymentHeartbeat {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Phase,
+
+        [Parameter(Mandatory)]
+        [string]$Operation,
+
+        [Parameter(Mandatory)]
+        [datetime]$StartedAt,
+
+        [string]$HeartbeatPath,
+
+        [string]$LastCheckpoint,
+
+        [Nullable[datetime]]$Deadline
+    )
+
+    $now = Get-Date
+    $elapsedSeconds = [int]($now - $StartedAt).TotalSeconds
+    $deadlineText = if ($null -ne $Deadline -and $Deadline.HasValue) {
+        $Deadline.Value.ToUniversalTime().ToString('o')
+    } else {
+        $null
+    }
+    $state = [ordered]@{
+        TimestampUtc = $now.ToUniversalTime().ToString('o')
+        Phase = $Phase
+        Operation = $Operation
+        ElapsedSeconds = $elapsedSeconds
+        DeadlineUtc = $deadlineText
+        LastCheckpoint = $LastCheckpoint
+    }
+
+    if ($HeartbeatPath) {
+        $heartbeatDirectory = Split-Path -Path $HeartbeatPath -Parent
+        if ($heartbeatDirectory -and -not (Test-Path $heartbeatDirectory)) {
+            New-Item -ItemType Directory -Path $heartbeatDirectory -Force | Out-Null
+        }
+        $temporaryPath = "$HeartbeatPath.tmp"
+        $state | ConvertTo-Json -Compress | Set-Content -LiteralPath $temporaryPath -Encoding UTF8 -Force
+        Move-Item -LiteralPath $temporaryPath -Destination $HeartbeatPath -Force
+    }
+
+    $message = "[HEARTBEAT] Phase=$Phase; Operation=$Operation; Elapsed=${elapsedSeconds}s"
+    if ($LastCheckpoint) { $message += "; LastCheckpoint=$LastCheckpoint" }
+    if ($deadlineText) { $message += "; DeadlineUtc=$deadlineText" }
+
+    $writer = Join-Path (Get-Location) 'Write-Info.ps1'
+    if (Test-Path $writer) {
+        & $writer $message -ForegroundColor DarkGray
+    } else {
+        Write-Host $message -ForegroundColor DarkGray
+    }
+}
+
+function Wait-DeploymentJob {
+    param(
+        [Parameter(Mandatory)]
+        [System.Management.Automation.Job]$Job,
+
+        [Parameter(Mandatory)]
+        [ValidateRange(1, 86400)]
+        [int]$TimeoutSeconds,
+
+        [Parameter(Mandatory)]
+        [string]$Phase,
+
+        [Parameter(Mandatory)]
+        [string]$Operation,
+
+        [string]$HeartbeatPath,
+
+        [string]$LastCheckpoint,
+
+        [ValidateRange(5, 600)]
+        [int]$HeartbeatIntervalSeconds = 60
+    )
+
+    $startedAt = Get-Date
+    $deadline = $startedAt.AddSeconds($TimeoutSeconds)
+    $nextHeartbeat = $startedAt
+
+    while ($Job.State -in @('NotStarted', 'Running', 'Blocked') -and (Get-Date) -lt $deadline) {
+        if ((Get-Date) -ge $nextHeartbeat) {
+            Write-DeploymentHeartbeat -Phase $Phase -Operation $Operation `
+                -StartedAt $startedAt -Deadline $deadline -HeartbeatPath $HeartbeatPath `
+                -LastCheckpoint $LastCheckpoint
+            $nextHeartbeat = (Get-Date).AddSeconds($HeartbeatIntervalSeconds)
+        }
+        Wait-Job -Job $Job -Timeout ([Math]::Min(10, $HeartbeatIntervalSeconds)) | Out-Null
+    }
+
+    if ($Job.State -in @('NotStarted', 'Running', 'Blocked')) {
+        Stop-Job -Job $Job
+        throw "$Operation exceeded the $TimeoutSeconds-second timeout."
+    }
+    if ($Job.State -ne 'Completed') {
+        $reason = $Job.ChildJobs[0].JobStateInfo.Reason
+        throw "$Operation ended in state '$($Job.State)': $reason"
+    }
+    return $Job
+}
+
+function Invoke-VerifiedDscConfiguration {
+    <#
+    .SYNOPSIS
+        Applies DSC and waits for a verified LCM success result.
+    .DESCRIPTION
+        Start-DscConfiguration -Wait keeps one WSMan client session open. Feature
+        installation can restart WinRM, invalidating that session even while the LCM
+        continues locally. Submit asynchronously, then poll with fresh calls so a
+        transient WinRM restart cannot become either a false failure or false success.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path,
+
+        [string]$OperationName = 'DSC configuration',
+
+        [ValidateRange(1, 7200)]
+        [int]$TimeoutSeconds = 3600,
+
+        [ValidateRange(1, 300)]
+        [int]$PollIntervalSeconds = 10,
+
+        [scriptblock]$Postcondition,
+
+        [string]$HeartbeatPath,
+
+        [string]$PhaseName = 'DSC',
+
+        [ValidateRange(5, 600)]
+        [int]$HeartbeatIntervalSeconds = 60
+    )
+
+    $submittedAt = Get-Date
+    Start-DscConfiguration -Path $Path -Verbose -Force -ErrorAction Stop
+
+    $deadline = $submittedAt.AddSeconds($TimeoutSeconds)
+    $lastStatus = $null
+    $lastProbeError = $null
+    $nextHeartbeat = $submittedAt
+
+    while ((Get-Date) -lt $deadline) {
+        if ((Get-Date) -ge $nextHeartbeat) {
+            Write-DeploymentHeartbeat -Phase $PhaseName -Operation $OperationName `
+                -StartedAt $submittedAt -Deadline $deadline -HeartbeatPath $HeartbeatPath `
+                -LastCheckpoint 'DSC submitted to the Local Configuration Manager'
+            $nextHeartbeat = (Get-Date).AddSeconds($HeartbeatIntervalSeconds)
+        }
+        $statusErrors = @()
+        try {
+            # Windows PowerShell 5.1 reports an expected non-terminating error while
+            # the submitted configuration is still active:
+            # "Start-DscConfiguration cmdlet is in progress..."
+            # Explicitly suppress the error stream so a normal feature installation
+            # does not flood the deployment transcript with terminating-error records.
+            $lastStatus = Get-DscConfigurationStatus -All `
+                -ErrorAction SilentlyContinue -ErrorVariable statusErrors |
+                # A prior run can finish immediately before this submission. Never accept
+                # a status whose LCM start time predates the operation being verified.
+                Where-Object { $_.StartDate -ge $submittedAt } |
+                Sort-Object StartDate -Descending |
+                Select-Object -First 1
+            if ($statusErrors.Count -gt 0) {
+                $lastProbeError = @($statusErrors | ForEach-Object { $_.Exception.Message }) -join '; '
+            } else {
+                $lastProbeError = $null
+            }
+        }
+        catch {
+            $lastProbeError = $_.Exception.Message
+            Start-Sleep -Seconds $PollIntervalSeconds
+            continue
+        }
+
+        if ($null -eq $lastStatus) {
+            Start-Sleep -Seconds $PollIntervalSeconds
+            continue
+        }
+
+        $statusName = "$($lastStatus.Status)"
+        if ($statusName -eq 'Failure') {
+            $details = @($lastStatus.Error | ForEach-Object { "$_" }) -join '; '
+            if ([string]::IsNullOrWhiteSpace($details)) { $details = 'No LCM error details were returned.' }
+            throw "$OperationName failed in the DSC Local Configuration Manager: $details"
+        }
+
+        if ($statusName -eq 'Success') {
+            if ($null -ne $Postcondition -and -not (& $Postcondition)) {
+                throw "$OperationName reported Success, but its required postconditions were not met."
+            }
+            return $lastStatus
+        }
+
+        Start-Sleep -Seconds $PollIntervalSeconds
+    }
+
+    $statusSummary = if ($null -ne $lastStatus) { "$($lastStatus.Status)" } else { 'not available' }
+    $probeSummary = if ($lastProbeError) { " Last status probe error: $lastProbeError" } else { '' }
+    throw "$OperationName did not reach a verified Success state within $TimeoutSeconds seconds (last status: $statusSummary).$probeSummary"
+}
