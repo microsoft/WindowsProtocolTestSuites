@@ -13,14 +13,13 @@
 
     Step 0 -> 1: Pre-Domain-Join
       DSC: Hosts file, firewall, PS remoting, password never expires, multi-NIC routing.
-      Imperative: Domain join via domainjoin.ps1.
-      -> Deferred reboot (TKFRSAR startup task + 90s shutdown)
+      Imperative: Prepare/install machine-level tools, then domain join via domainjoin.ps1.
+      -> Deferred domain-join reboot, or a Workgroup tool-stabilization reboot.
 
-    Step 1 -> 2: Tools + PTF Config + RSA Keys + ForceLevel2
+    Step 1 -> 2: PTF Config + RSA Keys + ForceLevel2
       DSC: Verify the persisted configuration and repair only when drifted.
-      Imperative: Tools install (DotNetCore, OpenSSH, PowerShellCore, PTMService,
-                  PTMCli, TestSuite, certs), cluster ptfconfig patching (if applicable),
-                  RSA key copy, sshd restart, ForceLevel2 via ShareUtil.exe.
+      Imperative: Verify tools, apply cluster ptfconfig changes (if applicable),
+                  copy RSA keys, restart sshd, and configure ForceLevel2 via ShareUtil.exe.
       Phase 3: Schedule test run (fire-and-forget).
       -> Finish (signal file written)
 
@@ -142,19 +141,6 @@ if ($isLinuxDriver) {
 $currentStep = Get-DeployStep
 .\Write-Info.ps1 "Current deploy step: $currentStep" -ForegroundColor DarkGray
 
-# Load shared helpers (reboot scheduling, TKFRSAR cleanup)
-. "$dscFolder\Deploy-CommonHelpers.ps1"
-
-# Cancel any stale reboot task from a previous run so it doesn't fire
-# in the middle of feature installation (0x8007045b).
-if (-not $isLinuxDriver) {
-    $staleReboot = Get-ScheduledTask -TaskName 'PostDeployReboot' -ErrorAction SilentlyContinue
-    if ($null -ne $staleReboot) {
-        Unregister-ScheduledTask -TaskName 'PostDeployReboot' -Confirm:$false
-        .\Write-Info.ps1 "[OK] Cancelled stale PostDeployReboot task from previous run." -ForegroundColor Yellow
-    }
-}
-
 $signalFile = "$dscFolder\Deploy-Driver.Completed.signal"
 $driverDscSignal = "$dscFolder\Driver-DSC.Completed.signal"
 $driverToolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
@@ -164,7 +150,111 @@ $forceLevel2Signal = "$dscFolder\ForceLevel2.Completed.signal"
 $joinRebootPendingName = 'DriverJoinRebootPending'
 $joinPreBootTimeName = 'DriverJoinPreRebootBootTimeUtc'
 $joinRebootCountName = 'DriverJoinRebootCount'
+$toolsRebootPendingName = 'DriverToolsRebootPending'
+$toolsPreBootTimeName = 'DriverToolsPreRebootBootTimeUtc'
+$toolsRebootCountName = 'DriverToolsRebootCount'
+$toolsRebootScheduleRetryName = 'DriverToolsRebootScheduleRetryCount'
+$joinRebootScheduleRetryName = 'DriverJoinRebootScheduleRetryCount'
 $toolsJobTimeoutSeconds = 3600
+
+# Load shared helpers (reboot scheduling, TKFRSAR cleanup)
+. "$dscFolder\Deploy-CommonHelpers.ps1"
+
+function Stop-DriverRecoveryTasks {
+    foreach ($taskName in @('TKFRSAR', 'Config-ForceLevel2', 'PostDeployReboot')) {
+        $task = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+        if ($null -ne $task) {
+            Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
+            .\Write-Info.ps1 "[OK] Unregistered terminal recovery task '$taskName'." -ForegroundColor Yellow
+        }
+    }
+}
+
+function Test-PostDeployRebootCanStillRun {
+    $task = Get-ScheduledTask -TaskName 'PostDeployReboot' -ErrorAction SilentlyContinue
+    if ($null -eq $task -or "$($task.State)" -eq 'Disabled') {
+        return $false
+    }
+    if ("$($task.State)" -eq 'Running') {
+        return $true
+    }
+    $taskInfo = Get-ScheduledTaskInfo -TaskName 'PostDeployReboot' -ErrorAction SilentlyContinue
+    return $null -ne $taskInfo -and $taskInfo.NextRunTime -gt (Get-Date)
+}
+
+# Cancel any stale reboot task from a previous run so it doesn't fire
+# in the middle of feature installation (0x8007045b).
+if (-not $isLinuxDriver) {
+    $toolsRebootPending = [int](Get-DeploymentRegistryValue `
+        -Name $toolsRebootPendingName -DefaultValue 0 -RegistryPath $rebootRegPath)
+    $joinRebootPending = [int](Get-DeploymentRegistryValue `
+        -Name $joinRebootPendingName -DefaultValue 0 -RegistryPath $rebootRegPath)
+    $staleReboot = Get-ScheduledTask -TaskName 'PostDeployReboot' -ErrorAction SilentlyContinue
+    if ($null -ne $staleReboot -and $toolsRebootPending -ne 1 -and $joinRebootPending -ne 1) {
+        Unregister-ScheduledTask -TaskName 'PostDeployReboot' -Confirm:$false
+        .\Write-Info.ps1 "[OK] Cancelled stale PostDeployReboot task from previous run." -ForegroundColor Yellow
+    }
+
+    if ($toolsRebootPending -eq 1) {
+        $recordedBoot = [datetime](Get-ItemPropertyValue -Path $rebootRegPath `
+            -Name $toolsPreBootTimeName -ErrorAction Stop)
+        $currentBoot = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+        if ($currentBoot.ToUniversalTime() -le $recordedBoot.ToUniversalTime()) {
+            if (-not (Test-PostDeployRebootCanStillRun)) {
+                $scheduleRetryCount = [int](Get-DeploymentRegistryValue `
+                    -Name $toolsRebootScheduleRetryName -DefaultValue 0 `
+                    -RegistryPath $rebootRegPath)
+                if ($scheduleRetryCount -ge 1) {
+                    Stop-DriverRecoveryTasks
+                    Pop-Location
+                    Stop-Transcript
+                    throw 'The Driver tool-stabilization reboot task failed after one bounded reschedule attempt.'
+                }
+                Set-ItemProperty -Path $rebootRegPath -Name $toolsRebootScheduleRetryName `
+                    -Value 1 -Type DWord -Force
+                $resumePassword = $cfg.Core.Password
+                $domainName = $cfg.Core.DomainName
+                if ([string]::IsNullOrWhiteSpace($domainName) -or $domainName -eq 'Workgroup') {
+                    $resumeUser = "$env:COMPUTERNAME\$($cfg.Core.Username)"
+                } else {
+                    $domainPrefix = if ($cfg.Domain -and $cfg.Domain.NetBiosName) {
+                        $cfg.Domain.NetBiosName
+                    } else {
+                        $domainName.Split('.')[0].ToUpperInvariant()
+                    }
+                    $resumeUser = "$domainPrefix\$($cfg.Core.Username)"
+                }
+                try {
+                    Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Driver.ps1" `
+                        -WorkingPath $WorkingPath -DscFolder $dscFolder `
+                        -RunAsUser $resumeUser -RunAsPassword $resumePassword
+                }
+                catch {
+                    foreach ($taskName in @('TKFRSAR', 'PostDeployReboot')) {
+                        Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
+                    }
+                    Pop-Location
+                    Stop-Transcript
+                    throw "The persisted Driver tool-stabilization reboot could not be rescheduled: $($_.Exception.Message)"
+                }
+            }
+            .\Write-Info.ps1 '[WAIT] Driver tool-stabilization reboot is scheduled but has not occurred yet.' -ForegroundColor Yellow
+            Pop-Location
+            Stop-Transcript
+            return
+        }
+        Set-ItemProperty -Path $rebootRegPath -Name $toolsRebootPendingName -Value 0 -Type DWord -Force
+        Set-ItemProperty -Path $rebootRegPath -Name $toolsRebootScheduleRetryName -Value 0 -Type DWord -Force
+        $remainingReasons = @(Get-PendingSystemRebootReasons)
+        if ($remainingReasons.Count -gt 0) {
+            Stop-DriverRecoveryTasks
+            Pop-Location
+            Stop-Transcript
+            throw "The Driver remains pending reboot after tool stabilization. Reasons: $($remainingReasons -join ', ')"
+        }
+        .\Write-Info.ps1 '[OK] Driver tool-stabilization reboot completed.' -ForegroundColor Green
+    }
+}
 
 function Start-DriverToolsPreparationJob {
     if ($isLinuxDriver -or
@@ -204,6 +294,60 @@ function Complete-DriverToolsPreparationJob {
     }
     finally {
         Remove-Job -Job $Job -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Register-DriverToolsStabilizationReboot {
+    $reasons = @(Get-PendingSystemRebootReasons)
+    $reasonSummary = if ($reasons.Count -gt 0) { $reasons -join ', ' } else { 'unknown' }
+    $rebootCount = [int](Get-DeploymentRegistryValue `
+        -Name $toolsRebootCountName -DefaultValue 0 -RegistryPath $rebootRegPath)
+    if ($rebootCount -ge 1) {
+        Stop-DriverRecoveryTasks
+        Pop-Location
+        Stop-Transcript
+        throw "The Driver remains pending reboot after its one allowed tool-stabilization reboot. Reasons: $reasonSummary"
+    }
+
+    $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
+    if ($null -ne $staleTestTask) {
+        Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
+    }
+
+    Set-DeployStep -Step 1
+    Set-ItemProperty -Path $rebootRegPath -Name $toolsRebootCountName -Value 1 -Type DWord -Force
+    Set-ItemProperty -Path $rebootRegPath -Name $toolsRebootPendingName -Value 1 -Type DWord -Force
+    Set-ItemProperty -Path $rebootRegPath -Name $toolsRebootScheduleRetryName -Value 0 -Type DWord -Force
+    $bootTime = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime.ToUniversalTime().ToString('o')
+    Set-ItemProperty -Path $rebootRegPath -Name $toolsPreBootTimeName -Value $bootTime -Type String -Force
+    .\Write-Info.ps1 "[WARN] Scheduling one Driver tool-stabilization reboot. Reasons: $reasonSummary" -ForegroundColor Yellow
+
+    $resumeUser = $null
+    $resumePassword = $null
+    if ($null -ne $cfg -and $null -ne $cfg.Core) {
+        $resumePassword = $cfg.Core.Password
+        $domainName = $cfg.Core.DomainName
+        if ([string]::IsNullOrWhiteSpace($domainName) -or $domainName -eq 'Workgroup') {
+            $resumeUser = "$env:COMPUTERNAME\$($cfg.Core.Username)"
+        } else {
+            $domainPrefix = if ($cfg.Domain -and $cfg.Domain.NetBiosName) {
+                $cfg.Domain.NetBiosName
+            } else {
+                $domainName.Split('.')[0].ToUpperInvariant()
+            }
+            $resumeUser = "$domainPrefix\$($cfg.Core.Username)"
+        }
+    }
+    try {
+        Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Driver.ps1" `
+            -WorkingPath $WorkingPath -DscFolder $dscFolder `
+            -RunAsUser $resumeUser -RunAsPassword $resumePassword
+    }
+    catch {
+        Stop-DriverRecoveryTasks
+        Pop-Location
+        Stop-Transcript
+        throw "Could not schedule the Driver tool-stabilization reboot; persisted state will retry once: $($_.Exception.Message)"
     }
 }
 
@@ -313,6 +457,7 @@ if (-not $isLinuxDriver -and (Test-Path $configFile)) {
             $currentRebootCount = Get-RebootCount
             if ($currentRebootCount -ge $maxRebootCount) {
                 Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
+                Stop-DriverRecoveryTasks
                 throw "The Driver hostname is still '$env:COMPUTERNAME' after its one allowed rename reboot; expected '$expectedName'."
             } else {
                 Set-RebootCount -Count ($currentRebootCount + 1)
@@ -321,8 +466,15 @@ if (-not $isLinuxDriver -and (Test-Path $configFile)) {
 
                 .\Write-Info.ps1 "Scheduling Deploy-Driver.ps1 to re-run after reboot..." -ForegroundColor Yellow
                 Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
-                Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Driver.ps1" `
-                    -WorkingPath $WorkingPath -DscFolder $dscFolder
+                try {
+                    Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Driver.ps1" `
+                        -WorkingPath $WorkingPath -DscFolder $dscFolder
+                }
+                catch {
+                    Stop-DriverRecoveryTasks
+                    Set-RebootCount -Count $currentRebootCount
+                    throw "Could not schedule the Driver hostname-change reboot: $($_.Exception.Message)"
+                }
 
                 Pop-Location
                 Stop-Transcript
@@ -368,8 +520,40 @@ if ($currentStep -lt 1) {
     $phase1.Stop()
     .\Write-Info.ps1 ""
 
+    # Install cached tools before the domain-join reboot so installer reboot
+    # requirements are coalesced with the one normal Driver reboot.
+    .\Write-Info.ps1 "---- Phase 1b: Pre-Reboot Tool Installation ----" -ForegroundColor Yellow
+    try {
+        Complete-DriverToolsPreparationJob -Job $toolsPreparationJob
+        $toolsPreparationJob = $null
+        if (-not (Test-Path $driverToolsPreparedSignal) -and
+            -not (Test-Path $driverToolsSignal)) {
+            $prepared = & $driverToolsInstaller -Role 'DriverComputer' -Operation Prepare `
+                -PreparedSignalFile $driverToolsPreparedSignal -NoTranscript | Select-Object -Last 1
+            if (-not $prepared -or -not (Test-Path $driverToolsPreparedSignal)) {
+                throw 'Required Driver packages could not be prepared before domain join.'
+            }
+        }
+        if (-not (Test-Path $driverToolsSignal)) {
+            $installed = & $driverToolsInstaller -Role 'DriverComputer' -Operation Install `
+                -PreparedSignalFile $driverToolsPreparedSignal -AllowRebootRequired `
+                -NoTranscript | Select-Object -Last 1
+            if (-not $installed -or -not (Test-Path $driverToolsSignal)) {
+                throw 'Required Driver tools could not be installed before domain join.'
+            }
+        }
+        .\Write-Info.ps1 '[OK] Driver tools installed before the planned domain-join reboot.' -ForegroundColor Green
+    }
+    catch {
+        Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
+        .\Write-Error.ps1 "[FAIL] Pre-reboot Driver tool installation failed: $($_.Exception.Message)"
+        Pop-Location
+        Stop-Transcript
+        throw
+    }
+
     # Imperative Step 1 -- Domain Join
-    .\Write-Info.ps1 "---- Phase 1b: Domain Join ----" -ForegroundColor Yellow
+    .\Write-Info.ps1 "---- Phase 1c: Domain Join ----" -ForegroundColor Yellow
     try {
         & "$dscFolder\Invoke-DriverImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath -NoTranscript
         .\Write-Info.ps1 "[OK] Domain join complete." -ForegroundColor Green
@@ -380,28 +564,34 @@ if ($currentStep -lt 1) {
         Pop-Location; Stop-Transcript; throw
     }
 
-    # Detect workgroup mode -- no reboot needed if domain join was skipped
+    # Workgroup has no domain-join reboot, so use the same bounded stabilization
+    # reboot to honor any accepted installer reboot requirement before Step 2.
     $cfgForReboot = Get-Content -Path $configFile -Raw | ConvertFrom-Json
     $domNameReboot = if ($cfgForReboot.Core) { $cfgForReboot.Core.DomainName } else { $null }
     $isWorkgroup = [string]::IsNullOrWhiteSpace($domNameReboot) -or $domNameReboot -eq 'Workgroup'
 
     if ($isWorkgroup) {
-        .\Write-Info.ps1 "Workgroup mode -- skipping reboot, proceeding to Step 2..." -ForegroundColor Yellow
+        .\Write-Info.ps1 'Workgroup mode -- scheduling the planned post-install stabilization reboot.' -ForegroundColor Yellow
         Set-DeployStep -Step 1
-        # Fall through to Step 1 -> 2 below
+        Register-DriverToolsStabilizationReboot
+        Pop-Location
+        Stop-Transcript
+        return
     } else {
-        if ($null -ne $toolsPreparationJob -and $toolsPreparationJob.State -eq 'Completed') {
-            try { Complete-DriverToolsPreparationJob -Job $toolsPreparationJob } catch {
-                .\Write-Info.ps1 "[WARN] Package preparation will retry after reboot: $($_.Exception.Message)" -ForegroundColor Yellow
+        if ($null -ne $toolsPreparationJob) {
+            if ($toolsPreparationJob.State -eq 'Completed') {
+                try { Complete-DriverToolsPreparationJob -Job $toolsPreparationJob } catch {
+                    .\Write-Info.ps1 "[WARN] Package preparation will retry after reboot: $($_.Exception.Message)" -ForegroundColor Yellow
+                }
+            } else {
+                Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
+                .\Write-Info.ps1 '[INFO] Paused unfinished package preparation for the domain-join reboot.' -ForegroundColor Yellow
             }
-        } else {
-            Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
-            .\Write-Info.ps1 '[INFO] Paused unfinished package preparation for the domain-join reboot.' -ForegroundColor Yellow
         }
         $toolsPreparationJob = $null
 
-        $joinRebootCount = [int](Get-ItemPropertyValue -Path $rebootRegPath `
-            -Name $joinRebootCountName -ErrorAction SilentlyContinue)
+        $joinRebootCount = [int](Get-DeploymentRegistryValue `
+            -Name $joinRebootCountName -DefaultValue 0 -RegistryPath $rebootRegPath)
         if ($joinRebootCount -ge 1) {
             Pop-Location
             Stop-Transcript
@@ -411,6 +601,7 @@ if ($currentStep -lt 1) {
         Set-DeployStep -Step 1
         Set-ItemProperty -Path $rebootRegPath -Name $joinRebootCountName -Value 1 -Type DWord -Force
         Set-ItemProperty -Path $rebootRegPath -Name $joinRebootPendingName -Value 1 -Type DWord -Force
+        Set-ItemProperty -Path $rebootRegPath -Name $joinRebootScheduleRetryName -Value 0 -Type DWord -Force
         $bootTime = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime.ToUniversalTime().ToString('o')
         Set-ItemProperty -Path $rebootRegPath -Name $joinPreBootTimeName -Value $bootTime -Type String -Force
         .\Write-Info.ps1 "Scheduling deferred reboot and resume..." -ForegroundColor Yellow
@@ -418,9 +609,17 @@ if ($currentStep -lt 1) {
         $domainNetBios = if ($cfg.Domain -and $cfg.Domain.NetBiosName) { $cfg.Domain.NetBiosName } else { $cfg.Core.DomainName.Split('.')[0].ToUpper() }
         $domainAdminUser = "$domainNetBios\$($cfg.Core.Username)"
         $domainAdminPass = $cfg.Core.Password
-        Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Driver.ps1" `
-            -WorkingPath $WorkingPath -DscFolder $dscFolder `
-            -RunAsUser $domainAdminUser -RunAsPassword $domainAdminPass
+        try {
+            Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Driver.ps1" `
+                -WorkingPath $WorkingPath -DscFolder $dscFolder `
+                -RunAsUser $domainAdminUser -RunAsPassword $domainAdminPass
+        }
+        catch {
+            Stop-DriverRecoveryTasks
+            Pop-Location
+            Stop-Transcript
+            throw "Could not schedule the Driver domain-join reboot; persisted state will retry once: $($_.Exception.Message)"
+        }
 
         Pop-Location
         Stop-Transcript
@@ -434,19 +633,53 @@ if ($currentStep -lt 1) {
 $currentStep = Get-DeployStep
 if ($currentStep -eq 1) {
     if (-not $isLinuxDriver) {
-        $joinPending = [int](Get-ItemPropertyValue -Path $rebootRegPath `
-            -Name $joinRebootPendingName -ErrorAction SilentlyContinue)
+        $joinPending = [int](Get-DeploymentRegistryValue `
+            -Name $joinRebootPendingName -DefaultValue 0 -RegistryPath $rebootRegPath)
         if ($joinPending -eq 1) {
             $recordedBoot = [datetime](Get-ItemPropertyValue -Path $rebootRegPath `
                 -Name $joinPreBootTimeName -ErrorAction Stop)
             $currentBoot = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
             if ($currentBoot.ToUniversalTime() -le $recordedBoot.ToUniversalTime()) {
                 Stop-DriverToolsPreparationJob -Job $toolsPreparationJob
+                if (-not (Test-PostDeployRebootCanStillRun)) {
+                    $scheduleRetryCount = [int](Get-DeploymentRegistryValue `
+                        -Name $joinRebootScheduleRetryName -DefaultValue 0 `
+                        -RegistryPath $rebootRegPath)
+                    if ($scheduleRetryCount -ge 1) {
+                        Stop-DriverRecoveryTasks
+                        Pop-Location
+                        Stop-Transcript
+                        throw 'The Driver domain-join reboot task failed after one bounded reschedule attempt.'
+                    }
+                    Set-ItemProperty -Path $rebootRegPath -Name $joinRebootScheduleRetryName `
+                        -Value 1 -Type DWord -Force
+                    $domainNetBios = if ($cfg.Domain -and $cfg.Domain.NetBiosName) {
+                        $cfg.Domain.NetBiosName
+                    } else {
+                        $cfg.Core.DomainName.Split('.')[0].ToUpperInvariant()
+                    }
+                    try {
+                        Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Driver.ps1" `
+                            -WorkingPath $WorkingPath -DscFolder $dscFolder `
+                            -RunAsUser "$domainNetBios\$($cfg.Core.Username)" `
+                            -RunAsPassword $cfg.Core.Password
+                    }
+                    catch {
+                        foreach ($taskName in @('TKFRSAR', 'PostDeployReboot')) {
+                            Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction SilentlyContinue
+                        }
+                        Pop-Location
+                        Stop-Transcript
+                        throw "The persisted Driver domain-join reboot could not be rescheduled: $($_.Exception.Message)"
+                    }
+                }
+                .\Write-Info.ps1 '[WAIT] Driver domain-join reboot is scheduled but has not occurred yet.' -ForegroundColor Yellow
                 Pop-Location
                 Stop-Transcript
-                throw 'The Driver domain-join reboot was persisted but not observed.'
+                return
             }
             Set-ItemProperty -Path $rebootRegPath -Name $joinRebootPendingName -Value 0 -Type DWord -Force
+            Set-ItemProperty -Path $rebootRegPath -Name $joinRebootScheduleRetryName -Value 0 -Type DWord -Force
         }
         Wait-DriverDomainReadiness
     }
@@ -535,13 +768,10 @@ if ($currentStep -eq 1) {
     $fl2Done = -not $fl2Required -or (Test-Path $forceLevel2Signal)
 
     if ($phase2Ok -and $fl2Done -and (Test-PendingSystemReboot)) {
-        $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
-        if ($null -ne $staleTestTask) {
-            Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
-        }
+        Register-DriverToolsStabilizationReboot
         Pop-Location
         Stop-Transcript
-        throw 'An unexpected second Driver reboot became pending before test scheduling.'
+        return
     }
 
     # ===========================================================================
@@ -640,19 +870,17 @@ if ($currentStep -eq 1) {
     # deployment is incomplete and should re-run on next boot.
     if ($phase2Ok -and $fl2Done) {
         if (Test-PendingSystemReboot) {
-            $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
-            if ($null -ne $staleTestTask) {
-                Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
-            }
+            Register-DriverToolsStabilizationReboot
             Pop-Location
             Stop-Transcript
-            throw 'An unexpected second Driver reboot became pending after tool and test configuration.'
+            return
         }
         Write-VerifiedDeploymentSignal -Path $signalFile `
             -Content "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
         Set-DeployStep -Step 2
         Set-RebootCount -Count 0
         Set-ItemProperty -Path $rebootRegPath -Name $joinRebootCountName -Value 0 -Type DWord -Force
+        Set-ItemProperty -Path $rebootRegPath -Name $toolsRebootCountName -Value 0 -Type DWord -Force
         .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
         Remove-ResumeTask
         Remove-Item -Path $heartbeatFile -Force -ErrorAction SilentlyContinue
@@ -682,12 +910,10 @@ if (-not $isLinuxDriver -and $currentStep -ge 2 -and -not (Test-Path $signalFile
     $fl2Done = -not $fl2Required -or (Test-Path $fl2SignalFile)
 
     if ($fl2Done -and (Test-PendingSystemReboot)) {
-        $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
-        if ($null -ne $staleTestTask) {
-            Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
-        }
-        Set-DeployStep -Step 1
-        throw 'An unexpected second Driver reboot remains pending; completion and tests are blocked.'
+        Register-DriverToolsStabilizationReboot
+        Pop-Location
+        Stop-Transcript
+        return
     }
     if ($fl2Done -and (Test-RequiredDriverReadyState)) {
         Write-VerifiedDeploymentSignal -Path $signalFile `

@@ -29,6 +29,8 @@ param(
     [ValidateRange(1, 16)]
     [int]$DownloadThrottleLimit = 4,
 
+    [switch]$AllowRebootRequired,
+
     [switch]$NoTranscript
 )
 
@@ -114,12 +116,23 @@ function Get-RequiredFile {
 
 function Assert-ExitCode {
     param([int]$ExitCode, [string]$Operation)
-    if ($script:Operation -eq 'Install' -and $ExitCode -in @(1641, 3010)) {
-        throw "$Operation requested another reboot (exit code $ExitCode) during the post-reboot install phase."
+    if ($ExitCode -eq 1641) {
+        throw "$Operation initiated a reboot (exit code $ExitCode) before deployment state could be persisted."
+    }
+    if ($script:Operation -eq 'Install' -and $ExitCode -eq 3010 -and -not $AllowRebootRequired) {
+        throw "$Operation requested a reboot (exit code $ExitCode) without an explicitly planned reboot phase."
     }
     if ($successExitCodes -notcontains $ExitCode) {
         throw "$Operation exited with code $ExitCode."
     }
+}
+
+function Add-NoRestartArgument {
+    param([string]$Arguments)
+    if ($Arguments -match '(?i)(^|\s)[/-]norestart(\s|$)') {
+        return $Arguments
+    }
+    return "$Arguments /norestart".Trim()
 }
 
 function Stop-ToolProcessTree {
@@ -213,15 +226,21 @@ function Invoke-ConfiguredItem {
     if ($Item.MSIName) {
         $arguments = "/i `"$itemPath`""
         $arguments += if ($Item.ArgumentList) { " $($Item.ArgumentList)" } else { ' /quiet' }
+        $arguments = Add-NoRestartArgument -Arguments $arguments
         Invoke-ToolProcess -FilePath 'msiexec.exe' -Arguments $arguments `
             -Operation "MSI install for $label"
     } elseif ($Item.EXEName) {
+        $arguments = "$($Item.ArgumentList)"
+        if ($AllowRebootRequired -or
+            [System.IO.Path]::GetExtension($itemPath) -eq '.msu') {
+            $arguments = Add-NoRestartArgument -Arguments $arguments
+        }
         if ([System.IO.Path]::GetExtension($itemPath) -eq '.msu') {
             Invoke-ToolProcess -FilePath 'wusa.exe' `
-                -Arguments "`"$itemPath`" $($Item.ArgumentList)" `
+                -Arguments "`"$itemPath`" $arguments" `
                 -Operation "Executable install for $label"
         } else {
-            Invoke-ToolProcess -FilePath $itemPath -Arguments "$($Item.ArgumentList)" `
+            Invoke-ToolProcess -FilePath $itemPath -Arguments $arguments `
                 -Operation "Executable install for $label"
         }
         if ($Item.InstallWaitSeconds) {

@@ -58,7 +58,8 @@ Describe 'Tool installation completion' {
         param(
             [string]$ConnectivityMode = 'Offline',
             [int]$InstallTimeoutSeconds = 30,
-            [string]$Operation = 'All'
+            [string]$Operation = 'All',
+            [switch]$AllowRebootRequired
         )
 
         Push-Location (Split-Path $installer -Parent)
@@ -68,7 +69,8 @@ Describe 'Tool installation completion' {
                 -PreparedSignalFile $preparedSignalFile -Operation $Operation `
                 -LogDirectory $testRoot `
                 -ConnectivityMode $ConnectivityMode `
-                -InstallTimeoutSeconds $InstallTimeoutSeconds -NoTranscript
+                -InstallTimeoutSeconds $InstallTimeoutSeconds `
+                -AllowRebootRequired:$AllowRebootRequired -NoTranscript
         } finally {
             Pop-Location
         }
@@ -245,7 +247,7 @@ Describe 'Tool installation completion' {
         Test-Path $signalFile | Should Be $false
     }
 
-    It 'accepts a reboot-required installer exit code' {
+    It 'preserves reboot-required success for legacy all-operation callers' {
         New-TestZip -InstallScript 'exit 3010' | Out-Null
         Write-TestConfiguration @{
             name = 'RebootingTool'
@@ -271,6 +273,49 @@ Describe 'Tool installation completion' {
 
         Invoke-TestInstaller -Operation Prepare | Should Be $true
         Invoke-TestInstaller -Operation Install | Should Be $false
+
+        Test-Path $signalFile | Should Be $false
+    }
+
+    It 'accepts a reboot-required exit code during an explicitly pre-reboot install' {
+        New-TestZip -InstallScript 'exit 3010' | Out-Null
+        Write-TestConfiguration @{
+            name = 'PreRebootTool'
+            ZipName = 'package.zip'
+            targetFolder = $targetFolder
+            installScript = 'install.ps1'
+        }
+
+        Invoke-TestInstaller -Operation Prepare | Should Be $true
+        Invoke-TestInstaller -Operation Install -AllowRebootRequired | Should Be $true
+
+        Test-Path $signalFile | Should Be $true
+    }
+
+    It 'suppresses installer-initiated restarts during explicitly pre-reboot installation' {
+        $content = Get-Content -LiteralPath $installer -Raw
+
+        $content.Contains('if ($ExitCode -eq 1641)') | Should Be $true
+        $content.Contains('function Add-NoRestartArgument') | Should Be $true
+        $content.Contains('$script:Operation -eq ''Install'' -and $ExitCode -eq 3010') |
+            Should Be $true
+        ([regex]::Matches(
+            $content,
+            '\$arguments = Add-NoRestartArgument -Arguments \$arguments'
+        ).Count) | Should Be 2
+    }
+
+    It 'rejects an installer-initiated reboot even during an explicitly pre-reboot install' {
+        New-TestZip -InstallScript 'exit 1641' | Out-Null
+        Write-TestConfiguration @{
+            name = 'SelfRebootingTool'
+            ZipName = 'package.zip'
+            targetFolder = $targetFolder
+            installScript = 'install.ps1'
+        }
+
+        Invoke-TestInstaller -Operation Prepare | Should Be $true
+        Invoke-TestInstaller -Operation Install -AllowRebootRequired | Should Be $false
 
         Test-Path $signalFile | Should Be $false
     }

@@ -117,7 +117,8 @@ function Remove-ResumeTask {
     }
 }
 
-function Test-PendingSystemReboot {
+function Get-PendingSystemRebootReasons {
+    $reasons = New-Object System.Collections.Generic.List[string]
     $pendingRenames = Get-ItemProperty `
         -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager' `
         -Name 'PendingFileRenameOperations' -ErrorAction SilentlyContinue
@@ -128,9 +129,20 @@ function Test-PendingSystemReboot {
         @()
     }
 
-    return (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') -or
-           (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') -or
-           ($pendingRenameOperations.Count -gt 0)
+    if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') {
+        $reasons.Add('ComponentBasedServicing')
+    }
+    if (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') {
+        $reasons.Add('WindowsUpdate')
+    }
+    if ($pendingRenameOperations.Count -gt 0) {
+        $reasons.Add("PendingFileRenameOperations:$($pendingRenameOperations.Count)")
+    }
+    return $reasons.ToArray()
+}
+
+function Test-PendingSystemReboot {
+    return @(Get-PendingSystemRebootReasons).Count -gt 0
 }
 
 function Write-VerifiedDeploymentSignal {
@@ -149,6 +161,24 @@ function Write-VerifiedDeploymentSignal {
     }
 }
 
+function Get-DeploymentRegistryValue {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+
+        $DefaultValue,
+
+        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+    )
+
+    $item = Get-ItemProperty -Path $RegistryPath -ErrorAction SilentlyContinue
+    if ($null -eq $item) { return $DefaultValue }
+
+    $property = $item.PSObject.Properties[$Name]
+    if ($null -eq $property) { return $DefaultValue }
+    return $property.Value
+}
+
 function Get-DeploymentPhase {
     param(
         [Parameter(Mandatory)]
@@ -157,9 +187,8 @@ function Get-DeploymentPhase {
         [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
     )
 
-    $value = Get-ItemProperty -Path $RegistryPath -Name $Name -ErrorAction SilentlyContinue
-    if ($null -eq $value) { return 0 }
-    return [int]$value.$Name
+    return [int](Get-DeploymentRegistryValue -Name $Name -DefaultValue 0 `
+        -RegistryPath $RegistryPath)
 }
 
 function Set-DeploymentPhase {
@@ -284,6 +313,83 @@ function Wait-DeploymentJob {
     return $Job
 }
 
+function ConvertTo-DscDiagnosticText {
+    param([object]$Value)
+
+    if ($null -eq $Value) { return $null }
+    if ($Value -is [string]) { return $Value }
+
+    $parts = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($name in @('ResourceId', 'ErrorSource', 'Message', 'ErrorCode')) {
+        $property = $Value.PSObject.Properties[$name]
+        if ($null -ne $property -and -not [string]::IsNullOrWhiteSpace("$($property.Value)")) {
+            $parts.Add("$name=$($property.Value)")
+        }
+    }
+    $exception = $Value.PSObject.Properties['Exception']
+    if ($null -ne $exception -and
+        $null -ne $exception.Value -and
+        -not [string]::IsNullOrWhiteSpace("$($exception.Value.Message)")) {
+        $parts.Add("Exception=$($exception.Value.Message)")
+    }
+    if ($parts.Count -gt 0) { return $parts.ToArray() -join ', ' }
+    return "$Value"
+}
+
+function Get-DscFailureDetails {
+    param(
+        [Parameter(Mandatory)]
+        [object]$Status,
+
+        [datetime]$Since
+    )
+
+    $details = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($errorValue in @($Status.Error)) {
+        $text = ConvertTo-DscDiagnosticText -Value $errorValue
+        if (-not [string]::IsNullOrWhiteSpace($text)) {
+            $details.Add($text)
+        }
+    }
+
+    foreach ($resource in @($Status.ResourcesNotInDesiredState)) {
+        if ($null -eq $resource) { continue }
+        $resourceParts = New-Object 'System.Collections.Generic.List[string]'
+        foreach ($name in @('ResourceId', 'SourceInfo', 'ModuleName')) {
+            $property = $resource.PSObject.Properties[$name]
+            if ($null -ne $property -and -not [string]::IsNullOrWhiteSpace("$($property.Value)")) {
+                $resourceParts.Add("$name=$($property.Value)")
+            }
+        }
+        foreach ($errorValue in @($resource.Error)) {
+            $text = ConvertTo-DscDiagnosticText -Value $errorValue
+            if (-not [string]::IsNullOrWhiteSpace($text)) {
+                $resourceParts.Add("Error=$text")
+            }
+        }
+        if ($resourceParts.Count -gt 0) {
+            $details.Add("FailedResource($($resourceParts.ToArray() -join ', '))")
+        }
+    }
+
+    $onlyGenericApplyError = $details.Count -eq 0 -or
+        ($details.Count -eq 1 -and $details[0] -match 'SendConfigurationApply function did not succeed')
+    if ($onlyGenericApplyError -and $Since -ne [datetime]::MinValue) {
+        $events = @(Get-WinEvent -FilterHashtable @{
+            LogName = 'Microsoft-Windows-DSC/Operational'
+            StartTime = $Since
+        } -ErrorAction SilentlyContinue | Where-Object {
+            $_.Level -le 2 -and -not [string]::IsNullOrWhiteSpace($_.Message)
+        } | Select-Object -First 10)
+        foreach ($event in $events) {
+            $details.Add("DSCEvent(Id=$($event.Id), Message=$($event.Message))")
+        }
+    }
+
+    if ($details.Count -eq 0) { return 'No LCM error details were returned.' }
+    return $details.ToArray() -join '; '
+}
+
 function Invoke-VerifiedDscConfiguration {
     <#
     .SYNOPSIS
@@ -314,7 +420,10 @@ function Invoke-VerifiedDscConfiguration {
         [string]$PhaseName = 'DSC',
 
         [ValidateRange(5, 600)]
-        [int]$HeartbeatIntervalSeconds = 60
+        [int]$HeartbeatIntervalSeconds = 60,
+
+        [ValidateRange(1, 600)]
+        [int]$TransientFailureGraceSeconds = 120
     )
 
     $submittedAt = Get-Date
@@ -323,6 +432,7 @@ function Invoke-VerifiedDscConfiguration {
     $deadline = $submittedAt.AddSeconds($TimeoutSeconds)
     $lastStatus = $null
     $lastProbeError = $null
+    $transientFailureSince = $null
     $nextHeartbeat = $submittedAt
 
     while ((Get-Date) -lt $deadline) {
@@ -339,13 +449,23 @@ function Invoke-VerifiedDscConfiguration {
             # "Start-DscConfiguration cmdlet is in progress..."
             # Explicitly suppress the error stream so a normal feature installation
             # does not flood the deployment transcript with terminating-error records.
-            $lastStatus = Get-DscConfigurationStatus -All `
+            $freshStatuses = @(Get-DscConfigurationStatus -All `
                 -ErrorAction SilentlyContinue -ErrorVariable statusErrors |
                 # A prior run can finish immediately before this submission. Never accept
                 # a status whose LCM start time predates the operation being verified.
-                Where-Object { $_.StartDate -ge $submittedAt } |
-                Sort-Object StartDate -Descending |
-                Select-Object -First 1
+                Where-Object { $_.StartDate -ge $submittedAt })
+            if ($freshStatuses.Count -gt 0) {
+                $latestStartDate = ($freshStatuses |
+                    Measure-Object -Property StartDate -Maximum).Maximum
+                # Get-DscConfigurationStatus returns newest-first. Preserve that order
+                # when PowerShell 5.1 reports multiple operations in the same second;
+                # Sort-Object is unstable for equal DateTime values.
+                $lastStatus = $freshStatuses |
+                    Where-Object { $_.StartDate -eq $latestStartDate } |
+                    Select-Object -First 1
+            } else {
+                $lastStatus = $null
+            }
             if ($statusErrors.Count -gt 0) {
                 $lastProbeError = @($statusErrors | ForEach-Object { $_.Exception.Message }) -join '; '
             } else {
@@ -365,8 +485,29 @@ function Invoke-VerifiedDscConfiguration {
 
         $statusName = "$($lastStatus.Status)"
         if ($statusName -eq 'Failure') {
-            $details = @($lastStatus.Error | ForEach-Object { "$_" }) -join '; '
-            if ([string]::IsNullOrWhiteSpace($details)) { $details = 'No LCM error details were returned.' }
+            $details = Get-DscFailureDetails -Status $lastStatus -Since $submittedAt
+            $failedResources = @($lastStatus.ResourcesNotInDesiredState |
+                Where-Object { $null -ne $_ })
+            $statusErrorTexts = @($lastStatus.Error |
+                Where-Object { $null -ne $_ } |
+                ForEach-Object { ConvertTo-DscDiagnosticText -Value $_ } |
+                Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+            $isTransientApplyFailure = $failedResources.Count -eq 0 -and
+                $statusErrorTexts.Count -eq 1 -and
+                $statusErrorTexts[0] -match 'SendConfigurationApply function did not succeed' -and
+                $details -notmatch 'DSCEvent\('
+            if ($isTransientApplyFailure) {
+                if ($null -eq $transientFailureSince) {
+                    $transientFailureSince = Get-Date
+                }
+                $lastProbeError = $details
+                if (((Get-Date) - $transientFailureSince).TotalSeconds -lt
+                    $TransientFailureGraceSeconds) {
+                    Start-Sleep -Seconds $PollIntervalSeconds
+                    continue
+                }
+                throw "$OperationName returned only a transient DSC apply failure for $TransientFailureGraceSeconds seconds: $details"
+            }
             throw "$OperationName failed in the DSC Local Configuration Manager: $details"
         }
 

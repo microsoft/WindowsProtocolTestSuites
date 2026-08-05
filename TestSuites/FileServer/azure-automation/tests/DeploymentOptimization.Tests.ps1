@@ -302,23 +302,52 @@ Describe 'Azure deployment critical-path optimizations' {
         $driverDeploy.Contains('function Test-DriverDomainReadyState') | Should Be $true
         $driverDeploy.Contains('(Test-DriverDomainReadyState)') | Should Be $true
         $driverDeploy.Contains('Driver domain readiness verification failed') | Should Be $true
-        $driverDeploy.Contains('domain-join reboot was persisted but not observed') | Should Be $true
+        $driverDeploy.Contains('domain-join reboot is scheduled but has not occurred yet') |
+            Should Be $true
         $driverDeploy.Contains('-Operation Prepare') | Should Be $true
+        $driverDeploy.Contains('-Operation Install') | Should Be $true
+        $driverDeploy.Contains('-AllowRebootRequired') | Should Be $true
+        ($driverDeploy.IndexOf('Pre-Reboot Tool Installation') -lt
+            $driverDeploy.IndexOf('Phase 1c: Domain Join')) | Should Be $true
+        $driverDeploy.Contains(
+            'Workgroup mode -- scheduling the planned post-install stabilization reboot.'
+        ) | Should Be $true
         ($driverDeploy.IndexOf('$toolsPreparationJob = Start-DriverToolsPreparationJob') -lt
             $driverDeploy.IndexOf('# Pre-check: Validate hostname')) | Should Be $true
-        $driverDeploy.Contains('unexpected second Driver reboot') | Should Be $true
-        ($driverDeploy.IndexOf('became pending before test scheduling') -lt
-            $driverDeploy.IndexOf("Register-ScheduledTask -TaskName 'RunFileServerTests'")) |
+        $driverDeploy.Contains('DriverToolsRebootPending') | Should Be $true
+        $driverDeploy.Contains('DriverToolsRebootScheduleRetryCount') | Should Be $true
+        $driverDeploy.Contains('DriverJoinRebootScheduleRetryCount') | Should Be $true
+        $driverDeploy.Contains('Get-DeploymentRegistryValue') | Should Be $true
+        ([regex]::Matches(
+            $driverDeploy,
+            'Get-ItemPropertyValue -Path \$rebootRegPath `\r?\n\s+-Name \$\w+ -ErrorAction SilentlyContinue'
+        ).Count) | Should Be 0
+        $driverDeploy.Contains('one Driver tool-stabilization reboot') | Should Be $true
+        $driverDeploy.Contains('tool-stabilization reboot is scheduled but has not occurred yet') |
             Should Be $true
+        $driverDeploy.Contains('Stop-DriverRecoveryTasks') | Should Be $true
+        $driverDeploy.Contains("'TKFRSAR', 'Config-ForceLevel2', 'PostDeployReboot'") |
+            Should Be $true
+        $driverDeploy.Contains('Could not schedule the Driver tool-stabilization reboot') |
+            Should Be $true
+        $driverDeploy.Contains('Could not schedule the Driver domain-join reboot') |
+            Should Be $true
+        $driverDeploy.Contains('Could not schedule the Driver hostname-change reboot') |
+            Should Be $true
+        $driverDeploy.Contains('persisted Driver tool-stabilization reboot could not be rescheduled') |
+            Should Be $true
+        $driverDeploy.Contains('persisted Driver domain-join reboot could not be rescheduled') |
+            Should Be $true
+        $driverDeploy.Contains('Test-PostDeployRebootCanStillRun') | Should Be $true
+        $driverDeploy.Contains('failed after one bounded reschedule attempt') | Should Be $true
         ($driverDeploy.IndexOf('Write-VerifiedDeploymentSignal -Path $signalFile') -lt
             $driverDeploy.IndexOf('Set-DeployStep -Step 2')) | Should Be $true
-        $driverDeploy.Contains('completion and tests are blocked') | Should Be $true
         $driverDeploy.Contains('if (-not $isLinuxDriver -and (Test-PendingSystemReboot))') |
             Should Be $true
         ([regex]::Matches(
             $driverDeploy,
             "Unregister-ScheduledTask -TaskName 'RunFileServerTests'"
-        ).Count) | Should BeGreaterThan 3
+        ).Count) | Should BeGreaterThan 2
         $driverDeploy.Contains('after its one allowed rename reboot') | Should Be $true
         $driverDeploy.Contains('Skipping rename reboot -- continuing') | Should Be $false
     }
