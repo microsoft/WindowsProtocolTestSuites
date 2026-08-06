@@ -208,10 +208,11 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
 
         private static byte[] Sign(Smb2CryptoInfo cryptoInfo, Smb2SinglePacket original, Smb2Role role)
         {
-            if (Smb2Utility.IsSmb2Family(cryptoInfo.Dialect))
+            if (Smb2Utility.IsSmb2Family(cryptoInfo.Dialect) ||
+                (cryptoInfo.Dialect == DialectRevision.Smb311 && cryptoInfo.SigningId == SigningAlgorithm.HMAC_SHA256))
             {
-                // [MS-SMB2] 3.1.4.1 
-                // 3. If Connection.Dialect is "2.002" or "2.100", the sender MUST compute a 32-byte hash using HMAC-SHA256 over the entire message, 
+                // [MS-SMB2] 3.1.4.1: SMB 2.0.2/2.1 use HMAC-SHA256. SMB 3.1.1 also
+                // uses HMAC-SHA256 when Connection.SigningAlgorithmId selects that algorithm.
                 HMACSHA256 hmacSha = new HMACSHA256(cryptoInfo.SigningKey);
                 return hmacSha.ComputeHash(original.ToBytes());
             }
@@ -382,7 +383,15 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             }
             else if (Smb2Utility.IsSmb3xFamily(cryptoInfo.Dialect))
             {
-                if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
+                if (cryptoInfo.Dialect == DialectRevision.Smb311 &&
+                    cryptoInfo.SigningId == SigningAlgorithm.HMAC_SHA256)
+                {
+                    // [MS-SMB2] 3.1.4.1: SMB 3.1.1 uses the negotiated signing algorithm.
+                    HMACSHA256 hmacSha = new HMACSHA256(cryptoInfo.SigningKey);
+                    signature = hmacSha.ComputeHash(original);
+                    nonce = Array.Empty<byte>();
+                }
+                else if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
                 {
                     // [MS-SMB2] 3.1.4.1
                     // 1. If Connection.Dialect belongs to the SMB 3.x dialect family and Connection.SigningAlgorithmId is AES-GMAC, 

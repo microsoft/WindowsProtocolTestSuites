@@ -2134,6 +2134,29 @@ This is used to test SMB2 common user scenarios.
 |                          | 15. Server sends LOGOFF response																											   |
 | **Cleanup**              ||
 
+|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| **Test IDs**             | Signing_WrongSessionKey_Rejected_Smb2002_HmacSha256<br>Signing_WrongSessionKey_Rejected_Smb21_HmacSha256<br>Signing_WrongSessionKey_Rejected_Smb30_AesCmac<br>Signing_WrongSessionKey_Rejected_Smb302_AesCmac<br>Signing_WrongSessionKey_Rejected_Smb311_HmacSha256<br>Signing_WrongSessionKey_Rejected_Smb311_AesCmac<br>Signing_WrongSessionKey_Rejected_Smb311_AesGmac |
+| **Description**          | These test cases verify that when the server receives a signed, unencrypted SMB2 request whose signature fails verification, it fails the request with STATUS_ACCESS_DENIED per MS-SMB2 3.3.5.2.4. A later disconnect is only an optional post-response action; for a Windows SUT the connection is additionally verified to be retained. |
+| **Prerequisites**        | SendSignedRequest is true and global encryption is not enabled (signed, unencrypted session).                |
+| **Dialect/signing cases** | SMB 2.0.2 / HMAC-SHA256; SMB 2.1 / HMAC-SHA256; SMB 3.0 / AES-CMAC; SMB 3.0.2 / AES-CMAC; SMB 3.1.1 / HMAC-SHA256; SMB 3.1.1 / AES-CMAC; SMB 3.1.1 / AES-GMAC. Each combination is an independently discoverable test case. Unsupported dialect or signing-algorithm cases are marked not applicable from authoritative test configuration. |
+| **Transport evidence**   | After normal signing, the test flips one signature byte and verifies that the complete 16-byte mutated signature, SMB2 protocol identifier, ECHO command, SMB2_FLAGS_SIGNED flag, and MessageId are present in the serialized payload after the underlying transport accepts it. The log records the dialect, effective signing algorithm, MessageId, and SHA-256 payload digest without logging session/signing keys. The rejection response MessageId must match the malformed request. |
+| **Pass criteria**        | The mutation callback, completed transport send, serialized mutation evidence, correlated server response, and exact STATUS_ACCESS_DENIED status are assertions. A timeout, a local serialization/send failure, or a server closure before the response fails the case. A disconnect after the rejection response is optional; connection retention is asserted only when the SUT is authoritatively configured as Windows. ECHO is used so the negative request has no operation side effect and the case does not use encryption. |
+| **Traceability**         | MS-SMB2 3.3.5.2.4 (signed unencrypted request verification and STATUS_ACCESS_DENIED); MS-SMB2 Appendix A product note 263 (Windows does not disconnect for a mismatched signature). |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with NEGOTIATE_SIGNING_REQUIRED flag set                                  |
+|                          | 2.  Server sends NEGOTIATE response                                                                          |
+|                          | 3.  Client sends SESSION_SETUP request with NEGOTIATE_SIGNING_REQUIRED flag set                             |
+|                          | 4.  Server sends SESSION_SETUP response                                                                      |
+|                          | 5.  Client sends TREE_CONNECT request to a non-encrypted share                                              |
+|                          | 6.  Client sends a correctly signed ECHO request as a control and expects STATUS_SUCCESS                     |
+|                          | 7.  Client constructs the same ECHO request and deterministically corrupts one signature byte after normal signing, then transmits it |
+|                          | 8.  Server MUST fail the malformed request with STATUS_ACCESS_DENIED (a connection closure without a response is treated as a failure of the required behavior; a client-side send failure is distinguished from server closure) |
+|                          | 9.  For a Windows SUT, client sends a valid signed ECHO follow-up and expects STATUS_SUCCESS to prove the connection was retained; on non-Windows implementations, a post-response disconnect is optional |
+|                          | 10. Client sends TREE_DISCONNECT request (best-effort on non-Windows implementations)                       |
+|                          | 11. Client sends LOGOFF request (best-effort on non-Windows implementations)                                |
+| **Cleanup**              ||
+
+PR description line for this change: `ADDED TESTS: Signing_WrongSessionKey_Rejected_Smb2002_HmacSha256, Signing_WrongSessionKey_Rejected_Smb21_HmacSha256, Signing_WrongSessionKey_Rejected_Smb30_AesCmac, Signing_WrongSessionKey_Rejected_Smb302_AesCmac, Signing_WrongSessionKey_Rejected_Smb311_HmacSha256, Signing_WrongSessionKey_Rejected_Smb311_AesCmac, Signing_WrongSessionKey_Rejected_Smb311_AesGmac`
+
 #### <a name="3.1.21"> TreeMgmt
 
 ##### <a name="3.1.21.1"> Test Case
@@ -11319,4 +11342,3 @@ The test cases are designed with below assumptions, and these terms will be used
 ||3. Client expects STATUS = STATUS_SUCCESS.|
 ||4. Disconnect and logoff.|
 |**Cleanup**|N/A|
-

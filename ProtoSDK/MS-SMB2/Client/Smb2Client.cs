@@ -381,6 +381,12 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public event Action<Smb2Packet> PacketSending;
         public event Action<Smb2Packet> ProcessedPacketModifier;
         public event Func<byte[], byte[]> OnWirePacketModifier;
+        /// <summary>
+        /// Raised synchronously after the underlying transport accepts the serialized SMB2 payload.
+        /// The byte array is a copy of the SMB2 payload after all on-wire modifiers have run and does
+        /// not include the TCP framing header.
+        /// </summary>
+        public event Action<byte[]> OnWirePacketSent;
         public event Action<Smb2Packet> PacketReceived;
         public event Action Disconnected;
 
@@ -672,12 +678,17 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     // NetbiosTransport uses synchronized NCBSEND.
                     // So if connection is aborted when sending the packet, exception is thrown from NetbiosTransport.
                     transport.AddEvent(new TransportEvent(EventType.Disconnected, null, null));
+                    return;
                 }
             }
             else
             {
                 transport.SendBytes(Smb2Utility.GenerateTcpTransportPayLoad(data));
             }
+
+            // Notify observers only after SendBytes returns successfully. A copy prevents observers from
+            // changing the payload that has already been handed to the transport.
+            OnWirePacketSent?.Invoke((byte[])data.Clone());
         }
 
         public virtual T ExpectPacket<T>(ulong messageId) where T : Smb2Packet
