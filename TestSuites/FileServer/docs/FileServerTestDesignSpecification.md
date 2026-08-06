@@ -11304,6 +11304,20 @@ The test cases are designed with below assumptions, and these terms will be used
 |**Cleanup**|N/A|
 
 
+|||
+|---|---|
+|**Test ID**|RootReferral_BufferTooSmall_WindowsBehavior|
+|**Description**|Client sends a valid v4 Root referral request to a Windows DFS server with a referral output buffer (MaxOutputResponse) smaller than the referral response size, and expects STATUS_BUFFER_OVERFLOW with zero output count and no referral payload (MS-SMB2 3.3.5.15.2 and Appendix A product note 384).|
+|**Prerequisites**|Common prerequisites. Windows DFS SUT (authoritatively identified). SMB2/SMB3 transport (required to control MaxOutputResponse).|
+|**Test Execution Steps**|1. Client establishes an SMB2 connection between client and DFS server.|
+||2. Client sends a valid Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\node01\Standalone\", MaxReferralLevel is 4) with a MaxOutputResponse large enough to hold the response, and records the referral response size.|
+||3. Client repeats the same valid request on the same connection with MaxOutputResponse set below the recorded referral response size.|
+||4. Client expects STATUS == STATUS_BUFFER_OVERFLOW, OutputCount == 0, and no referral payload bytes (status, output count, and payload absence asserted independently; partial data is not accepted for the Windows row).|
+||5. Client sends the valid Root referral v4 request again on the same connection and expects STATUS == STATUS_SUCCESS to confirm the session remains usable.|
+||6. Disconnect and logoff.|
+|**Cleanup**|N/A|
+
+
 #### <a name="3.7.7"> Path\_Normalization\_to\_DFSServer
 
 ##### <a name="3.7.7.1"> Scenario

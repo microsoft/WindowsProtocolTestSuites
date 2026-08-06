@@ -202,6 +202,8 @@ DFSC tests are organized by referral type:
 - **DFSCTestUtility**: Helper methods:
   - `SendAndReceiveDFSReferral()` - sends request, receives response packet
   - `VerifyReferralResponse()` - validates response structure and targets
+  - `Connect()` - connect to the DC or DFS server without sending a request (reuse one connection across multiple sends)
+  - `SendReferralWithMaxOutput()` - send a referral over an already-connected client with an explicit `MaxOutputResponse`, returning the response and the IOCTL `OutputCount`. Use this for referral output-buffer boundary tests (e.g. `STATUS_BUFFER_OVERFLOW` when the buffer is too small; MS-SMB2 3.3.5.15.2 / Appendix A note 384). SMB2/SMB3 transport only.
 - **Referral Entry Types**: V1, V2, V3, V4 format variations for backward compatibility
   - V1: Basic referral (section 7.2.1)
   - V2: Extended with TTL and flavor (section 7.2.2)
