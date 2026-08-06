@@ -117,6 +117,8 @@ never continue through an unexpected pending reboot.
 | `SMB2/TestSuite/IOCTL/` | FSCTL operations |
 | `SMB2/TestSuite/HVRS/` | Hyper-V replica set |
 | `SMB2/TestSuite/AppInstanceId/` | Application instance identifier |
+| `Auth/TestSuite/Authentication/` | Kerberos authentication and cross-mechanism (Kerberos/NTLM) encrypted post-authentication round trips (MS-SMB2 3.3.5.5.3, 3.2.5.3.1) |
+| `Auth/TestSuite/Authorization/` | Share/folder/file permission checks and Claims-Based Access Control (CBAC) |
 
 ---
 

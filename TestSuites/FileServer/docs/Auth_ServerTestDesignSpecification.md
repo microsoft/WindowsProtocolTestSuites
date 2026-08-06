@@ -33,10 +33,15 @@
     * [Claim-Based Access Control (CBAC)](#_Toc427487716)
 		* [Test Case Design](#_Toc427487717)
 		* [Preconditions](#_Toc427487718)
+    * [Cross-Mechanism Encrypted Authentication](#_Toc427487719)
+		* [Test Case Design](#_Toc427487720)
+		* [BVT cases](#_Toc427487721)
 
 ## <a name="_Toc427487691"/>Summary
 The Auth_ServerTestSuite is designed to test Authentication and Authorization scenarios of MS-SMB2.
-The Authentication cases cover Kerberos Authentication and NTLM Authentication;
+
+The Authentication cases cover Kerberos Authentication and cross-mechanism encrypted authentication (Kerberos and NTLM under equivalent SMB 3.x encryption settings);
+
 The Authorization cases cover Share Permission Check, Folder Permission Check, File Permission Check, and Claim-Based Access Control scenario.
 
 ## <a name="_Toc427487692"/>Test Scope
@@ -1131,3 +1136,48 @@ SMB2 SET_INFO is required to run these cases.
 |  **Description**| This test case is designed to test whether noclaimuser can access the share if any policy is applied on the share.| | | | 
 |  **Policy Name**| CountryCodeEquals156Policy| | | | 
 |  **Expected Results**|  **User**| noclaimuser|  **Result**| true| 
+
+### <a name="_Toc427487719"/>Cross-Mechanism Encrypted Authentication
+
+#### <a name="_Toc427487720"/>Test Case Design
+These cases validate the cross-mechanism encrypted post-authentication path required by MS-SMB2 3.3.5.5.3 (the server obtains authentication-specific key material from GSS; Kerberos and NTLM use their respective protocol-defined key sources) and MS-SMB2 3.2.5.3.1 (for an encryption-capable SMB 3.x non-guest, non-anonymous session, the client derives encryption keys). For each supported authentication mechanism the synthetic SMB2 client negotiates the same SMB 3.x dialect (3.11) and the same cipher (AES-128-GCM), authenticates with the selected mechanism, enables session encryption, and completes an encrypted request/response round trip. The interoperable observation is a correctly encrypted and successfully decrypted post-authentication exchange - internal key bytes are never inspected or logged, and no equality is asserted between Kerberos and NTLM key material. Dialect, cipher, share and operation are held constant across both rows so the only variable is the authentication mechanism.
+
+The Kerberos row is gated on domain, SPN, ticket and clock prerequisites (reported via Inconclusive/Assume when unavailable). The NTLM row is gated on encryption capability and the negotiated SMB 3.x dialect/cipher. Both rows verify the negotiated session is neither a guest session nor an anonymous (NULL) session before deriving encryption keys.
+
+2 BVT cases are designed to cover the above scenarios.
+
+#### <a name="_Toc427487721"/>BVT cases
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| Auth_Encryption_Kerberos|
+|  **Description**| This test case is designed to verify that a Kerberos-authenticated, encryption-capable SMB 3.x session completes an encrypted request/response round trip that is successfully decrypted (MS-SMB2 3.3.5.5.3 and 3.2.5.3.1).|
+|  **Prerequisites**| SUT is domain-joined; a resolvable SMB service principal name (SPN), a valid service ticket and acceptable clock skew are available; the server supports encryption and the AES-128-GCM cipher.|
+|  **Test Execution Steps**| SMB2 client connects to the server|
+| | SMB2 client sends NEGOTIATE with dialect 3.11 and SMB2_ENCRYPTION_CAPABILITIES requesting AES-128-GCM|
+| | SMB2 client verifies the negotiated cipher is AES-128-GCM|
+| | SMB2 client sends SESSION_SETUP authenticating with Kerberos and expects success|
+| | SMB2 client verifies the session is neither guest nor anonymous (NULL)|
+| | SMB2 client enables global session encryption|
+| | SMB2 client sends encrypted TREE_CONNECT to the encrypted share and expects success|
+| | SMB2 client sends encrypted CREATE, WRITE and READ and expects success|
+| | SMB2 client verifies the content read back equals the content written (response was encrypted and successfully decrypted)|
+| | SMB2 client tears down with CLOSE, TREE_DISCONNECT, LOG_OFF and disconnects|
+|  **Pass Criteria**| Negotiation selects AES-128-GCM; session is non-guest/non-anonymous; every post-authentication response that must be encrypted is delivered under the SMB2 transform and successfully decrypted; read content matches written content.|
+
+| &#32;| &#32; |
+| -------------| ------------- |
+|  **Test ID**| Auth_Encryption_Ntlm|
+|  **Description**| This test case is designed to verify that an NTLM-authenticated, encryption-capable SMB 3.x session completes an encrypted request/response round trip that is successfully decrypted (MS-SMB2 3.3.5.5.3 and 3.2.5.3.1).|
+|  **Prerequisites**| The server permits NTLM authentication by policy, supports encryption and the AES-128-GCM cipher, and supports the SMB 3.11 dialect.|
+|  **Test Execution Steps**| SMB2 client connects to the server|
+| | SMB2 client sends NEGOTIATE with dialect 3.11 and SMB2_ENCRYPTION_CAPABILITIES requesting AES-128-GCM|
+| | SMB2 client verifies the negotiated cipher is AES-128-GCM|
+| | SMB2 client sends SESSION_SETUP authenticating with NTLM and expects success|
+| | SMB2 client verifies the session is neither guest nor anonymous (NULL)|
+| | SMB2 client enables global session encryption|
+| | SMB2 client sends encrypted TREE_CONNECT to the encrypted share and expects success|
+| | SMB2 client sends encrypted CREATE, WRITE and READ and expects success|
+| | SMB2 client verifies the content read back equals the content written (response was encrypted and successfully decrypted)|
+| | SMB2 client tears down with CLOSE, TREE_DISCONNECT, LOG_OFF and disconnects|
+|  **Pass Criteria**| Negotiation selects AES-128-GCM; session is non-guest/non-anonymous; every post-authentication response that must be encrypted is delivered under the SMB2 transform and successfully decrypted; read content matches written content.|
