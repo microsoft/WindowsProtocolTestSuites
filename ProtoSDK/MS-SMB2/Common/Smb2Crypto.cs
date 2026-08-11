@@ -209,7 +209,9 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
         private static byte[] Sign(Smb2CryptoInfo cryptoInfo, Smb2SinglePacket original, Smb2Role role)
         {
             if (Smb2Utility.IsSmb2Family(cryptoInfo.Dialect) ||
-                (cryptoInfo.Dialect == DialectRevision.Smb311 && cryptoInfo.SigningId == SigningAlgorithm.HMAC_SHA256))
+                (cryptoInfo.Dialect == DialectRevision.Smb311 &&
+                 cryptoInfo.IsSigningAlgorithmNegotiated &&
+                 cryptoInfo.SigningId == SigningAlgorithm.HMAC_SHA256))
             {
                 // [MS-SMB2] 3.1.4.1: SMB 2.0.2/2.1 use HMAC-SHA256. SMB 3.1.1 also
                 // uses HMAC-SHA256 when Connection.SigningAlgorithmId selects that algorithm.
@@ -384,6 +386,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2.Common
             else if (Smb2Utility.IsSmb3xFamily(cryptoInfo.Dialect))
             {
                 if (cryptoInfo.Dialect == DialectRevision.Smb311 &&
+                    cryptoInfo.IsSigningAlgorithmNegotiated &&
                     cryptoInfo.SigningId == SigningAlgorithm.HMAC_SHA256)
                 {
                     // [MS-SMB2] 3.1.4.1: SMB 3.1.1 uses the negotiated signing algorithm.

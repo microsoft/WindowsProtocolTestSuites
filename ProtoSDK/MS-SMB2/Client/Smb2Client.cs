@@ -202,6 +202,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         protected Dictionary<ulong, Smb2CryptoInfo> cryptoInfoTable = new Dictionary<ulong, Smb2CryptoInfo>();
         private Smb2CompressionInfo compressionInfo;
         private SigningAlgorithm selectedSigningAlgorithm;
+        private bool isSigningAlgorithmNegotiated;
         private Smb2Decoder decoder;
 
         private bool disposed;
@@ -372,6 +373,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             cipherId = EncryptionAlgorithm.ENCRYPTION_NONE;
 
             selectedSigningAlgorithm = SigningAlgorithm.HMAC_SHA256;
+            isSigningAlgorithmNegotiated = false;
         }
 
         #endregion
@@ -980,7 +982,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                             null,
                             preauthHashValue,
                             cipherId,
-                            selectedSigningAlgorithm));
+                            selectedSigningAlgorithm,
+                            isSigningAlgorithmNegotiated));
                 }
                 else
                 {
@@ -1267,6 +1270,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             gssToken = response.Buffer.Skip(response.PayLoad.SecurityBufferOffset - response.BufferOffset).Take(response.PayLoad.SecurityBufferLength).ToArray();
 
             dialect = response.PayLoad.DialectRevision;
+            this.isSigningAlgorithmNegotiated = false;
 
             if (dialect >= DialectRevision.Smb311 && dialect != DialectRevision.Smb2Unknown)
             {
@@ -1290,6 +1294,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     } 
 
                     this.selectedSigningAlgorithm = response.NegotiateContext_SIGNING.Value.SigningAlgorithms[0];
+                    this.isSigningAlgorithmNegotiated = true;
                 }
 
                 // In SMB 311, client use SMB2_ENCRYPTION_CAPABILITIES context to indicate whether it 

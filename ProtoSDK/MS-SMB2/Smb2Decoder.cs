@@ -997,6 +997,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     //In the current SDK, the SigningKey is the Channel.SigningKey
 
                     if (cryptoInfo.Dialect == DialectRevision.Smb311 &&
+                        cryptoInfo.IsSigningAlgorithmNegotiated &&
                         cryptoInfo.SigningId == SigningAlgorithm.HMAC_SHA256)
                     {
                         // [MS-SMB2] 3.1.5.1: SMB 3.1.1 uses the signing algorithm

@@ -2085,7 +2085,7 @@ This is used to test SMB2 common user scenarios.
 
 ##### <a name="3.1.20.1"> Test Case
 
-|||
+| Field | Details |
 |---|---|
 |**Test ID**|BVT_Signing|
 |**Description**|This test case is designed to test whether server can handle NEGOTIATE and SESSION_SETUP requests with NEGOTIATE_SIGNING_REQUIRED set.|
@@ -2096,7 +2096,9 @@ This is used to test SMB2 common user scenarios.
 ||Server sends SESSION_SETUP response|
 ||According to the status code of last step, client may send more SESSION_SETUP request as needed|
 |**Cleanup**||
-|--------------------------|--------------------------------------------------------------------------------------------------------------|
+
+| Field | Details |
+|---|---|
 | **Test ID**              | Signing_VerifySignatureWhenEncrypted                                                                   |
 | **Description**          | This test case is designed to test whether server set the Signature field to zero in Encrypted message.      |
 | **Prerequisites**        |                                                                                                              |
@@ -2117,7 +2119,8 @@ This is used to test SMB2 common user scenarios.
 |                          | 15. Server sends LOGOFF response                                                                             |
 | **Cleanup**              ||
 
-|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| Field | Details |
+|---|---|
 | **Test ID**              | Signing_VerifyAesGmacSigning																												   |
 | **Description**          | This test case is designed to test whether outgoing and incoming messages are correctly signed and verified using aes-gmac signing algorithm. |
 | **Prerequisites**        |																																			   |
@@ -2134,10 +2137,22 @@ This is used to test SMB2 common user scenarios.
 |                          | 15. Server sends LOGOFF response																											   |
 | **Cleanup**              ||
 
-|--------------------------|--------------------------------------------------------------------------------------------------------------|
-| **Test IDs**             | Signing_WrongSessionKey_Rejected_Smb2002_HmacSha256<br>Signing_WrongSessionKey_Rejected_Smb21_HmacSha256<br>Signing_WrongSessionKey_Rejected_Smb30_AesCmac<br>Signing_WrongSessionKey_Rejected_Smb302_AesCmac<br>Signing_WrongSessionKey_Rejected_Smb311_HmacSha256<br>Signing_WrongSessionKey_Rejected_Smb311_AesCmac<br>Signing_WrongSessionKey_Rejected_Smb311_AesGmac |
+###### Invalid-signature rejection cases
+
+**Test IDs**
+
+- `Signing_WrongSessionKey_Rejected_Smb2002_HmacSha256`
+- `Signing_WrongSessionKey_Rejected_Smb21_HmacSha256`
+- `Signing_WrongSessionKey_Rejected_Smb30_AesCmac`
+- `Signing_WrongSessionKey_Rejected_Smb302_AesCmac`
+- `Signing_WrongSessionKey_Rejected_Smb311_HmacSha256`
+- `Signing_WrongSessionKey_Rejected_Smb311_AesCmac`
+- `Signing_WrongSessionKey_Rejected_Smb311_AesGmac`
+
+| Field | Details |
+|---|---|
 | **Description**          | These test cases verify that when the server receives a signed, unencrypted SMB2 request whose signature fails verification, it fails the request with STATUS_ACCESS_DENIED per MS-SMB2 3.3.5.2.4. A later disconnect is only an optional post-response action; for a Windows SUT the connection is additionally verified to be retained. |
-| **Prerequisites**        | SendSignedRequest is true and global encryption is not enabled (signed, unencrypted session).                |
+| **Prerequisites**        | For the Windows SUT coverage documented here, the supported targets are Windows Server 2022 and Windows Server 2025. `SendSignedRequest` is `true` and global encryption is not enabled (signed, unencrypted session). SMB 3.1.1 signing-algorithm cases require the SUT to return `SMB2_SIGNING_CAPABILITIES`, and the applicable algorithm must be listed in the authoritative `SupportedSigningAlgorithms` test configuration. |
 | **Dialect/signing cases** | SMB 2.0.2 / HMAC-SHA256; SMB 2.1 / HMAC-SHA256; SMB 3.0 / AES-CMAC; SMB 3.0.2 / AES-CMAC; SMB 3.1.1 / HMAC-SHA256; SMB 3.1.1 / AES-CMAC; SMB 3.1.1 / AES-GMAC. Each combination is an independently discoverable test case. Unsupported dialect or signing-algorithm cases are marked not applicable from authoritative test configuration. |
 | **Transport evidence**   | After normal signing, the test flips one signature byte and verifies that the complete 16-byte mutated signature, SMB2 protocol identifier, ECHO command, SMB2_FLAGS_SIGNED flag, and MessageId are present in the serialized payload after the underlying transport accepts it. The log records the dialect, effective signing algorithm, MessageId, and SHA-256 payload digest without logging session/signing keys. The rejection response MessageId must match the malformed request. |
 | **Pass criteria**        | The mutation callback, completed transport send, serialized mutation evidence, correlated server response, and exact STATUS_ACCESS_DENIED status are assertions. A timeout, a local serialization/send failure, or a server closure before the response fails the case. A disconnect after the rejection response is optional; connection retention is asserted only when the SUT is authoritatively configured as Windows. ECHO is used so the negative request has no operation side effect and the case does not use encryption. |
@@ -2154,8 +2169,6 @@ This is used to test SMB2 common user scenarios.
 |                          | 10. Client sends TREE_DISCONNECT request (best-effort on non-Windows implementations)                       |
 |                          | 11. Client sends LOGOFF request (best-effort on non-Windows implementations)                                |
 | **Cleanup**              ||
-
-PR description line for this change: `ADDED TESTS: Signing_WrongSessionKey_Rejected_Smb2002_HmacSha256, Signing_WrongSessionKey_Rejected_Smb21_HmacSha256, Signing_WrongSessionKey_Rejected_Smb30_AesCmac, Signing_WrongSessionKey_Rejected_Smb302_AesCmac, Signing_WrongSessionKey_Rejected_Smb311_HmacSha256, Signing_WrongSessionKey_Rejected_Smb311_AesCmac, Signing_WrongSessionKey_Rejected_Smb311_AesGmac`
 
 #### <a name="3.1.21"> TreeMgmt
 
@@ -11301,20 +11314,6 @@ The test cases are designed with below assumptions, and these terms will be used
 ||2. Client sends a Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\contoso.com\Invalid", MaxReferralLevel is 4) to DFS server.|
 ||3. Client expects STATUS == STATUS_NOT_FOUND for non-windows platform and STATUS_DFS_UNAVAILABLE for windows platform.|
 ||4. Disconnect and logoff.|
-|**Cleanup**|N/A|
-
-
-|||
-|---|---|
-|**Test ID**|RootReferral_BufferTooSmall_WindowsBehavior|
-|**Description**|Client sends a valid v4 Root referral request to a Windows DFS server with a referral output buffer (MaxOutputResponse) smaller than the referral response size, and expects STATUS_BUFFER_OVERFLOW with zero output count and no referral payload (MS-SMB2 3.3.5.15.2 and Appendix A product note 384).|
-|**Prerequisites**|Common prerequisites. Windows DFS SUT (authoritatively identified). SMB2/SMB3 transport (required to control MaxOutputResponse).|
-|**Test Execution Steps**|1. Client establishes an SMB2 connection between client and DFS server.|
-||2. Client sends a valid Root referral v4 REQ_GET_DFS_REFERRAL message (RequestFileName is "\node01\Standalone\", MaxReferralLevel is 4) with a MaxOutputResponse large enough to hold the response, and records the referral response size.|
-||3. Client repeats the same valid request on the same connection with MaxOutputResponse set below the recorded referral response size.|
-||4. Client expects STATUS == STATUS_BUFFER_OVERFLOW, OutputCount == 0, and no referral payload bytes (status, output count, and payload absence asserted independently; partial data is not accepted for the Windows row).|
-||5. Client sends the valid Root referral v4 request again on the same connection and expects STATUS == STATUS_SUCCESS to confirm the session remains usable.|
-||6. Disconnect and logoff.|
 |**Cleanup**|N/A|
 
 
