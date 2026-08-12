@@ -25,6 +25,19 @@ $ErrorActionPreference = 'Stop'
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force
 Start-Transcript -Path 'C:\__SCENARIO__-__ROLE__-setup.log' -Append
 
+function Complete-Bootstrap {
+    param([int]$ExitCode)
+
+    Stop-Transcript -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $PSCommandPath -Force -ErrorAction SilentlyContinue
+    exit $ExitCode
+}
+
+trap {
+    Write-Output "Bootstrap failed: $($_.Exception.Message)"
+    Complete-Bootstrap -ExitCode 1
+}
+
 Write-Output 'Starting __SCENARIO__ __ROLE__ setup...'
 New-Item -ItemType Directory -Path 'C:\__PACKAGE_NAME__' -Force | Out-Null
 
@@ -46,8 +59,7 @@ if (-not $zipFile) {
     }
     if (-not $dns) {
         Write-Output 'DNS resolution of __PACKAGE_HOST__ failed after retries'
-        Stop-Transcript
-        exit 1
+        Complete-Bootstrap -ExitCode 1
     }
 
     $zipPath = 'C:\__PACKAGE_NAME__.zip'
@@ -64,8 +76,7 @@ if (-not $zipFile) {
     }
     if (-not $dl) {
         Write-Output 'Package download failed'
-        Stop-Transcript
-        exit 1
+        Complete-Bootstrap -ExitCode 1
     }
     $zipFile = Get-Item $zipPath
 }
@@ -83,15 +94,16 @@ if (Test-Path 'C:\__PACKAGE_NAME__\DSC\Scripts\Set-ConfigCredential.ps1') {
 if (Test-Path 'C:\__PACKAGE_NAME__\DSC\__DEPLOY_SCRIPT__') {
     Write-Output 'Starting __DEPLOY_SCRIPT__ (DSC + imperative)...'
     Set-Location 'C:\__PACKAGE_NAME__\DSC'
-    & '.\__DEPLOY_SCRIPT__' -WorkingPath 'C:\__PACKAGE_NAME__'
+    try {
+        & '.\__DEPLOY_SCRIPT__' -WorkingPath 'C:\__PACKAGE_NAME__'
+    } catch {
+        Write-Output "__DEPLOY_SCRIPT__ failed: $($_.Exception.Message)"
+        Complete-Bootstrap -ExitCode 1
+    }
 } else {
     Write-Output '__DEPLOY_SCRIPT__ not found, skipping configuration'
-    Stop-Transcript
-    exit 1
+    Complete-Bootstrap -ExitCode 1
 }
 
 Write-Output '__SCENARIO__ __ROLE__ extension setup completed'
-Stop-Transcript
-# Explicit success code: the launcher propagates $LASTEXITCODE, which would
-# otherwise carry whatever the last native tool inside the deploy script returned.
-exit 0
+Complete-Bootstrap -ExitCode 0

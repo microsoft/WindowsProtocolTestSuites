@@ -164,6 +164,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 FullName = testCase.FullName,
                 Category = testCase.Category.ToArray(),
                 Description = testCase.Description,
+                Assembly = testCase.Assembly,
                 ToolTipOnUI = testCase.ToolTipOnUI,
             });
 

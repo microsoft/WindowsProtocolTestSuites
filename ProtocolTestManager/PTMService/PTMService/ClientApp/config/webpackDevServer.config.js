@@ -16,6 +16,7 @@ const sockPort = process.env.WDS_SOCKET_PORT;
 module.exports = function (proxy, allowedHost) {
   const disableFirewall =
     !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true';
+  const httpsConfig = getHttpsConfig();
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
     // websites from potentially accessing local content through DNS rebinding:
@@ -91,7 +92,14 @@ module.exports = function (proxy, allowedHost) {
       publicPath: paths.publicUrlOrPath.slice(0, -1),
     },
 
-    https: getHttpsConfig(),
+    server: httpsConfig
+      ? {
+          type: 'https',
+          ...(typeof httpsConfig === 'object'
+            ? { options: httpsConfig }
+            : {}),
+        }
+      : 'http',
     host,
     historyApiFallback: {
       // Paths with dots should still use the history fallback.
@@ -99,29 +107,32 @@ module.exports = function (proxy, allowedHost) {
       disableDotRule: true,
       index: paths.publicUrlOrPath,
     },
-    // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
     proxy,
-    onBeforeSetupMiddleware(devServer) {
-      // Keep `evalSourceMapMiddleware`
-      // middlewares before `redirectServedPath` otherwise will not have any effect
-      // This lets us fetch source contents from webpack for the error overlay
-      devServer.app.use(evalSourceMapMiddleware(devServer));
+    setupMiddlewares(middlewares, devServer) {
+      if (!devServer) {
+        throw new Error('webpack-dev-server is not defined');
+      }
 
       if (fs.existsSync(paths.proxySetup)) {
-        // This registers user provided middleware for proxy reasons
         require(paths.proxySetup)(devServer.app);
       }
-    },
-    onAfterSetupMiddleware(devServer) {
-      // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match
-      devServer.app.use(redirectServedPath(paths.publicUrlOrPath));
 
-      // This service worker file is effectively a 'no-op' that will reset any
-      // previous service worker registered for the same host:port combination.
-      // We do this in development to avoid hitting the production cache if
-      // it used the same host and port.
-      // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
-      devServer.app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
+      middlewares.unshift({
+        name: 'eval-source-map',
+        middleware: evalSourceMapMiddleware(devServer),
+      });
+      middlewares.push(
+        {
+          name: 'redirect-served-path',
+          middleware: redirectServedPath(paths.publicUrlOrPath),
+        },
+        {
+          name: 'noop-service-worker',
+          middleware: noopServiceWorkerMiddleware(paths.publicUrlOrPath),
+        }
+      );
+
+      return middlewares;
     },
   };
 };

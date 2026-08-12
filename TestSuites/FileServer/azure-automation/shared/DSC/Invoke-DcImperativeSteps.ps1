@@ -8,7 +8,7 @@
 
 .DESCRIPTION
     Handles (in order):
-    1. DC Promotion (Install-ADDSForest) + tools install  <- REQUIRES REBOOT
+    1. DC Promotion (Install-ADDSForest)                  <- REQUIRES REBOOT
     2. Test account creation (AD users, groups, Guest)
     3. CBAC objects (claim types, resource properties, central access
        rules & policies)
@@ -38,7 +38,9 @@ param(
     [string]$WorkingPath = (Split-Path $PSScriptRoot -Parent),
     [ValidateSet(1, 2)]
     [int]$Step = 1,
-    [string]$ConfigureFile = "$WorkingPath\Config.json"
+    [string]$ConfigureFile = "$WorkingPath\Config.json",
+    [string]$HeartbeatPath,
+    [switch]$NoTranscript
 )
 
 $ErrorActionPreference = 'Continue'
@@ -47,7 +49,34 @@ $env:Path += ";$scriptsPath"
 Push-Location $scriptsPath
 
 [string]$logFile = "$PSScriptRoot\Invoke-DcImperativeSteps.log"
-Start-Transcript -Path $logFile -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force
+    $transcriptStarted = $true
+}
+
+function Stop-LocalTranscript {
+    if ($transcriptStarted) {
+        Stop-Transcript
+    }
+}
+
+$operationStartedAt = Get-Date
+if (-not [string]::IsNullOrWhiteSpace($HeartbeatPath)) {
+    . "$PSScriptRoot\Deploy-CommonHelpers.ps1"
+}
+
+function Write-DcOperationHeartbeat {
+    param(
+        [string]$Operation,
+        [string]$Checkpoint
+    )
+    if (-not [string]::IsNullOrWhiteSpace($HeartbeatPath)) {
+        Write-DeploymentHeartbeat -Phase "ImperativeStep$Step" -Operation $Operation `
+            -StartedAt $operationStartedAt -HeartbeatPath $HeartbeatPath `
+            -LastCheckpoint $Checkpoint
+    }
+}
 
 # Section success tracking
 $promoteOk = $false
@@ -69,7 +98,7 @@ if (Test-Path $ConfigureFile) {
 
 if ($null -eq $config) {
     .\Write-Error.ps1 "Config.json not loaded. Cannot proceed."
-    Stop-Transcript; Pop-Location; return $false
+    Stop-LocalTranscript; Pop-Location; return $false
 }
 
 $systemDrive = $env:SystemDrive
@@ -80,6 +109,8 @@ $systemDrive = $env:SystemDrive
 if ($Step -eq 1) {
   try {
     .\Write-Info.ps1 "---- Step 1: Promote to Domain Controller ----" -ForegroundColor Yellow
+    Write-DcOperationHeartbeat -Operation 'Domain Controller promotion' `
+        -Checkpoint 'Checking existing directory role'
 
     # Check if already a DC
     $isDc = $false
@@ -105,28 +136,23 @@ if ($Step -eq 1) {
                       else { throw "Config.json Core.Password is required for DC configuration" }
 
         .\Write-Info.ps1 "Promoting to DC for domain $domainName..." -ForegroundColor Cyan
+        Write-DcOperationHeartbeat -Operation 'Domain Controller promotion' `
+            -Checkpoint "Promoting the server into $domainName"
         $result = & "$scriptsPath\PromoteDomainController.ps1" -DomainName $domainName -AdminPwd $adminPwd -AdminUser $adminUser
         if (-not $result) {
             .\Write-Error.ps1 "DC promotion failed."
-            Stop-Transcript; Pop-Location; return $false
-        }
-
-        # Install tools in background before reboot
-        $toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
-        if (-not (Test-Path $toolsSignal)) {
-            .\Write-Info.ps1 "Installing tools (background)..." -ForegroundColor Cyan
-            & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'DC'
+            Stop-LocalTranscript; Pop-Location; return $false
         }
 
         .\Write-Info.ps1 "[OK] DC promotion complete. REBOOT REQUIRED." -ForegroundColor Green
     }
 
     $promoteOk = $true
-    Stop-Transcript; Pop-Location; return $true
+    Stop-LocalTranscript; Pop-Location; return $true
   }
   catch {
     .\Write-Error.ps1 "DC imperative step 1 failed: $($_.Exception.Message)"
-    Stop-Transcript; Pop-Location; throw
+    Stop-LocalTranscript; Pop-Location; throw
   }
 }
 
@@ -136,6 +162,8 @@ if ($Step -eq 1) {
 if ($Step -eq 2) {
   try {
     .\Write-Info.ps1 "---- Step 2: Post-Reboot DC Configuration ----" -ForegroundColor Yellow
+    Write-DcOperationHeartbeat -Operation 'AD operational readiness' `
+        -Checkpoint 'Waiting for stable AD read, write, share, and advertising signals'
 
     # Wait for AD DS to be *fully operational*, not just ADWS-responsive. A freshly-promoted
     # DC answers Get-ADDomain within seconds but still reports "server is not operational" for
@@ -151,6 +179,8 @@ if ($Step -eq 2) {
                                # success flickers True for minutes post-promotion while AD
                                # writes still throw "server is not operational".
     for ($i = 0; $i -lt 60 -and -not $adOperational; $i++) {
+        Write-DcOperationHeartbeat -Operation 'AD operational readiness' `
+            -Checkpoint "Probe $($i + 1)/60; consecutive successes $consecutive/$requiredConsecutive"
         $adwsOk = $false
         try { $domain = Get-ADDomain -ErrorAction Stop; $adwsOk = ($null -ne $domain) } catch { $adwsOk = $false }
         $sysvolOk   = Test-Path "\\$($env:COMPUTERNAME)\SYSVOL"
@@ -187,6 +217,8 @@ if ($Step -eq 2) {
         throw "AD DS did not become stably operational within ~15 minutes (ADWS read+write / SYSVOL / NETLOGON / advertising, $requiredConsecutive consecutive passes). CBAC and claims-GPO setup would fail; failing Step 2 so the DC does not signal readiness."
     }
     .\Write-Info.ps1 "[OK] AD DS is fully operational" -ForegroundColor Green
+    Write-DcOperationHeartbeat -Operation 'Post-promotion provisioning' `
+        -Checkpoint 'AD operational readiness gate passed'
 
     # -- Account Lockout Policy -- DISABLE for domain test accounts --
     # The Auth/FileServer suites run negative-auth and rapid re-authentication cases; on a
@@ -262,7 +294,7 @@ if ($Step -eq 2) {
             # Capture only the final return value: Create-TestAccount emits stray success-stream
             # output (net.exe, Format-Table), so a raw capture would be a truthy array that masks
             # a real failure. The script returns $true on completion and throws on hard failure.
-            $accountResult = & "$scriptsPath\Create-TestAccount.ps1" | Select-Object -Last 1
+            $accountResult = & "$scriptsPath\Create-TestAccount.ps1" -NoTranscript | Select-Object -Last 1
             $accountsOk = ($accountResult -eq $true)
         } catch {
             .\Write-Info.ps1 "  Test accounts attempt $try/5 failed: $($_.Exception.Message)" -ForegroundColor DarkGray
@@ -282,7 +314,8 @@ if ($Step -eq 2) {
     $cbacOk = $false
     for ($try = 1; $try -le 5 -and -not $cbacOk; $try++) {
         try {
-            $cbacOk = [bool](& "$scriptsPath\Create-CbacObjectsInDC.ps1")
+            $cbacResult = & "$scriptsPath\Create-CbacObjectsInDC.ps1" -NoTranscript | Select-Object -Last 1
+            $cbacOk = ($cbacResult -eq $true)
         } catch {
             .\Write-Info.ps1 "  CBAC attempt $try/5 failed: $($_.Exception.Message)" -ForegroundColor DarkGray
         }
@@ -296,7 +329,8 @@ if ($Step -eq 2) {
     $gpoOk = $false
     for ($try = 1; $try -le 5 -and -not $gpoOk; $try++) {
         try {
-            $gpoOk = [bool](& "$scriptsPath\Import-GPOForClaims.ps1")
+            $gpoResult = & "$scriptsPath\Import-GPOForClaims.ps1" -NoTranscript | Select-Object -Last 1
+            $gpoOk = ($gpoResult -eq $true)
         } catch {
             .\Write-Info.ps1 "  GPO import attempt $try/5 failed: $($_.Exception.Message)" -ForegroundColor DarkGray
         }
@@ -327,7 +361,7 @@ if ($Step -eq 2) {
     # -- DNS Records --
     .\Write-Info.ps1 "Creating DNS records..." -ForegroundColor Yellow
     try {
-        $result = & "$scriptsPath\Create-DNSRecords.ps1"
+        $result = & "$scriptsPath\Create-DNSRecords.ps1" -NoTranscript
         if (-not $result) {
             Write-Warning "Create-DNSRecords.ps1 returned failure"
         } else {
@@ -340,8 +374,10 @@ if ($Step -eq 2) {
 
     # -- DC Status checker task --
     .\Write-Info.ps1 "Configuring DC status checker..." -ForegroundColor Yellow
+    Write-DcOperationHeartbeat -Operation 'Post-promotion provisioning' `
+        -Checkpoint 'Configuring status checks, tools, services, and SSH'
     try {
-        $dcStatusResult = & "$scriptsPath\Check-DCStatus.ps1" -action 'CreateCheckerTask'
+        $dcStatusResult = & "$scriptsPath\Check-DCStatus.ps1" -action 'CreateCheckerTask' -NoTranscript
         if (-not $dcStatusResult) {
             Write-Warning "Check-DCStatus.ps1 returned failure"
         } else {
@@ -355,7 +391,7 @@ if ($Step -eq 2) {
     $toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
     if (-not (Test-Path $toolsSignal)) {
         .\Write-Info.ps1 "Installing tools..." -ForegroundColor Cyan
-        & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'DC'
+        & "$scriptsPath\InstallMSIAndTools.ps1" -Role 'DC' -NoTranscript
     } else {
         .\Write-Info.ps1 "[OK] Tools already installed" -ForegroundColor Green
     }
@@ -392,6 +428,8 @@ if ($Step -eq 2) {
     }
 
     .\Write-Info.ps1 ""
+    Write-DcOperationHeartbeat -Operation 'Post-promotion provisioning' `
+        -Checkpoint 'All post-promotion imperative sections completed'
     .\Write-Info.ps1 "=== DC imperative steps (Step 2) completed (Accounts=$accountsOk, DomainAdmin=$domainAdminOk, CBAC=$cbacOk, GPO=$gpoOk, DNS=$dnsOk, Tools=$toolsOk, SshKeys=$sshKeysOk) ===" -ForegroundColor Cyan
 
     # Gate readiness: a DC that failed CBAC/GPO/SSH provisioning must NOT report ready, or the
@@ -409,10 +447,10 @@ if ($Step -eq 2) {
         throw ("DC post-promotion provisioning incomplete: " + ($provisioningFailures -join '; ') +
             ". Failing Step 2 so the DC does not signal readiness and the deployment does not proceed to tests against a half-provisioned DC.")
     }
-    Stop-Transcript; Pop-Location; return $true
+    Stop-LocalTranscript; Pop-Location; return $true
   }
   catch {
     .\Write-Error.ps1 "DC imperative step 2 failed: $($_.Exception.Message)"
-    Stop-Transcript; Pop-Location; throw
+    Stop-LocalTranscript; Pop-Location; throw
   }
 }

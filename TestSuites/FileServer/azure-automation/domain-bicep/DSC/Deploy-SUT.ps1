@@ -3,35 +3,13 @@
 
 <#
 .SYNOPSIS
-    Orchestrator for the Domain SUT (Node01).
-    Applies DSC, joins domain, reboots, installs features/tools, configures environment.
+    Deterministic phased deployment for the Domain SUT.
 
 .DESCRIPTION
-    Uses registry-based step tracking with deferred reboots (matching workgroup patterns):
-
-    Step 0 -> 1: Domain Join
-      Imperative: Domain join via domainjoin.ps1.
-      -> Deferred reboot (TKFRSAR startup task + 90s shutdown)
-
-    Step 1 -> 2: Features + Tools
-      DSC-Full: Windows features (batched), Hyper-V, SMB shares, registry,
-                FSRM, SMB signing, password never expires, computer password.
-      Tools: PowerShellCore, OpenSSH, WAC (background job concurrent with DSC).
-      -> Deferred reboot if pending (Hyper-V feature typically needs one)
-
-    Step 2 -> 3: Environment Setup
-      Imperative: Disk partitioning (ReFS K:, FAT32 J:), data disk shares,
-                  symbolic links, FSA environment, DFS namespaces, QUIC certs.
-      -> Finish (signal file written)
-
-    Re-running is safe. DSC only touches drifted state and imperative steps
-    have built-in idempotency checks.
-
-.PARAMETER WorkingPath
-    Path to the Domain-Package root folder.
-
-.EXAMPLE
-    .\Deploy-SUT.ps1
+    Phase 0 prepares disruptive features and tools, joins the domain, and uses
+    one normal member reboot for both feature servicing and domain membership.
+    Phase 1 applies non-disruptive DSC convergence. Phase 2 installs prepared
+    tools while the domain environment is configured and verified.
 #>
 
 param(
@@ -39,351 +17,520 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$dscFolder    = $PSScriptRoot
-$scriptsPath  = "$dscFolder\Scripts"
-$mofFolder    = "$dscFolder\MOF\SUT"
-$logFile      = "$dscFolder\Deploy-SUT.log"
+$dscFolder = $PSScriptRoot
+$scriptsPath = "$dscFolder\Scripts"
+$featureMofFolder = "$dscFolder\MOF\SUT-Features"
+$convergenceMofFolder = "$dscFolder\MOF\SUT"
+$logFile = "$dscFolder\Deploy-SUT.log"
+$heartbeatFile = "$dscFolder\Deploy-SUT.heartbeat.json"
+$configFile = "$WorkingPath\Config.json"
+$registryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+$phaseRegistryName = 'DomainSutDeployPhase'
+$memberRebootPendingName = 'DomainSutMemberRebootPending'
+$memberPreBootTimeName = 'DomainSutPreRebootBootTimeUtc'
+$memberRebootCountName = 'DomainSutMemberRebootCount'
+$renameRebootPendingName = 'DomainSutRenameRebootPending'
+$renamePreBootTimeName = 'DomainSutPreRenameBootTimeUtc'
+$toolsJobTimeoutSeconds = 3600
 
-# Put Scripts folder on PATH so Write-Info.ps1, Write-Error.ps1 etc. resolve via .\
 $env:Path += ";$scriptsPath"
 Push-Location $scriptsPath
-
 Start-Transcript -Path $logFile -Append -Force
-.\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
-.\Write-Info.ps1 "  Domain SUT (Node01) -- DSC + Imperative Deployment       " -ForegroundColor Cyan
-.\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
-.\Write-Info.ps1 "WorkingPath : $WorkingPath" -ForegroundColor DarkGray
-.\Write-Info.ps1 "DSCFolder   : $dscFolder"  -ForegroundColor DarkGray
-.\Write-Info.ps1 ""
 
-# ===========================================================================
-# Pre-flight validation
-# ===========================================================================
-$configFile = "$WorkingPath\Config.json"
-$cfg = $null
-if (Test-Path $configFile) {
-    try { $cfg = Get-Content -Path $configFile -Raw | ConvertFrom-Json }
-    catch { Write-Warning "Could not parse Config.json: $_" }
+function Stop-DeploymentTranscript {
+    Pop-Location
+    Stop-Transcript
 }
-$validateScript = "$scriptsPath\Validate-ConfigFile.ps1"
-if (Test-Path $validateScript) {
-    .\Write-Info.ps1 "Validating Config.json..." -ForegroundColor Cyan
+
+function Get-RegistryValue {
+    param([string]$Name, $DefaultValue)
+    $value = Get-ItemProperty -Path $registryPath -Name $Name -ErrorAction SilentlyContinue
+    if ($null -eq $value) { return $DefaultValue }
+    return $value.$Name
+}
+
+function Set-RegistryValue {
+    param(
+        [string]$Name,
+        $Value,
+        [ValidateSet('DWord', 'String')]
+        [string]$Type
+    )
+    if (-not (Test-Path $registryPath)) {
+        New-Item -Path $registryPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $registryPath -Name $Name -Value $Value -Type $Type -Force
+}
+
+function Test-NewBoot {
+    param([string]$BootTimeRegistryName)
+    $recorded = [datetime](Get-RegistryValue -Name $BootTimeRegistryName -DefaultValue '1900-01-01T00:00:00Z')
+    $current = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+    return $current.ToUniversalTime() -gt $recorded.ToUniversalTime()
+}
+
+function Test-RequiredSutFeatureState {
+    $missing = @()
+    $marker = Get-ItemProperty -Path $registryPath `
+        -Name 'DomainSutFeatureBundleAttempted' -ErrorAction SilentlyContinue
+    if ($null -eq $marker) { $missing += 'feature-bundle-marker' }
+    foreach ($featureName in $requiredSutFeatures) {
+        $feature = Get-WindowsFeature -Name $featureName -ErrorAction SilentlyContinue
+        if ($null -eq $feature -or $feature.InstallState -ne 'Installed') {
+            $missing += "feature:$featureName"
+        }
+    }
+    if ($missing.Count -gt 0) {
+        .\Write-Info.ps1 "[WARN] Required Domain SUT feature state is incomplete: $($missing -join ', ')" -ForegroundColor Yellow
+        return $false
+    }
+    return $true
+}
+
+function Test-RequiredSutDscState {
+    $missing = @()
+    if (-not (Test-RequiredSutFeatureState)) { $missing += 'feature-bundle' }
+    foreach ($commandName in @('dfsutil.exe', 'dfscmd.exe')) {
+        if (-not (Get-Command $commandName -ErrorAction SilentlyContinue)) {
+            $missing += "command:$commandName"
+        }
+    }
+    foreach ($path in @('C:\FileShare', 'C:\SMBBasic', 'C:\SMBBasic\sub')) {
+        if (-not (Test-Path -LiteralPath $path -PathType Container)) {
+            $missing += "directory:$path"
+        }
+    }
+    foreach ($share in @(
+        @{ Name = 'FileShare'; Path = 'C:\FileShare' },
+        @{ Name = 'SMBBasic'; Path = 'C:\SMBBasic' }
+    )) {
+        $existing = Get-SmbShare -Name $share.Name -ErrorAction SilentlyContinue
+        if ($null -eq $existing -or $existing.Path -ne $share.Path) {
+            $missing += "share:$($share.Name)"
+        }
+    }
+    if ($missing.Count -gt 0) {
+        .\Write-Info.ps1 "[WARN] Required Domain SUT convergence state is incomplete: $($missing -join ', ')" -ForegroundColor Yellow
+        return $false
+    }
+    return $true
+}
+
+function Test-RequiredSutDomainState {
+    $partOfDomain = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
+    $secureChannel = $false
+    try { $secureChannel = Test-ComputerSecureChannel -ErrorAction Stop } catch {}
+    return $partOfDomain -and $secureChannel
+}
+
+function Test-RequiredSutImperativeState {
+    $missing = @()
+    foreach ($path in @(
+        'C:\SMBBasic\symboliclink',
+        'C:\SMBBasic\sub\symboliclink2',
+        'C:\FileShare\ExistingFolder',
+        'C:\FileShare\ExistingFile.txt',
+        'C:\DomainBased.txt'
+    )) {
+        if (-not (Test-Path -LiteralPath $path)) {
+            $missing += "imperative-path:$path"
+        }
+    }
+    $passwordMarker = Get-ItemProperty -Path $registryPath `
+        -Name 'ComputerPasswordSet' -ErrorAction SilentlyContinue
+    if ($null -eq $passwordMarker) { $missing += 'computer-password-marker' }
+    foreach ($namespace in @('SMBDfs', 'Standalone')) {
+        $dfsRoot = "\\$env:COMPUTERNAME\$namespace"
+        & dfsutil.exe root $dfsRoot *> $null
+        if ($LASTEXITCODE -ne 0) { $missing += "dfs-root:$dfsRoot" }
+    }
+    if ($missing.Count -gt 0) {
+        .\Write-Info.ps1 "[WARN] Required Domain SUT imperative state is incomplete: $($missing -join ', ')" -ForegroundColor Yellow
+        return $false
+    }
+    return $true
+}
+
+function Test-RequiredSutReadyState {
+    return (Test-Path $fullDscSignal) -and
+           (Test-Path $toolsSignal) -and
+           (Test-RequiredSutDscState) -and
+           (Test-RequiredSutDomainState) -and
+           (Test-RequiredSutImperativeState)
+}
+
+function Get-DomainSutRepairPhase {
+    if ((Test-RequiredSutDscState) -and (Test-RequiredSutDomainState)) {
+        return 2
+    }
+    if ((Test-RequiredSutFeatureState) -and
+        (Test-RequiredSutDomainState) -and
+        -not (Test-PendingSystemReboot)) {
+        return 1
+    }
+    return 0
+}
+
+function Start-ToolsPreparationJob {
+    if ((Test-Path $toolsPreparedSignal) -or (Test-Path $toolsSignal)) { return $null }
+    .\Write-Info.ps1 'Starting parallel SUT tool package preparation...' -ForegroundColor Cyan
+    $jobLog = "$scriptsPath\InstallMSIAndTools.prepare.job.log"
+    return Start-Job -ScriptBlock {
+        param($installer, $scriptsDirectory, $preparedSignal, $log)
+        Set-Location $scriptsDirectory
+        $env:Path += ";$scriptsDirectory"
+        $output = @(& $installer -Role 'SUT' -Operation Prepare `
+            -PreparedSignalFile $preparedSignal -NoTranscript *>&1)
+        $output | Out-File -FilePath $log -Force
+        if ($output.Count -eq 0 -or $output[-1] -ne $true) {
+            throw 'Required Domain SUT package preparation failed.'
+        }
+    } -ArgumentList $toolsInstaller, $scriptsPath, $toolsPreparedSignal, $jobLog
+}
+
+function Stop-ToolsPreparationJob {
+    param([System.Management.Automation.Job]$Job)
+    if ($null -eq $Job) { return }
+    if ($Job.State -in @('NotStarted', 'Running', 'Blocked')) { Stop-Job -Job $Job }
+    Remove-Job -Job $Job -Force -ErrorAction SilentlyContinue
+}
+
+function Complete-ToolsPreparationJob {
+    param([System.Management.Automation.Job]$Job)
+    if ($null -eq $Job) { return }
     try {
-        & $validateScript -ConfigPath $configFile
-        .\Write-Info.ps1 "[OK] Config.json validation passed" -ForegroundColor Green
+        Wait-DeploymentJob -Job $Job -TimeoutSeconds $toolsJobTimeoutSeconds `
+            -Phase 'ToolsPrepare' -Operation 'Parallel Domain SUT package preparation' `
+            -HeartbeatPath $heartbeatFile -LastCheckpoint 'Domain SUT orchestration active' | Out-Null
     }
-    catch {
-        .\Write-Error.ps1 "[FAIL] Config.json validation failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
-    }
-}
-
-$toolsJsonPath = "$WorkingPath\Tools.json"
-if (Test-Path $toolsJsonPath) {
-    .\Write-Info.ps1 "Tools.json found at: $toolsJsonPath" -ForegroundColor DarkGray
-} else {
-    $toolsJsonPath = "$scriptsPath\Tools.json"
-    if (Test-Path $toolsJsonPath) {
-        .\Write-Info.ps1 "Tools.json found at fallback: $toolsJsonPath" -ForegroundColor DarkGray
-    } else {
-        .\Write-Info.ps1 "[WARN] Tools.json not found at $WorkingPath\Tools.json or $scriptsPath\Tools.json" -ForegroundColor Yellow
+    finally {
+        Remove-Job -Job $Job -Force -ErrorAction SilentlyContinue
     }
 }
 
-# ===========================================================================
-# Reboot circuit breaker
-# ===========================================================================
-$rebootRegPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
-$rebootRegName = 'RebootCount'
-$maxRebootCount = 3
+.\Write-Info.ps1 '===========================================================' -ForegroundColor Cyan
+.\Write-Info.ps1 '  Domain SUT -- Deterministic Phased Deployment            ' -ForegroundColor Cyan
+.\Write-Info.ps1 '===========================================================' -ForegroundColor Cyan
 
-function Get-RebootCount {
-    $val = Get-ItemProperty -Path $rebootRegPath -Name $rebootRegName -ErrorAction SilentlyContinue
-    if ($val) { return [int]$val.$rebootRegName } else { return 0 }
-}
-
-function Set-RebootCount {
-    param([int]$Count)
-    if (-not (Test-Path $rebootRegPath)) {
-        New-Item -Path $rebootRegPath -Force | Out-Null
-    }
-    Set-ItemProperty -Path $rebootRegPath -Name $rebootRegName -Value $Count -Type DWord -Force
-}
-
-# ===========================================================================
-# Step tracking (registry-based)
-# ===========================================================================
-$stepRegName = 'DeployStep'
-
-function Get-DeployStep {
-    $val = Get-ItemProperty -Path $rebootRegPath -Name $stepRegName -ErrorAction SilentlyContinue
-    if ($val) { return [int]$val.$stepRegName } else { return 0 }
-}
-
-function Set-DeployStep {
-    param([int]$Step)
-    if (-not (Test-Path $rebootRegPath)) {
-        New-Item -Path $rebootRegPath -Force | Out-Null
-    }
-    Set-ItemProperty -Path $rebootRegPath -Name $stepRegName -Value $Step -Type DWord -Force
-}
-
-$currentStep = Get-DeployStep
-.\Write-Info.ps1 "Current deploy step: $currentStep" -ForegroundColor DarkGray
-
-# Load shared helpers (reboot scheduling, TKFRSAR cleanup)
 . "$dscFolder\Deploy-CommonHelpers.ps1"
 
-# Cancel any stale reboot task from a previous run so it doesn't fire
-# in the middle of feature installation (0x8007045b).
-$staleReboot = Get-ScheduledTask -TaskName 'PostDeployReboot' -ErrorAction SilentlyContinue
-if ($null -ne $staleReboot) {
-    Unregister-ScheduledTask -TaskName 'PostDeployReboot' -Confirm:$false
-    .\Write-Info.ps1 "[OK] Cancelled stale PostDeployReboot task from previous run." -ForegroundColor Yellow
+try {
+    if (-not (Test-Path $configFile)) { throw "Config.json was not found at '$configFile'." }
+    $cfg = Get-Content -Path $configFile -Raw | ConvertFrom-Json
+    $validateScript = "$scriptsPath\Validate-ConfigFile.ps1"
+    if (Test-Path $validateScript) {
+        & $validateScript -ConfigPath $configFile
+        .\Write-Info.ps1 '[OK] Config.json validation passed' -ForegroundColor Green
+    }
+}
+catch {
+    .\Write-Error.ps1 "[FAIL] Domain SUT preflight failed: $($_.Exception.Message)"
+    Stop-DeploymentTranscript
+    throw
 }
 
 $signalFile = "$dscFolder\Deploy-SUT.Completed.signal"
-# Persisted marker: Full DSC (features + shares + registry) is a mandatory postcondition,
-# but it runs in an earlier boot than the completion-signal write, so an in-memory flag is
-# lost across the reboot. Gate the completion signal on this marker so a failed Full DSC
-# (e.g. missing SMB shares) does not produce a green-but-broken SUT.
+$featureSignal = "$scriptsPath\SUT-Features.Completed.signal"
 $fullDscSignal = "$scriptsPath\SUT-FullDsc.Completed.signal"
-if (Test-Path $signalFile) {
-    .\Write-Info.ps1 "[OK] SUT deployment already completed (signal file exists)." -ForegroundColor Green
+$toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
+$toolsPreparedSignal = "$scriptsPath\InstallMSIAndTools.Prepared.signal"
+$toolsInstaller = "$scriptsPath\InstallMSIAndTools.ps1"
+$requiredSutFeatures = @(
+    'File-Services',
+    'FS-BranchCache',
+    'FS-VSS-Agent',
+    'BranchCache',
+    'FS-DFS-Namespace',
+    'RSAT-File-Services',
+    'RSAT-DFS-Mgmt-Con',
+    'RSAT-Hyper-V-Tools',
+    'FS-Resource-Manager'
+)
+
+$staleReboot = Get-ScheduledTask -TaskName 'PostDeployReboot' -ErrorAction SilentlyContinue
+if ($null -ne $staleReboot) {
+    Unregister-ScheduledTask -TaskName 'PostDeployReboot' -Confirm:$false
+    .\Write-Info.ps1 '[OK] Cancelled stale PostDeployReboot task.' -ForegroundColor Yellow
+}
+
+if ((Test-Path $signalFile) -and (Test-RequiredSutReadyState)) {
+    Set-DeploymentPhase -Name $phaseRegistryName -Phase 3
+    Set-RegistryValue -Name $memberRebootCountName -Value 0 -Type DWord
     Remove-ResumeTask
-    Pop-Location; Stop-Transcript; return
-}
-
-$stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-$phase3Ok = $false
-
-# ===========================================================================
-# Pre-check: Validate hostname (rename if needed)
-# ===========================================================================
-if (Test-Path $configFile) {
-    try {
-        $cfg = Get-Content -Path $configFile -Raw | ConvertFrom-Json
-        $expectedName = $cfg.Machines.SUT.ComputerName
-        if (-not [string]::IsNullOrWhiteSpace($expectedName) -and $env:COMPUTERNAME -ne $expectedName) {
-            $currentRebootCount = Get-RebootCount
-            if ($currentRebootCount -ge $maxRebootCount) {
-                .\Write-Info.ps1 "[WARN] Reboot circuit breaker triggered ($currentRebootCount >= $maxRebootCount). Skipping rename reboot -- continuing with hostname '$env:COMPUTERNAME'." -ForegroundColor Red
-            } else {
-                Set-RebootCount -Count ($currentRebootCount + 1)
-                .\Write-Info.ps1 "Renaming computer from $env:COMPUTERNAME to $expectedName (reboot $($currentRebootCount + 1)/$maxRebootCount)..." -ForegroundColor Yellow
-                Rename-Computer -NewName $expectedName -Force
-
-                .\Write-Info.ps1 "Scheduling Deploy-SUT.ps1 to re-run after reboot..." -ForegroundColor Yellow
-                Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-SUT.ps1" `
-                    -WorkingPath $WorkingPath -DscFolder $dscFolder
-
-                Pop-Location
-                Stop-Transcript
-                return
-            }
-        }
-    } catch {
-        .\Write-Info.ps1 "[WARN] Could not validate hostname: $($_.Exception.Message)" -ForegroundColor Yellow
-    }
-}
-
-# ===========================================================================
-# Step 0 -> 1: Domain Join
-# ===========================================================================
-if ($currentStep -lt 1) {
-    # The complete SUT configuration includes features and shares that are valid only
-    # after domain join. Running it here was not a "lite" pass; it applied the full MOF,
-    # tolerated failures, and then repeated all resources after reboot.
-    .\Write-Info.ps1 "---- Phase 1: Domain Join ----" -ForegroundColor Yellow
-    try {
-        # Capture the imperative result: Step 1 returns $false (not throw) on join failure,
-        # so an unchecked call would advance the step on a machine that never joined.
-        $joinResult = & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath | Select-Object -Last 1
-        if ($joinResult -ne $true) {
-            throw "Domain join step returned failure (SUT did not join)."
-        }
-        .\Write-Info.ps1 "[OK] Domain join complete." -ForegroundColor Green
-    }
-    catch {
-        .\Write-Error.ps1 "[FAIL] Domain join failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
-    }
-
-    # Schedule deferred reboot + resume
-    Set-DeployStep -Step 1
-    .\Write-Info.ps1 "Scheduling deferred reboot and resume..." -ForegroundColor Yellow
-    # After domain join, resume task must run as domain admin for AD operations (e.g. domain-based DFS)
-    $domainNetBios = if ($cfg.Domain -and $cfg.Domain.NetBiosName) { $cfg.Domain.NetBiosName } else { $cfg.Core.DomainName.Split('.')[0].ToUpper() }
-    $domainAdminUser = "$domainNetBios\$($cfg.Core.Username)"
-    $domainAdminPass = $cfg.Core.Password
-    Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-SUT.ps1" `
-        -WorkingPath $WorkingPath -DscFolder $dscFolder `
-        -RunAsUser $domainAdminUser -RunAsPassword $domainAdminPass
-
-    Pop-Location
-    Stop-Transcript
+    .\Write-Info.ps1 '[OK] Domain SUT deployment already completed and remains ready.' -ForegroundColor Green
+    Stop-DeploymentTranscript
     return
 }
+if (Test-Path $signalFile) {
+    .\Write-Info.ps1 '[WARN] Removing stale Domain SUT completion signal.' -ForegroundColor Yellow
+    Remove-Item -Path $signalFile -Force
+    $repairPhase = Get-DomainSutRepairPhase
+    Set-DeploymentPhase -Name $phaseRegistryName -Phase $repairPhase
+}
+
+$currentPhase = Get-DeploymentPhase -Name $phaseRegistryName
+if ($currentPhase -ge 3 -and -not (Test-Path $signalFile)) {
+    $repairPhase = Get-DomainSutRepairPhase
+    Set-DeploymentPhase -Name $phaseRegistryName -Phase $repairPhase
+    $currentPhase = $repairPhase
+    .\Write-Info.ps1 "[WARN] Completion signal is absent; reset persisted Domain SUT Phase 3 to repair Phase $repairPhase." -ForegroundColor Yellow
+}
+
+if ([int](Get-RegistryValue -Name $renameRebootPendingName -DefaultValue 0) -eq 1) {
+    if (-not (Test-NewBoot -BootTimeRegistryName $renamePreBootTimeName)) {
+        Stop-DeploymentTranscript
+        throw 'The Domain SUT hostname repair reboot was persisted but not observed.'
+    }
+    Set-RegistryValue -Name $renameRebootPendingName -Value 0 -Type DWord
+    .\Write-Info.ps1 '[OK] Hostname repair reboot completed.' -ForegroundColor Green
+}
+if ($currentPhase -ge 1 -and
+    [int](Get-RegistryValue -Name $memberRebootPendingName -DefaultValue 0) -eq 1) {
+    if (-not (Test-NewBoot -BootTimeRegistryName $memberPreBootTimeName)) {
+        Stop-DeploymentTranscript
+        throw 'The Domain SUT member reboot was persisted but not observed.'
+    }
+    Set-RegistryValue -Name $memberRebootPendingName -Value 0 -Type DWord
+    .\Write-Info.ps1 '[OK] Combined feature/domain-join reboot completed.' -ForegroundColor Green
+}
+
+$oldDeployStep = [int](Get-RegistryValue -Name 'DeployStep' -DefaultValue 0)
+if ($currentPhase -eq 0 -and -not (Test-PendingSystemReboot)) {
+    if ($oldDeployStep -ge 2 -and (Test-RequiredSutDscState) -and (Test-RequiredSutDomainState)) {
+        "FULL DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" |
+            Set-Content -Path $fullDscSignal -Force
+        Set-DeploymentPhase -Name $phaseRegistryName -Phase 2
+        $currentPhase = 2
+        .\Write-Info.ps1 '[OK] Migrated existing converged Domain SUT state to Phase 2.' -ForegroundColor Green
+    }
+    elseif ($oldDeployStep -ge 1 -and
+            (Test-RequiredSutFeatureState) -and (Test-RequiredSutDomainState)) {
+        Set-DeploymentPhase -Name $phaseRegistryName -Phase 1
+        $currentPhase = 1
+        .\Write-Info.ps1 '[OK] Migrated existing joined Domain SUT state to Phase 1.' -ForegroundColor Green
+    }
+}
+
+# Hostname repair must complete before domain join. Azure-created VMs normally
+# already have the configured name, so this is an exceptional custom-image path.
+if ($currentPhase -eq 0) {
+    $expectedName = $cfg.Machines.SUT.ComputerName
+    if (-not [string]::IsNullOrWhiteSpace($expectedName) -and $env:COMPUTERNAME -ne $expectedName) {
+        Rename-Computer -NewName $expectedName -Force
+        Set-RegistryValue -Name $renameRebootPendingName -Value 1 -Type DWord
+        $bootTime = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime.ToUniversalTime().ToString('o')
+        Set-RegistryValue -Name $renamePreBootTimeName -Value $bootTime -Type String
+        Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-SUT.ps1" `
+            -WorkingPath $WorkingPath -DscFolder $dscFolder
+        Stop-DeploymentTranscript
+        return
+    }
+}
+
+$toolsPreparationJob = Start-ToolsPreparationJob
 
 # ===========================================================================
-# Step 1 -> 2: Full DSC (features, shares, registry) + Tools
+# Phase 0: Features, domain join, and one normal member reboot
 # ===========================================================================
-if ($currentStep -eq 1) {
-    Start-Sleep -Seconds 10  # Post-reboot stabilization
+if ($currentPhase -eq 0) {
+    .\Write-Info.ps1 '---- Phase 0: Features + Domain Join ----' -ForegroundColor Yellow
+    try {
+        . "$dscFolder\SUT-FeatureConfiguration.ps1"
+        SutFeatureConfiguration -OutputPath $featureMofFolder
+        Remove-Item -Path $featureSignal -Force -ErrorAction SilentlyContinue
+        Invoke-VerifiedDscConfiguration -Path $featureMofFolder `
+            -OperationName 'Domain SUT pre-reboot feature configuration' `
+            -Postcondition { Test-RequiredSutFeatureState } `
+            -HeartbeatPath $heartbeatFile -PhaseName 'Features' | Out-Null
+        "FEATURES APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" |
+            Set-Content -Path $featureSignal -Force
 
-    # -- Tools install (background job) --
-    .\Write-Info.ps1 "---- Phase 2a: Tools Install (background) ----" -ForegroundColor Yellow
-    $phase2 = [System.Diagnostics.Stopwatch]::StartNew()
-    $toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
-    $toolsJob    = $null
-
-    if (Test-Path $toolsSignal) {
-        .\Write-Info.ps1 "[OK] Tools already installed (signal file exists)." -ForegroundColor Green
+        $alreadyJoined = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
+        if (-not $alreadyJoined) {
+            Write-DeploymentHeartbeat -Phase 'DomainJoin' -Operation 'Joining the Domain SUT to Active Directory' `
+                -StartedAt (Get-Date) -HeartbeatPath $heartbeatFile -LastCheckpoint 'Feature phase complete'
+            $joinResult = & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 1 `
+                -WorkingPath $WorkingPath -HeartbeatPath $heartbeatFile -NoTranscript |
+                Select-Object -Last 1
+            if ($joinResult -ne $true) { throw 'Domain join step returned failure.' }
+        }
     }
-    else {
-        .\Write-Info.ps1 "Starting tools install as background job..." -ForegroundColor Cyan
-        $toolsInstaller = "$scriptsPath\InstallMSIAndTools.ps1"
-        $toolsScriptsDir = $scriptsPath
-        $toolsJobLog = "$scriptsPath\InstallMSIAndTools.job.log"
-        $toolsJob = Start-Job -ScriptBlock {
-            param($wp, $installer, $sd, $jl)
-            Set-Location $sd
-            $env:Path += ";$sd"
-            & $installer -Role 'SUT' *> $jl
-        } -ArgumentList $WorkingPath, $toolsInstaller, $toolsScriptsDir, $toolsJobLog
+    catch {
+        $phaseError = $_.Exception.Message
+        Stop-ToolsPreparationJob -Job $toolsPreparationJob
+        .\Write-Error.ps1 "[FAIL] Domain SUT pre-reboot phase failed: $phaseError"
+        Stop-DeploymentTranscript
+        throw
     }
-    $phase2.Stop()
 
-    # -- Full DSC (features + shares + registry) --
-    .\Write-Info.ps1 "---- Phase 2b: DSC Full (features, shares, registry) ----" -ForegroundColor Yellow
-    $phase2b = [System.Diagnostics.Stopwatch]::StartNew()
+    $rebootRequired = -not (Test-RequiredSutDomainState) -or (Test-PendingSystemReboot)
+    if ($rebootRequired) {
+        if ($null -ne $toolsPreparationJob -and $toolsPreparationJob.State -eq 'Completed') {
+            try { Complete-ToolsPreparationJob -Job $toolsPreparationJob } catch {
+                .\Write-Info.ps1 "[WARN] Package preparation will retry after reboot: $($_.Exception.Message)" -ForegroundColor Yellow
+            }
+        } else {
+            Stop-ToolsPreparationJob -Job $toolsPreparationJob
+            .\Write-Info.ps1 '[INFO] Paused unfinished package preparation for the member reboot.' -ForegroundColor Yellow
+        }
+        $toolsPreparationJob = $null
+
+        $memberRebootCount = [int](Get-RegistryValue -Name $memberRebootCountName -DefaultValue 0)
+        if ($memberRebootCount -ge 1) {
+            Stop-DeploymentTranscript
+            throw 'The Domain SUT requested another normal member reboot after its planned reboot.'
+        }
+        Set-DeploymentPhase -Name $phaseRegistryName -Phase 1
+        Set-RegistryValue -Name 'DeployStep' -Value 1 -Type DWord
+        Set-RegistryValue -Name $memberRebootCountName -Value 1 -Type DWord
+        Set-RegistryValue -Name $memberRebootPendingName -Value 1 -Type DWord
+        $bootTime = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime.ToUniversalTime().ToString('o')
+        Set-RegistryValue -Name $memberPreBootTimeName -Value $bootTime -Type String
+        $domainNetBios = if ($cfg.Domain.NetBiosName) {
+            $cfg.Domain.NetBiosName
+        } else {
+            $cfg.Core.DomainName.Split('.')[0].ToUpper()
+        }
+        Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-SUT.ps1" `
+            -WorkingPath $WorkingPath -DscFolder $dscFolder `
+            -RunAsUser "$domainNetBios\$($cfg.Core.Username)" `
+            -RunAsPassword $cfg.Core.Password
+        Stop-DeploymentTranscript
+        return
+    }
+    Set-DeploymentPhase -Name $phaseRegistryName -Phase 1
+    Set-RegistryValue -Name 'DeployStep' -Value 1 -Type DWord
+    $currentPhase = 1
+}
+
+# ===========================================================================
+# Phase 1: Joined-machine convergence
+# ===========================================================================
+if ($currentPhase -eq 1) {
+    if (Test-PendingSystemReboot) {
+        Stop-DeploymentTranscript
+        throw 'A reboot remains pending before Domain SUT convergence.'
+    }
+    if (-not (Test-RequiredSutDomainState)) {
+        Stop-DeploymentTranscript
+        throw 'Domain SUT membership or secure channel is not ready after reboot.'
+    }
+
+    .\Write-Info.ps1 '---- Phase 1: Post-Reboot DSC Convergence ----' -ForegroundColor Yellow
     try {
         . "$dscFolder\SUT-Configuration.ps1"
-        .\Write-Info.ps1 "Compiling SUT DSC configuration (full, config: $configFile)..." -ForegroundColor Cyan
-        SutConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
-        # Clear any stale marker from a previous attempt so a FAILED apply in this run cannot
-        # be mistaken for success by the completion gate (which only tests for the file).
-        if (Test-Path $fullDscSignal) { Remove-Item -Path $fullDscSignal -Force -ErrorAction SilentlyContinue }
-        .\Write-Info.ps1 "Applying full SUT DSC configuration..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
-        "FULL DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $fullDscSignal -Force
-        .\Write-Info.ps1 "[OK] Full DSC applied in $([math]::Round($phase2b.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        SutConfiguration -ConfigFilePath $configFile -OutputPath $convergenceMofFolder
+        Remove-Item -Path $fullDscSignal -Force -ErrorAction SilentlyContinue
+        Invoke-VerifiedDscConfiguration -Path $convergenceMofFolder `
+            -OperationName 'Domain SUT post-reboot convergence configuration' `
+            -Postcondition { Test-RequiredSutDscState } `
+            -HeartbeatPath $heartbeatFile -PhaseName 'Convergence' | Out-Null
+        "FULL DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" |
+            Set-Content -Path $fullDscSignal -Force
+        Set-DeploymentPhase -Name $phaseRegistryName -Phase 2
+        Set-RegistryValue -Name 'DeployStep' -Value 2 -Type DWord
+        $currentPhase = 2
     }
     catch {
-        .\Write-Error.ps1 "[FAIL] Full DSC failed: $($_.Exception.Message)"
-        .\Write-Info.ps1 "Continuing with remaining steps (completion signal will be withheld until Full DSC succeeds)..." -ForegroundColor Yellow
-    }
-    $phase2b.Stop()
-    .\Write-Info.ps1 ""
-
-    # -- Wait for tools if still running --
-    if ($null -ne $toolsJob) {
-        $phase2.Start()
-        .\Write-Info.ps1 "Waiting for tools install to complete..." -ForegroundColor Yellow
-        $toolsJob | Wait-Job | Remove-Job -Force
-        $phase2.Stop()
-        if (Test-Path $toolsSignal) {
-            .\Write-Info.ps1 "[OK] Tools installed in $([math]::Round($phase2.Elapsed.TotalSeconds))s" -ForegroundColor Green
-        } else {
-            .\Write-Info.ps1 "[WARN] Tools job completed but signal file not found -- check InstallMSIAndTools.ps1.log" -ForegroundColor Yellow
-        }
-    }
-
-    # Check if a reboot is pending (e.g., from Hyper-V feature installation)
-    $rebootPending = (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending') -or
-                     (Test-Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired') -or
-                     (Test-Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations')
-    if ($rebootPending) {
-        $currentRebootCount = Get-RebootCount
-        if ($currentRebootCount -ge $maxRebootCount) {
-            .\Write-Info.ps1 "[WARN] Reboot circuit breaker triggered ($currentRebootCount >= $maxRebootCount). Skipping pending-reboot -- continuing without reboot." -ForegroundColor Red
-            Set-DeployStep -Step 2
-        } else {
-            Set-RebootCount -Count ($currentRebootCount + 1)
-            Set-DeployStep -Step 2
-            .\Write-Info.ps1 "[WARN] A reboot is required to complete feature installation (reboot $($currentRebootCount + 1)/$maxRebootCount)." -ForegroundColor Yellow
-            .\Write-Info.ps1 'Scheduling Deploy-SUT.ps1 to re-run after reboot...' -ForegroundColor Yellow
-            $domainNetBios = if ($cfg.Domain -and $cfg.Domain.NetBiosName) { $cfg.Domain.NetBiosName } else { $cfg.Core.DomainName.Split('.')[0].ToUpper() }
-            $domainAdminUser = "$domainNetBios\$($cfg.Core.Username)"
-            $domainAdminPass = $cfg.Core.Password
-            Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-SUT.ps1" `
-                -WorkingPath $WorkingPath -DscFolder $dscFolder `
-                -RunAsUser $domainAdminUser -RunAsPassword $domainAdminPass
-
-            Pop-Location
-            Stop-Transcript
-            return
-        }
-    } else {
-        .\Write-Info.ps1 'No reboot required after feature install.' -ForegroundColor Green
-        Set-DeployStep -Step 2
+        $phaseError = $_.Exception.Message
+        Stop-ToolsPreparationJob -Job $toolsPreparationJob
+        .\Write-Error.ps1 "[FAIL] Domain SUT convergence failed: $phaseError"
+        Stop-DeploymentTranscript
+        throw
     }
 }
 
 # ===========================================================================
-# Step 2 -> 3: Environment Setup (disks, DFS, QUIC, FSA)
+# Phase 2: Domain environment and controlled tool installation
 # ===========================================================================
-$currentStep = Get-DeployStep
-if ($currentStep -ge 2 -and -not (Test-Path $signalFile)) {
-    Start-Sleep -Seconds 5  # Post-reboot stabilization
-
-    .\Write-Info.ps1 "---- Phase 3: Environment Setup ----" -ForegroundColor Yellow
-    $phase3sw = [System.Diagnostics.Stopwatch]::StartNew()
+if ($currentPhase -eq 2) {
+    .\Write-Info.ps1 '---- Phase 2: Environment + Tools ----' -ForegroundColor Yellow
     try {
-        & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 3 -WorkingPath $WorkingPath
-        $phase3Ok = $true
-        .\Write-Info.ps1 "[OK] Environment setup complete in $([math]::Round($phase3sw.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        Complete-ToolsPreparationJob -Job $toolsPreparationJob
+        $toolsPreparationJob = $null
+        if (-not (Test-Path $toolsPreparedSignal) -and -not (Test-Path $toolsSignal)) {
+            $prepared = & $toolsInstaller -Role 'SUT' -Operation Prepare `
+                -PreparedSignalFile $toolsPreparedSignal -NoTranscript | Select-Object -Last 1
+            if (-not $prepared -or -not (Test-Path $toolsPreparedSignal)) {
+                throw 'Required Domain SUT packages could not be prepared.'
+            }
+        }
     }
     catch {
-        .\Write-Error.ps1 "[FAIL] Environment setup failed: $($_.Exception.Message)"
+        .\Write-Error.ps1 "[FAIL] Domain SUT package preparation failed: $($_.Exception.Message)"
+        Stop-DeploymentTranscript
+        throw
     }
-    $phase3sw.Stop()
 
-    # -- Summary --
-    Set-DeployStep -Step 3
-    Set-RebootCount -Count 0
+    $toolsInstallJob = $null
+    if (-not (Test-Path $toolsSignal)) {
+        $toolsInstallLog = "$scriptsPath\InstallMSIAndTools.install.job.log"
+        $toolsInstallJob = Start-Job -ScriptBlock {
+            param($installer, $scriptsDirectory, $preparedSignal, $log)
+            Set-Location $scriptsDirectory
+            $env:Path += ";$scriptsDirectory"
+            $output = @(& $installer -Role 'SUT' -Operation Install `
+                -PreparedSignalFile $preparedSignal -NoTranscript *>&1)
+            $output | Out-File -FilePath $log -Force
+            if ($output.Count -eq 0 -or $output[-1] -ne $true) {
+                throw 'Required Domain SUT tool installation failed.'
+            }
+        } -ArgumentList $toolsInstaller, $scriptsPath, $toolsPreparedSignal, $toolsInstallLog
+    }
 
-    $stopwatch.Stop()
-    .\Write-Info.ps1 ""
-    .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
-    .\Write-Info.ps1 "  SUT Deployment Complete" -ForegroundColor Cyan
-    .\Write-Info.ps1 "  Total time : $([math]::Round($stopwatch.Elapsed.TotalMinutes, 1)) min" -ForegroundColor Cyan
-    .\Write-Info.ps1 "    Environment: $([math]::Round($phase3sw.Elapsed.TotalSeconds))s" -ForegroundColor DarkGray
-    .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
+    $environmentOk = $false
+    try {
+        $result = & "$dscFolder\Invoke-SutImperativeSteps.ps1" -Step 3 `
+            -WorkingPath $WorkingPath -HeartbeatPath $heartbeatFile -NoTranscript |
+            Select-Object -Last 1
+        $environmentOk = $result -eq $true -and
+                         (Test-RequiredSutImperativeState) -and
+                         (Test-RequiredSutDomainState)
+    }
+    catch {
+        .\Write-Error.ps1 "[FAIL] Domain SUT environment setup failed: $($_.Exception.Message)"
+    }
 
-    # Postcondition (domain mode): the SUT must actually be domain-joined with a working
-    # secure channel before it is declared test-ready. Test-ComputerSecureChannel is used as a
-    # gate (must be true to signal ready); its known false-positive bias only risks a missed
-    # block, never a false block, so it is safe in this direction.
-    $membershipOk = $true
-    $domainMode = -not [string]::IsNullOrWhiteSpace($cfg.Core.DomainName) -and $cfg.Core.DomainName -ne 'Workgroup'
-    if ($domainMode) {
-        $partOfDomain = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
-        $secureOk = $false
-        try { $secureOk = Test-ComputerSecureChannel -ErrorAction Stop } catch { $secureOk = $false }
-        $membershipOk = $partOfDomain -and $secureOk
-        if (-not $membershipOk) {
-            .\Write-Info.ps1 "[FAIL] Domain membership/secure-channel postcondition not met (PartOfDomain=$partOfDomain, SecureChannel=$secureOk)." -ForegroundColor Red
+    if ($null -ne $toolsInstallJob) {
+        try {
+            Wait-DeploymentJob -Job $toolsInstallJob -TimeoutSeconds $toolsJobTimeoutSeconds `
+                -Phase 'ToolsInstall' -Operation 'Controlled Domain SUT tool installation' `
+                -HeartbeatPath $heartbeatFile -LastCheckpoint 'Domain SUT convergence complete' | Out-Null
+        }
+        catch {
+            .\Write-Error.ps1 "[FAIL] Domain SUT tool installation failed: $($_.Exception.Message)"
+        }
+        finally {
+            Remove-Job -Job $toolsInstallJob -Force -ErrorAction SilentlyContinue
         }
     }
 
-    if ($phase3Ok -and (Test-Path $fullDscSignal) -and $membershipOk) {
-        "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
-        .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
-        Remove-ResumeTask
-    } elseif (-not $membershipOk) {
-        .\Write-Info.ps1 "[WARN] Signal file NOT written -- domain membership/secure channel not verified; SUT is not test-ready" -ForegroundColor Yellow
-    } elseif (-not (Test-Path $fullDscSignal)) {
-        .\Write-Info.ps1 "[WARN] Signal file NOT written -- Full DSC (features/shares/registry) did not succeed; SUT is not test-ready" -ForegroundColor Yellow
-    } else {
-        .\Write-Info.ps1 "[WARN] Signal file NOT written -- deployment incomplete" -ForegroundColor Yellow
+    $toolsOk = Test-Path $toolsSignal
+    if (-not $environmentOk -or -not $toolsOk -or -not (Test-RequiredSutReadyState)) {
+        Stop-DeploymentTranscript
+        throw "Domain SUT Phase 2 is incomplete (Tools=$toolsOk, Environment=$environmentOk)."
+    }
+    if (Test-PendingSystemReboot) {
+        Stop-DeploymentTranscript
+        throw 'An unexpected second Domain SUT reboot became pending after convergence.'
     }
 
-    $cleanupScript = "$scriptsPath\RestartAndRunFinish.ps1"
-    if (Test-Path $cleanupScript) {
-        & $cleanupScript
+    try {
+        Write-VerifiedDeploymentSignal -Path $signalFile `
+            -Content "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
     }
+    catch {
+        .\Write-Error.ps1 "[FAIL] Failed to commit Domain SUT completion signal: $($_.Exception.Message)"
+        Stop-DeploymentTranscript
+        throw
+    }
+
+    Set-DeploymentPhase -Name $phaseRegistryName -Phase 3
+    Set-RegistryValue -Name 'DeployStep' -Value 3 -Type DWord
+    Set-RegistryValue -Name $memberRebootCountName -Value 0 -Type DWord
+    Remove-ResumeTask
+    Remove-Item -Path $heartbeatFile -Force -ErrorAction SilentlyContinue
+    .\Write-Info.ps1 '[OK] Domain SUT deployment completed with all postconditions verified.' -ForegroundColor Green
 }
 
-Pop-Location
-Stop-Transcript
+Stop-DeploymentTranscript

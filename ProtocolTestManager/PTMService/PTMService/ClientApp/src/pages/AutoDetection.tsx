@@ -15,6 +15,7 @@ import {
 import { StepWizardChildProps, StepWizardProps } from 'react-step-wizard'
 import { PopupModal } from '../components/PopupModal'
 import { StepPanel } from '../components/StepPanel'
+import { LogPanel } from '../components/LogPanel'
 import { HeaderMenuHeight, WizardNavBar } from '../components/WizardNavBar'
 import { getNavSteps } from '../model/DefaultNavSteps'
 import { AppState } from '../store/configureStore'
@@ -22,7 +23,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useWindowSize } from '../components/UseWindowSize'
 import { LoadingPanel } from '../components/LoadingPanel'
 import { Property } from '../model/Property'
-import { CSSProperties, ReactElement, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { CSSProperties, ReactElement, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { AutoDetectionDataSrv } from '../services/AutoDetection'
 import { AutoDetectionActions } from '../actions/AutoDetectionAction'
 import { WizardNavBarActions } from '../actions/WizardNavBarAction'
@@ -59,19 +60,20 @@ export function AutoDetection (props: StepWizardProps) {
   const wizardProps: StepWizardChildProps = props as StepWizardChildProps
 
   const [isAutoDetectionWarningDialogOpen, { setTrue: showAutoDetectionWarningDialog, setFalse: hideAutoDetectionWarningDialog }] = useBoolean(false)
-  const [isAutoDetectionLogDialogOpen, { setTrue: showAutoDetectionLogDialog, setFalse: hideAutoDetectionLogDialog }] = useBoolean(false)
   const testSuiteInfo = useSelector((state: AppState) => state.testSuiteInfo)
   const configuration = useSelector((state: AppState) => state.configurations)
   const autoDetection = useSelector((state: AppState) => state.autoDetection)
-  const autoDetectionLog = useMemo(() => autoDetection.log, [autoDetection])
+  const autoDetectionLog = useMemo(() => autoDetection.log ?? '', [autoDetection.log])
   const prerequisitePropertyGroup = useMemo<PropertyGroup>(() => { return { Name: 'Prerequisite Properties', Items: autoDetection.prerequisite?.Properties ?? [] } }, [autoDetection])
   const navSteps = getNavSteps(wizardProps)
   const wizard = WizardNavBar(wizardProps, navSteps)
   const dispatch = useDispatch()
 
   const winSize = useWindowSize()
+  const canDockLogPanel = winSize.width >= 1400
   const [headerHeight, setHeaderHeight] = useState<number>(0)
   const [prerequisitePropertiesHeight, setPrerequisitePropertiesHeight] = useState<number>(0)
+  const [isLogPanelOpen, setIsLogPanelOpen] = useState<boolean>(canDockLogPanel)
 
   useEffect(() => {
     dispatch(AutoDetectionDataSrv.getAutoDetectionPrerequisite())
@@ -97,20 +99,40 @@ export function AutoDetection (props: StepWizardProps) {
 
   useEffect(() => {
     dispatch(AutoDetectionDataSrv.getAutoDetectionSteps(autoDetectionStepsUpdateCallback))
-  }, [dispatch])
+  }, [dispatch, autoDetectionStepsUpdateCallback])
 
   useEffect(() => {
-    if (!autoDetection.detecting) {
+    setIsLogPanelOpen(canDockLogPanel)
+  }, [canDockLogPanel])
+
+  useEffect(() => {
+    if (!autoDetection.detecting && autoDetection.isLogStreamComplete) {
       return
     }
 
-    const timer = setTimeout(() => {
-      dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionStepsUpdateCallback))
-      dispatch(AutoDetectionDataSrv.getAutoDetectionLog(() => { }))
-    }, 1000)
+    let cancelled = false
+    let timer: ReturnType<typeof setTimeout> | undefined
 
-    return () => clearTimeout(timer)
-  }, [dispatch, autoDetection])
+    const pollAutoDetection = async () => {
+      if (autoDetection.detecting) {
+        dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionStepsUpdateCallback))
+      }
+      if (!cancelled) {
+        dispatch(AutoDetectionDataSrv.getAutoDetectionLogChunk(() => { }))
+      }
+      if (!cancelled) {
+        timer = setTimeout(pollAutoDetection, 1000)
+      }
+    }
+
+    void pollAutoDetection()
+    return () => {
+      cancelled = true
+      if (timer !== undefined) {
+        clearTimeout(timer)
+      }
+    }
+  }, [dispatch, autoDetection.detecting, autoDetection.isLogStreamComplete, autoDetectionStepsUpdateCallback])
 
   useLayoutEffect(() => {
     if (autoDetection.prerequisite?.Summary !== undefined) {
@@ -139,7 +161,8 @@ export function AutoDetection (props: StepWizardProps) {
   }
 
   const onNextButtonClick = () => {
-    if (autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished) {
+    if (!autoDetection.applyingResult &&
+        autoDetection.detectionSteps?.Result.Status === DetectionStatus.Finished) {
       dispatch(PropertyGroupsActions.setUpdatedAction(false))
       dispatch(AutoDetectionDataSrv.applyDetectionResult(() => {
         // Next page
@@ -155,6 +178,9 @@ export function AutoDetection (props: StepWizardProps) {
       // Cancel
       dispatch(AutoDetectionDataSrv.stopAutoDetection())
     } else {
+      if (!canDockLogPanel) {
+        setIsLogPanelOpen(true)
+      }
       // Start detection
       dispatch(AutoDetectionDataSrv.startAutoDetection(() => {
         dispatch(AutoDetectionDataSrv.updateAutoDetectionSteps(autoDetectionStepsUpdateCallback))
@@ -162,15 +188,18 @@ export function AutoDetection (props: StepWizardProps) {
     }
   }
 
-  const isNextButtonDisabled = (): boolean => autoDetection.detecting || autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
+  const isNextButtonDisabled = (): boolean =>
+    autoDetection.detecting ||
+    autoDetection.applyingResult ||
+    autoDetection.detectionSteps?.Result.Status !== DetectionStatus.Finished
 
   const isDetectButtonDisabled = (): boolean => autoDetection.canceling
 
   const getDetectButtonText = (): string => autoDetection.detecting ? 'Cancel' : 'Detect'
 
-  const onFailedClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
-
-  const onViewLogClick = useCallback(() => dispatch(AutoDetectionDataSrv.getAutoDetectionLog(showAutoDetectionLogDialog)), [dispatch])
+  const onToggleLogPanelClick = () => {
+    setIsLogPanelOpen(isOpen => !isOpen)
+  }
 
   const onCloseAutoDetectionWarningDialogClick = () => {
     hideAutoDetectionWarningDialog()
@@ -187,7 +216,7 @@ export function AutoDetection (props: StepWizardProps) {
                                     <Link
                                         underline
                                         style={getStyle(status)}
-                                        onClick={onFailedClick}>
+                                        onClick={() => setIsLogPanelOpen(true)}>
                                         {status}
                                     </Link>
                             )
@@ -196,7 +225,7 @@ export function AutoDetection (props: StepWizardProps) {
                                     <Link
                                         underline
                                         style={getStyle(status)}
-                                        onClick={onViewLogClick}>
+                                        onClick={() => setIsLogPanelOpen(true)}>
                                         {status}
                                     </Link>
                             )
@@ -215,7 +244,7 @@ export function AutoDetection (props: StepWizardProps) {
                 </div>
             </Label>
     )
-  }, [autoDetection.detecting, onFailedClick, onViewLogClick])
+  }, [autoDetection.detecting])
 
   const stepColumns = useMemo<IColumn[]>(() => [{
     key: 'DetectingContent',
@@ -236,54 +265,76 @@ export function AutoDetection (props: StepWizardProps) {
     onRender: renderDetectingStatus
   }], [renderDetectingStatus])
 
+  const showDockedLogPanel = canDockLogPanel && isLogPanelOpen
+
   return (
         <div>
-            <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading} errorMsg={autoDetection.errorMsg} >
-                <Stack style={{ paddingLeft: 10 }}>
-                    <Stack style={{ paddingLeft: 30 }}>
-                        {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p key={line}>{line.trim()}</p>)}
-                    </Stack>
-                    <div style={{ paddingLeft: 30, height: prerequisitePropertiesHeight, overflowY: 'auto' }}>
-                        {
-                            autoDetection.isPrerequisiteLoading
-                              ? <LoadingPanel />
-                              : <PropertyGroupView
-                                    winSize={{ ...winSize, height: prerequisitePropertiesHeight }}
-                                    propertyGroup={prerequisitePropertyGroup}
-                                    onValueChange={onPropertyValueChange} />
-                        }
-                    </div>
-                    <div style={{ paddingTop: 10, paddingLeft: 30, height: winSize.height - (headerHeight + prerequisitePropertiesHeight) - 55, overflowY: 'auto' }}>
-                        {
-                            autoDetection.isDetectionStepsLoading
-                              ? <LoadingPanel />
-                              : <div>
-                                    <Stack horizontal style={{ paddingTop: 20 }} horizontalAlign='start' tokens={{ childrenGap: 10 }}>
-                                        <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
-                                            <DetailsList
-                                                columns={stepColumns}
-                                                items={autoDetection.detectionSteps?.DetectingItems ?? []}
-                                                compact
-                                                selectionMode={SelectionMode.none}
-                                                isHeaderVisible={false}
-                                            />
-                                        </div>
-                                    </Stack>
-                                </div>
-                        }
-                    </div>
-                    <div className='buttonPanel'>
-                        <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
-                            <PrimaryButton text="View Log" onClick={onViewLogClick} disabled={autoDetection.detectionSteps?.Result.Status === DetectionStatus.NotStart} />
-                            <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
-                            <PrimaryButton text="Previous" onClick={onPreviousButtonClick} />
-                            <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
+            <StepPanel leftNav={wizard} isLoading={autoDetection.isPrerequisiteLoading || autoDetection.isDetectionStepsLoading || autoDetection.applyingResult} errorMsg={autoDetection.errorMsg} >
+                <Stack horizontal={showDockedLogPanel} tokens={{ childrenGap: 16 }} style={{ height: showDockedLogPanel ? winSize.height - HeaderMenuHeight : undefined, paddingLeft: 10, paddingRight: 20 }}>
+                    <Stack style={{ height: showDockedLogPanel ? '100%' : undefined, minWidth: 0, flexGrow: 1 }}>
+                        <Stack style={{ paddingLeft: 30 }}>
+                            {autoDetection.prerequisite?.Summary.split('\n').map((line) => <p key={line}>{line.trim()}</p>)}
                         </Stack>
-                    </div>
+                        <div style={{ paddingLeft: 30, height: prerequisitePropertiesHeight, overflowY: 'auto' }}>
+                            {
+                                autoDetection.isPrerequisiteLoading
+                                  ? <LoadingPanel />
+                                  : <PropertyGroupView
+                                        winSize={{ ...winSize, height: prerequisitePropertiesHeight }}
+                                        propertyGroup={prerequisitePropertyGroup}
+                                        onValueChange={onPropertyValueChange} />
+                            }
+                        </div>
+                        <div style={{ paddingTop: 10, paddingLeft: 30, height: winSize.height - (headerHeight + prerequisitePropertiesHeight) - 55, overflowY: 'auto' }}>
+                            {
+                                autoDetection.isDetectionStepsLoading
+                                  ? <LoadingPanel />
+                                  : <div>
+                                        <Stack horizontal style={{ paddingTop: 20 }} horizontalAlign='start' tokens={{ childrenGap: 10 }}>
+                                            <div style={{ borderLeft: '2px solid #bae7ff', minHeight: 200 }}>
+                                                <DetailsList
+                                                    columns={stepColumns}
+                                                    items={autoDetection.detectionSteps?.DetectingItems ?? []}
+                                                    compact
+                                                    selectionMode={SelectionMode.none}
+                                                    isHeaderVisible={false}
+                                                />
+                                            </div>
+                                        </Stack>
+                                    </div>
+                            }
+                        </div>
+                        <div className='buttonPanel'>
+                            <Stack horizontal horizontalAlign="end" tokens={{ childrenGap: 10 }} >
+                                {!canDockLogPanel && (
+                                    <PrimaryButton
+                                        text={isLogPanelOpen ? 'Hide Log' : 'Show Log'}
+                                        onClick={onToggleLogPanelClick}
+                                        disabled={autoDetection.detectionSteps?.Result.Status === DetectionStatus.NotStart && !isLogPanelOpen}
+                                    />
+                                )}
+                                <PrimaryButton text={getDetectButtonText()} onClick={onDetectButtonClick} disabled={isDetectButtonDisabled()} />
+                                <PrimaryButton text="Previous" onClick={onPreviousButtonClick} />
+                                <PrimaryButton text="Next" onClick={onNextButtonClick} disabled={isNextButtonDisabled()} />
+                            </Stack>
+                        </div>
+                    </Stack>
+                    {
+                        isLogPanelOpen
+                          ? <LogPanel
+                                log={autoDetectionLog}
+                                canDock={canDockLogPanel}
+                                isOpen={isLogPanelOpen}
+                                onToggle={onToggleLogPanelClick}
+                                windowHeight={winSize.height}
+                                headerHeight={headerHeight}
+                                isDetecting={autoDetection.detecting}
+                            />
+                          : undefined
+                    }
                 </Stack>
             </StepPanel>
             <PopupModal isOpen={isAutoDetectionWarningDialogOpen} header={'Warning'} onClose={onCloseAutoDetectionWarningDialogClick} text={autoDetection.detectionSteps?.Result.Exception} />
-            <PopupModal isOpen={isAutoDetectionLogDialogOpen} header={'Log'} onClose={hideAutoDetectionLogDialog} text={autoDetectionLog} />
         </div >
   )
 };

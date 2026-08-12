@@ -8,15 +8,15 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 
 For a demo/onboarding environment with **defaults**, deploy straight from the Azure Portal — no local clone, no PowerShell, no `deploy.ps1`:
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2Ffileserver-domain-deploy-button-v1%2FTestSuites%2FFileServer%2Fazure-automation%2Fdomain-bicep%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.8.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fdomain-bicep%2Fazuredeploy.json)
 
-> The button points at [`azuredeploy.json`](azuredeploy.json) served from `raw.githubusercontent.com` at the **`fileserver-domain-deploy-button-v1`** tag, and the template pulls its DSC package from the GitHub **Release** asset at the same tag. It goes live once a maintainer cuts that release (see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button)).
+> The button points at [`azuredeploy.json`](azuredeploy.json) served from `raw.githubusercontent.com` at the **`4.26.8.0`** release tag, and the template pulls its DSC package from the same GitHub **Release**. It goes live once a maintainer publishes that release (see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button)).
 
 The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azuredeploy.json`](azuredeploy.json)) — the single-template equivalent of the two-phase `deploy.ps1` flow. Enter an **admin password** and deploy; the DC, SUT, and Driver come up, the members domain-join, and tests run automatically.
 
 **How the two phases collapse into one click.** `deploy.ps1` deploys the DC, waits for AD DS promotion, then deploys the members. The button can't run that imperative wait, so `main.bicep` handles it **declaratively**: the members' module `dependsOn` the DC, their NICs use the DC as DNS, and the on-VM domain join ([`../shared/DSC/Scripts/domainjoin.ps1`](../shared/DSC/Scripts/domainjoin.ps1)) already **retries DNS/DC reachability and `Add-Computer` with exponential backoff** — so the members wait out DC promotion on their own.
 
-**How credentials stay safe.** The button consumes a **public**, pre-built DSC package whose `Config.json` ships with a placeholder token (`#{ADMIN_PASSWORD}#`) instead of a password. At deploy time each VM's Custom Script Extension — from the extension's *encrypted* `protectedSettings` — injects the real admin password (base64-encoded, then JSON-escaped) into `Config.json` via [`../shared/DSC/Scripts/Set-ConfigCredential.ps1`](../shared/DSC/Scripts/Set-ConfigCredential.ps1) before the DC/member deploy scripts run.
+**How credentials stay safe.** The button consumes a **public**, pre-built DSC package whose `Config.json` ships with a placeholder token (`#{ADMIN_PASSWORD}#`) instead of a password. At deploy time each VM's Custom Script Extension — from the extension's *encrypted* `protectedSettings` — injects the real admin password (base64-encoded, then JSON-escaped) into `Config.json` via [`../shared/DSC/Scripts/Set-ConfigCredential.ps1`](../shared/DSC/Scripts/Set-ConfigCredential.ps1) before the DC/member deploy scripts run. The credential-bearing bootstrap runs in a separate PowerShell process so transcript headers contain only the script path, then deletes itself on success or failure.
 
 **Scope & limitations (defaults only):**
 - The baked `Config.json` is valid for the **default IP topology and domain** (`contoso.com` / `CONTOSO`) only. Changing IP/domain parameters in the form will not update the peer values inside the package. For custom topologies, use `deploy.ps1` (which rebuilds the package).
@@ -290,7 +290,7 @@ Before creating any Azure resources, deploy.ps1 validates:
 
 ## Publishing the public package ("Deploy to Azure" button)
 
-> **Maintainers only.** The [one-click button](#one-click-deploy-deploy-to-azure-button) consumes two public artifacts, both pinned to the **`fileserver-domain-deploy-button-v1`** tag on the public GitHub repo:
+> **Maintainers only.** The [one-click button](#one-click-deploy-deploy-to-azure-button) consumes two public artifacts, both pinned to the **`4.26.8.0`** FileServer release:
 > - **Package** → a GitHub **Release asset** `Domain-Package.zip`
 > - **Template** → the committed [`azuredeploy.json`](azuredeploy.json) served via `raw.githubusercontent.com/.../<tag>/...` — the committed file *is* the hosted template, so there is no separate template upload and no Bicep→JSON drift.
 >
@@ -309,9 +309,9 @@ bicep build main.bicep --outfile azuredeploy.json
 
 # 3. Cut the release + upload the package asset (idempotent; --clobber re-uploads)
 gh auth login
-.\Publish-DscPackage.ps1 -Tag fileserver-domain-deploy-button-v1 -Target <branch-or-sha>
-#  asset -> https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/fileserver-domain-deploy-button-v1/Domain-Package.zip
-#  raw   -> https://raw.githubusercontent.com/microsoft/WindowsProtocolTestSuites/fileserver-domain-deploy-button-v1/TestSuites/FileServer/azure-automation/domain-bicep/azuredeploy.json
+.\Publish-DscPackage.ps1 -Tag 4.26.8.0 -Target <branch-or-sha>
+#  asset -> https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/Domain-Package.zip
+#  raw   -> https://raw.githubusercontent.com/microsoft/WindowsProtocolTestSuites/4.26.8.0/TestSuites/FileServer/azure-automation/domain-bicep/azuredeploy.json
 #  -> prints the Deploy to Azure button URL
 ```
 
@@ -329,6 +329,8 @@ Validate the package offline first (no GitHub calls) with `-SkipUpload`. The pub
 | Client01 | `C:\Domain-Package\DSC\Invoke-DriverImperativeSteps.log` | Domain join, tools, RSA keys, ForceLevel2 |
 | Node01 | `C:\Domain-Package\DSC\Deploy-SUT.log` | SUT orchestrator (DSC + features + environment) |
 | Node01 | `C:\Domain-Package\DSC\Invoke-SutImperativeSteps.log` | Domain join, disks, DFS, QUIC |
+| Node01 | `C:\Domain-Package\DSC\Scripts\InstallMSIAndTools.ps1.log` | Required tool installation and per-tool failures |
+| Node01 | `C:\Domain-Package\DSC\Scripts\*.install.stderr.log` | Standard error from ZIP-based child installers |
 | All | `C:\domain-*-setup.log` | CustomScriptExtension bootstrap log |
 
 ### Common Issues
@@ -395,8 +397,9 @@ domain-bicep/
 │   ├── phase2.bicepparam           # Phase 2 parameters
 │   └── VmSizeFallbacks.psd1        # Per-role VM size fallback lists (DC/Driver/SUT)
 └── DSC/
-    ├── Deploy-SUT.ps1              # SUT orchestrator (step 0→1→2→3)
-    ├── SUT-Configuration.ps1       # DSC: features, shares, FSRM, registry
+    ├── Deploy-SUT.ps1              # SUT orchestrator (features/join → convergence → environment)
+    ├── SUT-FeatureConfiguration.ps1 # DSC: disruptive File Server features
+    ├── SUT-Configuration.ps1       # DSC: post-reboot shares, FSRM, registry
     ├── Invoke-SutImperativeSteps.ps1     # SUT: domain join, disks, DFS, QUIC
     └── Scripts/                    # Domain-specific scripts
 
@@ -404,14 +407,24 @@ domain-bicep/
 ├── Deploy-Helpers.psm1             # Azure helpers (connect, storage, polling, quota)
 ├── Generate-ConfigJson.ps1         # Config.json generation from bicepparam values
 └── DSC/
-    ├── Deploy-DC.ps1               # DC orchestrator (step 0→1→2)
-    ├── Deploy-Driver.ps1           # Driver orchestrator (step 0→1→2)
-    ├── DC-Configuration.ps1        # DSC: AD DS, RemoteAccess, LDAP, CBAC
+    ├── Deploy-DC.ps1               # DC orchestrator (foundation reboot → promotion reboot → convergence)
+    ├── Deploy-Driver.ps1           # Driver orchestrator (baseline/join → tools/tests)
+    ├── DC-FeatureConfiguration.ps1 # DSC: AD DS and RemoteAccess role features
+    ├── DC-Configuration.ps1        # DSC: post-promotion routing, LDAP, CBAC, services
     ├── Driver-Configuration.ps1    # DSC: hosts, firewall, PS remoting
     ├── Invoke-DcImperativeSteps.ps1      # DC: promotion, accounts, CBAC, GPO, DNS
     ├── Invoke-DriverImperativeSteps.ps1  # Driver: domain join, tools, RSA, ForceLevel2
     └── Scripts/                    # Shared scripts (tools install, test run, validation)
 ```
+
+The normal Domain reboot contract is deterministic: the SUT and Windows Driver
+each use one domain-member reboot, while the DC uses one foundation reboot for
+features/hostname and one mandatory promotion reboot. Tool packages are prepared
+in parallel before those reboots and installed serially afterward. Additional
+pending reboots are treated as failures, not silently retried. Long operations
+publish `Deploy-SUT.heartbeat.json`, `Deploy-DC.heartbeat.json`, or
+`Deploy-Driver.heartbeat.json`; `deploy.ps1` prints the DC heartbeat when its
+readiness gate times out.
 
 ## Based on FileServer User Guide
 

@@ -996,7 +996,16 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                     //TD has mentioned to use Session.SigningKey for SESSION_SETUP Response and Channel.SigningKey for other responses
                     //In the current SDK, the SigningKey is the Channel.SigningKey
 
-                    if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
+                    if (cryptoInfo.Dialect == DialectRevision.Smb311 &&
+                        cryptoInfo.IsSigningAlgorithmNegotiated &&
+                        cryptoInfo.SigningId == SigningAlgorithm.HMAC_SHA256)
+                    {
+                        // [MS-SMB2] 3.1.5.1: SMB 3.1.1 uses the signing algorithm
+                        // negotiated in Connection.SigningAlgorithmId.
+                        HMACSHA256 hmacSha = new HMACSHA256(cryptoInfo.SigningKey);
+                        computedSignature = hmacSha.ComputeHash(bytesToCompute);
+                    }
+                    else if (cryptoInfo.SigningId == SigningAlgorithm.AES_GMAC)
                     {
                         var nonce = Smb2Utility.ComputeNonce(packet, this.decodeRole);
                         var (_ciphertext, tag) = AesGmac.ComputeHash(cryptoInfo.SigningKey, nonce, bytesToCompute);

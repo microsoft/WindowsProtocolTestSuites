@@ -22,6 +22,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
     internal class TestRun : ITestRun
     {
+        private const string FileServerTestSuiteName = "FileServer";
+        private const string ParallelExecutionPropertyName = "Common.PTF.LogProfileParserPatch.Enabled";
+
         private string TestEnginePath { get; init; }
 
         public IConfiguration Configuration { get; init; }
@@ -48,9 +51,11 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public int? Inconclusive { get; private set; }
 
-        private record TestCaseInfo(TestCaseState Status, TestCaseResult Detail, Task Task);
+        private record TestCaseInfo(TestCaseState Status, TestCaseResult Detail);
 
         private ConcurrentDictionary<string, TestCaseInfo> runningTestResult;
+
+        private volatile TestEngine testEngine;
 
         private TestRun(string testEnginePath, TestResult testResult, IConfiguration configuration, IStorageNode storageRoot, TestResultUpdateDelegate update)
         {
@@ -103,7 +108,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public void Run(IEnumerable<string> selectedTestCases)
         {
-            var testEngine = new TestEngine(TestEnginePath)
+            testEngine = new TestEngine(TestEnginePath)
             {
                 WorkingDirectory = $"{Configuration.TestSuite.StorageRoot.AbsolutePath}{Path.DirectorySeparatorChar}",
                 TestAssemblies = Configuration.TestSuite.GetTestAssemblies().ToList(),
@@ -118,7 +123,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 selectedTestCases = Configuration.GetApplicableTestCases();
             }
 
-            var tests = testEngine.LoadTestCases().Join(selectedTestCases, o => o.FullName, i => i, (o, i) => o);
+            var tests = testEngine.LoadTestCases()
+                .Join(selectedTestCases, o => o.FullName, i => i, (o, i) => o)
+                .ToList();
 
             using var stream = new MemoryStream();
 
@@ -134,9 +141,9 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             StorageRoot.CreateFile(TestRunConsts.TestCaseListFile, stream);
 
-            runningTestResult = new ConcurrentDictionary<string, TestCaseInfo>(tests.Select(t => new KeyValuePair<string, TestCaseInfo>(t.FullName, new TestCaseInfo(TestCaseState.NotRun, null, null))));
+            runningTestResult = new ConcurrentDictionary<string, TestCaseInfo>(tests.Select(t => new KeyValuePair<string, TestCaseInfo>(t.FullName, new TestCaseInfo(TestCaseState.NotRun, null))));
 
-            testEngine.InitializeLogger(tests.ToList());
+            testEngine.InitializeLogger(tests);
 
             testEngine.GetTestSuiteLogManager().GroupByOutcome.UpdateTestCaseList = (_, testCase) =>
             {
@@ -144,7 +151,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 {
                     UpdateTestCase(testCase);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Add exception log.
                 }
@@ -158,7 +165,21 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
                     UpdateItem();
 
-                    testEngine.RunByCase(new Stack<TestCase>(tests), CancellationTokenSource.Token);
+                    if (IsFileServerParallelExecutionEnabled())
+                    {
+                        var plan = new FileServerExecutionPlanBuilder().Build(tests, parallelEnabled: true);
+                        var result = testEngine.RunExecutionPlan(plan, CancellationTokenSource.Token);
+                        if (!result.Succeeded)
+                        {
+                            throw new AggregateException(
+                                "Parallel test execution failed.",
+                                result.Failures.Select(failure => failure.Exception));
+                        }
+                    }
+                    else
+                    {
+                        testEngine.RunByCase(new Stack<TestCase>(tests), CancellationTokenSource.Token);
+                    }
 
                     State = TestResultState.Finished;
 
@@ -176,6 +197,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 }
                 catch (Exception ex)
                 {
+                    Logger.AddLog(LogLevel.Error, $"Test run {Id} failed with {ex}");
                     State = TestResultState.Failed;
 
                     Total = runningTestResult.Count();
@@ -191,6 +213,22 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     UpdateItem();
                 }
             });
+        }
+
+        private bool IsFileServerParallelExecutionEnabled()
+        {
+            if (!string.Equals(
+                Configuration.TestSuite.TestSuiteName,
+                FileServerTestSuiteName,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            var ptfConfigStorage = Configuration.StorageRoot.GetNode(ConfigurationConsts.PtfConfig);
+            var ptfConfig = new PtfConfig(ptfConfigStorage.GetFiles().ToList());
+            string value = ptfConfig.GetPropertyNodeByName(ParallelExecutionPropertyName)?.Value;
+            return bool.TryParse(value, out bool enabled) && enabled;
         }
 
         public void Abort()
@@ -268,11 +306,14 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
             {
                 var info = runningTestResult[name];
 
-                if (info.Task != null)
+                if (info.Detail == null && info.Status != TestCaseState.NotRun && info.Status != TestCaseState.Running)
                 {
-                    info.Task.Wait();
-
-                    info = runningTestResult[name];
+                    var (found, testCaseResult) = GetTestCaseResultInternal(name);
+                    if (found)
+                    {
+                        info = new TestCaseInfo(info.Status, testCaseResult);
+                        runningTestResult.AddOrUpdate(name, info, (_, _) => info);
+                    }
                 }
 
                 var result = new TestCaseResult
@@ -284,7 +325,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                     },
                     StartTime = info.Detail?.StartTime,
                     EndTime = info.Detail?.EndTime,
-                    Output = info.Detail?.Output,
+                    Output = info.Detail?.Output ?? testEngine?.GetTestLogs(name),
                 };
 
                 return result;
@@ -324,25 +365,67 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
         public (bool found, TestCaseDetail detail) GetTestCaseDetail(string name)
         {
-            var filePaths = Directory.EnumerateFiles(StorageRoot.AbsolutePath, $"{name}.html", SearchOption.AllDirectories);
-            if (!filePaths.Any())
+            foreach (string filePath in Directory.EnumerateFiles(
+                StorageRoot.AbsolutePath,
+                $"{name}.html",
+                SearchOption.AllDirectories))
+            {
+                if (TryReadTestCaseDetail(filePath, out TestCaseDetail detail))
+                {
+                    return (true, detail);
+                }
+            }
+
+            string shortName = name.Split('.').Last();
+            if (string.IsNullOrEmpty(shortName) || shortName == name)
             {
                 return (false, null);
             }
 
-            var filePath = filePaths.First();
-            var content = File.ReadAllLines(filePath);
+            TestCaseDetail onlyCandidate = null;
+            int candidateCount = 0;
+            foreach (string filePath in Directory.EnumerateFiles(
+                StorageRoot.AbsolutePath,
+                $"{shortName}.html",
+                SearchOption.AllDirectories))
+            {
+                if (!TryReadTestCaseDetail(filePath, out TestCaseDetail detail))
+                {
+                    continue;
+                }
 
-            var detailLine = content.Where(l => l.StartsWith(AppConfig.DetailKeyword));
-            var detailStr = detailLine.First();
+                if (string.Equals(detail.FullyQualifiedName, name, StringComparison.Ordinal))
+                {
+                    return (true, detail);
+                }
+
+                onlyCandidate = detail;
+                candidateCount++;
+            }
+
+            // Older result files may not include FullyQualifiedName. They are safe only when
+            // the short name identifies a single result across all parallel worker directories.
+            return candidateCount == 1
+                ? (true, onlyCandidate)
+                : (false, null);
+        }
+
+        private static bool TryReadTestCaseDetail(string filePath, out TestCaseDetail detail)
+        {
+            detail = null;
+            string detailLine = File.ReadLines(filePath)
+                .FirstOrDefault(line => line.StartsWith(AppConfig.DetailKeyword));
+            if (detailLine == null)
+            {
+                return false;
+            }
 
             int startIndex = AppConfig.DetailKeyword.Length;
-            int endIndex = detailStr.Length - 1;
-            string detailJson = detailStr.Substring(startIndex, endIndex - startIndex);
+            int endIndex = detailLine.Length - 1;
+            string detailJson = detailLine.Substring(startIndex, endIndex - startIndex);
 
-            var detail = JsonSerializer.Deserialize<TestCaseDetail>(detailJson);
-
-            return (true, detail);
+            detail = JsonSerializer.Deserialize<TestCaseDetail>(detailJson);
+            return detail != null;
         }
 
         private void UpdateItem()
@@ -375,31 +458,17 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
 
             if (state != TestCaseState.Running)
             {
-                var task = Task.Run(() =>
-                {
-                    // Need to wait before HTML file is generated.
-                    Task.Delay(5000).Wait();
-
-                    var (found, testCaseResult) = GetTestCaseResultInternal(testCase.FullName);
-                    if (found)
-                    {
-                        var info = new TestCaseInfo(state, testCaseResult, null);
-
-                        runningTestResult.AddOrUpdate(testCase.FullName, info, (k, old) => info);
-                    }
-                });
-
-                var info = new TestCaseInfo(state, null, task);
-
+                var (found, testCaseResult) = GetTestCaseResultInternal(testCase.FullName);
+                var info = new TestCaseInfo(state, found ? testCaseResult : null);
                 runningTestResult.AddOrUpdate(testCase.FullName, info, (k, old) => info);
             }
             else
             {
-                var info = new TestCaseInfo(state, null, null);
-
+                var info = new TestCaseInfo(state, null);
                 runningTestResult.AddOrUpdate(testCase.FullName, info, (k, old) => info);
             }
         }
+
 
         private (bool found, TestCaseResult result) GetTestCaseResultInternal(string name)
         {
@@ -417,6 +486,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 _ => TestCaseState.NotRun,
             };
 
+            var outputFromFile = String.Join("\n", detail.StandardOut.Select(output => output.Content));
             var result = new TestCaseResult
             {
                 Overview = new TestCaseOverview
@@ -426,7 +496,7 @@ namespace Microsoft.Protocols.TestManager.PTMService.PTMKernelService
                 },
                 StartTime = detail.StartTime,
                 EndTime = detail.EndTime,
-                Output = String.Join("\n", detail.StandardOut.Select(output => output.Content)),
+                Output = !String.IsNullOrEmpty(outputFromFile) ? outputFromFile : null,
             };
 
             return (true, result);

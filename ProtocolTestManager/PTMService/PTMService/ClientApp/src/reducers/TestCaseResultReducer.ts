@@ -45,6 +45,7 @@ export interface TestCaseResultState {
   isLoading: boolean
   isPosting: boolean
   errorMsg?: string
+  requestedTestCaseName?: string
   selectedTestCaseResult: TestCaseResult | undefined
 }
 
@@ -52,6 +53,7 @@ const initialTestCaseResultState: TestCaseResultState = {
   isLoading: false,
   isPosting: false,
   errorMsg: undefined,
+  requestedTestCaseName: undefined,
   selectedTestCaseResult: undefined
 }
 
@@ -181,17 +183,27 @@ export const getTestCaseResultReducer = (state = initialTestCaseResultState, act
       return {
         ...state,
         isPosting: true,
-        errorMsg: undefined
+        errorMsg: undefined,
+        requestedTestCaseName: action.payload,
+        selectedTestCaseResult: state.requestedTestCaseName === action.payload
+          ? state.selectedTestCaseResult
+          : undefined
       }
 
     case GET_TESTCASERESULT_SUCCESS:
+      if (state.requestedTestCaseName !== action.payload.testCaseName) {
+        return state
+      }
       return {
         ...state,
         isPosting: false,
-        selectedTestCaseResult: action.payload
+        selectedTestCaseResult: action.payload.result
       }
 
     case GET_TESTCASERESULT_FAILURE:
+      if (state.requestedTestCaseName !== action.payload) {
+        return state
+      }
       return {
         ...state,
         isPosting: false,
@@ -201,6 +213,7 @@ export const getTestCaseResultReducer = (state = initialTestCaseResultState, act
     case CLEAR_SELECTEDTESTCASERESULT:
       return {
         ...state,
+        requestedTestCaseName: undefined,
         selectedTestCaseResult: undefined
       }
 

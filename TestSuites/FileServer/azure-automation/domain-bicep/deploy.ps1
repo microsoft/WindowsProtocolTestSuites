@@ -96,6 +96,40 @@ if (-not (Test-Path $helpersPath)) {
 }
 Import-Module $helpersPath -Force
 
+function Write-DcDeploymentHeartbeat {
+    param(
+        [string]$ResourceGroupName,
+        [string]$VMNamePattern = '*-dc01'
+    )
+    try {
+        $vm = Get-AzVM -ResourceGroupName $ResourceGroupName |
+            Where-Object { $_.Name -like $VMNamePattern } |
+            Select-Object -First 1
+        if ($null -eq $vm) {
+            Write-Warning "DC heartbeat unavailable because no VM matched '$VMNamePattern'."
+            return
+        }
+        $result = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+            -VMName $vm.Name -CommandId 'RunPowerShellScript' -ScriptString @'
+$heartbeat = 'C:\Domain-Package\DSC\Deploy-DC.heartbeat.json'
+if (Test-Path $heartbeat) {
+    Get-Content -Path $heartbeat -Raw
+} else {
+    '{"Status":"Heartbeat file is not present; inspect Deploy-DC.log."}'
+}
+'@
+        $messages = @($result.Value | ForEach-Object { $_.Message } |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+        if ($messages.Count -gt 0) {
+            Write-Output "Last DC deployment heartbeat:"
+            $messages | ForEach-Object { Write-Output "  $_" }
+        }
+    }
+    catch {
+        Write-Warning "Could not retrieve the DC deployment heartbeat: $($_.Exception.Message)"
+    }
+}
+
 # Initialize Azure connection
 Import-AzureModules
 Connect-AzureSubscription -SubscriptionId $SubscriptionId
@@ -431,6 +465,7 @@ if (-not $SkipPhase1) {
                 -TimeoutMinutes $DCReadyTimeoutMinutes `
                 -PollIntervalSeconds 30
             if (-not $dcReady) {
+                Write-DcDeploymentHeartbeat -ResourceGroupName $ResourceGroupName
                 throw "Domain Controller did not signal readiness within $DCReadyTimeoutMinutes minutes."
             }
         }
@@ -467,6 +502,7 @@ if (-not $SkipPhase2) {
             -PollIntervalSeconds 15
 
         if (-not $dcReady) {
+            Write-DcDeploymentHeartbeat -ResourceGroupName $ResourceGroupName
             Write-Output @"
 
 Domain Controller does not appear to be ready.
@@ -614,6 +650,7 @@ Otherwise, connect to DC via Bastion and check: C:\Domain-Package\DSC\Deploy-DC.
             -PollIntervalSeconds 30
 
         if (-not $dcReady) {
+            Write-DcDeploymentHeartbeat -ResourceGroupName $ResourceGroupName
             Write-Output @"
 
 Domain Controller did not signal readiness within the timeout.

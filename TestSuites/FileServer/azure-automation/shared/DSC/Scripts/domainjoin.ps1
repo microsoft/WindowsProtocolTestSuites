@@ -9,7 +9,8 @@ Param (
 	[string]$install,
 	$LClient,
 	[switch]$noelevate,
-	[string]$protocolConfigFile = "$PSScriptRoot\Config.json"
+	[string]$protocolConfigFile = "$PSScriptRoot\Config.json",
+	[switch]$NoTranscript
 )
 
 $Path = Split-Path -Parent $MyInvocation.MyCommand.Definition
@@ -173,25 +174,35 @@ Function Phase0 {
 # Main Body of Script
 # ===================================================
 
-# Start Logging
-Start-Transcript -Path $Path\DomainJoinInstall.log -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+	Start-Transcript -Path $Path\DomainJoinInstall.log -Append -Force
+	$transcriptStarted = $true
+}
 
-$config = $null
 try {
-	$config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
-}
-catch {
-	.\Write-Error.ps1 "Failed to parse config file: $_"
-	return $false
-}
+	$config = $null
+	try {
+		$config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
+	}
+	catch {
+		.\Write-Error.ps1 "Failed to parse config file: $_"
+		return $false
+	}
 
-# Determine our Server
-$name = (Get-CimInstance Win32_ComputerSystem).Name
-$exchserver = $config.Machines.PSObject.Properties | Where-Object { $_.name -match $name -or $_.Value.ComputerName -match $name }
+	# Determine our Server
+	$name = (Get-CimInstance Win32_ComputerSystem).Name
+	$exchserver = $config.Machines.PSObject.Properties | Where-Object { $_.name -match $name -or $_.Value.ComputerName -match $name }
 
-if ($null -eq $exchserver) {
-	.\Write-Error.ps1 "Failed to find server in config file."
-	return $false
+	if ($null -eq $exchserver) {
+		.\Write-Error.ps1 "Failed to find server in config file."
+		return $false
+	}
+
+	return Phase0
 }
-
-return Phase0
+finally {
+	if ($transcriptStarted) {
+		Stop-Transcript
+	}
+}

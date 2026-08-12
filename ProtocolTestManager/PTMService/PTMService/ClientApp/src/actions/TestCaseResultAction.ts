@@ -12,8 +12,15 @@ export const CLEAR_SELECTEDTESTCASERESULT = 'TESTCASERESULT/CLEAR_SELECTEDTESTCA
 
 // define action types
 interface GetTestCaseResultActionRequestType { type: typeof GET_TESTCASERESULT_REQUEST, payload: string }
-interface GetTestCaseResultActionSuccessType { type: typeof GET_TESTCASERESULT_SUCCESS, payload: TestCaseResult }
-interface GetTestCaseResultActionFailureType { type: typeof GET_TESTCASERESULT_FAILURE, errorMsg: string }
+interface GetTestCaseResultActionSuccessType {
+  type: typeof GET_TESTCASERESULT_SUCCESS
+  payload: { testCaseName: string, result: TestCaseResult }
+}
+interface GetTestCaseResultActionFailureType {
+  type: typeof GET_TESTCASERESULT_FAILURE
+  payload: string
+  errorMsg: string
+}
 
 interface ClearSelectedTestCaseResultActionType { type: typeof CLEAR_SELECTEDTESTCASERESULT }
 
@@ -31,15 +38,16 @@ export const TestCaseResultActions = {
       payload: testCaseName
     }
   },
-  getTestCaseResultAction_Success: (testCaseResult: TestCaseResult): TestCaseResultActionTypes => {
+  getTestCaseResultAction_Success: (testCaseName: string, testCaseResult: TestCaseResult): TestCaseResultActionTypes => {
     return {
       type: GET_TESTCASERESULT_SUCCESS,
-      payload: testCaseResult
+      payload: { testCaseName, result: testCaseResult }
     }
   },
-  getTestCaseResultAction_Failure: (error: string): TestCaseResultActionTypes => {
+  getTestCaseResultAction_Failure: (testCaseName: string, error: string): TestCaseResultActionTypes => {
     return {
       type: GET_TESTCASERESULT_FAILURE,
+      payload: testCaseName,
       errorMsg: error
     }
   },

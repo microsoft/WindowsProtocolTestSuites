@@ -27,6 +27,9 @@
 .PARAMETER Step
     Which step to execute (1 or 3).
 
+.PARAMETER HeartbeatPath
+    Optional deployment heartbeat file updated at major operations.
+
 .EXAMPLE
     .\Invoke-SutImperativeSteps.ps1 -Step 1   # domain join -> reboot
     .\Invoke-SutImperativeSteps.ps1 -Step 3   # shares, DFS, QUIC, FSA
@@ -38,7 +41,9 @@ param(
     [string]$WorkingPath = (Split-Path $PSScriptRoot -Parent),
     [ValidateSet(1, 3)]
     [int]$Step = 1,
-    [string]$ConfigureFile = "$WorkingPath\Config.json"
+    [string]$ConfigureFile = "$WorkingPath\Config.json",
+    [string]$HeartbeatPath,
+    [switch]$NoTranscript
 )
 
 $ErrorActionPreference = 'Stop'
@@ -47,7 +52,34 @@ $env:Path += ";$WorkingPath;$scriptsPath"
 Push-Location $scriptsPath
 
 [string]$logFile = "$PSScriptRoot\Invoke-SutImperativeSteps.log"
-Start-Transcript -Path $logFile -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force
+    $transcriptStarted = $true
+}
+
+function Stop-LocalTranscript {
+    if ($transcriptStarted) {
+        Stop-Transcript
+    }
+}
+
+$operationStartedAt = Get-Date
+if (-not [string]::IsNullOrWhiteSpace($HeartbeatPath)) {
+    . "$PSScriptRoot\Deploy-CommonHelpers.ps1"
+}
+
+function Write-SutOperationHeartbeat {
+    param(
+        [string]$Operation,
+        [string]$Checkpoint
+    )
+    if (-not [string]::IsNullOrWhiteSpace($HeartbeatPath)) {
+        Write-DeploymentHeartbeat -Phase "ImperativeStep$Step" -Operation $Operation `
+            -StartedAt $operationStartedAt -HeartbeatPath $HeartbeatPath `
+            -LastCheckpoint $Checkpoint
+    }
+}
 
 $config = $null
 if (Test-Path $ConfigureFile) {
@@ -63,6 +95,7 @@ $systemDrive = $env:SystemDrive
 if ($Step -eq 1) {
   try {
     .\Write-Info.ps1 "---- Step 1: Domain Join ----" -ForegroundColor Yellow
+    Write-SutOperationHeartbeat -Operation 'Domain join' -Checkpoint 'Checking current domain membership'
 
     $isDomain = (Get-CimInstance Win32_ComputerSystem).PartOfDomain
     if ($isDomain) {
@@ -70,20 +103,21 @@ if ($Step -eq 1) {
     }
     else {
         .\Write-Info.ps1 "Joining domain..." -ForegroundColor Cyan
+        Write-SutOperationHeartbeat -Operation 'Domain join' -Checkpoint 'Submitting domain membership change'
         # Capture only the script's final return value (see domainjoin.ps1): stray
         # success-stream output makes a multi-element array truthy even on a failed join.
-        $result = & "$scriptsPath\domainjoin.ps1" | Select-Object -Last 1
+        $result = & "$scriptsPath\domainjoin.ps1" -NoTranscript | Select-Object -Last 1
         if ($result -ne $true) {
             .\Write-Error.ps1 "Domain join failed."
-            Stop-Transcript; Pop-Location; return $false
+            Stop-LocalTranscript; Pop-Location; return $false
         }
         .\Write-Info.ps1 "[OK] Domain join complete. REBOOT REQUIRED." -ForegroundColor Green
     }
-    Stop-Transcript; Pop-Location; return $true
+    Stop-LocalTranscript; Pop-Location; return $true
   }
   catch {
     .\Write-Error.ps1 "SUT imperative step 1 failed: $($_.Exception.Message)"
-    Stop-Transcript; Pop-Location; throw
+    Stop-LocalTranscript; Pop-Location; throw
   }
 }
 
@@ -104,6 +138,7 @@ if ($Step -eq 3) {
 
   try {
     .\Write-Info.ps1 "---- Step 3: Environment Configuration ----" -ForegroundColor Yellow
+    Write-SutOperationHeartbeat -Operation 'Environment configuration' -Checkpoint 'Starting TLS and policy configuration'
 
     # -- TLS Cipher Suite Configuration --
     .\Write-Info.ps1 "Configuring TLS cipher suites..." -ForegroundColor Yellow
@@ -142,6 +177,8 @@ if ($Step -eq 3) {
     # reachable. So wait for the DC, set, VERIFY the secure channel, retry, and treat
     # failure as a critical section so the problem surfaces at deploy time.
     .\Write-Info.ps1 "Setting computer password (ksetup) for Kerberos..." -ForegroundColor Yellow
+    Write-SutOperationHeartbeat -Operation 'Kerberos computer password synchronization' `
+        -Checkpoint 'Synchronizing the AD and local machine secrets'
     try {
         # Sync the machine-account password to the Kerberos constant Password04! on BOTH
         # the local LSA secret AND in AD. The Auth suite derives the file server's service
@@ -262,6 +299,8 @@ if ($Step -eq 3) {
     # Authorization test group hangs (no SMB/KDC traffic, flat CPU). Install + verify as critical.
     try {
         .\Write-Info.ps1 "Configuring SSH authorized_keys for PowerShell-over-SSH remoting..." -ForegroundColor Yellow
+        Write-SutOperationHeartbeat -Operation 'SSH remoting configuration' `
+            -Checkpoint 'Installing and verifying authorized keys'
         $sshKeysOk = [bool](& "$scriptsPath\Set-SshServerAuthorizedKeys.ps1" -Config $config)
     } catch {
         .\Write-Info.ps1 "[WARN] SSH authorized_keys setup error: $($_.Exception.Message)" -ForegroundColor Yellow
@@ -276,6 +315,8 @@ if ($Step -eq 3) {
 
     # -- Disk Partitioning --
     .\Write-Info.ps1 "Setting up disk partitions..." -ForegroundColor Yellow
+    Write-SutOperationHeartbeat -Operation 'Disk and share configuration' `
+        -Checkpoint 'Preparing ReFS and FAT32 test volumes'
 
     function New-DataPartition {
         param(
@@ -371,6 +412,8 @@ if ($Step -eq 3) {
         @{ Link = "$systemDrive\SMBBasic\sub\symboliclink2"; Target = "$systemDrive\FileShare\" }
     )
     foreach ($sl in $symlinks) {
+        New-Item -ItemType Directory -Path (Split-Path $sl.Link -Parent) -Force | Out-Null
+        New-Item -ItemType Directory -Path $sl.Target -Force | Out-Null
         if (-not (Test-Path $sl.Link)) {
             cmd /C "mklink /D `"$($sl.Link)`" `"$($sl.Target)`"" 2>&1 | .\Write-Info.ps1
         }
@@ -387,6 +430,8 @@ if ($Step -eq 3) {
   # -- FSA Environment --
   try {
     .\Write-Info.ps1 "Setting up FSA environment..." -ForegroundColor Yellow
+    Write-SutOperationHeartbeat -Operation 'FSA environment configuration' `
+        -Checkpoint 'Creating file-system test fixtures'
 
     function Set-FsaShareFolder {
         param([string]$Path, [string]$FolderName)
@@ -449,6 +494,13 @@ if ($Step -eq 3) {
   # -- DFS Namespaces --
   try {
     .\Write-Info.ps1 "Setting up DFS namespaces..." -ForegroundColor Yellow
+    Write-SutOperationHeartbeat -Operation 'DFS namespace configuration' `
+        -Checkpoint 'Creating standalone and domain DFS roots'
+    foreach ($commandName in @('dfsutil.exe', 'dfscmd.exe')) {
+        if (-not (Get-Command $commandName -ErrorAction SilentlyContinue)) {
+            throw "$commandName is unavailable. Install FS-DFS-Namespace and RSAT-DFS-Mgmt-Con before Phase 3."
+        }
+    }
     $computerName = $env:COMPUTERNAME
     $dfsSvc = Get-Service dfs -ErrorAction SilentlyContinue
     if ($null -ne $dfsSvc -and $dfsSvc.Status -ne 'Running') {
@@ -519,6 +571,8 @@ if ($Step -eq 3) {
   # -- QUIC Environment (Azure Edition only) --
   try {
     .\Write-Info.ps1 "Checking QUIC..." -ForegroundColor Yellow
+    Write-SutOperationHeartbeat -Operation 'SMB over QUIC configuration' `
+        -Checkpoint 'Checking Azure Edition and certificate mapping'
     $osName = (Get-CimInstance Win32_OperatingSystem).Name
     if ($osName -match 'Azure Edition') {
         $sutName = $env:COMPUTERNAME
@@ -570,6 +624,8 @@ if ($Step -eq 3) {
   }
 
   .\Write-Info.ps1 ""
+  Write-SutOperationHeartbeat -Operation 'Environment configuration' `
+      -Checkpoint 'All imperative sections completed'
   .\Write-Info.ps1 "=== SUT imperative steps (Step 3) completed (Disk=$diskOk, DataShares=$dataShareOk, Symlinks=$symlinkOk, FSA=$fsaOk, DFS=$dfsOk, QUIC=$quicOk, ComputerPwd=$computerPwdOk, SshKeys=$sshKeysOk) ===" -ForegroundColor Cyan
 
   # Critical sections: FSA, DFS, the Kerberos computer-account password, and SSH remoting
@@ -582,10 +638,10 @@ if ($Step -eq 3) {
   if (-not $sshKeysOk)     { $criticalFailures += 'SshRemoting' }
 
   if ($criticalFailures.Count -gt 0) {
-    Stop-Transcript
+    Stop-LocalTranscript
     Pop-Location
     throw "Critical section(s) failed: $($criticalFailures -join ', '). Check Invoke-SutImperativeSteps.log for details."
   }
 
-  Stop-Transcript; Pop-Location; return $true
+  Stop-LocalTranscript; Pop-Location; return $true
 }

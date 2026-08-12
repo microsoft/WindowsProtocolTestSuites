@@ -3,6 +3,7 @@
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $script = Join-Path $here '..\shared\DSC\Scripts\Modify-ConfigFileNode.ps1'
+$bootstrap = Join-Path $here '..\shared\scripts\cse-bootstrap.ps1'
 $sentinel = 'S3cr3t-SENTINEL-Passw0rd!'
 
 function New-TempPtfConfig {
@@ -75,6 +76,29 @@ Describe 'Modify-ConfigFileNode.ps1 secret redaction' {
         }
         finally {
             Remove-Item $cfg -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+Describe 'Custom Script Extension bootstrap secret handling' {
+    It 'removes its credential-bearing script on every exit path' {
+        $content = Get-Content -Path $bootstrap -Raw
+
+        $content.Contains('Remove-Item -LiteralPath $PSCommandPath') | Should Be $true
+        $content.Contains('Complete-Bootstrap -ExitCode 0') | Should Be $true
+        $content.Contains('trap {') | Should Be $true
+    }
+
+    It 'launches the bootstrap in a separate PowerShell process' {
+        $root = Resolve-Path (Join-Path $here '..')
+        foreach ($relativePath in @(
+            'domain-bicep\modules\domain-controller.bicep',
+            'domain-bicep\modules\domain-computer-extensions.bicep',
+            'workgroup-bicep\modules\workgroup-computers.bicep'
+        )) {
+            $content = Get-Content -Path (Join-Path $root $relativePath) -Raw
+            $content.Contains('& powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File') |
+                Should Be $true
         }
     }
 }

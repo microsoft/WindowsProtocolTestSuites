@@ -24,6 +24,9 @@
 .PARAMETER ConfigureFile
     Path to Config.json (default: WorkingPath\Config.json).
 
+.PARAMETER NoTranscript
+    Preserve the parent orchestrator transcript when this script is invoked by Deploy-SUT.ps1.
+
 .EXAMPLE
     .\Invoke-SutImperativeSteps.ps1 -WorkingPath C:\Workgroup-Package
 #>
@@ -32,7 +35,9 @@
     Justification = 'Password originates from Azure deployment config; no interactive prompt available.')]
 param(
     [string]$WorkingPath = (Split-Path $PSScriptRoot -Parent),
-    [string]$ConfigureFile = "$WorkingPath\Config.json"
+    [string]$ConfigureFile = "$WorkingPath\Config.json",
+    [string]$HeartbeatPath,
+    [switch]$NoTranscript
 )
 
 $ErrorActionPreference = 'Stop'
@@ -40,9 +45,32 @@ $parentPath = $WorkingPath
 $scriptsPath = "$PSScriptRoot\Scripts"
 $env:Path += ";$parentPath;$scriptsPath"
 Push-Location $scriptsPath
+. "$PSScriptRoot\Deploy-CommonHelpers.ps1"
+
+function Set-ImperativeHeartbeat {
+    param(
+        [string]$Operation,
+        [string]$LastCheckpoint
+    )
+    Write-DeploymentHeartbeat -Phase 'Environment' -Operation $Operation `
+        -StartedAt $script:imperativeStartedAt -HeartbeatPath $HeartbeatPath `
+        -LastCheckpoint $LastCheckpoint
+}
+
+$script:imperativeStartedAt = Get-Date
 
 [string]$logFile = "$PSScriptRoot\Invoke-SutImperativeSteps.log"
-Start-Transcript -Path $logFile -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force
+    $transcriptStarted = $true
+}
+
+function Stop-LocalTranscript {
+    if ($transcriptStarted) {
+        Stop-Transcript
+    }
+}
 
 $config = $null
 if (Test-Path $ConfigureFile) {
@@ -64,6 +92,7 @@ $quicOk      = $false
 # TLS Cipher Suite Configuration
 # ===========================================================================
 try {
+    Set-ImperativeHeartbeat -Operation 'Configuring TLS cipher suites' -LastCheckpoint 'Post-reboot DSC convergence complete'
     .\Write-Info.ps1 "Configuring TLS cipher suites..." -ForegroundColor Yellow
     $tlsResult = & "$scriptsPath\Configure-TlsCipherSuites.ps1"
     if ($tlsResult) {
@@ -87,6 +116,7 @@ try {
 # already-locked local accounts. (Domain accounts are governed by the DC's
 # default domain policy -- see Invoke-DcImperativeSteps.ps1.)
 try {
+    Set-ImperativeHeartbeat -Operation 'Configuring local account policy' -LastCheckpoint 'TLS configuration attempted'
     .\Write-Info.ps1 "Disabling account lockout policy (test SUT)..." -ForegroundColor Yellow
     & net accounts /lockoutthreshold:0 2>&1 | .\Write-Info.ps1
     Get-LocalUser -ErrorAction SilentlyContinue | ForEach-Object {
@@ -106,10 +136,11 @@ try {
 # ===========================================================================
 
 try {
+    Set-ImperativeHeartbeat -Operation 'Creating local test accounts' -LastCheckpoint 'Account policy configured'
     $createAccountScript = "$scriptsPath\Create-TestAccount.ps1"
     if (Test-Path $createAccountScript) {
         .\Write-Info.ps1 "Creating local test accounts via Create-TestAccount.ps1..." -ForegroundColor Yellow
-        $result = & $createAccountScript -workingDir $scriptsPath -protocolConfigFile $ConfigureFile
+        $result = & $createAccountScript -workingDir $scriptsPath -protocolConfigFile $ConfigureFile -NoTranscript
         if (-not $result) {
             .\Write-Info.ps1 "[WARN] Create-TestAccount.ps1 returned failure -- check Create-TestAccount.ps1.log" -ForegroundColor Yellow
         } else {
@@ -129,6 +160,7 @@ catch {
 # ===========================================================================
 
 try {
+    Set-ImperativeHeartbeat -Operation 'Partitioning the SUT data disk' -LastCheckpoint 'Local accounts attempted'
     function New-DataPartition {
         param(
             [string]$FileSystem,
@@ -195,6 +227,7 @@ catch {
 # ===========================================================================
 
 try {
+    Set-ImperativeHeartbeat -Operation 'Creating data disk SMB shares' -LastCheckpoint 'Data disk partitioning attempted'
     $dataDiskShares = @(
         @{ Drive = 'K:\'; Name = 'SMBReFSShare'; Path = 'K:\SMBReFSShare' },
         @{ Drive = 'J:\'; Name = 'SMBFAT32Share'; Path = 'J:\SMBFAT32Share' }
@@ -226,12 +259,15 @@ catch {
 # ===========================================================================
 
 try {
+    Set-ImperativeHeartbeat -Operation 'Creating symbolic links' -LastCheckpoint 'Data disk shares attempted'
     $symlinks = @(
         @{ Link = "$systemDrive\SMBBasic\symboliclink";      Target = "$systemDrive\FileShare\" },
         @{ Link = "$systemDrive\SMBBasic\sub\symboliclink2"; Target = "$systemDrive\FileShare\" }
     )
 
     foreach ($sl in $symlinks) {
+        New-Item -ItemType Directory -Path (Split-Path $sl.Link -Parent) -Force | Out-Null
+        New-Item -ItemType Directory -Path $sl.Target -Force | Out-Null
         if (-not (Test-Path $sl.Link)) {
             cmd /C "mklink /D `"$($sl.Link)`" `"$($sl.Target)`"" 2>&1 | .\Write-Info.ps1
         } else {
@@ -249,6 +285,7 @@ catch {
 # ===========================================================================
 
 try {
+    Set-ImperativeHeartbeat -Operation 'Creating the FSA environment' -LastCheckpoint 'Symbolic links attempted'
     function Set-FsaShareFolder {
         param(
             [string]$Path,
@@ -325,7 +362,14 @@ catch {
 # ===========================================================================
 
 try {
+    Set-ImperativeHeartbeat -Operation 'Creating DFS namespaces' -LastCheckpoint 'FSA environment attempted'
     $computerName = $env:COMPUTERNAME
+
+    foreach ($commandName in @('dfsutil.exe', 'dfscmd.exe')) {
+        if (-not (Get-Command $commandName -ErrorAction SilentlyContinue)) {
+            throw "$commandName is unavailable. Install FS-DFS-Namespace and RSAT-DFS-Mgmt-Con before Phase 3."
+        }
+    }
 
     $dfsSvc = Get-Service dfs -ErrorAction SilentlyContinue
     if ($null -ne $dfsSvc -and $dfsSvc.Status -ne 'Running') {
@@ -363,6 +407,7 @@ catch {
 # ===========================================================================
 
 try {
+    Set-ImperativeHeartbeat -Operation 'Configuring SMB over QUIC' -LastCheckpoint 'DFS namespaces attempted'
     $osName = (Get-CimInstance Win32_OperatingSystem).Name
     if ($osName -match 'Azure Edition') {
 
@@ -413,20 +458,22 @@ catch {
 # Done
 # ===========================================================================
 .\Write-Info.ps1 ""
+Set-ImperativeHeartbeat -Operation 'Verifying imperative postconditions' -LastCheckpoint 'All imperative sections attempted'
 .\Write-Info.ps1 "=== SUT imperative steps completed (Accounts=$accountsOk, Disk=$diskOk, DataShares=$dataShareOk, Symlinks=$symlinkOk, FSA=$fsaOk, DFS=$dfsOk, QUIC=$quicOk) ===" -ForegroundColor Cyan
 
 # Critical sections: FSA and DFS must succeed for tests to work.
 # Throw if either failed so the parent orchestrator catches the failure.
 $criticalFailures = @()
 if (-not $accountsOk) { $criticalFailures += 'Accounts' }
+if (-not $symlinkOk) { $criticalFailures += 'Symlinks' }
 if (-not $fsaOk)  { $criticalFailures += 'FSA' }
 if (-not $dfsOk)  { $criticalFailures += 'DFS' }
 
 if ($criticalFailures.Count -gt 0) {
-    Stop-Transcript
+    Stop-LocalTranscript
     Pop-Location
     throw "Critical section(s) failed: $($criticalFailures -join ', '). Check Invoke-SutImperativeSteps.log for details."
 }
 
-Stop-Transcript
+Stop-LocalTranscript
 Pop-Location

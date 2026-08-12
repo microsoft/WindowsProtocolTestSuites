@@ -430,6 +430,77 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Dfsc
             return ExpectPacket(timeout, out status);
         }
 
+        /// <summary>
+        /// Encode the packet to the transport payload and send the request with an explicit MaxOutputResponse.
+        /// Only supported over SMB2/SMB3 transport.
+        /// </summary>
+        /// <param name="maxOutputResponse">The maximum number of bytes the server is allowed to return for the output data.</param>
+        /// <param name="EXpacket">The REQ_GET_DFS_REFERRAL_EX packet to be sent.</param>
+        /// <param name="packet">The REQ_GET_DFS_REFERRAL packet to be sent.</param>
+        /// <exception cref="System.ArgumentNullException">The packet to be sent is null.</exception>
+        /// <exception cref="System.NotSupportedException">The transport is not SMB2/SMB3.</exception>
+        public void SendPacket(uint maxOutputResponse, DfscReferralRequestEXPacket EXpacket = null, DfscReferralRequestPacket packet = null)
+        {
+            if (packet == null && EXpacket == null)
+            {
+                throw new ArgumentNullException("packet is null");
+            }
+
+            var smb2Transport = this.transport as Smb2ClientTransport;
+            if (smb2Transport == null)
+            {
+                throw new NotSupportedException("Specifying MaxOutputResponse for a DFS referral request is only supported over SMB2/SMB3 transport.");
+            }
+
+            if (packet == null)
+            {
+                smb2Transport.SendDfscPayload(EXpacket.ToBytes(), true, maxOutputResponse);
+            }
+            else
+            {
+                smb2Transport.SendDfscPayload(packet.ToBytes(), false, maxOutputResponse);
+            }
+        }
+
+        /// <summary>
+        /// Wait for the DFS response packet and additionally expose the OutputCount field of the response.
+        /// Only supported over SMB2/SMB3 transport.
+        /// </summary>
+        /// <param name="timeout">The pending time to get server's response.</param>
+        /// <param name="ntStatus">The status of the DFS referral response from the server.</param>
+        /// <param name="outputCount">The OutputCount field of the IOCTL response.</param>
+        /// <exception cref="System.NotSupportedException">The transport is not SMB2/SMB3.</exception>
+        public DfscReferralResponsePacket ExpectPacket(TimeSpan timeout, out uint ntStatus, out uint outputCount)
+        {
+            var smb2Transport = this.transport as Smb2ClientTransport;
+            if (smb2Transport == null)
+            {
+                throw new NotSupportedException("Reading the DFS referral OutputCount is only supported over SMB2/SMB3 transport.");
+            }
+
+            byte[] payload;
+            smb2Transport.ExpectDfscPayload(timeout, out ntStatus, out payload, out outputCount);
+            DfscReferralResponsePacket packet = new DfscReferralResponsePacket(ntStatus, payload);
+            return packet;
+        }
+
+        /// <summary>
+        /// Sends a referral request with an explicit MaxOutputResponse and captures the response along with its OutputCount.
+        /// Only supported over SMB2/SMB3 transport.
+        /// </summary>
+        /// <param name="status">The status of the DFS referral response from the server.</param>
+        /// <param name="outputCount">The OutputCount field of the IOCTL response.</param>
+        /// <param name="timeout">The pending time to get server's response.</param>
+        /// <param name="maxOutputResponse">The maximum number of bytes the server is allowed to return for the output data.</param>
+        /// <param name="packetEX">Optional REQ_GET_DFS_REFERRAL_EX packet to be sent to the server.</param>
+        /// <param name="packet">Optional REQ_GET_DFS_REFERRAL packet to be sent to the server.</param>
+        public DfscReferralResponsePacket SendAndRecieveDFSCReferralMessages(out uint status, out uint outputCount, TimeSpan timeout, uint maxOutputResponse, DfscReferralRequestEXPacket packetEX = null, DfscReferralRequestPacket packet = null)
+        {
+            SendPacket(maxOutputResponse, packetEX, packet);
+
+            return ExpectPacket(timeout, out status, out outputCount);
+        }
+
         #endregion
     }
 }

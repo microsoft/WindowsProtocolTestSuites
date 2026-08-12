@@ -12,7 +12,8 @@ param(
     $workingDir = $PSScriptRoot,
     $protocolConfigFile = "$workingDir\Config.json",
     $parameterConfigFile = "$workingDir\ParamConfig.json",
-    $paramConfigSourceUrl = "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/configs/ParamConfig.json"
+    $paramConfigSourceUrl = "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/configs/ParamConfig.json",
+    [switch]$NoTranscript
 )
 
 # Ensure net.exe stderr (e.g. invalid usernames with '@') does not become a
@@ -69,8 +70,11 @@ if(!(Test-Path "$parameterConfigFile"))
 # Start logging using start-transcript cmdlet
 #----------------------------------------------------------------------------
 [string]$logFile = $MyInvocation.MyCommand.Path + ".log"
-try { Stop-Transcript -ErrorAction SilentlyContinue } catch {} # Ignore Stop-Transcript error messages
-Start-Transcript -Path "$logFile" -Append -Force
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path "$logFile" -Append -Force
+    $transcriptStarted = $true
+}
 
 function StartService($serviceName)
 {
@@ -344,5 +348,7 @@ else
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Completed create test accounts."
 Pop-Location
-Stop-Transcript
+if ($transcriptStarted) {
+    Stop-Transcript
+}
 return $true

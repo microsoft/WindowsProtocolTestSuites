@@ -8,13 +8,13 @@ This directory contains Azure Bicep templates for deploying the File Server Prot
 
 For a demo/onboarding environment with **defaults**, deploy straight from the Azure Portal — no local clone, no PowerShell, no `deploy.ps1`:
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2Ffileserver-workgroup-deploy-button-v1%2FTestSuites%2FFileServer%2Fazure-automation%2Fworkgroup-bicep%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.8.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fworkgroup-bicep%2Fazuredeploy.json)
 
-> The button points at [`azuredeploy.json`](azuredeploy.json) served from `raw.githubusercontent.com` at the **`fileserver-workgroup-deploy-button-v1`** tag, and the template pulls its DSC package from the GitHub **Release** asset at the same tag. The button goes live once a maintainer cuts that release (see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button)).
+> The button points at [`azuredeploy.json`](azuredeploy.json) served from `raw.githubusercontent.com` at the **`4.26.8.0`** release tag, and the template pulls its DSC package from the same GitHub **Release**. The button goes live once a maintainer publishes that release (see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button)).
 
 The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azuredeploy.json`](azuredeploy.json)). Enter an **admin password** and deploy; the Driver + SUT come up and tests run automatically — the same outcome as `deploy.ps1`, without the local build step.
 
-**How credentials stay safe.** The button consumes a **public**, pre-built DSC package. That package must never contain secrets, so its `Config.json` ships with a placeholder token (`#{ADMIN_PASSWORD}#`) instead of a password. At deploy time the VM's Custom Script Extension — running from the extension's *encrypted* `protectedSettings` — injects the real admin password (passed base64-encoded, then JSON-escaped) into `Config.json` via [`../shared/DSC/Scripts/Set-ConfigCredential.ps1`](../shared/DSC/Scripts/Set-ConfigCredential.ps1). The single admin password is reused for the local NonAdmin test account.
+**How credentials stay safe.** The button consumes a **public**, pre-built DSC package. That package must never contain secrets, so its `Config.json` ships with a placeholder token (`#{ADMIN_PASSWORD}#`) instead of a password. At deploy time the VM's Custom Script Extension — running from the extension's *encrypted* `protectedSettings` — injects the real admin password (passed base64-encoded, then JSON-escaped) into `Config.json` via [`../shared/DSC/Scripts/Set-ConfigCredential.ps1`](../shared/DSC/Scripts/Set-ConfigCredential.ps1). The credential-bearing bootstrap runs in a separate PowerShell process so transcript headers contain only the script path, then deletes itself on success or failure. The single admin password is reused for the local NonAdmin test account.
 
 **Scope & limitations (step 1 — defaults only):**
 - The baked `Config.json` is valid for the **default IP topology only**. Changing the IP parameters in the Portal form will not update the peer IPs inside the package. For custom topologies, use `deploy.ps1` (which rebuilds the package) until on-VM `Config.json` regeneration lands (step 2).
@@ -90,7 +90,7 @@ $localPassword = Read-Host "Enter local user password" -AsSecureString
 
 The script runs a single Bicep deployment (~5 min for Azure resources). Bastion is deployed alongside the VMs after core networking, so Bastion provisioning does not delay VM creation. After that, VMs configure themselves in the background:
 
-1. **SUT** (~5-10 min): File Server role, SMB shares, FSRM configuration
+1. **SUT**: Feature preparation, one planned reboot, post-reboot shares/FSRM convergence, then environment setup
 2. **Driver** (~10-15 min): Tools install, RSA keys, test environment setup
 3. **Tests run automatically** — a scheduled task on the Driver waits for SUT readiness, then executes the full test suite. No login required.
 
@@ -112,7 +112,7 @@ Get-ChildItem C:\Test\TestResults\*.trx
 | What | Duration | Notes |
 |------|----------|-------|
 | Bicep deployment (Network + VMs) | ~5 min | Single phase, no DC dependency |
-| SUT configuration | ~5-10 min | File Server role, shares, FSRM |
+| SUT configuration | Image-dependent | Feature-only DSC, one planned reboot, convergence DSC, environment setup |
 | Driver configuration | ~10-15 min | Tools install, RSA keys |
 | Automatic test execution | ~30-60 min | Depends on test scope |
 | **Total to test results** | **~50-90 min** | Fully unattended |
@@ -213,6 +213,21 @@ Scheduled task → Invoke-TestRun.ps1 (runs as local testadmin user)
   4. Cleans up the scheduled task (self-unregisters)
 ```
 
+### Workgroup SUT phase flow
+
+`Deploy-SUT.ps1` persists `WorkgroupSutDeployPhase` under
+`HKLM:\SOFTWARE\ProtocolTestSuites`:
+
+1. **Phase 0 — Features:** rename is requested without immediately rebooting; one DSC resource attempts all disruptive File Server, DFS, FSRM, Hyper-V, and management features. Tool packages are prepared in parallel using atomic temporary downloads.
+2. **Single planned reboot:** feature and rename requirements are coalesced. The resume task verifies that a new Windows boot actually occurred.
+3. **Phase 1 — Convergence:** a non-disruptive MOF creates shares and directories and configures routing, firewall, remoting, FSRM, and registry state.
+4. **Phase 2 — Environment and tools:** prepared tools install serially while idempotent disk, FSA, DFS, symlink, account, and QUIC setup runs.
+5. **Phase 3 — Complete:** the completion signal is written only after concrete DSC, tools, DFS, account, and filesystem postconditions pass.
+
+Long-running operations update
+`C:\Workgroup-Package\DSC\Deploy-SUT.heartbeat.json`. The file identifies the
+phase, active operation, elapsed time, deadline, and last successful checkpoint.
+
 ### Test filter
 
 To run a subset of tests, run `Invoke-TestRun.ps1` manually:
@@ -273,7 +288,7 @@ When a custom image ID is provided, it overrides the marketplace image. Leave em
 
 ## Publishing the public package ("Deploy to Azure" button)
 
-> **Maintainers only.** The [one-click button](#one-click-deploy-deploy-to-azure-button) consumes two public artifacts, both pinned to the **`fileserver-workgroup-deploy-button-v1`** tag on the public GitHub repo:
+> **Maintainers only.** The [one-click button](#one-click-deploy-deploy-to-azure-button) consumes two public artifacts, both pinned to the **`4.26.8.0`** FileServer release:
 > - **Package** → a GitHub **Release asset**: `https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/<tag>/Workgroup-Package.zip`
 > - **Template** → the committed [`azuredeploy.json`](azuredeploy.json) served via `raw.githubusercontent.com/.../<tag>/...` — the committed file *is* the hosted template, so there is no separate template upload and no Bicep→JSON drift.
 >
@@ -292,9 +307,9 @@ bicep build main.bicep --outfile azuredeploy.json
 
 # 3. Cut the release + upload the package asset (idempotent; --clobber re-uploads)
 gh auth login
-.\Publish-DscPackage.ps1 -Tag fileserver-workgroup-deploy-button-v1 -Target <branch-or-sha>
-#  asset -> https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/fileserver-workgroup-deploy-button-v1/Workgroup-Package.zip
-#  raw   -> https://raw.githubusercontent.com/microsoft/WindowsProtocolTestSuites/fileserver-workgroup-deploy-button-v1/TestSuites/FileServer/azure-automation/workgroup-bicep/azuredeploy.json
+.\Publish-DscPackage.ps1 -Tag 4.26.8.0 -Target <branch-or-sha>
+#  asset -> https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/Workgroup-Package.zip
+#  raw   -> https://raw.githubusercontent.com/microsoft/WindowsProtocolTestSuites/4.26.8.0/TestSuites/FileServer/azure-automation/workgroup-bicep/azuredeploy.json
 #  -> prints the Deploy to Azure button URL
 ```
 
@@ -326,7 +341,7 @@ Validate end-to-end without cutting a real wpts release: push to a **public** pe
 |---------|-----------|--------|
 | VMs | 2 (Client01, Node01) | 3 (DC01, Client01, Node01) |
 | Domain Controller | No | Yes |
-| Phased Deployment | No | Yes (DC must be ready first) |
+| Phased Deployment | Yes (persisted SUT phases, one planned reboot) | Yes (DC must be ready first) |
 | Authentication | Local accounts | Domain accounts |
 | Test Coverage | Basic SMB tests | Full test suite |
 | Automatic Tests | Yes (unattended) | Yes (unattended) |
@@ -342,6 +357,7 @@ Validate end-to-end without cutting a real wpts release: push to a **public** pe
 | Client01 (Windows) | `C:\Workgroup-Package\DSC\Scripts\Invoke-TestRun.log` | Test execution |
 | Client01 (Linux) | `/var/log/azure/custom-script/handler.log` | Driver extension output |
 | Node01 | `C:\Workgroup-Package\DSC\Deploy-SUT.log` | SUT orchestrator |
+| Node01 | `C:\Workgroup-Package\DSC\Deploy-SUT.heartbeat.json` | Current SUT phase and active long-running operation |
 | All (Windows) | `C:\workgroup-*-setup.log` | CustomScriptExtension bootstrap |
 | Test results | `C:\Test\TestResults\*.trx` | TRX result files |
 
@@ -351,7 +367,7 @@ Validate end-to-end without cutting a real wpts release: push to a **public** pe
 
 2. **Tests not running**: Verify the scheduled task exists: `Get-ScheduledTask -TaskName 'RunFileServerTests'`. If it doesn't exist, the Driver configuration hasn't completed yet — check `Deploy-Driver.log`.
 
-3. **SUT readiness timeout**: The test runner waits for the SUT signal file via SMB. If it times out, check `Deploy-SUT.log` on Node01. Verify SMB connectivity: `Test-NetConnection -ComputerName 192.168.1.11 -Port 445`.
+3. **SUT readiness timeout**: The test runner waits for the SUT signal file via SMB. If it times out, check `Deploy-SUT.log` and `Deploy-SUT.heartbeat.json` on Node01. Verify SMB connectivity: `Test-NetConnection -ComputerName 192.168.1.11 -Port 445`.
 
 4. **Marketplace terms not accepted**: First deployment of a new OS image may require: 
    $terms = Get-AzMarketplaceTerms -Publisher 'MicrosoftWindowsDesktop' -Product 'Windows-11' -Name 'win11-25h2-ent'
@@ -382,7 +398,8 @@ workgroup-bicep/
 ├── README.md                     # This file
 ├── DSC/                          # SUT DSC configuration scripts
 │   ├── Deploy-SUT.ps1            # SUT orchestrator (DSC + imperative)
-│   ├── SUT-Configuration.ps1     # SUT DSC configuration
+│   ├── SUT-FeatureConfiguration.ps1 # Pre-reboot disruptive feature bundle
+│   ├── SUT-Configuration.ps1     # Post-reboot convergence configuration
 │   ├── Invoke-SutImperativeSteps.ps1     # SUT non-DSC steps
 │   └── Scripts/
 │       └── Config.json                   # Workgroup scenario template

@@ -4046,6 +4046,139 @@
       "createdDate": "2026-05-23 21:18:56Z",
       "expirationDate": "2026-11-09 21:24:16Z",
       "justification": "This error is baselined with an expiration date of 180 days from 2026-05-23 21:24:16Z"
+    },
+    "6ae61bb7487c9314cb9c50c19d7a28b9d9ccb694048edbf62ee394f0a4cadbff": {
+      "signature": "6ae61bb7487c9314cb9c50c19d7a28b9d9ccb694048edbf62ee394f0a4cadbff",
+      "alternativeSignatures": [
+        "7f96fb17018ddddf288abcc6f0f7ca7912308a3d7bcb6628b9e84e8e1251b9e8",
+        "3b77759d73e2f609f5fab1c9c94a8d9c355b1a0565a4a10640b7a246e577c747",
+        "482d64174df36c1ea24b53ce7f5f44796397c3d955e06b12ba90c7f955de1156"
+      ],
+      "target": "ProtocolTestManager/PTMService/PTMKernelService/Configuration.cs",
+      "line": 62,
+      "uriBaseId": "file:///D:/a/_work/1/s/",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "roslynanalyzers",
+      "ruleId": "CA1310",
+      "createdDate": "2026-08-05 13:39:51Z",
+      "expirationDate": "2027-01-22 13:44:46Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2026-08-05 13:44:46Z"
+    },
+    "c72cd12515ae55d68f5488f084012e68ba3a4122e4124c521a292cc2a6527157": {
+      "signature": "c72cd12515ae55d68f5488f084012e68ba3a4122e4124c521a292cc2a6527157",
+      "alternativeSignatures": [
+        "41c8992cb48e881cbc6a1a254c0c01902b69d0973cace437b7c1a4d1509560b2",
+        "cac926416dbcedc459207fb639c45a012c7e5ce138397f1ff2f4f1d16e48b50d",
+        "fcfa81a6ead3b3de45e91bfe345d6faa7ce7fd5c004988f7b900098186d462d9"
+      ],
+      "target": "ProtocolTestManager/PTMService/PTMKernelService/Configuration.cs",
+      "line": 146,
+      "uriBaseId": "file:///D:/a/_work/1/s/",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "roslynanalyzers",
+      "ruleId": "CA1310",
+      "createdDate": "2026-08-05 13:39:51Z",
+      "expirationDate": "2027-01-22 13:44:46Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2026-08-05 13:44:46Z"
+    },
+    "b95fb7ceb9ea9c36d646b1730a95f1a275d61723124761bbdcf20055cca894ed": {
+      "signature": "b95fb7ceb9ea9c36d646b1730a95f1a275d61723124761bbdcf20055cca894ed",
+      "alternativeSignatures": [
+        "f394ad376792099dd9c21a22543aa3a0b3a2774ce8f5e9a378befdbb71cc926d",
+        "d41f01073b4189ae2c330aea75510c08cd27e42bbe80194a9d32937e0647662a",
+        "8e077d17e21f3dde6cb4b0916402c4d50f52bfb744fde0e1b147156a2a685dd4"
+      ],
+      "target": "ProtocolTestManager/PTMService/PTMKernelService/PTMKernelService_ProfileSetup.cs",
+      "line": 184,
+      "uriBaseId": "file:///D:/a/_work/1/s/",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "roslynanalyzers",
+      "ruleId": "CA1310",
+      "createdDate": "2026-08-05 13:39:51Z",
+      "expirationDate": "2027-01-22 13:44:46Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2026-08-05 13:44:46Z"
+    },
+    "9fe8d779d435c8db527058111792d7d719a196ba4af70c7ef02965589e2bc799": {
+      "signature": "9fe8d779d435c8db527058111792d7d719a196ba4af70c7ef02965589e2bc799",
+      "alternativeSignatures": [
+        "0daf5797fcd898832c9019511cd92dcd16dfe99dbe3deb5634a17b30a49610f8",
+        "50fed201c17a66f23b94bb4bef2d57f4c9e49f9384d361561377e6cabf21249c",
+        "a175af6af587e237b0168b4bad6fe8886ebe4e7653e4760697573b9be571562c"
+      ],
+      "target": "ProtocolTestManager/PTMService/PTMKernelService/PTMKernelService_TestSuite.cs",
+      "line": 194,
+      "uriBaseId": "file:///D:/a/_work/1/s/",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "roslynanalyzers",
+      "ruleId": "CA1310",
+      "createdDate": "2026-08-05 13:39:51Z",
+      "expirationDate": "2027-01-22 13:44:46Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2026-08-05 13:44:46Z"
+    },
+    "b8ac2b9e81384fbdeeef0d64c9b4c484709b4241c3c5c594407ac1b64544bbca": {
+      "signature": "b8ac2b9e81384fbdeeef0d64c9b4c484709b4241c3c5c594407ac1b64544bbca",
+      "alternativeSignatures": [
+        "76182c6d7aa390b29648385fe2e83867257e699ce6a74da9ad999bbd594f6412",
+        "46c68045ce225fa25c22dd69d783ad4257df595211b82bf5aed51f3f127a5e7b",
+        "b47b096880014ebb26606770410c45889232ab8507396b43d8415da7dbf123ac"
+      ],
+      "target": "ProtocolTestManager/PTMService/PTMKernelService/TestRun.cs",
+      "line": 417,
+      "uriBaseId": "file:///D:/a/_work/1/s/",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "roslynanalyzers",
+      "ruleId": "CA1310",
+      "createdDate": "2026-08-05 13:39:51Z",
+      "expirationDate": "2027-01-22 13:44:46Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2026-08-05 13:44:46Z"
+    },
+    "bec814d67168ad9c3739a5c16ceb0b41cbe36604ee46ecb072f20502a0ff2ad8": {
+      "signature": "bec814d67168ad9c3739a5c16ceb0b41cbe36604ee46ecb072f20502a0ff2ad8",
+      "alternativeSignatures": [
+        "cd04ae38fd407de86d203404ea56058ad51d9418773ab32d0252f54bf6835ed3",
+        "59c3a35943f7e9c61b2b077eba2674b796be40155279da786c5952b3441caa10",
+        "2e5e889aff79d01f2294102bb71f80618a94a312f5c01c7dd1c7d9e98443fe8d"
+      ],
+      "target": "ProtocolTestManager/PTMService/Common/Profile/ProfileUtil.cs",
+      "line": 163,
+      "uriBaseId": "file:///D:/a/_work/1/s/",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "roslynanalyzers",
+      "ruleId": "CA1310",
+      "createdDate": "2026-08-05 13:39:51Z",
+      "expirationDate": "2027-01-22 13:44:46Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2026-08-05 13:44:46Z"
+    },
+    "2328b5ed6782f062978ee9ed2d1bc653c2ce24da50b25a87502e98dd80276e7f": {
+      "signature": "2328b5ed6782f062978ee9ed2d1bc653c2ce24da50b25a87502e98dd80276e7f",
+      "alternativeSignatures": [
+        "0a97bc48ae8c4cfe70e7beb6463f7c3e1f988854aa8643853df897a8e182ecba",
+        "f316bdf3150647afa1a16ee18e26ca9282ffb4cc8f2f0e606ebef95b9e0ca89d",
+        "36e2ac8bdb73f95e701681becac0a18f4c521c67e846fe17546a4b67c1139b8c"
+      ],
+      "target": "ProtocolTestManager/PTMService/Common/Profile/ProfileUtil.cs",
+      "line": 166,
+      "uriBaseId": "file:///D:/a/_work/1/s/",
+      "memberOf": [
+        "default"
+      ],
+      "tool": "roslynanalyzers",
+      "ruleId": "CA1310",
+      "createdDate": "2026-08-05 13:39:51Z",
+      "expirationDate": "2027-01-22 13:44:46Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2026-08-05 13:44:46Z"
     }
   }
 }

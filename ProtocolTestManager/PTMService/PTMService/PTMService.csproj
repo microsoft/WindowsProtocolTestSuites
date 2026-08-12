@@ -9,10 +9,14 @@
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <!-- Required by EF Core 6 and PowerShell 7.2 runtime assets until those dependencies are upgraded. -->
+    <UseRidGraph>true</UseRidGraph>
   </PropertyGroup>
 
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Suppress internal consumption of preview-marked shared helpers without propagating preview to API clients. -->
+    <NoWarn>$(NoWarn);1591;CA2252</NoWarn>
     <RootNamespace>Microsoft.Protocols.TestManager.PTMService.PTMService</RootNamespace>
   </PropertyGroup>
 

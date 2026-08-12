@@ -178,6 +178,8 @@ In the `Batch` folder under root path of the test suite, there are several scrip
 
 **Protocol Test Manager Service (PTMService)** is a single web page application tool that helps you configure and run test cases in the Test Suites. PTMService supports multiple platforms, including Windows, Linux, and macOS. To get started with PTMService, you can refer to the [PTMService Wiki](https://github.com/microsoft/WindowsProtocolTestSuites/wiki/PTMService).
 
+For FileServer configurations, the PTM UI setting **Enable Parallel Test Execution** maps to the fully qualified `.ptfconfig` property **Common.PTF.LogProfileParserPatch.Enabled**. Set it to **true** to enable staged parallel execution within a FileServer test run.
+
 ## Documents
 
 You could set up the test environment and configure the test suite according to its **User Guide**.

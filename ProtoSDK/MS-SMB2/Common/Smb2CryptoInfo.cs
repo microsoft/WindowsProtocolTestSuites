@@ -21,6 +21,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         internal byte[] ApplicationKey;
         internal EncryptionAlgorithm CipherId;
         internal SigningAlgorithm SigningId;
+        internal bool IsSigningAlgorithmNegotiated;
 
         internal bool DisableVerifySignature;
 
@@ -42,6 +43,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         /// <param name="preauthIntegrityHashValue">The preauthentication integrity hash value, for smb dialect 311 only </param>
         /// <param name="cipherId">The ID of the cipher that was negotiated for this connection</param>
         /// <param name="signingId">The ID of the signing algorithm that was negotiated for this connection</param>
+        /// <param name="isSigningAlgorithmNegotiated">True if the server returned an SMB2_SIGNING_CAPABILITIES response context</param>
         public Smb2CryptoInfo(
             DialectRevision dialect, 
             byte[] cryptographicKey, 
@@ -51,7 +53,8 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             Smb2CryptoInfo cryptoInfo = null,
             byte[] preauthIntegrityHashValue = null,
             EncryptionAlgorithm cipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM,
-            SigningAlgorithm signingId = SigningAlgorithm.HMAC_SHA256)
+            SigningAlgorithm signingId = SigningAlgorithm.HMAC_SHA256,
+            bool isSigningAlgorithmNegotiated = false)
         {
             if (dialect >= DialectRevision.Smb311 && dialect != DialectRevision.Smb2Unknown && preauthIntegrityHashValue == null)
             {
@@ -104,12 +107,14 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 {
                     CipherId = cipherId;
                     SigningId = signingId;
+                    IsSigningAlgorithmNegotiated = isSigningAlgorithmNegotiated;
                 }
                 else
                 {
                     // for pre SMB 3.11 dialects, use AES-128-CCM for encryption
                     CipherId = EncryptionAlgorithm.ENCRYPTION_AES128_CCM;
                     SigningId = SigningAlgorithm.HMAC_SHA256;
+                    IsSigningAlgorithmNegotiated = false;
                 }
 
                 /**
@@ -181,6 +186,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
                 ServerOutKey = cryptoInfo.ServerOutKey;
                 ApplicationKey = cryptoInfo.ApplicationKey;
                 SigningId = cryptoInfo.SigningId;
+                IsSigningAlgorithmNegotiated = cryptoInfo.IsSigningAlgorithmNegotiated;
             }
 
             EnableSessionSigning = enableSigning;

@@ -3,15 +3,12 @@
 
 <#
 .SYNOPSIS
-    DSC Configuration for the Domain Controller (DC01).
-    Handles AD DS features, RemoteAccess feature, firewall, registry keys,
-    and service auto-start declaratively.
+    Post-promotion convergence configuration for the Domain Controller.
+    Handles firewall, registry keys, routing, remoting, and service state.
 
 .DESCRIPTION
-    Phase 1 concerns (pre-promote):
-      - AD-Domain-Services feature + management tools
-      - RemoteAccess feature + management tools
-    Phase 3 concerns (post-promote, post-reboot):
+    DC-FeatureConfiguration.ps1 owns disruptive role installation.
+    This configuration owns post-promotion state:
       - LDAP signing registry keys
       - CBAC / Armor registry keys
       - Service dependencies (NTDS, ADWS, RemoteAccess, sstpsvc, rasman)
@@ -131,40 +128,6 @@ Configuration DcConfiguration {
                 $block += "$marker END`r`n"
                 Set-Content -Path $hostsPath -Value ($content + $block) -Force -Encoding ASCII
             }
-        }
-        #endregion
-
-        #region -- AD Domain Services Feature ------------------------------
-        WindowsFeature ADDomainServices {
-            Name                 = 'AD-Domain-Services'
-            Ensure               = 'Present'
-            IncludeAllSubFeature = $true
-        }
-
-        WindowsFeature ADDSTools {
-            Name      = 'RSAT-AD-Tools'
-            Ensure    = 'Present'
-            DependsOn = '[WindowsFeature]ADDomainServices'
-        }
-
-        WindowsFeature GPMCTools {
-            Name      = 'GPMC'
-            Ensure    = 'Present'
-            DependsOn = '[WindowsFeature]ADDomainServices'
-        }
-        #endregion
-
-        #region -- RemoteAccess Feature ------------------------------------
-        WindowsFeature RemoteAccess {
-            Name                 = 'RemoteAccess'
-            Ensure               = 'Present'
-            IncludeAllSubFeature = $true
-        }
-
-        WindowsFeature RemoteAccessTools {
-            Name      = 'RSAT-RemoteAccess'
-            Ensure    = 'Present'
-            DependsOn = '[WindowsFeature]RemoteAccess'
         }
         #endregion
 
@@ -377,7 +340,6 @@ Configuration DcConfiguration {
 
         #region -- RemoteAccess Service AutoStart --------------------------
         Script RemoteAccessAutoStart {
-            DependsOn  = '[WindowsFeature]RemoteAccess'
             GetScript  = {
                 $svc = Get-Service RemoteAccess -ErrorAction SilentlyContinue
                 @{ Result = if ($svc) { $svc.StartType } else { 'NotInstalled' } }

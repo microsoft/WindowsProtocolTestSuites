@@ -30,6 +30,32 @@ These apply to all three scenarios:
   ```
 - **Bicep CLI** (installed automatically by the deploy scripts if missing, or install manually via `az bicep install`)
 
+## Release packages
+
+The official OneClick release pipeline is
+`pipelines/1es/FileServer-OneClick-Release.yml`. Run it only after the signed
+FileServer, PTMService, and PTMCli archives are final. Supply the HTTPS URL and
+SHA-256 hash for each signed archive.
+
+The pipeline copies the deployment sources into an isolated staging directory,
+pins those release assets in each publishable scenario's `Tools.json`, signs
+the staged PowerShell files through ESRP, runs the tests under
+`azure-automation/tests`, and builds these public, credential-free artifacts:
+
+- `Workgroup-Package.zip`
+- `Domain-Package.zip`
+- `SHA256SUMS.txt`
+
+Cluster is not included because it currently uses the phased `deploy.ps1`
+workflow and does not have a `Publish-DscPackage.ps1` wrapper or a single
+deploy-to-Azure template.
+
+The pipeline publishes the files as the `FileServer-OneClick-Packages` pipeline
+artifact. A release owner must download that artifact, complete the clean Azure
+deployment checks, and upload the unchanged ZIP files to the `4.26.8.0`
+FileServer GitHub release alongside the primary test-suite assets. Do not
+rebuild or replace packages after signing.
+
 ## Quick Start
 
 ### 1. Navigate to the scenario folder
@@ -186,7 +212,14 @@ flowchart LR
     step2 --> signal[Write .Completed.signal]
 ```
 
-Each step is tracked in the registry at `HKLM:\SOFTWARE\ProtocolTestSuites\DeployStep`. A **TKFRSAR** scheduled task re-runs the orchestrator after each reboot, with a circuit breaker (max 3-4 reboots) to prevent infinite loops.
+Current phased orchestrators persist role-specific phase values under
+`HKLM:\SOFTWARE\ProtocolTestSuites` while retaining `DeployStep` only for
+backward migration. Workgroup uses `WorkgroupSutDeployPhase`; Domain uses
+`DomainSutDeployPhase` and `DcDeployPhase`. The Domain SUT has one normal
+feature/domain-join reboot. The DC has one foundation reboot and one mandatory
+promotion reboot. The Driver verifies its one domain-join reboot and secure
+channel before continuing. Unexpected extra reboots are fatal. A **TKFRSAR**
+scheduled task resumes each orchestrator only across its planned boundary.
 
 ## Network Architecture
 
@@ -259,6 +292,19 @@ Each scenario README has detailed troubleshooting for its specific issues:
 ### Common across all scenarios
 
 **Azure shows "Succeeded" but VMs aren't ready** — VM extensions report success immediately after starting background configuration. Check for `.Completed.signal` files (see [step 3 above](#3-wait-for-vm-configuration-to-finish)).
+
+**Feature installation restarts WinRM** — Domain and Workgroup SUT/Driver orchestrators submit DSC asynchronously and poll fresh LCM status calls, so a transient `0x803381fa` WSMan disconnect is not treated as success. Completion signals are written only after the LCM reports `Success` and required features, commands, directories, tools, and applicable domain readiness checks pass. Imperative configuration is blocked while DSC prerequisites are incomplete instead of retrying the same broken environment setup indefinitely.
+
+While DSC is active, Windows PowerShell 5.1 can report that `Start-DscConfiguration` is still in progress when status is queried. This is an expected busy response: the verifier suppresses it, continues bounded polling, and surfaces only a final LCM failure or timeout.
+
+Workgroup and Domain SUTs compile disruptive features into dedicated feature
+MOFs and apply shares, routing, remoting, and registry state through separate
+post-reboot convergence MOFs. The DC similarly separates role features from
+post-promotion convergence. Tool packages download to unique temporary files in
+parallel and are promoted atomically into the cache; installation remains
+serial and post-reboot. Role heartbeat JSON files record the current phase,
+operation, elapsed time, deadline, and last checkpoint while DSC, downloads,
+installers, readiness probes, or imperative setup are active.
 
 **VM extension failure** — Check the bootstrap log on the VM:
 | VM Role | Log file |

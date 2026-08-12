@@ -65,7 +65,7 @@ namespace Microsoft.Protocols.TestManager.Kernel
 
         private class ShouldSerializeContractResolver : DefaultContractResolver
         {
-            public new static readonly ShouldSerializeContractResolver Instance = new ShouldSerializeContractResolver();
+            public static readonly ShouldSerializeContractResolver Instance = new ShouldSerializeContractResolver();
 
             protected override JsonContract CreateContract(Type objectType)
             {

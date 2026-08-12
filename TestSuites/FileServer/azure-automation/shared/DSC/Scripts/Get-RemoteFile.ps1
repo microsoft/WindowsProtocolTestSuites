@@ -11,28 +11,92 @@
 # resume after a reboot via the TKFRSAR scheduled task (e.g. domain member running as
 # CONTOSO\testadmin), BITS fails with 0x800704DD ("the user has not logged on to the
 # network"). HttpClient is a plain in-process socket call with no logon-token requirement
-# and it also follows redirects, so it works in that context.
+# and explicitly follows redirects, so it works in that context.
 #
 # Dot-source this script to import the function:
 #     . "$PSScriptRoot\Get-RemoteFile.ps1"
 #     Get-RemoteFile -Url $url -OutputPath $dest
 
 Function Get-RemoteFileViaHttpClient {
-    param([string]$Url, [string]$OutputPath)
+    param(
+        [string]$Url,
+        [string]$OutputPath,
+        [ValidateRange(0, 50)]
+        [int]$MaxRedirects = 10
+    )
+
+    $client = $null
+    $response = $null
     try {
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Add-Type -AssemblyName System.Net.Http -ErrorAction SilentlyContinue
         $handler = New-Object System.Net.Http.HttpClientHandler
-        $handler.AllowAutoRedirect = $true          # follows 301/302/307/308 for GET
+        # .NET Framework does not consistently auto-follow HTTP 308 responses.
+        $handler.AllowAutoRedirect = $false
         $client = New-Object System.Net.Http.HttpClient($handler)
         $client.Timeout = [TimeSpan]::FromMinutes(30)
-        $resp = $client.GetAsync($Url, [System.Net.Http.HttpCompletionOption]::ResponseHeadersRead).GetAwaiter().GetResult()
-        if (-not $resp.IsSuccessStatusCode) {
-            .\Write-Info.ps1 "HttpClient download failed: HTTP $([int]$resp.StatusCode) $($resp.ReasonPhrase)" -ForegroundColor Red
-            return $false
+
+        $currentUri = New-Object System.Uri($Url, [System.UriKind]::Absolute)
+        if ($currentUri.Scheme -notin @('http', 'https')) {
+            throw "Unsupported download URI scheme '$($currentUri.Scheme)'."
         }
+        $requireHttps = $currentUri.Scheme -eq 'https'
+
+        $visitedUris = @{}
+        for ($redirectCount = 0; ; $redirectCount++) {
+            $uriKey = $currentUri.AbsoluteUri.ToLowerInvariant()
+            if ($visitedUris.ContainsKey($uriKey)) {
+                throw "HTTP redirect loop detected at '$currentUri'."
+            }
+            $visitedUris[$uriKey] = $true
+
+            $response = $client.GetAsync(
+                $currentUri,
+                [System.Net.Http.HttpCompletionOption]::ResponseHeadersRead
+            ).GetAwaiter().GetResult()
+
+            $statusCode = [int]$response.StatusCode
+            if ($statusCode -notin @(301, 302, 303, 307, 308)) {
+                break
+            }
+
+            if ($redirectCount -ge $MaxRedirects) {
+                throw "HTTP redirect limit of $MaxRedirects exceeded while downloading '$Url'."
+            }
+
+            $location = $response.Headers.Location
+            if ($null -eq $location) {
+                throw "HTTP $statusCode response from '$currentUri' did not include a Location header."
+            }
+
+            $nextUri = if ($location.IsAbsoluteUri) {
+                $location
+            } else {
+                New-Object System.Uri($currentUri, $location)
+            }
+            if ($nextUri.Scheme -notin @('http', 'https')) {
+                throw "HTTP redirect from '$currentUri' used unsupported URI scheme '$($nextUri.Scheme)'."
+            }
+            if ($requireHttps -and $nextUri.Scheme -ne 'https') {
+                throw "Refusing to follow HTTPS to HTTP redirect from '$currentUri' to '$nextUri'."
+            }
+
+            .\Write-Info.ps1 "Following HTTP $statusCode redirect to: $nextUri" -ForegroundColor DarkGray
+            $response.Dispose()
+            $response = $null
+            $currentUri = $nextUri
+        }
+
+        if (-not $response.IsSuccessStatusCode) {
+            throw "HTTP $([int]$response.StatusCode) $($response.ReasonPhrase)"
+        }
+
         $fs = [System.IO.File]::Create($OutputPath)
-        try { [void]$resp.Content.CopyToAsync($fs).GetAwaiter().GetResult() } finally { $fs.Dispose() }
+        try {
+            [void]$response.Content.CopyToAsync($fs).GetAwaiter().GetResult()
+        } finally {
+            $fs.Dispose()
+        }
         .\Write-Info.ps1 "Download completed successfully (HttpClient fallback)" -ForegroundColor Green
         return $true
     }
@@ -42,6 +106,7 @@ Function Get-RemoteFileViaHttpClient {
         return $false
     }
     finally {
+        if ($response) { $response.Dispose() }
         if ($client) { $client.Dispose() }
     }
 }

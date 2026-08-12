@@ -78,7 +78,7 @@ var dcBootstrap = replace(replace(replace(replace(replace(replace(replace(
   '__PACKAGE_URL__', domainPackageZipUrl),
   '__PACKAGE_HOST__', packageHost),
   '__PASSWORD_B64__', base64(adminPassword))
-var dcCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\domain-dc-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(dcBootstrap)}\'))); & \'C:\\domain-dc-bootstrap.ps1\'; exit $LASTEXITCODE"'
+var dcCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\domain-dc-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(dcBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\domain-dc-bootstrap.ps1\'; exit $LASTEXITCODE"'
 
 var dcImageRef = !empty(dcCustomImageId) ? {
   id: dcCustomImageId

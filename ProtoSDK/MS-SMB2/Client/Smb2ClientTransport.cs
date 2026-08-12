@@ -440,6 +440,20 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public void SendIoctlPayload(CtlCode_Values code, byte[] payload)
         {
+            SendIoctlPayload(code, payload, IOCTL_DEFAULT_MAX_OUTPUT_RESPONSE);
+        }
+
+        /// <summary>
+        /// Send an IOCTL request with an explicit MaxOutputResponse value.
+        /// This allows callers to control the maximum output buffer size the server is allowed to return,
+        /// which is required to exercise output-buffer boundary behaviors (for example FSCTL_GET_DFS_REFERRALS
+        /// returning STATUS_BUFFER_OVERFLOW when the referral output buffer is too small).
+        /// </summary>
+        /// <param name="code">The FSCTL/IOCTL control code.</param>
+        /// <param name="payload">The input payload to send.</param>
+        /// <param name="maxOutputResponse">The maximum number of bytes the server is allowed to return for the output data.</param>
+        public void SendIoctlPayload(CtlCode_Values code, byte[] payload, uint maxOutputResponse)
+        {
             if (this.client == null)
             {
                 throw new InvalidOperationException("The transport is not connected.");
@@ -479,7 +493,7 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
             }
 
             request.PayLoad.MaxInputResponse = IOCTL_DEFAULT_MAX_INPUT_RESPONSE;
-            request.PayLoad.MaxOutputResponse = IOCTL_DEFAULT_MAX_OUTPUT_RESPONSE;
+            request.PayLoad.MaxOutputResponse = maxOutputResponse;
             request.PayLoad.Flags = IOCTL_Request_Flags_Values.SMB2_0_IOCTL_IS_FSCTL;
 
             ioctlRequestMessageIds.Enqueue(request.Header.MessageId);
@@ -488,12 +502,26 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
 
         public void ExpectIoctlPayload(out uint status, out byte[] payload)
         {
+            ExpectIoctlPayload(out status, out payload, out _);
+        }
+
+        /// <summary>
+        /// Wait for an IOCTL response and additionally expose the OutputCount field of the response.
+        /// OutputCount is asserted independently from the payload by boundary tests
+        /// (for example verifying that a too-small FSCTL_GET_DFS_REFERRALS buffer yields OutputCount == 0).
+        /// </summary>
+        /// <param name="status">The status of the response.</param>
+        /// <param name="payload">The output data of the response, or null when OutputCount is 0.</param>
+        /// <param name="outputCount">The OutputCount field of the IOCTL response.</param>
+        public void ExpectIoctlPayload(out uint status, out byte[] payload, out uint outputCount)
+        {
             if (this.client == null)
             {
                 throw new InvalidOperationException("The transport is not connected.");
             }
             Smb2IOCtlResponsePacket response = client.ExpectPacket<Smb2IOCtlResponsePacket>(ioctlRequestMessageIds.Dequeue());
 
+            outputCount = response.PayLoad.OutputCount;
             payload = null;
             if (response.PayLoad.OutputCount > 0)
             {
@@ -658,6 +686,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         }
 
         /// <summary>
+        /// Send a DFS referral request (FSCTL_GET_DFS_REFERRALS[_EX]) with an explicit MaxOutputResponse value.
+        /// Used to exercise the referral output-buffer boundary (STATUS_BUFFER_OVERFLOW when the buffer is too small).
+        /// </summary>
+        /// <param name="payload">The DFSC payload in byte array.</param>
+        /// <param name="isEX">Whether the payload contains a REQ_GET_DFS_REFERRAL_EX message.</param>
+        /// <param name="maxOutputResponse">The maximum number of bytes the server is allowed to return for the output data.</param>
+        public void SendDfscPayload(byte[] payload, bool isEX, uint maxOutputResponse)
+        {
+            SendIoctlPayload((isEX) ? CtlCode_Values.FSCTL_DFS_GET_REFERRALS_EX : CtlCode_Values.FSCTL_DFS_GET_REFERRALS, payload, maxOutputResponse);
+        }
+
+        /// <summary>
         /// Wait for the Dfs response packet from server.
         /// </summary>
         /// <param name="status">The status of response</param>
@@ -667,6 +707,18 @@ namespace Microsoft.Protocols.TestTools.StackSdk.FileAccessService.Smb2
         public override void ExpectDfscPayload(TimeSpan timeout, out uint status, out byte[] payload)
         {
             ExpectIoctlPayload(out status, out payload);
+        }
+
+        /// <summary>
+        /// Wait for a DFS referral response and additionally expose the OutputCount field of the response.
+        /// </summary>
+        /// <param name="timeout">The pending time to get server's response.</param>
+        /// <param name="status">The status of the response.</param>
+        /// <param name="payload">RESP_GET_DFS_REFERRAL structure in byte array, or null when OutputCount is 0.</param>
+        /// <param name="outputCount">The OutputCount field of the IOCTL response.</param>
+        public void ExpectDfscPayload(TimeSpan timeout, out uint status, out byte[] payload, out uint outputCount)
+        {
+            ExpectIoctlPayload(out status, out payload, out outputCount);
         }
 
         #endregion

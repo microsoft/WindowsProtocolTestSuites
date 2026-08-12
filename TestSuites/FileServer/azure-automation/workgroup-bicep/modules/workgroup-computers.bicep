@@ -134,8 +134,8 @@ var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(repla
   '__PACKAGE_URL__', dscPackageZipUrl),
   '__PACKAGE_HOST__', packageHost),
   '__PASSWORD_B64__', base64(adminPassword))
-var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\workgroup-driver-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(driverBootstrap)}\'))); & \'C:\\workgroup-driver-bootstrap.ps1\'; exit $LASTEXITCODE"'
-var sutCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\workgroup-sut-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(sutBootstrap)}\'))); & \'C:\\workgroup-sut-bootstrap.ps1\'; exit $LASTEXITCODE"'
+var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\workgroup-driver-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(driverBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\workgroup-driver-bootstrap.ps1\'; exit $LASTEXITCODE"'
+var sutCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\workgroup-sut-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(sutBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\workgroup-sut-bootstrap.ps1\'; exit $LASTEXITCODE"'
 
 var driverWindowsOffer = startsWith(driverOsVersion, 'win10-') ? 'Windows-10' : 'Windows-11'
 var driverImageRef = !empty(driverCustomImageId) ? {

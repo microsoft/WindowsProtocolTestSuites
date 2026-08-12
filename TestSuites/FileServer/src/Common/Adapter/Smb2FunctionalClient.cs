@@ -24,6 +24,15 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
     public delegate void ResponseChecker<T>(Packet_Header responseHeader, T response);
 
     /// <summary>
+    /// Delegate to observe each SESSION_SETUP response as it is received, including continuation
+    /// responses with STATUS_MORE_PROCESSING_REQUIRED and the final response.
+    /// </summary>
+    /// <param name="responseHeader">Response header to be observed</param>
+    /// <param name="response">Response payload to be observed</param>
+    /// <param name="serverGssToken">Server GSS token returned in the response security buffer</param>
+    public delegate void SessionSetupResponseObserver(Packet_Header responseHeader, SESSION_SETUP_Response response, byte[] serverGssToken);
+
+    /// <summary>
     /// Delegate to generate message id
     /// </summary>
     /// <returns></returns>
@@ -811,7 +820,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SESSION_SETUP_Request_SecurityMode_Values securityMode = SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
             SESSION_SETUP_Request_Flags sessionSetupFlags = SESSION_SETUP_Request_Flags.NONE,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            SessionSetupResponseObserver observer = null)
         {
             return SessionSetup(
                 Packet_Header_Flags_Values.NONE,
@@ -823,7 +833,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 serverName,
                 credential,
                 useServerGssToken,
-                checker: checker);
+                checker: checker,
+                observer: observer);
         }
 
         public uint SessionSetup(
@@ -834,7 +845,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool useServerGssToken,
             SESSION_SETUP_Request_SecurityMode_Values securityMode,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            SessionSetupResponseObserver observer = null)
         {
             return SessionSetup(
                 headerFlags,
@@ -846,7 +858,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 serverName,
                 credential,
                 useServerGssToken,
-                checker: checker);
+                checker: checker,
+                observer: observer);
         }
 
         public uint AlternativeChannelSessionSetup(
@@ -858,7 +871,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SESSION_SETUP_Request_SecurityMode_Values securityMode = SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
             ResponseChecker<SESSION_SETUP_Response> checker = null,
-            bool invalidToken = false)
+            bool invalidToken = false,
+            SessionSetupResponseObserver observer = null)
         {
             #region Check Applicability
             // According to TD, server must support signing when it supports multichannel.
@@ -886,7 +900,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 credential,
                 useServerGssToken,
                 checker: checker,
-                invalidToken: invalidToken);
+                invalidToken: invalidToken,
+                observer: observer);
         }
 
         public uint ReconnectSessionSetup(
@@ -898,7 +913,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             SESSION_SETUP_Request_SecurityMode_Values securityMode = SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
             SESSION_SETUP_Request_Flags sessionSetupFlags = SESSION_SETUP_Request_Flags.NONE,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            SessionSetupResponseObserver observer = null)
         {
             return SessionSetup(
                 Packet_Header_Flags_Values.NONE,
@@ -910,7 +926,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 serverName,
                 credential,
                 useServerGssToken,
-                checker: checker);
+                checker: checker,
+                observer: observer);
         }
 
         public uint ReconnectSessionSetup(
@@ -921,7 +938,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool useServerGssToken,
             SESSION_SETUP_Request_SecurityMode_Values securityMode = SESSION_SETUP_Request_SecurityMode_Values.NEGOTIATE_SIGNING_ENABLED,
             SESSION_SETUP_Request_Capabilities_Values capabilities = SESSION_SETUP_Request_Capabilities_Values.GLOBAL_CAP_DFS,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            SessionSetupResponseObserver observer = null)
         {
             return SessionSetup(
                 Packet_Header_Flags_Values.NONE,
@@ -933,7 +951,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 serverName,
                 credential,
                 useServerGssToken,
-                checker: checker);
+                checker: checker,
+                observer: observer);
         }
 
         public uint SessionSetup(
@@ -945,7 +964,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             AccountCredential credential,
             bool useServerGssToken,
             bool isMultipleChannelSupported = true,
-            ResponseChecker<SESSION_SETUP_Response> checker = null)
+            ResponseChecker<SESSION_SETUP_Response> checker = null,
+            SessionSetupResponseObserver observer = null)
         {
             return SessionSetup(
                 headerFlags,
@@ -959,7 +979,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                 useServerGssToken,
                 false,
                 isMultipleChannelSupported,
-                checker);
+                checker,
+                observer: observer);
         }
 
         public uint LogOff(ResponseChecker<LOGOFF_Response> checker = null)
@@ -3208,7 +3229,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
             bool allowPartialAuthentication = false,
             bool isMultipleChannelSupported = true,
             ResponseChecker<SESSION_SETUP_Response> checker = null,
-            bool invalidToken = false)
+            bool invalidToken = false,
+            SessionSetupResponseObserver observer = null)
         {
             Packet_Header header;
             SESSION_SETUP_Response sessionSetupResponse;
@@ -3261,6 +3283,8 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.Common.Adapter
                     out serverGssToken,
                     out header,
                     out sessionSetupResponse);
+
+                observer?.Invoke(header, sessionSetupResponse, serverGssToken);
 
                 if ((status == Smb2Status.STATUS_MORE_PROCESSING_REQUIRED || status == Smb2Status.STATUS_SUCCESS) &&
                     serverGssToken != null && serverGssToken.Length > 0)

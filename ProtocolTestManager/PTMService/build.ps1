@@ -21,7 +21,7 @@ if (Test-Path -Path $OutDir) {
     Get-ChildItem $OutDir -Recurse | Remove-Item -Recurse -Force
 }
 
-dotnet publish "$TestSuiteRoot/ProtocolTestManager/PTMService/PTMService.sln" -c $Configuration -o $OutDir
+dotnet publish "$InvocationPath/PTMService/PTMService.csproj" -c $Configuration -o $OutDir
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Failed to build PTMService"
     exit 1
