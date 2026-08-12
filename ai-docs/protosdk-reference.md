@@ -91,6 +91,8 @@ The most feature-rich protocol implementation in the SDK.
 
 **Compound requests:** `Smb2CompoundPacket` wraps multiple `Smb2SinglePacket` instances. The client handles MessageId registration for each embedded packet.
 
+**IOCTL output-buffer control:** `Smb2ClientTransport` exposes `SendIoctlPayload(code, payload, maxOutputResponse)` and `ExpectIoctlPayload(out status, out payload, out outputCount)` (plus the DFSC-specific `SendDfscPayload(payload, isEX, maxOutputResponse)` / `ExpectDfscPayload(..., out outputCount)`). Reuse these — instead of the default 4096-byte `MaxOutputResponse` overloads — to exercise output-buffer boundaries such as `FSCTL_GET_DFS_REFERRALS` returning `STATUS_BUFFER_OVERFLOW` with `OutputCount == 0` when the referral buffer is too small (MS-SMB2 3.3.5.15.2, Appendix A note 384). `DfscClient` surfaces the same capability via `SendAndRecieveDFSCReferralMessages(out status, out outputCount, timeout, maxOutputResponse, ...)`.
+
 ### MS-RDPBCGR (`ProtoSDK/MS-RDPBCGR/`)
 
 **Namespace:** `Microsoft.Protocols.TestTools.StackSdk.RemoteDesktop.Rdpbcgr`

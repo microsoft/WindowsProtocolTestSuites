@@ -109,6 +109,70 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         }
 
         /// <summary>
+        /// Connect to the DC or DFS server without sending any referral request.
+        /// Use this together with <see cref="SendReferralWithMaxOutput"/> to send multiple referral
+        /// requests over the same connection (for example, to verify a connection remains usable
+        /// after a STATUS_BUFFER_OVERFLOW response).
+        /// </summary>
+        /// <param name="client">Client instance.</param>
+        /// <param name="dcOrDFSServer">True to connect to the DC, false to connect to the DFS server.</param>
+        public void Connect(DfscClient client, bool dcOrDFSServer)
+        {
+            string serverName = dcOrDFSServer ? testConfig.DCServerName : testConfig.DFSServerName;
+            baseTestSite.Log.Add(LogEntryKind.Debug, "Connecting to server {0}", serverName);
+            client.Connect(serverName, testConfig.ClientComputerName, testConfig.DomainName, testConfig.UserName, testConfig.UserPassword, testConfig.Timeout,
+                testConfig.DefaultSecurityPackage, testConfig.UseServerGssToken, testConfig.TransportPreferredSMB);
+        }
+
+        /// <summary>
+        /// Send a DFS referral request over an already-connected client using an explicit MaxOutputResponse,
+        /// and return the response together with the OutputCount field of the IOCTL response.
+        /// The client MUST already be connected (see <see cref="Connect"/>); this method does not reconnect,
+        /// so it can be used to reuse a single connection across multiple requests. SMB2/SMB3 transport only.
+        /// </summary>
+        /// <param name="status">Returned status from server.</param>
+        /// <param name="outputCount">Returned OutputCount field of the IOCTL response.</param>
+        /// <param name="client">Client instance (already connected).</param>
+        /// <param name="entryType">Version of DFS referral request.</param>
+        /// <param name="reqPath">The requested DFS path to resolve.</param>
+        /// <param name="maxOutputResponse">The maximum number of bytes the server is allowed to return for the output data.</param>
+        /// <param name="isEx">The request is REQ_GET_DFS_REFERRAL_EX or REQ_GET_DFS_REFERRAL.</param>
+        /// <param name="containSiteName">If REQ_GET_DFS_REFERRAL_EX contains "SiteName" field.</param>
+        /// <returns>The response packet.</returns>
+        public DfscReferralResponsePacket SendReferralWithMaxOutput(
+            out uint status,
+            out uint outputCount,
+            DfscClient client,
+            ReferralEntryType_Values entryType,
+            string reqPath,
+            uint maxOutputResponse,
+            bool isEx = false,
+            bool containSiteName = false)
+        {
+            baseTestSite.Log.Add(LogEntryKind.Debug, "Request path is {0}, MaxOutputResponse is {1}", reqPath, maxOutputResponse);
+
+            DfscReferralRequestPacket reqPacket = null;
+            DfscReferralRequestEXPacket reqPacketEX = null;
+            if (isEx)
+            {
+                if (containSiteName)
+                {
+                    reqPacketEX = client.CreateDfscReferralRequestPacketEX((ushort)entryType, reqPath, REQ_GET_DFS_REFERRAL_RequestFlags.SiteName, testConfig.SiteName);
+                }
+                else
+                {
+                    reqPacketEX = client.CreateDfscReferralRequestPacketEX((ushort)entryType, reqPath, REQ_GET_DFS_REFERRAL_RequestFlags.None);
+                }
+            }
+            else
+            {
+                reqPacket = client.CreateDfscReferralRequestPacket((ushort)entryType, reqPath);
+            }
+
+            return client.SendAndRecieveDFSCReferralMessages(out status, out outputCount, testConfig.Timeout, maxOutputResponse, reqPacketEX, reqPacket);
+        }
+
+        /// <summary>
         /// This function is only used to verify sysvol/root/link referral response.
         /// It can not verify the response of Domain/DC referral request.
         /// </summary>

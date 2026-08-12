@@ -1383,6 +1383,134 @@ This is used to test SMB2 common user scenarios.
 |**Cleanup**||
 
 
+|||
+|---|---|
+|**Test ID**|PersistentHandle_Reconnect_ViaCreateGuid|
+|**Description**|Test reconnect of a persistent handle that is resumed through the CreateGuid lookup path when the FileId.Persistent lookup fails, per [MS-SMB2] v87.0 section 3.3.5.9.12|
+|**Prerequisites**|The server supports SMB 3.0, persistent handles, and a Continuous Availability (CA) share|
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request to a Continuous Availability (CA) share|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request for exclusive open with PersistentHandle create context|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnect|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 create context that contains the correct CreateGuid and the SMB2_DHANDLE_FLAG_PERSISTENT bit, but an invalid FileId.Persistent so the FileId.Persistent lookup fails and the server resumes the handle through the CreateGuid lookup|
+||Server sends CREATE response with STATUS_SUCCESS|
+||Client sends READ request|
+||Server sends READ response|
+||Client sends CLOSE request|
+||Server sends CLOSE response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**|Client disconnects|
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_Reconnect_ViaCreateGuid_CreateGuidNotFound|
+|**Description**|Verify that the server returns STATUS_OBJECT_NAME_NOT_FOUND when the FileId.Persistent lookup fails and the subsequent CreateGuid lookup also fails, per [MS-SMB2] v87.0 section 3.3.5.9.12 Step 3.3|
+|**Prerequisites**|The server supports SMB 3.0, persistent handles, and a Continuous Availability (CA) share|
+|**Test Execution Steps**|Client connects to a CA share and opens a file with a persistent handle|
+||Server returns the persistent handle and the client records its FileId and CreateGuid|
+||Client writes data and disconnects|
+||Another client reconnects the previous session|
+||Client sends SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 with SMB2_DHANDLE_FLAG_PERSISTENT, an invalid FileId.Persistent, and an unknown CreateGuid|
+||Server returns STATUS_OBJECT_NAME_NOT_FOUND|
+|**Cleanup**|Client reconnects the persistent handle with the original FileId and CreateGuid, closes it, and disconnects|
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_Reconnect_ViaCreateGuid_WithoutPersistentFlag|
+|**Description**|Verify that the server returns STATUS_OBJECT_NAME_NOT_FOUND when the FileId.Persistent lookup fails and SMB2_DHANDLE_FLAG_PERSISTENT is not present, per [MS-SMB2] v87.0 section 3.3.5.9.12 Step 3.4|
+|**Prerequisites**|The server supports SMB 3.0, persistent handles, and a Continuous Availability (CA) share|
+|**Test Execution Steps**|Client connects to a CA share and opens a file with a persistent handle|
+||Client writes data and disconnects|
+||Another client reconnects the previous session|
+||Client sends SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 with the correct CreateGuid and an invalid FileId.Persistent, but without SMB2_DHANDLE_FLAG_PERSISTENT|
+||Server returns STATUS_OBJECT_NAME_NOT_FOUND|
+|**Cleanup**|Client reconnects the persistent handle with the original FileId, correct CreateGuid, and SMB2_DHANDLE_FLAG_PERSISTENT, then closes it and disconnects|
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_Reconnect_ViaCreateGuid_SessionNotNull|
+|**Description**|Verify that the server returns STATUS_OBJECT_NAME_NOT_FOUND when the CreateGuid lookup succeeds but Open.Session is not NULL, per [MS-SMB2] v87.0 section 3.3.5.9.12 Step 3.2.3|
+|**Prerequisites**|The server supports SMB 3.0, persistent handles, and a Continuous Availability (CA) share|
+|**Test Execution Steps**|Client connects to a CA share and opens a file with a persistent handle|
+||The original client remains connected so Open.Session remains non-NULL|
+||Another client with the same ClientGuid and user connects to the CA share|
+||The second client sends SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 with the correct CreateGuid, SMB2_DHANDLE_FLAG_PERSISTENT, and an invalid FileId.Persistent|
+||Server returns STATUS_OBJECT_NAME_NOT_FOUND|
+|**Cleanup**|The original client closes the persistent handle and both clients disconnect|
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_Reconnect_ViaCreateGuid_WithDifferentDurableOwner|
+|**Description**|Verify that the server returns STATUS_ACCESS_DENIED when the CreateGuid lookup succeeds but the reconnecting session represents a different durable owner, per [MS-SMB2] v87.0 section 3.3.5.9.12 Step 3.2.6|
+|**Prerequisites**|The server supports SMB 3.0, persistent handles, a Continuous Availability (CA) share, and two test accounts|
+|**Test Execution Steps**|The primary account opens a file on a CA share with a persistent handle, writes data, and disconnects|
+||Another client connects using the secondary account|
+||The secondary account sends SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 with the correct CreateGuid, SMB2_DHANDLE_FLAG_PERSISTENT, and an invalid FileId.Persistent|
+||Server returns STATUS_ACCESS_DENIED|
+|**Cleanup**|A client using the primary account reconnects the persistent handle with the original FileId and closes it|
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_Reconnect_ViaCreateGuid_WithDifferentLeaseKeyV1|
+|**Description**|Verify that the server returns STATUS_OBJECT_NAME_NOT_FOUND when a Lease V1 key in the CreateGuid reconnect request does not match the lease key recreated during resume, per [MS-SMB2] v87.0 section 3.3.5.9.12 Step 3.2.5|
+|**Prerequisites**|The server supports SMB 3.0, persistent handles, leasing, and a Continuous Availability (CA) share|
+|**Test Execution Steps**|Client opens a file on a CA share with a persistent handle and a Lease V1, records the lease key, writes data, and disconnects|
+||Another client reconnects the previous session|
+||Client sends SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 with the correct CreateGuid, SMB2_DHANDLE_FLAG_PERSISTENT, an invalid FileId.Persistent, and a Lease V1 context containing a different LeaseKey|
+||Server returns STATUS_OBJECT_NAME_NOT_FOUND|
+|**Cleanup**|Client reconnects with the original FileId and matching LeaseKey, closes the handle, and disconnects|
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_Reconnect_ViaCreateGuid_WithDifferentLeaseKeyV2|
+|**Description**|Verify that the server returns STATUS_OBJECT_NAME_NOT_FOUND when a Lease V2 key in the CreateGuid reconnect request does not match the lease key recreated during resume, per [MS-SMB2] v87.0 section 3.3.5.9.12 Step 3.2.4|
+|**Prerequisites**|The server supports SMB 3.0, persistent handles, leasing, directory leasing, and a Continuous Availability (CA) share|
+|**Test Execution Steps**|Client opens a file on a CA share with a persistent handle and a Lease V2, records the lease key and epoch, writes data, and disconnects|
+||Another client reconnects the previous session|
+||Client sends SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 with the correct CreateGuid, SMB2_DHANDLE_FLAG_PERSISTENT, an invalid FileId.Persistent, and a Lease V2 context containing a different LeaseKey|
+||Server returns STATUS_OBJECT_NAME_NOT_FOUND|
+|**Cleanup**|Client reconnects with the original FileId and matching LeaseKey, closes the handle, and disconnects|
+
+
+|||
+|---|---|
+|**Test ID**|PersistentHandle_Reconnect_ViaCreateGuid_WithoutReconnectLeaseContext|
+|**Description**|Verify that the Step 2 lease-presence validations do not apply to a persistent handle resumed through the CreateGuid path and that the lease is recreated through the RKF mechanism|
+|**Prerequisites**|The server supports SMB 3.0, persistent handles, leasing, and a Continuous Availability (CA) share|
+|**Test Execution Steps**|Client opens a file on a CA share with a persistent handle and a Lease V1, records the lease key and granted lease state, writes data, and disconnects|
+||Another client reconnects the previous session|
+||Client sends SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 with the correct CreateGuid, SMB2_DHANDLE_FLAG_PERSISTENT, and an invalid FileId.Persistent, without an SMB2_CREATE_REQUEST_LEASE context|
+||Server returns STATUS_SUCCESS and an SMB2_CREATE_RESPONSE_LEASE context containing the recreated LeaseKey and LeaseState|
+||Client reads the previously written data and closes the handle|
+|**Cleanup**|Client disconnects|
+
+
+**Coverage note for [MS-SMB2] section 3.3.5.9.12 Step 3.2:** The validation that `Open.CreateGuid` differs after a successful CreateGuid-keyed lookup cannot be independently constructed by a protocol client because the lookup and validation use the same CreateGuid value. The `Open.IsDurable`/`Open.IsResilient` validation also cannot be isolated with `Open.Session == NULL` because a non-durable, non-resilient Open is closed when its connection is lost. Those two server-internal consistency conditions require implementation-level fault injection rather than a black-box protocol test. The externally constructible CreateGuid resume and rejection behaviors are covered by the cases above.
+
+
 #### <a name="3.1.16"> Oplock
 
 ##### <a name="3.1.16.1"> Scenario
@@ -2085,7 +2213,7 @@ This is used to test SMB2 common user scenarios.
 
 ##### <a name="3.1.20.1"> Test Case
 
-|||
+| Field | Details |
 |---|---|
 |**Test ID**|BVT_Signing|
 |**Description**|This test case is designed to test whether server can handle NEGOTIATE and SESSION_SETUP requests with NEGOTIATE_SIGNING_REQUIRED set.|
@@ -2096,7 +2224,9 @@ This is used to test SMB2 common user scenarios.
 ||Server sends SESSION_SETUP response|
 ||According to the status code of last step, client may send more SESSION_SETUP request as needed|
 |**Cleanup**||
-|--------------------------|--------------------------------------------------------------------------------------------------------------|
+
+| Field | Details |
+|---|---|
 | **Test ID**              | Signing_VerifySignatureWhenEncrypted                                                                   |
 | **Description**          | This test case is designed to test whether server set the Signature field to zero in Encrypted message.      |
 | **Prerequisites**        |                                                                                                              |
@@ -2117,7 +2247,8 @@ This is used to test SMB2 common user scenarios.
 |                          | 15. Server sends LOGOFF response                                                                             |
 | **Cleanup**              ||
 
-|--------------------------|--------------------------------------------------------------------------------------------------------------|
+| Field | Details |
+|---|---|
 | **Test ID**              | Signing_VerifyAesGmacSigning																												   |
 | **Description**          | This test case is designed to test whether outgoing and incoming messages are correctly signed and verified using aes-gmac signing algorithm. |
 | **Prerequisites**        |																																			   |
@@ -2132,6 +2263,39 @@ This is used to test SMB2 common user scenarios.
 |                          | 13. Server sends TREE\_DISCONNECT response																									   |
 |                          | 14. Client sends LOGOFF request																											   |
 |                          | 15. Server sends LOGOFF response																											   |
+| **Cleanup**              ||
+
+###### Invalid-signature rejection cases
+
+**Test IDs**
+
+- `Signing_WrongSessionKey_Rejected_Smb2002_HmacSha256`
+- `Signing_WrongSessionKey_Rejected_Smb21_HmacSha256`
+- `Signing_WrongSessionKey_Rejected_Smb30_AesCmac`
+- `Signing_WrongSessionKey_Rejected_Smb302_AesCmac`
+- `Signing_WrongSessionKey_Rejected_Smb311_HmacSha256`
+- `Signing_WrongSessionKey_Rejected_Smb311_AesCmac`
+- `Signing_WrongSessionKey_Rejected_Smb311_AesGmac`
+
+| Field | Details |
+|---|---|
+| **Description**          | These test cases verify that when the server receives a signed, unencrypted SMB2 request whose signature fails verification, it fails the request with STATUS_ACCESS_DENIED per MS-SMB2 3.3.5.2.4. A later disconnect is only an optional post-response action; for a Windows SUT the connection is additionally verified to be retained. |
+| **Prerequisites**        | For the Windows SUT coverage documented here, the supported targets are Windows Server 2022 and Windows Server 2025. `SendSignedRequest` is `true` and global encryption is not enabled (signed, unencrypted session). SMB 3.1.1 signing-algorithm cases require the SUT to return `SMB2_SIGNING_CAPABILITIES`, and the applicable algorithm must be listed in the authoritative `SupportedSigningAlgorithms` test configuration. |
+| **Dialect/signing cases** | SMB 2.0.2 / HMAC-SHA256; SMB 2.1 / HMAC-SHA256; SMB 3.0 / AES-CMAC; SMB 3.0.2 / AES-CMAC; SMB 3.1.1 / HMAC-SHA256; SMB 3.1.1 / AES-CMAC; SMB 3.1.1 / AES-GMAC. Each combination is an independently discoverable test case. Unsupported dialect or signing-algorithm cases are marked not applicable from authoritative test configuration. |
+| **Transport evidence**   | After normal signing, the test flips one signature byte and verifies that the complete 16-byte mutated signature, SMB2 protocol identifier, ECHO command, SMB2_FLAGS_SIGNED flag, and MessageId are present in the serialized payload after the underlying transport accepts it. The log records the dialect, effective signing algorithm, MessageId, and SHA-256 payload digest without logging session/signing keys. The rejection response MessageId must match the malformed request. |
+| **Pass criteria**        | The mutation callback, completed transport send, serialized mutation evidence, correlated server response, and exact STATUS_ACCESS_DENIED status are assertions. A timeout, a local serialization/send failure, or a server closure before the response fails the case. A disconnect after the rejection response is optional; connection retention is asserted only when the SUT is authoritatively configured as Windows. ECHO is used so the negative request has no operation side effect and the case does not use encryption. |
+| **Traceability**         | MS-SMB2 3.3.5.2.4 (signed unencrypted request verification and STATUS_ACCESS_DENIED); MS-SMB2 Appendix A product note 263 (Windows does not disconnect for a mismatched signature). |
+| **Test Execution Steps** | 1.  Client sends NEGOTIATE request with NEGOTIATE_SIGNING_REQUIRED flag set                                  |
+|                          | 2.  Server sends NEGOTIATE response                                                                          |
+|                          | 3.  Client sends SESSION_SETUP request with NEGOTIATE_SIGNING_REQUIRED flag set                             |
+|                          | 4.  Server sends SESSION_SETUP response                                                                      |
+|                          | 5.  Client sends TREE_CONNECT request to a non-encrypted share                                              |
+|                          | 6.  Client sends a correctly signed ECHO request as a control and expects STATUS_SUCCESS                     |
+|                          | 7.  Client constructs the same ECHO request and deterministically corrupts one signature byte after normal signing, then transmits it |
+|                          | 8.  Server MUST fail the malformed request with STATUS_ACCESS_DENIED (a connection closure without a response is treated as a failure of the required behavior; a client-side send failure is distinguished from server closure) |
+|                          | 9.  For a Windows SUT, client sends a valid signed ECHO follow-up and expects STATUS_SUCCESS to prove the connection was retained; on non-Windows implementations, a post-response disconnect is optional |
+|                          | 10. Client sends TREE_DISCONNECT request (best-effort on non-Windows implementations)                       |
+|                          | 11. Client sends LOGOFF request (best-effort on non-Windows implementations)                                |
 | **Cleanup**              ||
 
 #### <a name="3.1.21"> TreeMgmt
@@ -5043,7 +5207,7 @@ If the server disconnect the connection, the reconnect will be successful.
 |||
 |---|---|
 |**Test ID**|DurableHandleV2_Reconnect_WithLeaseV1_WithDifferentFileName|
-|**Description**|Test reconnect with DurableHandleV2 and LeaseV1 context, but the file name is different will fail with STATUS_INVALID_PARAMETER.|
+|**Description**|Test reconnect with DurableHandleV2 and LeaseV1 context, but the file name is different will fail with STATUS_OBJECT_NAME_NOT_FOUND.|
 |**Prerequisites**||
 |**Test Execution Steps**|Client sends NEGOTIATE request|
 ||Server sends NEGOTIATE response|
@@ -5064,7 +5228,103 @@ If the server disconnect the connection, the reconnect will be successful.
 ||Server sends SESSION_SETUP response|
 ||According to the status code of last step, client may send more SESSION_SETUP request as needed|
 ||Client sends CREATE request for exclusive open with DurableHandleReconnectV2 and LeaseV1 create context but to with a different filename|
-||Server sends STATUS_INVALID_PARAMETER response|
+||Server sends STATUS_OBJECT_NAME_NOT_FOUND response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV2_Reconnect_IncludeDurableHandleRequest|
+|**Description**|Test reconnect with a correct FileId.Persistent in SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 while also including SMB2_CREATE_DURABLE_HANDLE_REQUEST will fail with STATUS_OBJECT_NAME_NOT_FOUND, per [MS-SMB2] section 3.3.5.9.12.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 and requests a batch oplock|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnects|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 containing the correct FileId.Persistent and also SMB2_CREATE_DURABLE_HANDLE_REQUEST|
+||Server sends STATUS_OBJECT_NAME_NOT_FOUND response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV2_Reconnect_IncludeDurableHandleReconnect|
+|**Description**|Test reconnect with a correct FileId.Persistent in SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 while also including SMB2_CREATE_DURABLE_HANDLE_RECONNECT will fail with STATUS_OBJECT_NAME_NOT_FOUND, per [MS-SMB2] section 3.3.5.9.12.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 and requests a batch oplock|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnects|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 containing the correct FileId.Persistent and also SMB2_CREATE_DURABLE_HANDLE_RECONNECT|
+||Server sends STATUS_OBJECT_NAME_NOT_FOUND response|
+||Client sends TREE_DISCONNECT request|
+||Server sends TREE_DISCONNECT response|
+||Client sends LOGOFF request|
+||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|DurableHandleV2_Reconnect_IncludeDurableHandleRequestV2|
+|**Description**|Test reconnect with a correct FileId.Persistent in SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 while also including SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 will fail with STATUS_OBJECT_NAME_NOT_FOUND, per [MS-SMB2] section 3.3.5.9.12.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends TREE_CONNECT request|
+||Server sends TREE_CONNECT response|
+||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2 and requests a batch oplock|
+||Server sends CREATE response|
+||Client sends WRITE request|
+||Server sends WRITE response|
+||Client disconnects|
+||Create another client and the following requests are sent via this client|
+||Client sends NEGOTIATE request|
+||Server sends NEGOTIATE response|
+||Client sends SESSION_SETUP request|
+||Server sends SESSION_SETUP response|
+||According to the status code of last step, client may send more SESSION_SETUP request as needed|
+||Client sends CREATE request with SMB2_CREATE_DURABLE_HANDLE_RECONNECT_V2 containing the correct FileId.Persistent and also SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2|
+||Server sends STATUS_OBJECT_NAME_NOT_FOUND response|
 ||Client sends TREE_DISCONNECT request|
 ||Server sends TREE_DISCONNECT response|
 ||Client sends LOGOFF request|
@@ -11319,4 +11579,3 @@ The test cases are designed with below assumptions, and these terms will be used
 ||3. Client expects STATUS = STATUS_SUCCESS.|
 ||4. Disconnect and logoff.|
 |**Cleanup**|N/A|
-

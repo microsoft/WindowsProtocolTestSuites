@@ -277,6 +277,79 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.DFSC.TestSuite
         }
 
         /// <summary>
+        /// MS-SMB2 3.3.5.15.2 / Appendix A product note 384: when the output buffer supplied to
+        /// FSCTL_GET_DFS_REFERRALS is too small, Windows DFS fails the request with STATUS_BUFFER_OVERFLOW
+        /// and returns no referral data (OutputCount is 0 and no referral payload bytes are returned).
+        /// This is distinct from the generic base SMB2 data-relay branch, which copies overflow data returned
+        /// by DFS into the error response; that branch requires a provider that actually returns overflow data
+        /// and is not exercised here.
+        /// </summary>
+        [TestMethod]
+        [TestCategory(TestCategories.Dfsc)]
+        [TestCategory(TestCategories.DomainRequired)]
+        [TestCategory(TestCategories.NonSmb)]
+        [TestCategory(TestCategories.OutOfBoundary)]
+        [Description("Client sends a valid DFS root referral request to a Windows DFS server with a MaxOutputResponse smaller than the referral response size, and expects STATUS_BUFFER_OVERFLOW with zero output count and no referral payload.")]
+        public void RootReferral_BufferTooSmall_WindowsBehavior()
+        {
+            // Appendix A product note 384 describes Windows-specific behavior; assert it only when the SUT is
+            // authoritatively identified as a Windows platform.
+            BaseTestSite.Assume.IsTrue(TestConfig.IsWindowsPlatform,
+                "This test verifies Windows-specific DFS behavior (MS-SMB2 Appendix A product note 384) and requires a Windows DFS SUT.");
+
+            // Controlling MaxOutputResponse for the referral IOCTL requires the raw SMB2/SMB3 IOCTL path.
+            if (TestConfig.TransportPreferredSMB)
+            {
+                BaseTestSite.Assume.Inconclusive("This test requires SMB2/SMB3 transport to control MaxOutputResponse for FSCTL_GET_DFS_REFERRALS.");
+            }
+
+            // Use a valid control request so that malformed input cannot masquerade as the buffer boundary.
+            string reqPath = TestConfig.ValidRootPathStandalone;
+            const uint sufficientMaxOutput = 4096;
+            uint status;
+            uint outputCount;
+
+            // Connect once and reuse the same connection for all requests so the "session remains usable"
+            // assertion is meaningful.
+            utility.Connect(client, false);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends a valid v4 root referral request with sufficient output space to establish the referral response size.");
+            DfscReferralResponsePacket baselinePacket = utility.SendReferralWithMaxOutput(
+                out status, out outputCount, client, ReferralEntryType_Values.DFS_REFERRAL_V4, reqPath, sufficientMaxOutput);
+
+            BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status,
+                "The baseline root referral request should succeed. Actual status is {0}", Smb2Status.GetStatusCode(status));
+            BaseTestSite.Assume.IsNotNull(baselinePacket.Payload, "The baseline referral response should contain referral data.");
+            BaseTestSite.Assume.IsTrue(baselinePacket.Payload.Length > 1, "The baseline referral response must be large enough to define a smaller boundary buffer.");
+
+            uint referralResponseSize = (uint)baselinePacket.Payload.Length;
+            BaseTestSite.Log.Add(LogEntryKind.Debug, "The baseline referral response size is {0} bytes.", referralResponseSize);
+
+            // Repeat the same valid request on the same connection with MaxOutputResponse below the required size.
+            uint tooSmallMaxOutput = referralResponseSize - 1;
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client repeats the same valid v4 root referral request with MaxOutputResponse ({0}) below the required referral size ({1}).", tooSmallMaxOutput, referralResponseSize);
+            DfscReferralResponsePacket overflowPacket = utility.SendReferralWithMaxOutput(
+                out status, out outputCount, client, ReferralEntryType_Values.DFS_REFERRAL_V4, reqPath, tooSmallMaxOutput);
+
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Verify the server returns STATUS_BUFFER_OVERFLOW with zero output count and no referral payload.");
+            // Assert status, output count, and payload absence independently. Do not accept partial data for the Windows row.
+            BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_BUFFER_OVERFLOW, status,
+                "Windows DFS MUST fail the too-small referral request with STATUS_BUFFER_OVERFLOW. Actual status is {0}", Smb2Status.GetStatusCode(status));
+            BaseTestSite.Assert.AreEqual<uint>(0, outputCount,
+                "Windows DFS returns no data when the referral output buffer is too small, so OutputCount MUST be 0. Actual OutputCount is {0}", outputCount);
+            BaseTestSite.Assert.IsNull(overflowPacket.Payload,
+                "Windows DFS MUST NOT return any referral payload bytes when the output buffer is too small.");
+
+            // Verify the session remains usable after the STATUS_BUFFER_OVERFLOW response.
+            BaseTestSite.Log.Add(LogEntryKind.TestStep, "Client sends the valid v4 root referral request again on the same connection to verify the session remains usable.");
+            DfscReferralResponsePacket recoveryPacket = utility.SendReferralWithMaxOutput(
+                out status, out outputCount, client, ReferralEntryType_Values.DFS_REFERRAL_V4, reqPath, sufficientMaxOutput);
+            BaseTestSite.Assert.AreEqual(Smb2Status.STATUS_SUCCESS, status,
+                "The session should remain usable; the follow-up valid referral request should succeed. Actual status is {0}", Smb2Status.GetStatusCode(status));
+            utility.VerifyReferralResponse(ReferralResponseType.RootTarget, ReferralEntryType_Values.DFS_REFERRAL_V4, reqPath, TestConfig.RootTargetStandalone, recoveryPacket);
+        }
+
+        /// <summary>
         /// Client sends valid root or link referral request to DFS server, receives response and verifies response.
         /// </summary>
         /// <param name="entryType">Version of referral request</param>
