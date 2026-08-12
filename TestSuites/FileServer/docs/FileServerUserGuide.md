@@ -3450,7 +3450,17 @@ On how to use PTMCli to run test cases, please refer to this [guide](https://git
 
 #### Parallel FileServer execution
 
-Set **Common.PTF.LogProfileParserPatch.Enabled** to **true** in the PTM configuration to enable parallel FileServer execution. The same property enables the collision-safe PTF logging required when multiple test hosts run concurrently.
+In the PTM UI, set **Enable Parallel Test Execution** to **true**. This UI setting maps to the fully qualified `.ptfconfig` property **Common.PTF.LogProfileParserPatch.Enabled**.
+
+When editing the `.ptfconfig` file directly, set the **PTF.LogProfileParserPatch.Enabled** property in the **Common** group to **true**:
+
+```xml
+<Group name="Common">
+  <Property name="PTF.LogProfileParserPatch.Enabled" value="true" />
+</Group>
+```
+
+The property also enables the collision-safe PTF logging required when multiple test hosts run concurrently.
 
 PTM runs the selected tests in sequential stages that match the FileServer automation baseline:
 
