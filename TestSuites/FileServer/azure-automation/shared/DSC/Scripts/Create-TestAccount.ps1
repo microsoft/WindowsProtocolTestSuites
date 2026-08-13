@@ -296,8 +296,18 @@ if ($isDomainEnv -eq $true)
     }
 
     .\Write-Info.ps1 "Enable Guest account"
-    & net.exe user Guest /active:yes /Domain 2>&1 | .\Write-Info.ps1
-    & net.exe user Guest $password 2>&1 | .\Write-Info.ps1
+    try {
+        $guestPassword = ConvertTo-SecureString -String $password -AsPlainText -Force
+        $guestUser = Get-ADUser -Identity 'Guest' -ErrorAction Stop
+        Set-ADAccountPassword -Identity $guestUser.ObjectGUID -Reset `
+            -NewPassword $guestPassword -ErrorAction Stop
+        Enable-ADAccount -Identity $guestUser.ObjectGUID -ErrorAction Stop
+        Set-ADUser -Identity $guestUser.ObjectGUID -PasswordNeverExpires $true `
+            -CannotChangePassword $true -ErrorAction Stop
+        .\Write-Info.ps1 "[OK] Domain Guest account enabled" -ForegroundColor Green
+    } catch {
+        .\Write-Info.ps1 "[WARN] Failed to configure domain Guest account: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
 
     .\Write-Info.ps1 "Setting password never expires"
     dsquery user -samid * | dsmod user -pwdneverexpires yes -mustchpwd no 2>&1 | .\Write-Info.ps1
@@ -310,7 +320,10 @@ else
         .\Write-Info.ps1 "Create group: $($group.Group.GroupName)"
         $azGroupDN = $group.Group.GroupName
         try {
-            & net.exe localgroup $azGroupDN /ADD 2>&1 | .\Write-Info.ps1
+            if (-not (Get-LocalGroup -Name $azGroupDN -ErrorAction SilentlyContinue)) {
+                New-LocalGroup -Name $azGroupDN -ErrorAction Stop | Out-Null
+            }
+            .\Write-Info.ps1 "[OK] Local group '$azGroupDN' ready" -ForegroundColor Green
         } catch {
             .\Write-Info.ps1 "[WARN] Failed to create group '$azGroupDN': $($_.Exception.Message)" -ForegroundColor Yellow
         }
@@ -320,23 +333,43 @@ else
     {
         .\Write-Info.ps1 "Create user account: $($user.Username)"
         try {
-            & net.exe user $user.Username $user.Password /ADD 2>&1 | .\Write-Info.ps1
-            if ($LASTEXITCODE -ne 0) {
-                .\Write-Info.ps1 "[WARN] net.exe user failed for '$($user.Username)' (exit code $LASTEXITCODE)" -ForegroundColor Yellow
-                continue
+            $securePassword = ConvertTo-SecureString -String $user.Password -AsPlainText -Force
+            $localUser = Get-LocalUser -Name $user.Username -ErrorAction SilentlyContinue
+            if ($null -eq $localUser) {
+                $localUser = New-LocalUser -Name $user.Username -Password $securePassword `
+                    -AccountNeverExpires -PasswordNeverExpires -UserMayNotChangePassword `
+                    -ErrorAction Stop
+            } else {
+                Set-LocalUser -InputObject $localUser -Password $securePassword `
+                    -PasswordNeverExpires $true -UserMayChangePassword $false -ErrorAction Stop
+                Enable-LocalUser -InputObject $localUser -ErrorAction Stop
             }
+
             if($null -ne $user.Group)
             {
-                & net.exe localgroup $user.Group $user.Username /ADD 2>&1 | .\Write-Info.ps1
+                $isMember = @(Get-LocalGroupMember -Name $user.Group -ErrorAction Stop |
+                    Where-Object { $_.SID -eq $localUser.SID }).Count -gt 0
+                if (-not $isMember) {
+                    Add-LocalGroupMember -Name $user.Group -Member $localUser -ErrorAction Stop
+                }
             }
+            .\Write-Info.ps1 "[OK] Local user '$($user.Username)' ready" -ForegroundColor Green
         } catch {
             .\Write-Info.ps1 "[WARN] Failed to create user '$($user.Username)': $($_.Exception.Message)" -ForegroundColor Yellow
         }
     }
 
     .\Write-Info.ps1 "Enable Guest account"
-    & net.exe user Guest /active:yes 2>&1 | .\Write-Info.ps1
-    & net.exe user Guest $password 2>&1 | .\Write-Info.ps1
+    try {
+        $guestPassword = ConvertTo-SecureString -String $password -AsPlainText -Force
+        $guestUser = Get-LocalUser -Name 'Guest' -ErrorAction Stop
+        Set-LocalUser -InputObject $guestUser -Password $guestPassword `
+            -PasswordNeverExpires $true -UserMayChangePassword $false -ErrorAction Stop
+        Enable-LocalUser -InputObject $guestUser -ErrorAction Stop
+        .\Write-Info.ps1 "[OK] Guest account enabled" -ForegroundColor Green
+    } catch {
+        .\Write-Info.ps1 "[WARN] Failed to configure Guest account: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
 
     .\Write-Info.ps1 "Setting password never expires"
     Get-CimInstance -ClassName Win32_UserAccount -Filter "Domain='$env:ComputerName'" | ForEach-Object { Set-CimInstance -InputObject $_ -Property @{PasswordExpires = $false} }

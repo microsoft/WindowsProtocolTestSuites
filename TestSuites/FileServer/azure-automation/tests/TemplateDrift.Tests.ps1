@@ -38,9 +38,17 @@ function Get-CommittedGeneratorVersion {
     return $null
 }
 
-function Normalize-TemplateText {
+function ConvertTo-NormalizedTemplateText {
     param([string]$Text)
     return (($Text -replace "`r`n", "`n").TrimEnd())
+}
+
+function ConvertTo-NormalizedOutputJson {
+    param([object]$Outputs)
+
+    $json = $Outputs | ConvertTo-Json -Depth 50
+    $deploymentReferencePattern = "(reference\(resourceId\('Microsoft\.Resources/deployments'.*?\), )'\d{4}-\d{2}-\d{2}'(\)\.outputs\.)"
+    return ($json -replace $deploymentReferencePattern, "`$1'<compiler-selected-api-version>'`$2")
 }
 
 $scenarios = @(
@@ -78,8 +86,10 @@ Describe 'Deploy-to-Azure template drift (azuredeploy.json vs main.bicep)' {
                     # and rewired outputs regardless of the local bicep version.
                     ($committedJson.parameters | ConvertTo-Json -Depth 50) |
                         Should Be ($freshJson.parameters | ConvertTo-Json -Depth 50)
-                    ($committedJson.outputs | ConvertTo-Json -Depth 50) |
-                        Should Be ($freshJson.outputs | ConvertTo-Json -Depth 50)
+                    # Bicep selects the nested-deployment reference API version. That
+                    # version can change between compilers without changing output wiring.
+                    (ConvertTo-NormalizedOutputJson $committedJson.outputs) |
+                        Should Be (ConvertTo-NormalizedOutputJson $freshJson.outputs)
 
                     # Exact guard: only enforced when the local bicep version matches the one
                     # that produced the committed template, otherwise formatting differences
@@ -87,8 +97,8 @@ Describe 'Deploy-to-Azure template drift (azuredeploy.json vs main.bicep)' {
                     # version (see the scenario README "Publishing the public package").
                     $committedVersion = Get-CommittedGeneratorVersion $committedPath
                     if ($builder.Version -and $committedVersion -and $builder.Version -eq $committedVersion) {
-                        (Normalize-TemplateText (Get-Content $tmp -Raw)) |
-                            Should Be (Normalize-TemplateText (Get-Content $committedPath -Raw))
+                        (ConvertTo-NormalizedTemplateText (Get-Content $tmp -Raw)) |
+                            Should Be (ConvertTo-NormalizedTemplateText (Get-Content $committedPath -Raw))
                     }
                 }
                 finally {

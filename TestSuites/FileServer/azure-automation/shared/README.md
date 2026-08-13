@@ -19,6 +19,7 @@ Scenario-specific (e.g., domain-bicep/DSC/)     Shared (shared/DSC/)
             ↓  merged by Build-DscPackage  ↓         ├── Execute-TestCaseByContext.ps1
                                                      ├── Invoke-TestRun.ps1
 Uploaded Package (e.g., Domain-Package.zip)          └── (16 more utilities)
+├── cse-bootstrap.ps1    ← short generic Windows extension entry point
 ├── Config.json          ← generated from deployment params
 ├── ResultsUpload.json   ← storage account for test results
 ├── Tools.json           ← from scenario DSC/Scripts/
@@ -84,7 +85,18 @@ Each orchestrator writes a signal file on completion:
 | Cluster Node 2 | `Deploy-Node02.Completed.signal` |
 | Driver Computer | `Deploy-Driver.Completed.signal` |
 
-The `deploy.ps1` script polls the DC's signal file between Phase 1 and Phase 2. After deployment, use [`scripts/Verify-Deployment.ps1`](scripts/Verify-Deployment.ps1) to poll all VMs.
+The `deploy.ps1` script polls the DC's signal file between Phase 1 and Phase 2 and performs integrated final verification. [`scripts/Verify-Deployment.ps1`](scripts/Verify-Deployment.ps1) is also available for ad-hoc rechecks. Continuations accept existing signals from untouched phases but require fresh signals from redeployed roles.
+
+### Packaged Extension Bootstrap
+
+Windows Custom Script Extensions download the private package through `fileUris`, extract it to a short staging path, and invoke the packaged `cse-bootstrap.ps1`. This keeps extension command lines below Windows limits. Before replacing a Driver package, the bootstrap stops stale test tasks/process trees, removes stale test signals, and forces a fresh Driver completion signal and test launch. Linux Drivers use the native `cse-bootstrap.sh` flow.
+
+### Bounded Test Execution and Reporting
+
+- `Invoke-TestRun.ps1` launches the complete plan under the configured test account. Each VSTest invocation is bounded to 60 minutes and writes an `*.execution.json` manifest; a timeout kills the process tree but does not stop later stages.
+- `Write-TestRunSummary.ps1` parses every TRX and manifest into `test.summary.json` and `test.summary.txt`. Classifications distinguish assertion failures from infrastructure/configuration failures and mixed outcomes.
+- Finalization uploads TRX, manifests, summaries, and non-secret diagnostics before writing `test.run.completed.signal`. Upload failure is recorded in `test.results.upload.failed.signal`.
+- The verifier detects a `Started` manifest stalled for 70 minutes. Scenario deploy scripts pass a 360-minute complete-plan timeout.
 
 ## File Reference
 
@@ -101,7 +113,7 @@ The `deploy.ps1` script polls the DC's signal file between Phase 1 and Phase 2. 
 |----------|---------|
 | `Build-DscPackage` | Assembles a DSC package from scenario-specific + shared scripts, generates Config.json, uploads to Azure Storage. Called by all three `deploy.ps1` scripts. |
 | `Import-AzureModules` | Imports required Az PowerShell modules |
-| `Connect-AzureSubscription` | Authenticates to Azure |
+| `Connect-AzureSubscription` | Validates cached Az authentication, reuses an authenticated Azure CLI session when possible, then falls back to interactive login |
 | `Get-OrCreateStorageAccount` | Finds or creates a storage account for package upload |
 | `Send-BlobWithSasUrl` | Uploads a file to blob storage and returns a SAS URL |
 | `Wait-ForDomainController` | Polls a DC VM's signal file via `Invoke-AzVMRunCommand` |
@@ -137,6 +149,10 @@ Utility scripts that run on VMs during configuration:
 |------|---------|
 | `Execute-TestCaseByContext.ps1` | Main test executor — patches ptfconfig, runs tests by context |
 | `Invoke-TestRun.ps1` | Test run wrapper — waits for SUT, detects context, calls executor |
+| `Invoke-BoundedProcess.ps1` | Runs native tests with asynchronous output draining and whole-process-tree timeout termination |
+| `Invoke-VstestInvocation.ps1` | Writes execution manifests and invokes VSTest through the bounded process helper |
+| `Invoke-ProcessAsUser.ps1` | Launches the test runner from LocalSystem with the configured user's profile and environment |
+| `Write-TestRunSummary.ps1` | Aggregates all TRX/manifests and writes complete JSON/text summaries |
 | `InstallMSIAndTools.ps1` | Downloads and installs tools from Tools.json manifest |
 | `Create-TestAccount.ps1` | Creates AD test accounts and groups |
 | `Create-CbacObjectsInDC.ps1` | Creates Claims-Based Access Control objects in AD |
@@ -158,7 +174,7 @@ Utility scripts that run on VMs during configuration:
 
 | File | Purpose |
 |------|---------|
-| [`Verify-Deployment.ps1`](scripts/Verify-Deployment.ps1) | Polls all VMs in a resource group for completion. Auto-detects scenario (Domain/Cluster/Workgroup) by the VMs present. |
+| [`Verify-Deployment.ps1`](scripts/Verify-Deployment.ps1) | Polls bounded VM probes and automatic tests, rejects stale signals, detects stalled/failed invocations and uploads, retrieves the complete summary, and supports explicit phase-role subsets. |
 
 ### modules/ Directory
 

@@ -42,7 +42,9 @@
 param(
     [string]$WorkingPath = (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent),
     [string]$Filter,
-    [string]$TestSuitePath = $(if ($IsLinux) { '/opt/FileServer-TestSuite-ServerEP' } else { 'C:\FileServer-TestSuite-ServerEP' })
+    [string]$TestSuitePath = $(if ($IsLinux) { '/opt/FileServer-TestSuite-ServerEP' } else { 'C:\FileServer-TestSuite-ServerEP' }),
+    [ValidateRange(1, 1440)]
+    [int]$TestInvocationTimeoutMinutes = 60
 )
 
 $ErrorActionPreference = 'Stop'
@@ -120,6 +122,185 @@ function Get-SutPlatform {
     }
 }
 
+function Connect-WindowsSmbShare {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '',
+        Justification = 'The Windows network provider API requires separate username and password strings; neither is placed on a process command line.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', 'CredentialPassword',
+        Justification = 'The password is passed directly to the Windows network provider and never placed on a process command line.')]
+    param(
+        [Parameter(Mandatory)] [string]$RemotePath,
+        [Parameter(Mandatory)] [string]$CredentialUser,
+        [Parameter(Mandatory)] [string]$CredentialPassword
+    )
+
+    if (-not ('ProtocolTestSuites.NetworkConnection' -as [type])) {
+        Add-Type -TypeDefinition @'
+using System;
+using System.Runtime.InteropServices;
+
+namespace ProtocolTestSuites
+{
+    public static class NetworkConnection
+    {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct NetResource
+        {
+            public int Scope;
+            public int Type;
+            public int DisplayType;
+            public int Usage;
+            public string LocalName;
+            public string RemoteName;
+            public string Comment;
+            public string Provider;
+        }
+
+        [DllImport("mpr.dll", CharSet = CharSet.Unicode)]
+        public static extern int WNetAddConnection2(
+            ref NetResource netResource,
+            string password,
+            string userName,
+            int flags);
+    }
+}
+'@
+    }
+
+    $resource = [ProtocolTestSuites.NetworkConnection+NetResource]::new()
+    $resource.Type = 1
+    $resource.RemoteName = $RemotePath
+    $result = [ProtocolTestSuites.NetworkConnection]::WNetAddConnection2(
+        [ref]$resource,
+        $CredentialPassword,
+        $CredentialUser,
+        0)
+    # 1219 means an SMB connection already exists for this server. Keep it;
+    # subsequent access is the authoritative credential check.
+    if ($result -notin @(0, 1219)) {
+        throw [ComponentModel.Win32Exception]::new($result)
+    }
+    return $result
+}
+
+function Invoke-SecureSmbClient {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '',
+        Justification = 'smbclient requires separate credential fields in a mode-0600 auth file that is removed in finally.')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', 'CredentialPassword',
+        Justification = 'The password is written only to a mode-0600 temporary smbclient auth file and removed in finally.')]
+    param(
+        [Parameter(Mandatory)] [string]$SharePath,
+        [Parameter(Mandatory)] [string]$Command,
+        [Parameter(Mandatory)] [string]$CredentialUser,
+        [Parameter(Mandatory)] [string]$CredentialPassword
+    )
+
+    $credentialDomain = ''
+    $credentialName = $CredentialUser
+    if ($CredentialUser -match '^([^\\]+)\\(.+)$') {
+        $credentialDomain = $Matches[1]
+        $credentialName = $Matches[2]
+    }
+    $authFile = Join-Path ([IO.Path]::GetTempPath()) "wpts-smb-$([guid]::NewGuid().ToString('N')).auth"
+    try {
+        $authLines = @(
+            "username = $credentialName",
+            "password = $CredentialPassword"
+        )
+        if ($credentialDomain) { $authLines += "domain = $credentialDomain" }
+        [IO.File]::WriteAllLines($authFile, $authLines, [Text.UTF8Encoding]::new($false))
+        & chmod 600 $authFile
+        if ($LASTEXITCODE -ne 0) { throw "Could not restrict permissions on smbclient auth file." }
+
+        $output = @(& smbclient $SharePath -A $authFile -c $Command 2>&1)
+        $exitCode = $LASTEXITCODE
+        return [pscustomobject]@{ Output = $output; ExitCode = $exitCode }
+    } finally {
+        Remove-Item -LiteralPath $authFile -Force -ErrorAction SilentlyContinue
+    }
+}
+
+function Copy-ReadableDiagnosticFile {
+    param(
+        [Parameter(Mandatory)] [string]$SourcePath,
+        [Parameter(Mandatory)] [string]$DestinationPath
+    )
+
+    $destinationDirectory = Split-Path -Parent $DestinationPath
+    New-Item -ItemType Directory -Path $destinationDirectory -Force | Out-Null
+    $sourceStream = $null
+    $destinationStream = $null
+    try {
+        $sourceStream = [System.IO.File]::Open(
+            $SourcePath,
+            [System.IO.FileMode]::Open,
+            [System.IO.FileAccess]::Read,
+            [System.IO.FileShare]::ReadWrite)
+        $destinationStream = [System.IO.File]::Open(
+            $DestinationPath,
+            [System.IO.FileMode]::Create,
+            [System.IO.FileAccess]::Write,
+            [System.IO.FileShare]::Read)
+        $sourceStream.CopyTo($destinationStream)
+    } finally {
+        if ($destinationStream) { $destinationStream.Dispose() }
+        if ($sourceStream) { $sourceStream.Dispose() }
+    }
+}
+
+function Copy-DiagnosticDirectory {
+    param(
+        [Parameter(Mandatory)] [string]$SourceDirectory,
+        [Parameter(Mandatory)] [string]$DestinationDirectory
+    )
+
+    if (-not (Test-Path -LiteralPath $SourceDirectory -ErrorAction SilentlyContinue)) { return }
+    $extensions = @('.log', '.txt', '.signal', '.evtx', '.dmp')
+    foreach ($file in @(Get-ChildItem -LiteralPath $SourceDirectory -File -Recurse -ErrorAction SilentlyContinue |
+        Where-Object { $_.Extension.ToLowerInvariant() -in $extensions })) {
+        try {
+            $relativePath = $file.FullName.Substring($SourceDirectory.TrimEnd('\', '/').Length).TrimStart('\', '/')
+            Copy-ReadableDiagnosticFile -SourcePath $file.FullName `
+                -DestinationPath (Join-Path $DestinationDirectory $relativePath)
+        } catch {
+            Write-Warning "Could not collect diagnostic '$($file.FullName)': $($_.Exception.Message)"
+        }
+    }
+}
+
+function Copy-RemoteDiagnostics {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '',
+        Justification = 'Credentials are forwarded only to secure SMB helpers that keep the password off process command lines.')]
+    param(
+        [Parameter(Mandatory)] [string]$Target,
+        [Parameter(Mandatory)] [string]$RemoteDscDirectory,
+        [Parameter(Mandatory)] [string]$DestinationDirectory,
+        [Parameter(Mandatory)] [string]$CredentialUser,
+        [Parameter(Mandatory)] [string]$CredentialPassword,
+        [Parameter(Mandatory)] [bool]$LinuxDriver
+    )
+
+    New-Item -ItemType Directory -Path $DestinationDirectory -Force | Out-Null
+    if ($LinuxDriver) {
+        if (-not (Get-Command smbclient -ErrorAction SilentlyContinue)) { return }
+        $remotePath = $RemoteDscDirectory.Replace('\', '/')
+        $commands = "prompt OFF; recurse ON; lcd `"$DestinationDirectory`"; cd `"$remotePath`"; mget *.log; mget *.txt; mget *.signal"
+        $smbInvocation = Invoke-SecureSmbClient -SharePath "//$Target/C`$" `
+            -Command $commands -CredentialUser $CredentialUser `
+            -CredentialPassword $CredentialPassword
+        $smbInvocation.Output | ForEach-Object { Write-Verbose "smbclient diagnostics: $_" }
+        return
+    }
+
+    try {
+        [void](Connect-WindowsSmbShare -RemotePath "\\$Target\C`$" `
+            -CredentialUser $CredentialUser -CredentialPassword $CredentialPassword)
+        Copy-DiagnosticDirectory -SourceDirectory "\\$Target\C`$\$RemoteDscDirectory" `
+            -DestinationDirectory $DestinationDirectory
+    } catch {
+        Write-Warning "Could not collect diagnostics from '$Target': $($_.Exception.Message)"
+    }
+}
+
 $env:Path += "$([IO.Path]::PathSeparator)$scriptsPath"
 Push-Location $scriptsPath
 
@@ -127,11 +308,20 @@ Start-Transcript -Path $logFile -Append -Force
 
 $testDir = if ($isLinuxDriver) { '/test' } else { "$env:SystemDrive\Test" }
 $existingSignal = Join-Path $testDir 'test.finished.signal'
+$runCompleteSignal = Join-Path $testDir 'test.run.completed.signal'
+$uploadFailureSignal = Join-Path $testDir 'test.results.upload.failed.signal'
 if (Test-Path $existingSignal) {
-    .\Write-Info.ps1 "Test run already completed (signal file exists at $existingSignal). Skipping." -ForegroundColor Green
-    .\Write-Info.ps1 "Delete $existingSignal to re-run tests." -ForegroundColor DarkGray
-    Pop-Location; Stop-Transcript; return
+    if (Test-Path $runCompleteSignal) {
+        .\Write-Info.ps1 "Test run already completed (both completion signals exist). Skipping." -ForegroundColor Green
+        .\Write-Info.ps1 "Delete $existingSignal and $runCompleteSignal to re-run tests." -ForegroundColor DarkGray
+        Pop-Location; Stop-Transcript; return
+    }
+
+    .\Write-Info.ps1 "[WARN] Test execution finished previously, but finalization did not. Removing the stale execution signal and rerunning." -ForegroundColor Yellow
+    Remove-Item -LiteralPath $existingSignal -Force
 }
+Remove-Item -LiteralPath $runCompleteSignal -Force -ErrorAction SilentlyContinue
+Remove-Item -LiteralPath $uploadFailureSignal -Force -ErrorAction SilentlyContinue
 
 .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
 .\Write-Info.ps1 "  FileServer Test Run -- Execute-TestCaseByContext          " -ForegroundColor Cyan
@@ -225,7 +415,7 @@ $sutSignalFileName = switch ($scenario) {
 }
 
 if ($isLinuxDriver) {
-    # On Linux we cannot use UNC paths or net.exe.  Poll the SUT's admin share
+    # On Linux we cannot use UNC paths. Poll the SUT's admin share
     # via smbclient to check for the signal file.
     # The SUT is always Windows.  Derive its working path from the scenario
     # (Azure Bicep deploys to C:\<Scenario>-Package on the SUT).
@@ -241,8 +431,10 @@ if ($isLinuxDriver) {
     }
 
     while ($waited -lt ($maxWait * 60)) {
-        $smbResult = & smbclient "//$sutName/${sutDriveLetter}`$" -U "$smbCredUser%$adminPassword" -c "ls $signalRelPath" 2>&1
-        if ($LASTEXITCODE -eq 0 -and "$smbResult" -notmatch 'NT_STATUS') {
+        $smbInvocation = Invoke-SecureSmbClient -SharePath "//$sutName/${sutDriveLetter}`$" `
+            -Command "ls $signalRelPath" -CredentialUser $smbCredUser `
+            -CredentialPassword $adminPassword
+        if ($smbInvocation.ExitCode -eq 0 -and "$($smbInvocation.Output)" -notmatch 'NT_STATUS') {
             .\Write-Info.ps1 "[OK] SUT deployment signal detected." -ForegroundColor Green
             break
         }
@@ -253,7 +445,7 @@ if ($isLinuxDriver) {
         $waited += $pollInterval
     }
 } else {
-    # Windows: poll via UNC path + net.exe
+    # Windows: poll via UNC path and an in-process network-provider call.
     # Use IP address instead of hostname for Workgroup (no DNS server to resolve names)
     $sutTarget = if ($scenario -eq 'Workgroup') { $sutExt1Ip } else { $sutName }
     $driveLetter = if ($WorkingPath -match '^([A-Za-z]):') { $Matches[1] } else { 'C' }
@@ -266,11 +458,12 @@ if ($isLinuxDriver) {
         if (-not $netUseAttempted) {
             .\Write-Info.ps1 "  Authenticating to \\$sutTarget\${driveLetter}`$ ..." -ForegroundColor DarkGray
             try {
-                $netArgs = @('use', "\\$sutTarget\${driveLetter}`$", "/user:$smbCredUser", $adminPassword)
-                $netProc = Start-Process -FilePath 'net.exe' -ArgumentList $netArgs -Wait -NoNewWindow -PassThru -ErrorAction SilentlyContinue
-                .\Write-Info.ps1 "  net use exit code: $($netProc.ExitCode)" -ForegroundColor DarkGray
+                $connectionResult = Connect-WindowsSmbShare `
+                    -RemotePath "\\$sutTarget\${driveLetter}`$" `
+                    -CredentialUser $smbCredUser -CredentialPassword $adminPassword
+                .\Write-Info.ps1 "  SMB connection result: $connectionResult" -ForegroundColor DarkGray
             } catch {
-                .\Write-Info.ps1 "  net use failed: $($_.Exception.Message)" -ForegroundColor DarkGray
+                .\Write-Info.ps1 "  SMB connection failed: $($_.Exception.Message)" -ForegroundColor DarkGray
             }
             $netUseAttempted = $true
         }
@@ -328,8 +521,8 @@ if (-not $isLinuxDriver) {
 
         # Authenticate to SUT (may already be connected from signal polling)
         try {
-            $netArgs = @('use', "\\$sutName\IPC`$", "/user:$smbCredUser", $adminPassword)
-            Start-Process -FilePath 'net.exe' -ArgumentList $netArgs -Wait -NoNewWindow -PassThru -ErrorAction SilentlyContinue | Out-Null
+            [void](Connect-WindowsSmbShare -RemotePath "\\$sutName\IPC`$" `
+                -CredentialUser $smbCredUser -CredentialPassword $adminPassword)
         } catch { }
 
         $fl2MaxRetries = 6
@@ -441,11 +634,11 @@ if (-not $isLinuxDriver) {
         if (-not $target) { continue }
         .\Write-Info.ps1 "  Authenticating to \\$target\C`$ ..." -ForegroundColor DarkGray
         try {
-            $netArgs = @('use', "\\$target\C`$", "/user:$smbCredUser", $adminPassword)
-            $netProc = Start-Process -FilePath 'net.exe' -ArgumentList $netArgs -Wait -NoNewWindow -PassThru -ErrorAction SilentlyContinue
-            .\Write-Info.ps1 "  net use \\$target\C`$ exit code: $($netProc.ExitCode)" -ForegroundColor DarkGray
+            $connectionResult = Connect-WindowsSmbShare -RemotePath "\\$target\C`$" `
+                -CredentialUser $smbCredUser -CredentialPassword $adminPassword
+            .\Write-Info.ps1 "  SMB connection \\$target\C`$ result: $connectionResult" -ForegroundColor DarkGray
         } catch {
-            .\Write-Info.ps1 "  net use \\$target\C`$ failed: $($_.Exception.Message)" -ForegroundColor DarkGray
+            .\Write-Info.ps1 "  SMB connection \\$target\C`$ failed: $($_.Exception.Message)" -ForegroundColor DarkGray
         }
     }
 
@@ -479,6 +672,7 @@ try {
         ContextName    = $contextName
         runTests       = 'true'
         enableParallel = 'true'
+        TestInvocationTimeoutMinutes = $TestInvocationTimeoutMinutes
     }
     if ($Filter) {
         # Map -Filter to CategoryName or TestName
@@ -511,16 +705,84 @@ finally {
 $testStopwatch.Stop()
 
 $testResultDir = Join-Path $testDir 'TestResults'
+$executionPlanCompleted = Test-Path -LiteralPath $existingSignal
+$summaryScript = Join-Path $scriptsPath 'Write-TestRunSummary.ps1'
+$summaryJsonPath = Join-Path $testResultDir 'test.summary.json'
+$summaryTextPath = Join-Path $testResultDir 'test.summary.txt'
+try {
+    if (-not (Test-Path -LiteralPath $summaryScript)) {
+        throw "Test summary script not found at $summaryScript."
+    }
+    $testSummary = & $summaryScript -TestResultDirectory $testResultDir -Scenario $scenario `
+        -ContextName $contextName -ExecutionExitCode $exitCode `
+        -ExecutionPlanCompleted $executionPlanCompleted -RequireExecutionManifests `
+        -OutputJsonPath $summaryJsonPath `
+        -OutputTextPath $summaryTextPath
+} catch {
+    $summaryError = "Unable to generate complete test summary: $($_.Exception.Message)"
+    $testSummary = [pscustomobject]@{
+        Classification = 'InfrastructureOrConfigurationFailure'
+        FailedTests = @()
+    }
+    $summaryError | Set-Content -LiteralPath $summaryTextPath -Encoding UTF8
+    .\Write-Info.ps1 "[WARN] $summaryError" -ForegroundColor Yellow
+}
+
 .\Write-Info.ps1 "" -ForegroundColor Cyan
 .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
-if ($exitCode -eq 0) {
-    .\Write-Info.ps1 "  Test run completed SUCCESSFULLY" -ForegroundColor Green
+if ($executionPlanCompleted) {
+    .\Write-Info.ps1 "  All configured test stages completed" -ForegroundColor Cyan
 } else {
-    .\Write-Info.ps1 "  Test run completed with exit code: $exitCode" -ForegroundColor Yellow
+    .\Write-Info.ps1 "  Test execution stopped before the complete plan finished" -ForegroundColor Yellow
 }
+.\Write-Info.ps1 "  Classification: $($testSummary.Classification)" -ForegroundColor $(if ($testSummary.Classification -eq 'Passed') { 'Green' } else { 'Yellow' })
+.\Write-Info.ps1 "  Test process exit code: $exitCode" -ForegroundColor Cyan
 .\Write-Info.ps1 "  Duration: $([math]::Round($testStopwatch.Elapsed.TotalMinutes, 1)) min" -ForegroundColor Cyan
 .\Write-Info.ps1 "  Results : $testResultDir" -ForegroundColor Cyan
 .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
+
+if (Test-Path -LiteralPath $summaryTextPath) {
+    Get-Content -LiteralPath $summaryTextPath | ForEach-Object {
+        .\Write-Info.ps1 $_ -ForegroundColor $(if ($_ -match '^\[(Failed|Error|Timeout|Aborted)\]') { 'Red' } else { 'DarkGray' })
+    }
+}
+
+# Capture every deployment/test diagnostic before upload and before the active
+# transcript is closed. Config files are intentionally excluded because they
+# contain credentials.
+$diagnosticRoot = Join-Path $testDir 'Diagnostics'
+$driverDiagnostics = Join-Path $diagnosticRoot 'Driver'
+$sutDiagnostics = Join-Path $diagnosticRoot 'SUT'
+Remove-Item -LiteralPath $diagnosticRoot -Recurse -Force -ErrorAction SilentlyContinue
+Copy-DiagnosticDirectory -SourceDirectory $dscFolder `
+    -DestinationDirectory (Join-Path $driverDiagnostics 'Deployment')
+Copy-DiagnosticDirectory -SourceDirectory (Join-Path $testDir 'TestLog') `
+    -DestinationDirectory (Join-Path $driverDiagnostics 'TestLog')
+
+foreach ($machineProperty in @($config.Machines.PSObject.Properties)) {
+    if ($machineProperty.Name -eq 'DriverComputer') { continue }
+    $machine = $machineProperty.Value
+    if (-not $machine -or -not $machine.ComputerName) { continue }
+    $target = if ($scenario -eq 'Workgroup' -and $machine.IpConfig) {
+        @($machine.IpConfig)[0].Ip
+    } else {
+        $machine.ComputerName
+    }
+    $roleDirectory = if ($machineProperty.Name -eq 'SUT') {
+        $sutDiagnostics
+    } else {
+        Join-Path $diagnosticRoot $machineProperty.Name
+    }
+    $remoteCredentialUser = if ($domainNetBiosName) {
+        "$domainNetBiosName\$adminUser"
+    } else {
+        "$($machine.ComputerName)\$adminUser"
+    }
+    Copy-RemoteDiagnostics -Target $target -RemoteDscDirectory "$sutWorkingDir\DSC" `
+        -DestinationDirectory $roleDirectory -CredentialUser $remoteCredentialUser `
+        -CredentialPassword $adminPassword -LinuxDriver $isLinuxDriver
+}
+$diagnosticFiles = @(Get-ChildItem -LiteralPath $diagnosticRoot -File -Recurse -ErrorAction SilentlyContinue)
 
 # ===========================================================================
 # Upload test results to Azure Storage (if ResultsUpload.json exists)
@@ -530,41 +792,51 @@ if (Test-Path $resultsUploadFile) {
     .\Write-Info.ps1 "Uploading test results to Azure Storage..." -ForegroundColor Yellow
     try {
         $uploadConfig = Get-Content -Path $resultsUploadFile -Raw | ConvertFrom-Json
-        $sasUrl = $uploadConfig.SasUrl
+        [UriBuilder]$sasUrl = $uploadConfig.SasUrl
         $timestamp = (Get-Date).ToString('yyyyMMdd-HHmmss')
         $blobPrefix = "$scenario/$timestamp"
-
         # Collect files to upload: TRX files, logs, and the signal file
         $filesToUpload = @()
         if (Test-Path $testResultDir) {
             $filesToUpload += Get-ChildItem -Path $testResultDir -Recurse -File -ErrorAction SilentlyContinue
         }
-        $logFiles = @(
-            (Join-Path $dscFolder 'Invoke-TestRun.log'),
-            (Join-Path $dscFolder 'Deploy-Driver.log'),
-            (Join-Path $dscFolder 'Deploy-Driver.Completed.signal')
-        )
-        foreach ($lf in $logFiles) {
-            if (Test-Path $lf) { $filesToUpload += Get-Item $lf }
-        }
+        $filesToUpload += $diagnosticFiles
 
         $uploaded = 0
         foreach ($file in $filesToUpload) {
             $relativePath = if ($file.FullName.StartsWith($testResultDir, [StringComparison]::OrdinalIgnoreCase)) {
                 "TestResults/" + $file.FullName.Substring($testResultDir.Length).TrimStart('\', '/')
+            } elseif ($file.FullName.StartsWith($diagnosticRoot, [StringComparison]::OrdinalIgnoreCase)) {
+                "Diagnostics/" + $file.FullName.Substring($diagnosticRoot.Length).TrimStart('\', '/')
             } else {
                 "Logs/" + $file.Name
             }
             $blobName = "$blobPrefix/$relativePath"
-            $sasParts = "$sasUrl" -split '\?', 2
-            $blobUrl = "$($sasParts[0])/$blobName?$($sasParts[1])"
+            $blobUriBuilder = [UriBuilder]$sasUrl.Uri
+            $blobUriBuilder.Path = "$($sasUrl.Path.TrimEnd('/'))/$($blobName.Replace('\', '/'))"
+            $blobUrl = $blobUriBuilder.Uri.AbsoluteUri
 
             try {
                 $headers = @{
                     'x-ms-blob-type' = 'BlockBlob'
                     'x-ms-date'      = (Get-Date).ToUniversalTime().ToString('R')
                 }
-                $fileBytes = [System.IO.File]::ReadAllBytes($file.FullName)
+                $fileStream = [System.IO.File]::Open(
+                    $file.FullName,
+                    [System.IO.FileMode]::Open,
+                    [System.IO.FileAccess]::Read,
+                    [System.IO.FileShare]::ReadWrite)
+                try {
+                    $memoryStream = [System.IO.MemoryStream]::new()
+                    try {
+                        $fileStream.CopyTo($memoryStream)
+                        $fileBytes = $memoryStream.ToArray()
+                    } finally {
+                        $memoryStream.Dispose()
+                    }
+                } finally {
+                    $fileStream.Dispose()
+                }
                 Invoke-RestMethod -Uri $blobUrl -Method Put -Headers $headers -Body $fileBytes `
                     -ContentType 'application/octet-stream' -ErrorAction Stop | Out-Null
                 $uploaded++
@@ -578,8 +850,16 @@ if (Test-Path $resultsUploadFile) {
             }
         }
 
-        .\Write-Info.ps1 "[OK] Uploaded $uploaded/$($filesToUpload.Count) files to $($uploadConfig.StorageAccountName)/$($uploadConfig.ContainerName)/$blobPrefix" -ForegroundColor Green
+        if ($uploaded -eq $filesToUpload.Count) {
+            .\Write-Info.ps1 "[OK] Uploaded $uploaded/$($filesToUpload.Count) files to $($uploadConfig.StorageAccountName)/$($uploadConfig.ContainerName)/$blobPrefix" -ForegroundColor Green
+        } else {
+            "UPLOAD FAILED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') uploaded=$uploaded expected=$($filesToUpload.Count)" |
+                Out-File -FilePath $uploadFailureSignal -Force
+            .\Write-Info.ps1 "[WARN] Uploaded only $uploaded/$($filesToUpload.Count) files. Failure signal: $uploadFailureSignal" -ForegroundColor Yellow
+        }
     } catch {
+        "UPLOAD FAILED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') error=$($_.Exception.Message)" |
+            Out-File -FilePath $uploadFailureSignal -Force
         .\Write-Info.ps1 "[WARN] Test results upload failed: $($_.Exception.Message)" -ForegroundColor Yellow
     }
 } else {
@@ -595,5 +875,13 @@ if (-not $isLinuxDriver) {
     }
 }
 
+"TEST RUN FINALIZED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" |
+    Out-File -FilePath $runCompleteSignal -Force
+.\Write-Info.ps1 "[OK] Test orchestration completion signal written: $runCompleteSignal" -ForegroundColor Green
+
 Pop-Location
 Stop-Transcript
+
+if ($testSummary.Classification -ne 'Passed') {
+    exit 1
+}

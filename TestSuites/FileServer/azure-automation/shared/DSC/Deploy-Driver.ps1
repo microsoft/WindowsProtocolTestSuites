@@ -443,7 +443,6 @@ if (-not $isLinuxDriver) {
 }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-$phase1Ok = $false
 $phase2Ok = $false
 
 # ===========================================================================
@@ -506,7 +505,6 @@ if ($currentStep -lt 1) {
             -OperationName 'Driver DSC configuration' `
             -Postcondition { Test-RequiredDriverDscState } `
             -HeartbeatPath $heartbeatFile -PhaseName 'DriverBaseline' | Out-Null
-        $phase1Ok = $true
         "DRIVER DSC APPLIED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $driverDscSignal -Force
         .\Write-Info.ps1 "[OK] DSC applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
@@ -839,16 +837,30 @@ if ($currentStep -eq 1) {
         $action = New-ScheduledTaskAction -Execute $pwshExe `
             -Argument "-File `"$testRunScript`" -WorkingPath `"$WorkingPath`""
         $triggerStartup = New-ScheduledTaskTrigger -AtStartup
-        $triggerOnce    = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(30)
         $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries `
             -StartWhenAvailable
         Register-ScheduledTask -TaskName 'RunFileServerTests' -Action $action `
-            -Trigger @($triggerStartup, $triggerOnce) `
+            -Trigger $triggerStartup `
             -Settings $settings -User $taskUser -Password $taskPassword -RunLevel Highest `
             -Force -ErrorAction Stop | Out-Null
 
+        $launchDomain = if ($domainPrefix) { $domainPrefix } else { $env:COMPUTERNAME }
+        $launchUser = if ($domainPrefix) { $cfgJson.Core.Username } else { $taskUser }
+        $testRunArguments = @(
+            '-NoProfile',
+            '-NonInteractive',
+            '-File',
+            $testRunScript,
+            '-WorkingPath',
+            $WorkingPath
+        )
+        $launchedProcess = & "$scriptsPath\Invoke-ProcessAsUser.ps1" `
+            -UserName $launchUser -Domain $launchDomain -Password $taskPassword `
+            -FilePath $pwshExe -ArgumentList $testRunArguments `
+            -WorkingDirectory $scriptsPath -KeepProfileLoaded
+
         $phase3.Stop()
-        .\Write-Info.ps1 "[OK] Test run scheduled (fires in ~30s as '$taskUser') -- $([math]::Round($phase3.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        .\Write-Info.ps1 "[OK] Test run launched immediately as '$taskUser' (PID $($launchedProcess.ProcessId)); AtStartup fallback registered -- $([math]::Round($phase3.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
     .\Write-Info.ps1 ""
 

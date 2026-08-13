@@ -87,6 +87,8 @@ postconditions, and heartbeat JSON files. Reuse phase, verified DSC, job-wait,
 reboot-proof, and heartbeat helpers from `shared/DSC/Deploy-CommonHelpers.ps1`;
 never continue through an unexpected pending reboot.
 
+Reuse these modules and helpers rather than embedding equivalent resources in scenario-specific scripts.
+
 ### Key Classes
 
 | Class | File | Purpose |

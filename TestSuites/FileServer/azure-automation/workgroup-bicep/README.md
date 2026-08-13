@@ -61,9 +61,11 @@ The driver computer supports both Windows and Linux. Custom Azure VM images can 
 
 ## Prerequisites
 
-- Azure PowerShell modules: `Az.Accounts`, `Az.Resources`, `Az.Storage`, `Az.Compute`
+- PowerShell 7 and PowerShellGet access to PowerShell Gallery
 - Azure subscription with permissions to create resource groups, VMs, storage accounts, and Key Vaults
-- Bicep CLI (installed automatically by the script if missing)
+- Bicep CLI or Azure CLI
+
+`deploy.ps1` installs missing `Az.Accounts`, `Az.Resources`, `Az.Storage`, and `Az.Compute` modules for the current user. If `bicep` is not on `PATH`, it installs Bicep through Azure CLI. Both install paths use bounded retries and fail with a concrete prerequisite message. A cached Azure login is reused; authentication is requested only when required.
 
 ## Quick Start
 
@@ -77,24 +79,24 @@ cd workgroup-bicep
 
 ```powershell
 $adminPassword = Read-Host "Enter admin password" -AsSecureString
-$localPassword = Read-Host "Enter local user password" -AsSecureString
 
 .\deploy.ps1 `
     -SubscriptionId "your-subscription-id" `
     -ResourceGroupName "fs-workgroup-test" `
-    -AdminPassword $adminPassword `
-    -LocalUserPassword $localPassword
+  -AdminPassword $adminPassword
 ```
 
 ### 3. Wait for deployment and automatic tests
 
-The script runs a single Bicep deployment (~5 min for Azure resources). Bastion is deployed alongside the VMs after core networking, so Bastion provisioning does not delay VM creation. After that, VMs configure themselves in the background:
+The script runs a single Bicep deployment (~5 min for Azure resources). Bastion is deployed alongside the VMs after core networking, so Bastion provisioning does not delay VM creation. The same command then remains attached while the VMs configure themselves:
 
 1. **SUT**: Feature preparation, one planned reboot, post-reboot shares/FSRM convergence, then environment setup
 2. **Driver** (~10-15 min): Tools install, RSA keys, test environment setup
 3. **Tests run automatically** — a scheduled task on the Driver waits for SUT readiness, then executes the full test suite. No login required.
 
-When Azure Disk Encryption is enabled, Driver and SUT encryption operations run concurrently and all outcomes are aggregated before deployment succeeds.
+The command does not report success merely because ARM reports `Succeeded`. It requires fresh SUT and Driver signals, both test completion signals, and at least one TRX file. Each Run Command probe is bounded and transient probe errors use capped backoff.
+
+When Azure Disk Encryption is enabled, it runs only after automatic tests finalize, avoiding a reboot race with DSC, tool installation, and test execution. Driver and SUT encryption operations run concurrently; afterward both VM agents must answer a fresh Run Command probe.
 
 ### 4. Check test results
 
@@ -102,6 +104,7 @@ Connect to Client01 via **Azure Bastion** in the portal and check:
 ```powershell
 # See if tests finished
 Test-Path C:\Test\test.finished.signal
+Test-Path C:\Test\test.run.completed.signal
 
 # View results
 Get-ChildItem C:\Test\TestResults\*.trx
@@ -126,7 +129,6 @@ Get-ChildItem C:\Test\TestResults\*.trx
 | `SubscriptionId` | Azure subscription ID |
 | `ResourceGroupName` | Target resource group name |
 | `AdminPassword` | SecureString password for testadmin account |
-| `LocalUserPassword` | SecureString password for nonadmin test user |
 
 > **Note:** The Azure region is read from `param location` in the bicepparam file (single source of truth). Edit `parameters/workgroup.bicepparam` to change it.
 
@@ -138,9 +140,13 @@ Get-ChildItem C:\Test\TestResults\*.trx
 | `DscFolderPath` | `DSC/` (adjacent to deploy.ps1) | Path to DSC scripts folder |
 | `DscPackageZipUrl` | *(empty)* | Direct URL to pre-built DSC package zip |
 | `StorageAccountName` | *(empty)* | Use an existing storage account instead of creating one |
+| `LocalUserPassword` | `AdminPassword` | Optional compatibility override; ordinary test accounts are unified to the admin password |
 | `ValidateOnly` | `$false` | Run Bicep validation only (no deployment) |
 | `SkipDiskEncryption` | `$false` | Skip post-deployment Azure Disk Encryption |
 | `Resume` | `$false` | Resume a previously failed deployment (see below) |
+| `ConfigurationTimeoutMinutes` | `90` | Maximum wait for fresh SUT and Driver completion signals |
+| `TestTimeoutMinutes` | `360` | Maximum wait for the complete automatic test plan and finalization |
+| `SkipTestWait` | `$false` | Return after VM configuration; must be combined with `-SkipDiskEncryption` to avoid an ADE/test reboot race |
 
 ### Template Parameters (bicepparam file)
 
@@ -167,7 +173,7 @@ The Workgroup scenario uses local accounts (no domain):
 | Account | Purpose |
 |---------|---------|
 | `testadmin` | Administrator account (VM admin) — password provided via `-AdminPassword` |
-| `nonadmin` | Non-admin test user — password provided via `-LocalUserPassword` |
+| `nonadmin` | Non-admin test user — uses the same password as `testadmin` so `PasswordForAllUsers` logons are consistent |
 | `Guest` | Guest account — enabled by `Create-TestAccount.ps1` with the admin password (required by Guest-access test cases) |
 
 ## Resuming a Failed Deployment
@@ -179,15 +185,16 @@ If the deployment fails partway through (e.g., VM extension error, quota issue),
     -SubscriptionId "your-subscription-id" `
     -ResourceGroupName "fs-workgroup-test" `
     -AdminPassword $adminPassword `
-    -LocalUserPassword $localPassword `
     -Resume
 ```
 
-This skips storage account creation and package upload (reuses the existing blob), then re-runs the Bicep deployment. Azure will update only the resources that changed.
+Resume builds and uploads a fresh private package, starts stopped VMs, clears stale deployment/test tasks, processes, and signals, and sends bounded Run Command jobs to the existing SUT and Driver. It does not redeploy unchanged Azure infrastructure. The command then applies the same fresh-signal and optional test-completion verification as an initial deployment.
+
+If the local workstation restarts, guest setup and tests continue on the VMs, but the local script does not automatically resume its checkpoint. Rerun the same command with `-Resume`; expired Az PowerShell authentication can be restored from an authenticated Azure CLI session.
 
 ## Automatic Test Execution
 
-After deployment completes, the Driver VM automatically runs the FileServer test suite — **no login required**. A scheduled task (`RunFileServerTests`) fires ~30 seconds after `Deploy-Driver.ps1` finishes, running non-interactively with stored credentials.
+After deployment completes, the Driver VM automatically runs the FileServer test suite — **no login required**. `Deploy-Driver.ps1` launches it immediately under the configured test account and registers `RunFileServerTests` as an at-startup fallback.
 
 ### Execution flow
 
@@ -210,7 +217,9 @@ Scheduled task → Invoke-TestRun.ps1 (runs as local testadmin user)
      - Runs FSA tests per-filesystem (NTFS, REFS, FAT32)
      - Writes TRX results to C:\Test\TestResults\
      - Writes C:\Test\test.finished.signal on completion
-  4. Cleans up the scheduled task (self-unregisters)
+   4. Gives every native test invocation a 60-minute watchdog; a timeout is recorded and later stages continue
+   5. Writes complete JSON/text summaries and uploads TRX, manifests, and non-secret diagnostics
+   6. Writes C:\Test\test.run.completed.signal after upload/finalization handling
 ```
 
 ### Workgroup SUT phase flow
@@ -241,7 +250,7 @@ C:\Workgroup-Package\DSC\Scripts\Invoke-TestRun.ps1 -Filter "TestCategory=BVT"
 To re-run tests after a completed run, delete the signal file and run the script again:
 
 ```powershell
-Remove-Item C:\Test\test.finished.signal
+Remove-Item C:\Test\test.finished.signal, C:\Test\test.run.completed.signal
 C:\Workgroup-Package\DSC\Scripts\Invoke-TestRun.ps1
 ```
 
@@ -283,8 +292,8 @@ When a custom image ID is provided, it overrides the marketplace image. Leave em
 
 ## Default Behaviors
 
-- **Auto-shutdown** is enabled by default at 20:00 UTC. If a test run takes longer than expected, VMs may shut down mid-test. Disable with `param enableAutoShutdown = false` in the bicepparam file, or adjust the time with `param autoShutdownTime = '2300'`.
-- **Azure Disk Encryption** is enabled by default on the `deploy.ps1` path (via the bicepparam file); a Key Vault is created automatically for encryption keys. Skip with `-SkipDiskEncryption` if not needed or to speed up deployment. The one-click button defaults it **off** (see Scope & limitations above).
+- **Auto-shutdown** is enabled by default at 20:00 UTC, but the deploy script removes existing schedules before configuration and restores them only after terminal test finalization and optional encryption. Known terminal test classifications are reported without failing deployment orchestration; missing output, failed upload/readiness, and post-test infrastructure failures remain fatal. Disable with `param enableAutoShutdown = false` or adjust `param autoShutdownTime = '2300'`.
+- **Azure Disk Encryption** is enabled by default on the `deploy.ps1` path (via the bicepparam file); a Key Vault is created automatically for encryption keys. It runs after test finalization to avoid disruptive reboots during setup or tests. Skip with `-SkipDiskEncryption` if not needed or to speed up deployment. The one-click button defaults it **off** (see Scope & limitations above).
 
 ## Publishing the public package ("Deploy to Azure" button)
 

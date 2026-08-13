@@ -9,7 +9,7 @@ param environmentPrefix = 'fstest'
 
 // Admin credentials (password overridden at deployment time)
 param adminUsername = 'testadmin'
-param adminPassword = ''
+param adminPassword = '#{ADMIN_PASSWORD}#'
 
 // VM sizes
 param driverVmSize = 'Standard_F4as_v6'

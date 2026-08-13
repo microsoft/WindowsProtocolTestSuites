@@ -97,34 +97,11 @@ param dscPackageZipUrl string
 // Variables
 var driverIsLinux = driverOsType == 'Linux'
 
-// CSE bootstrap: the shared scripts (../shared/scripts/cse-bootstrap.ps1/.sh)
-// are loaded at compile time, scenario/role/package tokens are substituted, and
-// the result travels base64-encoded inside the extensions' ENCRYPTED
-// protectedSettings. Windows has no 'script' property, so its commandToExecute
-// materializes the script to a file and runs it; the Linux CustomScript v2
-// extension takes the base64 directly via 'script' and downloads the package
-// itself (never relying on the waagent download directory, whose sequence
-// number changes when the extension re-runs).
+// Windows CSEs download the package through protected fileUris, extract it to a
+// staging directory, and invoke the generic bootstrap shipped at package root.
+// This keeps commandToExecute below Windows' command-line limit. Linux keeps
+// native CustomScript v2 script delivery.
 var packageHost = empty(dscPackageZipUrl) ? '' : split(dscPackageZipUrl, '/')[2]
-var bootstrapPs = loadTextContent('../../shared/scripts/cse-bootstrap.ps1')
-var driverBootstrap = replace(replace(replace(replace(replace(replace(replace(
-  bootstrapPs,
-  '__SCENARIO__', 'workgroup'),
-  '__ROLE__', 'driver'),
-  '__PACKAGE_NAME__', 'Workgroup-Package'),
-  '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'),
-  '__PACKAGE_URL__', dscPackageZipUrl),
-  '__PACKAGE_HOST__', packageHost),
-  '__PASSWORD_B64__', base64(adminPassword))
-var sutBootstrap = replace(replace(replace(replace(replace(replace(replace(
-  bootstrapPs,
-  '__SCENARIO__', 'workgroup'),
-  '__ROLE__', 'sut'),
-  '__PACKAGE_NAME__', 'Workgroup-Package'),
-  '__DEPLOY_SCRIPT__', 'Deploy-SUT.ps1'),
-  '__PACKAGE_URL__', dscPackageZipUrl),
-  '__PACKAGE_HOST__', packageHost),
-  '__PASSWORD_B64__', base64(adminPassword))
 var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(replace(
   loadTextContent('../../shared/scripts/cse-bootstrap.sh'),
   '__SCENARIO__', 'workgroup'),
@@ -134,8 +111,8 @@ var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(repla
   '__PACKAGE_URL__', dscPackageZipUrl),
   '__PACKAGE_HOST__', packageHost),
   '__PASSWORD_B64__', base64(adminPassword))
-var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\workgroup-driver-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(driverBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\workgroup-driver-bootstrap.ps1\'; exit $LASTEXITCODE"'
-var sutCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\workgroup-sut-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(sutBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\workgroup-sut-bootstrap.ps1\'; exit $LASTEXITCODE"'
+var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-workgroup-driver\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Workgroup-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-workgroup-driver\\cse-bootstrap.ps1\' -Scenario \'workgroup\' -Role \'driver\' -PackageName \'Workgroup-Package\' -DeployScript \'Deploy-Driver.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
+var sutCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-workgroup-sut\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Workgroup-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-workgroup-sut\\cse-bootstrap.ps1\' -Scenario \'workgroup\' -Role \'sut\' -PackageName \'Workgroup-Package\' -DeployScript \'Deploy-SUT.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
 
 var driverWindowsOffer = startsWith(driverOsVersion, 'win10-') ? 'Windows-10' : 'Windows-11'
 var driverImageRef = !empty(driverCustomImageId) ? {
@@ -463,12 +440,11 @@ resource driverWinExtension 'Microsoft.Compute/virtualMachines/extensions@2023-0
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
+    settings: {}
+    protectedSettings: {
       fileUris: [
         dscPackageZipUrl
       ]
-    }
-    protectedSettings: {
       commandToExecute: driverCommandToExecute
     }
   }
@@ -501,12 +477,11 @@ resource sutVmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03-01
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
+    settings: {}
+    protectedSettings: {
       fileUris: [
         dscPackageZipUrl
       ]
-    }
-    protectedSettings: {
       commandToExecute: sutCommandToExecute
     }
   }

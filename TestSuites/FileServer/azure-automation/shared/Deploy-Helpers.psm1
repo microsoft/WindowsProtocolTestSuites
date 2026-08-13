@@ -1,20 +1,325 @@
-# Copyright (c) Microsoft. All rights reserved.
+﻿# Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 # Deploy-Helpers.psm1
 # Shared deployment helper functions for File Server Test Suite Azure deployments
 # Used by both cluster-bicep/deploy.ps1 and domain-bicep/deploy.ps1
 
+function Test-TransientAzureError {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [System.Management.Automation.ErrorRecord]$ErrorRecord
+    )
+
+    $messages = [System.Collections.Generic.List[string]]::new()
+    if ($ErrorRecord.ErrorDetails.Message) {
+        $messages.Add($ErrorRecord.ErrorDetails.Message)
+    }
+
+    $exception = $ErrorRecord.Exception
+    while ($null -ne $exception) {
+        if ($exception.Message) { $messages.Add($exception.Message) }
+        $exception = $exception.InnerException
+    }
+
+    $errorText = $messages -join ' '
+    return $errorText -match '(?i)HttpClient\.Timeout|TaskCanceledException|TimeoutException|request (?:was )?canceled|timed?\s*out|operation canceled|\b408\b|RequestTimeout|\b429\b|TooManyRequests|throttl|\b500\b|InternalServerError|\b502\b|BadGateway|\b503\b|ServiceUnavailable|temporarily unavailable|\b504\b|GatewayTimeout|connection (?:was )?(?:reset|closed|aborted)|connection attempt failed|failed to respond|transport connection|name resolution|remote name could not be resolved|socket exception'
+}
+
+function Get-AzureRetryAfterSeconds {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [System.Management.Automation.ErrorRecord]$ErrorRecord
+    )
+
+    try {
+        $retryAfter = $ErrorRecord.Exception.Response.Headers.RetryAfter
+        if ($retryAfter.Delta) {
+            return [math]::Ceiling($retryAfter.Delta.TotalSeconds)
+        }
+        if ($retryAfter.Date) {
+            return [math]::Max(0, [math]::Ceiling(($retryAfter.Date.UtcDateTime - [DateTime]::UtcNow).TotalSeconds))
+        }
+    } catch { }
+
+    return $null
+}
+
+function Invoke-AzureOperationWithRetry {
+    <#
+    .SYNOPSIS
+        Executes a read-only or idempotent Azure control-plane operation with
+        bounded retries for transient failures.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$OperationName,
+
+        [Parameter(Mandatory)]
+        [scriptblock]$Operation,
+
+        [ValidateRange(1, 10)]
+        [int]$MaxAttempts = 5,
+
+        [ValidateRange(0, 300)]
+        [int]$InitialDelaySeconds = 5,
+
+        [ValidateRange(0, 600)]
+        [int]$MaximumDelaySeconds = 60
+    )
+
+    for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+        try {
+            return & $Operation
+        } catch {
+            $isTransient = Test-TransientAzureError -ErrorRecord $_
+            if (-not $isTransient) {
+                throw
+            }
+
+            if ($attempt -eq $MaxAttempts) {
+                throw "$OperationName failed after $MaxAttempts attempts because Azure continued returning a transient error. Last error: $($_.Exception.Message)"
+            }
+
+            $exponentialDelay = [math]::Min(
+                $MaximumDelaySeconds,
+                $InitialDelaySeconds * [math]::Pow(2, $attempt - 1))
+            $retryAfterSeconds = Get-AzureRetryAfterSeconds -ErrorRecord $_
+            $baseDelaySeconds = if ($null -ne $retryAfterSeconds) {
+                [math]::Min($MaximumDelaySeconds, $retryAfterSeconds)
+            } else {
+                $exponentialDelay
+            }
+            $jitterMaximum = [math]::Max(0, [int][math]::Ceiling($baseDelaySeconds * 0.2))
+            $jitterSeconds = if ($jitterMaximum -gt 0) {
+                Get-Random -Minimum 0 -Maximum ($jitterMaximum + 1)
+            } else { 0 }
+            $delaySeconds = [math]::Min($MaximumDelaySeconds, $baseDelaySeconds + $jitterSeconds)
+
+            Write-Warning "$OperationName hit a transient Azure error (attempt $attempt of $MaxAttempts): $($_.Exception.Message) Retrying in $delaySeconds seconds."
+            if ($delaySeconds -gt 0) {
+                Start-Sleep -Seconds $delaySeconds
+            }
+        }
+    }
+}
+
+function Get-RegionalVmSkuSnapshot {
+    <#
+    .SYNOPSIS
+        Returns regional VM names and vCPU counts using the lightweight VM-sizes
+        endpoint rather than the full resource-SKU feed.
+    .DESCRIPTION
+        The full Microsoft.Compute/skus response can exceed the Az SDK's
+        100-second HTTP timeout. This endpoint supplies the fields needed for
+        candidate selection and regional quota math. ARM pre-validation remains
+        authoritative for policy, zone restrictions, family quota, and capacity.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Location
+    )
+
+    $context = Get-AzContext
+    if (-not $context -or -not $context.Subscription.Id) {
+        throw 'An Azure subscription context is required before querying regional VM sizes.'
+    }
+
+    $normalizedLocation = ($Location.ToLowerInvariant() -replace '[^a-z0-9]', '')
+    $path = "/subscriptions/$($context.Subscription.Id)/providers/Microsoft.Compute/locations/$normalizedLocation/vmSizes?api-version=2024-07-01"
+    $response = Invoke-AzureOperationWithRetry `
+        -OperationName "Read regional VM sizes in '$Location'" `
+        -Operation { Invoke-AzRestMethod -Method GET -Path $path -ErrorAction Stop }
+
+    if ($response.StatusCode -lt 200 -or $response.StatusCode -ge 300) {
+        throw "Regional VM-size query for '$Location' returned HTTP $($response.StatusCode)."
+    }
+
+    $body = $response.Content | ConvertFrom-Json -ErrorAction Stop
+    $sizes = @($body.value)
+    if ($sizes.Count -eq 0) {
+        throw "Regional VM-size query for '$Location' returned no VM sizes."
+    }
+
+    return @($sizes | ForEach-Object {
+        [pscustomobject]@{
+            Name          = $_.name
+            ResourceType  = 'virtualMachines'
+            Family        = $null
+            Restrictions  = @()
+            LocationInfo  = @()
+            Capabilities  = @(
+                [pscustomobject]@{ Name = 'vCPUs'; Value = [string]$_.numberOfCores }
+                [pscustomobject]@{ Name = 'MemoryGB'; Value = [string]([math]::Round($_.memoryInMB / 1024, 2)) }
+            )
+        }
+    })
+}
+
 function Import-AzureModules {
     [CmdletBinding()]
     param()
 
+    $requiredModules = @('Az.Accounts', 'Az.Resources', 'Az.Storage', 'Az.Compute')
+    $missingModules = @($requiredModules | Where-Object {
+        -not (Get-Module -ListAvailable -Name $_)
+    })
+
+    if ($missingModules.Count -gt 0) {
+        $installModuleCommand = Get-Command Install-Module -ErrorAction SilentlyContinue
+        if (-not $installModuleCommand) {
+            throw "Required Azure PowerShell modules are missing ($($missingModules -join ', ')), and Install-Module is unavailable. Install PowerShellGet, then rerun the deployment."
+        }
+
+        Write-Output "`nInstalling missing Azure PowerShell modules for the current user: $($missingModules -join ', ')"
+        foreach ($moduleName in $missingModules) {
+            $installed = $false
+            for ($attempt = 1; $attempt -le 3 -and -not $installed; $attempt++) {
+                try {
+                    Install-Module -Name $moduleName -Repository PSGallery -Scope CurrentUser `
+                        -Force -AllowClobber -Confirm:$false -ErrorAction Stop
+                    $installed = $true
+                } catch {
+                    if ($attempt -eq 3) {
+                        throw "Failed to install required module '$moduleName' after $attempt attempts: $($_.Exception.Message)"
+                    }
+                    $retryDelaySeconds = [math]::Pow(2, $attempt)
+                    Write-Warning "Could not install '$moduleName' (attempt $attempt of 3): $($_.Exception.Message). Retrying in $retryDelaySeconds seconds."
+                    Start-Sleep -Seconds $retryDelaySeconds
+                }
+            }
+        }
+    }
+
     Write-Output "`n📦 Importing Azure PowerShell modules..."
-    Import-Module Az.Accounts -Force -ErrorAction Stop
-    Import-Module Az.Resources -Force -ErrorAction Stop
-    Import-Module Az.Storage -Force -ErrorAction Stop
-    Import-Module Az.Compute -Force -ErrorAction Stop
+    foreach ($moduleName in $requiredModules) {
+        Import-Module $moduleName -Force -ErrorAction Stop
+    }
     Write-Output "✅ Azure modules imported"
+}
+
+function Initialize-BicepCli {
+    [CmdletBinding()]
+    param(
+        [ValidateRange(1, 10)]
+        [int]$MaxAttempts = 3
+    )
+
+    $bicepCommand = Get-Command bicep -ErrorAction SilentlyContinue
+    if ($bicepCommand) {
+        & $bicepCommand.Source --version | Write-Output
+        if ($LASTEXITCODE -eq 0) {
+            return
+        }
+        Write-Warning "The Bicep command at '$($bicepCommand.Source)' is not executable; reinstalling it."
+    }
+
+    $azCommand = Get-Command az -ErrorAction SilentlyContinue
+    if (-not $azCommand) {
+        throw "Bicep CLI is not available and Azure CLI ('az') is not installed. Install either Bicep CLI (https://aka.ms/bicep-install) or Azure CLI, then rerun the deployment."
+    }
+
+    Write-Output "Bicep CLI not found on PATH. Installing through Azure CLI..."
+    $installed = $false
+    for ($attempt = 1; $attempt -le $MaxAttempts -and -not $installed; $attempt++) {
+        & $azCommand.Source bicep install
+        if ($LASTEXITCODE -eq 0) {
+            $installed = $true
+            break
+        }
+
+        if ($attempt -lt $MaxAttempts) {
+            $retryDelaySeconds = [math]::Pow(2, $attempt)
+            Write-Warning "Bicep installation failed (attempt $attempt of $MaxAttempts). Retrying in $retryDelaySeconds seconds."
+            Start-Sleep -Seconds $retryDelaySeconds
+        }
+    }
+    if (-not $installed) {
+        throw "Failed to install Bicep CLI after $MaxAttempts attempts. See https://aka.ms/bicep-install."
+    }
+
+    $bicepFileName = if ($IsWindows -or $env:OS -eq 'Windows_NT') { 'bicep.exe' } else { 'bicep' }
+    $azBicepPath = Join-Path (Join-Path $HOME '.azure/bin') $bicepFileName
+    if (Test-Path -LiteralPath $azBicepPath) {
+        $azBicepDirectory = Split-Path $azBicepPath -Parent
+        $pathEntries = @($env:PATH -split [IO.Path]::PathSeparator)
+        if ($azBicepDirectory -notin $pathEntries) {
+            $env:PATH = "$azBicepDirectory$([IO.Path]::PathSeparator)$env:PATH"
+        }
+    }
+
+    $bicepCommand = Get-Command bicep -ErrorAction SilentlyContinue
+    if (-not $bicepCommand) {
+        throw "Azure CLI reported a successful Bicep installation, but the 'bicep' executable was not found on PATH. Expected it under '$azBicepPath'."
+    }
+
+    & $bicepCommand.Source --version | Write-Output
+    if ($LASTEXITCODE -ne 0) {
+        throw "Bicep CLI was installed but failed its version check."
+    }
+    Write-Output "✅ Bicep CLI is ready"
+}
+
+function Get-AzureCliAccessContext {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$SubscriptionId
+    )
+
+    $azCommand = Get-Command az -ErrorAction SilentlyContinue
+    if (-not $azCommand) { return $null }
+
+    try {
+        $accountJson = @(& $azCommand.Source account show --subscription $SubscriptionId `
+            --only-show-errors --output json 2>$null) -join [Environment]::NewLine
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($accountJson)) { return $null }
+        $account = $accountJson | ConvertFrom-Json -ErrorAction Stop
+        if ($account.id -ne $SubscriptionId -or [string]::IsNullOrWhiteSpace($account.tenantId) -or
+            [string]::IsNullOrWhiteSpace($account.user.name)) {
+            return $null
+        }
+
+        $accessToken = (@(& $azCommand.Source account get-access-token `
+            --subscription $SubscriptionId --resource 'https://management.azure.com/' `
+            --query accessToken --output tsv --only-show-errors 2>$null) -join '').Trim()
+        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($accessToken)) { return $null }
+
+        return [pscustomobject]@{
+            AccessToken    = $accessToken
+            AccountId      = [string]$account.user.name
+            TenantId       = [string]$account.tenantId
+            SubscriptionId = [string]$account.id
+        }
+    } catch {
+        return $null
+    }
+}
+
+function Connect-AzAccountFromAzureCli {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$SubscriptionId
+    )
+
+    $cliContext = Get-AzureCliAccessContext -SubscriptionId $SubscriptionId
+    if (-not $cliContext) { return $false }
+
+    try {
+        Connect-AzAccount -AccessToken $cliContext.AccessToken `
+            -AccountId $cliContext.AccountId -Tenant $cliContext.TenantId `
+            -Subscription $SubscriptionId -Scope Process -ErrorAction Stop | Out-Null
+        return $true
+    } catch {
+        return $false
+    } finally {
+        $cliContext = $null
+    }
 }
 
 function Connect-AzureSubscription {
@@ -24,12 +329,55 @@ function Connect-AzureSubscription {
         [string]$SubscriptionId
     )
 
-    Write-Output "`n🔐 Connecting to Azure subscription: $SubscriptionId"
+    Write-Output "`n🔐 Selecting Azure subscription: $SubscriptionId"
     $context = Get-AzContext
     if (-not $context -or $context.Subscription.Id -ne $SubscriptionId) {
-        Connect-AzAccount -SubscriptionId $SubscriptionId -ErrorAction Stop | Out-Null
+        try {
+            Set-AzContext -SubscriptionId $SubscriptionId -ErrorAction Stop | Out-Null
+        } catch {
+            Write-Output "No usable cached Azure context was found. Authentication is required."
+            if (-not (Connect-AzAccountFromAzureCli -SubscriptionId $SubscriptionId)) {
+                Connect-AzAccount -SubscriptionId $SubscriptionId -Scope Process -ErrorAction Stop | Out-Null
+            }
+        }
     }
-    Write-Output "✅ Connected to Azure"
+
+    $context = Get-AzContext
+    $contextIsUsable = $false
+    if ($context -and $context.Subscription.Id -eq $SubscriptionId) {
+        try {
+            $probe = Invoke-AzRestMethod -Method GET `
+                -Path "/subscriptions/$SubscriptionId`?api-version=2022-12-01" `
+                -ErrorAction Stop
+            $contextIsUsable = $probe.StatusCode -ge 200 -and $probe.StatusCode -lt 300
+        } catch {
+            Write-Warning "The cached Azure context targets the requested subscription but its token is unusable: $($_.Exception.Message)"
+        }
+    }
+
+    if (-not $contextIsUsable) {
+        Write-Output 'Refreshing Azure authentication before deployment operations...'
+        Clear-AzContext -Scope Process -Force -ErrorAction SilentlyContinue | Out-Null
+        if (Connect-AzAccountFromAzureCli -SubscriptionId $SubscriptionId) {
+            Write-Output 'Reused the authenticated Azure CLI session.'
+        } else {
+            Connect-AzAccount -SubscriptionId $SubscriptionId -Scope Process -ErrorAction Stop | Out-Null
+        }
+        $context = Get-AzContext
+        $probe = Invoke-AzRestMethod -Method GET `
+            -Path "/subscriptions/$SubscriptionId`?api-version=2022-12-01" `
+            -ErrorAction Stop
+        $contextIsUsable = $probe.StatusCode -ge 200 -and $probe.StatusCode -lt 300
+    }
+
+    if (-not $context -or $context.Subscription.Id -ne $SubscriptionId) {
+        throw "Azure context selection failed. Expected subscription '$SubscriptionId', but the active subscription is '$($context.Subscription.Id)'."
+    }
+    if (-not $contextIsUsable) {
+        throw "Azure authentication validation failed for subscription '$SubscriptionId'."
+    }
+
+    Write-Output "✅ Using Azure subscription: $($context.Subscription.Name) ($($context.Subscription.Id))"
 }
 
 function Initialize-ResourceGroup {
@@ -50,6 +398,82 @@ function Initialize-ResourceGroup {
     } else {
         Write-Output "✅ Resource group exists"
     }
+}
+
+function Remove-VmAutoShutdownSchedules {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$ResourceGroupName,
+
+        [Parameter(Mandatory)]
+        [string[]]$VMNames
+    )
+
+    $expectedScheduleNames = @($VMNames | Where-Object { $_ } |
+        Select-Object -Unique | ForEach-Object { "shutdown-computevm-$_" })
+    $schedules = @(@(Invoke-AzureOperationWithRetry `
+        -OperationName "List auto-shutdown schedules in '$ResourceGroupName'" `
+        -Operation {
+            Get-AzResource -ResourceGroupName $ResourceGroupName `
+                -ResourceType 'Microsoft.DevTestLab/schedules' -ErrorAction Stop
+        }) | Where-Object { $_.Name -in $expectedScheduleNames })
+
+    foreach ($schedule in $schedules) {
+        Invoke-AzureOperationWithRetry `
+            -OperationName "Remove auto-shutdown schedule '$($schedule.Name)'" `
+            -Operation {
+                Remove-AzResource -ResourceId $schedule.ResourceId -Force -ErrorAction Stop | Out-Null
+            } | Out-Null
+    }
+
+    if ($schedules.Count -gt 0) {
+        Write-Output "Removed $($schedules.Count) auto-shutdown schedule(s) while deployment validation is active."
+    }
+}
+
+function Enable-VmAutoShutdownSchedules {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)] [string]$ResourceGroupName,
+        [Parameter(Mandatory)] [string]$Location,
+        [Parameter(Mandatory)] [string[]]$VMNames,
+        [Parameter(Mandatory)] [string]$Time,
+        [Parameter(Mandatory)] [string]$TimeZone
+    )
+
+    $normalizedTime = $Time -replace ':', ''
+    if ($normalizedTime -notmatch '^(?:[01]\d|2[0-3])[0-5]\d$') {
+        throw "Auto-shutdown time '$Time' must be HH:mm or HHmm in 24-hour format."
+    }
+
+    foreach ($vmName in @($VMNames | Where-Object { $_ } | Select-Object -Unique)) {
+        $vm = Invoke-AzureOperationWithRetry `
+            -OperationName "Read VM '$vmName' for auto-shutdown" `
+            -Operation {
+                Get-AzVM -ResourceGroupName $ResourceGroupName -Name $vmName -ErrorAction Stop
+            }
+
+        $properties = [pscustomobject]@{
+            status = 'Enabled'
+            taskType = 'ComputeVmShutdownTask'
+            dailyRecurrence = [pscustomobject]@{ time = $normalizedTime }
+            timeZoneId = $TimeZone
+            targetResourceId = $vm.Id
+            notificationSettings = [pscustomobject]@{ status = 'Disabled' }
+        }
+
+        Invoke-AzureOperationWithRetry `
+            -OperationName "Create auto-shutdown schedule for '$vmName'" `
+            -Operation {
+                New-AzResource -ResourceGroupName $ResourceGroupName `
+                    -ResourceType 'Microsoft.DevTestLab/schedules' `
+                    -Name "shutdown-computevm-$vmName" -ApiVersion '2018-09-15' `
+                    -Location $Location -Properties $properties -Force -ErrorAction Stop
+            } | Out-Null
+    }
+
+    Write-Output "Enabled auto-shutdown at $normalizedTime ($TimeZone) for $($VMNames.Count) VM(s)."
 }
 
 function ConvertFrom-SecurePassword {
@@ -292,6 +716,20 @@ function Get-OrCreateStorageAccount {
     return $result
 }
 
+function Join-StorageSasUrl {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)] [string]$BlobEndpoint,
+        [Parameter(Mandatory)] [string]$ContainerName,
+        [Parameter(Mandatory)] [string]$SasToken
+    )
+
+    $uriBuilder = [UriBuilder]$BlobEndpoint
+    $uriBuilder.Path = "$($uriBuilder.Path.TrimEnd('/'))/$ContainerName"
+    $uriBuilder.Query = $SasToken.TrimStart('?')
+    return $uriBuilder.Uri.AbsoluteUri
+}
+
 function New-ResultsUploadConfig {
     <#
     .SYNOPSIS
@@ -328,7 +766,8 @@ function New-ResultsUploadConfig {
         -Permission rwl `
         -ExpiryTime (Get-Date).AddHours($SasExpiryHours)
 
-    $sasUrl = "$($StorageContext.BlobEndPoint)${ContainerName}${sasToken}"
+    $sasUrl = Join-StorageSasUrl -BlobEndpoint $StorageContext.BlobEndPoint `
+        -ContainerName $ContainerName -SasToken $sasToken
 
     Write-Host "   Test results SAS URL generated (expires in ${SasExpiryHours}h)"
 
@@ -368,8 +807,8 @@ function Resolve-AvailableVmSize {
     .PARAMETER FallbackSizes
         Ordered list of fallback sizes to try if the preferred size is unavailable.
     .PARAMETER AvailableSkus
-        Pre-fetched output of Get-AzComputeResourceSku (filtered to virtualMachines).
-        Pass this to avoid repeated API calls when resolving multiple sizes.
+        Pre-fetched VM SKU snapshot. Get-RegionalVmSkuSnapshot provides the
+        lightweight name/vCPU shape; full resource-SKU objects are also accepted.
     .PARAMETER Role
         Label for log messages (e.g., 'Driver', 'SUT').
     .PARAMETER ReturnAll
@@ -601,43 +1040,39 @@ function Invoke-DeploymentWithSkuFallback {
             -ErrorAction Stop `
             -AsJob
 
-        Watch-Deployment -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName -Job $job
-
         $deployment = $null
-        $deployError = $null
         try {
-            $deployment = $job | Receive-Job -Wait -AutoRemoveJob -ErrorAction Stop
+            $deployment = Watch-Deployment -ResourceGroupName $ResourceGroupName `
+                -DeploymentName $deploymentName -Job $job
         } catch {
-            $deployError = $_
-            $job | Remove-Job -Force -ErrorAction SilentlyContinue
+            if ($job.State -in @('Running', 'NotStarted')) {
+                Stop-Job -Job $job -ErrorAction SilentlyContinue
+            }
+            Remove-Job -Job $job -Force -ErrorAction SilentlyContinue
+            throw
         }
+        if ($job.State -in @('Running', 'NotStarted')) {
+            Stop-Job -Job $job -ErrorAction SilentlyContinue
+        }
+        Remove-Job -Job $job -Force -ErrorAction SilentlyContinue
 
-        $provState = if ($deployment) { $deployment.ProvisioningState } else { 'Failed' }
-        if ($provState -eq 'Succeeded' -and -not $deployError) {
+        $provState = $deployment.ProvisioningState
+        if ($provState -eq 'Succeeded') {
             return $deployment
         }
 
-        if ($deployError) {
-            Write-Output "`n$DeploymentNamePrefix deployment error details:"
-            Write-Output "  Message: $($deployError.Exception.Message)"
-            $inner = $deployError.Exception.InnerException
-            while ($inner) {
-                Write-Output "  Inner: $($inner.Message)"
-                $inner = $inner.InnerException
-            }
-            if ($deployError.ErrorDetails) {
-                Write-Output "  ErrorDetails: $($deployError.ErrorDetails.Message)"
-            }
-        }
-
-        $isCapacity = Test-CapacityError -ErrorRecord $deployError `
+        $isCapacity = Test-CapacityError -ErrorRecord $null `
             -ResourceGroupName $ResourceGroupName -DeploymentName $deploymentName
-        $errText = if ($deployError) { "$($deployError.Exception.Message)" } else { '' }
+        $failedOperationText = try {
+            @(Get-AzResourceGroupDeploymentOperation -ResourceGroupName $ResourceGroupName `
+                -DeploymentName $deploymentName -ErrorAction Stop |
+                Where-Object ProvisioningState -eq 'Failed' |
+                ForEach-Object { "$($_.StatusMessage)" }) -join ' '
+        } catch { '' }
 
-        if ($isCapacity -and (& $stepFailedSizes $errText)) { continue }
+        if ($isCapacity -and (& $stepFailedSizes $failedOperationText)) { continue }
 
-        if ($deployError) { throw $deployError }
-        throw "$DeploymentNamePrefix deployment '$deploymentName' finished with state: $provState"
+        throw "$DeploymentNamePrefix deployment '$deploymentName' finished with state '$provState'. $failedOperationText"
     }
 }
 
@@ -656,7 +1091,8 @@ function Test-RegionalVCpuQuota {
         Hashtable mapping Role label -> resolved VM size name.
         Example: @{ 'Driver' = 'Standard_F4as_v6'; 'SUT' = 'Standard_D8ls_v5' }
     .PARAMETER AvailableSkus
-        Pre-fetched output of Get-AzComputeResourceSku (filtered to virtualMachines).
+        Pre-fetched VM SKU snapshot from Get-RegionalVmSkuSnapshot or the full
+        Get-AzComputeResourceSku response.
     #>
     [CmdletBinding()]
     param(
@@ -693,7 +1129,9 @@ function Test-RegionalVCpuQuota {
     }
 
     # Query subscription regional quota
-    $usages = Get-AzVMUsage -Location $Location
+    $usages = @(Invoke-AzureOperationWithRetry `
+        -OperationName "Read regional vCPU quota in '$Location'" `
+        -Operation { Get-AzVMUsage -Location $Location -ErrorAction Stop })
     $regionalQuota = $usages | Where-Object { $_.Name.Value -eq 'cores' }
     if (-not $regionalQuota) {
         Write-Warning "Could not retrieve regional vCPU quota for '$Location'; skipping quota check."
@@ -801,12 +1239,13 @@ function Test-VmImageAvailability {
         [string]$Sku
     )
 
-    try {
-        $images = Get-AzVMImage -Location $Location -PublisherName $Publisher -Offer $Offer -Skus $Sku -ErrorAction Stop
-        return ($null -ne $images -and @($images).Count -gt 0)
-    } catch {
-        return $false
-    }
+    $images = @(Invoke-AzureOperationWithRetry `
+        -OperationName "Check VM image '$Publisher/$Offer/$Sku' in '$Location'" `
+        -Operation {
+            Get-AzVMImage -Location $Location -PublisherName $Publisher `
+                -Offer $Offer -Skus $Sku -ErrorAction Stop
+        })
+    return ($images.Count -gt 0)
 }
 
 function Resolve-DeploymentConfig {
@@ -895,15 +1334,12 @@ function Watch-Deployment {
     Write-Host "Monitoring deployment '$DeploymentName'..." -ForegroundColor Cyan
 
     # -- Phase 1: Wait for deployment to appear (up to 60s) --
-    # Also monitor the PowerShell job (if provided) so that ARM validation errors
-    # surface immediately instead of blocking for the full timeout.
+    # The local Az job can fail because its client connection times out while the
+    # registered ARM deployment continues. Once ARM exposes the named deployment,
+    # ARM state is authoritative and local job state is diagnostic only.
     $waitStart = Get-Date
     $deployment = $null
     while (((Get-Date) - $waitStart).TotalSeconds -lt 60) {
-        if ($Job -and $Job.State -eq 'Failed') {
-            Write-Host "`nDeployment job failed during ARM validation." -ForegroundColor Red
-            return
-        }
         try {
             $deployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName `
                 -Name $DeploymentName -ErrorAction Stop
@@ -914,10 +1350,13 @@ function Watch-Deployment {
     }
     if (-not $deployment) {
         if ($Job -and $Job.State -eq 'Failed') {
-            Write-Host "`nDeployment job failed during ARM validation." -ForegroundColor Red
-            return
+            $jobFailure = try {
+                $Job | Receive-Job -ErrorAction Stop | Out-Null
+                'The local deployment job failed before ARM registered the deployment.'
+            } catch { $_.Exception.Message }
+            throw "Deployment job failed before ARM registered '$DeploymentName': $jobFailure"
         }
-        Write-Warning "Deployment '$DeploymentName' not found after 60s. Continuing to wait..."
+        throw "Deployment '$DeploymentName' was not registered in ARM within 60 seconds."
     }
 
     # Parse a TargetResource value into resource type and name.
@@ -1019,11 +1458,6 @@ function Watch-Deployment {
     $pollCount = 0
     while ((Get-Date) -lt $deadline) {
         $pollCount++
-        # Early exit if the deployment job failed (e.g., ARM validation error)
-        if ($Job -and $Job.State -eq 'Failed') {
-            Write-Host "`nDeployment job failed." -ForegroundColor Red
-            return
-        }
         try {
             $deployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName `
                 -Name $DeploymentName -ErrorAction Stop
@@ -1081,6 +1515,12 @@ function Watch-Deployment {
     # -- Phase 3: Final summary --
     $totalMin = [math]::Round(((Get-Date) - $startTime).TotalMinutes, 1)
     $finalState = if ($deployment) { $deployment.ProvisioningState } else { 'Unknown' }
+    if ($finalState -notin @('Succeeded', 'Failed', 'Canceled')) {
+        if ($Job -and $Job.State -in @('Running', 'NotStarted')) {
+            Stop-Job -Job $Job -ErrorAction SilentlyContinue
+        }
+        throw [TimeoutException]::new("Deployment '$DeploymentName' did not reach a terminal state within $TimeoutMinutes minutes (last state: $finalState).")
+    }
     $color = switch ($finalState) {
         'Succeeded' { 'Green' }
         'Failed'    { 'Red' }
@@ -1088,6 +1528,7 @@ function Watch-Deployment {
     }
     Write-Host ""
     Write-Host "[$(Get-Date -Format 'HH:mm:ss')]  ** Deployment '$DeploymentName' $($finalState.ToLower()) in $totalMin min **" -ForegroundColor $color
+    return $deployment
 }
 
 function Enable-VmDiskEncryption {
@@ -1188,6 +1629,14 @@ function Enable-VmDiskEncryption {
         return $true
     }
     catch {
+        try {
+            $encryptionStatus = Get-AzVMDiskEncryptionStatus `
+                -ResourceGroupName $ResourceGroupName -VMName $VMName -ErrorAction Stop
+            if ($encryptionStatus.OsVolumeEncrypted -eq 'Encrypted') {
+                Write-Warning "ADE reported an extension error for '$VMName', but the OS volume is encrypted. Treating the postcondition as authoritative."
+                return $true
+            }
+        } catch { }
         Write-Warning "Disk encryption failed for '$VMName': $($_.Exception.Message)"
         return $false
     }
@@ -1236,11 +1685,29 @@ function Invoke-DiskEncryptionForVMs {
         return
     }
 
-    Write-Output "`n  Encrypting VM disks..."
-    $results = [System.Collections.Generic.List[object]]::new()
-    $threadJobCommand = Get-Command Start-ThreadJob -ErrorAction SilentlyContinue
+    $mountPointScript = Join-Path $PSScriptRoot 'scripts\Set-FsaMountPointsForDiskEncryption.ps1'
+    if (-not (Test-Path -LiteralPath $mountPointScript)) {
+        throw "FSA mount-point helper was not found at '$mountPointScript'."
+    }
+    $preparedVmNames = [System.Collections.Generic.List[string]]::new()
+    try {
+        foreach ($vmName in $uniqueVmNames) {
+            Invoke-AzureOperationWithRetry `
+                -OperationName "Prepare '$vmName' mount points for disk encryption" `
+                -Operation {
+                    Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+                        -VMName $vmName -CommandId RunPowerShellScript `
+                        -ScriptPath $mountPointScript -Parameter @{ Mode = 'Detach' } `
+                        -ErrorAction Stop | Out-Null
+                } | Out-Null
+            $preparedVmNames.Add($vmName)
+        }
 
-    if ($uniqueVmNames.Count -gt 1 -and $threadJobCommand) {
+        Write-Output "`n  Encrypting VM disks..."
+        $results = [System.Collections.Generic.List[object]]::new()
+        $threadJobCommand = Get-Command Start-ThreadJob -ErrorAction SilentlyContinue
+
+        if ($uniqueVmNames.Count -gt 1 -and $threadJobCommand) {
         Write-Output "   Encrypting $($uniqueVmNames.Count) VMs concurrently (throttle: $ThrottleLimit)..."
         $encryptionFunction = ${function:Enable-VmDiskEncryption}.ToString()
         $azureContext = Get-AzContext
@@ -1282,8 +1749,8 @@ function Invoke-DiskEncryptionForVMs {
                 $job | Remove-Job -Force -ErrorAction SilentlyContinue
             }
         }
-    }
-    else {
+        }
+        else {
         if ($uniqueVmNames.Count -gt 1) {
             Write-Warning 'Start-ThreadJob is unavailable; encrypting VMs sequentially.'
         }
@@ -1299,15 +1766,32 @@ function Invoke-DiskEncryptionForVMs {
                 Output  = @()
             })
         }
-    }
+        }
 
-    $failed = @($results | Where-Object { -not $_.Success })
-    if ($failed.Count -gt 0) {
-        $failedNames = ($failed.VMName | Sort-Object -Unique) -join ', '
-        throw "Disk encryption failed for: $failedNames"
-    }
+        $failed = @($results | Where-Object { -not $_.Success })
+        if ($failed.Count -gt 0) {
+            $failedNames = ($failed.VMName | Sort-Object -Unique) -join ', '
+            throw "Disk encryption failed for: $failedNames"
+        }
 
-    return @($results)
+        return @($results)
+    } finally {
+        foreach ($vmName in @($preparedVmNames)) {
+            $restored = $false
+            for ($attempt = 1; $attempt -le 5 -and -not $restored; $attempt++) {
+                try {
+                    Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+                        -VMName $vmName -CommandId RunPowerShellScript `
+                        -ScriptPath $mountPointScript -Parameter @{ Mode = 'Restore' } `
+                        -ErrorAction Stop | Out-Null
+                    $restored = $true
+                } catch {
+                    if ($attempt -eq 5) { throw }
+                    Start-Sleep -Seconds ([math]::Min(15 * $attempt, 60))
+                }
+            }
+        }
+    }
 }
 
 function Install-DscPackageAssets {
@@ -1588,6 +2072,19 @@ function New-DscPackageZip {
             Write-Warning "Shared DSC folder not found at $SharedDscPath -- package may be incomplete"
         }
 
+        # Windows Custom Script Extensions invoke this generic bootstrap from
+        # the extracted package. This avoids embedding the full script in
+        # commandToExecute, which is subject to Windows' command-line limit.
+        $sharedRoot = Split-Path $SharedDscPath -Parent
+        $windowsBootstrapSource = Join-Path $sharedRoot 'scripts\cse-bootstrap.ps1'
+        $windowsBootstrapDestination = Join-Path $tempPackagePath 'cse-bootstrap.ps1'
+        if (-not (Test-Path -LiteralPath $windowsBootstrapSource)) {
+            throw "Windows CSE bootstrap not found at '$windowsBootstrapSource'."
+        }
+        Copy-Item -LiteralPath $windowsBootstrapSource `
+            -Destination $windowsBootstrapDestination -Force
+        Write-Host "   [OK] Copied Windows CSE bootstrap to package root"
+
         # Download external assets (GPOBackup.zip, ParamConfig.json)
         $assetParams = @{
             ScriptsFolder = $dscScriptsTarget
@@ -1816,10 +2313,49 @@ function Resolve-VmNicIp {
     return $result
 }
 
+function Complete-DeploymentTestOutcome {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [object]$Verification
+    )
+
+    if (-not $Verification.TestsComplete) {
+        return
+    }
+
+    $classification = "$($Verification.TestClassification)"
+    $failedTestCount = [int]$Verification.FailedTestCount
+    $message = "Automatic tests reached terminal finalization with classification '$classification' and $failedTestCount non-passing results. Requested post-test infrastructure handling completed."
+
+    switch ($classification) {
+        'Passed' {
+            Write-Host '[OK] Automatic tests passed and deployment orchestration completed.'
+        }
+        'TestFailures' {
+            Write-Warning "$message The environment and test run completed successfully; review the reported protocol-test failures."
+        }
+        'InfrastructureOrConfigurationFailure' {
+            Write-Warning "$message The environment orchestration completed, but the test run reported infrastructure or configuration failures; review the complete summary."
+        }
+        'MixedTestAndInfrastructureFailures' {
+            Write-Warning "$message The environment orchestration completed, but the test run reported both protocol-test and infrastructure/configuration failures; review the complete summary."
+        }
+        default {
+            throw "$message The test classification is missing or unknown, so deployment validation cannot be trusted."
+        }
+    }
+}
+
 Export-ModuleMember -Function @(
+    'Invoke-AzureOperationWithRetry',
+    'Get-RegionalVmSkuSnapshot',
     'Import-AzureModules',
+    'Initialize-BicepCli',
     'Connect-AzureSubscription',
     'Initialize-ResourceGroup',
+    'Remove-VmAutoShutdownSchedules',
+    'Enable-VmAutoShutdownSchedules',
     'ConvertFrom-SecurePassword',
     'New-TemporaryStorageAccount',
     'Get-OrCreateStorageAccount',
@@ -1841,6 +2377,7 @@ Export-ModuleMember -Function @(
     'New-DscPackageZip',
     'Enable-VmDiskEncryption',
     'Invoke-DiskEncryptionForVMs',
+    'Complete-DeploymentTestOutcome',
     'Resolve-FreeSubnetIp',
     'Resolve-VmNicIp'
 )

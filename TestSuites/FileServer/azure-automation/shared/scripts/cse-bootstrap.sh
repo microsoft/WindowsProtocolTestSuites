@@ -15,6 +15,18 @@ export DEBIAN_FRONTEND=noninteractive
 
 echo 'Starting __SCENARIO__ __ROLE__ setup...'
 mkdir -p '/opt/__PACKAGE_NAME__'
+
+if [ '__ROLE__' = 'driver' ]; then
+    echo 'Reconciling any stale Driver test run before replacing the package...'
+    pkill -TERM -f 'Invoke-TestRun|Execute-TestCaseByContext|dotnet vstest|testhost' 2>/dev/null || true
+    sleep 2
+    pkill -KILL -f 'Invoke-TestRun|Execute-TestCaseByContext|dotnet vstest|testhost' 2>/dev/null || true
+    rm -f /test/test.started.signal \
+        /test/test.finished.signal \
+        /test/test.run.completed.signal \
+        /test/test.results.upload.failed.signal
+fi
+
 apt-get update -qq
 apt-get install -y -qq wget unzip apt-transport-https
 
@@ -55,6 +67,11 @@ fi
 
 unzip -o '/opt/__PACKAGE_NAME__.zip' -d '/opt/__PACKAGE_NAME__'
 rm -f '/opt/__PACKAGE_NAME__.zip'
+
+# A packaged rerun must produce a fresh role signal. Otherwise Deploy-Driver
+# can short-circuit on the previous signal and freshness verification times out.
+deploy_signal="/opt/__PACKAGE_NAME__/DSC/$(basename '__DEPLOY_SCRIPT__' .ps1).Completed.signal"
+rm -f "$deploy_signal"
 
 if [ -f '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' ]; then
     echo 'Injecting credential into Config.json...'

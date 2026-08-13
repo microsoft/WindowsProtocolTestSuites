@@ -22,7 +22,15 @@
 # $TestName:            The running test cases filter test name
 #----------------------------------------------------------------------------
 
-param($ContextName = "", $CategoryName = "", $TestName = "", $runTests = "true", $enableParallel = "true")
+param(
+  $ContextName = "",
+  $CategoryName = "",
+  $TestName = "",
+  $runTests = "true",
+  $enableParallel = "true",
+  [ValidateRange(1, 1440)]
+  [int]$TestInvocationTimeoutMinutes = 60
+)
 # For FileSharing, the context name should be any of below
 # Samba_Workgroup_SMB2002
 # Samba_Workgroup_SMB21
@@ -745,24 +753,45 @@ if ($driverOS -ne "Linux" -and $driverOS -ne "RPMBasedLinux") {
 #----------------------------------------------------------------------------
 # Functions for running test cases
 #----------------------------------------------------------------------------
-function RenameTrxResultFile($newName) {
-  $trxResultFile = Get-ChildItem (Resolve-Path "$testDir\TestResults/*.trx") | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-  if ($null -ne $trxResultFile) {
-    Rename-Item -Path $trxResultFile -NewName $newName
+function Invoke-TestCommand($testContainer, $trxResultFileName, $testCaseFilter = "", $root = $PSScriptRoot, $resultRoot = $testDir) {
+  $resultDirectory = Join-Path $resultRoot 'TestResults'
+  ."$root\Write-Info.ps1" "Execute test cases in test filter: $testCaseFilter"
+  ."$root\Write-Info.ps1" "Execute test cases in test container: $testContainer"
+  if (-not [string]::IsNullOrEmpty($testCaseFilter)) {
+    ."$root\Write-Info.ps1" "Filtered by: $testCaseFilter"
+  }
+
+  $invocation = & "$root\Invoke-VstestInvocation.ps1" `
+    -TestContainer $testContainer `
+    -TrxResultFileName $trxResultFileName `
+    -TestCaseFilter $testCaseFilter `
+    -ResultDirectory $resultDirectory `
+    -TimeoutMinutes $TestInvocationTimeoutMinutes `
+    -WorkingDirectory $resultRoot
+
+  foreach ($line in @($invocation.StandardOutput, $invocation.StandardError)) {
+    if (-not [string]::IsNullOrWhiteSpace($line)) {
+      $line.TrimEnd() | ."$root\Write-Info.ps1"
+    }
+  }
+
+  if ($invocation.Status -eq 'TimedOut') {
+    ."$root\Write-Info.ps1" "Test invocation timed out after $TestInvocationTimeoutMinutes minutes and its process tree was terminated; continuing the remaining execution plan." -ForegroundColor Yellow
+  }
+  elseif ($invocation.Status -ne 'Completed') {
+    ."$root\Write-Info.ps1" "Test invocation ended with status $($invocation.Status): $($invocation.ErrorMessage); continuing the remaining execution plan." -ForegroundColor Yellow
+  }
+  elseif ($invocation.ExitCode -ne 0) {
+    ."$root\Write-Info.ps1" "Test invocation exited with code $($invocation.ExitCode); continuing the remaining execution plan." -ForegroundColor Yellow
+  }
+  if (-not $invocation.ResultFileCreated) {
+    ."$root\Write-Info.ps1" "Test invocation did not create expected result: $($invocation.ResultPath)" -ForegroundColor Yellow
   }
 }
 
 function ExecuteTestCases($testContainer, $trxResultFileName, $testCaseFilter = "") {
-  ."$PSScriptRoot\Write-Info.ps1" "Execute test cases in test container: $testContainer"
-  if ([System.String]::IsNullOrEmpty($testCaseFilter)) {
-    dotnet vstest (Resolve-Path "$testContainer") /Logger:trx 2>&1 | ."$PSScriptRoot\Write-Info.ps1"
-  }
-  else {
-    ."$PSScriptRoot\Write-Info.ps1" "Filtered by: $testCaseFilter"
-    dotnet vstest (Resolve-Path "$testContainer") /TestCaseFilter:"$testCaseFilter" /Logger:trx 2>&1 | ."$PSScriptRoot\Write-Info.ps1"
-  }
-  Start-Sleep 10
-  RenameTrxResultFile $trxResultFileName
+  Invoke-TestCommand -testContainer $testContainer `
+    -trxResultFileName $trxResultFileName -testCaseFilter $testCaseFilter
 }
 
 function ExecuteTestCasesArray($ArrayCommands) {
@@ -774,20 +803,37 @@ function ExecuteTestCasesArray($ArrayCommands) {
         $testContainer = $command.TestContainer
         $testCaseFilter = $command.TestCaseFilter
         $trxResultFileName = $command.TrxResultFileName
+        $timeoutMinutes = $using:TestInvocationTimeoutMinutes
 
-        ."$root\Write-Info.ps1" "Execute test cases in test filter: $($command.TestCaseFilter)"
-        ."$root\Write-Info.ps1" "Execute test cases in test container: $($command.TestContainer)"
-        if ([System.String]::IsNullOrEmpty($testCaseFilter)) {
-          dotnet vstest (Resolve-Path $testContainer) /Logger:trx 2>&1 | ."$root\Write-Info.ps1"
-        } else {
+        $resultDirectory = Join-Path $_testDir 'TestResults'
+        ."$root\Write-Info.ps1" "Execute test cases in test filter: $testCaseFilter"
+        ."$root\Write-Info.ps1" "Execute test cases in test container: $testContainer"
+        if (-not [string]::IsNullOrEmpty($testCaseFilter)) {
           ."$root\Write-Info.ps1" "Filtered by: $testCaseFilter"
-          dotnet vstest (Resolve-Path $testContainer) /TestCaseFilter:"$testCaseFilter" /Logger:trx 2>&1 | ."$root\Write-Info.ps1"
         }
-        Start-Sleep 10
-
-        $trxResultFile = Get-ChildItem (Resolve-Path "$_testDir\TestResults/*.trx") | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-        if ($null -ne $trxResultFile) {
-          Rename-Item -Path $trxResultFile -NewName $trxResultFileName
+        $invocation = & "$root\Invoke-VstestInvocation.ps1" `
+          -TestContainer $testContainer `
+          -TrxResultFileName $trxResultFileName `
+          -TestCaseFilter $testCaseFilter `
+          -ResultDirectory $resultDirectory `
+          -TimeoutMinutes $timeoutMinutes `
+          -WorkingDirectory $_testDir
+        foreach ($line in @($invocation.StandardOutput, $invocation.StandardError)) {
+          if (-not [string]::IsNullOrWhiteSpace($line)) {
+            $line.TrimEnd() | ."$root\Write-Info.ps1"
+          }
+        }
+        if ($invocation.Status -eq 'TimedOut') {
+          ."$root\Write-Info.ps1" "Test invocation timed out after $timeoutMinutes minutes and its process tree was terminated; continuing the remaining execution plan." -ForegroundColor Yellow
+        }
+        elseif ($invocation.Status -ne 'Completed') {
+          ."$root\Write-Info.ps1" "Test invocation ended with status $($invocation.Status): $($invocation.ErrorMessage); continuing the remaining execution plan." -ForegroundColor Yellow
+        }
+        elseif ($invocation.ExitCode -ne 0) {
+          ."$root\Write-Info.ps1" "Test invocation exited with code $($invocation.ExitCode); continuing the remaining execution plan." -ForegroundColor Yellow
+        }
+        if (-not $invocation.ResultFileCreated) {
+          ."$root\Write-Info.ps1" "Test invocation did not create expected result: $($invocation.ResultPath)" -ForegroundColor Yellow
         }
     } -ThrottleLimit 5
   }
@@ -796,26 +842,9 @@ function ExecuteTestCasesArray($ArrayCommands) {
       $command = $_
       $root = $PSScriptRoot
 
-      # Access properties directly
-      $testContainer = $command.TestContainer
-      $testCaseFilter = $command.TestCaseFilter
-      $trxResultFileName = $command.TrxResultFileName
-
-      ."$root\Write-Info.ps1" "Execute test cases in test filter: $($command.TestCaseFilter)"
-      ."$root\Write-Info.ps1" "Execute test cases in test container: $($command.TestContainer)"
-
-      if ([System.String]::IsNullOrEmpty($testCaseFilter)) {
-        dotnet vstest (Resolve-Path $testContainer) /Logger:trx 2>&1 | ."$root\Write-Info.ps1"
-      }
-      else {
-        ."$root\Write-Info.ps1" "Filtered by: $testCaseFilter"
-        dotnet vstest (Resolve-Path $testContainer) /TestCaseFilter:"$testCaseFilter" /Logger:trx 2>&1 | ."$root\Write-Info.ps1"
-      }
-      Start-Sleep 10
-      $trxResultFile = Get-ChildItem (Resolve-Path "$testDir\TestResults/*.trx") | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-      if ($null -ne $trxResultFile) {
-        Rename-Item -Path $trxResultFile -NewName $trxResultFileName
-      }
+      ExecuteTestCases -testContainer $command.TestContainer `
+        -trxResultFileName $command.TrxResultFileName `
+        -testCaseFilter $command.TestCaseFilter
     }
   }
 }
