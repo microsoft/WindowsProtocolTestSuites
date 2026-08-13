@@ -10,7 +10,8 @@ Automated Infrastructure-as-Code (IaC) for deploying complete File Server Protoc
 | **VMs deployed** | 2 (Driver + SUT) | 3 (DC + Driver + SUT) | 5 (DC + Storage + 2 Nodes + Driver) |
 | **Active Directory** | No | Yes | Yes |
 | **Deploy time** | ~15 min | ~30 min | ~40 min |
-| **Post-deploy manual steps** | None (tests run automatically) | None | Cluster formation (~15 min) |
+| **Command returns** | After VM configuration and automatic tests are verified | After VM configuration and automatic tests are verified | After cluster configuration and automatic tests are verified |
+| **Post-deploy manual steps** | None | None | None (manual checks remain available for troubleshooting) |
 | **Authentication** | Local accounts | Domain accounts (Kerberos, NTLM) | Domain accounts (Kerberos, NTLM) |
 | **Test coverage** | SMB2, DFSC, FSA, SQOS, RSVD | Full suite (SMB2, FSA, DFSC, Auth, FSRVP, RSVD, SQOS, QUIC) | Full suite + ServerFailover, clustered shares |
 | **Linux driver support** | Yes | Yes | Yes |
@@ -23,12 +24,12 @@ Automated Infrastructure-as-Code (IaC) for deploying complete File Server Protoc
 
 These apply to all three scenarios:
 
+- **PowerShell 7**
 - **Azure subscription** with permissions to create resource groups, VMs, storage accounts, and Key Vaults
-- **Azure PowerShell modules**: `Az.Accounts`, `Az.Resources`, `Az.Storage`, `Az.Compute`
-  ```powershell
-  Install-Module Az -Scope CurrentUser
-  ```
-- **Bicep CLI** (installed automatically by the deploy scripts if missing, or install manually via `az bicep install`)
+- **PowerShellGet** with access to PowerShell Gallery. The scripts install missing `Az.Accounts`, `Az.Resources`, `Az.Storage`, and `Az.Compute` modules for the current user.
+- **Bicep CLI or Azure CLI**. If `bicep` is missing, the scripts install it through `az bicep install` with bounded retries.
+
+The scripts first validate a cached Az PowerShell context. If its token expired after a workstation restart, they reuse an authenticated Azure CLI session through a process-scoped ARM token. Interactive Azure authentication occurs only when neither context is usable. Tokens, credentials, and signed package URLs are not written to deployment logs.
 
 ## Release packages
 
@@ -79,29 +80,32 @@ $password = Read-Host -Prompt "Enter admin password" -AsSecureString
     -AdminPassword $password
 ```
 
-**Workgroup** (requires a second password for the local test user):
+**Workgroup** (one password is used for the VM administrator and ordinary test accounts):
 ```powershell
 $adminPass = Read-Host -Prompt "Admin password" -AsSecureString
-$localPass = Read-Host -Prompt "Local user password" -AsSecureString
 
 .\deploy.ps1 `
     -SubscriptionId "your-subscription-id" `
     -ResourceGroupName "fileserver-test" `
-    -AdminPassword $adminPass `
-    -LocalUserPassword $localPass
+    -AdminPassword $adminPass
 ```
 
 ### 3. Wait for VM configuration to finish
 
-Azure Portal will show "Succeeded" before VMs finish their background configuration (AD promotion, domain joins, feature installation). Use the verification methods below to confirm readiness.
+Azure Portal can show an ARM deployment as `Succeeded` before guest configuration finishes (AD promotion, domain joins, feature installation). All three deployment scripts perform integrated guest and automatic-test verification. They require role completion signals, both test finalization signals, a complete summary, and at least one TRX result. After terminal test finalization, requested Azure Disk Encryption and auto-shutdown schedules are handled before the command returns. All known terminal test classifications are printed and uploaded without being conflated with deployment-orchestration failure. Missing summaries/TRX, failed uploads, incomplete guest setup, and post-test infrastructure failures still produce a nonzero exit. VM responsiveness is checked again after encryption.
+
+For an ad-hoc recheck, use the shared verifier:
 
 **All scenarios** — use the shared verification script:
 ```powershell
 # From any scenario folder (or use the full path)
-..\shared\scripts\Verify-Deployment.ps1 -ResourceGroupName "fileserver-test"
+..\shared\scripts\Verify-Deployment.ps1 `
+    -SubscriptionId "your-subscription-id" `
+    -ResourceGroupName "fileserver-test" `
+    -Scenario Workgroup
 ```
 
-This auto-detects which VMs are present (Domain, Cluster, or Workgroup) and polls their signal files until all report complete.
+Pass `-WaitForTests` when that scenario launches tests automatically. Each Azure Run Command probe has its own timeout; transient probe failures use bounded backoff. Pass `-Scenario` explicitly for partial or failed deployments so a missing VM cannot be mistaken for a smaller successful scenario.
 
 ### 4. Connect and use
 
@@ -137,8 +141,10 @@ flowchart TB
         gate --> ext_sut[Node01 CustomScriptExtension]
     end
 
-    ext_driver --> done([All VMs configuring in background<br/>Check signal files for completion])
-    ext_sut --> done
+    ext_driver --> verify[Verify fresh member signals<br/>and complete automatic tests]
+    ext_sut --> verify
+    verify --> ade{ADE enabled?}
+    ade --> done([Report terminal result])
 ```
 
 ### Cluster Scenario
@@ -166,8 +172,10 @@ flowchart TB
         driver[Client01<br/>Driver]
     end
 
-    phase2 --> verify[Run Verify-ClusterDeployment.ps1<br/>Poll signal files on all 5 VMs]
-    verify --> manual[Manual: form cluster on Node01<br/>Initialize disks, create cluster,<br/>add ScaleOutFS, create shares]
+    phase2 --> configure[Node01 forms cluster<br/>and creates clustered roles/shares]
+    configure --> verify[Verify all role signals<br/>and complete automatic tests]
+    verify --> ade{ADE enabled?}
+    ade --> done([Report terminal result])
 ```
 
 ### Workgroup Scenario
@@ -191,7 +199,11 @@ flowchart TB
 
     ext_driver --> test[Scheduled task fires<br/>Waits for SUT readiness<br/>Runs full test suite automatically]
     ext_sut --> test
-    test --> results([Results at C:\Test\TestResults\])
+    test --> verify[Verify fresh VM + test signals<br/>and TRX output]
+    verify --> ade{ADE enabled?}
+    ade -- Yes --> encrypt[Encrypt both VMs<br/>then verify VM agents]
+    ade -- No --> results([Results at C:\Test\TestResults\])
+    encrypt --> results
 ```
 
 ### On-VM Configuration Flow
@@ -280,7 +292,18 @@ Domain and Cluster deployments support resuming from Phase 2 if Phase 1 succeede
 
 This retrieves Phase 1 outputs automatically (subnet IDs, DC IP), reuses the previously uploaded DSC package, and redeploys only Phase 2 resources.
 
+Continuation preserves AD computer objects for VMs that still exist. Unchanged Phase 1 roles may use their existing completion signals; redeployed Phase 2 roles and test signals must be newer than the continuation start time.
+
+If the local shell or workstation restarts, VM-side extensions, scheduled tasks, and test processes continue independently. The local `deploy.ps1` process does not checkpoint and restart itself: rerun Workgroup with `-Resume`, or Domain/Cluster with `-SkipPhase1`. An authenticated Azure CLI session can restore the Az PowerShell context without another interactive login.
+
 You can also deploy Phase 1 only (`-SkipPhase2`) to inspect the DC before continuing, or validate templates without deploying (`-ValidateOnly`).
+
+## Automatic Test Reliability and Results
+
+- Every VSTest invocation has a 60-minute watchdog by default. A timed-out process tree is terminated, recorded in an `*.execution.json` manifest, and later test stages still run.
+- The verifier reports a `Started` manifest as stalled after 70 minutes. Scenario deploy scripts allow 360 minutes for the complete plan; direct verifier use defaults to 120 minutes unless overridden.
+- Finalization writes `test.summary.json` and `test.summary.txt`, then uploads TRX files, execution manifests, summaries, and non-secret Driver/SUT diagnostics. `test.results.upload.failed.signal` records an incomplete upload.
+- Summary classifications are `Passed`, `TestFailures`, `InfrastructureOrConfigurationFailure`, or `MixedTestAndInfrastructureFailures`. These are test-run outcomes: they do not stop later stages or fail the deployment command after the complete report is printed and uploaded. Verification still fails for missing or malformed terminal evidence, failed upload, incomplete guest readiness, active stalls, or failed ADE/schedule finalization.
 
 ## Troubleshooting
 

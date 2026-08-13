@@ -38,6 +38,10 @@ param(
     [int]$DCReadyTimeoutMinutes = 45,
 
     [Parameter(Mandatory=$false)]
+    [ValidateRange(1, 1440)]
+    [int]$TestTimeoutMinutes = 360,
+
+    [Parameter(Mandatory=$false)]
     [switch]$SkipPhase1,
 
     [Parameter(Mandatory=$false)]
@@ -54,6 +58,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$operationStartUtc = [DateTime]::UtcNow
 
 # Resolve paths relative to script directory
 $Phase1ParametersFile = if ([System.IO.Path]::IsPathRooted($Phase1ParametersFile)) {
@@ -95,6 +100,7 @@ if (-not (Test-Path $helpersPath)) {
     exit 1
 }
 Import-Module $helpersPath -Force
+Initialize-BicepCli
 
 function Write-DcDeploymentHeartbeat {
     param(
@@ -134,24 +140,6 @@ if (Test-Path $heartbeat) {
 Import-AzureModules
 Connect-AzureSubscription -SubscriptionId $SubscriptionId
 
-# Ensure Bicep CLI is on PATH (required for New-AzResourceGroupDeployment with .bicep files)
-if (-not (Get-Command bicep -ErrorAction SilentlyContinue)) {
-    Write-Output "Bicep CLI not found on PATH. Installing via Azure CLI..."
-    az bicep install
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Failed to install Bicep CLI. Please install manually: https://aka.ms/bicep-install"
-        exit 1
-    }
-    # az bicep install places the binary in ~/.azure/bin — add it to PATH for this session
-    $azBicepDir = Join-Path $env:USERPROFILE '.azure\bin'
-    if (Test-Path (Join-Path $azBicepDir 'bicep.exe')) {
-        $env:PATH = "$azBicepDir;$env:PATH"
-        Write-Output "✅ Bicep CLI installed and added to PATH"
-    } else {
-        Write-Warning "Bicep installed via az, but binary not found at '$azBicepDir'. You may need to add it to PATH manually."
-    }
-}
-
 # Convert password securely
 $plainPassword = ConvertFrom-SecurePassword -SecurePassword $AdminPassword
 
@@ -186,6 +174,22 @@ Write-Output "   Location (from bicepparam): $($config.location)"
 # Post-deploy Azure Disk Encryption runs only when the bicepparam enables it
 # (otherwise no Key Vault exists) and -SkipDiskEncryption was not passed.
 $diskEncryptionRequested = (-not $SkipDiskEncryption) -and ($phase1Params['enableDiskEncryption'] -ne $false)
+$phase2AutoShutdownRequested = $phase2Params['enableAutoShutdown'] -eq $true
+$autoShutdownRequested = ($phase1Params['enableAutoShutdown'] -eq $true) -or $phase2AutoShutdownRequested
+$autoShutdownTime = if ($phase2AutoShutdownRequested -and $phase2Params['autoShutdownTime']) {
+    $phase2Params['autoShutdownTime']
+} elseif ($phase1Params['autoShutdownTime']) {
+    $phase1Params['autoShutdownTime']
+} else {
+    '20:00'
+}
+$autoShutdownTimeZone = if ($phase2AutoShutdownRequested -and $phase2Params['autoShutdownTimeZone']) {
+    $phase2Params['autoShutdownTimeZone']
+} elseif ($phase1Params['autoShutdownTimeZone']) {
+    $phase1Params['autoShutdownTimeZone']
+} else {
+    'UTC'
+}
 
 $generateScript = Join-Path $PSScriptRoot "..\shared\Generate-ConfigJson.ps1"
 
@@ -204,9 +208,9 @@ if ($phase2Params['sutCustomImageId']) {
 
 Write-Output "`nValidating VM sizes and OS images in $($config.location)..."
 
-# Fetch all VM SKUs for the region (single API call, reused for all checks)
-$vmSkus = Get-AzComputeResourceSku -Location $config.location |
-    Where-Object { $_.ResourceType -eq 'virtualMachines' }
+# Fetch the lightweight regional VM-size snapshot once. ARM pre-validation and
+# deployment-time fallback remain authoritative for policy and current capacity.
+$vmSkus = @(Get-RegionalVmSkuSnapshot -Location $config.location)
 
 # Resolve VM sizes (with fallbacks for capacity-constrained regions).
 # -ReturnAll gives us ALL statically-valid sizes so we can retry at deployment
@@ -292,9 +296,9 @@ if (-not $phase2Params['sutCustomImageId']) {
 # ===========================================================================
 # Advisory: Warn if auto-shutdown is near
 # ===========================================================================
-if ($phase1Params['enableAutoShutdown'] -eq $true) {
-    $shutdownTime = $phase1Params['autoShutdownTime']       # e.g. '20:00'
-    $shutdownTz   = $phase1Params['autoShutdownTimeZone']   # e.g. 'UTC'
+if ($autoShutdownRequested) {
+    $shutdownTime = $autoShutdownTime
+    $shutdownTz   = $autoShutdownTimeZone
     if ($shutdownTime -and $shutdownTz) {
         try {
             $tzInfo = [System.TimeZoneInfo]::FindSystemTimeZoneById($shutdownTz)
@@ -322,6 +326,9 @@ if ($phase1Params['enableAutoShutdown'] -eq $true) {
 # account, package upload). ARM template validation needs an existing resource
 # group, so it runs only when one is already there.
 # ===========================================================================
+$phase1Params['enableAutoShutdown'] = $false
+$phase2Params['enableAutoShutdown'] = $false
+
 if ($ValidateOnly) {
     if (Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue) {
         Write-Output "`nValidating Phase 1 template against existing resource group..."
@@ -358,6 +365,9 @@ if ($ValidateOnly) {
 
 # Create or validate the resource group (uses location from bicepparam)
 Initialize-ResourceGroup -ResourceGroupName $ResourceGroupName -Location $config.location
+$envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest' }
+$autoShutdownVmNames = @("$envPrefix-dc01", "$envPrefix-node01", "$envPrefix-client01")
+$autoShutdownRestored = $false
 
 # ===========================================================================
 # Handle DSC package upload
@@ -375,6 +385,11 @@ $DscFolderPath = if ([System.IO.Path]::IsPathRooted($DscFolderPath)) {
 # Wrap packaging + deployment in try/finally so the temporary storage account
 # is always cleaned up, even if packaging or deployment fails.
 try {
+
+if ($autoShutdownRequested) {
+    Remove-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+        -VMNames $autoShutdownVmNames
+}
 
 if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
     Write-Output "`nPreparing DSC package for upload..."
@@ -476,6 +491,14 @@ if (-not $SkipPhase1) {
                 -DeploymentOutputs $phase1DeploymentResult.Outputs `
                 -VMNames @($dcVmName)
         }
+
+        if ($autoShutdownRequested -and $phase1DeploymentResult) {
+            Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+                -Location $config.location `
+                -VMNames @($phase1DeploymentResult.Outputs.dcVmName.Value) `
+                -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+            $autoShutdownRestored = $true
+        }
     }
 }
 
@@ -514,29 +537,62 @@ Otherwise, connect to DC via Bastion and check: C:\Domain-Package\DSC\Deploy-DC.
         Write-Output "[OK] Domain Controller is ready"
     }
 
-    # Clean up stale computer accounts on DC before fresh Phase 2 deployment.
-    # When -SkipPhase1 is used, the DC may have leftover computer objects from a
-    # previous SUT/Driver deployment. Add-Computer on the new VMs can fail with
-    # "The account already exists" if these aren't removed first.
+    # Clean up computer objects only for member VMs that no longer exist. Removing
+    # an object for a surviving domain member immediately breaks its secure channel.
+    $resultsStorageAccountName = if ($tempStorage -and $tempStorage.Name) {
+        $tempStorage.Name
+    } else {
+        $StorageAccountName
+    }
     if ($SkipPhase1) {
-        Write-Output "`nCleaning up stale computer accounts on DC..."
         $envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest' }
         $dcVmName = "$envPrefix-dc01"
+        $memberDefinitions = @(
+            [pscustomobject]@{ VMName = "$envPrefix-client01"; ComputerName = 'Client01' }
+            [pscustomobject]@{ VMName = "$envPrefix-node01"; ComputerName = 'Node01' }
+        )
+        $existingMemberVmNames = @(Invoke-AzureOperationWithRetry `
+            -OperationName 'List existing Domain member VMs' `
+            -Operation { @(Get-AzVM -ResourceGroupName $ResourceGroupName -ErrorAction Stop).Name })
+        $staleComputerNames = @($memberDefinitions |
+            Where-Object { $_.VMName -notin $existingMemberVmNames } |
+            ForEach-Object { $_.ComputerName })
 
-        try {
-            $result = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
-                -VMName $dcVmName -CommandId 'RunPowerShellScript' `
-                -ScriptPath (Join-Path $PSScriptRoot 'scripts\Remove-StaleComputerAccounts.ps1')
-            if ($result.Value) {
-                foreach ($v in $result.Value) {
-                    if ($v.Message) {
-                        $v.Message -split "`n" | ForEach-Object { Write-Output "   $_" }
+        if ($staleComputerNames.Count -eq 0) {
+            Write-Output "`n[OK] Domain member VMs already exist; preserving their computer accounts."
+        } else {
+            Write-Output "`nCleaning stale computer accounts for missing VMs: $($staleComputerNames -join ', ')..."
+            $cleanupJob = $null
+            try {
+                $cleanupJob = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+                    -VMName $dcVmName -CommandId 'RunPowerShellScript' `
+                    -ScriptPath (Join-Path $PSScriptRoot 'scripts\Remove-StaleComputerAccounts.ps1') `
+                    -Parameter @{ ComputerNamesCsv = ($staleComputerNames -join ',') } `
+                    -AsJob -ErrorAction Stop
+                $completedCleanup = Wait-Job -Job $cleanupJob -Timeout 180
+                if ($null -eq $completedCleanup) {
+                    Stop-Job -Job $cleanupJob -ErrorAction SilentlyContinue
+                    throw 'Stale account cleanup exceeded 180 seconds.'
+                }
+                if ($cleanupJob.State -ne 'Completed') {
+                    throw "Stale account cleanup ended in state '$($cleanupJob.State)'."
+                }
+                $result = $cleanupJob | Receive-Job -ErrorAction Stop
+                if ($result.Value) {
+                    foreach ($v in $result.Value) {
+                        if ($v.Message) {
+                            $v.Message -split "`n" | ForEach-Object { Write-Output "   $_" }
+                        }
                     }
                 }
+            } catch {
+                Write-Warning "Could not clean up stale computer accounts on DC: $($_.Exception.Message)"
+                Write-Warning "If domain join fails, manually remove only the account for the missing VM."
+            } finally {
+                if ($cleanupJob) {
+                    Remove-Job -Job $cleanupJob -Force -ErrorAction SilentlyContinue
+                }
             }
-        } catch {
-            Write-Warning "Could not clean up stale computer accounts on DC: $($_.Exception.Message)"
-            Write-Warning "If domain join fails, manually remove stale computer accounts from AD."
         }
     }
 
@@ -573,15 +629,22 @@ Otherwise, connect to DC via Bastion and check: C:\Domain-Package\DSC\Deploy-DC.
     # When resuming without a local package, try to reuse existing blob from storage account
     if ($SkipPhase1 -and -not $actualDscPackageZipUrl) {
         Write-Output "`nLooking for previously uploaded Domain-Package in storage..."
-        $storageAccounts = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -ErrorAction SilentlyContinue |
+        $storageAccounts = @(Invoke-AzureOperationWithRetry `
+            -OperationName 'Find Domain package storage accounts' `
+            -Operation { Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -ErrorAction Stop }) |
             Where-Object { $_.StorageAccountName -like 'fststorage*' }
         foreach ($sa in $storageAccounts) {
             $saCtx = $sa.Context
             # Check both new (dsc-package) and legacy (domain-package) container names
             foreach ($cName in @('dsc-package', 'domain-package')) {
-                $blob = Get-AzStorageBlob -Container $cName -Context $saCtx -ErrorAction SilentlyContinue |
-                    Where-Object { $_.Name -eq 'Domain-Package.zip' } |
-                    Select-Object -First 1
+                try {
+                    $blob = @(Invoke-AzureOperationWithRetry `
+                        -OperationName "Find Domain package in '$($sa.StorageAccountName)/$cName'" `
+                        -Operation { Get-AzStorageBlob -Container $cName -Context $saCtx -ErrorAction Stop }) |
+                        Where-Object { $_.Name -eq 'Domain-Package.zip' } | Select-Object -First 1
+                } catch {
+                    $blob = $null
+                }
                 if ($blob) {
                     $sasToken = New-AzStorageBlobSASToken -Container $cName -Blob $blob.Name `
                         -Permission r -ExpiryTime (Get-Date).AddHours(2) -Context $saCtx -FullUri
@@ -593,8 +656,7 @@ Otherwise, connect to DC via Bastion and check: C:\Domain-Package\DSC\Deploy-DC.
             if ($actualDscPackageZipUrl) { break }
         }
         if (-not $actualDscPackageZipUrl) {
-            Write-Output "   [WARN] No previously uploaded package found. VMs will deploy without package configuration."
-            Write-Output "      To include a package, re-run with -DscPackageZipUrl or -DscFolderPath"
+            throw 'No reusable Domain-Package.zip was found. Supply -DscPackageZipUrl or -DscFolderPath.'
         }
     }
 
@@ -617,7 +679,7 @@ Otherwise, connect to DC via Bastion and check: C:\Domain-Package\DSC\Deploy-DC.
     Write-Output "Phase 2 parameters:"
     foreach ($k in ($phase2BaseParams.Keys | Sort-Object)) {
         $v = $phase2BaseParams[$k]
-        if ($k -match 'password|Password') { $v = '***' }
+        if ($k -match '(?i)password|url|sas') { $v = '***' }
         Write-Output "   $k = $v"
     }
 
@@ -666,20 +728,11 @@ Options:
        -ResourceGroupName '$ResourceGroupName' ``
        -AdminPassword (ConvertTo-SecureString '<password>' -AsPlainText -Force) ``
        -SkipPhase1$(if ($actualDscPackageZipUrl) { " ``
-       -DscPackageZipUrl '$actualDscPackageZipUrl'" })
+    -DscPackageZipUrl '<signed-package-url>'" })
 "@
             exit 1
         }
         Write-Output "[OK] Domain Controller is ready"
-    }
-
-    # Preserve the existing safe ordering: ADE may reboot the DC, so finish it and
-    # wait for the DC to return before starting member domain joins.
-    if ($diskEncryptionRequested -and $phase1Deployment) {
-        $dcVmName = $phase1Deployment.Outputs.dcVmName.Value
-        Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
-            -DeploymentOutputs $phase1Deployment.Outputs `
-            -VMNames @($dcVmName)
     }
 
     # Deploy only the guest extensions after readiness. This avoids an idempotent
@@ -708,20 +761,58 @@ Options:
         $configurationDuration = [math]::Round(((Get-Date) - $configurationStart).TotalMinutes, 1)
         Write-Output "[OK] Phase 2B guest configuration initiated in $configurationDuration minutes"
     } else {
-        Write-Warning "No Domain-Package URL is available. Member VMs were provisioned, but guest configuration was not started."
+        throw 'No Domain-Package URL is available; refusing to leave unconfigured member VMs.'
     }
 
-    # ===========================================================================
-    # Disk Encryption — Driver + SUT (after Phase 2 deployment)
-    # ===========================================================================
-    if ($diskEncryptionRequested -and $phase2DeploymentResult) {
+    if ($SkipPhase1) {
+        & "$PSScriptRoot\..\shared\scripts\Verify-Deployment.ps1" `
+            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
+            -Scenario Domain -ExpectedRoles 'Domain Controller' -TimeoutMinutes 10 | Out-Null
+        $verification = & "$PSScriptRoot\..\shared\scripts\Verify-Deployment.ps1" `
+            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
+            -Scenario Domain -ExpectedRoles @('SUT', 'Driver Computer') `
+            -TimeoutMinutes 120 -TestTimeoutMinutes $TestTimeoutMinutes `
+            -NotBeforeUtc $operationStartUtc -WaitForTests -DeferTestFailure `
+            -ResultsStorageAccountName $resultsStorageAccountName
+    } else {
+        $verification = & "$PSScriptRoot\..\shared\scripts\Verify-Deployment.ps1" `
+            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
+            -Scenario Domain -TimeoutMinutes 120 -TestTimeoutMinutes $TestTimeoutMinutes `
+            -NotBeforeUtc $operationStartUtc -WaitForTests -DeferTestFailure `
+            -ResultsStorageAccountName $resultsStorageAccountName
+    }
+            Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+
+    # ADE can reboot all three machines. Apply it only after DC/member guest
+    # configuration and automatic tests have terminal, verified outcomes.
+    if ($diskEncryptionRequested -and $phase1Deployment -and $phase2DeploymentResult) {
+        $dcVmName     = $phase1Deployment.Outputs.dcVmName.Value
         $driverVmName = $phase2DeploymentResult.Outputs.driverVmName.Value
         $sutVmName    = $phase2DeploymentResult.Outputs.sutVmName.Value
 
         Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
             -DeploymentOutputs $phase1Deployment.Outputs `
-            -VMNames @($sutVmName, $driverVmName)
+            -VMNames @($dcVmName, $sutVmName, $driverVmName)
+
+        & "$PSScriptRoot\..\shared\scripts\Verify-Deployment.ps1" `
+            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
+            -Scenario Domain -TimeoutMinutes 20 | Out-Null
     }
+
+    if ($autoShutdownRequested) {
+        Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+        Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+            -Location $config.location `
+            -VMNames @(
+                $phase1Deployment.Outputs.dcVmName.Value,
+                $phase2DeploymentResult.Outputs.sutVmName.Value,
+                $phase2DeploymentResult.Outputs.driverVmName.Value
+            ) `
+            -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+            $autoShutdownRestored = $true
+    }
+
+    Complete-DeploymentTestOutcome -Verification $verification
 }
 
 # ===========================================================================
@@ -758,6 +849,17 @@ For detailed instructions, see: README.md
 "@
 
 } finally {
+    if ($autoShutdownRequested -and -not $autoShutdownRestored) {
+        try {
+            Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+            Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+                -Location $config.location -VMNames $autoShutdownVmNames `
+                -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+            $autoShutdownRestored = $true
+        } catch {
+            Write-Warning "Failed to restore VM auto-shutdown schedules (non-fatal): $($_.Exception.Message)"
+        }
+    }
     # Storage account is kept alive for test results upload.
     # Only print info so the user knows where results will go.
     if ($tempStorage) {

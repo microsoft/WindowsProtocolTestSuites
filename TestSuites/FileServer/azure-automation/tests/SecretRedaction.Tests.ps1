@@ -102,3 +102,50 @@ Describe 'Custom Script Extension bootstrap secret handling' {
         }
     }
 }
+
+Describe 'Native process credential handling' {
+    It 'uses in-process credential APIs for Driver SMB and Domain Guest setup' {
+        $driver = Get-Content (Join-Path $here '..\shared\DSC\Invoke-DriverImperativeSteps.ps1') -Raw
+        $accounts = Get-Content (Join-Path $here '..\shared\DSC\Scripts\Create-TestAccount.ps1') -Raw
+        $smbHelper = Get-Content (Join-Path $here '..\shared\DSC\Scripts\Connect-WindowsSmbShare.ps1') -Raw
+
+        $driver.Contains("Start-Process -FilePath 'net.exe'") | Should Be $false
+        $driver.Contains('Connect-WindowsSmbShare.ps1') | Should Be $true
+        $accounts.Contains('& net.exe user Guest $password') | Should Be $false
+        $accounts.Contains('Set-ADAccountPassword -Identity $guestUser.ObjectGUID') |
+            Should Be $true
+        $smbHelper.Contains('WNetAddConnection2') | Should Be $true
+    }
+}
+
+Describe 'Deployment transcript secret handling' {
+    It 'redacts signed package URLs from the Domain parameter dump' {
+        $domainDeploy = Get-Content (Join-Path $here '..\domain-bicep\deploy.ps1') -Raw
+
+        $domainDeploy.Contains("if (`$k -match '(?i)password|url|sas') { `$v = '***' }") |
+            Should Be $true
+    }
+
+    It 'redacts the Cluster PTF password while retaining the configured value' {
+        $clusterConfig = Get-Content `
+            (Join-Path $here '..\cluster-bicep\DSC\Scripts\Config-ClusterPTFConfig.ps1') -Raw
+
+        $clusterConfig.Contains("[ValidateSet('Public', 'Secret')]") | Should Be $true
+        $clusterConfig.Contains('-Value $adminPassword -ValueClassification Secret') |
+            Should Be $true
+        $clusterConfig.Contains('PasswordForAllUsers`: $oldValue -> $Value') |
+            Should Be $false
+    }
+
+    It 'never prints signed package URLs in continuation guidance' {
+        $domainDeploy = Get-Content (Join-Path $here '..\domain-bicep\deploy.ps1') -Raw
+        $clusterDeploy = Get-Content (Join-Path $here '..\cluster-bicep\deploy.ps1') -Raw
+
+        $domainDeploy.Contains("-DscPackageZipUrl '`$actualDscPackageZipUrl'") |
+            Should Be $false
+        $clusterDeploy.Contains('Using provided clusterPackageZipUrl: $ClusterPackageZipUrl') |
+            Should Be $false
+        $clusterDeploy.Contains("-ClusterPackageZipUrl '`$actualClusterPackageZipUrl'") |
+            Should Be $false
+    }
+}

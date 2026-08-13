@@ -204,9 +204,15 @@ foreach ($disk in $disks)
 #----------------------------------------------------------------------------
 # Clean Cluster
 #----------------------------------------------------------------------------
-.\Write-Info.ps1 "Clean Cluster"
+$existingCluster = $null
 try {
-    .\Write-Info.ps1 "Clean cluster env in single-domain environment."
+        $existingCluster = Get-Cluster | Where-Object { $_.Name -eq $clusterName }
+} catch { }
+
+if ($null -eq $existingCluster) {
+    .\Write-Info.ps1 "Clean Cluster"
+    try {
+        .\Write-Info.ps1 "Clean cluster env in single-domain environment."
     $domainAdminPwd = New-Object SecureString
     $config.Core.Password.ToCharArray() | ForEach-Object {$domainAdminPwd.AppendChar($_)}
 
@@ -249,21 +255,26 @@ try {
     # Flush local DNS cache to pick up the changes
     ipconfig /flushdns 2>&1 | Out-Null
     .\Write-Info.ps1 "Clean cluster completed."
-}
-catch {
+  }
+  catch {
     Write-Warning "Clean Cluster failed: $_"
+  }
+} else {
+    .\Write-Info.ps1 "[OK] Cluster '$clusterName' already exists; preserving its AD and DNS endpoint identities." -ForegroundColor Green
 }
 
 #----------------------------------------------------------------------------
 # Create Cluster
 #----------------------------------------------------------------------------
 .\Write-Info.ps1 "Create Cluster"
-$cluster = $null
-try {
-    $cluster = Get-cluster | Where-Object {$_.Name -eq $clusterName}    
-}
-catch {
-    Write-Warning "Get-Cluster failed"
+$cluster = $existingCluster
+if ($null -eq $cluster) {
+    try {
+        $cluster = Get-cluster | Where-Object {$_.Name -eq $clusterName}
+    }
+    catch {
+        Write-Warning "Get-Cluster failed"
+    }
 }
 
 if($null -eq $cluster)
@@ -625,6 +636,47 @@ if (($build -ge 17609) -and (![string]::IsNullOrEmpty($infraFsName)))
             exit (ExitCode)
         }
     }
+}
+
+# Reconcile VCOs after role creation. This is normally a no-op, but it repairs
+# endpoint objects deleted by an interrupted or older continuation.
+$vcoRepairScript = Join-Path $scriptPath 'Repair-ClusterVirtualComputerObjects.ps1'
+$processLauncher = Join-Path $scriptPath 'Invoke-ProcessAsUser.ps1'
+$vcoRepairResult = Join-Path $env:TEMP "wpts-vco-repair-$PID.result"
+if (-not (Test-Path $vcoRepairScript) -or -not (Test-Path $processLauncher)) {
+    throw 'Cluster VCO repair prerequisites are missing from the deployment package.'
+}
+$domainNetBios = if ($config.Domain -and $config.Domain.NetBiosName) {
+    $config.Domain.NetBiosName
+} else {
+    $domain.Split('.')[0].ToUpperInvariant()
+}
+Remove-Item -LiteralPath $vcoRepairResult -Force -ErrorAction SilentlyContinue
+try {
+    $repairProcess = & $processLauncher `
+        -UserName $config.Core.Username -Domain $domainNetBios -Password $config.Core.Password `
+        -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" `
+        -ArgumentList @(
+            '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
+            '-File', $vcoRepairScript,
+            '-ConfigFile', $protocolConfigFile,
+            '-ResultPath', $vcoRepairResult
+        ) `
+        -WorkingDirectory $scriptPath `
+        -WaitForExit -TimeoutSeconds 600
+    if ($repairProcess.ExitCode -ne 0) {
+        throw "Cluster VCO repair process exited with code $($repairProcess.ExitCode)."
+    }
+    if (-not (Test-Path $vcoRepairResult)) {
+        throw 'Cluster VCO repair process returned no result.'
+    }
+    $vcoRepairOutcome = (Get-Content -LiteralPath $vcoRepairResult -Raw).Trim()
+    if ($vcoRepairOutcome -notlike 'SUCCESS|*') {
+        throw "Cluster VCO repair failed: $vcoRepairOutcome"
+    }
+    .\Write-Info.ps1 "[OK] Cluster virtual computer objects verified: $($vcoRepairOutcome.Substring(8))" -ForegroundColor Green
+} finally {
+    Remove-Item -LiteralPath $vcoRepairResult -Force -ErrorAction SilentlyContinue
 }
 
 #----------------------------------------------------------------------------

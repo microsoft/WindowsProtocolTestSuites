@@ -195,6 +195,19 @@ if ($Step -eq 3) {
         $secPw       = ConvertTo-SecureString 'Password04!' -AsPlainText -Force
         $adDomain    = (Get-CimInstance Win32_ComputerSystem).Domain
         $machineAcct = "$($env:COMPUTERNAME)$"
+        if (-not $config -or [string]::IsNullOrWhiteSpace($config.Core.Username) -or
+            [string]::IsNullOrWhiteSpace($config.Core.Password)) {
+            throw 'Config.json Core.Username and Core.Password are required to reset the AD computer password.'
+        }
+        $domainNetBios = if ($config.Domain -and $config.Domain.NetBiosName) {
+            $config.Domain.NetBiosName
+        } else {
+            $adDomain.Split('.')[0].ToUpperInvariant()
+        }
+        $domainAdminPassword = ConvertTo-SecureString $config.Core.Password -AsPlainText -Force
+        $domainCredential = [pscredential]::new(
+            "$domainNetBios\$($config.Core.Username)",
+            $domainAdminPassword)
 
         # Idempotency: the marker is only ever written AFTER a forced AD reset + Netlogon
         # restart + live verification below, so a marker + verified channel is authoritative.
@@ -235,7 +248,8 @@ if ($Step -eq 3) {
                 #    ksetup cannot be relied on to update AD, and this must run BEFORE
                 #    DisablePasswordChange is set (which would block the AD update).
                 try {
-                    Set-ADAccountPassword -Identity $machineAcct -Reset -NewPassword $secPw -ErrorAction Stop
+                    Set-ADAccountPassword -Identity $machineAcct -Reset -NewPassword $secPw `
+                        -Credential $domainCredential -Server $adDomain -ErrorAction Stop
                 } catch {
                     .\Write-Info.ps1 "  AD machine-password reset failed: $($_.Exception.Message); retrying in 30s..." -ForegroundColor DarkGray
                     Start-Sleep -Seconds 30

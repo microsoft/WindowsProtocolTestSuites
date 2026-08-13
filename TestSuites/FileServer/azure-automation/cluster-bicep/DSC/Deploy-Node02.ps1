@@ -148,7 +148,8 @@ if ($currentStep -lt 1) {
     try {
         . "$dscFolder\Node-Configuration.ps1"
         NodeConfiguration -ConfigFilePath $configFile -NodeRole 'Node02' -OutputPath $mofFolder
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+        Invoke-VerifiedDscConfiguration -Path $mofFolder `
+            -OperationName 'Cluster Node02 pre-domain DSC' | Out-Null
         .\Write-Info.ps1 "[OK] DSC Lite applied in $([math]::Round($phase1sw.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
     catch {
@@ -187,6 +188,8 @@ if ($currentStep -eq 1) {
     .\Write-Info.ps1 "---- Phase 2a: Tools Install (background) ----" -ForegroundColor Yellow
     $toolsSignal = "$scriptsPath\InstallMSIAndTools.Completed.signal"
     $toolsJob    = $null
+    $toolsJobStart = $null
+    $toolsJobTimeoutSeconds = 3600
 
     if (Test-Path $toolsSignal) {
         .\Write-Info.ps1 "[OK] Tools already installed." -ForegroundColor Green
@@ -195,6 +198,7 @@ if ($currentStep -eq 1) {
         $toolsInstaller = "$scriptsPath\InstallMSIAndTools.ps1"
         $toolsScriptsDir = $scriptsPath
         $toolsJobLog = "$scriptsPath\InstallMSIAndTools.job.log"
+        $toolsJobStart = Get-Date
         $toolsJob = Start-Job -ScriptBlock {
             param($wp, $installer, $sd, $jl)
             Set-Location $sd
@@ -206,10 +210,13 @@ if ($currentStep -eq 1) {
     # Full DSC
     .\Write-Info.ps1 "---- Phase 2b: DSC Full (features, shares, registry) ----" -ForegroundColor Yellow
     $phase2b = [System.Diagnostics.Stopwatch]::StartNew()
+    $fullDscOk = $false
     try {
         . "$dscFolder\Node-Configuration.ps1"
         NodeConfiguration -ConfigFilePath $configFile -NodeRole 'Node02' -OutputPath $mofFolder
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+        Invoke-VerifiedDscConfiguration -Path $mofFolder `
+            -OperationName 'Cluster Node02 full DSC' | Out-Null
+        $fullDscOk = $true
         .\Write-Info.ps1 "[OK] Full DSC applied in $([math]::Round($phase2b.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
     catch {
@@ -220,17 +227,34 @@ if ($currentStep -eq 1) {
     # Wait for tools
     if ($null -ne $toolsJob) {
         .\Write-Info.ps1 "Waiting for tools install..." -ForegroundColor Yellow
-        $toolsJob | Wait-Job | Remove-Job -Force
+        $elapsedSeconds = [int]((Get-Date) - $toolsJobStart).TotalSeconds
+        $remainingSeconds = [math]::Max(1, $toolsJobTimeoutSeconds - $elapsedSeconds)
+        $completedToolsJob = Wait-Job -Job $toolsJob -Timeout $remainingSeconds
+        if ($null -eq $completedToolsJob) {
+            Stop-Job -Job $toolsJob -ErrorAction SilentlyContinue
+            .\Write-Error.ps1 "[FAIL] Tools job exceeded ${toolsJobTimeoutSeconds}s."
+        } elseif ($toolsJob.State -ne 'Completed') {
+            .\Write-Error.ps1 "[FAIL] Tools job ended in state '$($toolsJob.State)'."
+        }
+        Remove-Job -Job $toolsJob -Force -ErrorAction SilentlyContinue
     }
+    $toolsOk = Test-Path $toolsSignal
 
     # iSCSI connection
     .\Write-Info.ps1 "---- Phase 2c: iSCSI Connection ----" -ForegroundColor Yellow
+    $iscsiOk = $false
     try {
         & "$dscFolder\Invoke-Node02ImperativeSteps.ps1" -Step 2 -WorkingPath $WorkingPath
+        $iscsiOk = $true
         .\Write-Info.ps1 "[OK] iSCSI connected." -ForegroundColor Green
     }
     catch {
         .\Write-Error.ps1 "[FAIL] iSCSI connection failed: $($_.Exception.Message)"
+    }
+
+    if (-not ($fullDscOk -and $toolsOk -and $iscsiOk)) {
+        Set-DeployStep -Step 1
+        throw "Cluster node prerequisites are incomplete (DSC=$fullDscOk, Tools=$toolsOk, iSCSI=$iscsiOk)."
     }
 
     # Check for pending reboot

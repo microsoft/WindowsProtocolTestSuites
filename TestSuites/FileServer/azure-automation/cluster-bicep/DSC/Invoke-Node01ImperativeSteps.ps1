@@ -29,6 +29,8 @@
     .\Invoke-Node01ImperativeSteps.ps1 -Step 3 -WorkingPath C:\Cluster-Package
 #>
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '',
+    Justification = 'Passwords originate in the private deployment Config.json and must be converted for AD cmdlets; no interactive prompt is available.')]
 param(
     [string]$WorkingPath = (Split-Path $PSScriptRoot -Parent),
     [ValidateSet(1, 2, 3)]
@@ -189,8 +191,8 @@ if ($Step -eq 3) {
   $quicOk       = $false
   $authOk       = $false
   $fl2Ok        = $false
-  $ptfOk        = $false
   $sshKeysOk    = $false
+    $computerPasswordOk = $false
 
   try {
     .\Write-Info.ps1 "---- Step 3: Cluster + Environment Setup ----" -ForegroundColor Yellow
@@ -214,28 +216,66 @@ if ($Step -eq 3) {
     # Must run AFTER domain join (matches pipeline's Set-ComputerPassword.ps1).
     .\Write-Info.ps1 "Setting computer password (ksetup)..." -ForegroundColor Yellow
     try {
-        $marker = Get-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'ComputerPasswordSet' -ErrorAction SilentlyContinue
-        if ($null -eq $marker) {
-            ksetup /SetComputerPassword Password04!
-            # Also update the AD computer account password to match, otherwise
-            # the local-only change breaks the trust relationship after reboot.
-            try {
-                $secPw = [System.Net.NetworkCredential]::new('', 'Password04!').SecurePassword
-                Set-ADAccountPassword -Identity "$($env:COMPUTERNAME)$" -Reset -NewPassword $secPw -ErrorAction Stop
-                .\Write-Info.ps1 "[OK] AD computer account password synced" -ForegroundColor Green
-            } catch {
-                .\Write-Info.ps1 "[WARN] Failed to sync AD computer password: $($_.Exception.Message)" -ForegroundColor Yellow
-            }
-            if (-not (Test-Path 'HKLM:\SOFTWARE\ProtocolTestSuites')) {
-                New-Item -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Force | Out-Null
-            }
-            New-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'ComputerPasswordSet' -Value 1 -PropertyType DWord -Force | Out-Null
-            .\Write-Info.ps1 "[OK] Computer password set" -ForegroundColor Green
-        } else {
-            .\Write-Info.ps1 "[OK] Computer password already set -- skipping" -ForegroundColor Green
+        if (-not $config -or [string]::IsNullOrWhiteSpace($config.Core.Username) -or
+            [string]::IsNullOrWhiteSpace($config.Core.Password)) {
+            throw 'Config.json Core.Username and Core.Password are required to reset the AD computer password.'
         }
+        $adDomain = (Get-CimInstance Win32_ComputerSystem).Domain
+        $domainNetBios = if ($config.Domain -and $config.Domain.NetBiosName) {
+            $config.Domain.NetBiosName
+        } else {
+            $adDomain.Split('.')[0].ToUpperInvariant()
+        }
+        $domainAdminPassword = ConvertTo-SecureString $config.Core.Password -AsPlainText -Force
+        $domainCredential = [pscredential]::new(
+            "$domainNetBios\$($config.Core.Username)",
+            $domainAdminPassword)
+        $machinePassword = ConvertTo-SecureString 'Password04!' -AsPlainText -Force
+        $marker = Get-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'ComputerPasswordSet' -ErrorAction SilentlyContinue
+        if ($null -ne $marker -and $marker.ComputerPasswordSet -eq 2) {
+            try { $computerPasswordOk = Test-ComputerSecureChannel -ErrorAction Stop } catch { $computerPasswordOk = $false }
+            if (-not $computerPasswordOk) {
+                Remove-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' `
+                    -Name 'ComputerPasswordSet' -ErrorAction SilentlyContinue
+            }
+        }
+
+        for ($attempt = 1; $attempt -le 10 -and -not $computerPasswordOk; $attempt++) {
+            .\Write-Info.ps1 "  Computer password sync attempt $attempt/10..." -ForegroundColor DarkGray
+            try {
+                Set-ADAccountPassword -Identity "$($env:COMPUTERNAME)$" -Reset `
+                    -NewPassword $machinePassword -Credential $domainCredential `
+                    -Server $adDomain -ErrorAction Stop
+                $ksetupOutput = ksetup /SetComputerPassword Password04! 2>&1
+                $ksetupExitCode = $LASTEXITCODE
+                $ksetupOutput | .\Write-Info.ps1
+                if ($ksetupExitCode -ne 0) {
+                    throw "ksetup returned exit code $ksetupExitCode."
+                }
+                Restart-Service Netlogon -Force -ErrorAction Stop
+                Start-Sleep -Seconds 5
+                $computerPasswordOk = Test-ComputerSecureChannel -ErrorAction Stop
+            } catch {
+                .\Write-Info.ps1 "  Password sync failed: $($_.Exception.Message)" -ForegroundColor DarkGray
+                $computerPasswordOk = $false
+            }
+            if (-not $computerPasswordOk -and $attempt -lt 10) {
+                Start-Sleep -Seconds 30
+            }
+        }
+
+        if (-not $computerPasswordOk) {
+            throw 'Failed to synchronize the Node01 AD and local machine passwords or verify the secure channel.'
+        }
+        if (-not (Test-Path 'HKLM:\SOFTWARE\ProtocolTestSuites')) {
+            New-Item -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Force | Out-Null
+        }
+        New-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' `
+            -Name 'ComputerPasswordSet' -Value 2 -PropertyType DWord -Force | Out-Null
+        .\Write-Info.ps1 "[OK] AD and local machine passwords synchronized; secure channel verified" -ForegroundColor Green
     } catch {
-        .\Write-Info.ps1 "[WARN] ksetup failed: $($_.Exception.Message)" -ForegroundColor Yellow
+        .\Write-Error.ps1 "[FAIL] Computer password setup failed: $($_.Exception.Message)"
+        throw
     }
 
     # NOTE: Do NOT Initialize-Disk here. Create-ServerFailoverEnv.ps1 handles
@@ -355,7 +395,7 @@ if ($Step -eq 3) {
     }
 
     .\Write-Info.ps1 ""
-    .\Write-Info.ps1 "=== Node01 imperative steps completed (Cluster=$clusterOk, SMB2=$smb2Ok, FSA=$fsaOk, DFS=$dfsOk, QUIC=$quicOk, Auth=$authOk, FL2=$fl2Ok, SshKeys=$sshKeysOk) ===" -ForegroundColor Cyan
+    .\Write-Info.ps1 "=== Node01 imperative steps completed (ComputerPassword=$computerPasswordOk, Cluster=$clusterOk, SMB2=$smb2Ok, FSA=$fsaOk, DFS=$dfsOk, QUIC=$quicOk, Auth=$authOk, FL2=$fl2Ok, SshKeys=$sshKeysOk) ===" -ForegroundColor Cyan
 
     # Cluster creation and SSH remoting are critical
     if (-not $clusterOk) {

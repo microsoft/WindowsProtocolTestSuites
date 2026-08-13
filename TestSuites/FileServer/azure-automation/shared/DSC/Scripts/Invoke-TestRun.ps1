@@ -174,9 +174,11 @@ namespace ProtocolTestSuites
         $CredentialPassword,
         $CredentialUser,
         0)
-    # 1219 means an SMB connection already exists for this server. Keep it;
-    # subsequent access is the authoritative credential check.
-    if ($result -notin @(0, 1219)) {
+    if ($result -eq 1219) {
+        $exception = [ComponentModel.Win32Exception]::new($result)
+        throw "WNetAddConnection2 returned 1219 ($($exception.Message)). Windows already has a connection to the same server using different credentials, so the requested credential session was not established. Clear the conflicting connection and retry."
+    }
+    if ($result -ne 0) {
         throw [ComponentModel.Win32Exception]::new($result)
     }
     return $result

@@ -41,6 +41,10 @@ param(
     [int]$DCReadyTimeoutMinutes = 45,
 
     [Parameter(Mandatory=$false)]
+    [ValidateRange(1, 1440)]
+    [int]$TestTimeoutMinutes = 360,
+
+    [Parameter(Mandatory=$false)]
     [switch]$SkipPhase1,
 
     [Parameter(Mandatory=$false)]
@@ -57,6 +61,19 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$operationStartUtc = [DateTime]::UtcNow
+$phase1Deployment = $null
+
+$Phase1ParametersFile = if ([System.IO.Path]::IsPathRooted($Phase1ParametersFile)) {
+    $Phase1ParametersFile
+} else {
+    Join-Path $PSScriptRoot $Phase1ParametersFile
+}
+$Phase2ParametersFile = if ([System.IO.Path]::IsPathRooted($Phase2ParametersFile)) {
+    $Phase2ParametersFile
+} else {
+    Join-Path $PSScriptRoot $Phase2ParametersFile
+}
 
 Write-Output @"
 ╔═══════════════════════════════════════════════════════════════╗
@@ -74,6 +91,9 @@ if ($SkipPhase1) {
 if ($SkipPhase2) {
     Write-Output "`n⏩ Running Phase 1 only (Phase 2 skipped)"
 }
+if ($SkipPhase1 -and $SkipPhase2) {
+    throw 'Both -SkipPhase1 and -SkipPhase2 were specified; there is nothing to deploy.'
+}
 
 # Import shared helpers
 $helpersPath = Join-Path $PSScriptRoot "..\shared\Deploy-Helpers.psm1"
@@ -82,6 +102,7 @@ if (-not (Test-Path $helpersPath)) {
     exit 1
 }
 Import-Module $helpersPath -Force
+Initialize-BicepCli
 
 # Initialize Azure connection
 Import-AzureModules
@@ -121,10 +142,128 @@ if ($SkipDiskEncryption) {
     $phase1Params['enableDiskEncryption'] = $false
 }
 
+$autoShutdownRequested = ($phase1Params['enableAutoShutdown'] -eq $true) -or
+    ($phase2Params['enableAutoShutdown'] -eq $true)
+$autoShutdownTime = if ($phase1Params['autoShutdownTime']) { $phase1Params['autoShutdownTime'] } else { '20:00' }
+$autoShutdownTimeZone = if ($phase1Params['autoShutdownTimeZone']) { $phase1Params['autoShutdownTimeZone'] } else { 'UTC' }
+$phase1Params['enableAutoShutdown'] = $false
+$phase2Params['enableAutoShutdown'] = $false
+
 Write-Output "   Location (from bicepparam): $($config.location)"
 
-# Create or validate the resource group (uses location from bicepparam)
+$phase1TemplateFile = Join-Path $PSScriptRoot 'phase1.bicep'
+$phase2TemplateFile = Join-Path $PSScriptRoot 'phase2.bicep'
+
+# Validate all role sizes before creating resources. The lightweight regional
+# endpoint avoids the full resource-SKU feed's recurring 100-second timeout;
+# ARM pre-validation remains authoritative for policy and dynamic capacity.
+Write-Output "`nValidating VM sizes and OS images in $($config.location)..."
+$vmSkus = @(Get-RegionalVmSkuSnapshot -Location $config.location)
+$vmSizeFallbacks = Import-PowerShellDataFile (Join-Path $PSScriptRoot '..\shared\parameters\VmSizeFallbacks.psd1')
+
+$dcCandidates = Resolve-AvailableVmSize `
+    -PreferredSize $phase1Params['dcVmSize'] `
+    -FallbackSizes $vmSizeFallbacks.DC -AvailableSkus $vmSkus -Role 'DC' -ReturnAll
+$storageCandidates = Resolve-AvailableVmSize `
+    -PreferredSize $phase1Params['storageVmSize'] `
+    -FallbackSizes $vmSizeFallbacks.Driver -AvailableSkus $vmSkus -Role 'Storage' -ReturnAll
+$nodeCandidates = Resolve-AvailableVmSize `
+    -PreferredSize $phase2Params['clusterNodeVmSize'] `
+    -FallbackSizes $vmSizeFallbacks.SUT -AvailableSkus $vmSkus -Role 'Cluster Node' -ReturnAll
+$driverCandidates = Resolve-AvailableVmSize `
+    -PreferredSize $phase2Params['driverVmSize'] `
+    -FallbackSizes $vmSizeFallbacks.Driver -AvailableSkus $vmSkus -Role 'Driver' -ReturnAll
+
+$phase1Params['dcVmSize'] = $dcCandidates[0]
+$phase1Params['storageVmSize'] = $storageCandidates[0]
+$phase2Params['clusterNodeVmSize'] = $nodeCandidates[0]
+$phase2Params['driverVmSize'] = $driverCandidates[0]
+
+Write-Output "   DC VM size: $($dcCandidates[0]) (+$([math]::Max(0, $dcCandidates.Count - 1)) fallbacks)"
+Write-Output "   Storage VM size: $($storageCandidates[0]) (+$([math]::Max(0, $storageCandidates.Count - 1)) fallbacks)"
+Write-Output "   Cluster Node VM size: $($nodeCandidates[0]) (+$([math]::Max(0, $nodeCandidates.Count - 1)) fallbacks)"
+Write-Output "   Driver VM size: $($driverCandidates[0]) (+$([math]::Max(0, $driverCandidates.Count - 1)) fallbacks)"
+
+Test-RegionalVCpuQuota -Location $config.location -AvailableSkus $vmSkus -VmSizes @{
+    'DC' = $dcCandidates[0]
+    'Storage' = $storageCandidates[0]
+    'Node01' = $nodeCandidates[0]
+    'Node02' = $nodeCandidates[0]
+    'Driver' = $driverCandidates[0]
+}
+
+if (-not $phase1Params['dcCustomImageId'] -and
+    -not (Test-VmImageAvailability -Location $config.location -Publisher 'MicrosoftWindowsServer' `
+        -Offer 'WindowsServer' -Sku $phase1Params['dcOsVersion'])) {
+    throw "DC image '$($phase1Params['dcOsVersion'])' is unavailable in $($config.location)."
+}
+if (-not $phase1Params['storageCustomImageId'] -and
+    -not (Test-VmImageAvailability -Location $config.location -Publisher 'MicrosoftWindowsServer' `
+        -Offer 'WindowsServer' -Sku $phase1Params['storageOsVersion'])) {
+    throw "Storage image '$($phase1Params['storageOsVersion'])' is unavailable in $($config.location)."
+}
+if (-not $phase2Params['clusterNodeCustomImageId'] -and
+    -not (Test-VmImageAvailability -Location $config.location -Publisher 'MicrosoftWindowsServer' `
+        -Offer 'WindowsServer' -Sku $phase2Params['clusterNodeOsVersion'])) {
+    throw "Cluster node image '$($phase2Params['clusterNodeOsVersion'])' is unavailable in $($config.location)."
+}
+if (-not $phase2Params['driverCustomImageId']) {
+    if ($config.driverOsType -eq 'Linux') {
+        $driverPublisher = 'Canonical'
+        $driverOffer = 'ubuntu-24_04-lts'
+        $driverSku = $phase2Params['driverLinuxOsVersion']
+    } else {
+        $driverPublisher = 'MicrosoftWindowsDesktop'
+        $driverOffer = if ($phase2Params['driverOsVersion'] -like 'win10-*') { 'Windows-10' } else { 'Windows-11' }
+        $driverSku = $phase2Params['driverOsVersion']
+    }
+    if (-not (Test-VmImageAvailability -Location $config.location -Publisher $driverPublisher `
+        -Offer $driverOffer -Sku $driverSku)) {
+        throw "Driver image '$driverPublisher/$driverOffer/$driverSku' is unavailable in $($config.location)."
+    }
+}
+
+if ($ValidateOnly) {
+    Write-Output "`nValidating Cluster Phase 1 template without creating or modifying Azure resources..."
+    $existingResourceGroup = Get-AzResourceGroup -Name $ResourceGroupName -ErrorAction SilentlyContinue
+    if ($existingResourceGroup) {
+        $phase1ValidationParams = @{} + $phase1Params
+        $phase1ValidationParams['adminPassword'] = $AdminPassword
+        if ($ClusterPackageZipUrl) {
+            $phase1ValidationParams['clusterPackageZipUrl'] = $ClusterPackageZipUrl
+        }
+        $validationResult = Test-AzResourceGroupDeployment `
+            -ResourceGroupName $ResourceGroupName `
+            -TemplateFile $phase1TemplateFile `
+            -TemplateParameterObject $phase1ValidationParams `
+            -ErrorAction SilentlyContinue
+        if ($validationResult) {
+            $nonCapacityErrors = $validationResult | Where-Object {
+                $_.Code -notmatch 'SkuNotAvailable|ZonalAllocationFailed|AllocationFailed'
+            }
+            if ($nonCapacityErrors) {
+                Write-Error "Phase 1 template validation failed:`n$($nonCapacityErrors | ForEach-Object { "  - [$($_.Code)] $($_.Message)" } | Out-String)"
+                throw 'Bicep template validation failed. Fix the errors above before deploying.'
+            }
+            Write-Warning 'Template validation returned capacity warnings; deployment-time SKU fallback handles these.'
+        } else {
+            Write-Output '[OK] Phase 1 ARM template validation passed'
+        }
+    } else {
+        Write-Output "Resource group '$ResourceGroupName' does not exist; ARM validation was skipped. Local Bicep, image, SKU, and quota checks passed."
+    }
+    Write-Output 'Validation-only mode: no resource group, storage account, package, or schedule was created or modified.'
+    return
+}
+
+# Create or validate the resource group only after local/read-only preflight.
 Initialize-ResourceGroup -ResourceGroupName $ResourceGroupName -Location $config.location
+$envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest-cluster' }
+$autoShutdownVmNames = @(
+    "$envPrefix-dc01", "$envPrefix-storage01", "$envPrefix-node01",
+    "$envPrefix-node02", "$envPrefix-client01"
+)
+$autoShutdownRestored = $false
 
 # Validate custom images - non-driver VMs require Windows images
 if ($phase1Params['dcCustomImageId']) {
@@ -228,7 +367,7 @@ if (-not $ClusterPackageZipUrl -and ((Test-Path $ClusterPackagePath) -or (Test-P
             -LocalGpoBackupPath (Join-Path $PSScriptRoot "..\..\Setup\Scripts\GPOBackup.zip")
     }
 } else {
-    Write-Output "✅ Using provided clusterPackageZipUrl: $ClusterPackageZipUrl"
+    Write-Output "✅ Using provided clusterPackageZipUrl"
 }
 
 # ═══════════════════════════════════════════════════════════
@@ -244,7 +383,7 @@ if ($actualClusterPackageZipUrl) {
 
 $validationResult = Test-AzResourceGroupDeployment `
     -ResourceGroupName $ResourceGroupName `
-    -TemplateFile 'phase1.bicep' `
+    -TemplateFile $phase1TemplateFile `
     -TemplateParameterObject $phase1ValidationParams `
     -ErrorAction SilentlyContinue
 
@@ -261,17 +400,16 @@ if ($validationResult) {
     Write-Output "[OK] Phase 1 template validation passed"
 }
 
-if ($ValidateOnly) {
-    Write-Output "`nValidation-only mode: skipping deployment."
-    Write-Output "Note: Phase 2 template depends on Phase 1 outputs and cannot be validated without deploying Phase 1."
-    return
-}
-
 # ═══════════════════════════════════════════════════════════
 # PHASE 1: Deploy Network, Domain Controller, Storage
 # ═══════════════════════════════════════════════════════════
 
 try {
+
+if ($autoShutdownRequested) {
+    Remove-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+        -VMNames $autoShutdownVmNames
+}
 
 if (-not $SkipPhase1) {
     Write-Output @"
@@ -285,29 +423,24 @@ if (-not $SkipPhase1) {
 "@
 
     $phase1Start = Get-Date
-    $deploymentName = "Phase1-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-
     $phase1TemplateParams = @{} + $phase1Params
+    $phase1TemplateParams.Remove('dcVmSize')
+    $phase1TemplateParams.Remove('storageVmSize')
     $phase1TemplateParams['adminPassword'] = $AdminPassword
     if ($actualClusterPackageZipUrl) {
         $phase1TemplateParams['clusterPackageZipUrl'] = $actualClusterPackageZipUrl
     }
 
-    try {
-        Write-Output "🚀 Starting Phase 1 deployment..."
-        $deployment = New-AzResourceGroupDeployment `
-            -ResourceGroupName $ResourceGroupName `
-            -Name $deploymentName `
-            -TemplateFile 'phase1.bicep' `
-            -TemplateParameterObject $phase1TemplateParams `
-            -ErrorAction Stop
+    Write-Output "🚀 Starting Phase 1 deployment..."
+    $deployment = Invoke-DeploymentWithSkuFallback `
+        -ResourceGroupName $ResourceGroupName -TemplateFile $phase1TemplateFile `
+        -BaseParameters $phase1TemplateParams `
+        -SizeCandidates @{ dcVmSize = $dcCandidates; storageVmSize = $storageCandidates } `
+        -DeploymentNamePrefix 'Cluster-Phase1'
+    $phase1Deployment = $deployment
 
-        $phase1Duration = [math]::Round(((Get-Date) - $phase1Start).TotalMinutes, 1)
-        Write-Output "`n✅ Phase 1 deployment completed in $phase1Duration minutes"
-    } catch {
-        Write-Error "❌ Phase 1 deployment error: $($_.Exception.Message)"
-        exit 1
-    }
+    $phase1Duration = [math]::Round(((Get-Date) - $phase1Start).TotalMinutes, 1)
+    Write-Output "`n✅ Phase 1 deployment completed in $phase1Duration minutes"
 
     # ═══════════════════════════════════════════════════════════
     # Wait for Domain Controller to be fully configured
@@ -343,23 +476,11 @@ Options:
        -ResourceGroupName '$ResourceGroupName' ``
        -AdminPassword (ConvertTo-SecureString '<password>' -AsPlainText -Force) ``
        -SkipPhase1$(if ($actualClusterPackageZipUrl) { " ``
-       -ClusterPackageZipUrl '$actualClusterPackageZipUrl'" })
+    -ClusterPackageZipUrl '<signed-package-url>'" })
 "@
         exit 1
     }
 
-    # ═══════════════════════════════════════════════════════════
-    # Disk Encryption — DC + Storage (after DC is ready)
-    # ═══════════════════════════════════════════════════════════
-    if (-not $SkipDiskEncryption -and $deployment) {
-        $envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest-cluster' }
-        $dcVmName      = "$envPrefix-dc01"
-        $storageVmName = "$envPrefix-storage01"
-
-        Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
-            -DeploymentOutputs $deployment.Outputs `
-            -VMNames @($dcVmName, $storageVmName)
-    }
 }
 
 # ═══════════════════════════════════════════════════════════
@@ -399,21 +520,40 @@ Otherwise, connect to DC via Bastion and check: C:\dc-extension-setup.log
         Write-Output "✅ Domain Controller is ready"
     }
 
-    # Clean up stale computer accounts on DC before fresh Phase 2 deployment.
-    # When -SkipPhase1 is used, the DC may have leftover computer objects from a
-    # previous cluster deployment. Add-Computer on the new VMs can fail with
-    # "The account already exists" if these aren't removed first.
+    # Clean up identities only for VMs that no longer exist. Removing an object
+    # for a surviving domain member immediately breaks its secure channel. Live
+    # cluster endpoint identities must also remain while either node survives.
     if ($SkipPhase1) {
-        Write-Output "`nCleaning up stale computer accounts on DC..."
-        $envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest' }
+        $envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest-cluster' }
         $dcVmName = "$envPrefix-dc01"
+        $memberDefinitions = @(
+            [pscustomobject]@{ VMName = "$envPrefix-client01"; ComputerName = 'Client01'; IsClusterNode = $false }
+            [pscustomobject]@{ VMName = "$envPrefix-node01"; ComputerName = 'Node01'; IsClusterNode = $true }
+            [pscustomobject]@{ VMName = "$envPrefix-node02"; ComputerName = 'Node02'; IsClusterNode = $true }
+            [pscustomobject]@{ VMName = "$envPrefix-storage01"; ComputerName = 'Storage01'; IsClusterNode = $false }
+        )
+        $existingMemberVmNames = @(Invoke-AzureOperationWithRetry `
+            -OperationName 'List existing Cluster member VMs' `
+            -Operation { @(Get-AzVM -ResourceGroupName $ResourceGroupName -ErrorAction Stop).Name })
+        $missingComputerNames = @($memberDefinitions |
+            Where-Object { $_.VMName -notin $existingMemberVmNames } |
+            ForEach-Object { $_.ComputerName })
+        $survivingClusterNodeCount = @($memberDefinitions |
+            Where-Object { $_.IsClusterNode -and $_.VMName -in $existingMemberVmNames }).Count
+        $cleanupClusterEndpoints = $survivingClusterNodeCount -eq 0
 
-        # Read machine names and endpoint names from Config.json on the DC.
-        # This avoids hardcoding and always matches the previous deployment's config.
-        $cleanupScript = @"
+        if ($missingComputerNames.Count -eq 0 -and -not $cleanupClusterEndpoints) {
+            Write-Output "`n[OK] Cluster VMs already exist; preserving member and endpoint computer accounts."
+        } else {
+            Write-Output "`nCleaning stale identities for missing Cluster VMs: $($missingComputerNames -join ', ')..."
+            $missingComputerNamesLiteral = @($missingComputerNames |
+                ForEach-Object { "'$(($_ -replace "'", "''"))'" }) -join ', '
+            $cleanupEndpointsLiteral = if ($cleanupClusterEndpoints) { '$true' } else { '$false' }
+            $cleanupScript = @"
 Import-Module ActiveDirectory -ErrorAction Stop
 
-# Discover names from the Config.json left by the previous deployment
+`$staleNames = @($missingComputerNamesLiteral)
+`$cleanupClusterEndpoints = $cleanupEndpointsLiteral
 `$configPaths = @(
     'C:\Cluster-Package\Config.json',
     'C:\Cluster-Package\DSC\Scripts\Config.json'
@@ -426,26 +566,14 @@ foreach (`$p in `$configPaths) {
     }
 }
 
-`$staleNames = @()
-if (`$config) {
-    # Machine computer names (Node01, Node02, Client01, etc.)
-    foreach (`$prop in `$config.Machines.PSObject.Properties) {
-        if (`$prop.Value.ComputerName) { `$staleNames += `$prop.Value.ComputerName }
-    }
-    # Cluster endpoint virtual names (Cluster CNO, GeneralFS, ScaleoutFS, InfraFS)
+if (`$cleanupClusterEndpoints -and `$config) {
     if (`$config.Endpoints) {
         foreach (`$prop in `$config.Endpoints.PSObject.Properties) {
             if (`$prop.Value.Name) { `$staleNames += `$prop.Value.Name }
         }
     }
-    # Deduplicate and exclude the DC itself
-    `$dcName = (`$config.Machines.PSObject.Properties | Where-Object { `$_.Name -match 'DC' }).Value.ComputerName
-    `$staleNames = `$staleNames | Where-Object { `$_ -ne `$dcName } | Select-Object -Unique
-} else {
-    Write-Output "WARNING: Config.json not found on DC - cannot discover machine names."
-    Write-Output "Skipping stale account cleanup."
-    return
 }
+`$staleNames = @(`$staleNames | Select-Object -Unique)
 
 Write-Output "Cleaning up stale accounts for: `$(`$staleNames -join ', ')"
 `$cleaned = @()
@@ -475,20 +603,35 @@ foreach (`$name in `$staleNames) {
 }
 "@
 
-        try {
-            $result = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
-                -VMName $dcVmName -CommandId 'RunPowerShellScript' `
-                -ScriptString $cleanupScript
-            if ($result.Value) {
-                foreach ($v in $result.Value) {
-                    if ($v.Message) {
-                        $v.Message -split "`n" | ForEach-Object { Write-Output "   $_" }
+            $cleanupJob = $null
+            try {
+                $cleanupJob = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+                    -VMName $dcVmName -CommandId 'RunPowerShellScript' `
+                    -ScriptString $cleanupScript -AsJob -ErrorAction Stop
+                $completedCleanup = Wait-Job -Job $cleanupJob -Timeout 180
+                if ($null -eq $completedCleanup) {
+                    Stop-Job -Job $cleanupJob -ErrorAction SilentlyContinue
+                    throw 'Stale account cleanup exceeded 180 seconds.'
+                }
+                if ($cleanupJob.State -ne 'Completed') {
+                    throw "Stale account cleanup ended in state '$($cleanupJob.State)'."
+                }
+                $result = $cleanupJob | Receive-Job -ErrorAction Stop
+                if ($result.Value) {
+                    foreach ($v in $result.Value) {
+                        if ($v.Message) {
+                            $v.Message -split "`n" | ForEach-Object { Write-Output "   $_" }
+                        }
                     }
                 }
+            } catch {
+                Write-Warning "Could not clean up stale computer accounts on DC: $($_.Exception.Message)"
+                Write-Warning "If domain join fails, manually remove only identities for missing VMs."
+            } finally {
+                if ($cleanupJob) {
+                    Remove-Job -Job $cleanupJob -Force -ErrorAction SilentlyContinue
+                }
             }
-        } catch {
-            Write-Warning "Could not clean up stale computer accounts on DC: $($_.Exception.Message)"
-            Write-Warning "If domain join fails, manually remove stale computer accounts from AD."
         }
     }
 
@@ -503,13 +646,13 @@ foreach (`$name in `$staleNames) {
 "@
 
     $phase2Start = Get-Date
-    $deploymentName = "Phase2-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-
     # Get Phase 1 outputs
-    $phase1Deployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName |
-        Where-Object { $_.DeploymentName -like "Phase1-*" } |
-        Sort-Object Timestamp -Descending |
-        Select-Object -First 1
+    if (-not $phase1Deployment) {
+        $phase1Deployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName |
+            Where-Object { $_.DeploymentName -like 'Cluster-Phase1-*' -or $_.DeploymentName -like 'Phase1-*' } |
+            Sort-Object Timestamp -Descending |
+            Select-Object -First 1
+    }
 
     if (-not $phase1Deployment) {
         Write-Error "❌ Phase 1 deployment not found in resource group '$ResourceGroupName'. Run Phase 1 first."
@@ -530,29 +673,74 @@ foreach (`$name in `$staleNames) {
     # When resuming without a local package, try to reuse existing blob from storage account
     if ($SkipPhase1 -and -not $actualClusterPackageZipUrl) {
         Write-Output "`n🔍 Looking for previously uploaded Cluster-Package in storage..."
-        $storageAccounts = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -ErrorAction SilentlyContinue |
-            Where-Object { $_.StorageAccountName -like '*temp*' -or $_.StorageAccountName -like '*cluster*' }
+        $storageAccounts = @(Invoke-AzureOperationWithRetry `
+            -OperationName 'Find Cluster package storage accounts' `
+            -Operation { Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -ErrorAction Stop }) |
+            Where-Object {
+                if ($StorageAccountName) {
+                    $_.StorageAccountName -eq $StorageAccountName
+                } else {
+                    $_.StorageAccountName -like 'fststorage*'
+                }
+            }
+        $packageCandidates = New-Object System.Collections.Generic.List[object]
         foreach ($sa in $storageAccounts) {
-            $saCtx = $sa.Context
-            $blob = Get-AzStorageBlob -Container 'packages' -Context $saCtx -ErrorAction SilentlyContinue |
-                Where-Object { $_.Name -eq 'Cluster-Package.zip' } |
-                Select-Object -First 1
-            if ($blob) {
-                $sasToken = New-AzStorageBlobSASToken -Container 'packages' -Blob $blob.Name `
-                    -Permission r -ExpiryTime (Get-Date).AddHours(2) -Context $saCtx -FullUri
-                $actualClusterPackageZipUrl = $sasToken
-                Write-Output "   ✅ Found existing package blob: $($blob.Name) in $($sa.StorageAccountName)"
-                break
+            try {
+                $saCtx = $sa.Context
+                $blob = @(Invoke-AzureOperationWithRetry `
+                    -OperationName "Find Cluster package in '$($sa.StorageAccountName)'" `
+                    -Operation { Get-AzStorageBlob -Container 'packages' -Context $saCtx -ErrorAction Stop }) |
+                    Where-Object { $_.Name -eq 'Cluster-Package.zip' } |
+                    Select-Object -First 1
+                if ($blob) {
+                    $lastModified = if ($blob.LastModified) {
+                        [DateTimeOffset]$blob.LastModified
+                    } elseif ($blob.ICloudBlob -and $blob.ICloudBlob.Properties.LastModified) {
+                        [DateTimeOffset]$blob.ICloudBlob.Properties.LastModified
+                    } else {
+                        $null
+                    }
+                    $packageCandidates.Add([pscustomobject]@{
+                        StorageAccountName = $sa.StorageAccountName
+                        Context = $saCtx
+                        BlobName = $blob.Name
+                        LastModified = $lastModified
+                    }) | Out-Null
+                }
+            } catch {
+                Write-Warning "Skipping storage account '$($sa.StorageAccountName)': $($_.Exception.Message)"
             }
         }
-        if (-not $actualClusterPackageZipUrl) {
-            Write-Output "   ⚠️  No previously uploaded package found. VMs will deploy without package configuration."
-            Write-Output "      To include a package, re-run with -ClusterPackageZipUrl or -ClusterPackageZip/-ClusterPackagePath"
+        if ($packageCandidates.Count -eq 0) {
+            throw 'No reusable Cluster-Package.zip was found. Supply -ClusterPackageZipUrl, -ClusterPackageZip, or -ClusterPackagePath.'
         }
+        if (-not $StorageAccountName -and $packageCandidates.Count -gt 1) {
+            $candidateSummary = @($packageCandidates |
+                Sort-Object LastModified -Descending |
+                ForEach-Object {
+                    $timestamp = if ($_.LastModified) {
+                        $_.LastModified.UtcDateTime.ToString('u')
+                    } else {
+                        'unknown'
+                    }
+                    "$($_.StorageAccountName)/$($_.BlobName) (LastModified: $timestamp)"
+                }) -join '; '
+            throw "Multiple reusable Cluster-Package.zip blobs were found. Provide -StorageAccountName or -ClusterPackageZipUrl to select one explicitly. Candidates: $candidateSummary"
+        }
+        $selectedPackage = $packageCandidates |
+            Sort-Object LastModified -Descending |
+            Select-Object -First 1
+        $actualClusterPackageZipUrl = New-AzStorageBlobSASToken `
+            -Container 'packages' -Blob $selectedPackage.BlobName `
+            -Permission r -ExpiryTime (Get-Date).AddHours(2) `
+            -Context $selectedPackage.Context -FullUri
+        Write-Output "   ✅ Using package blob: $($selectedPackage.BlobName) in $($selectedPackage.StorageAccountName)"
     }
 
     try {
         $phase2TemplateParams = @{} + $phase2Params
+        $phase2TemplateParams.Remove('clusterNodeVmSize')
+        $phase2TemplateParams.Remove('driverVmSize')
         $phase2TemplateParams['adminPassword'] = $AdminPassword
         $phase2TemplateParams['external1SubnetId'] = $external1SubnetId
         $phase2TemplateParams['external2SubnetId'] = $external2SubnetId
@@ -562,12 +750,11 @@ foreach (`$name in `$staleNames) {
         }
 
         Write-Output "`n🚀 Starting Phase 2 deployment..."
-        $deployment = New-AzResourceGroupDeployment `
-            -ResourceGroupName $ResourceGroupName `
-            -Name $deploymentName `
-            -TemplateFile 'phase2.bicep' `
-            -TemplateParameterObject $phase2TemplateParams `
-            -ErrorAction Stop
+        $deployment = Invoke-DeploymentWithSkuFallback `
+            -ResourceGroupName $ResourceGroupName -TemplateFile $phase2TemplateFile `
+            -BaseParameters $phase2TemplateParams `
+            -SizeCandidates @{ clusterNodeVmSize = $nodeCandidates; driverVmSize = $driverCandidates } `
+            -DeploymentNamePrefix 'Cluster-Phase2'
 
         $phase2Duration = [math]::Round(((Get-Date) - $phase2Start).TotalMinutes, 1)
         Write-Output "`n✅ Phase 2 deployment completed in $phase2Duration minutes"
@@ -575,30 +762,6 @@ foreach (`$name in `$staleNames) {
         throw
     }
 
-    # ═══════════════════════════════════════════════════════════
-    # Disk Encryption — Nodes + Driver (after Phase 2 deployment)
-    # ═══════════════════════════════════════════════════════════
-    if (-not $SkipDiskEncryption -and $deployment) {
-        # Get KV outputs from Phase 1 deployment
-        if (-not $phase1Deployment) {
-            $phase1Deployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName |
-                Where-Object { $_.DeploymentName -like "Phase1-*" } |
-                Sort-Object Timestamp -Descending |
-                Select-Object -First 1
-        }
-        if ($phase1Deployment) {
-            $envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest-cluster' }
-            $node01Name = "$envPrefix-node01"
-            $node02Name = "$envPrefix-node02"
-            $driverName = "$envPrefix-client01"
-
-            Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
-                -DeploymentOutputs $phase1Deployment.Outputs `
-                -VMNames @($node01Name, $node02Name, $driverName)
-        } else {
-            Write-Warning "Phase 1 deployment not found. Skipping Phase 2 disk encryption."
-        }
-    }
 }
 
 # ═══════════════════════════════════════════════════════════
@@ -613,7 +776,83 @@ Write-Output @"
 "@
 
 Write-Output "`n🔍 Running final verification..."
-& "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" -ResourceGroupName $ResourceGroupName -TimeoutMinutes 30
+$envPrefix = if ($phase1Params['environmentPrefix']) { $phase1Params['environmentPrefix'] } else { 'fstest-cluster' }
+$resultsStorageAccountName = if ($tempStorage -and $tempStorage.Name) {
+    $tempStorage.Name
+} else {
+    $StorageAccountName
+}
+if ($SkipPhase2) {
+    $expectedRoles = @('Domain Controller', 'Storage Server')
+    $verifiedVmNames = @("$envPrefix-dc01", "$envPrefix-storage01")
+    & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" `
+        -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
+        -ExpectedRoles $expectedRoles -TimeoutMinutes 120 -NotBeforeUtc $operationStartUtc | Out-Null
+} else {
+    $verifiedVmNames = @(
+        "$envPrefix-dc01",
+        "$envPrefix-storage01",
+        "$envPrefix-node01",
+        "$envPrefix-node02",
+        "$envPrefix-client01"
+    )
+    if ($SkipPhase1) {
+        & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" `
+            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
+            -ExpectedRoles @('Domain Controller', 'Storage Server') -TimeoutMinutes 10 | Out-Null
+        $verification = & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" `
+            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
+            -ExpectedRoles @('Cluster Node 1', 'Cluster Node 2', 'Driver Computer') `
+            -TimeoutMinutes 120 -TestTimeoutMinutes $TestTimeoutMinutes `
+            -NotBeforeUtc $operationStartUtc -WaitForTests -DeferTestFailure `
+            -ResultsStorageAccountName $resultsStorageAccountName
+    } else {
+        $verification = & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" `
+            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
+            -TimeoutMinutes 120 -TestTimeoutMinutes $TestTimeoutMinutes `
+            -NotBeforeUtc $operationStartUtc -WaitForTests -DeferTestFailure `
+            -ResultsStorageAccountName $resultsStorageAccountName
+    }
+    Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+}
+
+# ADE may reboot every VM, so apply it only after cluster configuration and
+# automatic tests have reached verified terminal states.
+if (-not $SkipDiskEncryption) {
+    if (-not $phase1Deployment) {
+        $phase1Deployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName |
+            Where-Object { $_.DeploymentName -like 'Cluster-Phase1-*' -or $_.DeploymentName -like 'Phase1-*' } |
+            Sort-Object Timestamp -Descending |
+            Select-Object -First 1
+    }
+    if (-not $phase1Deployment) {
+        throw 'Phase 1 deployment outputs are unavailable for disk encryption.'
+    }
+
+    Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
+        -DeploymentOutputs $phase1Deployment.Outputs `
+        -VMNames $verifiedVmNames
+
+    $postEncryptionParams = @{
+        SubscriptionId = $SubscriptionId
+        ResourceGroupName = $ResourceGroupName
+        TimeoutMinutes = 20
+    }
+    if ($expectedRoles) { $postEncryptionParams['ExpectedRoles'] = $expectedRoles }
+    & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" @postEncryptionParams | Out-Null
+}
+
+if ($autoShutdownRequested) {
+    Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+    Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+        -Location $config.location -VMNames $verifiedVmNames `
+        -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+    $autoShutdownRestored = $true
+}
+
+if (-not $SkipPhase2) {
+    Complete-DeploymentTestOutcome -Verification $verification
+}
 
 Write-Output @"
 
@@ -635,6 +874,17 @@ For detailed instructions, see: README.md
 "@
 
 } finally {
+    if ($autoShutdownRequested -and -not $autoShutdownRestored) {
+        try {
+            Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+            Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+                -Location $config.location -VMNames $autoShutdownVmNames `
+                -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+            $autoShutdownRestored = $true
+        } catch {
+            Write-Warning "Failed to restore VM auto-shutdown schedules (non-fatal): $($_.Exception.Message)"
+        }
+    }
     # Storage account is kept alive for test results upload.
     if ($tempStorage) {
         Write-Output "`nStorage account '$($tempStorage.Name)' retained for test results upload."

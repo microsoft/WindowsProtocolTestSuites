@@ -52,6 +52,13 @@ Start-Transcript -Path $logFile -Append -Force
 # Pre-flight validation
 # ===========================================================================
 $configFile = "$WorkingPath\Config.json"
+$cfg = $null
+try {
+    $cfg = Get-Content -Path $configFile -Raw -ErrorAction Stop | ConvertFrom-Json
+} catch {
+    .\Write-Error.ps1 "[FAIL] Could not load Config.json: $($_.Exception.Message)"
+    Pop-Location; Stop-Transcript; throw
+}
 $validateScript = "$scriptsPath\Validate-ConfigFile.ps1"
 if (Test-Path $validateScript) {
     try {
@@ -98,10 +105,32 @@ $currentStep = Get-DeployStep
 . "$dscFolder\Deploy-CommonHelpers.ps1"
 
 $signalFile = "$dscFolder\Deploy-Storage.Completed.signal"
-if (Test-Path $signalFile) {
+$targetName = if ($cfg.Machines.Storage.iSCSITargetName) {
+    $cfg.Machines.Storage.iSCSITargetName
+} else { 'ClusterTarget' }
+
+function Test-RequiredStorageReadyState {
+    $service = Get-Service WinTarget -ErrorAction SilentlyContinue
+    if ($null -eq $service -or $service.Status -ne 'Running') {
+        return $false
+    }
+
+    $target = Get-IscsiServerTarget -TargetName $targetName -ErrorAction SilentlyContinue
+    if ($null -eq $target -or $null -eq $target.LunMappings -or $target.LunMappings.Count -lt 4) {
+        return $false
+    }
+
+    return $true
+}
+
+if ((Test-Path $signalFile) -and (Test-RequiredStorageReadyState)) {
     .\Write-Info.ps1 "[OK] Storage deployment already completed (signal file exists)." -ForegroundColor Green
     Remove-ResumeTask
     Pop-Location; Stop-Transcript; return
+}
+if (Test-Path $signalFile) {
+    .\Write-Info.ps1 "[WARN] Removing stale Storage completion signal because required state is incomplete." -ForegroundColor Yellow
+    Remove-Item -LiteralPath $signalFile -Force
 }
 
 $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
@@ -145,7 +174,8 @@ if ($currentStep -lt 1) {
         .\Write-Info.ps1 "Compiling Storage DSC configuration..." -ForegroundColor Cyan
         StorageConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
         .\Write-Info.ps1 "Applying Storage DSC configuration..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+        Invoke-VerifiedDscConfiguration -Path $mofFolder `
+            -OperationName 'Cluster Storage initial DSC' | Out-Null
         .\Write-Info.ps1 "[OK] DSC applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
     }
     catch {
@@ -184,22 +214,22 @@ if ($currentStep -eq 1) {
 
     # Verify WinTarget service is running
     $winTarget = Get-Service WinTarget -ErrorAction SilentlyContinue
-    if ($null -ne $winTarget) {
-        if ($winTarget.Status -ne 'Running') {
-            .\Write-Info.ps1 "Starting WinTarget service..." -ForegroundColor Yellow
-            Start-Service WinTarget -ErrorAction SilentlyContinue
-            Start-Sleep -Seconds 5
-        }
-        .\Write-Info.ps1 "[OK] WinTarget service status: $((Get-Service WinTarget).Status)" -ForegroundColor Green
-    } else {
-        .\Write-Info.ps1 "[WARN] WinTarget service not found" -ForegroundColor Yellow
+    if ($null -eq $winTarget) {
+        throw 'WinTarget service is not installed.'
     }
+    if ($winTarget.Status -ne 'Running') {
+        .\Write-Info.ps1 "Starting WinTarget service..." -ForegroundColor Yellow
+        Start-Service WinTarget -ErrorAction Stop
+        Start-Sleep -Seconds 5
+    }
+    .\Write-Info.ps1 "[OK] WinTarget service status: $((Get-Service WinTarget).Status)" -ForegroundColor Green
 
     # Re-apply DSC to catch drift
     try {
         . "$dscFolder\Storage-Configuration.ps1"
         StorageConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
-        Start-DscConfiguration -Path $mofFolder -Wait -Verbose -Force
+        Invoke-VerifiedDscConfiguration -Path $mofFolder `
+            -OperationName 'Cluster Storage post-reboot DSC' | Out-Null
         .\Write-Info.ps1 "[OK] DSC re-applied post-reboot." -ForegroundColor Green
     }
     catch {
@@ -212,12 +242,16 @@ if ($currentStep -eq 1) {
         try { & $checkScript } catch { .\Write-Info.ps1 "[WARN] Storage status check: $($_.Exception.Message)" -ForegroundColor Yellow }
     }
 
-    Set-DeployStep -Step 2
-    Set-RebootCount -Count 0
-
-    "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
-    .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
-    Remove-ResumeTask
+    if (Test-RequiredStorageReadyState) {
+        Set-DeployStep -Step 2
+        Set-RebootCount -Count 0
+        "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
+        .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
+        Remove-ResumeTask
+    } else {
+        Set-DeployStep -Step 1
+        throw "Storage postconditions failed for target '$targetName'."
+    }
 
     $cleanupScript = "$scriptsPath\RestartAndRunFinish.ps1"
     if (Test-Path $cleanupScript) { & $cleanupScript }

@@ -154,11 +154,14 @@ Describe 'Credentialed test process launcher' {
 
 Describe 'Windows SMB credential connection' {
     $connector = Get-Content (Join-Path $root 'shared\DSC\Scripts\Connect-WindowsSmbShare.ps1') -Raw
+    $testRun = Get-Content (Join-Path $root 'shared\DSC\Scripts\Invoke-TestRun.ps1') -Raw
 
     It 'does not accept a conflicting pre-existing credential session' {
-        $connector.Contains('$result -eq 1219') | Should Be $true
-        $connector.Contains('requested credential session was not established') |
-            Should Be $true
-        $connector.Contains('$result -notin @(0, 1219)') | Should Be $false
+        foreach ($implementation in @($connector, $testRun)) {
+            $implementation.Contains('$result -eq 1219') | Should Be $true
+            $implementation.Contains('requested credential session was not established') |
+                Should Be $true
+            $implementation.Contains('$result -notin @(0, 1219)') | Should Be $false
+        }
     }
 }

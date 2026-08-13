@@ -62,23 +62,7 @@ param domainPackageZipUrl string
 // Variables
 var dcIsHotpatch = contains(dcOsVersion, 'azure-edition')
 
-// CSE bootstrap: the shared script (../../shared/scripts/cse-bootstrap.ps1) is
-// loaded at compile time, role/package tokens are substituted, and the result
-// travels base64-encoded inside the extension's ENCRYPTED protectedSettings. The
-// commandToExecute materializes it to a file and runs it (the Windows
-// CustomScriptExtension has no 'script' property, and inline one-liners are
-// unreviewable and drift between roles).
-var packageHost = empty(domainPackageZipUrl) ? '' : split(domainPackageZipUrl, '/')[2]
-var dcBootstrap = replace(replace(replace(replace(replace(replace(replace(
-  loadTextContent('../../shared/scripts/cse-bootstrap.ps1'),
-  '__SCENARIO__', 'domain'),
-  '__ROLE__', 'dc'),
-  '__PACKAGE_NAME__', 'Domain-Package'),
-  '__DEPLOY_SCRIPT__', 'Deploy-DC.ps1'),
-  '__PACKAGE_URL__', domainPackageZipUrl),
-  '__PACKAGE_HOST__', packageHost),
-  '__PASSWORD_B64__', base64(adminPassword))
-var dcCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "[System.IO.File]::WriteAllText(\'C:\\domain-dc-bootstrap.ps1\', [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(\'${base64(dcBootstrap)}\'))); & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\domain-dc-bootstrap.ps1\'; exit $LASTEXITCODE"'
+var dcCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-domain-dc\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Domain-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-domain-dc\\cse-bootstrap.ps1\' -Scenario \'domain\' -Role \'dc\' -PackageName \'Domain-Package\' -DeployScript \'Deploy-DC.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
 
 var dcImageRef = !empty(dcCustomImageId) ? {
   id: dcCustomImageId
@@ -247,12 +231,11 @@ resource dcVmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03-01'
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
+    settings: {}
+    protectedSettings: {
       fileUris: [
         domainPackageZipUrl
       ]
-    }
-    protectedSettings: {
       commandToExecute: dcCommandToExecute
     }
   }

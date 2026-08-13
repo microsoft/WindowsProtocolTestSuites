@@ -75,6 +75,18 @@ var driverVmName = '${environmentPrefix}-client01'
 var driverNic1Name = '${driverVmName}-nic1'
 var driverNic2Name = '${driverVmName}-nic2'
 var driverIsLinux = driverOsType == 'Linux'
+var packageHost = empty(clusterPackageZipUrl) ? '' : split(clusterPackageZipUrl, '/')[2]
+var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(replace(
+  loadTextContent('../../shared/scripts/cse-bootstrap.sh'),
+  '__SCENARIO__', 'cluster'),
+  '__ROLE__', 'driver'),
+  '__PACKAGE_NAME__', 'Cluster-Package'),
+  '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'),
+  '__PACKAGE_URL__', clusterPackageZipUrl),
+  '__PACKAGE_HOST__', packageHost),
+  '__PASSWORD_B64__', base64(adminPassword))
+var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-cluster-driver\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Cluster-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-cluster-driver\\cse-bootstrap.ps1\' -Scenario \'cluster\' -Role \'driver\' -PackageName \'Cluster-Package\' -DeployScript \'Deploy-Driver.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
+var driverWindowsOffer = startsWith(driverOsVersion, 'win10-') ? 'Windows-10' : 'Windows-11'
 var driverImageRef = !empty(driverCustomImageId) ? {
   id: driverCustomImageId
 } : driverIsLinux ? {
@@ -84,7 +96,7 @@ var driverImageRef = !empty(driverCustomImageId) ? {
   version: 'latest'
 } : {
   publisher: 'MicrosoftWindowsDesktop'
-  offer: 'Windows-11'
+  offer: driverWindowsOffer
   sku: driverOsVersion
   version: 'latest'
 }
@@ -248,13 +260,12 @@ resource driverWinExtension 'Microsoft.Compute/virtualMachines/extensions@2023-0
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
+    settings: {}
+    protectedSettings: {
       fileUris: [
         clusterPackageZipUrl
       ]
-    }
-    protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\driver-extension-setup.log -Append; Write-Output \\"Starting Driver Computer Setup for Cluster Testing...\\"; New-Item -ItemType Directory -Path C:\\Cluster-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Cluster-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-Driver.ps1 execution...\\"; if (Test-Path C:\\Cluster-Package\\DSC\\Deploy-Driver.ps1) { & C:\\Cluster-Package\\DSC\\Deploy-Driver.ps1 -WorkingPath C:\\Cluster-Package; } else { Write-Output \\"Deploy-Driver.ps1 not found, skipping configuration\\"; }; Write-Output \\"Driver Computer extension setup completed\\"; Stop-Transcript"'
+      commandToExecute: driverCommandToExecute
     }
   }
 }
@@ -269,13 +280,9 @@ resource driverLinuxExtension 'Microsoft.Compute/virtualMachines/extensions@2023
     type: 'CustomScript'
     typeHandlerVersion: '2.1'
     autoUpgradeMinorVersion: true
-    settings: {
-      fileUris: [
-        clusterPackageZipUrl
-      ]
-    }
+    settings: {}
     protectedSettings: {
-      commandToExecute: 'bash -c "set -e; export DEBIAN_FRONTEND=noninteractive; echo Starting Driver Computer Setup for Cluster Testing...; mkdir -p /opt/Cluster-Package; apt-get update -qq; apt-get install -y -qq wget unzip apt-transport-https; if ! command -v pwsh >/dev/null 2>&1; then wget -q https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb; dpkg -i /tmp/packages-microsoft-prod.deb; rm -f /tmp/packages-microsoft-prod.deb; apt-get update -qq; apt-get install -y -qq powershell; fi; zipfile=\\$(find /var/lib/waagent/custom-script/download/0 -maxdepth 1 -name *.zip 2>/dev/null | head -1); if [ -n \\"\\$zipfile\\" ]; then echo Extracting \\$zipfile...; unzip -o \\"\\$zipfile\\" -d /opt/Cluster-Package; rm -f \\"\\$zipfile\\"; else echo No zip file found; exit 1; fi; echo Starting Deploy-Driver.ps1 execution...; if [ -f /opt/Cluster-Package/DSC/Deploy-Driver.ps1 ]; then pwsh -ExecutionPolicy Unrestricted -File /opt/Cluster-Package/DSC/Deploy-Driver.ps1 -WorkingPath /opt/Cluster-Package; else echo Deploy-Driver.ps1 not found, skipping configuration; fi; echo Driver Computer extension setup completed"'
+      script: base64(driverLinuxBootstrap)
     }
   }
 }

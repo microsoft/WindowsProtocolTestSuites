@@ -75,6 +75,8 @@ var node01Nic1Name = '${node01VmName}-nic1'
 var node01Nic2Name = '${node01VmName}-nic2'
 var node02Nic1Name = '${node02VmName}-nic1'
 var node02Nic2Name = '${node02VmName}-nic2'
+var node01CommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-cluster-node01\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Cluster-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-cluster-node01\\cse-bootstrap.ps1\' -Scenario \'cluster\' -Role \'node01\' -PackageName \'Cluster-Package\' -DeployScript \'Deploy-Node01.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
+var node02CommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-cluster-node02\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Cluster-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-cluster-node02\\cse-bootstrap.ps1\' -Scenario \'cluster\' -Role \'node02\' -PackageName \'Cluster-Package\' -DeployScript \'Deploy-Node02.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
 
 // Node01 Network Interfaces
 resource node01Nic1 'Microsoft.Network/networkInterfaces@2023-04-01' = {
@@ -383,13 +385,12 @@ resource node01VmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
+    settings: {}
+    protectedSettings: {
       fileUris: [
         clusterPackageZipUrl
       ]
-    }
-    protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\node01-extension-setup.log -Append; Write-Output \\"Starting Cluster Node01 Setup...\\"; New-Item -ItemType Directory -Path C:\\Cluster-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Cluster-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-Node01.ps1 execution...\\"; if (Test-Path C:\\Cluster-Package\\DSC\\Deploy-Node01.ps1) { & C:\\Cluster-Package\\DSC\\Deploy-Node01.ps1 -WorkingPath C:\\Cluster-Package; } else { Write-Output \\"Deploy-Node01.ps1 not found, skipping configuration\\"; }; Write-Output \\"Node01 extension setup completed\\"; Stop-Transcript"'
+      commandToExecute: node01CommandToExecute
     }
   }
 }
@@ -403,13 +404,12 @@ resource node02VmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
+    settings: {}
+    protectedSettings: {
       fileUris: [
         clusterPackageZipUrl
       ]
-    }
-    protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\node02-extension-setup.log -Append; Write-Output \\"Starting Cluster Node02 Setup...\\"; New-Item -ItemType Directory -Path C:\\Cluster-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Cluster-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-Node02.ps1 execution...\\"; if (Test-Path C:\\Cluster-Package\\DSC\\Deploy-Node02.ps1) { & C:\\Cluster-Package\\DSC\\Deploy-Node02.ps1 -WorkingPath C:\\Cluster-Package; } else { Write-Output \\"Deploy-Node02.ps1 not found, skipping configuration\\"; }; Write-Output \\"Node02 extension setup completed\\"; Stop-Transcript"'
+      commandToExecute: node02CommandToExecute
     }
   }
 }

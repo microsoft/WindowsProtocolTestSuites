@@ -56,6 +56,7 @@ var storageImageRef = !empty(storageCustomImageId) ? {
 }
 var storageVmName = '${environmentPrefix}-storage01'
 var storageNic1Name = '${storageVmName}-nic1'
+var storageCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-cluster-storage\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Cluster-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-cluster-storage\\cse-bootstrap.ps1\' -Scenario \'cluster\' -Role \'storage\' -PackageName \'Cluster-Package\' -DeployScript \'Deploy-Storage.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
 
 // Storage Server Network Interfaces
 resource storageNic1 'Microsoft.Network/networkInterfaces@2023-04-01' = {
@@ -182,13 +183,12 @@ resource storageVmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-0
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
+    settings: {}
+    protectedSettings: {
       fileUris: [
         clusterPackageZipUrl
       ]
-    }
-    protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\storage-extension-setup.log -Append; Write-Output \\"Starting Storage Server (iSCSI Target) Setup...\\"; New-Item -ItemType Directory -Path C:\\Cluster-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Cluster-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-Storage.ps1 execution...\\"; if (Test-Path C:\\Cluster-Package\\DSC\\Deploy-Storage.ps1) { & C:\\Cluster-Package\\DSC\\Deploy-Storage.ps1 -WorkingPath C:\\Cluster-Package; } else { Write-Output \\"Deploy-Storage.ps1 not found, skipping configuration\\"; }; Write-Output \\"Storage Server extension setup completed\\"; Stop-Transcript"'
+      commandToExecute: storageCommandToExecute
     }
   }
 }

@@ -41,7 +41,9 @@ function Set-PTFConfigProperty {
     param(
         [string]$FilePath,
         [string]$PropertyName,
-        [string]$Value
+        [string]$Value,
+        [ValidateSet('Public', 'Secret')]
+        [string]$ValueClassification = 'Public'
     )
     if (!(Test-Path $FilePath)) { return }
 
@@ -52,7 +54,11 @@ function Set-PTFConfigProperty {
         $node.SetAttribute("value", $Value)
         Set-ItemProperty -Path $FilePath -Name IsReadOnly -Value $false -ErrorAction SilentlyContinue
         $xml.Save((Resolve-Path $FilePath))
-        .\Write-Info.ps1 "  $PropertyName`: $oldValue -> $Value"
+        if ($ValueClassification -eq 'Secret') {
+            .\Write-Info.ps1 "  $PropertyName`: <redacted> -> <redacted>"
+        } else {
+            .\Write-Info.ps1 "  $PropertyName`: $oldValue -> $Value"
+        }
     }
 }
 
@@ -97,7 +103,8 @@ if (Test-Path $commonPtf) {
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "DCServerComputerName" -Value "$dcName.$domain"
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "AdminUserName" -Value $adminUser
     if (-not [string]::IsNullOrEmpty($adminPassword)) {
-        Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "PasswordForAllUsers" -Value $adminPassword
+        Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "PasswordForAllUsers" `
+            -Value $adminPassword -ValueClassification Secret
     }
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "IsPersistentHandlesSupported" -Value "true"
     Set-PTFConfigProperty -FilePath $commonPtf -PropertyName "CAShareName" -Value "SMBClustered"
