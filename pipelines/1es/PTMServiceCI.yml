@@ -54,23 +54,27 @@ extends:
                 inputs:
                   command: restore
                   projects: ProtocolTestManager\PTMService\**\*.csproj
+                  feedsToUse: config
+                  nugetConfigPath: NuGet.config
                   noCache: true
               - task: DotNetCoreCLI@2
                 displayName: dotnet build
                 inputs:
                   projects: ProtocolTestManager\PTMService\PTMService.sln
+                  arguments: --no-restore
               - task: DotNetCoreCLI@2
                 displayName: dotnet test
                 inputs:
                   command: test
                   projects: ProtocolTestManager\PTMService\**\*.csproj
+                  arguments: --no-restore
               - task: DotNetCoreCLI@2
                 displayName: dotnet publish
                 inputs:
                   command: publish
                   publishWebProjects: false
                   projects: ProtocolTestManager\PTMService\PTMService\PTMService.csproj
-                  arguments: --configuration Release --output "$(build.artifactstagingdirectory)"
+                  arguments: --configuration Release --output "$(build.artifactstagingdirectory)" --no-restore
           - job: Job_2
             displayName: Publish PTMService on Linux
             templateContext:
@@ -94,18 +98,21 @@ extends:
                 inputs:
                   command: restore
                   projects: ProtocolTestManager/PTMService/**/*.csproj
+                  feedsToUse: config
+                  nugetConfigPath: NuGet.config
                   noCache: true
               - task: DotNetCoreCLI@2
                 displayName: dotnet build
                 inputs:
                   projects: ProtocolTestManager/PTMService/PTMService.sln
+                  arguments: --no-restore
               - task: DotNetCoreCLI@2
                 displayName: dotnet publish
                 inputs:
                   command: publish
                   publishWebProjects: false
                   projects: ProtocolTestManager/PTMService/PTMService/PTMService.csproj
-                  arguments: --configuration Release --output "$(build.binariesdirectory)"
+                  arguments: --configuration Release --output "$(build.binariesdirectory)" --no-restore
                   zipAfterPublish: false
               - task: ArchiveFiles@2
                 displayName: Archive PTMService
