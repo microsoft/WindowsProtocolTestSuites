@@ -54,12 +54,18 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.FSA.TestSuite
 
             FileIdInformation fileIdInfo = TypeMarshal.ToStruct<FileIdInformation>(outputBuffer);
 
+            // For other file system, just skip step 3, 4
+            if (this.fsaAdapter.FileSystem == FileSystem.NTFS ||
+	        this.fsaAdapter.FileSystem == FileSystem.REFS)
+	    {
+
             BaseTestSite.Log.Add(LogEntryKind.TestStep, "3. Get FileId by sending FSCTL_READ_FILE_USN_DATA to server.");
             status = this.fsaAdapter.FsCtlReadFileUSNData(3, 3, out outputBuffer); // Only version 3 USN record contains 128 bit FileReferenceNumber;
             BaseTestSite.Assert.AreEqual(MessageStatus.SUCCESS, status, "FSCTL_READ_FILE_USN_DATA should succeed.");
             USN_RECORD_V3 record = TypeMarshal.ToStruct<USN_RECORD_V3>(outputBuffer);
             System.Guid fileId = record.FileReferenceNumber;
             BaseTestSite.Assert.AreEqual(fileId, fileIdInfo.FileId, "FileId when querying FileIdInformation should be the same with FileReferenceNumber when sending FSCTL_READ_FILE_USN_DATA.");
+	    }
 
             // We can get the 64-bit VolumeSerialNumber only by sending FSCTL_GET_NTFS_VOLUME_DATA or FSCTL_GET_REFS_VOLUME_DATA.
             // For other file system, just ignore this check.
