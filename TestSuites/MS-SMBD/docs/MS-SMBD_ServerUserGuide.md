@@ -132,9 +132,9 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012R2(Standard Edition or later versions); Ubuntu 24.04| 
+| Operating system| Microsoft® Windows Server 2022 (version 21H2), Microsoft® Windows Server 2025 (version 24H2), Standard Edition or later versions; Ubuntu 24.04| 
 | Feature| An RDMA capable NIC is installed and ready to use| 
-| Memory| 2 GB RAM| 
+| Memory| 16 GB RAM| 
 | Disk space| 60 GB | 
 
 Note:
@@ -147,9 +147,9 @@ The minimum requirements for the SUT are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012R2, Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
+| Operating system| Microsoft® Windows Server 2022 (version 21H2), Microsoft® Windows Server 2025 (version 24H2), Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
 | Feature| An RDMA capable NIC is installed and ready to use| 
-| Memory| 2 GB RAM| 
+| Memory| 16 GB RAM| 
 | Disk space| 60 GB| 
 
 ### Software
