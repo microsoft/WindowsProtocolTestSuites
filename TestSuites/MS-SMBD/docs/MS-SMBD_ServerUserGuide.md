@@ -122,9 +122,9 @@ Refer to the Privacy Statement and EULA for further information
 
 Run this test suite in a domain or non-domain environment that contains the following computers (physical or virtual): 
 
-* A driver computer running Microsoft® Windows Server® 2012R2 or later versions. For RDMA testing scenarios, a Linux-based operating system (e.g., Ubuntu 24.04) can also be used.
+* A driver computer running Microsoft® Windows Server® 2022 or later versions. For RDMA testing scenarios, a Linux-based operating system (e.g., Ubuntu 24.04) can also be used.
 
-* A system under test running Microsoft® Windows Server® 2012R2 or later versions
+* A system under test running Microsoft® Windows Server® 2022 or later versions
 
 ### Driver Computer
 
@@ -132,9 +132,9 @@ The minimum requirements for the driver computer are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012R2(Standard Edition or later versions); Ubuntu 24.04| 
+| Operating system| Microsoft® Windows Server 2022 (version 21H2), Microsoft® Windows Server 2025 (version 24H2), Standard Edition or later versions; Ubuntu 24.04| 
 | Feature| An RDMA capable NIC is installed and ready to use| 
-| Memory| 2 GB RAM| 
+| Memory| 16 GB RAM| 
 | Disk space| 60 GB | 
 
 Note:
@@ -147,9 +147,9 @@ The minimum requirements for the SUT are as follows.
 
 |  **Requirement**|  **Description**| 
 | -------------| ------------- |
-| Operating system| Microsoft Windows Server 2012R2, Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
+| Operating system| Microsoft® Windows Server 2022 (version 21H2), Microsoft® Windows Server 2025 (version 24H2), Standard Edition or later versions, or a SUT implementation that is not based on the Windows operating system| 
 | Feature| An RDMA capable NIC is installed and ready to use| 
-| Memory| 2 GB RAM| 
+| Memory| 16 GB RAM| 
 | Disk space| 60 GB| 
 
 ### Software
