@@ -141,23 +141,41 @@ if($i -ge 5)
 #----------------------------------------------------------------------------
 # Discover Iscsi Target
 #----------------------------------------------------------------------------
-for($i=0;$i -lt 5;$i++)
+Write-Info.ps1 "Discover Iscsi Target"
+
+$targetDiscovered = $false
+
+for($i = 0; $i -lt 30; $i++)
 {
-    Write-Info.ps1 "Discover Iscsi Target"
     iscsicli qaddtargetportal $iscsiservername 2>&1 | Write-Info.ps1
-    if($LastExitCode -eq 0)
+
+    if($LastExitCode -ne 0)
     {
+        Write-Info.ps1 "qaddtargetportal failed, retry..."
+        Start-Sleep 10
+        continue
+    }
+
+    $expectedIqn = "iqn.1991-05.com.microsoft:$iscsiservername-$targetname-target"
+    $targets = Get-IscsiTarget -ErrorAction SilentlyContinue
+    $matchingTargets = $targets | Where-Object { $_.NodeAddress -eq $expectedIqn }
+
+    if($matchingTargets)
+    {
+        Write-Info.ps1 "iSCSI target discovered: $expectedIqn"
+        $matchingTargets | Format-List * | Out-String | Write-Info.ps1
+
+        $targetDiscovered = $true
         break
     }
-    else
-    {
-        Write-Error.ps1 "Discover Iscsi Target failed."
-    }
+
+    Write-Info.ps1 "No iSCSI target discovered yet, retry after 10 seconds..."
+    Start-Sleep 10
 }
 
-if($i -ge 5)
+if(-not $targetDiscovered)
 {
-    Write-Error.ps1 "Discover Iscsi Target failed within 5 retries."
+    Write-Error.ps1 "Discover Iscsi Target failed within 5 minutes."
     Write-ConfigFailureSignal
     exit ExitCode
 }
