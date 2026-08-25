@@ -87,6 +87,9 @@ param dcExternal2Ip string
 @description('Enable auto-shutdown. Default false: auto-shutdown DEALLOCATES VMs, and a deallocate/restart of a domain-joined member can collide with machine-account password handling. Opt in explicitly to save cost.')
 param enableAutoShutdown bool = false
 
+@description('Run FileServer tests automatically after configuration')
+param enableTestAutoRun bool = true
+
 @description('Auto-shutdown time (HH:mm in UTC)')
 param autoShutdownTime string = '20:00'
 
@@ -137,6 +140,7 @@ module memberConfiguration 'modules/domain-computer-extensions.bicep' = if (conf
     sutVmName: domainComputers.outputs.sutVmName
     adminPassword: adminPassword
     driverOsType: driverOsType
+    enableTestAutoRun: enableTestAutoRun
     domainPackageZipUrl: domainPackageZipUrl
   }
 }

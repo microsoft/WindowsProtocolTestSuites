@@ -22,6 +22,34 @@ if (-not $NoTranscript) {
     $transcriptStarted = $true
 }
 
+function Test-ClaimsGpoConfigured {
+    try {
+        Import-Module GroupPolicy -ErrorAction Stop
+        $report = Get-GPOReport -Name 'Default Domain Policy' -ReportType Xml `
+            -ErrorAction Stop
+        foreach ($marker in @(
+            'Central Access Policy',
+            'PET-AccessPolicy',
+            'CountryCodeEquals156Policy'
+        )) {
+            if ($report -notmatch [regex]::Escape($marker)) {
+                return $false
+            }
+        }
+        return $true
+    }
+    catch {
+        return $false
+    }
+}
+
+if (Test-ClaimsGpoConfigured) {
+    .\Write-Info.ps1 'Claims GPO settings are already present; skipping import.'
+    Pop-Location
+    if ($transcriptStarted) { Stop-Transcript }
+    return $true
+}
+
 #----------------------------------------------------------------------------
 # Extract GPOBackup files
 #----------------------------------------------------------------------------

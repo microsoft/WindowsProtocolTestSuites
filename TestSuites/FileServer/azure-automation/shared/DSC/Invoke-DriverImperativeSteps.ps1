@@ -597,3 +597,4 @@ if ($Step -eq 2 -and -not $toolsOk) {
 
 Stop-LocalTranscript
 Pop-Location
+return $true

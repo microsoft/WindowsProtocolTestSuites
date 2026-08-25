@@ -20,6 +20,7 @@ Scenario-specific (e.g., domain-bicep/DSC/)     Shared (shared/DSC/)
                                                      ├── Invoke-TestRun.ps1
 Uploaded Package (e.g., Domain-Package.zip)          └── (16 more utilities)
 ├── cse-bootstrap.ps1    ← short generic Windows extension entry point
+├── PackageManifest.json ← scenario, source revision, lengths, SHA-256 hashes
 ├── Config.json          ← generated from deployment params
 ├── ResultsUpload.json   ← storage account for test results
 ├── Tools.json           ← from scenario DSC/Scripts/
@@ -38,6 +39,15 @@ Uploaded Package (e.g., Domain-Package.zip)          └── (16 more utilitie
 
 **Key rule:** Shared files overwrite scenario-specific files of the same name. This means `shared/DSC/` is the source of truth for DC and Driver scripts — the scenario folders should not contain copies of these.
 
+`Build-DscPackage` validates required scenario content, generates
+`PackageManifest.json`, and verifies every hash before compression.
+`cse-bootstrap.ps1` repeats that verification before credential injection or
+role execution. Cluster packages fail closed when the contracts or manifest are
+missing. Public packages exclude private parameter and results-upload files.
+`InstallMSIAndTools.ps1` also verifies configured SHA-256 values and expected
+ZIP entries for cached and downloaded external assets before preparation or
+installation can succeed.
+
 ## On-VM Configuration Pattern
 
 Once a VM downloads the package, its **CustomScriptExtension** runs an orchestrator script (e.g., `Deploy-DC.ps1`). All orchestrators follow the same multi-step pattern:
@@ -50,6 +60,11 @@ Each orchestrator tracks progress in the registry at `HKLM:\SOFTWARE\ProtocolTes
 |-----|---------|
 | `DeployStep` | Current step (0, 1, 2, 3...) — incremented after each phase |
 | `RebootCount` | Number of reboots taken — circuit breaker at 3-4 max |
+
+Current deterministic orchestrators use role-specific phase and reboot values;
+`DeployStep` remains only for migration. Cluster Storage uses one bounded
+feature/hostname reboot, Cluster nodes use one combined feature/domain-join
+reboot, and the Cluster Driver has a dedicated readiness-gated path.
 
 ### Step Progression
 
@@ -135,6 +150,7 @@ Orchestrators and DSC configurations shared by all scenarios:
 |------|---------|---------|
 | `Deploy-DC.ps1` | Domain, Cluster | DC orchestrator — AD DS promotion, accounts, CBAC, GPO |
 | `Deploy-Driver.ps1` | All | Driver orchestrator — tools install, domain join, test setup |
+| `Deploy-ClusterDriver.ps1` | Cluster | Cluster Driver orchestrator — waits for both nodes, live Cluster readiness, tools, and ForceLevel2 shares |
 | `Deploy-CommonHelpers.ps1` | All | Shared functions used by orchestrators |
 | `DC-Configuration.ps1` | Domain, Cluster | DSC: AD DS role, DNS, LDAP, RemoteAccess |
 | `Driver-Configuration.ps1` | All | DSC: hosts file, firewall rules, PS remoting |
@@ -162,6 +178,7 @@ Utility scripts that run on VMs during configuration:
 | `Create-DNSRecords.ps1` | Creates DNS records for test endpoints |
 | `Validate-ConfigFile.ps1` | Validates Config.json structure |
 | `Validate-Environment.ps1` | Post-deploy environment validation |
+| `Package-Contracts.ps1` | Required package content plus manifest and SHA-256 verification |
 | `Set-AutoLogon.ps1` | Configures automatic logon for scheduled tasks |
 | `Check-DCStatus.ps1` | Checks DC readiness (AD services, DNS) |
 | `Configure-TlsCipherSuites.ps1` | Configures TLS cipher suites for testing |

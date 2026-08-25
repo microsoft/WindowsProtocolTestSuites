@@ -5,6 +5,12 @@
 # Shared deployment helper functions for File Server Test Suite Azure deployments
 # Used by both cluster-bicep/deploy.ps1 and domain-bicep/deploy.ps1
 
+$packageContractsPath = Join-Path $PSScriptRoot 'DSC\Scripts\Package-Contracts.ps1'
+if (-not (Test-Path -LiteralPath $packageContractsPath)) {
+    throw "Package contracts were not found at '$packageContractsPath'."
+}
+. $packageContractsPath
+
 function Test-TransientAzureError {
     [CmdletBinding()]
     param(
@@ -1259,7 +1265,11 @@ function Resolve-DeploymentConfig {
     )
     $merged = @{}
     foreach ($key in $Defaults.Keys) {
-        $merged[$key] = if ($Params[$key]) { $Params[$key] } else { $Defaults[$key] }
+        $merged[$key] = if ($Params.ContainsKey($key)) {
+            $Params[$key]
+        } else {
+            $Defaults[$key]
+        }
     }
     [PSCustomObject]$merged
 }
@@ -1828,19 +1838,26 @@ function Install-DscPackageAssets {
         [ValidateSet('Domain', 'Cluster', 'Workgroup')]
         [string]$Scenario,
 
-        [string]$LocalGpoBackupPath = ''
+        [string]$LocalGpoBackupPath = '',
+
+        [switch]$PublicPackage
     )
 
     $baseUrl = 'https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net'
 
     # -- ParamConfig.json (all scenarios -- Create-TestAccount.ps1 needs it) --
-    $paramConfigDest = Join-Path $ScriptsFolder 'ParamConfig.json'
-    try {
-        Invoke-WebRequest -Uri "$baseUrl/configs/ParamConfig.json" `
-            -OutFile $paramConfigDest -UseBasicParsing
-        Write-Host "   [OK] Downloaded ParamConfig.json to DSC\Scripts"
-    } catch {
-        Write-Warning "Failed to download ParamConfig.json: $_"
+    if (-not $PublicPackage) {
+        $paramConfigDest = Join-Path $ScriptsFolder 'ParamConfig.json'
+        try {
+            Invoke-WebRequest -Uri "$baseUrl/configs/ParamConfig.json" `
+                -OutFile $paramConfigDest -UseBasicParsing
+            if ((Get-Item -LiteralPath $paramConfigDest).Length -le 0) {
+                throw 'Downloaded file is empty.'
+            }
+            Write-Host "   [OK] Downloaded ParamConfig.json to DSC\Scripts"
+        } catch {
+            Write-Warning "Failed to download ParamConfig.json: $_"
+        }
     }
 
     # -- GPOBackup.zip (Domain / Cluster only -- needed for Import-GPOForClaims.ps1) --
@@ -2024,6 +2041,10 @@ function New-DscPackageZip {
 
         [string]$LocalGpoBackupPath = '',
 
+        [switch]$PublicPackage,
+
+        [string]$BuildRevision = '',
+
         [Parameter(Mandatory)]
         [string]$OutputZipPath
     )
@@ -2043,7 +2064,8 @@ function New-DscPackageZip {
             $dscDestination = Join-Path $tempPackagePath "DSC"
             Copy-Item -Path $DscFolderPath -Destination $dscDestination -Recurse -Force
         } else {
-            Copy-Item -Path $DscFolderPath -Destination $tempPackagePath -Recurse -Force
+            Copy-Item -Path (Join-Path $DscFolderPath '*') `
+                -Destination $tempPackagePath -Recurse -Force
             $dscDestination = Join-Path $tempPackagePath "DSC"
         }
         Write-Host "   [OK] Copied source to package"
@@ -2093,6 +2115,9 @@ function New-DscPackageZip {
         if ($LocalGpoBackupPath) {
             $assetParams['LocalGpoBackupPath'] = $LocalGpoBackupPath
         }
+        if ($PublicPackage) {
+            $assetParams['PublicPackage'] = $true
+        }
         Install-DscPackageAssets @assetParams
 
         # Copy Tools.json to package root
@@ -2117,11 +2142,32 @@ function New-DscPackageZip {
 
         # Generate ResultsUpload.json for test results upload (only when a config is
         # supplied -- public packages must not embed a write-capable SAS token).
-        if ($ResultsUploadConfig) {
+        if ($ResultsUploadConfig -and -not $PublicPackage) {
             $ResultsUploadConfig | ConvertTo-Json -Depth 3 |
                 Set-Content -Path (Join-Path $tempPackagePath "ResultsUpload.json") -Force
             Write-Host "   [OK] ResultsUpload.json generated"
         }
+
+        if ($PublicPackage) {
+            Get-ChildItem -LiteralPath $tempPackagePath -Recurse -File |
+                Where-Object { $_.Name -in @('ParamConfig.json', 'ResultsUpload.json') } |
+                Remove-Item -Force
+            Write-Host "   [OK] Removed private-only configuration from public package"
+        }
+
+        if (-not $BuildRevision) {
+            $BuildRevision = if ($env:BUILD_SOURCEVERSION) {
+                $env:BUILD_SOURCEVERSION
+            } else {
+                'unknown-local-build'
+            }
+        }
+
+        New-DscPackageManifest -PackageRoot $tempPackagePath -Scenario $Scenario `
+            -SourceRevision $BuildRevision | Out-Null
+        Test-DscPackageManifest -PackageRoot $tempPackagePath `
+            -ExpectedScenario $Scenario -ThrowOnFailure | Out-Null
+        Write-Host "   [OK] Package manifest created and verified"
 
         # Zip the assembled package
         if (Test-Path $OutputZipPath) { Remove-Item $OutputZipPath -Force }
@@ -2325,8 +2371,10 @@ function Complete-DeploymentTestOutcome {
     }
 
     $classification = "$($Verification.TestClassification)"
+    $passedTestCount = [int]$Verification.PassedTestCount
+    $inconclusiveTestCount = [int]$Verification.InconclusiveTestCount
     $failedTestCount = [int]$Verification.FailedTestCount
-    $message = "Automatic tests reached terminal finalization with classification '$classification' and $failedTestCount non-passing results. Requested post-test infrastructure handling completed."
+    $message = "Automatic tests reached terminal finalization with classification '$classification': $passedTestCount passed, $inconclusiveTestCount inconclusive, and $failedTestCount failed. Requested post-test infrastructure handling completed."
 
     switch ($classification) {
         'Passed' {
@@ -2334,6 +2382,9 @@ function Complete-DeploymentTestOutcome {
         }
         'TestFailures' {
             Write-Warning "$message The environment and test run completed successfully; review the reported protocol-test failures."
+        }
+        'Inconclusive' {
+            Write-Warning "$message The environment and test run completed successfully; review the inconclusive tests and environment prerequisites."
         }
         'InfrastructureOrConfigurationFailure' {
             Write-Warning "$message The environment orchestration completed, but the test run reported infrastructure or configuration failures; review the complete summary."

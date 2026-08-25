@@ -38,6 +38,8 @@ $counters = [ordered]@{
     NotExecuted = 0
 }
 $failedTests = [System.Collections.Generic.List[object]]::new()
+$inconclusiveTests = [System.Collections.Generic.List[object]]::new()
+$passedResultCount = 0
 $executionIssues = [System.Collections.Generic.List[object]]::new()
 $nonPassingTrxFiles = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
 $configurationPattern = '(?i)config|environment|share|path|directory|file not found|network|connection|connect|DNS|domain|credential|logon|authentication|access denied|service|timeout|unreachable|not operational|prerequisite'
@@ -74,7 +76,7 @@ foreach ($trxFile in $trxFiles) {
             } else {
                 'TestBehaviorFailure'
             }
-            $failedTests.Add([pscustomobject]@{
+            $testResult = [pscustomobject]@{
                 TrxFile = $trxFile.Name
                 TestName = "$($result.testName)"
                 Outcome = "$($result.outcome)"
@@ -82,8 +84,14 @@ foreach ($trxFile in $trxFiles) {
                 DiagnosticHint = $diagnosticHint
                 ErrorMessage = $message
                 StackTrace = $failureStackTrace
-            })
+            }
+            if ($testResult.Outcome -in @('Inconclusive', 'NotExecuted')) {
+                $inconclusiveTests.Add($testResult)
+            } else {
+                $failedTests.Add($testResult)
+            }
         }
+        $passedResultCount += @($document.SelectNodes('//t:UnitTestResult[@outcome="Passed"]', $namespace)).Count
     } catch {
         $executionIssues.Add([pscustomobject]@{
             ManifestFile = ''
@@ -137,9 +145,15 @@ if ($RequireExecutionManifests -and $executionManifests.Count -eq 0) {
     })
 }
 
-$hasTestFailures = $failedTests.Count -gt 0 -or $counters.Failed -gt 0 -or $counters.Error -gt 0 -or
-    $counters.Timeout -gt 0 -or $counters.Aborted -gt 0 -or $counters.Inconclusive -gt 0 -or
-    $counters.NotExecuted -gt 0
+$passedTestCount = [math]::Max($passedResultCount, $counters.Passed)
+$inconclusiveTestCount = [math]::Max(
+    $inconclusiveTests.Count,
+    $counters.Inconclusive + $counters.NotExecuted)
+$failedTestCount = [math]::Max(
+    $failedTests.Count,
+    $counters.Failed + $counters.Error + $counters.Timeout + $counters.Aborted)
+$hasTestFailures = $failedTests.Count -gt 0 -or $failedTestCount -gt 0
+$hasInconclusiveTests = $inconclusiveTests.Count -gt 0 -or $inconclusiveTestCount -gt 0
 $hasInfrastructureFailures = -not $ExecutionPlanCompleted -or $trxFiles.Count -eq 0 -or $executionIssues.Count -gt 0
 $classification = if ($hasTestFailures -and $hasInfrastructureFailures) {
     'MixedTestAndInfrastructureFailures'
@@ -147,6 +161,8 @@ $classification = if ($hasTestFailures -and $hasInfrastructureFailures) {
     'InfrastructureOrConfigurationFailure'
 } elseif ($hasTestFailures) {
     'TestFailures'
+} elseif ($hasInconclusiveTests) {
+    'Inconclusive'
 } elseif ($ExecutionExitCode -ne 0) {
     'InfrastructureOrConfigurationFailure'
 } else {
@@ -163,8 +179,12 @@ $summary = [pscustomobject]@{
     TrxFileCount = $trxFiles.Count
     TestInvocationCount = $executionManifests.Count
     Counters = [pscustomobject]$counters
+    PassedTestCount = $passedTestCount
+    InconclusiveTestCount = $inconclusiveTestCount
+    FailedTestCount = $failedTestCount
     PotentialConfigurationOrEnvironmentFailures = @($failedTests | Where-Object DiagnosticHint -eq 'PotentialConfigurationOrEnvironmentIssue').Count
     FailedTests = @($failedTests)
+    InconclusiveTests = @($inconclusiveTests)
     ExecutionIssues = @($executionIssues)
 }
 
@@ -183,6 +203,7 @@ $lines.Add("Execution plan completed: $ExecutionPlanCompleted")
 $lines.Add("TRX files: $($trxFiles.Count)")
 $lines.Add("Test invocations: $($executionManifests.Count)")
 $lines.Add("Counters: total=$($counters.Total), executed=$($counters.Executed), passed=$($counters.Passed), failed=$($counters.Failed), error=$($counters.Error), timeout=$($counters.Timeout), aborted=$($counters.Aborted), inconclusive=$($counters.Inconclusive), notExecuted=$($counters.NotExecuted)")
+$lines.Add("Reported outcomes: passed=$passedTestCount, inconclusive=$inconclusiveTestCount, failed=$failedTestCount")
 $lines.Add("Potential configuration/environment failures: $($summary.PotentialConfigurationOrEnvironmentFailures)")
 $lines.Add('')
 if ($executionIssues.Count -gt 0) {
@@ -203,6 +224,20 @@ if ($failedTests.Count -eq 0) {
         $lines.Add("Diagnostic hint: $($failure.DiagnosticHint)")
         $lines.Add("Message: $($failure.ErrorMessage)")
         if ($failure.StackTrace) { $lines.Add("Stack: $($failure.StackTrace)") }
+    }
+}
+if ($inconclusiveTests.Count -eq 0) {
+    $lines.Add('No inconclusive tests were reported.')
+} else {
+    $lines.Add('')
+    $lines.Add("Inconclusive tests ($($inconclusiveTests.Count)):")
+    foreach ($test in $inconclusiveTests) {
+        $lines.Add('')
+        $lines.Add("[$($test.Outcome)] $($test.TestName)")
+        $lines.Add("TRX: $($test.TrxFile)")
+        $lines.Add("Diagnostic hint: $($test.DiagnosticHint)")
+        $lines.Add("Message: $($test.ErrorMessage)")
+        if ($test.StackTrace) { $lines.Add("Stack: $($test.StackTrace)") }
     }
 }
 $lines | Set-Content -LiteralPath $OutputTextPath -Encoding UTF8

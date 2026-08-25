@@ -3,27 +3,26 @@
 
 <#
 .SYNOPSIS
-    DSC Configuration for the Storage Server (Storage01).
-    Handles iSCSI target features, firewall, hosts file, and service auto-start declaratively.
+    Non-disruptive convergence DSC for the Storage Server (Storage01).
 
 .DESCRIPTION
     Storage01 is a workgroup machine (NOT domain-joined) that serves as an iSCSI target
     for the failover cluster nodes.
 
-    Declarative (DSC):
-      - File-Services, FS-iSCSITarget-Server features
+    Declarative convergence:
       - Firewall disabled
       - Hosts file from Config.json
       - Password never expires (workgroup accounts)
-      - WinTarget service set to Automatic
+      - WinTarget service set to Automatic and Running
 
-    Imperative (Invoke-StorageImperativeSteps.ps1):
+    Disruptive features are installed by Storage-FeatureConfiguration.ps1.
+    Imperative convergence (Invoke-StorageImperativeSteps.ps1):
       - iSCSI target creation + virtual disk mapping
 
 .EXAMPLE
     . .\Storage-Configuration.ps1
     StorageConfiguration -ConfigFilePath .\..\Config.json -OutputPath .\MOF
-    Start-DscConfiguration -Path .\MOF -Wait -Verbose -Force
+    Invoke-VerifiedDscConfiguration -Path .\MOF
 #>
 
 Configuration StorageConfiguration {
@@ -121,33 +120,24 @@ Configuration StorageConfiguration {
         }
         #endregion
 
-        #region -- Windows Features ----------------------------------------
-        WindowsFeature FileServices {
-            Name   = 'File-Services'
-            Ensure = 'Present'
-        }
-
-        WindowsFeature ISCSITargetServer {
-            Name      = 'FS-iSCSITarget-Server'
-            Ensure    = 'Present'
-            DependsOn = '[WindowsFeature]FileServices'
-        }
-        #endregion
-
         #region -- WinTarget Service Auto-Start ----------------------------
-        # Ensure the iSCSI target service starts automatically after reboot
         Script WinTargetAutoStart {
-            DependsOn  = '[WindowsFeature]ISCSITargetServer'
             GetScript  = {
                 $svc = Get-Service WinTarget -ErrorAction SilentlyContinue
-                @{ Result = if ($svc) { $svc.StartType } else { 'NotInstalled' } }
+                @{ Result = if ($svc) { "$($svc.StartType)/$($svc.Status)" } else { 'NotInstalled' } }
             }
             TestScript = {
                 $svc = Get-Service WinTarget -ErrorAction SilentlyContinue
-                return ($null -ne $svc -and $svc.StartType -eq 'Automatic')
+                return ($null -ne $svc -and
+                    $svc.StartType -eq 'Automatic' -and
+                    $svc.Status -eq 'Running')
             }
             SetScript  = {
-                Set-Service WinTarget -StartupType Automatic -ErrorAction SilentlyContinue
+                Set-Service WinTarget -StartupType Automatic -ErrorAction Stop
+                $svc = Get-Service WinTarget -ErrorAction Stop
+                if ($svc.Status -ne 'Running') {
+                    Start-Service WinTarget -ErrorAction Stop
+                }
             }
         }
         #endregion
@@ -192,21 +182,11 @@ Configuration StorageConfiguration {
 # ===========================================================================
 function Invoke-StorageDsc {
     param(
-        [switch]$Apply,
         [string]$OutputPath = "$PSScriptRoot\MOF",
         [string]$ConfigFilePath = "$PSScriptRoot\..\Config.json"
     )
 
     Write-Host "Compiling Storage DSC configuration..." -ForegroundColor Cyan
     StorageConfiguration -ConfigFilePath $ConfigFilePath -OutputPath $OutputPath
-
-    if ($Apply) {
-        Write-Host "Applying Storage DSC configuration..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $OutputPath -Wait -Verbose -Force
-        Write-Host "Storage DSC configuration applied." -ForegroundColor Green
-    }
-    else {
-        Write-Host "MOF compiled to $OutputPath. Run:" -ForegroundColor Green
-        Write-Host "  Start-DscConfiguration -Path '$OutputPath' -Wait -Verbose -Force"
-    }
+    Write-Host "Storage convergence MOF compiled to '$OutputPath'." -ForegroundColor Green
 }

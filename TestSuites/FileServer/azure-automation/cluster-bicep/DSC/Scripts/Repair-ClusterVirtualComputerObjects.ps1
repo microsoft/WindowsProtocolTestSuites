@@ -54,6 +54,20 @@ function Get-ExpectedResourceGuid {
     return (($ObjectGuid.ToByteArray() | ForEach-Object { $_.ToString('x2') }) -join '')
 }
 
+function Get-RequiredVcoSpns {
+    param(
+        [Parameter(Mandatory)] [string]$VcoName,
+        [Parameter(Mandatory)] [string]$DnsHostName
+    )
+
+    return @(
+        "HOST/$VcoName",
+        "HOST/$DnsHostName",
+        "cifs/$VcoName",
+        "cifs/$DnsHostName"
+    )
+}
+
 function Get-VcoState {
     param(
         [Parameter(Mandatory)] [string]$VcoName,
@@ -67,13 +81,22 @@ function Get-VcoState {
         -ErrorAction Stop) | Select-Object -First 1
     $resourceGuid = [string](($parameters | Where-Object Name -eq 'ObjectGUID').Value)
     $expectedGuid = if ($computer) { Get-ExpectedResourceGuid -ObjectGuid $computer.ObjectGUID } else { '' }
+    $requiredSpns = if ($computer) {
+        Get-RequiredVcoSpns -VcoName $VcoName -DnsHostName $computer.DNSHostName
+    } else {
+        @()
+    }
+    $missingSpns = @($requiredSpns | Where-Object {
+        $_ -notin @($computer.ServicePrincipalName)
+    })
 
     [pscustomobject]@{
         Resource = $resource
         Computer = $computer
+        MissingSpns = $missingSpns
         Healthy = $null -ne $computer -and
             $computer.Enabled -and
-            @($computer.ServicePrincipalName).Count -gt 0 -and
+            $missingSpns.Count -eq 0 -and
             $resource.State -eq 'Online' -and
             $resourceGuid -eq $expectedGuid -and
             (($parameters | Where-Object Name -eq 'StatusDNS').Value -eq 0) -and
@@ -165,7 +188,25 @@ try {
             Enable-ADAccount -Identity $state.Computer -ErrorAction Stop
         }
 
-        $computer = Get-ADComputer -Identity $mapping.VcoName -ErrorAction Stop
+        $computer = Get-ADComputer -Identity $mapping.VcoName `
+            -Properties DNSHostName, ServicePrincipalName -ErrorAction Stop
+        $requiredSpns = Get-RequiredVcoSpns -VcoName $mapping.VcoName `
+            -DnsHostName "$($mapping.VcoName).$($domain.DNSRoot)"
+        $missingSpns = @($requiredSpns | Where-Object {
+            $_ -notin @($computer.ServicePrincipalName)
+        })
+        if ($missingSpns.Count -gt 0) {
+            Set-ADComputer -Identity $computer.ObjectGUID `
+                -Add @{ ServicePrincipalName = [string[]]$missingSpns } -ErrorAction Stop
+        }
+
+        $state = Get-VcoState -VcoName $mapping.VcoName -ResourceName $mapping.ResourceName
+        if ($state.Healthy) {
+            "$($mapping.VcoName)=Repaired"
+            continue
+        }
+
+        $computer = $state.Computer
         $acl = Get-Acl -Path "AD:$($computer.DistinguishedName)" -ErrorAction Stop
         $rule = [DirectoryServices.ActiveDirectoryAccessRule]::new(
             $cno.SID,

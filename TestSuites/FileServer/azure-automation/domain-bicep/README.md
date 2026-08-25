@@ -22,7 +22,7 @@ The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azurede
 - The baked `Config.json` is valid for the **default IP topology and domain** (`contoso.com` / `CONTOSO`) only. Changing IP/domain parameters in the form will not update the peer values inside the package. For custom topologies, use `deploy.ps1` (which rebuilds the package).
 - The package embeds a **fixed test-suite drop** (a snapshot) — appropriate for demo/onboarding, not for testing an arbitrary build.
 - Marketplace **image terms** for the SUT/Driver/DC images may need to be accepted once per subscription (see the [top-level README](../README.md)).
-- **VM sizes default to burstable (B-series)** (`Standard_B4ms`) for broad regional availability. If a size is capacity-constrained, pick a different **Region** (the template deploys into the resource group's region) or change the VM sizes in the form. Unlike `deploy.ps1`, the button **cannot auto-retry across SKUs**.
+- **VM sizes use curated dropdowns with burstable defaults:** DC and Driver default to `Standard_B4ms`; SUT defaults to `Standard_B8ms`. The dropdowns also offer approved D/F-series alternatives. If a size is capacity-constrained, pick a different **Region** (the template deploys into the resource group's region) or choose another size. Unlike `deploy.ps1`, the button **cannot auto-retry across SKUs**.
 - **Disk encryption is off by default for the button** (`enableDiskEncryption=false`). Azure Disk Encryption (ADE) is applied by `deploy.ps1` as a *post-deploy* step, which the Portal button cannot run — so for the button the Key Vault would be created but never used. Managed disks are platform-encrypted at rest regardless. If you specifically want ADE and your subscription has the required Key Vault permissions, set `enableDiskEncryption` to **true** in the form.
 
 ## Architecture Overview
@@ -86,6 +86,8 @@ $password = Read-Host -Prompt "Enter the admin password" -AsSecureString
 ```
 
 Location, VM sizes, OS versions, and all other settings are read from the bicepparam files.
+`enableTestAutoRun` in `parameters/phase2.bicepparam` defaults to `true`; set it
+to `false` to complete Driver/SUT configuration without starting tests.
 
 ### 3. Wait for deployment to complete
 
@@ -95,7 +97,7 @@ The script overlaps independent work while preserving the domain-readiness gate:
 2. **Phase 2A**: Driver + SUT infrastructure provisions while AD DS promotion continues.
 3. **DC readiness poll**: The script waits for `Deploy-DC.Completed.signal`.
 4. **Phase 2B**: Driver + SUT guest extensions start only after the DC is ready.
-5. **Tests and finalization**: The Driver runs the complete FileServer plan. Each native invocation is bounded to 60 minutes, and later stages continue after a timeout or assertion failure.
+5. **Tests and finalization**: When `enableTestAutoRun` is `true` (the default), the Driver runs the complete FileServer plan. When disabled, deployment finalizes after guest configuration and prints the manual `Invoke-TestRun.ps1` command.
 6. **Disk encryption and shutdown schedules**: Optional ADE and schedules are handled only after terminal guest/test finalization. Known terminal test classifications are reported without failing deployment orchestration; missing output, failed upload/readiness, and post-test infrastructure failures remain fatal. VM responsiveness is checked again after ADE.
 
 The command remains attached after ARM reports `Succeeded`. It waits for all three role signals, both test finalization signals, a complete JSON/text summary, and uploaded result handling. An assertion failure is reported only after the remaining test stages run and the complete summary is printed.

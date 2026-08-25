@@ -222,8 +222,16 @@ if ($isDomainEnv -eq $true)
     foreach($group in $azgroups)
     {        
         .\Write-Info.ps1 "Create group: $($group.Group.GroupName)"
-        $azGroupDN = $group.Group.GroupName 
-        New-ADGroup -Name $azGroupDN -GroupScope Global -GroupCategory Security
+        $azGroupDN = $group.Group.GroupName
+        $existingGroup = Get-ADGroup -Filter * -ErrorAction Stop |
+            Where-Object { $_.SamAccountName -eq $azGroupDN } |
+            Select-Object -First 1
+        if ($null -eq $existingGroup) {
+            New-ADGroup -Name $azGroupDN -GroupScope Global -GroupCategory Security `
+                -ErrorAction Stop
+        } else {
+            .\Write-Info.ps1 "AD group $azGroupDN already exists."
+        }
     }
 
     foreach($user in $users.User)

@@ -61,6 +61,9 @@ param dcExternal1Ip string = '192.168.1.10'
 @description('Enable auto-shutdown')
 param enableAutoShutdown bool = true
 
+@description('Run FileServer tests automatically after configuration')
+param enableTestAutoRun bool = true
+
 @description('Auto-shutdown time (HH:mm in UTC)')
 param autoShutdownTime string = '20:00'
 
@@ -76,7 +79,7 @@ var driverNic1Name = '${driverVmName}-nic1'
 var driverNic2Name = '${driverVmName}-nic2'
 var driverIsLinux = driverOsType == 'Linux'
 var packageHost = empty(clusterPackageZipUrl) ? '' : split(clusterPackageZipUrl, '/')[2]
-var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(replace(
+var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(replace(replace(
   loadTextContent('../../shared/scripts/cse-bootstrap.sh'),
   '__SCENARIO__', 'cluster'),
   '__ROLE__', 'driver'),
@@ -84,8 +87,9 @@ var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(repla
   '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'),
   '__PACKAGE_URL__', clusterPackageZipUrl),
   '__PACKAGE_HOST__', packageHost),
-  '__PASSWORD_B64__', base64(adminPassword))
-var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-cluster-driver\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Cluster-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-cluster-driver\\cse-bootstrap.ps1\' -Scenario \'cluster\' -Role \'driver\' -PackageName \'Cluster-Package\' -DeployScript \'Deploy-Driver.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
+  '__PASSWORD_B64__', base64(adminPassword)),
+  '__ENABLE_TEST_AUTORUN__', string(enableTestAutoRun))
+var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-cluster-driver\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Cluster-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-cluster-driver\\cse-bootstrap.ps1\' -Scenario \'cluster\' -Role \'driver\' -PackageName \'Cluster-Package\' -DeployScript \'Deploy-Driver.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -EnableTestAutoRun \'${enableTestAutoRun}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
 var driverWindowsOffer = startsWith(driverOsVersion, 'win10-') ? 'Windows-10' : 'Windows-11'
 var driverImageRef = !empty(driverCustomImageId) ? {
   id: driverCustomImageId

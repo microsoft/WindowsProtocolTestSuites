@@ -67,23 +67,17 @@ Configuration DriverConfiguration {
                 }
             }
         }
-        # Also add Endpoints if present.
-        # For Azure clusters, cluster virtual IPs (GeneralFS, etc.) are not routable
-        # without an Azure Load Balancer. Map endpoint names to Node01's real IP instead
-        # so clients can reach the CA shares directly via the owning node.
+        # Also add Endpoints if present. Azure Cluster endpoint names must resolve
+        # through DNS to their dual-subnet load-balancer frontends.
         $isAzureCluster = ($null -ne $configData.Core.RegressionType -and $configData.Core.RegressionType -match 'Azure') -and
                           ($null -ne $configData.Core.Scenario -and $configData.Core.Scenario -match 'Cluster')
-        $node01Ip = $null
-        if ($isAzureCluster -and $null -ne $configData.Machines.Node01) {
-            $node01Ip = $configData.Machines.Node01.IpConfig[0].Ip
-        }
         if ($null -ne $configData.Endpoints) {
             foreach ($ep in $configData.Endpoints.PSObject.Properties) {
+                if ($isAzureCluster) { continue }
                 $endpoint = $ep.Value
                 $epName   = $endpoint.Name
                 if ($null -ne $epName -and $null -ne $endpoint.IpConfig -and $endpoint.IpConfig.Count -gt 0) {
-                    # In Azure clusters, use Node01's IP instead of the unreachable virtual IP
-                    $epIp = if ($isAzureCluster -and $null -ne $node01Ip) { $node01Ip } else { $endpoint.IpConfig[0].Ip }
+                    $epIp = $endpoint.IpConfig[0].Ip
                     if (-not [string]::IsNullOrWhiteSpace($epIp)) {
                         $hostsEntries += "$epIp`t$epName"
                         if ($null -ne $domainName -and $domainName -ne '') {

@@ -135,7 +135,13 @@ $config = Resolve-DeploymentConfig -Params $allParams -Defaults @{
     driverOsType       = 'Windows'
     clusterName        = 'Cluster01'
     scaleOutFSName     = 'ScaleoutFS'
+    clusterExternal1Ip = '192.168.1.100'
+    clusterExternal2Ip = '192.168.2.100'
+    generalFSExternal1Ip = '192.168.1.200'
+    generalFSExternal2Ip = '192.168.2.200'
+    enableTestAutoRun  = $true
 }
+$testAutoRun = $config.enableTestAutoRun -ne $false
 
 # Override enableDiskEncryption if -SkipDiskEncryption was specified
 if ($SkipDiskEncryption) {
@@ -184,13 +190,18 @@ Write-Output "   Storage VM size: $($storageCandidates[0]) (+$([math]::Max(0, $s
 Write-Output "   Cluster Node VM size: $($nodeCandidates[0]) (+$([math]::Max(0, $nodeCandidates.Count - 1)) fallbacks)"
 Write-Output "   Driver VM size: $($driverCandidates[0]) (+$([math]::Max(0, $driverCandidates.Count - 1)) fallbacks)"
 
-Test-RegionalVCpuQuota -Location $config.location -AvailableSkus $vmSkus -VmSizes @{
-    'DC' = $dcCandidates[0]
-    'Storage' = $storageCandidates[0]
-    'Node01' = $nodeCandidates[0]
-    'Node02' = $nodeCandidates[0]
-    'Driver' = $driverCandidates[0]
+$plannedVmSizes = @{}
+if (-not $SkipPhase1) {
+    $plannedVmSizes['DC'] = $dcCandidates[0]
+    $plannedVmSizes['Storage'] = $storageCandidates[0]
 }
+if (-not $SkipPhase2) {
+    $plannedVmSizes['Node01'] = $nodeCandidates[0]
+    $plannedVmSizes['Node02'] = $nodeCandidates[0]
+    $plannedVmSizes['Driver'] = $driverCandidates[0]
+}
+Test-RegionalVCpuQuota -Location $config.location -AvailableSkus $vmSkus `
+    -VmSizes $plannedVmSizes
 
 if (-not $phase1Params['dcCustomImageId'] -and
     -not (Test-VmImageAvailability -Location $config.location -Publisher 'MicrosoftWindowsServer' `
@@ -314,8 +325,17 @@ if (-not $ClusterPackageZipUrl -and ((Test-Path $ClusterPackagePath) -or (Test-P
         DriverExternal1Ip  = $config.driverExternal1Ip
         DriverExternal2Ip  = $config.driverExternal2Ip
         DriverOSType       = $config.driverOsType
+        EnableTestAutoRun  = $testAutoRun
         ClusterName        = $config.clusterName
         ScaleOutFSName     = $config.scaleOutFSName
+        ClusterExternal1Ip = $config.clusterExternal1Ip
+        ClusterExternal2Ip = $config.clusterExternal2Ip
+        GeneralFSExternal1Ip = $config.generalFSExternal1Ip
+        GeneralFSExternal2Ip = $config.generalFSExternal2Ip
+        ClusterExternal1ProbePort = [int]$phase2Params['clusterExternal1ProbePort']
+        ClusterExternal2ProbePort = [int]$phase2Params['clusterExternal2ProbePort']
+        GeneralFSExternal1ProbePort = [int]$phase2Params['generalFSExternal1ProbePort']
+        GeneralFSExternal2ProbePort = [int]$phase2Params['generalFSExternal2ProbePort']
         # Create every test account with the single admin password so secondary
         # accounts match the framework's PasswordForAllUsers (works for any chosen
         # password; a no-op when the admin password already matches ParamConfig).
@@ -324,32 +344,26 @@ if (-not $ClusterPackageZipUrl -and ((Test-Path $ClusterPackagePath) -or (Test-P
 
     if (Test-Path $ClusterPackageZip) {
         Write-Output "`n📦 Found existing Cluster-Package.zip"
-        Write-Output "   Extracting, updating Config.json, and re-packaging..."
+        Write-Output "   Rebuilding through the shared overlay and validation path..."
 
         $tempExtractPath = Join-Path $env:TEMP "ClusterPackage-Extract-$(Get-Random)"
-        Expand-Archive -Path $ClusterPackageZip -DestinationPath $tempExtractPath -Force
-        Write-Output "   ✅ Extracted to: $tempExtractPath"
-
-        $configParams['OutputPath'] = Join-Path $tempExtractPath "Config.json"
-        & "$PSScriptRoot\..\shared\Generate-ConfigJson.ps1" @configParams
-        Write-Output "   ✅ Config.json updated"
-
-        # Generate ResultsUpload.json for test results upload
-        $resultsConfig = New-ResultsUploadConfig `
-            -StorageAccountName $tempStorage.Name -StorageContext $ctx
-        $resultsConfig | ConvertTo-Json -Depth 3 | Set-Content -Path (Join-Path $tempExtractPath "ResultsUpload.json") -Force
-        Write-Output "   ✅ ResultsUpload.json generated"
-
-        $tempZipPath = Join-Path $env:TEMP "Cluster-Package-$(Get-Random).zip"
-        Compress-Archive -Path (Join-Path $tempExtractPath "*") -DestinationPath $tempZipPath -Force
-        Write-Output "   ✅ Created new zip: $tempZipPath"
-
-        $actualClusterPackageZipUrl = Send-BlobWithSasUrl `
-            -FilePath $tempZipPath -BlobName "Cluster-Package.zip" `
-            -ContainerName $containerName -StorageContext $ctx
-
-        Remove-Item $tempExtractPath -Recurse -Force
-        Remove-Item $tempZipPath -Force
+        try {
+            Expand-Archive -Path $ClusterPackageZip -DestinationPath $tempExtractPath -Force
+            $actualClusterPackageZipUrl = Build-DscPackage `
+                -DscFolderPath $tempExtractPath `
+                -SharedDscPath (Join-Path $PSScriptRoot "..\shared\DSC") `
+                -Scenario 'Cluster' `
+                -BlobName 'Cluster-Package.zip' `
+                -ConfigJsonParams $configParams `
+                -GenerateConfigScript (Join-Path $PSScriptRoot "..\shared\Generate-ConfigJson.ps1") `
+                -StorageContext $ctx `
+                -ContainerName $containerName `
+                -StorageAccountName $tempStorage.Name `
+                -LocalGpoBackupPath (Join-Path $PSScriptRoot "..\..\Setup\Scripts\GPOBackup.zip")
+        }
+        finally {
+            Remove-Item $tempExtractPath -Recurse -Force -ErrorAction SilentlyContinue
+        }
 
     } elseif (Test-Path $ClusterPackagePath) {
         Write-Output "`n📦 Building Cluster-Package from: $ClusterPackagePath"
@@ -796,23 +810,30 @@ if ($SkipPhase2) {
         "$envPrefix-node02",
         "$envPrefix-client01"
     )
+    $testVerificationParams = @{
+        SubscriptionId = $SubscriptionId
+        ResourceGroupName = $ResourceGroupName
+        TimeoutMinutes = 120
+        NotBeforeUtc = $operationStartUtc
+        ResultsStorageAccountName = $resultsStorageAccountName
+    }
+    if ($testAutoRun) {
+        $testVerificationParams['WaitForTests'] = $true
+        $testVerificationParams['DeferTestFailure'] = $true
+        $testVerificationParams['TestTimeoutMinutes'] = $TestTimeoutMinutes
+    }
     if ($SkipPhase1) {
         & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" `
             -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
             -ExpectedRoles @('Domain Controller', 'Storage Server') -TimeoutMinutes 10 | Out-Null
-        $verification = & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" `
-            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
-            -ExpectedRoles @('Cluster Node 1', 'Cluster Node 2', 'Driver Computer') `
-            -TimeoutMinutes 120 -TestTimeoutMinutes $TestTimeoutMinutes `
-            -NotBeforeUtc $operationStartUtc -WaitForTests -DeferTestFailure `
-            -ResultsStorageAccountName $resultsStorageAccountName
-    } else {
-        $verification = & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" `
-            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
-            -TimeoutMinutes 120 -TestTimeoutMinutes $TestTimeoutMinutes `
-            -NotBeforeUtc $operationStartUtc -WaitForTests -DeferTestFailure `
-            -ResultsStorageAccountName $resultsStorageAccountName
+        $testVerificationParams['ExpectedRoles'] = @(
+            'Cluster Node 1',
+            'Cluster Node 2',
+            'Driver Computer'
+        )
     }
+    $verification = & "$PSScriptRoot\scripts\Verify-ClusterDeployment.ps1" `
+        @testVerificationParams
     Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
 }
 
@@ -854,21 +875,48 @@ if (-not $SkipPhase2) {
     Complete-DeploymentTestOutcome -Verification $verification
 }
 
+$testExecutionDetails = if ($SkipPhase2) {
+@"
+Test execution:
+  - Phase 2 was skipped, so no Driver test run was started.
+"@
+} elseif (-not $testAutoRun) {
+@"
+Test execution:
+  - Automatic FileServer test execution was disabled.
+  - Start tests manually on Client01:
+    pwsh -File "C:\Cluster-Package\DSC\Scripts\Invoke-TestRun.ps1" -WorkingPath "C:\Cluster-Package"
+"@
+} else {
+@"
+Test execution:
+  - Automatic FileServer test execution completed.
+  - Classification: $($verification.TestClassification)
+  - Passed tests: $($verification.PassedTestCount)
+  - Inconclusive tests: $($verification.InconclusiveTestCount)
+  - Failed tests: $($verification.FailedTestCount)
+  - Results: C:\Test\TestResults\*.trx
+  - Completion signal: C:\Test\test.finished.signal
+"@
+}
+
+$clusterCompletionSummary = if ($SkipPhase2) {
+    'Cluster Phase 1 is ready (Domain Controller and Storage). Phase 2 was skipped.'
+} else {
+    'Your failover cluster environment is ready!'
+}
+
 Write-Output @"
 
 ╔═══════════════════════════════════════════════════════════════╗
 ║   DEPLOYMENT COMPLETE                                         ║
 ╚═══════════════════════════════════════════════════════════════╝
 
-🎉 Your failover cluster environment is ready!
+🎉 $clusterCompletionSummary
 
-All VMs are configured automatically. Tests will run via scheduled task on Client01.
+Configuration reached its requested terminal state.
 
-Monitor progress:
-1. Connect to Client01 via Azure Bastion
-2. Check task: Get-ScheduledTask -TaskName 'RunFileServerTests'
-3. Logs: C:\Cluster-Package\DSC\Deploy-Driver.log, Invoke-TestRun.log
-4. Results: C:\Test\TestResults\*.trx
+$testExecutionDetails
 
 For detailed instructions, see: README.md
 "@

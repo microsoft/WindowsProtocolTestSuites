@@ -30,6 +30,18 @@ param(
     [int]$ProbeTimeoutSeconds = 120,
 
     [Parameter(Mandatory=$false)]
+    [ValidateRange(2, 20)]
+    [int]$RunCommandConflictThreshold = 3,
+
+    [Parameter(Mandatory=$false)]
+    [ValidateRange(60, 1800)]
+    [int]$RunCommandRecoveryDelaySeconds = 300,
+
+    [Parameter(Mandatory=$false)]
+    [ValidateRange(0, 3)]
+    [int]$RunCommandRecoveryLimit = 1,
+
+    [Parameter(Mandatory=$false)]
     [datetime]$NotBeforeUtc,
 
     [Parameter(Mandatory=$false)]
@@ -65,6 +77,98 @@ if ($SubscriptionId) {
     Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
 }
 
+$runCommandRecoveryState = @{}
+
+function Get-RunCommandRecoveryState {
+    param([Parameter(Mandatory)] [string]$VMName)
+
+    if (-not $runCommandRecoveryState.ContainsKey($VMName)) {
+        $runCommandRecoveryState[$VMName] = [pscustomobject]@{
+            FirstTimeoutUtc = $null
+            ConflictCount = 0
+            RecoveryCount = 0
+        }
+    }
+    return $runCommandRecoveryState[$VMName]
+}
+
+function Register-RunCommandProbeTimeout {
+    param([Parameter(Mandatory)] [string]$VMName)
+
+    $state = Get-RunCommandRecoveryState -VMName $VMName
+    if ($null -eq $state.FirstTimeoutUtc) {
+        $state.FirstTimeoutUtc = [datetime]::UtcNow
+        $state.ConflictCount = 0
+    }
+}
+
+function Reset-RunCommandProbeFailure {
+    param([Parameter(Mandatory)] [string]$VMName)
+
+    $state = Get-RunCommandRecoveryState -VMName $VMName
+    $state.FirstTimeoutUtc = $null
+    $state.ConflictCount = 0
+}
+
+function Test-RunCommandConflict {
+    param([AllowEmptyString()] [string]$Message)
+
+    return $Message -match '(?i)(409|conflict|run command extension execution is in progress|execution already in progress)'
+}
+
+function Invoke-RunCommandConflictRecovery {
+    param(
+        [Parameter(Mandatory)] [string]$VMName,
+        [AllowEmptyString()] [string]$FailureMessage,
+        [Parameter(Mandatory)] [bool]$AllowRestart
+    )
+
+    if (-not $AllowRestart -or
+        $RunCommandRecoveryLimit -eq 0 -or
+        -not (Test-RunCommandConflict -Message $FailureMessage)) {
+        return $false
+    }
+
+    $state = Get-RunCommandRecoveryState -VMName $VMName
+    if ($null -eq $state.FirstTimeoutUtc) {
+        return $false
+    }
+
+    $state.ConflictCount++
+    $conflictAgeSeconds = ([datetime]::UtcNow - $state.FirstTimeoutUtc).TotalSeconds
+    if ($state.ConflictCount -lt $RunCommandConflictThreshold -or
+        $conflictAgeSeconds -lt $RunCommandRecoveryDelaySeconds) {
+        Write-Warning ("Run Command on '$VMName' remains busy after a timed-out probe " +
+            "($($state.ConflictCount)/$RunCommandConflictThreshold conflicts, " +
+            "$([math]::Floor($conflictAgeSeconds))/$RunCommandRecoveryDelaySeconds seconds).")
+        return $false
+    }
+
+    if ($state.RecoveryCount -ge $RunCommandRecoveryLimit) {
+        Write-Warning ("Run Command on '$VMName' is still busy, but the controlled restart limit " +
+            "($RunCommandRecoveryLimit) has been reached.")
+        return $false
+    }
+
+    $state.RecoveryCount++
+    Write-Warning ("Run Command on '$VMName' remained busy for at least " +
+        "$RunCommandRecoveryDelaySeconds seconds after a timed-out probe. Restarting the VM " +
+        "to clear the wedged Guest Agent operation (recovery $($state.RecoveryCount)/$RunCommandRecoveryLimit).")
+    try {
+        Invoke-AzureOperationWithRetry -OperationName "Restart '$VMName' after wedged Run Command" `
+            -Operation {
+                Restart-AzVM -ResourceGroupName $ResourceGroupName -Name $VMName `
+                    -ErrorAction Stop | Out-Null
+            } | Out-Null
+        Reset-RunCommandProbeFailure -VMName $VMName
+        Write-Warning "Restarted '$VMName' after repeated Run Command conflicts; verification will retry."
+        return $true
+    } catch {
+        Write-Warning "Controlled restart of '$VMName' failed: $($_.Exception.Message)"
+        return $false
+    }
+}
+
 function Invoke-BoundedVmRunCommand {
     [CmdletBinding()]
     param(
@@ -84,6 +188,7 @@ function Invoke-BoundedVmRunCommand {
         $completedProbe = Wait-Job -Job $probeJob -Timeout $TimeoutSeconds
         if ($null -eq $completedProbe) {
             Stop-Job -Job $probeJob -ErrorAction SilentlyContinue
+            Register-RunCommandProbeTimeout -VMName $VMName
             throw [TimeoutException]::new("Run Command probe on '$VMName' exceeded ${TimeoutSeconds}s.")
         }
         if ($probeJob.State -ne 'Completed') {
@@ -96,9 +201,16 @@ function Invoke-BoundedVmRunCommand {
                 if ($value.Message) { $value.Message }
             }
         }
+        Reset-RunCommandProbeFailure -VMName $VMName
         return ($messages -join "`n")
     } catch {
         $azPowerShellFailure = $_
+        $restarted = Invoke-RunCommandConflictRecovery -VMName $VMName `
+            -FailureMessage $_.Exception.Message `
+            -AllowRestart ($CommandId -eq 'RunPowerShellScript')
+        if ($restarted) {
+            throw "Restarted '$VMName' to recover a wedged Run Command operation; retry the probe."
+        }
     } finally {
         if ($null -ne $probeJob) {
             Remove-Job -Job $probeJob -Force -ErrorAction SilentlyContinue
@@ -151,7 +263,16 @@ function Invoke-BoundedVmRunCommand {
             throw "Azure CLI Run Command probe on '$VMName' failed with exit code $($cliResult.ExitCode): $($cliResult.Output)"
         }
         $cliResponse = $cliResult.Output | ConvertFrom-Json -ErrorAction Stop
+        Reset-RunCommandProbeFailure -VMName $VMName
         return (@($cliResponse.value) | ForEach-Object { $_.message } | Where-Object { $_ }) -join "`n"
+    } catch {
+        $restarted = Invoke-RunCommandConflictRecovery -VMName $VMName `
+            -FailureMessage $_.Exception.Message `
+            -AllowRestart ($CommandId -eq 'RunPowerShellScript')
+        if ($restarted) {
+            throw "Restarted '$VMName' to recover a wedged Run Command operation; retry the probe."
+        }
+        throw
     } finally {
         if ($cliJob) {
             Remove-Job -Job $cliJob -Force -ErrorAction SilentlyContinue
@@ -247,9 +368,11 @@ summary_json='/test/TestResults/test.summary.json'
 summary_text='/test/TestResults/test.summary.txt'
 if [ ! -f "`$summary_json" ] || [ ! -f "`$summary_text" ]; then echo 'TEST_SUMMARY_MISSING'; exit 0; fi
 classification=`$(grep -o '"Classification"[[:space:]]*:[[:space:]]*"[^"]*"' "`$summary_json" | head -1 | cut -d'"' -f4)
-failed_test_count=`$(grep -c '"TestName"[[:space:]]*:' "`$summary_json" 2>/dev/null || true)
+passed_test_count=`$(grep -o '"PassedTestCount"[[:space:]]*:[[:space:]]*[0-9]*' "`$summary_json" | head -1 | grep -o '[0-9]*$')
+inconclusive_test_count=`$(grep -o '"InconclusiveTestCount"[[:space:]]*:[[:space:]]*[0-9]*' "`$summary_json" | head -1 | grep -o '[0-9]*$')
+failed_test_count=`$(grep -o '"FailedTestCount"[[:space:]]*:[[:space:]]*[0-9]*' "`$summary_json" | head -1 | grep -o '[0-9]*$')
 summary_size=`$(wc -c < "`$summary_text")
-echo "TEST_READY|`$trx_count|`$failed_count|`$classification|`$failed_test_count|`$summary_size"
+echo "TEST_READY|`$trx_count|`$failed_count|`$classification|`$passed_test_count|`$inconclusive_test_count|`$failed_test_count|`$summary_size"
 "@
     }
 
@@ -307,9 +430,11 @@ if (`$testModified -lt $NotBeforeEpoch -or `$runModified -lt $NotBeforeEpoch) { 
 `$summaryText = Join-Path `$summaryPath 'test.summary.txt'
 if (-not (Test-Path -LiteralPath `$summaryJson) -or -not (Test-Path -LiteralPath `$summaryText)) { Write-Output 'TEST_SUMMARY_MISSING'; exit 0 }
 `$summary = Get-Content -LiteralPath `$summaryJson -Raw | ConvertFrom-Json
-`$failedTestCount = @(`$summary.FailedTests).Count
+`$passedTestCount = [int]`$summary.PassedTestCount
+`$inconclusiveTestCount = [int]`$summary.InconclusiveTestCount
+`$failedTestCount = [int]`$summary.FailedTestCount
 `$summaryLength = (Get-Item -LiteralPath `$summaryText).Length
-Write-Output "TEST_READY|`$(`$trxFiles.Count)|`$(`$failedFiles.Count)|`$(`$summary.Classification)|`$failedTestCount|`$summaryLength"
+Write-Output "TEST_READY|`$(`$trxFiles.Count)|`$(`$failedFiles.Count)|`$(`$summary.Classification)|`$passedTestCount|`$inconclusiveTestCount|`$failedTestCount|`$summaryLength"
 "@
 }
 
@@ -608,6 +733,11 @@ while (-not $allComplete -and (Get-Date) -lt $timeoutTime) {
                 -ScriptString $checkScript -AsJob -ErrorAction Stop
             $probeEntries += [pscustomobject]@{ Target = $target; Job = $probeJob }
         } catch {
+            $restarted = Invoke-RunCommandConflictRecovery -VMName $target.VMName `
+                -FailureMessage $_.Exception.Message -AllowRestart (-not $target.IsLinux)
+            if ($restarted) {
+                Write-Host "    [!] RECOVERY: restarted VM after repeated Run Command conflicts"
+            }
             Write-Host "    [!] ERROR submitting probe: $($_.Exception.Message)"
             $statusList += @{ VM = $target.VMName; Role = $target.Role; Status = 'ERROR' }
             $allComplete = $false
@@ -627,6 +757,7 @@ while (-not $allComplete -and (Get-Date) -lt $timeoutTime) {
             try {
                 if ($probeJob.State -in @('Running', 'NotStarted')) {
                     Stop-Job -Job $probeJob -ErrorAction SilentlyContinue
+                    Register-RunCommandProbeTimeout -VMName $target.VMName
                     throw "Run Command probe on '$($target.VMName)' exceeded ${probeTimeout}s."
                 }
                 if ($probeJob.State -ne 'Completed') {
@@ -637,6 +768,7 @@ while (-not $allComplete -and (Get-Date) -lt $timeoutTime) {
                 $result = @($probeJob | Receive-Job -ErrorAction Stop)
                 $output = @($result | ForEach-Object { @($_.Value) } |
                     ForEach-Object { $_.Message }) -join "`n"
+                Reset-RunCommandProbeFailure -VMName $target.VMName
 
             if ($output -match 'SIGNAL_READY\|') {
                 Write-Host "    [OK] COMPLETE"
@@ -659,6 +791,11 @@ while (-not $allComplete -and (Get-Date) -lt $timeoutTime) {
                 $allComplete = $false
             }
             } catch {
+                $restarted = Invoke-RunCommandConflictRecovery -VMName $target.VMName `
+                    -FailureMessage $_.Exception.Message -AllowRestart (-not $target.IsLinux)
+                if ($restarted) {
+                    Write-Host "    [!] RECOVERY: restarted VM after repeated Run Command conflicts"
+                }
                 Write-Host "    [!] ERROR: $($_.Exception.Message)"
                 $statusList += @{ VM = $target.VMName; Role = $target.Role; Status = 'ERROR' }
                 $allComplete = $false
@@ -719,10 +856,9 @@ if ($allComplete) {
     Write-Host ""
     Write-Host "All VMs have completed their configuration."
 
-    if ($Scenario -eq 'Cluster') {
+    if ($WaitForTests) {
         Write-Host ""
-        Write-Host "Next: Connect to Node01 via Bastion and follow the"
-        Write-Host "post-deployment cluster setup steps in the README."
+        Write-Host "Automatic FileServer test execution will now be monitored."
     }
 } else {
     $message = "Timeout after $TimeoutMinutes minutes: some '$Scenario' VMs did not complete configuration. Check C:\$packageFolder\DSC\Deploy-*.log (Windows) or /opt/$packageFolder/DSC/Deploy-*.log (Linux)."
@@ -738,6 +874,8 @@ $testsComplete = $false
 $trxCount = 0
 $failedTrxCount = 0
 $testClassification = ''
+$passedTestCount = 0
+$inconclusiveTestCount = 0
 $failedTestCount = 0
 $summaryLength = 0L
 if ($WaitForTests) {
@@ -776,12 +914,14 @@ if ($WaitForTests) {
             if ($testOutput -match 'TEST_SUMMARY_MISSING') {
                 throw "Automatic tests finalized on '$($driver.VMName)', but the complete test summary is missing."
             }
-            if ($testOutput -match 'TEST_READY\|(\d+)\|(\d+)\|([^|\r\n]+)\|(\d+)\|(\d+)') {
+            if ($testOutput -match 'TEST_READY\|(\d+)\|(\d+)\|([^|\r\n]+)\|(\d+)\|(\d+)\|(\d+)\|(\d+)') {
                 $trxCount = [int]$Matches[1]
                 $failedTrxCount = [int]$Matches[2]
                 $testClassification = $Matches[3]
-                $failedTestCount = [int]$Matches[4]
-                $summaryLength = [long]$Matches[5]
+                $passedTestCount = [int]$Matches[4]
+                $inconclusiveTestCount = [int]$Matches[5]
+                $failedTestCount = [int]$Matches[6]
+                $summaryLength = [long]$Matches[7]
                 if ($trxCount -eq 0) {
                     throw 'The test completion signal exists, but no TRX result files were found.'
                 }
@@ -838,12 +978,17 @@ if ($WaitForTests) {
             -Driver $driver -SummaryLength $summaryLength -TimeoutSeconds $ProbeTimeoutSeconds
     }
     Write-Host ""
-    Write-Host "================ COMPLETE TEST SUMMARY ================"
-    Write-Host $testSummaryText
+    Write-Host "================ TEST RUN SUMMARY ====================="
+    Write-Host "Classification: $testClassification"
+    Write-Host "Passed:         $passedTestCount"
+    Write-Host "Inconclusive:   $inconclusiveTestCount"
+    Write-Host "Failed:         $failedTestCount"
+    Write-Host "TRX files:      $trxCount ($failedTrxCount with failed results)"
+    Write-Host "Detailed per-test messages and stack traces remain in C:\Test\TestResults\ and the uploaded result artifacts."
     Write-Host "======================================================="
 
     if ($testClassification -ne 'Passed') {
-        $testFailureMessage = "Automatic tests completed with failures in $failedTrxCount of $trxCount TRX files on '$($driver.VMName)'. Classification: $testClassification; failed tests: $failedTestCount. Full logs and summaries were uploaded."
+        $testFailureMessage = "Automatic tests completed on '$($driver.VMName)'. Classification: $testClassification; passed: $passedTestCount; inconclusive: $inconclusiveTestCount; failed: $failedTestCount. Full logs and summaries were uploaded."
         if (-not $DeferTestFailure) {
             throw $testFailureMessage
         }
@@ -861,6 +1006,8 @@ if ($WaitForTests) {
     TrxFileCount           = $trxCount
     FailedTrxFileCount     = $failedTrxCount
     TestClassification     = $testClassification
+    PassedTestCount        = $passedTestCount
+    InconclusiveTestCount  = $inconclusiveTestCount
     FailedTestCount        = $failedTestCount
     VerificationMinutes    = [math]::Round(((Get-Date) - $startTime).TotalMinutes, 1)
 }

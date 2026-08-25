@@ -81,12 +81,90 @@ function Test-ItemApplicable {
     return $true
 }
 
+function Test-ConfiguredItemAlreadyInstalled {
+    param($Item)
+
+    $paths = @($Item.ExistingInstallPaths | Where-Object {
+        -not [string]::IsNullOrWhiteSpace("$_")
+    })
+    $services = @($Item.ExistingServiceNames | Where-Object {
+        -not [string]::IsNullOrWhiteSpace("$_")
+    })
+    if ($paths.Count -eq 0 -and $services.Count -eq 0) {
+        return $false
+    }
+
+    foreach ($path in $paths) {
+        $expandedPath = [Environment]::ExpandEnvironmentVariables("$path")
+        if (-not (Test-Path -LiteralPath $expandedPath)) {
+            return $false
+        }
+    }
+    foreach ($serviceName in $services) {
+        if ($null -eq (Get-Service -Name "$serviceName" -ErrorAction SilentlyContinue)) {
+            return $false
+        }
+    }
+    return $true
+}
+
 function Get-ItemFileName {
     param($Item)
     foreach ($property in @('MSIName', 'EXEName', 'ZipName')) {
         if ($Item.$property) { return "$($Item.$property)" }
     }
     throw "Tool '$($Item.name)' does not define MSIName, EXEName, or ZipName."
+}
+
+function Assert-PackageIntegrity {
+    param(
+        $Item,
+        [Parameter(Mandatory)]
+        [string]$Path
+    )
+
+    $file = Get-Item -LiteralPath $Path -ErrorAction SilentlyContinue
+    if ($null -eq $file -or $file.PSIsContainer -or $file.Length -le 0) {
+        throw "Package is missing or empty: $(Split-Path $Path -Leaf)"
+    }
+
+    if ($Item.SHA256) {
+        $expectedHash = "$($Item.SHA256)".Trim().ToLowerInvariant()
+        if ($expectedHash -notmatch '^[a-f0-9]{64}$') {
+            throw "Configured SHA256 is invalid for $(Split-Path $Path -Leaf)."
+        }
+        $actualHash = (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()
+        if ($actualHash -ne $expectedHash) {
+            throw "SHA256 mismatch for $(Split-Path $Path -Leaf): expected $expectedHash, actual $actualHash."
+        }
+    }
+
+    if ([System.IO.Path]::GetExtension($Path) -ieq '.zip') {
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $archive = $null
+        try {
+            $archive = [System.IO.Compression.ZipFile]::OpenRead($Path)
+            $entryNames = @($archive.Entries | ForEach-Object {
+                $_.FullName -replace '\\', '/'
+            })
+            if ($entryNames.Count -eq 0) {
+                throw 'ZIP archive contains no entries.'
+            }
+            foreach ($expectedEntry in @($Item.ExpectedEntries)) {
+                if ([string]::IsNullOrWhiteSpace("$expectedEntry")) { continue }
+                $normalizedExpected = "$expectedEntry" -replace '\\', '/'
+                if (@($entryNames | Where-Object { $_ -like $normalizedExpected }).Count -eq 0) {
+                    throw "ZIP archive is missing expected entry '$normalizedExpected'."
+                }
+            }
+        }
+        catch {
+            throw "ZIP validation failed for $(Split-Path $Path -Leaf): $($_.Exception.Message)"
+        }
+        finally {
+            if ($null -ne $archive) { $archive.Dispose() }
+        }
+    }
 }
 
 function Get-RequiredFile {
@@ -96,9 +174,19 @@ function Get-RequiredFile {
         [bool]$OfflineMode
     )
 
-    if ((Test-Path -LiteralPath $Destination -PathType Leaf) -and
-        (Get-Item -LiteralPath $Destination).Length -gt 0) {
-        return
+    if (Test-Path -LiteralPath $Destination -PathType Leaf) {
+        try {
+            Assert-PackageIntegrity -Item $Item -Path $Destination
+            return
+        }
+        catch {
+            $integrityError = $_.Exception.Message
+            Remove-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue
+            if ($OfflineMode) {
+                throw "Cached package failed integrity validation: $integrityError"
+            }
+            Write-ToolMessage "[WARN] Removing invalid cached package: $integrityError" Yellow
+        }
     }
     if ($OfflineMode) {
         throw "Required package is not baked into Tools and outbound download is unavailable: $(Split-Path $Destination -Leaf)"
@@ -111,6 +199,13 @@ function Get-RequiredFile {
     if (-not $downloaded -or -not (Test-Path -LiteralPath $Destination -PathType Leaf) -or
         (Get-Item -LiteralPath $Destination).Length -eq 0) {
         throw "Download did not produce a non-empty file: $(Split-Path $Destination -Leaf)"
+    }
+    try {
+        Assert-PackageIntegrity -Item $Item -Path $Destination
+    }
+    catch {
+        Remove-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue
+        throw
     }
 }
 
@@ -218,6 +313,10 @@ function Invoke-ConfiguredItem {
         Write-ToolMessage "[SKIP] $label does not apply to OS build $CurrentOSBuild." Yellow
         return
     }
+    if (Test-ConfiguredItemAlreadyInstalled -Item $Item) {
+        Write-ToolMessage "[OK] $label is already installed; skipping package application." Green
+        return
+    }
 
     $fileName = Get-ItemFileName -Item $Item
     $itemPath = Join-Path $ToolsPath $fileName
@@ -317,13 +416,30 @@ function Invoke-ParallelPreparation {
         }
         $destinations[$destinationKey] = $true
 
-        if ((Test-Path -LiteralPath $destination -PathType Leaf) -and
-            (Get-Item -LiteralPath $destination).Length -gt 0) {
-            Write-ToolMessage "[OK] Package already prepared: $fileName" Green
-            continue
+        $required = Test-RequiredItem -Item $item
+        if (Test-Path -LiteralPath $destination -PathType Leaf) {
+            try {
+                Assert-PackageIntegrity -Item $item -Path $destination
+                Write-ToolMessage "[OK] Package already prepared: $fileName" Green
+                continue
+            }
+            catch {
+                $integrityError = $_.Exception.Message
+                Remove-Item -LiteralPath $destination -Force -ErrorAction SilentlyContinue
+                if ($OfflineMode) {
+                    if ($required) {
+                        $failures.Add("$label`: Cached package failed integrity validation: $integrityError")
+                        Write-ToolMessage "[FAIL] $label`: $integrityError" Red
+                    }
+                    else {
+                        Write-ToolMessage "[WARN] Optional tool '$label' failed integrity validation: $integrityError" Yellow
+                    }
+                    continue
+                }
+                Write-ToolMessage "[WARN] Removing invalid cached package for '$label': $integrityError" Yellow
+            }
         }
 
-        $required = Test-RequiredItem -Item $item
         if ($OfflineMode) {
             $message = "Required package is not baked into Tools and outbound download is unavailable: $fileName"
             if ($required) {
@@ -350,6 +466,7 @@ function Invoke-ParallelPreparation {
             Url = "$($item.Url)"
             Destination = $destination
             Required = $required
+            Item = $item
         })
     }
 
@@ -412,10 +529,23 @@ function Invoke-ParallelPreparation {
                 Where-Object { $null -ne $_.PSObject.Properties['Success'] } |
                 Select-Object -Last 1)
             $succeeded = $job.State -eq 'Completed' -and $result.Count -eq 1 -and $result[0].Success
+            $integrityError = $null
+            if ($succeeded) {
+                try {
+                    Assert-PackageIntegrity -Item $entry.Item -Path $entry.Destination
+                }
+                catch {
+                    $integrityError = $_.Exception.Message
+                    Remove-Item -LiteralPath $entry.Destination -Force -ErrorAction SilentlyContinue
+                    $succeeded = $false
+                }
+            }
             if ($succeeded) {
                 Write-ToolMessage "[OK] Package prepared: $(Split-Path $entry.Destination -Leaf)" Green
             } else {
-                $reason = if ($result.Count -eq 1 -and $result[0].Error) {
+                $reason = if ($integrityError) {
+                    $integrityError
+                } elseif ($result.Count -eq 1 -and $result[0].Error) {
                     $result[0].Error
                 } elseif ($job.State -in @('NotStarted', 'Running', 'Blocked', 'Stopped')) {
                     "Download exceeded the $InstallTimeoutSeconds-second preparation timeout."

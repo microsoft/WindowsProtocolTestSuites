@@ -49,7 +49,11 @@ Describe 'Complete FileServer test-run reporting' {
         $summary.Counters.Total | Should Be 3
         $summary.Counters.Passed | Should Be 2
         $summary.Counters.Failed | Should Be 1
+        $summary.PassedTestCount | Should Be 2
+        $summary.InconclusiveTestCount | Should Be 0
+        $summary.FailedTestCount | Should Be 1
         $summary.FailedTests.Count | Should Be 1
+        $summary.InconclusiveTests.Count | Should Be 0
         $summary.FailedTests[0].TestName | Should Be 'ConfigSensitiveFailure'
         $summary.FailedTests[0].TrxFile | Should Be 'suite-one.trx'
         $summary.FailedTests[0].ErrorMessage | Should Match 'Expected share was missing'
@@ -71,9 +75,10 @@ Describe 'Complete FileServer test-run reporting' {
         $summary.TrxFileCount | Should Be 0
     }
 
-        It 'does not report success when a test was inconclusive or not executed' {
+        It 'reports inconclusive and not-executed tests separately from failures' {
             $jsonPath = Join-Path $testRoot 'test.summary.json'
             $textPath = Join-Path $testRoot 'test.summary.txt'
+            Remove-Item (Join-Path $results '*.trx') -Force
                 @'
 <TestRun xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
     <Results>
@@ -82,7 +87,7 @@ Describe 'Complete FileServer test-run reporting' {
             <Output><ErrorInfo><Message>Environment prerequisite was unavailable</Message></ErrorInfo></Output>
         </UnitTestResult>
     </Results>
-    <ResultSummary outcome="Completed"><Counters total="2" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" notExecuted="1" /></ResultSummary>
+    <ResultSummary outcome="Completed"><Counters total="2" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" notExecuted="0" /></ResultSummary>
 </TestRun>
 '@ | Set-Content (Join-Path $results 'suite-two.trx') -Encoding UTF8
 
@@ -90,9 +95,14 @@ Describe 'Complete FileServer test-run reporting' {
                         -ContextName test -ExecutionExitCode 0 -OutputJsonPath $jsonPath `
                         -OutputTextPath $textPath
 
-                $summary.Classification | Should Be 'TestFailures'
-                @($summary.FailedTests | Where-Object TestName -eq 'SkippedByEnvironment').Count |
+                $summary.Classification | Should Be 'Inconclusive'
+                $summary.PassedTestCount | Should Be 1
+                $summary.InconclusiveTestCount | Should Be 1
+                $summary.FailedTestCount | Should Be 0
+                @($summary.InconclusiveTests | Where-Object TestName -eq 'SkippedByEnvironment').Count |
                         Should Be 1
+                (Get-Content $textPath -Raw) |
+                    Should Match 'Reported outcomes: passed=1, inconclusive=1, failed=0'
         }
 
             It 'distinguishes a missing invocation result from assertion failures' {
@@ -197,7 +207,7 @@ Describe 'Runner completion and diagnostic artifacts' {
         $testRunner.Contains('$diagnosticFiles') | Should Be $true
     }
 
-    It 'retrieves and prints the complete summary before reporting failed verification' {
+    It 'retrieves the complete artifact but prints only a concise terminal summary' {
         $verifier.Contains('function Get-RemoteTestSummaryText') | Should Be $true
         $verifier.Contains('function Get-UploadedTestSummaryText') | Should Be $true
         $verifier.Contains('Get-AzStorageBlobContent') | Should Be $true
@@ -209,17 +219,56 @@ Describe 'Runner completion and diagnostic artifacts' {
         $verifier.Contains("Join-Path ```$summaryPath 'test.summary.txt'") | Should Be $true
         $verifier.Contains('for ($chunkAttempt = 1; $chunkAttempt -le 3; $chunkAttempt++)') | Should Be $true
         $verifier.Contains('Summary chunk transport failed at offset $offset') | Should Be $true
-        $verifier.Contains('Write-Host $testSummaryText') | Should Be $true
+        $verifier.Contains('Write-Host $testSummaryText') | Should Be $false
+        $verifier.Contains('================ COMPLETE TEST SUMMARY ================') |
+            Should Be $false
+        $verifier.Contains('Write-Host "Classification: $testClassification"') |
+            Should Be $true
+        $verifier.Contains('Write-Host "Passed:         $passedTestCount"') |
+            Should Be $true
+        $verifier.Contains('Write-Host "Inconclusive:   $inconclusiveTestCount"') |
+            Should Be $true
+        $verifier.Contains('Write-Host "Failed:         $failedTestCount"') |
+            Should Be $true
+        $verifier.Contains('Detailed per-test messages and stack traces remain in') |
+            Should Be $true
         $verifier.Contains('Import-AzureModules | Out-Host') | Should Be $true
         $verifier.Contains('Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host') |
             Should Be $true
-        $printIndex = $verifier.IndexOf('Write-Host $testSummaryText')
-        $throwIndex = $verifier.IndexOf('Automatic tests completed with failures in $failedTrxCount')
+        $printIndex = $verifier.IndexOf('Write-Host "Classification: $testClassification"')
+        $throwIndex = $verifier.IndexOf("Automatic tests completed on '`$(`$driver.VMName)'")
         ($printIndex -ge 0) | Should Be $true
         ($throwIndex -gt $printIndex) | Should Be $true
         $verifier.Contains('[switch]$DeferTestFailure') | Should Be $true
         $verifier.Contains('Final deployment failure is deferred until post-test infrastructure handling completes') |
             Should Be $true
+    }
+
+    It 'does not instruct automated Cluster deployments to perform manual setup' {
+        $verifier.Contains('Connect to Node01 via Bastion') | Should Be $false
+        $verifier.Contains('post-deployment cluster setup steps') | Should Be $false
+        $verifier.Contains('Automatic FileServer test execution will now be monitored.') |
+            Should Be $true
+    }
+
+    It 'reports terminal deployment outcomes in past tense for every scenario' {
+        foreach ($scenario in @('workgroup-bicep', 'domain-bicep', 'cluster-bicep')) {
+            $deploy = Get-Content (Join-Path $root "$scenario\deploy.ps1") -Raw
+            $deploy.Contains('Automatic FileServer test execution completed.') |
+                Should Be $true
+            $deploy.Contains('What happens next (fully automatic):') |
+                Should Be $false
+        }
+
+        $clusterDeploy = Get-Content (
+            Join-Path $root 'cluster-bicep\deploy.ps1') -Raw
+        $clusterDeploy.Contains('Monitor progress:') | Should Be $false
+        $clusterDeploy.Contains('Tests run automatically on Client01.') |
+            Should Be $false
+
+        $workgroupDeploy = Get-Content (
+            Join-Path $root 'workgroup-bicep\deploy.ps1') -Raw
+        $workgroupDeploy.Contains('Monitor progress:') | Should Be $false
     }
 }
 
@@ -229,6 +278,8 @@ Describe 'Deployment test outcome exit semantics' {
         $verification = [pscustomobject]@{
             TestsComplete = $true
             TestClassification = 'Passed'
+            PassedTestCount = 12
+            InconclusiveTestCount = 0
             FailedTestCount = 0
         }
 
@@ -239,18 +290,36 @@ Describe 'Deployment test outcome exit semantics' {
         $verification = [pscustomobject]@{
             TestsComplete = $true
             TestClassification = 'TestFailures'
+            PassedTestCount = 20
+            InconclusiveTestCount = 3
             FailedTestCount = 12
         }
 
         $output = @(Complete-DeploymentTestOutcome -Verification $verification 3>&1) -join "`n"
         $output | Should Match 'environment and test run completed successfully'
-        $output | Should Match '12 non-passing results'
+        $output | Should Match '20 passed, 3 inconclusive, and 12 failed'
+    }
+
+    It 'reports inconclusive tests without calling them failures' {
+        $verification = [pscustomobject]@{
+            TestsComplete = $true
+            TestClassification = 'Inconclusive'
+            PassedTestCount = 100
+            InconclusiveTestCount = 12
+            FailedTestCount = 0
+        }
+
+        $output = @(Complete-DeploymentTestOutcome -Verification $verification 3>&1) -join "`n"
+        $output | Should Match '100 passed, 12 inconclusive, and 0 failed'
+        $output | Should Match 'environment prerequisites'
     }
 
     It 'reports infrastructure or configuration outcomes without failing deployment orchestration' {
         $verification = [pscustomobject]@{
             TestsComplete = $true
             TestClassification = 'InfrastructureOrConfigurationFailure'
+            PassedTestCount = 0
+            InconclusiveTestCount = 0
             FailedTestCount = 1
         }
 
@@ -263,6 +332,8 @@ Describe 'Deployment test outcome exit semantics' {
         $verification = [pscustomobject]@{
             TestsComplete = $true
             TestClassification = 'MixedTestAndInfrastructureFailures'
+            PassedTestCount = 4
+            InconclusiveTestCount = 2
             FailedTestCount = 5
         }
 
@@ -275,6 +346,8 @@ Describe 'Deployment test outcome exit semantics' {
         $verification = [pscustomobject]@{
             TestsComplete = $false
             TestClassification = ''
+            PassedTestCount = 0
+            InconclusiveTestCount = 0
             FailedTestCount = 0
         }
 

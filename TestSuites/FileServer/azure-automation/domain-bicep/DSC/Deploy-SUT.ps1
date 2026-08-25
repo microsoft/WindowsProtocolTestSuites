@@ -31,7 +31,11 @@ $memberPreBootTimeName = 'DomainSutPreRebootBootTimeUtc'
 $memberRebootCountName = 'DomainSutMemberRebootCount'
 $renameRebootPendingName = 'DomainSutRenameRebootPending'
 $renamePreBootTimeName = 'DomainSutPreRenameBootTimeUtc'
+$renameRebootCountName = 'DomainSutRenameRebootCount'
+$maxRenameRebootCount = 1
 $toolsJobTimeoutSeconds = 3600
+$kerberosAlignmentVersion = 1
+$kerberosAlignmentMarkerName = 'KerberosMachinePasswordAlignmentVersion'
 
 $env:Path += ";$scriptsPath"
 Push-Location $scriptsPath
@@ -123,6 +127,40 @@ function Test-RequiredSutDomainState {
     return $partOfDomain -and $secureChannel
 }
 
+function Test-RequiredSutKerberosAlignment {
+    $marker = [int](Get-RegistryValue -Name $kerberosAlignmentMarkerName `
+        -DefaultValue 0)
+    if ($marker -ne $kerberosAlignmentVersion) { return $false }
+
+    $netlogon = Get-ItemProperty `
+        -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters' `
+        -Name DisablePasswordChange -ErrorAction SilentlyContinue
+    return ($null -ne $netlogon -and
+            $netlogon.DisablePasswordChange -eq 1 -and
+            (Test-RequiredSutDomainState))
+}
+
+function Register-DomainSutKerberosAlignmentReboot {
+    $alignmentOutput = @(& "$scriptsPath\Set-KerberosMachinePasswordAlignment.ps1" `
+        -ConfigFile $configFile *>&1)
+    $alignmentOutput | ForEach-Object { .\Write-Info.ps1 "$_" }
+    Assert-DeploymentChildResult -Output $alignmentOutput `
+        -Operation 'Domain SUT Kerberos machine-password alignment' `
+        -RequireTrueResult | Out-Null
+
+    Set-DeploymentRebootPending -Role 'DomainSut' `
+        -RebootScope 'KerberosAlignment' -MaximumRebootCount 1 | Out-Null
+    $domainNetBios = if ($cfg.Domain.NetBiosName) {
+        "$($cfg.Domain.NetBiosName)"
+    } else {
+        "$($cfg.Core.DomainName)".Split('.')[0].ToUpperInvariant()
+    }
+    Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-SUT.ps1" `
+        -WorkingPath $WorkingPath -DscFolder $dscFolder `
+        -RunAsUser "$domainNetBios\$($cfg.Core.Username)" `
+        -RunAsPassword $cfg.Core.Password
+}
+
 function Test-RequiredSutImperativeState {
     $missing = @()
     foreach ($path in @(
@@ -136,9 +174,9 @@ function Test-RequiredSutImperativeState {
             $missing += "imperative-path:$path"
         }
     }
-    $passwordMarker = Get-ItemProperty -Path $registryPath `
-        -Name 'ComputerPasswordSet' -ErrorAction SilentlyContinue
-    if ($null -eq $passwordMarker) { $missing += 'computer-password-marker' }
+    if (-not (Test-RequiredSutKerberosAlignment)) {
+        $missing += 'kerberos-machine-password-alignment'
+    }
     foreach ($namespace in @('SMBDfs', 'Standalone')) {
         $dfsRoot = "\\$env:COMPUTERNAME\$namespace"
         & dfsutil.exe root $dfsRoot *> $null
@@ -156,6 +194,7 @@ function Test-RequiredSutReadyState {
            (Test-Path $toolsSignal) -and
            (Test-RequiredSutDscState) -and
            (Test-RequiredSutDomainState) -and
+           (Test-RequiredSutKerberosAlignment) -and
            (Test-RequiredSutImperativeState)
 }
 
@@ -256,6 +295,7 @@ if ($null -ne $staleReboot) {
 if ((Test-Path $signalFile) -and (Test-RequiredSutReadyState)) {
     Set-DeploymentPhase -Name $phaseRegistryName -Phase 3
     Set-RegistryValue -Name $memberRebootCountName -Value 0 -Type DWord
+    Set-RegistryValue -Name $renameRebootCountName -Value 0 -Type DWord
     Remove-ResumeTask
     .\Write-Info.ps1 '[OK] Domain SUT deployment already completed and remains ready.' -ForegroundColor Green
     Stop-DeploymentTranscript
@@ -282,6 +322,15 @@ if ([int](Get-RegistryValue -Name $renameRebootPendingName -DefaultValue 0) -eq 
         throw 'The Domain SUT hostname repair reboot was persisted but not observed.'
     }
     Set-RegistryValue -Name $renameRebootPendingName -Value 0 -Type DWord
+    $expectedName = $cfg.Machines.SUT.ComputerName
+    $renameAttempts = [int](Get-RegistryValue -Name $renameRebootCountName `
+        -DefaultValue 0)
+    if (-not [string]::IsNullOrWhiteSpace($expectedName) -and
+        $env:COMPUTERNAME -ne $expectedName) {
+        Stop-DeploymentTranscript
+        throw "Hostname repair reboot observed but rename did not apply after $renameAttempts attempt(s) (Expected='$expectedName', Actual='$env:COMPUTERNAME')."
+    }
+    Set-RegistryValue -Name $renameRebootCountName -Value 0 -Type DWord
     .\Write-Info.ps1 '[OK] Hostname repair reboot completed.' -ForegroundColor Green
 }
 if ($currentPhase -ge 1 -and
@@ -292,6 +341,26 @@ if ($currentPhase -ge 1 -and
     }
     Set-RegistryValue -Name $memberRebootPendingName -Value 0 -Type DWord
     .\Write-Info.ps1 '[OK] Combined feature/domain-join reboot completed.' -ForegroundColor Green
+}
+
+$kerberosRebootNames = Get-DeploymentRoleStateNames -Role 'DomainSut' `
+    -RebootScope 'KerberosAlignment'
+if ([int](Get-DeploymentRegistryValue `
+        -Name $kerberosRebootNames.RebootPendingName -DefaultValue 0) -eq 1) {
+    Confirm-DeploymentReboot -Role 'DomainSut' `
+        -RebootScope 'KerberosAlignment' | Out-Null
+    if (-not (Test-RequiredSutDomainState)) {
+        Stop-DeploymentTranscript
+        throw 'Domain SUT Kerberos alignment reboot completed without a healthy secure channel.'
+    }
+    Set-RegistryValue -Name $kerberosAlignmentMarkerName `
+        -Value $kerberosAlignmentVersion -Type DWord
+    Set-RegistryValue -Name 'ComputerPasswordSet' -Value 3 -Type DWord
+    Set-DeploymentRegistryValue -Name $kerberosRebootNames.RebootCountName `
+        -Value 0 -Type DWord
+    .\Write-Info.ps1 (
+        '[OK] Domain SUT Kerberos machine-password alignment reboot was proven.'
+    ) -ForegroundColor Green
 }
 
 $oldDeployStep = [int](Get-RegistryValue -Name 'DeployStep' -DefaultValue 0)
@@ -316,7 +385,15 @@ if ($currentPhase -eq 0 -and -not (Test-PendingSystemReboot)) {
 if ($currentPhase -eq 0) {
     $expectedName = $cfg.Machines.SUT.ComputerName
     if (-not [string]::IsNullOrWhiteSpace($expectedName) -and $env:COMPUTERNAME -ne $expectedName) {
+        $renameAttempts = [int](Get-RegistryValue -Name $renameRebootCountName `
+            -DefaultValue 0)
+        if ($renameAttempts -ge $maxRenameRebootCount) {
+            Stop-DeploymentTranscript
+            throw "Hostname repair requires a reboot but maximum attempts reached (Expected='$expectedName', Actual='$env:COMPUTERNAME')."
+        }
         Rename-Computer -NewName $expectedName -Force
+        Set-RegistryValue -Name $renameRebootCountName `
+            -Value ($renameAttempts + 1) -Type DWord
         Set-RegistryValue -Name $renameRebootPendingName -Value 1 -Type DWord
         $bootTime = (Get-CimInstance Win32_OperatingSystem).LastBootUpTime.ToUniversalTime().ToString('o')
         Set-RegistryValue -Name $renamePreBootTimeName -Value $bootTime -Type String
@@ -325,6 +402,12 @@ if ($currentPhase -eq 0) {
         Stop-DeploymentTranscript
         return
     }
+}
+
+if ($currentPhase -ge 1 -and -not (Test-RequiredSutKerberosAlignment)) {
+    Register-DomainSutKerberosAlignmentReboot
+    Stop-DeploymentTranscript
+    return
 }
 
 $toolsPreparationJob = Start-ToolsPreparationJob
@@ -401,6 +484,14 @@ if ($currentPhase -eq 0) {
     Set-DeploymentPhase -Name $phaseRegistryName -Phase 1
     Set-RegistryValue -Name 'DeployStep' -Value 1 -Type DWord
     $currentPhase = 1
+}
+
+if ($currentPhase -ge 1 -and -not (Test-RequiredSutKerberosAlignment)) {
+    Stop-ToolsPreparationJob -Job $toolsPreparationJob
+    $toolsPreparationJob = $null
+    Register-DomainSutKerberosAlignmentReboot
+    Stop-DeploymentTranscript
+    return
 }
 
 # ===========================================================================

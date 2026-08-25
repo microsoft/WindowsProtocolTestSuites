@@ -162,7 +162,9 @@ $config = Resolve-DeploymentConfig -Params $allParams -Defaults @{
     sutExternal2Ip    = '192.168.2.11'
     driverExternal1Ip = '192.168.1.111'
     driverExternal2Ip = '192.168.2.111'
+    enableTestAutoRun = $true
 }
+$testAutoRun = $config.enableTestAutoRun -ne $false
 
 # Override enableDiskEncryption if -SkipDiskEncryption was specified
 if ($SkipDiskEncryption) {
@@ -247,10 +249,18 @@ $resolvedSutSize = $sutCandidates[0]
 $phase2Params['sutVmSize'] = $resolvedSutSize
 Write-Host "   SUT VM size: $resolvedSutSize$(if ($sutCandidates.Count -gt 1) { " (+$($sutCandidates.Count - 1) fallbacks)" })"
 
-# Validate regional vCPU quota before creating any resources
+# Validate quota only for phases that this invocation will deploy. Existing
+# Phase 1 VMs already count toward CurrentValue during a -SkipPhase1 resume.
+$plannedVmSizes = @{}
+if (-not $SkipPhase1) {
+    $plannedVmSizes['DC'] = $resolvedDcSize
+}
+if (-not $SkipPhase2) {
+    $plannedVmSizes['Driver'] = $resolvedDriverSize
+    $plannedVmSizes['SUT'] = $resolvedSutSize
+}
 Test-RegionalVCpuQuota -Location $config.location `
-    -VmSizes @{ 'DC' = $resolvedDcSize; 'Driver' = $resolvedDriverSize; 'SUT' = $resolvedSutSize } `
-    -AvailableSkus $vmSkus
+    -VmSizes $plannedVmSizes -AvailableSkus $vmSkus
 
 # Validate OS image availability (skip when using custom images)
 if (-not $phase1Params['dcCustomImageId']) {
@@ -416,6 +426,7 @@ if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
             DriverExternal1Ip = $config.driverExternal1Ip
             DriverExternal2Ip = $config.driverExternal2Ip
             DriverOSType      = $config.driverOsType
+            EnableTestAutoRun = $testAutoRun
             # Create every test account with the single admin password so secondary
             # accounts match the framework's PasswordForAllUsers (works for any chosen
             # password; a no-op when the admin password already matches ParamConfig).
@@ -750,6 +761,7 @@ Options:
             environmentPrefix   = if ($phase2Params['environmentPrefix']) { $phase2Params['environmentPrefix'] } else { 'fstest' }
             adminPassword       = $AdminPassword
             driverOsType        = $config.driverOsType
+            enableTestAutoRun   = $testAutoRun
             domainPackageZipUrl = $actualDscPackageZipUrl
         }
         New-AzResourceGroupDeployment `
@@ -764,23 +776,27 @@ Options:
         throw 'No Domain-Package URL is available; refusing to leave unconfigured member VMs.'
     }
 
+    $testVerificationParams = @{
+        SubscriptionId = $SubscriptionId
+        ResourceGroupName = $ResourceGroupName
+        Scenario = 'Domain'
+        TimeoutMinutes = 120
+        NotBeforeUtc = $operationStartUtc
+        ResultsStorageAccountName = $resultsStorageAccountName
+    }
+    if ($testAutoRun) {
+        $testVerificationParams['WaitForTests'] = $true
+        $testVerificationParams['DeferTestFailure'] = $true
+        $testVerificationParams['TestTimeoutMinutes'] = $TestTimeoutMinutes
+    }
     if ($SkipPhase1) {
         & "$PSScriptRoot\..\shared\scripts\Verify-Deployment.ps1" `
             -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
             -Scenario Domain -ExpectedRoles 'Domain Controller' -TimeoutMinutes 10 | Out-Null
-        $verification = & "$PSScriptRoot\..\shared\scripts\Verify-Deployment.ps1" `
-            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
-            -Scenario Domain -ExpectedRoles @('SUT', 'Driver Computer') `
-            -TimeoutMinutes 120 -TestTimeoutMinutes $TestTimeoutMinutes `
-            -NotBeforeUtc $operationStartUtc -WaitForTests -DeferTestFailure `
-            -ResultsStorageAccountName $resultsStorageAccountName
-    } else {
-        $verification = & "$PSScriptRoot\..\shared\scripts\Verify-Deployment.ps1" `
-            -SubscriptionId $SubscriptionId -ResourceGroupName $ResourceGroupName `
-            -Scenario Domain -TimeoutMinutes 120 -TestTimeoutMinutes $TestTimeoutMinutes `
-            -NotBeforeUtc $operationStartUtc -WaitForTests -DeferTestFailure `
-            -ResultsStorageAccountName $resultsStorageAccountName
+        $testVerificationParams['ExpectedRoles'] = @('SUT', 'Driver Computer')
     }
+    $verification = & "$PSScriptRoot\..\shared\scripts\Verify-Deployment.ps1" `
+        @testVerificationParams
             Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
 
     # ADE can reboot all three machines. Apply it only after DC/member guest
@@ -815,14 +831,48 @@ Options:
     Complete-DeploymentTestOutcome -Verification $verification
 }
 
-# ===========================================================================
-# Deployment Complete
-# ===========================================================================
+$testExecutionDetails = if ($SkipPhase2) {
+@"
+Test execution:
+  - Phase 2 was skipped, so no Driver test run was started.
+"@
+} elseif (-not $testAutoRun) {
+    $manualCommand = if ($config.driverOsType -eq 'Linux') {
+        'pwsh -File "/opt/Domain-Package/DSC/Scripts/Invoke-TestRun.ps1" -WorkingPath "/opt/Domain-Package"'
+    } else {
+        'pwsh -File "C:\Domain-Package\DSC\Scripts\Invoke-TestRun.ps1" -WorkingPath "C:\Domain-Package"'
+    }
+@"
+Test execution:
+  - Automatic FileServer test execution was disabled.
+  - Start tests manually on Client01:
+    $manualCommand
+"@
+} else {
+@"
+Test execution:
+  - Automatic FileServer test execution completed.
+  - Classification: $($verification.TestClassification)
+  - Passed tests: $($verification.PassedTestCount)
+  - Inconclusive tests: $($verification.InconclusiveTestCount)
+  - Failed tests: $($verification.FailedTestCount)
+  - Results: C:\Test\TestResults\
+  - Completion signal: C:\Test\test.finished.signal
+"@
+}
 
-Write-Output @"
+$domainCompletionSummary = if ($SkipPhase2) {
+@"
+  Domain Phase 1 is ready. Phase 2 was skipped.
 
-  DEPLOYMENT COMPLETE
+VMs deployed:
+  - DC01 (Domain Controller) - AD DS, DNS configured
 
+Network Configuration:
+  - DC01: External1 = $($config.dcExternal1Ip), External2 = $($config.dcExternal2Ip)
+"@
+} else {
+@"
   Your domain environment is ready!
 
 VMs deployed:
@@ -834,16 +884,20 @@ Network Configuration:
   - DC01:     External1 = $($config.dcExternal1Ip), External2 = $($config.dcExternal2Ip)
   - Client01: External1 = $($config.driverExternal1Ip), External2 = $($config.driverExternal2Ip)
   - Node01:   External1 = $($config.sutExternal1Ip), External2 = $($config.sutExternal2Ip)
+"@
+}
 
-What happens next (fully automatic):
-1. DC configures AD DS and creates domain accounts
-2. Driver and SUT join domain, install tools via DSC
-3. Driver VM runs Execute-TestCaseByContext.ps1 automatically
-4. Results will be written to C:\Test\TestResults\ once complete
-5. Signal file: C:\Test\test.finished.signal indicates completion
+# ===========================================================================
+# Deployment Complete
+# ===========================================================================
 
-To monitor progress:
-  - RDP/Bastion into Client01 and check C:\Domain-Package\DSC\Invoke-TestRun.log
+Write-Output @"
+
+  DEPLOYMENT COMPLETE
+
+$domainCompletionSummary
+
+$testExecutionDetails
 
 For detailed instructions, see: README.md
 "@

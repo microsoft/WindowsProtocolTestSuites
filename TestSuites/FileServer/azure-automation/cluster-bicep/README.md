@@ -4,6 +4,31 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 
 > **Choosing a scenario?** See the [top-level azure-automation README](../README.md) for a comparison of Domain vs. Cluster vs. Workgroup.
 
+## One-Click Deploy ("Deploy to Azure" button)
+
+[`main.bicep`](main.bicep), compiled to [`azuredeploy.json`](azuredeploy.json),
+provides the single-template Portal deployment. Enter an admin password and the
+template deploys both infrastructure phases, configures all five VMs, forms the
+cluster, and waits for live Cluster and Driver readiness.
+
+The template preserves the phased safety gates by using managed deployment
+scripts. It applies optional Azure Disk Encryption before each group of VM
+configuration extensions, waits for verified DC and Storage completion before
+deploying the domain members, and reports success only after Node01, Node02, and
+the Driver pass their readiness checks.
+
+The Portal exposes curated VM-size dropdowns with burstable defaults for broad
+regional availability and lower onboarding cost: `Standard_B4ms` for DC,
+Storage, and Driver, and `Standard_B8ms` for each Cluster node. Approved D/F
+series alternatives are available when the defaults are constrained or higher
+sustained throughput is required. Long test runs may still be slower than the
+compute-oriented defaults used by `deploy.ps1`.
+
+The template's public package contains no credentials. It validates the package
+manifest before applying the generated topology override, then injects the
+deployment password from encrypted Custom Script Extension
+`protectedSettings`.
+
 ## Architecture Overview
 
 ```
@@ -34,6 +59,10 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 │  │                │ │  Node02        .12 │←→──── .12        │      │
 │  │                │ │  Cluster Node 2    │ │                 │      │
 │  │                │ └────────────────────┘ │                 │      │
+│  │                │ │  Cluster01     .100│←→──── .100       │      │
+│  │                │ │  GeneralFS     .200│←→──── .200       │      │
+│  │                │ │  Standard ILB VIPs │ │                 │      │
+│  │                │ └────────────────────┘ │                 │      │
 │  │                │ ┌────────────────────┐ │                 │      │
 │  │                │ │  Client01     .111 │←→──── .111       │      │
 │  │                │ │  Driver (Tests)    │ │                 │      │
@@ -53,6 +82,12 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 - **Driver Computer (Client01)**: Windows 11 Enterprise or Ubuntu Linux for running test cases
 
 The driver computer supports both Windows and Linux. Custom Azure VM images can be used for any VM by providing a resource ID.
+
+The node subnets use a NAT Gateway for deterministic outbound downloads. A
+Standard internal load balancer supplies Cluster01 and GeneralFS frontends on
+both subnets. Floating-IP rules and four health probes follow clustered role
+ownership, so the Driver resolves virtual names through DNS rather than pinning
+them to Node01.
 
 ## Prerequisites
 
@@ -79,6 +114,10 @@ $password = Read-Host -Prompt "Enter your secure password" -AsSecureString
     -AdminPassword $password
 ```
 
+`enableTestAutoRun` in `parameters/phase2.bicepparam` defaults to `true`. Set it
+to `false` to configure the complete cluster without scheduling tests on
+Client01.
+
 ### 3. Wait for deployment to complete
 
 The script deploys in two Bicep phases with progress output:
@@ -87,7 +126,7 @@ The script deploys in two Bicep phases with progress output:
 2. **DC readiness poll** (~15-25 min): Script waits for AD DS promotion to finish
 3. **Phase 2** (~10-15 min): Cluster Nodes + Driver VM
 
-After Phase 2, the command remains attached while VMs join the domain, connect iSCSI, form the cluster, create clustered roles/shares, and run automatic tests. Integrated verification requires all five role signals and a terminal test summary. For an optional ad-hoc recheck:
+After Phase 2, the command remains attached while VMs join the domain, connect iSCSI, form the cluster, and create clustered roles/shares. With `enableTestAutoRun = true`, it also runs automatic tests and requires a terminal test summary. With autorun disabled, it completes after all five role signals. For an optional ad-hoc recheck:
 
 ```powershell
 .\scripts\Verify-ClusterDeployment.ps1 -ResourceGroupName "fileserver-cluster-test"
@@ -141,12 +180,14 @@ The deployment uses a **two-phase Bicep approach** to ensure proper sequencing:
 
 **Phase 1** (`phase1.bicep`) deploys:
 - Virtual Network with dual subnets (External1, External2)
+- NAT Gateway for Cluster node outbound connectivity
 - Network Security Groups with required firewall rules (SMB, iSCSI, cluster communication)
 - Azure Bastion for secure remote access
 - DC01 — installs AD DS, creates `contoso.com` domain, configures DNS
 - Storage01 — installs iSCSI Target Server, creates 4 virtual disks (NOT domain-joined)
 
 **Phase 2** (`phase2.bicep`) deploys after the DC is ready:
+- Standard internal load balancer with Cluster01 and GeneralFS frontends on both subnets
 - Node01 and Node02 — join domain, install Failover Clustering and File Server, connect to iSCSI storage
 - Client01 — joins domain, installs test tools
 
@@ -243,6 +284,10 @@ Edit these files to customize the environment. All template configuration lives 
 | `node01External1Ip` | `192.168.1.11` | Node01 primary IP |
 | `node02External1Ip` | `192.168.1.12` | Node02 primary IP |
 | `driverExternal1Ip` | `192.168.1.111` | Driver computer IP |
+| `clusterExternal1Ip` / `clusterExternal2Ip` | `.100` on each subnet | Cluster core load-balancer frontends |
+| `generalFSExternal1Ip` / `generalFSExternal2Ip` | `.200` on each subnet | GeneralFS load-balancer frontends |
+| `clusterExternal1ProbePort` / `clusterExternal2ProbePort` | `59998` / `59999` | Cluster core health probes |
+| `generalFSExternal1ProbePort` / `generalFSExternal2ProbePort` | `60000` / `60001` | GeneralFS health probes |
 | `driverCustomImageId` | *(empty)* | Custom image for driver (overrides marketplace) |
 | `clusterNodeCustomImageId` | *(empty)* | Custom image for cluster nodes (overrides marketplace) |
 
@@ -378,7 +423,10 @@ Get-ItemProperty HKLM:\SOFTWARE\ProtocolTestSuites
 
 ## Known Issues
 
-1. **GeneralFS virtual IP not routable in Azure**: The GeneralFS clustered file server virtual IP is not directly routable in Azure networking. As a workaround, Client01 maps `GeneralFS` to Node01's IP address via the hosts file (`C:\Windows\System32\drivers\etc\hosts`).
+1. **Cluster virtual IPs require the Standard internal load balancer**: The
+   Cluster01 and GeneralFS addresses use floating-IP load-balancer rules and
+   probe ports. Do not replace them with direct hosts-file mappings to a
+   physical node.
 
 2. **ksetup trust relationship**: The `ksetup /SetComputerPassword` command runs after domain join. AD account password synchronization is performed via `Set-ADAccountPassword` on the DC side.
 
@@ -400,8 +448,12 @@ Get-ItemProperty HKLM:\SOFTWARE\ProtocolTestSuites
 
 ```
 cluster-bicep/
+├── main.bicep                       # One-click, readiness-gated deployment
+├── azuredeploy.json                 # Compiled one-click ARM template
 ├── phase1.bicep                     # Phase 1: Network + DC + Storage
+├── phase1.json                      # Compiled Phase 1 ARM template
 ├── phase2.bicep                     # Phase 2: Cluster Nodes + Driver
+├── phase2.json                      # Compiled Phase 2 ARM template
 ├── deploy.ps1                       # PowerShell deployment script (supports resume)
 ├── README.md                        # This file
 ├── modules/
@@ -409,7 +461,9 @@ cluster-bicep/
 │   ├── domain-controller.bicep    # Domain Controller VM
 │   ├── storage-server.bicep       # Storage Server (iSCSI) VM
 │   ├── cluster-nodes.bicep        # Cluster Node VMs (Node01, Node02)
-│   └── driver-computer.bicep      # Driver Computer VM
+│   ├── driver-computer.bicep      # Driver Computer VM
+│   ├── service-extensions.bicep   # DC + Storage one-click configuration
+│   └── computer-extensions.bicep  # Nodes + Driver one-click configuration
 ├── DSC/
 │   ├── Deploy-Storage.ps1          # Storage Server configuration script
 │   ├── Deploy-Node01.ps1           # Cluster Node 1 configuration script

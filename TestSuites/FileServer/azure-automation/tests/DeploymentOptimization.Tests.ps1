@@ -78,7 +78,7 @@ Describe 'Azure deployment critical-path optimizations' {
         $deploy.Contains('Domain Controller did not signal readiness within $DCReadyTimeoutMinutes minutes.') | Should Be $true
     }
 
-    It 'uses one planned member reboot between Domain SUT features and convergence' {
+    It 'uses bounded planned reboots for Domain membership and Kerberos alignment' {
         $sutDeploy = Read-AutomationFile 'domain-bicep\DSC\Deploy-SUT.ps1'
         $featureConfiguration = Read-AutomationFile 'domain-bicep\DSC\SUT-FeatureConfiguration.ps1'
         $convergenceConfiguration = Read-AutomationFile 'domain-bicep\DSC\SUT-Configuration.ps1'
@@ -90,6 +90,19 @@ Describe 'Azure deployment critical-path optimizations' {
         $sutDeploy.Contains("Set-DeploymentPhase -Name `$phaseRegistryName -Phase 3") | Should Be $true
         $sutDeploy.Contains('feature/domain-join reboot') | Should Be $true
         $sutDeploy.Contains('requested another normal member reboot') | Should Be $true
+        $sutDeploy.Contains("-RebootScope 'KerberosAlignment'") | Should Be $true
+        $sutDeploy.Contains('Set-KerberosMachinePasswordAlignment.ps1') |
+            Should Be $true
+        $sutDeploy.Contains(
+            'Domain SUT Kerberos machine-password alignment reboot was proven.'
+        ) | Should Be $true
+        $sutDeploy.Contains("`$renameRebootCountName = 'DomainSutRenameRebootCount'") |
+            Should Be $true
+        $sutDeploy.Contains('$maxRenameRebootCount = 1') | Should Be $true
+        $sutDeploy.Contains('$renameAttempts -ge $maxRenameRebootCount') |
+            Should Be $true
+        $sutDeploy.Contains('Hostname repair reboot observed but rename did not apply') |
+            Should Be $true
         $sutDeploy.Contains('Set-DeploymentPhase -Name $phaseRegistryName -Phase $repairPhase') |
             Should Be $true
         ([regex]::Matches($sutDeploy, 'Get-DomainSutRepairPhase').Count) | Should Be 3
@@ -134,6 +147,8 @@ Describe 'Azure deployment critical-path optimizations' {
 
         $sutDeploy.Contains('(Test-RequiredSutReadyState)') | Should Be $true
         $sutDeploy.Contains('(Test-RequiredSutDomainState)') | Should Be $true
+        $sutDeploy.Contains('(Test-RequiredSutKerberosAlignment)') |
+            Should Be $true
         $sutDeploy.Contains('(Test-RequiredSutImperativeState)') | Should Be $true
         $sutDeploy.Contains('$toolsJobTimeoutSeconds = 3600') | Should Be $true
         $sutDeploy.Contains('Wait-DeploymentJob -Job $Job') | Should Be $true
@@ -253,6 +268,7 @@ Describe 'Azure deployment critical-path optimizations' {
         $driverDeploy.Contains('NoTranscript = $true') | Should Be $true
         $driverSteps.Contains('[switch]$NoTranscript') | Should Be $true
         $driverSteps.Contains('"$scriptsPath\domainjoin.ps1" -NoTranscript') | Should Be $true
+        $driverSteps.TrimEnd().EndsWith('return $true') | Should Be $true
         $createAccounts.Contains('[switch]$NoTranscript') | Should Be $true
         $domainJoin.Contains('[switch]$NoTranscript') | Should Be $true
         $domainJoin.Contains('if (-not $NoTranscript)') | Should Be $true
@@ -447,6 +463,22 @@ Describe 'Azure deployment critical-path optimizations' {
             Should Be $true
     }
 
+    It 'keeps DC account, claims GPO, and DNS reconciliation idempotent' {
+        $accounts = Read-AutomationFile 'shared\DSC\Scripts\Create-TestAccount.ps1'
+        $gpo = Read-AutomationFile 'shared\DSC\Scripts\Import-GPOForClaims.ps1'
+        $dns = Read-AutomationFile 'shared\DSC\Scripts\Create-DNSRecords.ps1'
+
+        $accounts.Contains('Get-ADGroup -Filter * -ErrorAction Stop') | Should Be $true
+        $accounts.Contains('Get-ADGroup -Identity $azGroupDN') | Should Be $false
+        $accounts.Contains('AD group $azGroupDN already exists.') | Should Be $true
+        $gpo.Contains('function Test-ClaimsGpoConfigured') | Should Be $true
+        $gpo.Contains("'PET-AccessPolicy'") | Should Be $true
+        $gpo.Contains('Claims GPO settings are already present; skipping import.') |
+            Should Be $true
+        $dns.Contains('$existingAddresses -contains $HostIPv4Address') |
+            Should Be $true
+    }
+
     It 'self-installs required Az modules and verifies Bicep before deployment' {
         $helpers = Read-AutomationFile 'shared\Deploy-Helpers.psm1'
         $workgroupDeploy = Read-AutomationFile 'workgroup-bicep\deploy.ps1'
@@ -491,6 +523,9 @@ Describe 'Azure deployment critical-path optimizations' {
         $verifier.Contains("[ValidateSet('Auto', 'Workgroup', 'Domain', 'Cluster')]") |
             Should Be $true
         $verifier.Contains('[int]$ProbeTimeoutSeconds = 120') | Should Be $true
+        $verifier.Contains('[int]$RunCommandConflictThreshold = 3') | Should Be $true
+        $verifier.Contains('[int]$RunCommandRecoveryDelaySeconds = 300') | Should Be $true
+        $verifier.Contains('[int]$RunCommandRecoveryLimit = 1') | Should Be $true
         $verifier.Contains('-AsJob -ErrorAction Stop') | Should Be $true
         $verifier.Contains('Wait-Job -Job $probeJob -Timeout $TimeoutSeconds') |
             Should Be $true
@@ -499,6 +534,16 @@ Describe 'Azure deployment critical-path optimizations' {
             Should Be $true
         $verifier.Contains('--scripts "@$scriptPath"') | Should Be $true
         $verifier.Contains('Wait-Job -Job $probeJobs -Timeout $probeTimeout') |
+            Should Be $true
+        $verifier.Contains('Register-RunCommandProbeTimeout -VMName $VMName') |
+            Should Be $true
+        $verifier.Contains('Invoke-RunCommandConflictRecovery -VMName $VMName') |
+            Should Be $true
+        $verifier.Contains("Restart-AzVM -ResourceGroupName `$ResourceGroupName -Name `$VMName") |
+            Should Be $true
+        $verifier.Contains('recovery $($state.RecoveryCount)/$RunCommandRecoveryLimit') |
+            Should Be $true
+        $verifier.Contains('-AllowRestart (-not $target.IsLinux)') |
             Should Be $true
         $verifier.Contains('[string[]]$ExpectedRoles') | Should Be $true
         $verifier.Contains('$targetDefinitions = @($targetDefinitions | Where-Object') |
@@ -514,7 +559,7 @@ Describe 'Azure deployment critical-path optimizations' {
         $verifier.Contains('SIGNAL_STALE') | Should Be $true
         $verifier.Contains('RunShellScript') | Should Be $true
         $verifier.Contains('TEST_READY') | Should Be $true
-        $verifier.Contains('Automatic tests completed with failures in $failedTrxCount') |
+        $verifier.Contains("Automatic tests completed on '`$(`$driver.VMName)'") |
             Should Be $true
         $verifier.Contains('[bool]$IsLinux') | Should Be $false
         $verifier.Contains('[bool]$LinuxTarget') | Should Be $true
@@ -537,7 +582,8 @@ Describe 'Azure deployment critical-path optimizations' {
     It 'preserves AD computer accounts for Domain member VMs that still exist' {
         $deploy = Read-AutomationFile 'domain-bicep\deploy.ps1'
         $cleanup = Read-AutomationFile 'domain-bicep\scripts\Remove-StaleComputerAccounts.ps1'
-        $sutSteps = Read-AutomationFile 'domain-bicep\DSC\Invoke-SutImperativeSteps.ps1'
+        $alignment = Read-AutomationFile `
+            'shared\DSC\Scripts\Set-KerberosMachinePasswordAlignment.ps1'
 
         $deploy.Contains("ComputerName = 'Client01'") | Should Be $true
         $deploy.Contains("ComputerName = 'Node01'") | Should Be $true
@@ -547,13 +593,19 @@ Describe 'Azure deployment critical-path optimizations' {
             Should Be $true
         $cleanup.Contains('[string]$ComputerNamesCsv') | Should Be $true
         $cleanup.Contains("'C:\Domain-Package\Config.json'") | Should Be $false
-        $sutSteps.Contains('-Credential $domainCredential -Server $adDomain') | Should Be $true
+        $alignment.Contains('-Credential $domainCredential') | Should Be $true
+        $alignment.Contains('-Server $dcServer') | Should Be $true
+        $alignment.Contains(
+            "SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText'") |
+            Should Be $true
     }
 
     It 'preserves live Cluster member and endpoint computer accounts on resume' {
         $deploy = Read-AutomationFile 'cluster-bicep\deploy.ps1'
         $clusterSetup = Read-AutomationFile 'cluster-bicep\DSC\Scripts\Create-ServerFailoverEnv.ps1'
-        $nodeSetup = Read-AutomationFile 'cluster-bicep\DSC\Invoke-Node01ImperativeSteps.ps1'
+        $nodeDeploy = Read-AutomationFile 'cluster-bicep\DSC\Deploy-ClusterNode.ps1'
+        $alignment = Read-AutomationFile `
+            'shared\DSC\Scripts\Set-KerberosMachinePasswordAlignment.ps1'
 
         foreach ($computerName in @('Client01', 'Node01', 'Node02', 'Storage01')) {
             $deploy.Contains("ComputerName = '$computerName'") | Should Be $true
@@ -570,19 +622,56 @@ Describe 'Azure deployment critical-path optimizations' {
         $clusterSetup.Contains("Cluster '`$clusterName' already exists; preserving its AD and DNS endpoint identities") |
             Should Be $true
         $clusterSetup.Contains('Repair-ClusterVirtualComputerObjects.ps1') | Should Be $true
-        $nodeSetup.Contains('-Credential $domainCredential') | Should Be $true
-        $nodeSetup.Contains('Test-ComputerSecureChannel -ErrorAction Stop') | Should Be $true
-        $nodeSetup.Contains('$marker.ComputerPasswordSet -eq 2') | Should Be $true
-        $nodeSetup.Contains("-Name 'ComputerPasswordSet' -Value 2") | Should Be $true
-        $nodeSetup.Contains("throw 'Failed to synchronize the Node01 AD and local machine passwords") |
+        $alignment.Contains('-Credential $domainCredential') | Should Be $true
+        $alignment.Contains('Set-ADAccountPassword -Identity $machineAccount') |
+            Should Be $true
+        $alignment.Contains('ksetup.exe /SetComputerPassword $MachinePassword') |
+            Should Be $true
+        $nodeDeploy.Contains('Start-NodeKerberosAlignment') | Should Be $true
+        $nodeDeploy.Contains("-RebootScope 'KerberosAlignment'") | Should Be $true
+        $nodeDeploy.Contains('Test-RequiredNodeKerberosAlignment') |
             Should Be $true
 
             $vcoRepair = Read-AutomationFile 'cluster-bicep\DSC\Scripts\Repair-ClusterVirtualComputerObjects.ps1'
             $vcoRepair.Contains('[uint32]0x0100018D') | Should Be $true
             $vcoRepair.Contains('ServicePrincipalName') | Should Be $true
+            $vcoRepair.Contains('"cifs/$VcoName"') | Should Be $true
+            $vcoRepair.Contains('"cifs/$DnsHostName"') | Should Be $true
             $vcoRepair.Contains('StatusDNS') | Should Be $true
             $vcoRepair.Contains('StatusKerberos') | Should Be $true
             $vcoRepair.Contains('Start-ClusterGroup') | Should Be $true
+    }
+
+    It 'uses explicit domain credentials for Cluster Driver readiness probes' {
+        $readiness = Read-AutomationFile `
+            'cluster-bicep\DSC\Scripts\Test-ClusterDriverReadiness.ps1'
+
+        $readiness.Contains('$domainCredential = [pscredential]::new(') |
+            Should Be $true
+        $readiness.Contains(
+            "SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText'") |
+            Should Be $true
+        @([regex]::Matches($readiness, '-Credential \$domainCredential')).Count |
+            Should BeGreaterThan 3
+        $readiness.Contains('New-PSDrive -Name $driveName') | Should Be $true
+        $readiness.Contains("Clustered share '`$sharePath' is unreachable:") |
+            Should Be $true
+    }
+
+    It 'preserves Azure Load Balancer probe ports in Cluster Config.json' {
+        $generator = Read-AutomationFile 'shared\Generate-ConfigJson.ps1'
+        $deploy = Read-AutomationFile 'cluster-bicep\deploy.ps1'
+
+        foreach ($name in @(
+            'ClusterExternal1ProbePort',
+            'ClusterExternal2ProbePort',
+            'GeneralFSExternal1ProbePort',
+            'GeneralFSExternal2ProbePort'
+        )) {
+            $generator.Contains("[int]`$$name") | Should Be $true
+            $generator.Contains("ProbePort = `$$name") | Should Be $true
+            $deploy.Contains("$name = [int]`$phase2Params") | Should Be $true
+        }
     }
 
     It 'requires fresh signals only from phases redeployed during continuation' {
@@ -591,11 +680,12 @@ Describe 'Azure deployment critical-path optimizations' {
 
         $domainDeploy.Contains("-ExpectedRoles 'Domain Controller' -TimeoutMinutes 10") |
             Should Be $true
-        $domainDeploy.Contains("-ExpectedRoles @('SUT', 'Driver Computer')") |
+        $domainDeploy.Contains(
+            "`$testVerificationParams['ExpectedRoles'] = @('SUT', 'Driver Computer')") |
             Should Be $true
         $clusterDeploy.Contains("-ExpectedRoles @('Domain Controller', 'Storage Server')") |
             Should Be $true
-        $clusterDeploy.Contains("-ExpectedRoles @('Cluster Node 1', 'Cluster Node 2', 'Driver Computer')") |
+        $clusterDeploy.Contains("`$testVerificationParams['ExpectedRoles'] = @(") |
             Should Be $true
     }
 
@@ -658,14 +748,35 @@ Describe 'Azure deployment critical-path optimizations' {
 
         ($verification -ge 0) | Should Be $true
         ($encryption -gt $verification) | Should Be $true
-        $deploy.Contains('-NotBeforeUtc $operationStartUtc -WaitForTests') | Should Be $true
+        $deploy.Contains("`$testVerificationParams['WaitForTests'] = `$true") |
+            Should Be $true
+        $deploy.Contains('if ($testAutoRun)') | Should Be $true
         $deploy.Contains('[int]$TestTimeoutMinutes = 360') | Should Be $true
-        $deploy.Contains('-TestTimeoutMinutes $TestTimeoutMinutes') | Should Be $true
+        $deploy.Contains(
+            "`$testVerificationParams['TestTimeoutMinutes'] = `$TestTimeoutMinutes") |
+            Should Be $true
         ([regex]::Matches($deploy, 'Invoke-DiskEncryptionForVMs').Count) | Should Be 1
         $deploy.Contains('Wait-Job -Job $cleanupJob -Timeout 180') | Should Be $true
         $deploy.Contains("DeploymentName -like 'Cluster-Phase1-*'") | Should Be $true
         $deploy.Contains("StorageAccountName -like 'fststorage*'") | Should Be $true
         $deploy.Contains('No reusable Cluster-Package.zip was found') | Should Be $true
+    }
+
+    It 'uses the resolved Cluster VIPs in generated Config.json' {
+        $deploy = Read-AutomationFile 'cluster-bicep\deploy.ps1'
+        $configStart = $deploy.IndexOf('$configParams = @{')
+        $configEnd = $deploy.IndexOf('UnifyAccountPasswords = $true', $configStart)
+        $configBlock = $deploy.Substring($configStart, $configEnd - $configStart)
+
+        foreach ($name in @(
+            'ClusterExternal1Ip',
+            'ClusterExternal2Ip',
+            'GeneralFSExternal1Ip',
+            'GeneralFSExternal2Ip'
+        )) {
+            $camelName = $name.Substring(0, 1).ToLowerInvariant() + $name.Substring(1)
+            $configBlock -match "$name\s*=\s*\`$config\.$camelName" | Should Be $true
+        }
     }
 
     It 'verifies full Domain configuration and tests before member disk encryption' {
@@ -675,49 +786,50 @@ Describe 'Azure deployment critical-path optimizations' {
 
         ($verification -ge 0) | Should Be $true
         ($lastEncryption -gt $verification) | Should Be $true
-        $deploy.Contains('-Scenario Domain -TimeoutMinutes 120') |
+        $deploy.Contains("Scenario = 'Domain'") |
             Should Be $true
         $deploy.Contains('[int]$TestTimeoutMinutes = 360') | Should Be $true
-        $deploy.Contains('-TestTimeoutMinutes $TestTimeoutMinutes') | Should Be $true
-        $deploy.Contains('-NotBeforeUtc $operationStartUtc -WaitForTests') | Should Be $true
+        $deploy.Contains(
+            "`$testVerificationParams['TestTimeoutMinutes'] = `$TestTimeoutMinutes") |
+            Should Be $true
+        $deploy.Contains("`$testVerificationParams['WaitForTests'] = `$true") |
+            Should Be $true
+        $deploy.Contains('if ($testAutoRun)') | Should Be $true
         $deploy.Contains('Wait-Job -Job $cleanupJob -Timeout 180') | Should Be $true
         $deploy.Contains('No reusable Domain-Package.zip was found') | Should Be $true
     }
 
     It 'requires verified DSC, bounded tools, and iSCSI before Cluster nodes advance' {
-        foreach ($relativePath in @(
-            'cluster-bicep\DSC\Deploy-Node01.ps1',
-            'cluster-bicep\DSC\Deploy-Node02.ps1'
-        )) {
-            $nodeDeploy = Read-AutomationFile $relativePath
+        $nodeDeploy = Read-AutomationFile 'cluster-bicep\DSC\Deploy-ClusterNode.ps1'
 
-            ([regex]::Matches($nodeDeploy, 'Invoke-VerifiedDscConfiguration').Count) |
-                Should Be 2
-            $nodeDeploy.Contains('Start-DscConfiguration -Path $mofFolder -Wait') |
-                Should Be $false
-            $nodeDeploy.Contains('$toolsJobTimeoutSeconds = 3600') | Should Be $true
-            $nodeDeploy.Contains('Wait-Job -Job $toolsJob -Timeout $remainingSeconds') |
-                Should Be $true
-            $nodeDeploy.Contains('$toolsOk = Test-Path $toolsSignal') | Should Be $true
-            $nodeDeploy.Contains('$fullDscOk -and $toolsOk -and $iscsiOk') |
-                Should Be $true
-            $nodeDeploy.Contains('Cluster node prerequisites are incomplete') |
-                Should Be $true
-        }
+        ([regex]::Matches($nodeDeploy, 'Invoke-VerifiedDscConfiguration').Count) |
+            Should Be 2
+        $nodeDeploy.Contains('Start-DscConfiguration -Path $mofFolder -Wait') |
+            Should Be $false
+        $nodeDeploy.Contains('$toolsJobTimeoutSeconds = 3600') | Should Be $true
+        $nodeDeploy.Contains('Wait-DeploymentJob -Job $Job -TimeoutSeconds $toolsJobTimeoutSeconds') |
+            Should Be $true
+        $nodeDeploy.Contains('Test-RequiredNodeFoundationState') | Should Be $true
+        $nodeDeploy.Contains('foundation readiness is incomplete after convergence') |
+            Should Be $true
     }
 
     It 'requires verified DSC and concrete iSCSI state before Storage reports ready' {
         $storageDeploy = Read-AutomationFile 'cluster-bicep\DSC\Deploy-Storage.ps1'
+        $storageReadiness = Read-AutomationFile 'cluster-bicep\DSC\Scripts\Test-StorageReadiness.ps1'
 
         ([regex]::Matches($storageDeploy, 'Invoke-VerifiedDscConfiguration').Count) |
             Should Be 2
         $storageDeploy.Contains('Start-DscConfiguration -Path $mofFolder -Wait') |
             Should Be $false
         $storageDeploy.Contains('function Test-RequiredStorageReadyState') | Should Be $true
-        $storageDeploy.Contains("`$service.Status -ne 'Running'") | Should Be $true
-        $storageDeploy.Contains('$target.LunMappings.Count -lt 4') | Should Be $true
-        $storageDeploy.Contains('Removing stale Storage completion signal') | Should Be $true
-        $storageDeploy.Contains('if (Test-RequiredStorageReadyState)') | Should Be $true
+        $storageReadiness.Contains("`$service.State -ne 'Running'") | Should Be $true
+        $storageReadiness.Contains('$mappingPaths.Count -ne $diskSpecs.Count') |
+            Should Be $true
+        $storageDeploy.Contains('Removing stale or unverifiable Storage signal') |
+            Should Be $true
+        $storageDeploy.Contains('if (-not (Test-RequiredStorageReadyState))') |
+            Should Be $true
     }
 
     It 'uses shared bootstrap delivery for every Cluster VM role' {
@@ -725,7 +837,9 @@ Describe 'Azure deployment critical-path optimizations' {
             'cluster-bicep\modules\domain-controller.bicep',
             'cluster-bicep\modules\storage-server.bicep',
             'cluster-bicep\modules\cluster-nodes.bicep',
-            'cluster-bicep\modules\driver-computer.bicep'
+            'cluster-bicep\modules\driver-computer.bicep',
+            'cluster-bicep\modules\service-extensions.bicep',
+            'cluster-bicep\modules\computer-extensions.bicep'
         )) {
             $module = Read-AutomationFile $relativePath
             $module.Contains('cse-bootstrap.ps1') |
@@ -759,6 +873,32 @@ Describe 'Azure deployment critical-path optimizations' {
         $helpers.Contains("Join-Path `$tempPackagePath 'cse-bootstrap.ps1'") |
             Should Be $true
         $bootstrap.Contains('[switch]$PackageAlreadyExtracted') | Should Be $true
+        $manifest = $bootstrap.IndexOf('Test-DscPackageManifest')
+        $configOverride = $bootstrap.IndexOf('One-click Config.json override applied')
+        ($manifest -ge 0) | Should Be $true
+        ($configOverride -gt $manifest) | Should Be $true
+        $stagedValidation = $bootstrap.IndexOf(
+            'Test-PackagePayload -RootPath $stagedPackagePath'
+        )
+        $cleanReplacement = $bootstrap.IndexOf(
+            'Remove-Item -LiteralPath $packagePath -Recurse -Force -ErrorAction Stop'
+        )
+        $packageCopy = $bootstrap.IndexOf(
+            "Copy-Item -Path (Join-Path `$stagedPackagePath '*')"
+        )
+        ($stagedValidation -gt $manifest) | Should Be $true
+        ($cleanReplacement -gt $stagedValidation) | Should Be $true
+        ($packageCopy -gt $cleanReplacement) | Should Be $true
+        $bootstrap.Contains('Existing package path could not be removed') |
+            Should Be $true
+        $bootstrap.Contains('function Stop-PackageConsumers') | Should Be $true
+        $bootstrap.Contains('$_.CommandLine -match $packagePattern') |
+            Should Be $true
+        $bootstrap.Contains('Stop-ScheduledTask -InputObject $task') |
+            Should Be $true
+        $bootstrap.Contains('Stop-Process -Id $process.ProcessId -Force') |
+            Should Be $true
+        $bootstrap.Contains('$attempt -le 12') | Should Be $true
 
         foreach ($relativePath in $windowsModules) {
             $module = Read-AutomationFile $relativePath
@@ -812,6 +952,12 @@ Describe 'Azure deployment critical-path optimizations' {
         $linuxBootstrap.Contains('deploy_signal="/opt/__PACKAGE_NAME__/DSC/') |
             Should Be $true
         $linuxBootstrap.Contains('rm -f "$deploy_signal"') | Should Be $true
+        $linuxBootstrap.Contains('staged_package="/opt/__PACKAGE_NAME__.bootstrap.$$"') |
+            Should Be $true
+        $linuxBootstrap.Contains("rm -rf '/opt/__PACKAGE_NAME__'") |
+            Should Be $true
+        $linuxBootstrap.Contains('mv "$staged_package" ''/opt/__PACKAGE_NAME__''') |
+            Should Be $true
     }
 
     It 'verifies Workgroup configuration and tests before disk encryption' {
@@ -1005,6 +1151,18 @@ Describe 'Azure deployment critical-path optimizations' {
         $deploy.Contains('Deploy-DC.heartbeat.json') | Should Be $true
         ([regex]::Matches($deploy, 'Write-DcDeploymentHeartbeat -ResourceGroupName').Count) |
             Should Be 3
+    }
+
+    It 'checks quota only for phases selected by a resume invocation' {
+        $domain = Read-AutomationFile 'domain-bicep\deploy.ps1'
+        $cluster = Read-AutomationFile 'cluster-bicep\deploy.ps1'
+
+        foreach ($deploy in @($domain, $cluster)) {
+            $deploy.Contains('$plannedVmSizes = @{}') | Should Be $true
+            $deploy.Contains('if (-not $SkipPhase1)') | Should Be $true
+            $deploy.Contains('if (-not $SkipPhase2)') | Should Be $true
+            $deploy.Contains('-VmSizes $plannedVmSizes') | Should Be $true
+        }
     }
 
     It 'uses bounded parallel jobs and aggregates member encryption failures' {

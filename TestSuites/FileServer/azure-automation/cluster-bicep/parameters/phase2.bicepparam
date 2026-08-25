@@ -34,8 +34,21 @@ param node01External2Ip = '192.168.2.11'
 param node02External2Ip = '192.168.2.12'
 param driverExternal2Ip = '192.168.2.111'
 
+// Cluster and GeneralFS virtual IPs
+param clusterExternal1Ip = '192.168.1.100'
+param clusterExternal2Ip = '192.168.2.100'
+param generalFSExternal1Ip = '192.168.1.200'
+param generalFSExternal2Ip = '192.168.2.200'
+
+// Azure Load Balancer probe ports
+param clusterExternal1ProbePort = 59998
+param clusterExternal2ProbePort = 59999
+param generalFSExternal1ProbePort = 60000
+param generalFSExternal2ProbePort = 60001
+
 // Auto-shutdown Configuration
 param enableAutoShutdown = true
+param enableTestAutoRun = true
 param autoShutdownTime = '20:00'
 param autoShutdownTimeZone = 'UTC'
 

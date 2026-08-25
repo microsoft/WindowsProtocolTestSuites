@@ -46,6 +46,9 @@ param node02External2Ip string = '192.168.2.12'
 @description('Domain Controller External1 IP address')
 param dcExternal1Ip string = '192.168.1.10'
 
+@description('Standard Load Balancer backend pool resource ID')
+param backendPoolId string
+
 @description('Enable auto-shutdown')
 param enableAutoShutdown bool = true
 
@@ -92,6 +95,11 @@ resource node01Nic1 'Microsoft.Network/networkInterfaces@2023-04-01' = {
           subnet: {
             id: external1SubnetId
           }
+          loadBalancerBackendAddressPools: [
+            {
+              id: backendPoolId
+            }
+          ]
         }
       }
     ]
@@ -117,6 +125,11 @@ resource node01Nic2 'Microsoft.Network/networkInterfaces@2023-04-01' = {
           subnet: {
             id: external2SubnetId
           }
+          loadBalancerBackendAddressPools: [
+            {
+              id: backendPoolId
+            }
+          ]
         }
       }
     ]
@@ -143,6 +156,11 @@ resource node02Nic1 'Microsoft.Network/networkInterfaces@2023-04-01' = {
           subnet: {
             id: external1SubnetId
           }
+          loadBalancerBackendAddressPools: [
+            {
+              id: backendPoolId
+            }
+          ]
         }
       }
     ]
@@ -168,6 +186,11 @@ resource node02Nic2 'Microsoft.Network/networkInterfaces@2023-04-01' = {
           subnet: {
             id: external2SubnetId
           }
+          loadBalancerBackendAddressPools: [
+            {
+              id: backendPoolId
+            }
+          ]
         }
       }
     ]

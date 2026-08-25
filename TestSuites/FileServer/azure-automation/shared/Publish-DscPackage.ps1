@@ -167,6 +167,7 @@ New-DscPackageZip `
     -Scenario $Scenario `
     -ConfigJsonParams $ConfigJsonParams `
     -GenerateConfigScript $generateScript `
+    -PublicPackage `
     -OutputZipPath $OutputZipPath
 
 Write-Output "[OK] Package built: $OutputZipPath"

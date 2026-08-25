@@ -5,18 +5,10 @@
     "_generator": {
       "name": "bicep",
       "version": "0.44.1.10279",
-      "templateHash": "3853246722870525155"
+      "templateHash": "4660677836277415410"
     }
   },
   "parameters": {
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "minLength": 1,
-      "metadata": {
-        "description": "Resource group location. Defaults to the resource group's region so the \"Deploy to Azure\" button deploys where you have quota/capacity. deploy.ps1 sets this explicitly from the bicepparam file."
-      }
-    },
     "environmentPrefix": {
       "type": "string",
       "defaultValue": "fstest",
@@ -59,6 +51,14 @@
     "dcVmSize": {
       "type": "string",
       "defaultValue": "Standard_B4ms",
+      "allowedValues": [
+        "Standard_B4ms",
+        "Standard_D2s_v5",
+        "Standard_D2as_v5",
+        "Standard_D4s_v5",
+        "Standard_D4as_v5",
+        "Standard_D4s_v6"
+      ],
       "minLength": 1,
       "metadata": {
         "description": "Domain Controller VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button; deploy.ps1 uses a compute-optimized size from the bicepparam file."
@@ -86,6 +86,14 @@
     "driverVmSize": {
       "type": "string",
       "defaultValue": "Standard_B4ms",
+      "allowedValues": [
+        "Standard_B4ms",
+        "Standard_F4as_v6",
+        "Standard_F4s_v2",
+        "Standard_D4s_v5",
+        "Standard_D4as_v5",
+        "Standard_D4s_v6"
+      ],
       "minLength": 1,
       "metadata": {
         "description": "Driver computer VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button."
@@ -93,10 +101,19 @@
     },
     "sutVmSize": {
       "type": "string",
-      "defaultValue": "Standard_B4ms",
+      "defaultValue": "Standard_B8ms",
+      "allowedValues": [
+        "Standard_B4ms",
+        "Standard_B8ms",
+        "Standard_D8ls_v5",
+        "Standard_D8s_v5",
+        "Standard_D8as_v5",
+        "Standard_D8s_v6",
+        "Standard_D8as_v6"
+      ],
       "minLength": 1,
       "metadata": {
-        "description": "SUT computer VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button."
+        "description": "SUT computer VM size. Defaults to a broadly-available burstable (B-series) size with additional capacity for FileServer tests."
       }
     },
     "driverOsType": {
@@ -261,6 +278,13 @@
         "description": "Enable auto-shutdown. Default false for the domain lab: auto-shutdown DEALLOCATES VMs, and a deallocate/restart of a domain-joined member can collide with machine-account password handling. Members set Netlogon\\DisablePasswordChange to stay safe, but keeping the lab running by default avoids the deallocation churn entirely. Opt in explicitly to save cost."
       }
     },
+    "enableTestAutoRun": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Run FileServer tests automatically after Driver and SUT configuration completes"
+      }
+    },
     "autoShutdownTime": {
       "type": "string",
       "defaultValue": "20:00",
@@ -292,6 +316,9 @@
       }
     }
   },
+  "variables": {
+    "location": "[resourceGroup().location]"
+  },
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
@@ -304,7 +331,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "environmentPrefix": {
             "value": "[parameters('environmentPrefix')]"
@@ -1606,7 +1633,7 @@
         "mode": "Incremental",
         "parameters": {
           "location": {
-            "value": "[parameters('location')]"
+            "value": "[variables('location')]"
           },
           "environmentPrefix": {
             "value": "[parameters('environmentPrefix')]"
@@ -1668,6 +1695,9 @@
           "enableAutoShutdown": {
             "value": "[parameters('enableAutoShutdown')]"
           },
+          "enableTestAutoRun": {
+            "value": "[parameters('enableTestAutoRun')]"
+          },
           "autoShutdownTime": {
             "value": "[parameters('autoShutdownTime')]"
           },
@@ -1685,7 +1715,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.44.1.10279",
-              "templateHash": "11443149619549975292"
+              "templateHash": "6634842739330867057"
             }
           },
           "parameters": {
@@ -1851,6 +1881,13 @@
               "defaultValue": false,
               "metadata": {
                 "description": "Enable auto-shutdown. Default false: auto-shutdown DEALLOCATES VMs, and a deallocate/restart of a domain-joined member can collide with machine-account password handling. Opt in explicitly to save cost."
+              }
+            },
+            "enableTestAutoRun": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Run FileServer tests automatically after configuration"
               }
             },
             "autoShutdownTime": {
@@ -2502,6 +2539,9 @@
                   "driverOsType": {
                     "value": "[parameters('driverOsType')]"
                   },
+                  "enableTestAutoRun": {
+                    "value": "[parameters('enableTestAutoRun')]"
+                  },
                   "domainPackageZipUrl": {
                     "value": "[parameters('domainPackageZipUrl')]"
                   }
@@ -2513,7 +2553,7 @@
                     "_generator": {
                       "name": "bicep",
                       "version": "0.44.1.10279",
-                      "templateHash": "13286396146950771152"
+                      "templateHash": "2624611079256684189"
                     }
                   },
                   "parameters": {
@@ -2551,6 +2591,12 @@
                         "description": "Driver computer OS type"
                       }
                     },
+                    "enableTestAutoRun": {
+                      "type": "bool",
+                      "metadata": {
+                        "description": "Run FileServer tests automatically after configuration"
+                      }
+                    },
                     "domainPackageZipUrl": {
                       "type": "string",
                       "metadata": {
@@ -2559,11 +2605,11 @@
                     }
                   },
                   "variables": {
-                    "$fxv#0": "#!/bin/bash\n# Copyright (c) Microsoft. All rights reserved.\n# Licensed under the MIT license. See LICENSE file in the project root for full license information.\n#\n# Custom Script Extension bootstrap shared by the Linux Driver across scenarios\n# (Workgroup, Domain). The Bicep module loads this file with loadTextContent(),\n# substitutes the __TOKENS__ (same set as cse-bootstrap.ps1), and delivers it\n# base64-encoded via the extension's encrypted protectedSettings 'script'\n# property. The script downloads the package itself (no fileUris), so it never\n# depends on the waagent download directory layout, whose sequence number\n# changes when the extension re-runs.\n\nset -e\nexport DEBIAN_FRONTEND=noninteractive\n\necho 'Starting __SCENARIO__ __ROLE__ setup...'\nmkdir -p '/opt/__PACKAGE_NAME__'\n\nif [ '__ROLE__' = 'driver' ]; then\n    echo 'Reconciling any stale Driver test run before replacing the package...'\n    pkill -TERM -f 'Invoke-TestRun|Execute-TestCaseByContext|dotnet vstest|testhost' 2>/dev/null || true\n    sleep 2\n    pkill -KILL -f 'Invoke-TestRun|Execute-TestCaseByContext|dotnet vstest|testhost' 2>/dev/null || true\n    rm -f /test/test.started.signal \\\n        /test/test.finished.signal \\\n        /test/test.run.completed.signal \\\n        /test/test.results.upload.failed.signal\nfi\n\napt-get update -qq\napt-get install -y -qq wget unzip apt-transport-https\n\nif ! command -v pwsh >/dev/null 2>&1; then\n    wget -q https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb\n    dpkg -i /tmp/packages-microsoft-prod.deb\n    rm -f /tmp/packages-microsoft-prod.deb\n    apt-get update -qq\n    apt-get install -y -qq powershell\nfi\n\necho 'Waiting for DNS resolution of __PACKAGE_HOST__ (DNS may still be coming up)...'\ndns=0\nfor i in $(seq 1 60); do\n    if getent hosts '__PACKAGE_HOST__' >/dev/null 2>&1; then\n        dns=1\n        break\n    fi\n    sleep 30\ndone\nif [ $dns -ne 1 ]; then\n    echo 'DNS resolution failed'\n    exit 1\nfi\n\ndl=0\nfor i in $(seq 1 10); do\n    if wget -q '__PACKAGE_URL__' -O '/opt/__PACKAGE_NAME__.zip'; then\n        dl=1\n        break\n    fi\n    sleep 30\ndone\nif [ $dl -ne 1 ]; then\n    echo 'Package download failed'\n    exit 1\nfi\n\nunzip -o '/opt/__PACKAGE_NAME__.zip' -d '/opt/__PACKAGE_NAME__'\nrm -f '/opt/__PACKAGE_NAME__.zip'\n\n# A packaged rerun must produce a fresh role signal. Otherwise Deploy-Driver\n# can short-circuit on the previous signal and freshness verification times out.\ndeploy_signal=\"/opt/__PACKAGE_NAME__/DSC/$(basename '__DEPLOY_SCRIPT__' .ps1).Completed.signal\"\nrm -f \"$deploy_signal\"\n\nif [ -f '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' ]; then\n    echo 'Injecting credential into Config.json...'\n    pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' -PasswordBase64 '__PASSWORD_B64__'\nfi\n\nif [ -f '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' ]; then\n    echo 'Starting __DEPLOY_SCRIPT__ (DSC + imperative)...'\n    cd '/opt/__PACKAGE_NAME__/DSC'\n    pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' -WorkingPath '/opt/__PACKAGE_NAME__'\nelse\n    echo '__DEPLOY_SCRIPT__ not found, skipping configuration'\nfi\n\necho '__SCENARIO__ __ROLE__ setup completed'\n",
+                    "$fxv#0": "#!/bin/bash\n# Copyright (c) Microsoft. All rights reserved.\n# Licensed under the MIT license. See LICENSE file in the project root for full license information.\n#\n# Custom Script Extension bootstrap shared by the Linux Driver across scenarios\n# (Workgroup, Domain). The Bicep module loads this file with loadTextContent(),\n# substitutes the __TOKENS__ (same set as cse-bootstrap.ps1), and delivers it\n# base64-encoded via the extension's encrypted protectedSettings 'script'\n# property. The script downloads the package itself (no fileUris), so it never\n# depends on the waagent download directory layout, whose sequence number\n# changes when the extension re-runs.\n\nset -e\nexport DEBIAN_FRONTEND=noninteractive\n\necho 'Starting __SCENARIO__ __ROLE__ setup...'\nstaged_package=\"/opt/__PACKAGE_NAME__.bootstrap.$$\"\nrm -rf \"$staged_package\"\nmkdir -p \"$staged_package\"\n\nif [ '__ROLE__' = 'driver' ]; then\n    echo 'Reconciling any stale Driver test run before replacing the package...'\n    pkill -TERM -f 'Invoke-TestRun|Execute-TestCaseByContext|dotnet vstest|testhost' 2>/dev/null || true\n    sleep 2\n    pkill -KILL -f 'Invoke-TestRun|Execute-TestCaseByContext|dotnet vstest|testhost' 2>/dev/null || true\n    rm -f /test/test.started.signal \\\n        /test/test.finished.signal \\\n        /test/test.run.completed.signal \\\n        /test/test.results.upload.failed.signal\nfi\n\napt-get update -qq\napt-get install -y -qq wget unzip apt-transport-https\n\nif ! command -v pwsh >/dev/null 2>&1; then\n    wget -q https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb\n    dpkg -i /tmp/packages-microsoft-prod.deb\n    rm -f /tmp/packages-microsoft-prod.deb\n    apt-get update -qq\n    apt-get install -y -qq powershell\nfi\n\necho 'Waiting for DNS resolution of __PACKAGE_HOST__ (DNS may still be coming up)...'\ndns=0\nfor i in $(seq 1 60); do\n    if getent hosts '__PACKAGE_HOST__' >/dev/null 2>&1; then\n        dns=1\n        break\n    fi\n    sleep 30\ndone\nif [ $dns -ne 1 ]; then\n    echo 'DNS resolution failed'\n    exit 1\nfi\n\ndl=0\nfor i in $(seq 1 10); do\n    if wget -q '__PACKAGE_URL__' -O '/opt/__PACKAGE_NAME__.zip'; then\n        dl=1\n        break\n    fi\n    sleep 30\ndone\nif [ $dl -ne 1 ]; then\n    echo 'Package download failed'\n    exit 1\nfi\n\nunzip -o '/opt/__PACKAGE_NAME__.zip' -d \"$staged_package\"\nrm -f '/opt/__PACKAGE_NAME__.zip'\nrm -rf '/opt/__PACKAGE_NAME__'\nmv \"$staged_package\" '/opt/__PACKAGE_NAME__'\n\n# A packaged rerun must produce a fresh role signal. Otherwise Deploy-Driver\n# can short-circuit on the previous signal and freshness verification times out.\ndeploy_signal=\"/opt/__PACKAGE_NAME__/DSC/$(basename '__DEPLOY_SCRIPT__' .ps1).Completed.signal\"\nrm -f \"$deploy_signal\"\n\nif [ -f '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' ]; then\n    echo 'Injecting credential into Config.json...'\n    pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' -PasswordBase64 '__PASSWORD_B64__'\nfi\n\nif [ '__ROLE__' = 'driver' ]; then\n    test_execution_script='/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigTestExecution.ps1'\n    if [ ! -f \"$test_execution_script\" ]; then\n        echo \"Set-ConfigTestExecution.ps1 not found at $test_execution_script\"\n        exit 1\n    fi\n    pwsh -ExecutionPolicy Unrestricted -File \"$test_execution_script\" -EnableTestAutoRun '__ENABLE_TEST_AUTORUN__'\nfi\n\nif [ -f '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' ]; then\n    echo 'Starting __DEPLOY_SCRIPT__ (DSC + imperative)...'\n    cd '/opt/__PACKAGE_NAME__/DSC'\n    pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' -WorkingPath '/opt/__PACKAGE_NAME__'\nelse\n    echo '__DEPLOY_SCRIPT__ not found, skipping configuration'\nfi\n\necho '__SCENARIO__ __ROLE__ setup completed'\n",
                     "driverIsLinux": "[equals(parameters('driverOsType'), 'Linux')]",
                     "packageHost": "[if(empty(parameters('domainPackageZipUrl')), '', split(parameters('domainPackageZipUrl'), '/')[2])]",
-                    "driverLinuxBootstrap": "[replace(replace(replace(replace(replace(replace(replace(variables('$fxv#0'), '__SCENARIO__', 'domain'), '__ROLE__', 'driver'), '__PACKAGE_NAME__', 'Domain-Package'), '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'), '__PACKAGE_URL__', parameters('domainPackageZipUrl')), '__PACKAGE_HOST__', variables('packageHost')), '__PASSWORD_B64__', base64(parameters('adminPassword')))]",
-                    "driverCommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"$stage=''C:\\Temp\\wpts-domain-driver''; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path ''.\\Domain-Package.zip'' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\Temp\\wpts-domain-driver\\cse-bootstrap.ps1'' -Scenario ''domain'' -Role ''driver'' -PackageName ''Domain-Package'' -DeployScript ''Deploy-Driver.ps1'' -PasswordBase64 ''{0}'' -PackageAlreadyExtracted; exit $LASTEXITCODE\"', base64(parameters('adminPassword')))]",
+                    "driverLinuxBootstrap": "[replace(replace(replace(replace(replace(replace(replace(replace(variables('$fxv#0'), '__SCENARIO__', 'domain'), '__ROLE__', 'driver'), '__PACKAGE_NAME__', 'Domain-Package'), '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'), '__PACKAGE_URL__', parameters('domainPackageZipUrl')), '__PACKAGE_HOST__', variables('packageHost')), '__PASSWORD_B64__', base64(parameters('adminPassword'))), '__ENABLE_TEST_AUTORUN__', string(parameters('enableTestAutoRun')))]",
+                    "driverCommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"$stage=''C:\\Temp\\wpts-domain-driver''; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path ''.\\Domain-Package.zip'' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\Temp\\wpts-domain-driver\\cse-bootstrap.ps1'' -Scenario ''domain'' -Role ''driver'' -PackageName ''Domain-Package'' -DeployScript ''Deploy-Driver.ps1'' -PasswordBase64 ''{0}'' -EnableTestAutoRun ''{1}'' -PackageAlreadyExtracted; exit $LASTEXITCODE\"', base64(parameters('adminPassword')), parameters('enableTestAutoRun'))]",
                     "sutCommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"$stage=''C:\\Temp\\wpts-domain-sut''; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path ''.\\Domain-Package.zip'' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\Temp\\wpts-domain-sut\\cse-bootstrap.ps1'' -Scenario ''domain'' -Role ''sut'' -PackageName ''Domain-Package'' -DeployScript ''Deploy-SUT.ps1'' -PasswordBase64 ''{0}'' -PackageAlreadyExtracted; exit $LASTEXITCODE\"', base64(parameters('adminPassword')))]"
                   },
                   "resources": [

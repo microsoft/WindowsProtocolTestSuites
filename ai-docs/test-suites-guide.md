@@ -78,7 +78,9 @@ Workgroup and Domain use the deterministic phased model. Dedicated feature
 configurations install disruptive roles before planned reboot boundaries;
 convergence configurations contain only non-disruptive post-reboot state. The
 Domain SUT persists `DomainSutDeployPhase` and coalesces feature servicing with
-domain join into one normal reboot. The DC persists `DcDeployPhase`, using one
+domain join into one normal reboot, then performs a separate bounded reboot
+after forcing the AD and local machine secrets to the Auth suite's deterministic
+`Password04!` service key. The DC persists `DcDeployPhase`, using one
 foundation reboot for features/hostname and a separate mandatory promotion
 reboot. The shared Driver prepares tools before its join reboot, then verifies
 `PartOfDomain` and `Test-ComputerSecureChannel` before test setup. All roles use
@@ -86,6 +88,51 @@ atomic parallel package preparation, serial cached installation, concrete
 postconditions, and heartbeat JSON files. Reuse phase, verified DSC, job-wait,
 reboot-proof, and heartbeat helpers from `shared/DSC/Deploy-CommonHelpers.ps1`;
 never continue through an unexpected pending reboot.
+
+Cluster uses the same deterministic contracts through
+`cluster-bicep/DSC/Deploy-ClusterNode.ps1`,
+`cluster-bicep/DSC/Deploy-Storage.ps1`, and
+`cluster-bicep/DSC/Deploy-ClusterDriver.ps1`. Node02 must publish foundation readiness
+before Node01 forms the Cluster, and both nodes plus live Cluster/ForceLevel2
+postconditions gate tests. Node01 uses the same shared Kerberos machine-password
+alignment helper and proves its required reboot before publishing pre-cluster
+readiness. `cluster-bicep/DSC/Scripts/Test-ClusterDriverReadiness.ps1` validates
+the Auth service password/salt and forces Kerberos-only remoting to Node01 before
+tests can start. Azure Cluster endpoints use a dual-subnet Standard
+internal load balancer with floating-IP rules; do not map virtual names to a
+physical owner node. Cluster node subnets use the scenario NAT Gateway because
+ILB backend membership disables implicit outbound SNAT.
+
+All deployment packages must use `shared/DSC/Scripts/Package-Contracts.ps1`.
+`Build-DscPackage` writes and validates `PackageManifest.json`, and the packaged
+bootstrap verifies scenario, required content, lengths, and SHA-256 hashes
+before executing role scripts. Cluster packages fail closed if these integrity
+contracts are absent.
+
+The three one-click templates expose curated VM-size dropdowns through Bicep
+`@allowed` values. Keep their burstable defaults and role-specific alternatives
+aligned across Workgroup, Domain, and Cluster; the dropdowns improve selection
+but do not guarantee transient Azure capacity.
+
+Automatic FileServer test execution is controlled by the default-enabled
+`enableTestAutoRun` deployment parameter. It is persisted in `Config.json` as
+`TestExecution.AutoRun`; Driver orchestrators must remove stale test tasks and
+skip scheduling when disabled, while deployment verification must not wait for
+test signals. `SkipTestWait` only detaches local monitoring and must not be used
+as an autorun control. Terminal deployment summaries report passed,
+inconclusive (including `NotExecuted`), and failed outcomes separately; do not
+label all non-passing tests as failures. Deployment terminals print only these
+aggregate counts and the terminal classification; per-test messages and stack
+traces remain in the local and uploaded result artifacts and must not be dumped
+into the interactive deployment shell.
+
+Deployment verification also bounds every Azure Run Command probe. A probe
+timeout alone must not restart a VM because the server-side command can still
+be completing. If the same Windows VM subsequently returns sustained HTTP 409
+or "execution in progress" conflicts for at least five minutes, the shared
+verifier performs at most one controlled restart to clear a wedged Guest Agent
+operation, then resumes polling. Linux targets and conflicts without a
+preceding local timeout are never restarted automatically.
 
 Reuse these modules and helpers rather than embedding equivalent resources in scenario-specific scripts.
 

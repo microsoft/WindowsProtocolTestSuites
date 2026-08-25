@@ -85,6 +85,9 @@ param sutExternal2Ip string
 @description('Enable auto-shutdown')
 param enableAutoShutdown bool
 
+@description('Run FileServer tests automatically after configuration')
+param enableTestAutoRun bool
+
 @description('Auto-shutdown time (HHmm in UTC)')
 param autoShutdownTime string
 
@@ -102,7 +105,7 @@ var driverIsLinux = driverOsType == 'Linux'
 // This keeps commandToExecute below Windows' command-line limit. Linux keeps
 // native CustomScript v2 script delivery.
 var packageHost = empty(dscPackageZipUrl) ? '' : split(dscPackageZipUrl, '/')[2]
-var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(replace(
+var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(replace(replace(
   loadTextContent('../../shared/scripts/cse-bootstrap.sh'),
   '__SCENARIO__', 'workgroup'),
   '__ROLE__', 'driver'),
@@ -110,8 +113,9 @@ var driverLinuxBootstrap = replace(replace(replace(replace(replace(replace(repla
   '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'),
   '__PACKAGE_URL__', dscPackageZipUrl),
   '__PACKAGE_HOST__', packageHost),
-  '__PASSWORD_B64__', base64(adminPassword))
-var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-workgroup-driver\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Workgroup-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-workgroup-driver\\cse-bootstrap.ps1\' -Scenario \'workgroup\' -Role \'driver\' -PackageName \'Workgroup-Package\' -DeployScript \'Deploy-Driver.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
+  '__PASSWORD_B64__', base64(adminPassword)),
+  '__ENABLE_TEST_AUTORUN__', string(enableTestAutoRun))
+var driverCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-workgroup-driver\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Workgroup-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-workgroup-driver\\cse-bootstrap.ps1\' -Scenario \'workgroup\' -Role \'driver\' -PackageName \'Workgroup-Package\' -DeployScript \'Deploy-Driver.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -EnableTestAutoRun \'${enableTestAutoRun}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
 var sutCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-workgroup-sut\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Workgroup-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-workgroup-sut\\cse-bootstrap.ps1\' -Scenario \'workgroup\' -Role \'sut\' -PackageName \'Workgroup-Package\' -DeployScript \'Deploy-SUT.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
 
 var driverWindowsOffer = startsWith(driverOsVersion, 'win10-') ? 'Windows-10' : 'Windows-11'

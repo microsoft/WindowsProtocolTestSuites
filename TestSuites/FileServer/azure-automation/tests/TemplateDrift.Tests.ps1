@@ -1,10 +1,8 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-# Tier-0 drift guard for the one-click "Deploy to Azure" buttons.
-# The committed azuredeploy.json *is* the template served from raw.githubusercontent.com,
-# so it must stay byte-identical to `bicep build main.bicep`. This test recompiles each
-# main.bicep and fails if the committed artifact has drifted.
+# Tier-0 drift guard for committed ARM templates.
+# The generated JSON files must stay synchronized with their Bicep entry points.
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = (Resolve-Path (Join-Path $here '..')).Path
@@ -51,24 +49,27 @@ function ConvertTo-NormalizedOutputJson {
     return ($json -replace $deploymentReferencePattern, "`$1'<compiler-selected-api-version>'`$2")
 }
 
-$scenarios = @(
-    @{ Name = 'workgroup'; Dir = 'workgroup-bicep' }
-    @{ Name = 'domain';    Dir = 'domain-bicep' }
+$templates = @(
+    @{ Name = 'workgroup';     Dir = 'workgroup-bicep'; Bicep = 'main.bicep';   Json = 'azuredeploy.json' }
+    @{ Name = 'domain';        Dir = 'domain-bicep';    Bicep = 'main.bicep';   Json = 'azuredeploy.json' }
+    @{ Name = 'cluster';       Dir = 'cluster-bicep';   Bicep = 'main.bicep';   Json = 'azuredeploy.json' }
+    @{ Name = 'cluster-phase1'; Dir = 'cluster-bicep';  Bicep = 'phase1.bicep'; Json = 'phase1.json' }
+    @{ Name = 'cluster-phase2'; Dir = 'cluster-bicep';  Bicep = 'phase2.bicep'; Json = 'phase2.json' }
 )
 
-Describe 'Deploy-to-Azure template drift (azuredeploy.json vs main.bicep)' {
+Describe 'Generated ARM template drift' {
 
     It 'has a bicep builder available (standalone bicep or az bicep)' {
         (Get-BicepBuilder) | Should Not BeNullOrEmpty
     }
 
-    foreach ($s in $scenarios) {
-        Context "$($s.Name)-bicep" {
-            $dir       = $s.Dir
-            $committedPath = Join-Path (Join-Path $root $dir) 'azuredeploy.json'
-            $mainPath      = Join-Path (Join-Path $root $dir) 'main.bicep'
+    foreach ($template in $templates) {
+        Context $template.Name {
+            $dir = $template.Dir
+            $committedPath = Join-Path (Join-Path $root $dir) $template.Json
+            $mainPath = Join-Path (Join-Path $root $dir) $template.Bicep
 
-            It 'recompiles main.bicep and matches the committed azuredeploy.json' {
+            It 'recompiles the Bicep entry point and matches the committed JSON' {
                 $builder = Get-BicepBuilder
                 $builder | Should Not BeNullOrEmpty
 

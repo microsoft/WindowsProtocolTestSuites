@@ -1,9 +1,7 @@
 // Workgroup File Server Test Suite - Main Deployment Template
 // Deploys network infrastructure and workgroup computers (Driver + SUT) in a single deployment
 
-@description('Resource group location. Defaults to the resource group\'s region so the "Deploy to Azure" button deploys where you have quota/capacity (capacity is per-region). deploy.ps1 sets this explicitly from the bicepparam file.')
-@minLength(1)
-param location string = resourceGroup().location
+var location = resourceGroup().location
 
 @description('Environment name prefix')
 @minLength(1)
@@ -19,10 +17,27 @@ param adminUsername string = 'testadmin'
 param adminPassword string
 
 @description('Driver computer VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button; deploy.ps1 uses a compute-optimized size from the bicepparam file. Note: burstable CPU may throttle during long test runs.')
+@allowed([
+  'Standard_B4ms'
+  'Standard_F4as_v6'
+  'Standard_F4s_v2'
+  'Standard_D4s_v5'
+  'Standard_D4as_v5'
+  'Standard_D4s_v6'
+])
 @minLength(1)
 param driverVmSize string = 'Standard_B4ms'
 
 @description('SUT computer VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button; deploy.ps1 uses a compute-optimized size from the bicepparam file.')
+@allowed([
+  'Standard_B4ms'
+  'Standard_B8ms'
+  'Standard_D8ls_v5'
+  'Standard_D8s_v5'
+  'Standard_D8as_v5'
+  'Standard_D8s_v6'
+  'Standard_D8as_v6'
+])
 @minLength(1)
 param sutVmSize string = 'Standard_B8ms'
 
@@ -108,6 +123,9 @@ param sutExternal2Ip string = '192.168.2.11'
 @description('Enable auto-shutdown')
 param enableAutoShutdown bool = true
 
+@description('Run FileServer tests automatically after Driver and SUT configuration completes')
+param enableTestAutoRun bool = true
+
 @description('Auto-shutdown time (HHmm in UTC)')
 @minLength(1)
 param autoShutdownTime string = '2000'
@@ -180,6 +198,7 @@ module computers 'modules/workgroup-computers.bicep' = {
     sutExternal1Ip: sutExternal1Ip
     sutExternal2Ip: sutExternal2Ip
     enableAutoShutdown: enableAutoShutdown
+    enableTestAutoRun: enableTestAutoRun
     autoShutdownTime: autoShutdownTime
     autoShutdownTimeZone: autoShutdownTimeZone
     dscPackageZipUrl: dscPackageZipUrl

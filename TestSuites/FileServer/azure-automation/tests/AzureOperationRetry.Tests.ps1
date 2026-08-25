@@ -67,6 +67,23 @@ Describe 'Azure control-plane retry handling' {
     }
 }
 
+Describe 'Deployment configuration merging' {
+    It 'preserves explicit false and zero values while defaulting absent keys' {
+        $resolved = Resolve-DeploymentConfig -Params @{
+            enableTestAutoRun = $false
+            probePort = 0
+        } -Defaults @{
+            enableTestAutoRun = $true
+            probePort = 59998
+            location = 'West US 2'
+        }
+
+        $resolved.enableTestAutoRun | Should Be $false
+        $resolved.probePort | Should Be 0
+        $resolved.location | Should Be 'West US 2'
+    }
+}
+
 Describe 'Azure subscription context validation' {
     InModuleScope Deploy-Helpers {
         It 'reauthenticates when the cached subscription context has an expired token' {
@@ -142,5 +159,90 @@ Describe 'Azure subscription context validation' {
             $moduleSource.Contains('-Subscription $SubscriptionId') | Should Be $true
             $moduleSource.Contains('-Scope Process') | Should Be $true
         }
+    }
+}
+
+Describe 'Run Command conflict recovery' {
+    BeforeEach {
+        $verifierPath = Join-Path $here '..\shared\scripts\Verify-Deployment.ps1'
+        $tokens = $null
+        $parseErrors = $null
+        $verifierAst = [System.Management.Automation.Language.Parser]::ParseFile(
+            $verifierPath,
+            [ref]$tokens,
+            [ref]$parseErrors)
+        $parseErrors.Count | Should Be 0
+
+        $functionNames = @(
+            'Get-RunCommandRecoveryState',
+            'Register-RunCommandProbeTimeout',
+            'Reset-RunCommandProbeFailure',
+            'Test-RunCommandConflict',
+            'Invoke-RunCommandConflictRecovery'
+        )
+        foreach ($functionName in $functionNames) {
+            $functionAst = $verifierAst.Find(
+                {
+                    param($node)
+                    $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and
+                    $node.Name -eq $functionName
+                },
+                $true)
+            $null -ne $functionAst | Should Be $true
+            . ([scriptblock]::Create($functionAst.Extent.Text))
+        }
+
+        $script:ResourceGroupName = 'test-rg'
+        $script:RunCommandConflictThreshold = 3
+        $script:RunCommandRecoveryDelaySeconds = 300
+        $script:RunCommandRecoveryLimit = 1
+        $script:runCommandRecoveryState = @{}
+        Mock Restart-AzVM { }
+    }
+
+    It 'does not restart for a conflict without a preceding local timeout' {
+        $restarted = Invoke-RunCommandConflictRecovery -VMName 'client01' `
+            -FailureMessage '409 Conflict: execution is in progress' -AllowRestart $true
+
+        $restarted | Should Be $false
+        Assert-MockCalled Restart-AzVM -Times 0 -Scope It
+    }
+
+    It 'restarts once after a timed-out probe has sustained enough conflicts' {
+        Register-RunCommandProbeTimeout -VMName 'client01'
+        $state = Get-RunCommandRecoveryState -VMName 'client01'
+        $state.FirstTimeoutUtc = [datetime]::UtcNow.AddSeconds(-301)
+
+        1..2 | ForEach-Object {
+            Invoke-RunCommandConflictRecovery -VMName 'client01' `
+                -FailureMessage 'Run command extension execution is in progress (409)' `
+                -AllowRestart $true | Should Be $false
+        }
+        Invoke-RunCommandConflictRecovery -VMName 'client01' `
+            -FailureMessage 'Run command extension execution is in progress (409)' `
+            -AllowRestart $true | Should Be $true
+
+        Assert-MockCalled Restart-AzVM -Times 1 -Scope It
+
+        Register-RunCommandProbeTimeout -VMName 'client01'
+        $state.FirstTimeoutUtc = [datetime]::UtcNow.AddSeconds(-301)
+        1..3 | ForEach-Object {
+            Invoke-RunCommandConflictRecovery -VMName 'client01' `
+                -FailureMessage '409 Conflict' -AllowRestart $true | Should Be $false
+        }
+        Assert-MockCalled Restart-AzVM -Times 1 -Scope It
+    }
+
+    It 'never restarts a Linux target automatically' {
+        Register-RunCommandProbeTimeout -VMName 'linux01'
+        $state = Get-RunCommandRecoveryState -VMName 'linux01'
+        $state.FirstTimeoutUtc = [datetime]::UtcNow.AddSeconds(-301)
+
+        1..3 | ForEach-Object {
+            Invoke-RunCommandConflictRecovery -VMName 'linux01' `
+                -FailureMessage '409 Conflict' -AllowRestart $false | Should Be $false
+        }
+
+        Assert-MockCalled Restart-AzVM -Times 0 -Scope It
     }
 }

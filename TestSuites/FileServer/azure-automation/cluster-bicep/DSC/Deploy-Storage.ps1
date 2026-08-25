@@ -3,264 +3,242 @@
 
 <#
 .SYNOPSIS
-    Orchestrator for the Storage Server (Storage01).
-    Applies DSC for features/firewall, creates iSCSI target, reboots to ensure
-    services start cleanly.
+    Deterministic phased deployment for the Cluster Storage server.
 
 .DESCRIPTION
-    Step 0 -> 1: Features + Firewall + iSCSI Target
-      DSC: File-Services, FS-iSCSITarget-Server, firewall, hosts file,
-           password never expires, WinTarget auto-start.
-      Imperative: iSCSI target creation (virtual disks + target mapping).
-      -> Deferred reboot (always reboot to ensure services start cleanly)
-
-    Step 1 -> 2: Post-Reboot Verification
-      Verify WinTarget service is running.
-      -> Finish (signal file written)
-
-    Storage01 is a workgroup machine -- no domain join, no multi-NIC.
-
-.PARAMETER WorkingPath
-    Path to the Cluster-Package root folder.
-
-.EXAMPLE
-    .\Deploy-Storage.ps1
+    Phase 0 installs disruptive file/iSCSI target features, coalesces an
+    optional hostname change, and persists one planned reboot. Phase 1 proves
+    that reboot, applies non-disruptive convergence, repairs the target and
+    exact four-LUN layout, then publishes verified Storage readiness.
 #>
 
+[CmdletBinding()]
 param(
     [string]$WorkingPath = (Split-Path $PSScriptRoot -Parent)
 )
 
 $ErrorActionPreference = 'Stop'
-$dscFolder    = $PSScriptRoot
-$scriptsPath  = "$dscFolder\Scripts"
-$mofFolder    = "$dscFolder\MOF\Storage"
-$logFile      = "$dscFolder\Deploy-Storage.log"
+$dscFolder = $PSScriptRoot
+$scriptsPath = Join-Path $dscFolder 'Scripts'
+$featureMofFolder = Join-Path $dscFolder 'MOF\Storage-Features'
+$convergenceMofFolder = Join-Path $dscFolder 'MOF\Storage'
+$logFile = Join-Path $dscFolder 'Deploy-Storage.log'
+$heartbeatFile = Join-Path $dscFolder 'Deploy-Storage.heartbeat.json'
+$configFile = Join-Path $WorkingPath 'Config.json'
+$phaseRegistryName = 'StorageDeployPhase'
+$signalFile = Join-Path $dscFolder 'Deploy-Storage.Completed.signal'
+$signalPattern = '^STORAGE READY; SchemaVersion=1\.0;'
 
 $env:Path += ";$scriptsPath"
 Push-Location $scriptsPath
+Start-Transcript -Path $logFile -Append -Force | Out-Null
+$transcriptStopped = $false
 
-Start-Transcript -Path $logFile -Append -Force
-.\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
-.\Write-Info.ps1 "  Storage (Storage01) -- DSC + Imperative Deployment       " -ForegroundColor Cyan
-.\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
-.\Write-Info.ps1 "WorkingPath : $WorkingPath" -ForegroundColor DarkGray
-.\Write-Info.ps1 "DSCFolder   : $dscFolder"  -ForegroundColor DarkGray
-.\Write-Info.ps1 ""
-
-# ===========================================================================
-# Pre-flight validation
-# ===========================================================================
-$configFile = "$WorkingPath\Config.json"
-$cfg = $null
-try {
-    $cfg = Get-Content -Path $configFile -Raw -ErrorAction Stop | ConvertFrom-Json
-} catch {
-    .\Write-Error.ps1 "[FAIL] Could not load Config.json: $($_.Exception.Message)"
-    Pop-Location; Stop-Transcript; throw
-}
-$validateScript = "$scriptsPath\Validate-ConfigFile.ps1"
-if (Test-Path $validateScript) {
-    try {
-        & $validateScript -ConfigPath $configFile
-        .\Write-Info.ps1 "[OK] Config.json validation passed" -ForegroundColor Green
-    }
-    catch {
-        .\Write-Error.ps1 "[FAIL] Config.json validation failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
+function Stop-StorageDeploymentTranscript {
+    if (-not $transcriptStopped) {
+        $script:transcriptStopped = $true
+        Stop-Transcript | Out-Null
+        Pop-Location
     }
 }
 
-# ===========================================================================
-# Reboot circuit breaker + Step tracking
-# ===========================================================================
-$rebootRegPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
-$rebootRegName = 'RebootCount'
-$maxRebootCount = 3
-
-function Get-RebootCount {
-    $val = Get-ItemProperty -Path $rebootRegPath -Name $rebootRegName -ErrorAction SilentlyContinue
-    if ($val) { return [int]$val.$rebootRegName } else { return 0 }
-}
-function Set-RebootCount {
-    param([int]$Count)
-    if (-not (Test-Path $rebootRegPath)) { New-Item -Path $rebootRegPath -Force | Out-Null }
-    Set-ItemProperty -Path $rebootRegPath -Name $rebootRegName -Value $Count -Type DWord -Force
-}
-
-$stepRegName = 'DeployStep'
-function Get-DeployStep {
-    $val = Get-ItemProperty -Path $rebootRegPath -Name $stepRegName -ErrorAction SilentlyContinue
-    if ($val) { return [int]$val.$stepRegName } else { return 0 }
-}
-function Set-DeployStep {
-    param([int]$Step)
-    if (-not (Test-Path $rebootRegPath)) { New-Item -Path $rebootRegPath -Force | Out-Null }
-    Set-ItemProperty -Path $rebootRegPath -Name $stepRegName -Value $Step -Type DWord -Force
-}
-
-$currentStep = Get-DeployStep
-.\Write-Info.ps1 "Current deploy step: $currentStep" -ForegroundColor DarkGray
-
-. "$dscFolder\Deploy-CommonHelpers.ps1"
-
-$signalFile = "$dscFolder\Deploy-Storage.Completed.signal"
-$targetName = if ($cfg.Machines.Storage.iSCSITargetName) {
-    $cfg.Machines.Storage.iSCSITargetName
-} else { 'ClusterTarget' }
-
-function Test-RequiredStorageReadyState {
-    $service = Get-Service WinTarget -ErrorAction SilentlyContinue
-    if ($null -eq $service -or $service.Status -ne 'Running') {
-        return $false
+function Test-InstalledStorageFeatures {
+    foreach ($featureName in @('File-Services', 'FS-iSCSITarget-Server')) {
+        $feature = Get-WindowsFeature -Name $featureName -ErrorAction SilentlyContinue
+        if ($null -eq $feature -or $feature.InstallState -ne 'Installed') {
+            return $false
+        }
     }
-
-    $target = Get-IscsiServerTarget -TargetName $targetName -ErrorAction SilentlyContinue
-    if ($null -eq $target -or $null -eq $target.LunMappings -or $target.LunMappings.Count -lt 4) {
-        return $false
-    }
-
     return $true
 }
 
-if ((Test-Path $signalFile) -and (Test-RequiredStorageReadyState)) {
-    .\Write-Info.ps1 "[OK] Storage deployment already completed (signal file exists)." -ForegroundColor Green
-    Remove-ResumeTask
-    Pop-Location; Stop-Transcript; return
-}
-if (Test-Path $signalFile) {
-    .\Write-Info.ps1 "[WARN] Removing stale Storage completion signal because required state is incomplete." -ForegroundColor Yellow
-    Remove-Item -LiteralPath $signalFile -Force
+function Test-RequiredStorageFeatureState {
+    $marker = Get-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' `
+        -Name 'StorageFeatureBundleAttempted' -ErrorAction SilentlyContinue
+    return ($null -ne $marker -and (Test-InstalledStorageFeatures))
 }
 
-$stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-
-# ===========================================================================
-# Pre-check: Validate hostname
-# ===========================================================================
-if (Test-Path $configFile) {
-    try {
-        $cfg = Get-Content -Path $configFile -Raw | ConvertFrom-Json
-        $expectedName = $cfg.Machines.Storage.ComputerName
-        if (-not [string]::IsNullOrWhiteSpace($expectedName) -and $env:COMPUTERNAME -ne $expectedName) {
-            $currentRebootCount = Get-RebootCount
-            if ($currentRebootCount -ge $maxRebootCount) {
-                .\Write-Info.ps1 "[WARN] Reboot circuit breaker triggered. Skipping rename." -ForegroundColor Red
-            } else {
-                Set-RebootCount -Count ($currentRebootCount + 1)
-                .\Write-Info.ps1 "Renaming computer from $env:COMPUTERNAME to $expectedName..." -ForegroundColor Yellow
-                Rename-Computer -NewName $expectedName -Force
-
-                Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Storage.ps1" `
-                    -WorkingPath $WorkingPath -DscFolder $dscFolder
-
-                Pop-Location; Stop-Transcript; return
-            }
-        }
-    } catch {
-        .\Write-Info.ps1 "[WARN] Could not validate hostname: $($_.Exception.Message)" -ForegroundColor Yellow
+function Test-RequiredStorageConvergenceState {
+    if (-not (Test-RequiredStorageFeatureState)) { return $false }
+    $service = Get-CimInstance Win32_Service -Filter "Name='WinTarget'" `
+        -ErrorAction SilentlyContinue
+    if ($null -eq $service -or $service.StartMode -ne 'Auto' -or
+        $service.State -ne 'Running') {
+        return $false
     }
-}
-
-# ===========================================================================
-# Step 0 -> 1: DSC (features + firewall) + iSCSI Target Creation
-# ===========================================================================
-if ($currentStep -lt 1) {
-    .\Write-Info.ps1 "---- Phase 1a: DSC Configuration (features + baseline) ----" -ForegroundColor Yellow
-    $phase1 = [System.Diagnostics.Stopwatch]::StartNew()
-
+    $enabledFirewall = Get-NetFirewallProfile -ErrorAction SilentlyContinue |
+        Where-Object { $_.Enabled -eq $true }
+    if (@($enabledFirewall).Count -gt 0) { return $false }
     try {
-        . "$dscFolder\Storage-Configuration.ps1"
-        .\Write-Info.ps1 "Compiling Storage DSC configuration..." -ForegroundColor Cyan
-        StorageConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
-        .\Write-Info.ps1 "Applying Storage DSC configuration..." -ForegroundColor Yellow
-        Invoke-VerifiedDscConfiguration -Path $mofFolder `
-            -OperationName 'Cluster Storage initial DSC' | Out-Null
-        .\Write-Info.ps1 "[OK] DSC applied in $([math]::Round($phase1.Elapsed.TotalSeconds))s" -ForegroundColor Green
+        return [bool](Test-DscConfiguration -Path $convergenceMofFolder -ErrorAction Stop)
     }
     catch {
-        .\Write-Error.ps1 "[FAIL] DSC failed: $($_.Exception.Message)"
-        .\Write-Info.ps1 "Continuing with imperative steps..." -ForegroundColor Yellow
+        return $false
     }
-    $phase1.Stop()
+}
 
-    # Imperative: Create iSCSI target
-    .\Write-Info.ps1 "---- Phase 1b: Imperative (iSCSI Target Creation) ----" -ForegroundColor Yellow
-    try {
-        & "$dscFolder\Invoke-StorageImperativeSteps.ps1" -Step 1 -WorkingPath $WorkingPath
-        .\Write-Info.ps1 "[OK] iSCSI target created." -ForegroundColor Green
-    }
-    catch {
-        .\Write-Error.ps1 "[FAIL] iSCSI target creation failed: $($_.Exception.Message)"
-        Pop-Location; Stop-Transcript; return
-    }
+function Test-RequiredStorageReadyState {
+    $output = @(& (Join-Path $scriptsPath 'Test-StorageReadiness.ps1') `
+        -ConfigureFile $configFile *>&1)
+    $lastResult = Get-LastMeaningfulDeploymentOutput -Output $output
+    return (Test-DeploymentSuccessValue -Value $lastResult)
+}
 
-    # Always reboot to ensure WinTarget service starts cleanly
-    Set-DeployStep -Step 1
-    Set-RebootCount -Count ((Get-RebootCount) + 1)
-    .\Write-Info.ps1 "Scheduling reboot to ensure services start cleanly..." -ForegroundColor Yellow
-    Register-DeferredRebootAndResume -DeployScript "$dscFolder\Deploy-Storage.ps1" `
+.\Write-Info.ps1 '===========================================================' -ForegroundColor Cyan
+.\Write-Info.ps1 '  Storage -- Deterministic Phased Deployment               ' -ForegroundColor Cyan
+.\Write-Info.ps1 '===========================================================' -ForegroundColor Cyan
+
+. "$dscFolder\Deploy-CommonHelpers.ps1"
+
+function Register-StoragePlannedReboot {
+    .\Write-Info.ps1 'Scheduling the single Storage feature/hostname reboot.' `
+        -ForegroundColor Yellow
+    Register-DeferredRebootAndResume `
+        -DeployScript (Join-Path $dscFolder 'Deploy-Storage.ps1') `
         -WorkingPath $WorkingPath -DscFolder $dscFolder
-
-    Pop-Location; Stop-Transcript; return
 }
 
-# ===========================================================================
-# Step 1 -> 2: Post-Reboot Verification
-# ===========================================================================
-if ($currentStep -eq 1) {
-    Start-Sleep -Seconds 10
-    .\Write-Info.ps1 "---- Phase 2: Post-Reboot Verification ----" -ForegroundColor Yellow
+try {
+    if (-not (Test-Path -LiteralPath $configFile -PathType Leaf)) {
+        throw "Config.json was not found at '$configFile'."
+    }
+    $config = Get-Content -LiteralPath $configFile -Raw -ErrorAction Stop |
+        ConvertFrom-Json -ErrorAction Stop
+    & (Join-Path $scriptsPath 'Validate-ConfigFile.ps1') -ConfigPath $configFile
 
-    # Verify WinTarget service is running
-    $winTarget = Get-Service WinTarget -ErrorAction SilentlyContinue
-    if ($null -eq $winTarget) {
-        throw 'WinTarget service is not installed.'
-    }
-    if ($winTarget.Status -ne 'Running') {
-        .\Write-Info.ps1 "Starting WinTarget service..." -ForegroundColor Yellow
-        Start-Service WinTarget -ErrorAction Stop
-        Start-Sleep -Seconds 5
-    }
-    .\Write-Info.ps1 "[OK] WinTarget service status: $((Get-Service WinTarget).Status)" -ForegroundColor Green
-
-    # Re-apply DSC to catch drift
-    try {
-        . "$dscFolder\Storage-Configuration.ps1"
-        StorageConfiguration -ConfigFilePath $configFile -OutputPath $mofFolder
-        Invoke-VerifiedDscConfiguration -Path $mofFolder `
-            -OperationName 'Cluster Storage post-reboot DSC' | Out-Null
-        .\Write-Info.ps1 "[OK] DSC re-applied post-reboot." -ForegroundColor Green
-    }
-    catch {
-        .\Write-Info.ps1 "[WARN] DSC re-apply had issues: $($_.Exception.Message)" -ForegroundColor Yellow
+    $expectedName = "$($config.Machines.Storage.ComputerName)"
+    if ([string]::IsNullOrWhiteSpace($expectedName)) {
+        throw 'Config.json does not define the Storage computer name.'
     }
 
-    # Run storage status check if available
-    $checkScript = "$scriptsPath\Check-StorageStatus.ps1"
-    if (Test-Path $checkScript) {
-        try { & $checkScript } catch { .\Write-Info.ps1 "[WARN] Storage status check: $($_.Exception.Message)" -ForegroundColor Yellow }
+    $staleReboot = Get-ScheduledTask -TaskName 'PostDeployReboot' `
+        -ErrorAction SilentlyContinue
+    if ($null -ne $staleReboot) {
+        Unregister-ScheduledTask -TaskName 'PostDeployReboot' -Confirm:$false
     }
 
-    if (Test-RequiredStorageReadyState) {
-        Set-DeployStep -Step 2
-        Set-RebootCount -Count 0
-        "DEPLOY FINISHED $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" | Out-File -FilePath $signalFile -Force
-        .\Write-Info.ps1 "[OK] Signal file written: $signalFile" -ForegroundColor Green
+    if ((Test-VerifiedDeploymentSignal -Path $signalFile `
+            -ExpectedContentPattern $signalPattern) -and
+        (Test-RequiredStorageReadyState)) {
+        Set-DeploymentPhase -Name $phaseRegistryName -Phase 2
         Remove-ResumeTask
-    } else {
-        Set-DeployStep -Step 1
-        throw "Storage postconditions failed for target '$targetName'."
+        Remove-Item -LiteralPath $heartbeatFile -Force -ErrorAction SilentlyContinue
+        .\Write-Info.ps1 '[OK] Storage deployment remains complete and ready.' `
+            -ForegroundColor Green
+        return
     }
 
-    $cleanupScript = "$scriptsPath\RestartAndRunFinish.ps1"
-    if (Test-Path $cleanupScript) { & $cleanupScript }
+    if (Test-Path -LiteralPath $signalFile -PathType Leaf) {
+        .\Write-Info.ps1 '[WARN] Removing stale or unverifiable Storage signal.' `
+            -ForegroundColor Yellow
+        Remove-Item -LiteralPath $signalFile -Force
+    }
 
-    $stopwatch.Stop()
-    .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
-    .\Write-Info.ps1 "  Storage Deployment Complete ($([math]::Round($stopwatch.Elapsed.TotalMinutes, 1)) min)" -ForegroundColor Cyan
-    .\Write-Info.ps1 "===========================================================" -ForegroundColor Cyan
+    $currentPhase = Get-DeploymentPhase -Name $phaseRegistryName
+    $oldDeployStep = [int](Get-DeploymentRegistryValue -Name 'DeployStep' -DefaultValue 0)
+    if ($currentPhase -eq 0 -and $oldDeployStep -ge 1 -and
+        (Test-InstalledStorageFeatures)) {
+        Set-DeploymentRegistryValue -Name 'StorageFeatureBundleAttempted' `
+            -Value 1 -Type DWord
+        Set-DeploymentPhase -Name $phaseRegistryName -Phase 1
+        $currentPhase = 1
+        .\Write-Info.ps1 (
+            "[OK] Migrated legacy Storage DeployStep $oldDeployStep to deterministic Phase 1."
+        ) -ForegroundColor Green
+        if (Test-PendingSystemReboot) {
+            Set-DeploymentRebootPending -Role 'Storage' -MaximumRebootCount 1 | Out-Null
+            Register-StoragePlannedReboot
+            return
+        }
+        Set-DeploymentRegistryValue -Name 'StorageRebootPending' -Value 0 -Type DWord
+    }
+
+    if ($currentPhase -ge 2 -and -not (Test-VerifiedDeploymentSignal -Path $signalFile -ExpectedContentPattern $signalPattern)) {
+        Set-DeploymentPhase -Name $phaseRegistryName -Phase 1
+        $currentPhase = 1
+        .\Write-Info.ps1 (
+            '[WARN] Storage Phase 2 lacked a valid signal; reset to repair Phase 1.'
+        ) -ForegroundColor Yellow
+    }
+
+    $stateNames = Get-DeploymentRoleStateNames -Role 'Storage'
+    $rebootPending = [int](Get-DeploymentRegistryValue `
+        -Name $stateNames.RebootPendingName -DefaultValue 0)
+    if ($currentPhase -ge 1 -and $rebootPending -eq 1) {
+        Confirm-DeploymentReboot -Role 'Storage' | Out-Null
+        .\Write-Info.ps1 '[OK] Storage feature/hostname reboot was proven.' `
+            -ForegroundColor Green
+    }
+
+    if ($currentPhase -eq 0) {
+        if ($env:COMPUTERNAME -ne $expectedName) {
+            Rename-Computer -NewName $expectedName -Force -ErrorAction Stop
+            .\Write-Info.ps1 (
+                "Storage hostname change to '$expectedName' will complete at the planned reboot."
+            ) -ForegroundColor Yellow
+        }
+
+        . (Join-Path $dscFolder 'Storage-FeatureConfiguration.ps1')
+        StorageFeatureConfiguration -OutputPath $featureMofFolder
+        Invoke-VerifiedDscConfiguration -Path $featureMofFolder `
+            -OperationName 'Storage feature configuration' `
+            -PhaseName 'StorageFeatures' -HeartbeatPath $heartbeatFile `
+            -Postcondition { Test-RequiredStorageFeatureState } | Out-Null
+
+        Set-DeploymentRebootPending -Role 'Storage' -MaximumRebootCount 1 | Out-Null
+        Set-DeploymentPhase -Name $phaseRegistryName -Phase 1
+        Register-StoragePlannedReboot
+        return
+    }
+
+    if ($env:COMPUTERNAME -ne $expectedName) {
+        throw "Storage reboot completed without applying hostname '$expectedName'."
+    }
+    if (Test-PendingSystemReboot) {
+        throw 'An unexpected reboot remains pending before Storage convergence.'
+    }
+
+    . (Join-Path $dscFolder 'Storage-Configuration.ps1')
+    StorageConfiguration -ConfigFilePath $configFile `
+        -OutputPath $convergenceMofFolder
+    Invoke-VerifiedDscConfiguration -Path $convergenceMofFolder `
+        -OperationName 'Storage convergence configuration' `
+        -PhaseName 'StorageConvergence' -HeartbeatPath $heartbeatFile `
+        -Postcondition { Test-RequiredStorageConvergenceState } | Out-Null
+
+    $imperativeOutput = @(& (Join-Path $dscFolder 'Invoke-StorageImperativeSteps.ps1') `
+        -WorkingPath $WorkingPath -ConfigureFile $configFile `
+        -HeartbeatPath $heartbeatFile -NoTranscript *>&1)
+    $imperativeOutput | ForEach-Object { .\Write-Info.ps1 "$_" }
+    Assert-DeploymentChildResult -Output $imperativeOutput `
+        -Operation 'Storage iSCSI target convergence' -RequireTrueResult | Out-Null
+
+    if (-not (Test-RequiredStorageReadyState)) {
+        throw 'Storage readiness regressed after imperative convergence.'
+    }
+    if (Test-PendingSystemReboot) {
+        throw 'Storage convergence requested an unexpected second normal reboot.'
+    }
+
+    $signalContent = "STORAGE READY; SchemaVersion=1.0; TimestampUtc=$((Get-Date).ToUniversalTime().ToString('o'))"
+    Write-VerifiedDeploymentSignal -Path $signalFile -Content $signalContent
+    if (-not (Test-VerifiedDeploymentSignal -Path $signalFile `
+            -ExpectedContentPattern $signalPattern)) {
+        throw 'Storage readiness signal verification failed after writing.'
+    }
+    Set-DeploymentPhase -Name $phaseRegistryName -Phase 2
+    Remove-ResumeTask
+    Remove-Item -LiteralPath $heartbeatFile -Force -ErrorAction SilentlyContinue
+    .\Write-Info.ps1 '[OK] Storage deployment completed with verified readiness.' `
+        -ForegroundColor Green
 }
-
-Pop-Location
-Stop-Transcript
+catch {
+    $failureMessage = "Storage deployment failed: $($_.Exception.Message)"
+    .\Write-Error.ps1 $failureMessage
+    Stop-DeploymentForTerminalFailure -Message $failureMessage `
+        -Phase 'Storage' -Operation 'Deterministic Storage deployment' `
+        -HeartbeatPath $heartbeatFile
+}
+finally {
+    Stop-StorageDeploymentTranscript
+}

@@ -1,0 +1,1617 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.44.1.10279",
+      "templateHash": "13353851089556526694"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "West US 2",
+      "metadata": {
+        "description": "Resource group location"
+      }
+    },
+    "environmentPrefix": {
+      "type": "string",
+      "defaultValue": "fstest-cluster",
+      "metadata": {
+        "description": "Environment name prefix"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "defaultValue": "testadmin",
+      "metadata": {
+        "description": "Admin username for VMs"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Admin password for VMs"
+      }
+    },
+    "clusterNodeVmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D8s_v5",
+      "metadata": {
+        "description": "Cluster node VM size"
+      }
+    },
+    "driverVmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D4s_v5",
+      "metadata": {
+        "description": "Driver computer VM size"
+      }
+    },
+    "clusterNodeOsVersion": {
+      "type": "string",
+      "defaultValue": "2025-datacenter-azure-edition",
+      "allowedValues": [
+        "2019-datacenter-gensecond",
+        "2022-datacenter-g2",
+        "2025-datacenter-azure-edition"
+      ],
+      "metadata": {
+        "description": "Cluster nodes OS version"
+      }
+    },
+    "driverOsType": {
+      "type": "string",
+      "defaultValue": "Windows",
+      "allowedValues": [
+        "Windows",
+        "Linux"
+      ],
+      "metadata": {
+        "description": "Driver computer OS type"
+      }
+    },
+    "driverOsVersion": {
+      "type": "string",
+      "defaultValue": "win11-25h2-ent",
+      "allowedValues": [
+        "win11-25h2-pro",
+        "win11-25h2-ent",
+        "win11-24h2-ent",
+        "win11-23h2-pro",
+        "win11-23h2-ent",
+        "win10-22h2-pro",
+        "win10-22h2-ent"
+      ],
+      "metadata": {
+        "description": "Driver computer Windows OS version"
+      }
+    },
+    "driverLinuxOsVersion": {
+      "type": "string",
+      "defaultValue": "server",
+      "allowedValues": [
+        "server",
+        "server-arm64"
+      ],
+      "metadata": {
+        "description": "Driver computer Linux OS version (Ubuntu SKU)"
+      }
+    },
+    "driverCustomImageId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Custom image resource ID for driver VM (overrides marketplace image when set)"
+      }
+    },
+    "clusterNodeCustomImageId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Custom image resource ID for cluster node VMs (overrides marketplace image when set). Must be a Windows image."
+      }
+    },
+    "external1SubnetId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "External1 subnet ID from Phase 1"
+      }
+    },
+    "external2SubnetId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "External2 subnet ID from Phase 1"
+      }
+    },
+    "node01External1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.11",
+      "metadata": {
+        "description": "Node01 External1 IP address"
+      }
+    },
+    "node01External2Ip": {
+      "type": "string",
+      "defaultValue": "192.168.2.11",
+      "metadata": {
+        "description": "Node01 External2 IP address"
+      }
+    },
+    "node02External1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.12",
+      "metadata": {
+        "description": "Node02 External1 IP address"
+      }
+    },
+    "node02External2Ip": {
+      "type": "string",
+      "defaultValue": "192.168.2.12",
+      "metadata": {
+        "description": "Node02 External2 IP address"
+      }
+    },
+    "driverExternal1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.111",
+      "metadata": {
+        "description": "Driver computer External1 IP address"
+      }
+    },
+    "driverExternal2Ip": {
+      "type": "string",
+      "defaultValue": "192.168.2.111",
+      "metadata": {
+        "description": "Driver computer External2 IP address"
+      }
+    },
+    "dcExternal1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.10",
+      "metadata": {
+        "description": "Domain Controller External1 IP address from Phase 1"
+      }
+    },
+    "clusterExternal1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.100",
+      "metadata": {
+        "description": "Cluster core virtual IP on External1"
+      }
+    },
+    "clusterExternal2Ip": {
+      "type": "string",
+      "defaultValue": "192.168.2.100",
+      "metadata": {
+        "description": "Cluster core virtual IP on External2"
+      }
+    },
+    "generalFSExternal1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.200",
+      "metadata": {
+        "description": "GeneralFS virtual IP on External1"
+      }
+    },
+    "generalFSExternal2Ip": {
+      "type": "string",
+      "defaultValue": "192.168.2.200",
+      "metadata": {
+        "description": "GeneralFS virtual IP on External2"
+      }
+    },
+    "clusterExternal1ProbePort": {
+      "type": "int",
+      "defaultValue": 59998,
+      "metadata": {
+        "description": "Cluster core External1 health probe port"
+      }
+    },
+    "clusterExternal2ProbePort": {
+      "type": "int",
+      "defaultValue": 59999,
+      "metadata": {
+        "description": "Cluster core External2 health probe port"
+      }
+    },
+    "generalFSExternal1ProbePort": {
+      "type": "int",
+      "defaultValue": 60000,
+      "metadata": {
+        "description": "GeneralFS External1 health probe port"
+      }
+    },
+    "generalFSExternal2ProbePort": {
+      "type": "int",
+      "defaultValue": 60001,
+      "metadata": {
+        "description": "GeneralFS External2 health probe port"
+      }
+    },
+    "autoShutdownTime": {
+      "type": "string",
+      "defaultValue": "20:00",
+      "metadata": {
+        "description": "Auto-shutdown time (HH:mm in UTC)"
+      }
+    },
+    "autoShutdownTimeZone": {
+      "type": "string",
+      "defaultValue": "UTC",
+      "metadata": {
+        "description": "Auto-shutdown timezone"
+      }
+    },
+    "enableAutoShutdown": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable auto-shutdown"
+      }
+    },
+    "enableTestAutoRun": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Run FileServer tests automatically after configuration"
+      }
+    },
+    "clusterPackageZipUrl": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "URL to Cluster-Package.zip file in Azure Storage"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('{0}-cluster-ilb-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "external1SubnetId": {
+            "value": "[parameters('external1SubnetId')]"
+          },
+          "external2SubnetId": {
+            "value": "[parameters('external2SubnetId')]"
+          },
+          "clusterExternal1Ip": {
+            "value": "[parameters('clusterExternal1Ip')]"
+          },
+          "clusterExternal2Ip": {
+            "value": "[parameters('clusterExternal2Ip')]"
+          },
+          "generalFSExternal1Ip": {
+            "value": "[parameters('generalFSExternal1Ip')]"
+          },
+          "generalFSExternal2Ip": {
+            "value": "[parameters('generalFSExternal2Ip')]"
+          },
+          "clusterExternal1ProbePort": {
+            "value": "[parameters('clusterExternal1ProbePort')]"
+          },
+          "clusterExternal2ProbePort": {
+            "value": "[parameters('clusterExternal2ProbePort')]"
+          },
+          "generalFSExternal1ProbePort": {
+            "value": "[parameters('generalFSExternal1ProbePort')]"
+          },
+          "generalFSExternal2ProbePort": {
+            "value": "[parameters('generalFSExternal2ProbePort')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.44.1.10279",
+              "templateHash": "17978919926269592059"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix"
+              }
+            },
+            "external1SubnetId": {
+              "type": "string"
+            },
+            "external2SubnetId": {
+              "type": "string"
+            },
+            "clusterExternal1Ip": {
+              "type": "string"
+            },
+            "clusterExternal2Ip": {
+              "type": "string"
+            },
+            "generalFSExternal1Ip": {
+              "type": "string"
+            },
+            "generalFSExternal2Ip": {
+              "type": "string"
+            },
+            "clusterExternal1ProbePort": {
+              "type": "int"
+            },
+            "clusterExternal2ProbePort": {
+              "type": "int"
+            },
+            "generalFSExternal1ProbePort": {
+              "type": "int"
+            },
+            "generalFSExternal2ProbePort": {
+              "type": "int"
+            }
+          },
+          "variables": {
+            "loadBalancerName": "[format('{0}-cluster-ilb', parameters('environmentPrefix'))]",
+            "backendPoolName": "cluster-node-backend",
+            "frontends": [
+              {
+                "name": "cluster-external1-frontend",
+                "subnetId": "[parameters('external1SubnetId')]",
+                "address": "[parameters('clusterExternal1Ip')]",
+                "probeName": "cluster-external1-probe",
+                "probePort": "[parameters('clusterExternal1ProbePort')]",
+                "ruleName": "cluster-external1-rule"
+              },
+              {
+                "name": "cluster-external2-frontend",
+                "subnetId": "[parameters('external2SubnetId')]",
+                "address": "[parameters('clusterExternal2Ip')]",
+                "probeName": "cluster-external2-probe",
+                "probePort": "[parameters('clusterExternal2ProbePort')]",
+                "ruleName": "cluster-external2-rule"
+              },
+              {
+                "name": "generalfs-external1-frontend",
+                "subnetId": "[parameters('external1SubnetId')]",
+                "address": "[parameters('generalFSExternal1Ip')]",
+                "probeName": "generalfs-external1-probe",
+                "probePort": "[parameters('generalFSExternal1ProbePort')]",
+                "ruleName": "generalfs-external1-rule"
+              },
+              {
+                "name": "generalfs-external2-frontend",
+                "subnetId": "[parameters('external2SubnetId')]",
+                "address": "[parameters('generalFSExternal2Ip')]",
+                "probeName": "generalfs-external2-probe",
+                "probePort": "[parameters('generalFSExternal2ProbePort')]",
+                "ruleName": "generalfs-external2-rule"
+              }
+            ]
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/loadBalancers",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('loadBalancerName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+              },
+              "properties": {
+                "copy": [
+                  {
+                    "name": "frontendIPConfigurations",
+                    "count": "[length(variables('frontends'))]",
+                    "input": {
+                      "name": "[variables('frontends')[copyIndex('frontendIPConfigurations')].name]",
+                      "properties": {
+                        "privateIPAllocationMethod": "Static",
+                        "privateIPAddress": "[variables('frontends')[copyIndex('frontendIPConfigurations')].address]",
+                        "privateIPAddressVersion": "IPv4",
+                        "subnet": {
+                          "id": "[variables('frontends')[copyIndex('frontendIPConfigurations')].subnetId]"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "name": "probes",
+                    "count": "[length(variables('frontends'))]",
+                    "input": {
+                      "name": "[variables('frontends')[copyIndex('probes')].probeName]",
+                      "properties": {
+                        "protocol": "Tcp",
+                        "port": "[variables('frontends')[copyIndex('probes')].probePort]",
+                        "intervalInSeconds": 5,
+                        "numberOfProbes": 2
+                      }
+                    }
+                  },
+                  {
+                    "name": "loadBalancingRules",
+                    "count": "[length(variables('frontends'))]",
+                    "input": {
+                      "name": "[variables('frontends')[copyIndex('loadBalancingRules')].ruleName]",
+                      "properties": {
+                        "protocol": "All",
+                        "frontendPort": 0,
+                        "backendPort": 0,
+                        "enableFloatingIP": true,
+                        "idleTimeoutInMinutes": 15,
+                        "loadDistribution": "Default",
+                        "disableOutboundSnat": true,
+                        "frontendIPConfiguration": {
+                          "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', variables('loadBalancerName'), variables('frontends')[copyIndex('loadBalancingRules')].name)]"
+                        },
+                        "backendAddressPool": {
+                          "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), variables('backendPoolName'))]"
+                        },
+                        "probe": {
+                          "id": "[resourceId('Microsoft.Network/loadBalancers/probes', variables('loadBalancerName'), variables('frontends')[copyIndex('loadBalancingRules')].probeName)]"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "backendAddressPools": [
+                  {
+                    "name": "[variables('backendPoolName')]"
+                  }
+                ]
+              }
+            }
+          ],
+          "outputs": {
+            "loadBalancerId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/loadBalancers', variables('loadBalancerName'))]"
+            },
+            "backendPoolId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('loadBalancerName'), variables('backendPoolName'))]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('{0}-cluster-nodes-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "clusterNodeVmSize": {
+            "value": "[parameters('clusterNodeVmSize')]"
+          },
+          "clusterNodeOsVersion": {
+            "value": "[parameters('clusterNodeOsVersion')]"
+          },
+          "clusterNodeCustomImageId": {
+            "value": "[parameters('clusterNodeCustomImageId')]"
+          },
+          "external1SubnetId": {
+            "value": "[parameters('external1SubnetId')]"
+          },
+          "external2SubnetId": {
+            "value": "[parameters('external2SubnetId')]"
+          },
+          "node01External1Ip": {
+            "value": "[parameters('node01External1Ip')]"
+          },
+          "node01External2Ip": {
+            "value": "[parameters('node01External2Ip')]"
+          },
+          "node02External1Ip": {
+            "value": "[parameters('node02External1Ip')]"
+          },
+          "node02External2Ip": {
+            "value": "[parameters('node02External2Ip')]"
+          },
+          "dcExternal1Ip": {
+            "value": "[parameters('dcExternal1Ip')]"
+          },
+          "backendPoolId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-cluster-ilb-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.backendPoolId.value]"
+          },
+          "enableAutoShutdown": {
+            "value": "[parameters('enableAutoShutdown')]"
+          },
+          "autoShutdownTime": {
+            "value": "[parameters('autoShutdownTime')]"
+          },
+          "autoShutdownTimeZone": {
+            "value": "[parameters('autoShutdownTimeZone')]"
+          },
+          "clusterPackageZipUrl": {
+            "value": "[parameters('clusterPackageZipUrl')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.44.1.10279",
+              "templateHash": "3968443185743205169"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "West US 2",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix"
+              }
+            },
+            "adminUsername": {
+              "type": "string",
+              "defaultValue": "testadmin",
+              "metadata": {
+                "description": "Admin username for VMs"
+              }
+            },
+            "adminPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Admin password for VMs"
+              }
+            },
+            "clusterNodeVmSize": {
+              "type": "string",
+              "defaultValue": "Standard_D8s_v5",
+              "metadata": {
+                "description": "Cluster node VM size"
+              }
+            },
+            "clusterNodeOsVersion": {
+              "type": "string",
+              "defaultValue": "2025-datacenter-azure-edition",
+              "allowedValues": [
+                "2019-datacenter-gensecond",
+                "2022-datacenter-g2",
+                "2025-datacenter-azure-edition"
+              ],
+              "metadata": {
+                "description": "Cluster nodes OS version"
+              }
+            },
+            "clusterNodeCustomImageId": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "Custom image resource ID for cluster node VMs (overrides marketplace image when set). Must be a Windows image."
+              }
+            },
+            "external1SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External1 subnet ID"
+              }
+            },
+            "external2SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External2 subnet ID"
+              }
+            },
+            "node01External1Ip": {
+              "type": "string",
+              "defaultValue": "192.168.1.11",
+              "metadata": {
+                "description": "Node01 External1 IP address"
+              }
+            },
+            "node01External2Ip": {
+              "type": "string",
+              "defaultValue": "192.168.2.11",
+              "metadata": {
+                "description": "Node01 External2 IP address"
+              }
+            },
+            "node02External1Ip": {
+              "type": "string",
+              "defaultValue": "192.168.1.12",
+              "metadata": {
+                "description": "Node02 External1 IP address"
+              }
+            },
+            "node02External2Ip": {
+              "type": "string",
+              "defaultValue": "192.168.2.12",
+              "metadata": {
+                "description": "Node02 External2 IP address"
+              }
+            },
+            "dcExternal1Ip": {
+              "type": "string",
+              "defaultValue": "192.168.1.10",
+              "metadata": {
+                "description": "Domain Controller External1 IP address"
+              }
+            },
+            "backendPoolId": {
+              "type": "string",
+              "metadata": {
+                "description": "Standard Load Balancer backend pool resource ID"
+              }
+            },
+            "enableAutoShutdown": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Enable auto-shutdown"
+              }
+            },
+            "autoShutdownTime": {
+              "type": "string",
+              "defaultValue": "20:00",
+              "metadata": {
+                "description": "Auto-shutdown time (HH:mm in UTC)"
+              }
+            },
+            "autoShutdownTimeZone": {
+              "type": "string",
+              "defaultValue": "UTC",
+              "metadata": {
+                "description": "Auto-shutdown timezone"
+              }
+            },
+            "clusterPackageZipUrl": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "URL to Cluster-Package.zip file in Azure Storage"
+              }
+            }
+          },
+          "variables": {
+            "nodeIsHotpatch": "[contains(parameters('clusterNodeOsVersion'), 'azure-edition')]",
+            "nodeImageRef": "[if(not(empty(parameters('clusterNodeCustomImageId'))), createObject('id', parameters('clusterNodeCustomImageId')), createObject('publisher', 'MicrosoftWindowsServer', 'offer', 'WindowsServer', 'sku', parameters('clusterNodeOsVersion'), 'version', 'latest'))]",
+            "node01VmName": "[format('{0}-node01', parameters('environmentPrefix'))]",
+            "node02VmName": "[format('{0}-node02', parameters('environmentPrefix'))]",
+            "node01Nic1Name": "[format('{0}-nic1', variables('node01VmName'))]",
+            "node01Nic2Name": "[format('{0}-nic2', variables('node01VmName'))]",
+            "node02Nic1Name": "[format('{0}-nic1', variables('node02VmName'))]",
+            "node02Nic2Name": "[format('{0}-nic2', variables('node02VmName'))]",
+            "node01CommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"$stage=''C:\\Temp\\wpts-cluster-node01''; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path ''.\\Cluster-Package.zip'' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\Temp\\wpts-cluster-node01\\cse-bootstrap.ps1'' -Scenario ''cluster'' -Role ''node01'' -PackageName ''Cluster-Package'' -DeployScript ''Deploy-Node01.ps1'' -PasswordBase64 ''{0}'' -PackageAlreadyExtracted; exit $LASTEXITCODE\"', base64(parameters('adminPassword')))]",
+            "node02CommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"$stage=''C:\\Temp\\wpts-cluster-node02''; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path ''.\\Cluster-Package.zip'' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\Temp\\wpts-cluster-node02\\cse-bootstrap.ps1'' -Scenario ''cluster'' -Role ''node02'' -PackageName ''Cluster-Package'' -DeployScript ''Deploy-Node02.ps1'' -PasswordBase64 ''{0}'' -PackageAlreadyExtracted; exit $LASTEXITCODE\"', base64(parameters('adminPassword')))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('node01Nic1Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external1-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('node01External1Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external1SubnetId')]"
+                      },
+                      "loadBalancerBackendAddressPools": [
+                        {
+                          "id": "[parameters('backendPoolId')]"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "enableIPForwarding": false,
+                "dnsSettings": {
+                  "dnsServers": [
+                    "[parameters('dcExternal1Ip')]"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('node01Nic2Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external2-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('node01External2Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external2SubnetId')]"
+                      },
+                      "loadBalancerBackendAddressPools": [
+                        {
+                          "id": "[parameters('backendPoolId')]"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "enableIPForwarding": false,
+                "dnsSettings": {
+                  "dnsServers": [
+                    "[parameters('dcExternal1Ip')]"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('node02Nic1Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external1-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('node02External1Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external1SubnetId')]"
+                      },
+                      "loadBalancerBackendAddressPools": [
+                        {
+                          "id": "[parameters('backendPoolId')]"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "enableIPForwarding": false,
+                "dnsSettings": {
+                  "dnsServers": [
+                    "[parameters('dcExternal1Ip')]"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('node02Nic2Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external2-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('node02External2Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external2SubnetId')]"
+                      },
+                      "loadBalancerBackendAddressPools": [
+                        {
+                          "id": "[parameters('backendPoolId')]"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "enableIPForwarding": false,
+                "dnsSettings": {
+                  "dnsServers": [
+                    "[parameters('dcExternal1Ip')]"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2023-03-01",
+              "name": "[variables('node01VmName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "[parameters('clusterNodeVmSize')]"
+                },
+                "osProfile": {
+                  "computerName": "Node01",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]",
+                  "windowsConfiguration": {
+                    "enableAutomaticUpdates": "[variables('nodeIsHotpatch')]",
+                    "provisionVMAgent": true,
+                    "winRM": {
+                      "listeners": [
+                        {
+                          "protocol": "Http"
+                        }
+                      ]
+                    },
+                    "patchSettings": {
+                      "patchMode": "[if(variables('nodeIsHotpatch'), 'AutomaticByPlatform', 'Manual')]",
+                      "assessmentMode": "ImageDefault"
+                    },
+                    "additionalUnattendContent": [
+                      {
+                        "passName": "OobeSystem",
+                        "componentName": "Microsoft-Windows-Shell-Setup",
+                        "settingName": "AutoLogon",
+                        "content": "[format('<AutoLogon><Username>{0}</Username><Password><Value>{1}</Value><PlainText>true</PlainText></Password><Enabled>true</Enabled></AutoLogon>', parameters('adminUsername'), parameters('adminPassword'))]"
+                      }
+                    ]
+                  }
+                },
+                "storageProfile": {
+                  "imageReference": "[variables('nodeImageRef')]",
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "diskSizeGB": 128,
+                    "managedDisk": {
+                      "storageAccountType": "Premium_LRS"
+                    }
+                  },
+                  "dataDisks": [
+                    {
+                      "createOption": "Empty",
+                      "diskSizeGB": 64,
+                      "lun": 0,
+                      "managedDisk": {
+                        "storageAccountType": "Premium_LRS"
+                      }
+                    }
+                  ]
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('node01Nic1Name'))]",
+                      "properties": {
+                        "primary": true
+                      }
+                    },
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('node01Nic2Name'))]",
+                      "properties": {
+                        "primary": false
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('node01Nic1Name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('node01Nic2Name'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2023-03-01",
+              "name": "[variables('node02VmName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "[parameters('clusterNodeVmSize')]"
+                },
+                "osProfile": {
+                  "computerName": "Node02",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]",
+                  "windowsConfiguration": {
+                    "enableAutomaticUpdates": "[variables('nodeIsHotpatch')]",
+                    "provisionVMAgent": true,
+                    "winRM": {
+                      "listeners": [
+                        {
+                          "protocol": "Http"
+                        }
+                      ]
+                    },
+                    "patchSettings": {
+                      "patchMode": "[if(variables('nodeIsHotpatch'), 'AutomaticByPlatform', 'Manual')]",
+                      "assessmentMode": "ImageDefault"
+                    },
+                    "additionalUnattendContent": [
+                      {
+                        "passName": "OobeSystem",
+                        "componentName": "Microsoft-Windows-Shell-Setup",
+                        "settingName": "AutoLogon",
+                        "content": "[format('<AutoLogon><Username>{0}</Username><Password><Value>{1}</Value><PlainText>true</PlainText></Password><Enabled>true</Enabled></AutoLogon>', parameters('adminUsername'), parameters('adminPassword'))]"
+                      }
+                    ]
+                  }
+                },
+                "storageProfile": {
+                  "imageReference": "[variables('nodeImageRef')]",
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "diskSizeGB": 128,
+                    "managedDisk": {
+                      "storageAccountType": "Premium_LRS"
+                    }
+                  },
+                  "dataDisks": [
+                    {
+                      "createOption": "Empty",
+                      "diskSizeGB": 64,
+                      "lun": 0,
+                      "managedDisk": {
+                        "storageAccountType": "Premium_LRS"
+                      }
+                    }
+                  ]
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('node02Nic1Name'))]",
+                      "properties": {
+                        "primary": true
+                      }
+                    },
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('node02Nic2Name'))]",
+                      "properties": {
+                        "primary": false
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('node02Nic1Name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('node02Nic2Name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('enableAutoShutdown')]",
+              "type": "Microsoft.DevTestLab/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('shutdown-computevm-{0}', variables('node01VmName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', variables('node01VmName'))]",
+                "notificationSettings": {
+                  "status": "Disabled"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('node01VmName'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('enableAutoShutdown')]",
+              "type": "Microsoft.DevTestLab/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('shutdown-computevm-{0}', variables('node02VmName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', variables('node02VmName'))]",
+                "notificationSettings": {
+                  "status": "Disabled"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('node02VmName'))]"
+              ]
+            },
+            {
+              "condition": "[not(empty(parameters('clusterPackageZipUrl')))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('node01VmName'), 'ConfigureClusterNode01')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {},
+                "protectedSettings": {
+                  "fileUris": [
+                    "[parameters('clusterPackageZipUrl')]"
+                  ],
+                  "commandToExecute": "[variables('node01CommandToExecute')]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('node01VmName'))]"
+              ]
+            },
+            {
+              "condition": "[not(empty(parameters('clusterPackageZipUrl')))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('node02VmName'), 'ConfigureClusterNode02')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {},
+                "protectedSettings": {
+                  "fileUris": [
+                    "[parameters('clusterPackageZipUrl')]"
+                  ],
+                  "commandToExecute": "[variables('node02CommandToExecute')]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('node02VmName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "node01VmId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('node01VmName'))]"
+            },
+            "node02VmId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('node02VmName'))]"
+            },
+            "node01VmName": {
+              "type": "string",
+              "value": "[variables('node01VmName')]"
+            },
+            "node02VmName": {
+              "type": "string",
+              "value": "[variables('node02VmName')]"
+            },
+            "node01PrivateIps": {
+              "type": "array",
+              "value": [
+                "[parameters('node01External1Ip')]",
+                "[parameters('node01External2Ip')]"
+              ]
+            },
+            "node02PrivateIps": {
+              "type": "array",
+              "value": [
+                "[parameters('node02External1Ip')]",
+                "[parameters('node02External2Ip')]"
+              ]
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', format('{0}-cluster-ilb-deployment', parameters('environmentPrefix')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('{0}-driver-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "driverVmSize": {
+            "value": "[parameters('driverVmSize')]"
+          },
+          "driverOsType": {
+            "value": "[parameters('driverOsType')]"
+          },
+          "driverOsVersion": {
+            "value": "[parameters('driverOsVersion')]"
+          },
+          "driverLinuxOsVersion": {
+            "value": "[parameters('driverLinuxOsVersion')]"
+          },
+          "driverCustomImageId": {
+            "value": "[parameters('driverCustomImageId')]"
+          },
+          "external1SubnetId": {
+            "value": "[parameters('external1SubnetId')]"
+          },
+          "external2SubnetId": {
+            "value": "[parameters('external2SubnetId')]"
+          },
+          "driverExternal1Ip": {
+            "value": "[parameters('driverExternal1Ip')]"
+          },
+          "driverExternal2Ip": {
+            "value": "[parameters('driverExternal2Ip')]"
+          },
+          "dcExternal1Ip": {
+            "value": "[parameters('dcExternal1Ip')]"
+          },
+          "enableAutoShutdown": {
+            "value": "[parameters('enableAutoShutdown')]"
+          },
+          "enableTestAutoRun": {
+            "value": "[parameters('enableTestAutoRun')]"
+          },
+          "autoShutdownTime": {
+            "value": "[parameters('autoShutdownTime')]"
+          },
+          "autoShutdownTimeZone": {
+            "value": "[parameters('autoShutdownTimeZone')]"
+          },
+          "clusterPackageZipUrl": {
+            "value": "[parameters('clusterPackageZipUrl')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.44.1.10279",
+              "templateHash": "17506502480211208150"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "West US 2",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix"
+              }
+            },
+            "adminUsername": {
+              "type": "string",
+              "defaultValue": "testadmin",
+              "metadata": {
+                "description": "Admin username for VMs"
+              }
+            },
+            "adminPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Admin password for VMs"
+              }
+            },
+            "driverVmSize": {
+              "type": "string",
+              "defaultValue": "Standard_F4as_v6",
+              "metadata": {
+                "description": "Driver computer VM size"
+              }
+            },
+            "driverOsType": {
+              "type": "string",
+              "defaultValue": "Windows",
+              "allowedValues": [
+                "Windows",
+                "Linux"
+              ],
+              "metadata": {
+                "description": "Driver computer OS type"
+              }
+            },
+            "driverOsVersion": {
+              "type": "string",
+              "defaultValue": "win11-25h2-ent",
+              "allowedValues": [
+                "win11-25h2-pro",
+                "win11-25h2-ent",
+                "win11-24h2-ent",
+                "win11-23h2-pro",
+                "win11-23h2-ent",
+                "win10-22h2-pro",
+                "win10-22h2-ent"
+              ],
+              "metadata": {
+                "description": "Driver computer Windows OS version"
+              }
+            },
+            "driverLinuxOsVersion": {
+              "type": "string",
+              "defaultValue": "server",
+              "allowedValues": [
+                "server",
+                "server-arm64"
+              ],
+              "metadata": {
+                "description": "Driver computer Linux OS version (Ubuntu SKU)"
+              }
+            },
+            "driverCustomImageId": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "Custom image resource ID for driver VM (overrides marketplace image when set)"
+              }
+            },
+            "external1SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External1 subnet ID"
+              }
+            },
+            "external2SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External2 subnet ID"
+              }
+            },
+            "driverExternal1Ip": {
+              "type": "string",
+              "defaultValue": "192.168.1.111",
+              "metadata": {
+                "description": "Driver computer External1 IP address"
+              }
+            },
+            "driverExternal2Ip": {
+              "type": "string",
+              "defaultValue": "192.168.2.111",
+              "metadata": {
+                "description": "Driver computer External2 IP address"
+              }
+            },
+            "dcExternal1Ip": {
+              "type": "string",
+              "defaultValue": "192.168.1.10",
+              "metadata": {
+                "description": "Domain Controller External1 IP address"
+              }
+            },
+            "enableAutoShutdown": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Enable auto-shutdown"
+              }
+            },
+            "enableTestAutoRun": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Run FileServer tests automatically after configuration"
+              }
+            },
+            "autoShutdownTime": {
+              "type": "string",
+              "defaultValue": "20:00",
+              "metadata": {
+                "description": "Auto-shutdown time (HH:mm in UTC)"
+              }
+            },
+            "autoShutdownTimeZone": {
+              "type": "string",
+              "defaultValue": "UTC",
+              "metadata": {
+                "description": "Auto-shutdown timezone"
+              }
+            },
+            "clusterPackageZipUrl": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "URL to Cluster-Package.zip file in Azure Storage"
+              }
+            }
+          },
+          "variables": {
+            "$fxv#0": "#!/bin/bash\n# Copyright (c) Microsoft. All rights reserved.\n# Licensed under the MIT license. See LICENSE file in the project root for full license information.\n#\n# Custom Script Extension bootstrap shared by the Linux Driver across scenarios\n# (Workgroup, Domain). The Bicep module loads this file with loadTextContent(),\n# substitutes the __TOKENS__ (same set as cse-bootstrap.ps1), and delivers it\n# base64-encoded via the extension's encrypted protectedSettings 'script'\n# property. The script downloads the package itself (no fileUris), so it never\n# depends on the waagent download directory layout, whose sequence number\n# changes when the extension re-runs.\n\nset -e\nexport DEBIAN_FRONTEND=noninteractive\n\necho 'Starting __SCENARIO__ __ROLE__ setup...'\nstaged_package=\"/opt/__PACKAGE_NAME__.bootstrap.$$\"\nrm -rf \"$staged_package\"\nmkdir -p \"$staged_package\"\n\nif [ '__ROLE__' = 'driver' ]; then\n    echo 'Reconciling any stale Driver test run before replacing the package...'\n    pkill -TERM -f 'Invoke-TestRun|Execute-TestCaseByContext|dotnet vstest|testhost' 2>/dev/null || true\n    sleep 2\n    pkill -KILL -f 'Invoke-TestRun|Execute-TestCaseByContext|dotnet vstest|testhost' 2>/dev/null || true\n    rm -f /test/test.started.signal \\\n        /test/test.finished.signal \\\n        /test/test.run.completed.signal \\\n        /test/test.results.upload.failed.signal\nfi\n\napt-get update -qq\napt-get install -y -qq wget unzip apt-transport-https\n\nif ! command -v pwsh >/dev/null 2>&1; then\n    wget -q https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb\n    dpkg -i /tmp/packages-microsoft-prod.deb\n    rm -f /tmp/packages-microsoft-prod.deb\n    apt-get update -qq\n    apt-get install -y -qq powershell\nfi\n\necho 'Waiting for DNS resolution of __PACKAGE_HOST__ (DNS may still be coming up)...'\ndns=0\nfor i in $(seq 1 60); do\n    if getent hosts '__PACKAGE_HOST__' >/dev/null 2>&1; then\n        dns=1\n        break\n    fi\n    sleep 30\ndone\nif [ $dns -ne 1 ]; then\n    echo 'DNS resolution failed'\n    exit 1\nfi\n\ndl=0\nfor i in $(seq 1 10); do\n    if wget -q '__PACKAGE_URL__' -O '/opt/__PACKAGE_NAME__.zip'; then\n        dl=1\n        break\n    fi\n    sleep 30\ndone\nif [ $dl -ne 1 ]; then\n    echo 'Package download failed'\n    exit 1\nfi\n\nunzip -o '/opt/__PACKAGE_NAME__.zip' -d \"$staged_package\"\nrm -f '/opt/__PACKAGE_NAME__.zip'\nrm -rf '/opt/__PACKAGE_NAME__'\nmv \"$staged_package\" '/opt/__PACKAGE_NAME__'\n\n# A packaged rerun must produce a fresh role signal. Otherwise Deploy-Driver\n# can short-circuit on the previous signal and freshness verification times out.\ndeploy_signal=\"/opt/__PACKAGE_NAME__/DSC/$(basename '__DEPLOY_SCRIPT__' .ps1).Completed.signal\"\nrm -f \"$deploy_signal\"\n\nif [ -f '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' ]; then\n    echo 'Injecting credential into Config.json...'\n    pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' -PasswordBase64 '__PASSWORD_B64__'\nfi\n\nif [ '__ROLE__' = 'driver' ]; then\n    test_execution_script='/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigTestExecution.ps1'\n    if [ ! -f \"$test_execution_script\" ]; then\n        echo \"Set-ConfigTestExecution.ps1 not found at $test_execution_script\"\n        exit 1\n    fi\n    pwsh -ExecutionPolicy Unrestricted -File \"$test_execution_script\" -EnableTestAutoRun '__ENABLE_TEST_AUTORUN__'\nfi\n\nif [ -f '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' ]; then\n    echo 'Starting __DEPLOY_SCRIPT__ (DSC + imperative)...'\n    cd '/opt/__PACKAGE_NAME__/DSC'\n    pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' -WorkingPath '/opt/__PACKAGE_NAME__'\nelse\n    echo '__DEPLOY_SCRIPT__ not found, skipping configuration'\nfi\n\necho '__SCENARIO__ __ROLE__ setup completed'\n",
+            "driverVmName": "[format('{0}-client01', parameters('environmentPrefix'))]",
+            "driverNic1Name": "[format('{0}-nic1', variables('driverVmName'))]",
+            "driverNic2Name": "[format('{0}-nic2', variables('driverVmName'))]",
+            "driverIsLinux": "[equals(parameters('driverOsType'), 'Linux')]",
+            "packageHost": "[if(empty(parameters('clusterPackageZipUrl')), '', split(parameters('clusterPackageZipUrl'), '/')[2])]",
+            "driverLinuxBootstrap": "[replace(replace(replace(replace(replace(replace(replace(replace(variables('$fxv#0'), '__SCENARIO__', 'cluster'), '__ROLE__', 'driver'), '__PACKAGE_NAME__', 'Cluster-Package'), '__DEPLOY_SCRIPT__', 'Deploy-Driver.ps1'), '__PACKAGE_URL__', parameters('clusterPackageZipUrl')), '__PACKAGE_HOST__', variables('packageHost')), '__PASSWORD_B64__', base64(parameters('adminPassword'))), '__ENABLE_TEST_AUTORUN__', string(parameters('enableTestAutoRun')))]",
+            "driverCommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"$stage=''C:\\Temp\\wpts-cluster-driver''; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path ''.\\Cluster-Package.zip'' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\Temp\\wpts-cluster-driver\\cse-bootstrap.ps1'' -Scenario ''cluster'' -Role ''driver'' -PackageName ''Cluster-Package'' -DeployScript ''Deploy-Driver.ps1'' -PasswordBase64 ''{0}'' -EnableTestAutoRun ''{1}'' -PackageAlreadyExtracted; exit $LASTEXITCODE\"', base64(parameters('adminPassword')), parameters('enableTestAutoRun'))]",
+            "driverWindowsOffer": "[if(startsWith(parameters('driverOsVersion'), 'win10-'), 'Windows-10', 'Windows-11')]",
+            "driverImageRef": "[if(not(empty(parameters('driverCustomImageId'))), createObject('id', parameters('driverCustomImageId')), if(variables('driverIsLinux'), createObject('publisher', 'Canonical', 'offer', 'ubuntu-24_04-lts', 'sku', parameters('driverLinuxOsVersion'), 'version', 'latest'), createObject('publisher', 'MicrosoftWindowsDesktop', 'offer', variables('driverWindowsOffer'), 'sku', parameters('driverOsVersion'), 'version', 'latest')))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('driverNic1Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external1-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('driverExternal1Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external1SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": false,
+                "dnsSettings": {
+                  "dnsServers": [
+                    "[parameters('dcExternal1Ip')]"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('driverNic2Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external2-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('driverExternal2Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external2SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": false,
+                "dnsSettings": {
+                  "dnsServers": [
+                    "[parameters('dcExternal1Ip')]"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2023-03-01",
+              "name": "[variables('driverVmName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "[parameters('driverVmSize')]"
+                },
+                "osProfile": {
+                  "computerName": "Client01",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]",
+                  "windowsConfiguration": "[if(variables('driverIsLinux'), null(), createObject('enableAutomaticUpdates', false(), 'provisionVMAgent', true(), 'winRM', createObject('listeners', createArray(createObject('protocol', 'Http'))), 'patchSettings', createObject('patchMode', 'Manual', 'assessmentMode', 'ImageDefault')))]",
+                  "linuxConfiguration": "[if(variables('driverIsLinux'), createObject('disablePasswordAuthentication', false(), 'provisionVMAgent', true(), 'patchSettings', createObject('patchMode', 'AutomaticByPlatform', 'assessmentMode', 'AutomaticByPlatform')), null())]"
+                },
+                "storageProfile": {
+                  "imageReference": "[variables('driverImageRef')]",
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "diskSizeGB": 128,
+                    "managedDisk": {
+                      "storageAccountType": "Premium_LRS"
+                    }
+                  },
+                  "dataDisks": [
+                    {
+                      "createOption": "Empty",
+                      "diskSizeGB": 64,
+                      "lun": 0,
+                      "managedDisk": {
+                        "storageAccountType": "Premium_LRS"
+                      }
+                    }
+                  ]
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('driverNic1Name'))]",
+                      "properties": {
+                        "primary": true
+                      }
+                    },
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('driverNic2Name'))]",
+                      "properties": {
+                        "primary": false
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('driverNic1Name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('driverNic2Name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('enableAutoShutdown')]",
+              "type": "Microsoft.DevTestLab/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('shutdown-computevm-{0}', variables('driverVmName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]",
+                "notificationSettings": {
+                  "status": "Disabled"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]"
+              ]
+            },
+            {
+              "condition": "[and(not(variables('driverIsLinux')), not(empty(parameters('clusterPackageZipUrl'))))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('driverVmName'), 'ConfigureClusterDriver')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {},
+                "protectedSettings": {
+                  "fileUris": [
+                    "[parameters('clusterPackageZipUrl')]"
+                  ],
+                  "commandToExecute": "[variables('driverCommandToExecute')]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]"
+              ]
+            },
+            {
+              "condition": "[and(variables('driverIsLinux'), not(empty(parameters('clusterPackageZipUrl'))))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('driverVmName'), 'ConfigureClusterDriverLinux')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Azure.Extensions",
+                "type": "CustomScript",
+                "typeHandlerVersion": "2.1",
+                "autoUpgradeMinorVersion": true,
+                "settings": {},
+                "protectedSettings": {
+                  "script": "[base64(variables('driverLinuxBootstrap'))]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "driverVmId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('driverVmName'))]"
+            },
+            "driverVmName": {
+              "type": "string",
+              "value": "[variables('driverVmName')]"
+            },
+            "driverPrivateIps": {
+              "type": "array",
+              "value": [
+                "[parameters('driverExternal1Ip')]",
+                "[parameters('driverExternal2Ip')]"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "node01Name": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-cluster-nodes-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.node01VmName.value]"
+    },
+    "node02Name": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-cluster-nodes-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.node02VmName.value]"
+    },
+    "driverComputerName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-driver-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.driverVmName.value]"
+    },
+    "node01PrivateIps": {
+      "type": "array",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-cluster-nodes-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.node01PrivateIps.value]"
+    },
+    "node02PrivateIps": {
+      "type": "array",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-cluster-nodes-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.node02PrivateIps.value]"
+    },
+    "driverPrivateIps": {
+      "type": "array",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-driver-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.driverPrivateIps.value]"
+    },
+    "clusterLoadBalancerId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-cluster-ilb-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.loadBalancerId.value]"
+    }
+  }
+}

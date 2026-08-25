@@ -75,6 +75,9 @@ function Get-SutPlatform {
 
     try {
         $cimSession = $null
+        $trustedHostsPath = 'WSMan:\localhost\Client\TrustedHosts'
+        $originalTrustedHosts = $null
+        $trustedHostsChanged = $false
         $cimParams = @{
             ClassName   = 'Win32_OperatingSystem'
             ErrorAction = 'Stop'
@@ -91,6 +94,17 @@ function Get-SutPlatform {
             # Workgroup — explicit credentials via CimSession
             $secPwd = ConvertTo-SecureString $Password -AsPlainText -Force
             $cred = [PSCredential]::new("$SutComputerName\$Username", $secPwd)
+            $originalTrustedHosts = "$((Get-Item -Path $trustedHostsPath -ErrorAction Stop).Value)"
+            $trustedHosts = @($originalTrustedHosts -split ',' |
+                ForEach-Object { "$_".Trim() } |
+                Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+            if ($trustedHosts -notcontains '*' -and
+                $trustedHosts -inotcontains $SutComputerName) {
+                $updatedTrustedHosts = @($trustedHosts + $SutComputerName) -join ','
+                Set-Item -Path $trustedHostsPath -Value $updatedTrustedHosts `
+                    -Force -ErrorAction Stop
+                $trustedHostsChanged = $true
+            }
             $sessionOpt = New-CimSessionOption -Protocol Wsman
             $cimSession = New-CimSession -ComputerName $SutComputerName -Credential $cred `
                 -SessionOption $sessionOpt -ErrorAction Stop
@@ -114,11 +128,19 @@ function Get-SutPlatform {
         }
     }
     catch {
-        Write-Warning "Could not query SUT OS version: $($_.Exception.Message). Defaulting to WindowsServer2025."
-        return 'WindowsServer2025'
+        throw "Could not query SUT OS version: $($_.Exception.Message)"
     }
     finally {
         if ($cimSession) { Remove-CimSession $cimSession -ErrorAction SilentlyContinue }
+        if ($trustedHostsChanged) {
+            try {
+                Set-Item -Path $trustedHostsPath -Value $originalTrustedHosts `
+                    -Force -ErrorAction Stop
+            }
+            catch {
+                throw "Could not restore WinRM TrustedHosts after SUT platform detection: $($_.Exception.Message)"
+            }
+        }
     }
 }
 
@@ -349,6 +371,14 @@ $adminUser     = $config.Core.Username
 $adminPassword = $config.Core.Password
 $scenario      = $config.Core.Scenario
 
+if ($scenario -eq 'Cluster') {
+    $clusterGateOutput = @(& (Join-Path $scriptsPath 'Test-ClusterDriverReadiness.ps1') `
+        -WorkingPath $WorkingPath -ConfigureFile $configFile *>&1)
+    if ($clusterGateOutput.Count -eq 0 -or $clusterGateOutput[-1] -ne $true) {
+        throw 'Cluster readiness validation failed; tests will not start.'
+    }
+}
+
 # Resolve SUT machine: Cluster uses Node01 as the primary SUT; Domain/Workgroup use "SUT"
 $sutMachine = if ($scenario -eq 'Cluster' -and $config.Machines.Node01) {
     $config.Machines.Node01
@@ -503,7 +533,7 @@ if ($waited -ge ($maxWait * 60)) {
 # have been applied yet if the SUT wasn't ready when Deploy-Driver ran.  A retry
 # scheduled task exists but fires every 5 minutes -- tests can start before it
 # succeeds.  Now that SUT is confirmed ready, apply it inline.
-if (-not $isLinuxDriver) {
+if (-not $isLinuxDriver -and $scenario -ne 'Cluster') {
     $fl2Applied = $false
     $endPointPath = $null
     $toolsJsonPath = "$WorkingPath\Tools.json"

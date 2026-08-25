@@ -14,7 +14,9 @@ set -e
 export DEBIAN_FRONTEND=noninteractive
 
 echo 'Starting __SCENARIO__ __ROLE__ setup...'
-mkdir -p '/opt/__PACKAGE_NAME__'
+staged_package="/opt/__PACKAGE_NAME__.bootstrap.$$"
+rm -rf "$staged_package"
+mkdir -p "$staged_package"
 
 if [ '__ROLE__' = 'driver' ]; then
     echo 'Reconciling any stale Driver test run before replacing the package...'
@@ -65,8 +67,10 @@ if [ $dl -ne 1 ]; then
     exit 1
 fi
 
-unzip -o '/opt/__PACKAGE_NAME__.zip' -d '/opt/__PACKAGE_NAME__'
+unzip -o '/opt/__PACKAGE_NAME__.zip' -d "$staged_package"
 rm -f '/opt/__PACKAGE_NAME__.zip'
+rm -rf '/opt/__PACKAGE_NAME__'
+mv "$staged_package" '/opt/__PACKAGE_NAME__'
 
 # A packaged rerun must produce a fresh role signal. Otherwise Deploy-Driver
 # can short-circuit on the previous signal and freshness verification times out.
@@ -76,6 +80,15 @@ rm -f "$deploy_signal"
 if [ -f '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' ]; then
     echo 'Injecting credential into Config.json...'
     pwsh -ExecutionPolicy Unrestricted -File '/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigCredential.ps1' -PasswordBase64 '__PASSWORD_B64__'
+fi
+
+if [ '__ROLE__' = 'driver' ]; then
+    test_execution_script='/opt/__PACKAGE_NAME__/DSC/Scripts/Set-ConfigTestExecution.ps1'
+    if [ ! -f "$test_execution_script" ]; then
+        echo "Set-ConfigTestExecution.ps1 not found at $test_execution_script"
+        exit 1
+    fi
+    pwsh -ExecutionPolicy Unrestricted -File "$test_execution_script" -EnableTestAutoRun '__ENABLE_TEST_AUTORUN__'
 fi
 
 if [ -f '/opt/__PACKAGE_NAME__/DSC/__DEPLOY_SCRIPT__' ]; then

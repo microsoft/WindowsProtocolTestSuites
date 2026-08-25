@@ -897,18 +897,53 @@ function CheckIfHasFailure($trxResultFileName) {
 
 function Get-TestCasesFromDll {
     param([string]$DllPath)
-    Add-Type -AssemblyName "System.Reflection"
-    $asm = [System.Reflection.Assembly]::LoadFrom($DllPath)
-    $testCases = @()
-    foreach ($type in $asm.GetTypes()) {
-        foreach ($method in $type.GetMethods()) {
-            $hasTestMethod = $method.CustomAttributes |
-                Where-Object { $_.AttributeType.FullName -eq "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute"}
-            if ($hasTestMethod) {
-                $testCases += $method.Name
-            }
+
+    $dotnet = (Get-Command dotnet -ErrorAction SilentlyContinue).Source
+    if (-not $dotnet) {
+        throw 'ERROR: dotnet was not found; test discovery cannot continue.'
+    }
+
+    $resolvedDll = (Resolve-Path -LiteralPath $DllPath -ErrorAction Stop).Path
+    $discovery = & "$PSScriptRoot\Invoke-BoundedProcess.ps1" `
+        -FilePath $dotnet `
+        -ArgumentList @('vstest', $resolvedDll, '/ListTests') `
+        -TimeoutSeconds 300 `
+        -WorkingDirectory (Split-Path -Parent $resolvedDll)
+
+    $discoveryOutput = @(
+        "$($discovery.StandardOutput)" -split '\r?\n'
+        "$($discovery.StandardError)" -split '\r?\n'
+    )
+    if (-not $discovery.Started) {
+        throw "ERROR: Test discovery failed to start for '$resolvedDll': $($discovery.ErrorMessage)"
+    }
+    if ($discovery.TimedOut) {
+        throw "ERROR: Test discovery timed out for '$resolvedDll'."
+    }
+    if ($discovery.ExitCode -ne 0) {
+        throw "ERROR: Test discovery failed for '$resolvedDll' with exit code $($discovery.ExitCode).`n$($discoveryOutput -join "`n")"
+    }
+
+    $markerIndex = -1
+    for ($index = 0; $index -lt $discoveryOutput.Count; $index++) {
+        if ("$($discoveryOutput[$index])".Trim() -eq 'The following Tests are available:') {
+            $markerIndex = $index
+            break
         }
     }
+    if ($markerIndex -lt 0 -or $markerIndex -eq ($discoveryOutput.Count - 1)) {
+        throw "ERROR: Test discovery returned no recognizable test list for '$resolvedDll'.`n$($discoveryOutput -join "`n")"
+    }
+
+    $testCases = @(
+        $discoveryOutput[($markerIndex + 1)..($discoveryOutput.Count - 1)] |
+            ForEach-Object { "$_".Trim() } |
+            Where-Object { $_ -and $_ -notmatch '^Total tests:' }
+    )
+    if ($testCases.Count -eq 0) {
+        throw "ERROR: Test discovery returned no test cases for '$resolvedDll'."
+    }
+
     return $testCases
 }
 

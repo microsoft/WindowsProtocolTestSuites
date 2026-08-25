@@ -14,6 +14,9 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$ResourceGroupName,
 
+    [Parameter(Mandatory=$false)]
+    [string]$Location = 'West US 2',
+
     [Parameter(Mandatory=$true)]
     [SecureString]$AdminPassword,
 
@@ -110,14 +113,16 @@ $plainLocalUserPassword = if ($LocalUserPassword) {
 $templateParams = ConvertFrom-BicepParam -Path $ParametersFile
 
 $config = Resolve-DeploymentConfig -Params $templateParams -Defaults @{
-    location          = 'West US 2'
+    location          = $Location
     adminUsername     = 'testadmin'
     driverOsType     = 'Windows'
     sutExternal1Ip   = '192.168.1.11'
     sutExternal2Ip   = '192.168.2.11'
     driverExternal1Ip = '192.168.1.111'
     driverExternal2Ip = '192.168.2.111'
+    enableTestAutoRun = $true
 }
+$testAutoRun = $config.enableTestAutoRun -ne $false
 
 $autoShutdownRequested = $templateParams['enableAutoShutdown'] -eq $true
 $autoShutdownTime = if ($templateParams['autoShutdownTime']) { $templateParams['autoShutdownTime'] } else { '2000' }
@@ -129,12 +134,12 @@ if ($SkipDiskEncryption) {
     $templateParams['enableDiskEncryption'] = $false
 }
 
-Write-Output "   Location (from bicepparam): $($config.location)"
+Write-Output "   Location: $($config.location)"
 
 # Post-deploy Azure Disk Encryption runs only when the bicepparam enables it
 # (otherwise no Key Vault exists) and -SkipDiskEncryption was not passed.
 $diskEncryptionRequested = (-not $SkipDiskEncryption) -and ($templateParams['enableDiskEncryption'] -ne $false)
-if ($SkipTestWait -and $diskEncryptionRequested) {
+if ($SkipTestWait -and $testAutoRun -and $diskEncryptionRequested) {
     throw "-SkipTestWait cannot be combined while Azure Disk Encryption is enabled because ADE may reboot a VM during the automatic test run. Also pass -SkipDiskEncryption, or allow the script to wait for tests."
 }
 
@@ -419,7 +424,7 @@ if ($ValidateOnly) {
     return
 }
 
-# Create or validate the resource group (uses location from bicepparam)
+# Create or validate the resource group.
 Initialize-ResourceGroup -ResourceGroupName $ResourceGroupName -Location $config.location
 $envPrefix = if ($templateParams['environmentPrefix']) { $templateParams['environmentPrefix'] } else { 'fstest' }
 $autoShutdownVmNames = @("$envPrefix-node01", "$envPrefix-client01")
@@ -468,6 +473,7 @@ if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
             DriverExternal2Ip = $config.driverExternal2Ip
             LocalUserPassword = $plainLocalUserPassword
             DriverOSType      = $config.driverOsType
+            EnableTestAutoRun = $testAutoRun
             # Create every test account with the single admin password so secondary
             # accounts match the framework's PasswordForAllUsers (works for any chosen
             # password; a no-op when the admin password already matches ParamConfig).
@@ -687,7 +693,8 @@ Write-Output '=== Resume setup complete ==='
     $resumeDuration = [math]::Round(((Get-Date) - $resumeStart).TotalMinutes, 1)
 
     $resumeVerification = Invoke-WorkgroupVerification -NotBeforeUtc $resumeStart.ToUniversalTime() `
-        -IncludeTests:(-not $SkipTestWait) -DeferTestFailure:(-not $SkipTestWait)
+        -IncludeTests:($testAutoRun -and -not $SkipTestWait) `
+        -DeferTestFailure:($testAutoRun -and -not $SkipTestWait)
     Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
 
     $resumeInfrastructureFinalizationError = $null
@@ -724,9 +731,31 @@ Write-Output '=== Resume setup complete ==='
     }
 
     if ($resumeInfrastructureFinalizationError) {
-        throw "Workgroup resume infrastructure finalization failed after terminal tests; shutdown schedules were restored. $($resumeInfrastructureFinalizationError.Exception.Message)"
+        throw "Workgroup resume infrastructure finalization failed after configuration/test finalization; shutdown schedules were restored. $($resumeInfrastructureFinalizationError.Exception.Message)"
     }
     Complete-DeploymentTestOutcome -Verification $resumeVerification
+
+    $resumeTestDetails = if (-not $testAutoRun) {
+@"
+  Test execution: automatic execution was disabled.
+  Start tests manually on ${driverVmName}:
+    pwsh -File "C:\$packageName\DSC\Scripts\Invoke-TestRun.ps1" -WorkingPath "C:\$packageName"
+"@
+    } elseif ($SkipTestWait) {
+@"
+  Test execution: automatic execution was started without waiting for its terminal outcome.
+  Driver log: C:\$packageName\DSC\Invoke-TestRun.log
+"@
+    } else {
+@"
+  Test execution completed.
+  Classification: $($resumeVerification.TestClassification)
+  Passed tests: $($resumeVerification.PassedTestCount)
+  Inconclusive tests: $($resumeVerification.InconclusiveTestCount)
+  Failed tests: $($resumeVerification.FailedTestCount)
+  Results: C:\Test\TestResults\
+"@
+    }
 
     Write-Output @"
 
@@ -734,13 +763,7 @@ Write-Output '=== Resume setup complete ==='
 
   VMs received updated packages and passed the requested readiness checks.
 
-  Monitor progress:
-    - SUT:    RDP/Bastion -> $sutVmName -> C:\$packageName\DSC\Deploy-SUT.log
-    - Driver: RDP/Bastion -> $driverVmName -> C:\$packageName\DSC\Deploy-Driver.log
-
-  Completion signals:
-    - SUT:    C:\$packageName\DSC\Deploy-SUT.Completed.signal
-    - Driver: C:\$packageName\DSC\Deploy-Driver.Completed.signal
+$resumeTestDetails
 "@
     return
 }
@@ -790,7 +813,8 @@ Write-Output "`n[OK] Azure resource deployment completed in $deployDuration minu
 # race with DSC, tool installation, or the test run.
 try {
     $verification = Invoke-WorkgroupVerification -NotBeforeUtc $deployStart.ToUniversalTime() `
-        -IncludeTests:(-not $SkipTestWait) -DeferTestFailure:(-not $SkipTestWait)
+        -IncludeTests:($testAutoRun -and -not $SkipTestWait) `
+        -DeferTestFailure:($testAutoRun -and -not $SkipTestWait)
 } catch {
     if ($ConfigurationRecoveryAttempts -gt 0 -and
         (Test-IsWorkgroupConfigurationFailure -ErrorRecord $_)) {
@@ -856,9 +880,41 @@ if ($diskEncryptionRequested -and $deploymentResult) {
     }
 
 if ($infrastructureFinalizationError) {
-    throw "Workgroup infrastructure finalization failed after terminal tests; shutdown schedules were restored. $($infrastructureFinalizationError.Exception.Message)"
+    throw "Workgroup infrastructure finalization failed after configuration/test finalization; shutdown schedules were restored. $($infrastructureFinalizationError.Exception.Message)"
 }
 Complete-DeploymentTestOutcome -Verification $verification
+
+$testExecutionDetails = if (-not $testAutoRun) {
+    $manualCommand = if ($config.driverOsType -eq 'Linux') {
+        'pwsh -File "/opt/Workgroup-Package/DSC/Scripts/Invoke-TestRun.ps1" -WorkingPath "/opt/Workgroup-Package"'
+    } else {
+        'pwsh -File "C:\Workgroup-Package\DSC\Scripts\Invoke-TestRun.ps1" -WorkingPath "C:\Workgroup-Package"'
+    }
+@"
+Test execution:
+  - Automatic FileServer test execution was disabled.
+  - Start tests manually on Client01:
+    $manualCommand
+"@
+} elseif ($SkipTestWait) {
+@"
+Test execution:
+  - Automatic FileServer test execution was started.
+  - This command was configured not to wait for the terminal test outcome.
+  - Log: C:\Workgroup-Package\DSC\Invoke-TestRun.log
+"@
+} else {
+@"
+Test execution:
+  - Automatic FileServer test execution completed.
+  - Classification: $($verification.TestClassification)
+  - Passed tests: $($verification.PassedTestCount)
+  - Inconclusive tests: $($verification.InconclusiveTestCount)
+  - Failed tests: $($verification.FailedTestCount)
+  - Results: C:\Test\TestResults\
+  - Completion signal: C:\Test\test.finished.signal
+"@
+}
 
 # ===========================================================================
 # Deployment Complete
@@ -878,14 +934,7 @@ Network Configuration:
   - Client01: External1 = $($config.driverExternal1Ip), External2 = $($config.driverExternal2Ip)
   - Node01:   External1 = $($config.sutExternal1Ip), External2 = $($config.sutExternal2Ip)
 
-What happens next (fully automatic):
-1. Both VMs run their deployment scripts in parallel (DSC + tools install)
-2. Driver VM waits for SUT readiness, then runs Execute-TestCaseByContext.ps1
-3. Results will be written to C:\Test\TestResults\ once complete
-4. Signal file: C:\Test\test.finished.signal indicates completion
-
-To monitor progress:
-  - RDP/Bastion into Client01 and check C:\Workgroup-Package\DSC\Invoke-TestRun.log
+$testExecutionDetails
 
 For detailed instructions, see: README.md
 "@

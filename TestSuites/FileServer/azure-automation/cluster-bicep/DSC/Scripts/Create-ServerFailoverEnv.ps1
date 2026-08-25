@@ -1,709 +1,640 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-param($workingDir = $PSScriptRoot, $protocolConfigFile = "$workingDir\Config.json")
+<#
+.SYNOPSIS
+    Creates or repairs the FileServer failover Cluster without replacing
+    healthy identities, roles, resources, or owned disks.
+#>
 
-#----------------------------------------------------------------------------
-# Global variables
-#----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$env:Path += ";$scriptPath"
-Push-Location $workingDir
-#----------------------------------------------------------------------------
-# if working dir is not exists. it will use scripts path as working path
-#----------------------------------------------------------------------------
-if(!(Test-Path "$workingDir"))
-{
-    $workingDir = $scriptPath
+[CmdletBinding()]
+param(
+    [string]$WorkingPath = (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent),
+    [string]$ConfigureFile = "$WorkingPath\Config.json",
+    [string]$HeartbeatPath,
+    [switch]$NoTranscript
+)
+
+$ErrorActionPreference = 'Stop'
+$dscFolder = Split-Path $PSScriptRoot -Parent
+$logFile = "$PSCommandPath.log"
+$transcriptStarted = $false
+
+Push-Location $PSScriptRoot
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force | Out-Null
+    $transcriptStarted = $true
 }
 
-if(!(Test-Path "$protocolConfigFile"))
-{
-    $protocolConfigFile = "$workingDir\Config.json"
-    if(!(Test-Path "$protocolConfigFile")) 
-    {
-        .\Write-Error.ps1 "No Config file found."
-        exit 1
-    }
+. (Join-Path $dscFolder 'Deploy-CommonHelpers.ps1')
+
+function Write-ClusterHeartbeat {
+    param([string]$Checkpoint, [datetime]$StartedAt)
+    if (-not $HeartbeatPath) { return }
+    Write-DeploymentHeartbeat -Phase 'ClusterFormation' `
+        -Operation 'Create or repair failover Cluster' `
+        -StartedAt $StartedAt -HeartbeatPath $HeartbeatPath `
+        -LastCheckpoint $Checkpoint
 }
 
-#----------------------------------------------------------------------------
-# Start loging using start-transcript cmdlet
-#----------------------------------------------------------------------------
-[string]$logFile = $MyInvocation.MyCommand.Path + ".log"
-Start-Transcript -Path "$logFile" -Append -Force
-
-#----------------------------------------------------------------------------
-# Define common functions
-#----------------------------------------------------------------------------
-function ExitCode()
-{ 
-    return $MyInvocation.ScriptLineNumber 
-}
-
-function Write-ConfigFailureSignal()
-{
-    $startSignalFile = "$workingDir\Config_" + $env:COMPUTERNAME + "_FailureSignal.log"
-    "Execute Create-ServerFailoverEnv.ps1 failed, read Create-ServerFailoverEnv.ps1.log for detail." | Out-File -FilePath $startSignalFile -Append
-}
-
-function CreateShareFolder($fullPath)
-{
-    if(!(Test-Path $fullPath))
-    {
-        CMD /C "MKDIR $fullPath" 2>&1 | .\Write-Info.ps1
-    }
-    CMD /C "icacls $fullPath /grant $domainAdmin`:(OI)(CI)(F)" 2>&1 | .\Write-Info.ps1
-}
-
-function CheckConnectivity($computerName)
-{
-    # Build domain admin credentials for remote WMI access (SYSTEM doesn't have remote WMI rights)
-    $domainAdminPwd = New-Object SecureString
-    $config.Core.Password.ToCharArray() | ForEach-Object {$domainAdminPwd.AppendChar($_)}
-    $wmiCreds = New-Object System.Management.Automation.PSCredential($domainAdmin, $domainAdminPwd)
-
-    for($i=0;$i -lt 10;$i++)
-    {
-        try
-        {
-		    .\Write-Info.ps1 "Test TCP connection to computer: $computerName"
-            Test-Connection -ComputerName $computerName -ErrorAction Stop
-
-			.\Write-Info.ps1 "Test WMI connection to computer: $computerName"
-            if ($computerName -eq $env:COMPUTERNAME) {
-                $wmiObj = Get-WmiObject Win32_ComputerSystem -ErrorAction Stop
-            } else {
-                $wmiObj = Get-WmiObject Win32_ComputerSystem -Computername $computerName -Credential $wmiCreds -ErrorAction Stop
-            }
-            break
-        }
-        catch
-        {
-            .\Write-Info.ps1 "Get exception: $_"
-            Start-Sleep 15
-        }
-    }
-
-    if($i -ge 10)
-    {
-        .\Write-Error.ps1 "$computerName cannot be connected within 10 retries."
-        Write-ConfigFailureSignal
-        exit (ExitCode)
-    }
-}
-
-#----------------------------------------------------------------------------
-# Get content from protocol config file
-#----------------------------------------------------------------------------
-$config = $null
-try {
-    $config = Get-Content -Path $protocolConfigFile -Raw | ConvertFrom-Json
-}
-catch {
-    .\Write-Error.ps1 "Failed to parse config file: $_"
-    exit 1
-}
-
-#----------------------------------------------------------------------------
-# Define common variables
-#----------------------------------------------------------------------------
-$domain = (Get-WmiObject win32_computersystem).Domain
-$domainAdmin = $config.Core.Username
-$domainAdmin = "$domain\$domainAdmin"
-$systemDrive = $env:SystemDrive
-
-$clusterName = $config.Endpoints.Cluster.Name
-$clusterNodes = @()
-$clusterIps = @()
-$generalFsIps = @()
-$infraFsName = $config.Endpoints.InfrastructureFS.Name
-
-$clusterNodeList = $config.Machines.PSObject.Properties | Where-Object {$_.Value.isclusternode -eq "true"} | Select-Object -ExpandProperty Value
-foreach ($clusterNode in $clusterNodeList)
-{
-    $clusterNodes += $clusterNode.ComputerName
-}
-
-$clusterIpList = $config.Endpoints.Cluster.IpConfig
-foreach ($clusterip in $clusterIpList)
-{
-    $clusterIps += $clusterip.Ip
-}
-
-$generalFsIpList = $config.Endpoints.GeneralFS.IpConfig
-foreach ($generalFsIp in $generalFsIpList)
-{
-    $generalFsIps += $generalFsIp.Ip
-}
-
-#----------------------------------------------------------------------------
-# Install Windows Features
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Install Windows Features"
-Add-WindowsFeature Failover-Clustering
-Add-WindowsFeature FS-BranchCache
-Add-WindowsFeature FS-VSS-Agent
-Add-WindowsFeature BranchCache
-Add-WindowsFeature RSAT-Clustering
-Add-WindowsFeature RSAT-File-Services
-Add-WindowsFeature RSAT-AD-PowerShell
-
-#----------------------------------------------------------------------------
-# Get disk ready for cluster
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Get disk ready for cluster"
-$disks = Get-Disk | Where-Object {$_.FriendlyName -match "MSFT Virtual HD"} | Sort-Object Size
-$diskCount = $disks.count
-if($diskCount -lt 3)
-{
-    .\Write-Info.ps1 "There are only $diskCount disks."
-    .\Write-Info.ps1 "Cluster environment requires at least 3 disks."
-    Write-ConfigFailureSignal
-    exit (ExitCode)
-} 
-
-.\Write-Info.ps1 "Format all disks for cluster"
-$diskLabelsDict = @{}
-$isQuorumDisk = $true
-foreach ($disk in $disks)
-{
-    $diskNumber = $disk.Number
-    if($isQuorumDisk)
-    {
-        $volumeLabel = "Q$diskNumber"
-        $isQuorumDisk = $false
-    }
-    else
-    {
-        $volumeLabel = "CLUSTER_DATA$diskNumber"
-    }
-    $diskLabelsDict.Add($diskNumber, $volumeLabel)
-    
-    # Only skip formatting if the disk already has a data partition with an NTFS volume.
-    # GPT-initialized disks may have a Microsoft Reserved Partition (MSR) but no usable volume.
-    $partition = Get-Partition -DiskNumber $diskNumber -ErrorAction SilentlyContinue |
-        Where-Object { $_.Type -notin @('Reserved', 'System', 'Unknown') -and $_.Size -gt 0 }
-    if($null -eq $partition)
-    {
-        $diskpartscript=@()
-
-        .\Write-Info.ps1 "Online and format Disk $diskNumber"
-        $diskpartscript += "select disk $diskNumber"
-        $diskpartscript += "ATTRIBUTES DISK CLEAR READONLY"
-        $diskpartscript += "online disk noerr"
-        $diskpartscript += "clean"
-        $diskpartscript += "convert mbr noerr"
-        $diskpartscript += "crea part prim noerr"
-        $diskpartscript += "format fs=NTFS label=$volumeLabel quick noerr"
-
-        $diskpartscript | diskpart.exe
-    }
-}
-
-#----------------------------------------------------------------------------
-# Clean Cluster
-#----------------------------------------------------------------------------
-$existingCluster = $null
-try {
-        $existingCluster = Get-Cluster | Where-Object { $_.Name -eq $clusterName }
-} catch { }
-
-if ($null -eq $existingCluster) {
-    .\Write-Info.ps1 "Clean Cluster"
+function Set-ClusterParameterValue {
+    param(
+        [Parameter(Mandatory)]$Resource,
+        [Parameter(Mandatory)][string]$Name,
+        [Parameter(Mandatory)]$Value
+    )
     try {
-        .\Write-Info.ps1 "Clean cluster env in single-domain environment."
-    $domainAdminPwd = New-Object SecureString
-    $config.Core.Password.ToCharArray() | ForEach-Object {$domainAdminPwd.AppendChar($_)}
-
-    $creds = New-Object System.Management.Automation.PSCredential($domainAdmin,$domainAdminPwd)
-
-    # Remove stale AD computer accounts for all cluster endpoints
-    $endpointNames = @($clusterName, $config.Endpoints.GeneralFS.Name, $config.Endpoints.ScaleoutFS.Name)
-    if (-not [string]::IsNullOrEmpty($infraFsName)) { $endpointNames += $infraFsName }
-    $filterStr = ($endpointNames | ForEach-Object { "Name -like `"$_`"" }) -join " -or "
-    .\Write-Info.ps1 "Removing stale AD objects matching: $filterStr"
-    $staleObjects = Get-ADComputer -Filter $filterStr -Credential $creds -ErrorAction SilentlyContinue
-    if ($null -ne $staleObjects) {
-        $staleObjects | ForEach-Object {
-            .\Write-Info.ps1 "  Removing AD computer: $($_.Name)"
-            $_ | Remove-ADObject -Recursive -Credential $creds -Confirm:$false
-        }
-    }
-
-    # Also remove stale DNS records so Add-ClusterFileServerRole / Add-ClusterScaleOutFileServerRole
-    # don't fail with "network name already used". AD object removal doesn't always clean DNS quickly.
-    $dcName = ($config.Machines.PSObject.Properties | Where-Object { $_.Name -match "DC" } | Select-Object -First 1).Value.ComputerName
-    $zoneName = $domain
-    foreach ($epName in $endpointNames) {
-        if ([string]::IsNullOrEmpty($epName)) { continue }
-        try {
-            Invoke-Command -ComputerName $dcName -Credential $creds -ScriptBlock {
-                param($name, $zone)
-                $records = Get-DnsServerResourceRecord -ZoneName $zone -Name $name -ErrorAction SilentlyContinue
-                if ($null -ne $records) {
-                    $records | Remove-DnsServerResourceRecord -ZoneName $zone -Name $name -Force -ErrorAction SilentlyContinue
-                    Write-Host "  Removed DNS records for $name in $zone"
-                }
-            } -ArgumentList $epName, $zoneName -ErrorAction SilentlyContinue
-        }
-        catch {
-            .\Write-Info.ps1 "  DNS cleanup for $epName skipped: $_" -ForegroundColor Yellow
-        }
-    }
-
-    # Flush local DNS cache to pick up the changes
-    ipconfig /flushdns 2>&1 | Out-Null
-    .\Write-Info.ps1 "Clean cluster completed."
-  }
-  catch {
-    Write-Warning "Clean Cluster failed: $_"
-  }
-} else {
-    .\Write-Info.ps1 "[OK] Cluster '$clusterName' already exists; preserving its AD and DNS endpoint identities." -ForegroundColor Green
-}
-
-#----------------------------------------------------------------------------
-# Create Cluster
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Create Cluster"
-$cluster = $existingCluster
-if ($null -eq $cluster) {
-    try {
-        $cluster = Get-cluster | Where-Object {$_.Name -eq $clusterName}
+        $Resource | Set-ClusterParameter -Name $Name -Value $Value -ErrorAction Stop |
+            Out-Null
     }
     catch {
-        Write-Warning "Get-Cluster failed"
+        $Resource | Set-ClusterParameter -Name $Name -Value $Value -Create `
+            -ErrorAction Stop | Out-Null
     }
 }
 
-if($null -eq $cluster)
-{
-    .\Write-Info.ps1 "Check cluster node connectivity"
-    foreach($node in $clusterNodes)
-    {
-        CheckConnectivity $node
-    }
-	
-    # Create cluster
-    .\Write-Info.ps1 "Create cluster"
-    New-Cluster -Name $clusterName -Node $clusterNodes -StaticAddress $clusterIps -NoStorage
-    Start-Sleep 20
+function Get-ClusterNetworkForAddress {
+    param([string]$Address)
+    $octets = $Address.Split('.')
+    if ($octets.Count -ne 4) { return $null }
+    $prefix = "$($octets[0]).$($octets[1]).$($octets[2])."
+    return Get-ClusterNetwork | Where-Object {
+        "$($_.Address)".StartsWith($prefix)
+    } | Select-Object -First 1
+}
 
-    .\Write-Info.ps1 "Check if cluster create succeed"
-    $cluster = Get-cluster | Where-Object {$_.Name -eq $clusterName}
-    if($null -eq $cluster)
-    {
-        .\Write-Info.ps1 "Create Cluster failed."
-        Write-ConfigFailureSignal
-        exit (ExitCode)
+function Set-AzureClusterIpResources {
+    param(
+        [Parameter(Mandatory)][string]$GroupName,
+        [Parameter(Mandatory)][object[]]$IpConfigurations
+    )
+
+    $group = Get-ClusterGroup -Name $GroupName -ErrorAction Stop
+    $ipResources = @(Get-ClusterResource | Where-Object {
+        $_.OwnerGroup -eq $group.Name -and $_.ResourceType -eq 'IP Address'
+    })
+    $configuredResources = New-Object System.Collections.Generic.List[object]
+
+    for ($index = 0; $index -lt $IpConfigurations.Count; $index++) {
+        $ipConfiguration = $IpConfigurations[$index]
+        $address = "$($ipConfiguration.Ip)"
+        $probePort = [int]$ipConfiguration.ProbePort
+        $resource = $ipResources | Where-Object {
+            $currentAddress = ($_ | Get-ClusterParameter -Name Address `
+                -ErrorAction SilentlyContinue).Value
+            "$currentAddress" -eq $address
+        } | Select-Object -First 1
+
+        if ($null -eq $resource) {
+            $resource = $ipResources | Where-Object {
+                $currentAddress = ($_ | Get-ClusterParameter -Name Address `
+                    -ErrorAction SilentlyContinue).Value
+                "$($_.State)" -ne 'Online' -and
+                "$currentAddress" -in @('', '0.0.0.0')
+            } | Select-Object -First 1
+        }
+        if ($null -eq $resource) {
+            $resourceName = "$GroupName IP Address $($index + 1)"
+            $resource = Add-ClusterResource -Name $resourceName `
+                -ResourceType 'IP Address' -Group $group.Name -ErrorAction Stop
+            $ipResources += $resource
+        }
+
+        Stop-ClusterResource -Name $resource.Name -Wait 30 `
+            -ErrorAction SilentlyContinue | Out-Null
+        $network = Get-ClusterNetworkForAddress -Address $address
+        if ($null -eq $network) {
+            throw "No Cluster network matches Azure virtual IP '$address'."
+        }
+        $resource | Set-ClusterParameter -Multiple @{
+            Address = $address
+            SubnetMask = '255.255.255.255'
+            Network = $network.Name
+            EnableDhcp = 0
+            ProbePort = $probePort
+            OverrideAddressMatch = 1
+        } -ErrorAction Stop | Out-Null
+        Start-ClusterResource -Name $resource.Name -Wait 60 -ErrorAction Stop |
+            Out-Null
+        $configuredResources.Add($resource)
     }
 
-    # Ensure all cluster networks allow client access (ClusterAndClient role = 3).
-    # In Azure, secondary NICs lack a default gateway, so the cluster classifies those
-    # networks as "Cluster only" (role 1). This prevents file server roles from binding
-    # to secondary subnet IPs. Setting role = 3 fixes this.
-    # NOTE: Property assignments on cluster objects are no-ops in PowerShell 7 because the
-    # FailoverClusters module runs via WinPSCompatSession and returns deserialized objects.
-    # All mutations must go through powershell.exe (Windows PowerShell 5.1).
-    .\Write-Info.ps1 "Setting all cluster networks to ClusterAndClient role"
-    Get-ClusterNetwork | ForEach-Object {
-        if ($_.Role -ne 3) {
-            .\Write-Info.ps1 "  Network '$($_.Name)' (Address: $($_.Address)) role $($_.Role) -> 3 (ClusterAndClient)"
-            powershell.exe -NoProfile -Command "(Get-ClusterNetwork -Name '$($_.Name)').Role = 3"
-        } else {
-            .\Write-Info.ps1 "  Network '$($_.Name)' (Address: $($_.Address)) already ClusterAndClient"
+    $networkName = Get-ClusterResource | Where-Object {
+        $_.OwnerGroup -eq $group.Name -and
+        $_.ResourceType -in @('Network Name', 'Distributed Network Name')
+    } | Select-Object -First 1
+    if ($null -eq $networkName) {
+        throw "Group '$GroupName' has no supported network-name resource."
+    }
+    Set-ClusterParameterValue -Resource $networkName `
+        -Name RegisterAllProvidersIP -Value 1
+    Set-ClusterParameterValue -Resource $networkName `
+        -Name HostRecordTTL -Value 60
+    $dependency = (@($configuredResources |
+        ForEach-Object { "[$($_.Name)]" })) -join ' or '
+    if ($networkName.ResourceType -eq 'Network Name') {
+        Set-ClusterResourceDependency -Resource $networkName.Name `
+            -Dependency $dependency -ErrorAction Stop
+    }
+    Start-ClusterResource -Name $networkName.Name -Wait 60 -ErrorAction Stop |
+        Out-Null
+}
+
+function Get-ClusterOwnedDiskGuids {
+    $guids = New-Object System.Collections.Generic.HashSet[string](
+        [System.StringComparer]::OrdinalIgnoreCase
+    )
+    if (-not (Test-Path 'HKLM:\Cluster')) {
+        return ,$guids
+    }
+    foreach ($resource in @(Get-ClusterResource -ErrorAction Stop |
+        Where-Object { $_.ResourceType -eq 'Physical Disk' })) {
+        $value = ($resource | Get-ClusterParameter -Name DiskIdGuid `
+            -ErrorAction SilentlyContinue).Value
+        if ($value) { [void]$guids.Add("$value".Trim('{}')) }
+    }
+    foreach ($resource in @(Get-ClusterSharedVolume -ErrorAction SilentlyContinue)) {
+        $disk = Get-DiskForClusterResource -Resource $resource
+        if ($null -ne $disk -and $disk.Guid) {
+            [void]$guids.Add("$($disk.Guid)".Trim('{}'))
         }
     }
+    return ,$guids
+}
 
-    .\Write-Info.ps1 "Set cluster quorum"
-    $disks = Get-Disk | Where-Object { $_.FriendlyName -match "MSFT Virtual HD" }
-    $Script:diskResourcesDict = @{}
+function Prepare-UnownedIscsiDisks {
+    $ownedGuids = Get-ClusterOwnedDiskGuids
+    $disks = @(Get-Disk -ErrorAction Stop |
+        Where-Object { $_.BusType -eq 'iSCSI' } |
+        Sort-Object Size, UniqueId)
+    if ($disks.Count -ne 4) {
+        throw "Exactly four iSCSI disks are required; found $($disks.Count)."
+    }
+
+    $dataIndex = 0
     foreach ($disk in $disks) {
-        if ($diskLabelsDict[$disk.Number] -match "Q\d") {
-            $diskResource = Add-ClusterDisk $disk
-            $diskOnlineRetry = 0
-            while ($diskResource.State -ne "Online" -and $diskOnlineRetry -lt 30) {
-                Start-Sleep 5
-                $diskResource = Start-ClusterResource -Name $diskResource.Name -ErrorAction SilentlyContinue
-                $diskOnlineRetry++
-            }
-
-            $Script:diskResourcesDict.Add($disk.Number, $diskResource.Name)
-            break
+        $diskGuid = "$($disk.Guid)".Trim('{}')
+        $owned = $diskGuid -and $ownedGuids.Contains($diskGuid)
+        if ($disk.PartitionStyle -eq 'RAW' -and $owned) {
+            throw "Cluster-owned disk $($disk.Number) is RAW; refusing to format it."
         }
-    }
+        if ($disk.PartitionStyle -ne 'RAW') { continue }
 
-    foreach ($disk in $disks) {
-        if ($diskLabelsDict[$disk.Number] -match "Q\d") {
-            $quorumDiskResourceName = $Script:diskResourcesDict[$disk.Number]
-            .\Write-Info.ps1 "Set $quorumDiskResourceName as the cluster quorum disk"
-            Set-ClusterQuorum -DiskWitness $quorumDiskResourceName
-            break
+        if ($disk.IsOffline) {
+            Set-Disk -Number $disk.Number -IsOffline $false -ErrorAction Stop
         }
-    }
-
-    .\Write-Info.ps1 "Add other disks to cluster"
-    foreach ($disk in $disks) {
-        if ($diskLabelsDict[$disk.Number] -notmatch "Q\d") {
-            $diskResource = Add-ClusterDisk $disk
-            $diskOnlineRetry = 0
-            while ($diskResource.State -ne "Online" -and $diskOnlineRetry -lt 30) {
-                Start-Sleep 5
-                $diskResource = Start-ClusterResource -Name $diskResource.Name -ErrorAction SilentlyContinue
-                $diskOnlineRetry++
-            }
-
-            $Script:diskResourcesDict.Add($disk.Number, $diskResource.Name)
+        if ($disk.IsReadOnly) {
+            Set-Disk -Number $disk.Number -IsReadOnly $false -ErrorAction Stop
         }
-    }
-}
-
-#----------------------------------------------------------------------------
-# Adding storage disk to cluster
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Adding storage disk to cluster"
-
-.\Write-Info.ps1 "Check available disk number"
-$Storages = Get-ClusterResource | Where-Object {$_.ResourceType -eq "Physical Disk"}
-if($Storages.Count -lt 2)
-{
-    .\Write-Info.ps1 "At lease 2 available storages are required for File Sharing Cluster ENV."
-    Write-ConfigFailureSignal
-    exit (ExitCode)
-}
-
-.\Write-Info.ps1 "Adding General disk"
-$SMBGeneralDisk = Get-ClusterResource | Where-Object {$_.Name -eq "SMBGeneralDisk"}
-if($null -eq $SMBGeneralDisk)
-{
-    .\Write-Info.ps1 "Pick one disk from available storage for general disk"
-    $clusterResources = Get-ClusterResource | Where-Object {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk"}
-    $SMBGeneralDisk = $clusterResources | Select-Object -First 1
-
-    foreach ($diskNumber in $Script:diskResourcesDict.Keys) {
-        if ($Script:diskResourcesDict[$diskNumber] -eq $SMBGeneralDisk.Name) {
-            $Script:SMBGeneralDiskLabel = $diskLabelsDict[$diskNumber]
-            break
-        }
-    }
-
-    $originalDiskName = $SMBGeneralDisk.Name
-    powershell.exe -NoProfile -Command "(Get-ClusterResource -Name '$originalDiskName').Name = 'SMBGeneralDisk'"
-    .\Write-Info.ps1 "Renamed '$originalDiskName' to 'SMBGeneralDisk'"
-}
-
-# If SMBGeneralDiskLabel not set (re-run where cluster already existed), resolve it from current disk state
-if ([string]::IsNullOrEmpty($Script:SMBGeneralDiskLabel)) {
-    .\Write-Info.ps1 "Resolving general disk label from existing cluster resource..."
-    $generalDiskResource = Get-ClusterResource -Name "SMBGeneralDisk" -ErrorAction SilentlyContinue
-    if ($null -ne $generalDiskResource) {
-        $diskId = ($generalDiskResource | Get-ClusterParameter -Name DiskIdGuid -ErrorAction SilentlyContinue).Value
-        $clusterDisk = Get-Disk | Where-Object { $_.Guid -eq $diskId }
-        if ($null -ne $clusterDisk) {
-            $vol = Get-Partition -DiskNumber $clusterDisk.Number -ErrorAction SilentlyContinue | Get-Volume -ErrorAction SilentlyContinue
-            if ($null -ne $vol) {
-                $Script:SMBGeneralDiskLabel = $vol.FileSystemLabel
-                .\Write-Info.ps1 "Resolved general disk label: $($Script:SMBGeneralDiskLabel)"
-            }
-        }
-    }
-}
-
-.\Write-Info.ps1 "Adding Scaleout disk"
-$csv = Get-ClusterSharedVolume
-if($null -eq $csv)
-{
-    .\Write-Info.ps1 "Pick one disk from available storage for scaleout disk"
-    $clusterResources = Get-ClusterResource | Where-Object {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
-    $scaleoutDisk = $clusterResources | Select-Object -First 1
-    if ($null -eq $scaleoutDisk) {
-        .\Write-Info.ps1 "No available disk for scaleout volume." -ForegroundColor Red
-        Write-ConfigFailureSignal
-        exit (ExitCode)
-    }
-    .\Write-Info.ps1 "Add the disk as cluster shared volume: $($scaleoutDisk.Name)"
-    Add-ClusterSharedVolume -Name $scaleoutDisk.Name
-    Start-Sleep 10
-    $csv = Get-ClusterSharedVolume
-}
-
-.\Write-Info.ps1 "Update SMBScaleOutDisk name"
-if ($null -ne $csv) {
-    $originalCsvName = $csv.Name
-    powershell.exe -NoProfile -Command "(Get-ClusterSharedVolume -Name '$originalCsvName').Name = 'SMBScaleOutDisk'"
-    .\Write-Info.ps1 "Renamed CSV '$originalCsvName' to 'SMBScaleOutDisk'"
-} else {
-    .\Write-Info.ps1 "Warning: No cluster shared volume found. Downstream steps may fail." -ForegroundColor Yellow
-}
-
-#----------------------------------------------------------------------------
-# Create GeneralFS role
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Add ClusterFileServerRole"
-$fileServerGroup = Get-ClusterGroup | Where-Object {$_.Name -eq  $config.Endpoints.GeneralFS.Name}
-if($null -eq $fileServerGroup)
-{
-    # Try with all configured IPs first; if a secondary subnet IP fails
-    # (e.g. no default gateway → cluster won't accept it as ClusterAndClient),
-    # fall back to primary IP only.
-    try {
-        Add-ClusterFileServerRole -Name $config.Endpoints.GeneralFS.Name -Storage "SMBGeneralDisk" -StaticAddress $generalFsIps -ErrorAction Stop
-    }
-    catch {
-        .\Write-Info.ps1 "Add-ClusterFileServerRole with all IPs failed: $_" -ForegroundColor Yellow
-        if ($generalFsIps.Count -gt 1) {
-            .\Write-Info.ps1 "Retrying with primary IP only ($($generalFsIps[0]))..." -ForegroundColor Yellow
-            Add-ClusterFileServerRole -Name $config.Endpoints.GeneralFS.Name -Storage "SMBGeneralDisk" -StaticAddress $generalFsIps[0]
+        Initialize-Disk -Number $disk.Number -PartitionStyle GPT -ErrorAction Stop
+        $partition = New-Partition -DiskNumber $disk.Number -UseMaximumSize `
+            -ErrorAction Stop
+        if ([long]$disk.Size -lt [long](2GB)) {
+            $label = 'ClusterQuorum'
         }
         else {
-            throw
+            $dataIndex++
+            $label = "ClusterData$dataIndex"
         }
+        $partition | Format-Volume -FileSystem NTFS -NewFileSystemLabel $label `
+            -Confirm:$false -ErrorAction Stop | Out-Null
+    }
+    return @(Get-Disk | Where-Object { $_.BusType -eq 'iSCSI' } |
+        Sort-Object Size, UniqueId)
+}
+
+function Get-DiskForClusterResource {
+    param($Resource)
+    if ($null -ne $Resource.PSObject.Properties['SharedVolumeInfo']) {
+        $partitionId = "$(@($Resource.SharedVolumeInfo)[0].Partition.Name)"
+        $partition = Get-Volume -ErrorAction Stop |
+            Where-Object { "$($_.UniqueId)" -eq $partitionId } |
+            Get-Partition -ErrorAction Stop |
+            Select-Object -First 1
+        if ($null -ne $partition) {
+            return Get-Disk -Number $partition.DiskNumber -ErrorAction Stop
+        }
+        return $null
+    }
+    $diskGuid = ($Resource | Get-ClusterParameter -Name DiskIdGuid `
+        -ErrorAction SilentlyContinue).Value
+    if ($diskGuid) {
+        $normalized = "$diskGuid".Trim('{}')
+        $disk = Get-Disk | Where-Object {
+            "$($_.Guid)".Trim('{}') -ieq $normalized
+        } | Select-Object -First 1
+        if ($null -ne $disk) { return $disk }
+    }
+    $signature = ($Resource | Get-ClusterParameter -Name DiskSignature `
+        -ErrorAction SilentlyContinue).Value
+    if ($null -ne $signature) {
+        return Get-Disk | Where-Object {
+            [uint32]$_.Signature -eq [uint32]$signature
+        } | Select-Object -First 1
+    }
+    return $null
+}
+
+function Get-ClusterDiskResource {
+    param([string]$Name)
+    $resource = Get-ClusterSharedVolume -Name $Name -ErrorAction SilentlyContinue
+    if ($null -ne $resource) { return $resource }
+    return Get-ClusterResource -Name $Name -ErrorAction SilentlyContinue
+}
+
+function Get-PhysicalDiskInfos {
+    # Prefer CSV objects when a disk appears in both APIs, then de-duplicate by
+    # the underlying disk identity so reruns count each owned disk once.
+    $resources = @(Get-ClusterSharedVolume -ErrorAction SilentlyContinue)
+    $resources += @(Get-ClusterResource | Where-Object {
+        $_.ResourceType -eq 'Physical Disk'
+    })
+    $seenDisks = New-Object System.Collections.Generic.HashSet[string](
+        [System.StringComparer]::OrdinalIgnoreCase
+    )
+    $diskInfos = @()
+    foreach ($resource in $resources) {
+        $disk = Get-DiskForClusterResource -Resource $resource
+        if ($null -ne $disk) {
+            $diskIdentity = if ($disk.Guid) {
+                $normalizedGuid = "$($disk.Guid)".Trim('{}')
+                "Guid:$normalizedGuid"
+            } elseif ($disk.UniqueId) {
+                "UniqueId:$($disk.UniqueId)"
+            } else {
+                "Number:$($disk.Number)"
+            }
+            if (-not $seenDisks.Add($diskIdentity)) {
+                continue
+            }
+            $diskInfos += [pscustomobject]@{
+                Resource = $resource
+                Disk = $disk
+            }
+        }
+    }
+    return @($diskInfos)
+}
+
+function Rename-ClusterResourceIfNeeded {
+    param($Resource, [string]$Name)
+    if ($Resource.Name -ne $Name) {
+        $Resource.Name = $Name
+    }
+    $resource = Get-ClusterDiskResource -Name $Name
+    if ($null -eq $resource) {
+        throw "Cluster disk resource '$Name' was not found after rename."
+    }
+    return $resource
+}
+
+function Ensure-ClusterResourceOnline {
+    param($Resource)
+    if ($null -ne $Resource.PSObject.Properties['SharedVolumeInfo']) {
+        if ("$($Resource.State)" -ne 'Online') {
+            throw "Cluster Shared Volume '$($Resource.Name)' is not online."
+        }
+        return
+    }
+    if ("$($Resource.State)" -ne 'Online') {
+        Start-ClusterResource -Name $Resource.Name -Wait 120 -ErrorAction Stop |
+            Out-Null
     }
 }
 
-#----------------------------------------------------------------------------
-# Add shared folders to GeneralFS role
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Change the owner of GeneralFS to $env:ComputerName to access the local path of shares."
-Move-ClusterGroup -Name $config.Endpoints.GeneralFS.Name -Node $env:ComputerName
-Start-Sleep 15
-.\Write-Info.ps1 "Add shared folders to GeneralFS role"
-$fileServerShare = Get-SmbShare | Where-Object {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.Endpoints.GeneralFS.Name.ToLower()}
-if($null -eq $fileServerShare)
-{
-    .\Write-Info.ps1 "Get general disk volume"
-    # Note: 
-    # There are 3 disks with label prefix "CLUSTER_DATA" for general disk and cluster shared volumes.
-    # The general disk's FileSystem is NTFS
-    # The cluster shared volumes' FileSystem is CSVFS
-    # Retry 5 minutes (30 * 10 s) in case the disk is not ready due to change cluster owner node.
-    $retryTime = 30
-    do
-    {
-        $drive = Get-WmiObject -Class Win32_volume | Where-Object {$_.FileSystem -eq "NTFS" -and $_.Label -eq $Script:SMBGeneralDiskLabel}
-        if($null -eq $drive)
-        {
-            Start-Sleep 10
-            $retryTime--
-            .\Write-Info.ps1 "Retry to get general disk volume"
-        }
-    } while ($null -eq $drive -and $retryTime -gt 0)
-
-    if($retryTime -le 0)
-    {
-        .\Write-Info.ps1 "Does not found general disk volume"
-        Write-ConfigFailureSignal
-        exit (ExitCode)
+function Get-GeneralDiskRoot {
+    param($Resource)
+    $disk = Get-DiskForClusterResource -Resource $Resource
+    if ($null -eq $disk) {
+        throw "Could not resolve disk for Cluster resource '$($Resource.Name)'."
     }
+    $partition = Get-Partition -DiskNumber $disk.Number -ErrorAction Stop |
+        Where-Object { $_.Type -notin @('Reserved', 'System') } |
+        Select-Object -First 1
+    if ($null -eq $partition) {
+        throw "GeneralFS disk $($disk.Number) has no usable partition."
+    }
+    if (-not $partition.DriveLetter) {
+        $usedLetters = @(Get-Volume | Where-Object { $_.DriveLetter } |
+            ForEach-Object { "$($_.DriveLetter)" })
+        $letter = @([char[]]([char]'F'..[char]'Z') | Where-Object {
+            "$_" -notin $usedLetters
+        } | Select-Object -First 1)
+        if ($letter.Count -ne 1) { throw 'No drive letter is available for GeneralFS.' }
+        Add-PartitionAccessPath -DiskNumber $disk.Number `
+            -PartitionNumber $partition.PartitionNumber `
+            -DriveLetter "$($letter[0])" -ErrorAction Stop
+        $partition = Get-Partition -DiskNumber $disk.Number `
+            -PartitionNumber $partition.PartitionNumber
+    }
+    return "$($partition.DriveLetter):\"
+}
 
-    .\Write-Info.ps1 "Get available drive letter"
-	$driveLetter = ""
-	foreach ($letter in [char[]]([char]'F'..[char]'Z')) 
-    { 
-      	$driveLetter = $letter + ":"
-        $logicaldisk = get-wmiobject win32_logicaldisk | Where-Object {$_.DeviceID -eq $driveLetter}
-        if ($null -eq $logicaldisk -and (Test-Path -path $driveLetter) -eq $false)
-        { 
-            break
-        } 
-    } 
-	.\Write-Info.ps1 "The available drive letter is: $driveLetter"
-
-    .\Write-Info.ps1 "Assign drive letter to general disk volume"
-    # Set-WmiInstance fails in PS7 because $drive is a deserialized WMI object.
-    # Use powershell.exe to perform the assignment with a live WMI object.
-    $volumeLabel = $Script:SMBGeneralDiskLabel
-    powershell.exe -NoProfile -Command "
-        `$vol = Get-WmiObject -Class Win32_Volume | Where-Object { `$_.FileSystem -eq 'NTFS' -and `$_.Label -eq '$volumeLabel' }
-        if (`$vol) { Set-WmiInstance -InputObject `$vol -Arguments @{ DriveLetter = '$driveLetter' } }
-    "
-    Start-Sleep 10
-
-    # Create share folders
-    .\Write-Info.ps1 "Create share folder: $driveLetter\SMBClustered"
-    CreateShareFolder "$driveLetter\SMBClustered"
-    $generalfsShare1 = Get-SmbShare | Where-Object {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.Endpoints.GeneralFS.Name.ToLower()}
-    if($null -eq $generalfsShare1)
-    {
-        New-SMBShare -name "SMBClustered" -ScopeName $config.Endpoints.GeneralFS.Name -Path "$driveLetter\SMBClustered" -FullAccess "$domainAdmin" -ContinuouslyAvailable $true -CachingMode BranchCache
-	}
-
-    .\Write-Info.ps1 "Create share folder: $driveLetter\SMBClusteredEncrypted"
-    CreateShareFolder "$driveLetter\SMBClusteredEncrypted"
-    $generalfsShare2 = Get-SmbShare | Where-Object {$_.Name -eq "SMBClusteredEncrypted" -and $_.ScopeName.ToLower() -eq $config.Endpoints.GeneralFS.Name.ToLower()}
-    if($null -eq $generalfsShare2)
-    {
-	    New-SMBShare -name "SMBClusteredEncrypted" -ScopeName $config.Endpoints.GeneralFS.Name -Path "$driveLetter\SMBClusteredEncrypted" -FullAccess "$domainAdmin" -ContinuouslyAvailable $true -CachingMode BranchCache -EncryptData $true
+function Ensure-ScopedShare {
+    param(
+        [string]$Name,
+        [string]$ScopeName,
+        [string]$Path,
+        [string]$FullAccess,
+        [bool]$EncryptData = $false,
+        [bool]$ContinuouslyAvailable = $true
+    )
+    New-Item -ItemType Directory -Path $Path -Force | Out-Null
+    & icacls.exe $Path '/grant' "${FullAccess}:(OI)(CI)(F)" | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to grant '$FullAccess' access to '$Path'."
+    }
+    $share = Get-SmbShare -Name $Name -ScopeName $ScopeName `
+        -ErrorAction SilentlyContinue
+    if ($null -eq $share) {
+        New-SmbShare -Name $Name -ScopeName $ScopeName -Path $Path `
+            -FullAccess $FullAccess -ContinuouslyAvailable $ContinuouslyAvailable `
+            -CachingMode BranchCache -EncryptData $EncryptData -ErrorAction Stop |
+            Out-Null
+    }
+    elseif ($share.Path -ne $Path) {
+        throw "Share '$ScopeName\$Name' uses '$($share.Path)', expected '$Path'."
     }
 }
 
-#----------------------------------------------------------------------------
-# Azure cluster: GeneralFS virtual IPs are not routable without an Azure Load
-# Balancer because Azure's SDN drops traffic to IPs not assigned to any NIC.
-# Instead of setting /32 masks + ProbePort for a non-existent LB, we leave the
-# default /24 masks from Add-ClusterFileServerRole and rely on hosts-file
-# entries (configured by DSC HostsFileEntries) on client machines to resolve
-# GeneralFS to the owning node's real IP.
-#----------------------------------------------------------------------------
-
-#----------------------------------------------------------------------------
-# Create ScaleoutFS role
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Create ScaleoutFS role"
-$scaleOutGroup = Get-ClusterGroup | Where-Object {$_.Name -eq $config.Endpoints.ScaleoutFS.Name}
-if($null -eq $scaleOutGroup)
-{
-    Add-ClusterScaleOutFileServerRole -Name $config.Endpoints.ScaleoutFS.Name
-}
-
-#----------------------------------------------------------------------------
-# Add shared folders to ScaleoutFS role
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Change the owner of ScaleOutFS and SMBScaleOutDisk to $env:ComputerName to access the local path of shares."
-Move-ClusterGroup -Name $config.Endpoints.ScaleoutFS.Name -Node $env:ComputerName
-Start-Sleep 5
-Move-ClusterSharedVolume -Name "SMBScaleOutDisk" -Node $env:ComputerName
-Start-Sleep 10
-
-$retryTime = 30
-do
-{
-    try
-    {
-        $catchIssue = $false
-
-        .\Write-Info.ps1 "Add shared folders to ScaleoutFS role"
-        .\Write-Info.ps1 "Create share folder: $systemDrive\clusterstorage\volume1\SMBClustered"
-        CreateShareFolder "$systemDrive\clusterstorage\volume1\SMBClustered"
-        $scaleOutShare = Get-SmbShare | Where-Object {$_.Name -eq "SMBClustered" -and $_.ScopeName.ToLower() -eq $config.Endpoints.ScaleoutFS.Name.ToLower()}
-        if($null -eq $scaleOutShare)
-        {
-            New-SMBShare -name "SMBClustered" -ScopeName $config.Endpoints.ScaleoutFS.Name -Path "$systemDrive\ClusterStorage\Volume1\SMBClustered" -FullAccess "$domainAdmin" -ContinuouslyAvailable $true -CachingMode BranchCache
-        }
-
-        .\Write-Info.ps1 "Create share folder: $systemDrive\clusterstorage\volume1\SMBClusteredForceLevel2"
-        # Note: Create SMBClusteredForceLevel2 for Oplock model
-        CreateShareFolder "$systemDrive\clusterstorage\volume1\SMBClusteredForceLevel2"
-        $ClusteredForceLevel2 = Get-SmbShare | Where-Object {$_.Name -eq "SMBClusteredForceLevel2" -and $_.ScopeName.ToLower() -eq $config.Endpoints.ScaleoutFS.Name.ToLower()}
-        if($null -eq $ClusteredForceLevel2)
-        {
-            New-SMBShare -name "SMBClusteredForceLevel2" -ScopeName $config.Endpoints.ScaleoutFS.Name -Path "$systemDrive\ClusterStorage\Volume1\SMBClusteredForceLevel2" -FullAccess "$domainAdmin"
-        }
-    }
-    catch
-    {
-        Start-Sleep 10
-        $retryTime--
-        $catchIssue = $true
-    }
-
-} while ($catchIssue -eq $true -and $retryTime -gt 0)
-
-if($retryTime -le 0)
-{
-    .\Write-Error.ps1 "Failed to add shared folders to ScaleoutFS role."
-    Write-ConfigFailureSignal
-    exit (ExitCode)
-}
-
-#----------------------------------------------------------------------------
-# Create infrastructure share before adding cluster shared volume
-#----------------------------------------------------------------------------
-$build = [environment]::OSVersion.Version.Build
-if (($build -ge 17609) -and (![string]::IsNullOrEmpty($infraFsName)))
-{
-    $InfrastructureGroup = Get-ClusterGroup | Where-Object {$_.Name -eq $infraFsName}
-    if($null -eq $InfrastructureGroup)
-    {
-        .\Write-Info.ps1 "Create InfraFS role"
-        Add-ClusterScaleOutFileServerRole -Infrastructure -Name $infraFsName
-        .\Write-Info.ps1 "Add infrastructure share"
-        $clusterAvailableResources = Get-ClusterResource | Where-Object {$_.OwnerGroup -eq "Available Storage" -and $_.ResourceType -eq "Physical Disk" -and $_.Name -ne "SMBGeneralDisk"}
-        if ($clusterAvailableResources.Count -lt 1)
-        {
-            .\Write-Error.ps1 "No available storage for infrastructure share."
-            Write-ConfigFailureSignal
-            exit (ExitCode)
-        }
-        $infraShare = $clusterAvailableResources | Select-Object -First 1
-        Add-ClusterSharedVolume -Name $infraShare.Name
-        .\Write-Info.ps1 "Check the availability of infrastructure share. \\$infraFsName\Volume1 should be available."
-        if (!(Test-Path "\\$infraFsName\Volume1"))
-        {
-            .\Write-Error.ps1 "Failed to add infrastructure share."
-            Write-ConfigFailureSignal
-            exit (ExitCode)
-        }
-    }
-}
-
-# Reconcile VCOs after role creation. This is normally a no-op, but it repairs
-# endpoint objects deleted by an interrupted or older continuation.
-$vcoRepairScript = Join-Path $scriptPath 'Repair-ClusterVirtualComputerObjects.ps1'
-$processLauncher = Join-Path $scriptPath 'Invoke-ProcessAsUser.ps1'
-$vcoRepairResult = Join-Path $env:TEMP "wpts-vco-repair-$PID.result"
-if (-not (Test-Path $vcoRepairScript) -or -not (Test-Path $processLauncher)) {
-    throw 'Cluster VCO repair prerequisites are missing from the deployment package.'
-}
-$domainNetBios = if ($config.Domain -and $config.Domain.NetBiosName) {
-    $config.Domain.NetBiosName
-} else {
-    $domain.Split('.')[0].ToUpperInvariant()
-}
-Remove-Item -LiteralPath $vcoRepairResult -Force -ErrorAction SilentlyContinue
+$startedAt = Get-Date
 try {
-    $repairProcess = & $processLauncher `
-        -UserName $config.Core.Username -Domain $domainNetBios -Password $config.Core.Password `
-        -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" `
-        -ArgumentList @(
-            '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
-            '-File', $vcoRepairScript,
-            '-ConfigFile', $protocolConfigFile,
-            '-ResultPath', $vcoRepairResult
-        ) `
-        -WorkingDirectory $scriptPath `
-        -WaitForExit -TimeoutSeconds 600
-    if ($repairProcess.ExitCode -ne 0) {
-        throw "Cluster VCO repair process exited with code $($repairProcess.ExitCode)."
+    Import-Module FailoverClusters -ErrorAction Stop
+    $config = Get-Content -LiteralPath $ConfigureFile -Raw -ErrorAction Stop |
+        ConvertFrom-Json -ErrorAction Stop
+    $clusterName = "$($config.Endpoints.Cluster.Name)"
+    $generalFsName = "$($config.Endpoints.GeneralFS.Name)"
+    $scaleOutName = "$($config.Endpoints.ScaleoutFS.Name)"
+    $infraFsName = "$($config.Endpoints.InfrastructureFS.Name)"
+    $clusterNodes = @($config.Machines.Node01.ComputerName,
+        $config.Machines.Node02.ComputerName)
+    $clusterIps = @($config.Endpoints.Cluster.IpConfig)
+    $generalFsIps = @($config.Endpoints.GeneralFS.IpConfig)
+    $domainAdmin = "$($config.Domain.NetBiosName)\$($config.Core.Username)"
+
+    Write-ClusterHeartbeat -Checkpoint 'Preparing unowned iSCSI disks' `
+        -StartedAt $startedAt
+    $null = Prepare-UnownedIscsiDisks
+
+    $cluster = Get-Cluster -ErrorAction SilentlyContinue
+    if ($null -ne $cluster -and $cluster.Name -ne $clusterName) {
+        throw "This node belongs to Cluster '$($cluster.Name)', expected '$clusterName'."
     }
-    if (-not (Test-Path $vcoRepairResult)) {
-        throw 'Cluster VCO repair process returned no result.'
+    if ($null -eq $cluster) {
+        New-Cluster -Name $clusterName -Node $clusterNodes `
+            -StaticAddress @($clusterIps.Ip) -NoStorage -ErrorAction Stop |
+            Out-Null
+        $cluster = Get-Cluster -ErrorAction Stop
     }
-    $vcoRepairOutcome = (Get-Content -LiteralPath $vcoRepairResult -Raw).Trim()
-    if ($vcoRepairOutcome -notlike 'SUCCESS|*') {
-        throw "Cluster VCO repair failed: $vcoRepairOutcome"
+    else {
+        .\Write-Info.ps1 "Cluster '$clusterName' already exists; preserving its AD and DNS endpoint identities"
     }
-    .\Write-Info.ps1 "[OK] Cluster virtual computer objects verified: $($vcoRepairOutcome.Substring(8))" -ForegroundColor Green
-} finally {
+
+    Write-ClusterHeartbeat -Checkpoint 'Repairing Cluster node membership' `
+        -StartedAt $startedAt
+    $memberNames = @(Get-ClusterNode | ForEach-Object { $_.Name })
+    foreach ($nodeName in $clusterNodes) {
+        if ($memberNames -notcontains $nodeName) {
+            Add-ClusterNode -Name $nodeName -NoStorage `
+                -ErrorAction Stop | Out-Null
+        }
+    }
+    Wait-DeploymentCondition -Condition {
+        $nodes = @(Get-ClusterNode -ErrorAction SilentlyContinue)
+        @($nodes | Where-Object { $_.State -eq 'Up' }).Count -eq $clusterNodes.Count
+    } -TimeoutSeconds 600 -PollIntervalSeconds 10 `
+        -Phase 'ClusterFormation' -Operation 'Wait for both Cluster nodes Up' `
+        -HeartbeatPath $HeartbeatPath -LastCheckpoint 'Membership repaired' | Out-Null
+
+    foreach ($network in @(Get-ClusterNetwork)) {
+        if ([int]$network.Role -ne 3) { $network.Role = 3 }
+    }
+
+    Write-ClusterHeartbeat -Checkpoint 'Adding available iSCSI disks' `
+        -StartedAt $startedAt
+    $availableDisks = @(Get-ClusterAvailableDisk -ErrorAction SilentlyContinue)
+    if ($availableDisks.Count -gt 0) {
+        $availableDisks | Add-ClusterDisk -ErrorAction Stop | Out-Null
+    }
+    $diskInfos = Get-PhysicalDiskInfos
+    if ($diskInfos.Count -ne 4) {
+        throw "Cluster owns $($diskInfos.Count) physical disks; expected exactly 4."
+    }
+
+    $quorumInfo = $diskInfos | Where-Object {
+        [long]$_.Disk.Size -lt [long](2GB)
+    } | Select-Object -First 1
+    if ($null -eq $quorumInfo) { throw 'The 1-GB quorum disk was not found.' }
+    $quorumResource = Rename-ClusterResourceIfNeeded `
+        -Resource $quorumInfo.Resource -Name 'ClusterQuorumDisk'
+    Ensure-ClusterResourceOnline -Resource $quorumResource
+    Set-ClusterQuorum -DiskWitness $quorumResource.Name -ErrorAction Stop |
+        Out-Null
+
+    $dataInfos = @($diskInfos | Where-Object {
+        [long]$_.Disk.Size -ge [long](2GB)
+    } | Sort-Object { $_.Disk.UniqueId })
+    if ($dataInfos.Count -ne 3) {
+        throw "Cluster requires three data disks; found $($dataInfos.Count)."
+    }
+
+    $scaleResource = Get-ClusterDiskResource -Name 'SMBScaleOutDisk'
+    $infraResource = Get-ClusterDiskResource -Name 'SMBInfraDisk'
+    $reservedDataGuids = @(@($scaleResource, $infraResource) | Where-Object {
+        $null -ne $_
+    } | ForEach-Object {
+        $reservedDisk = Get-DiskForClusterResource -Resource $_
+        if ($null -ne $reservedDisk) { "$($reservedDisk.Guid)" }
+    })
+
+    $generalResource = Get-ClusterDiskResource -Name 'SMBGeneralDisk'
+    if ($null -eq $generalResource) {
+        $generalCandidate = $dataInfos | Where-Object {
+            "$($_.Disk.Guid)" -notin $reservedDataGuids
+        } | Select-Object -First 1
+        if ($null -eq $generalCandidate) {
+            throw 'No data disk is available for SMBGeneralDisk.'
+        }
+        $generalResource = Rename-ClusterResourceIfNeeded `
+            -Resource $generalCandidate.Resource -Name 'SMBGeneralDisk'
+    }
+    Ensure-ClusterResourceOnline -Resource $generalResource
+    $generalDisk = Get-DiskForClusterResource -Resource $generalResource
+    if ($null -eq $generalDisk) { throw 'Could not resolve SMBGeneralDisk.' }
+
+    if ($null -eq $scaleResource) {
+        $infraDiskGuid = if ($null -ne $infraResource) {
+            $disk = Get-DiskForClusterResource -Resource $infraResource
+            if ($null -ne $disk) { "$($disk.Guid)" }
+        } else { $null }
+        $candidate = $dataInfos | Where-Object {
+            "$($_.Disk.Guid)" -ine "$($generalDisk.Guid)" -and
+            (-not $infraDiskGuid -or "$($_.Disk.Guid)" -ine $infraDiskGuid)
+        } | Select-Object -First 1
+        if ($null -eq $candidate) {
+            throw 'No data disk is available for SMBScaleOutDisk.'
+        }
+        if ($null -eq (Get-ClusterSharedVolume -Name $candidate.Resource.Name `
+                -ErrorAction SilentlyContinue)) {
+            Add-ClusterSharedVolume -Name $candidate.Resource.Name -ErrorAction Stop |
+                Out-Null
+        }
+        $scaleResource = Rename-ClusterResourceIfNeeded `
+            -Resource (Get-ClusterSharedVolume -Name $candidate.Resource.Name `
+                -ErrorAction Stop) `
+            -Name 'SMBScaleOutDisk'
+    }
+    Ensure-ClusterResourceOnline -Resource $scaleResource
+    if ($null -eq (Get-ClusterSharedVolume -Name $scaleResource.Name `
+            -ErrorAction SilentlyContinue)) {
+        Add-ClusterSharedVolume -Name $scaleResource.Name -ErrorAction Stop |
+            Out-Null
+    }
+    $scaleDisk = Get-DiskForClusterResource -Resource $scaleResource
+    if ($null -eq $scaleDisk) { throw 'Could not resolve SMBScaleOutDisk.' }
+
+    if (-not [string]::IsNullOrWhiteSpace($infraFsName) -and
+        $null -eq $infraResource) {
+        $candidate = $dataInfos | Where-Object {
+            "$($_.Disk.Guid)" -notin @("$($generalDisk.Guid)", "$($scaleDisk.Guid)")
+        } | Select-Object -First 1
+        if ($null -eq $candidate) { throw 'No data disk remains for InfraFS.' }
+        if ($null -eq (Get-ClusterSharedVolume -Name $candidate.Resource.Name `
+                -ErrorAction SilentlyContinue)) {
+            Add-ClusterSharedVolume -Name $candidate.Resource.Name -ErrorAction Stop |
+                Out-Null
+        }
+        $infraResource = Rename-ClusterResourceIfNeeded `
+            -Resource (Get-ClusterSharedVolume -Name $candidate.Resource.Name `
+                -ErrorAction Stop) `
+            -Name 'SMBInfraDisk'
+    }
+    if ($null -ne $infraResource) {
+        Ensure-ClusterResourceOnline -Resource $infraResource
+    }
+
+    Write-ClusterHeartbeat -Checkpoint 'Repairing Clustered file server roles' `
+        -StartedAt $startedAt
+    $generalGroup = Get-ClusterGroup -Name $generalFsName -ErrorAction SilentlyContinue
+    if ($null -eq $generalGroup) {
+        Add-ClusterFileServerRole -Name $generalFsName `
+            -Storage $generalResource.Name -StaticAddress @($generalFsIps.Ip) `
+            -ErrorAction Stop | Out-Null
+    }
+    elseif ($generalResource.OwnerGroup -ne $generalFsName) {
+        Move-ClusterResource -Name $generalResource.Name -Group $generalFsName `
+            -ErrorAction Stop | Out-Null
+    }
+    Move-ClusterGroup -Name $generalFsName -Node $env:COMPUTERNAME `
+        -Wait 120 -ErrorAction Stop | Out-Null
+    Set-AzureClusterIpResources -GroupName $generalFsName `
+        -IpConfigurations $generalFsIps
+
+    $generalRoot = Get-GeneralDiskRoot -Resource $generalResource
+    Ensure-ScopedShare -Name 'SMBClustered' -ScopeName $generalFsName `
+        -Path (Join-Path $generalRoot 'SMBClustered') -FullAccess $domainAdmin
+    Ensure-ScopedShare -Name 'SMBClusteredEncrypted' -ScopeName $generalFsName `
+        -Path (Join-Path $generalRoot 'SMBClusteredEncrypted') `
+        -FullAccess $domainAdmin -EncryptData $true
+
+    if ($null -eq (Get-ClusterGroup -Name $scaleOutName -ErrorAction SilentlyContinue)) {
+        Add-ClusterScaleOutFileServerRole -Name $scaleOutName -ErrorAction Stop |
+            Out-Null
+    }
+    Move-ClusterGroup -Name $scaleOutName -Node $env:COMPUTERNAME `
+        -Wait 120 -ErrorAction Stop | Out-Null
+    Move-ClusterSharedVolume -Name $scaleResource.Name -Node $env:COMPUTERNAME `
+        -ErrorAction Stop | Out-Null
+    $scaleCsv = Get-ClusterSharedVolume -Name $scaleResource.Name -ErrorAction Stop
+    $scaleRoot = "$($scaleCsv.SharedVolumeInfo.FriendlyVolumeName)"
+    Ensure-ScopedShare -Name 'SMBClustered' -ScopeName $scaleOutName `
+        -Path (Join-Path $scaleRoot 'SMBClustered') -FullAccess $domainAdmin
+    Ensure-ScopedShare -Name 'SMBClusteredForceLevel2' -ScopeName $scaleOutName `
+        -Path (Join-Path $scaleRoot 'SMBClusteredForceLevel2') `
+        -FullAccess $domainAdmin -ContinuouslyAvailable $true
+
+    if (-not [string]::IsNullOrWhiteSpace($infraFsName)) {
+        $infraGroup = Get-ClusterGroup -Name $infraFsName `
+            -ErrorAction SilentlyContinue
+        if ($null -eq $infraGroup) {
+            $infraGroup = Get-ClusterGroup -Name 'Infrastructure File Server' `
+                -ErrorAction SilentlyContinue
+        }
+        if ($null -eq $infraGroup) {
+            Add-ClusterScaleOutFileServerRole -Infrastructure -Name $infraFsName `
+                -ErrorAction Stop | Out-Null
+        }
+        if ($null -ne $infraResource -and
+            $null -eq (Get-ClusterSharedVolume -Name $infraResource.Name `
+                -ErrorAction SilentlyContinue)) {
+            Add-ClusterSharedVolume -Name $infraResource.Name -ErrorAction Stop |
+                Out-Null
+        }
+    }
+
+    Set-AzureClusterIpResources -GroupName 'Cluster Group' `
+        -IpConfigurations $clusterIps
+
+    # Repair VCOs after role creation. This is normally a no-op, but restores
+    # endpoint identities removed by an interrupted or older continuation.
+    $scriptPath = $PSScriptRoot
+    $protocolConfigFile = $ConfigureFile
+    $vcoRepairScript = Join-Path $scriptPath 'Repair-ClusterVirtualComputerObjects.ps1'
+    $processLauncher = Join-Path $scriptPath 'Invoke-ProcessAsUser.ps1'
+    $vcoRepairResult = Join-Path $env:TEMP "wpts-vco-repair-$PID.result"
+    if (-not (Test-Path $vcoRepairScript) -or -not (Test-Path $processLauncher)) {
+        throw 'Cluster VCO repair prerequisites are missing from the deployment package.'
+    }
     Remove-Item -LiteralPath $vcoRepairResult -Force -ErrorAction SilentlyContinue
-}
-
-#----------------------------------------------------------------------------
-# Update FailoverThreshold for Cluster Group and File Server role
-# so that they can exceed more than 1 failure tolerance during a short period
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Update FailoverThreshold for Cluster Group and File Server role"
-
-foreach ($groupName in @("Cluster Group", $config.Endpoints.GeneralFS.Name, $config.Endpoints.ScaleoutFS.Name)) {
-    $clusgp = Get-ClusterGroup -Name $groupName -ErrorAction SilentlyContinue
-    if ($null -ne $clusgp) {
-        try {
-            powershell.exe -NoProfile -Command "(Get-ClusterGroup -Name '$groupName').FailoverThreshold = 1024"
-            .\Write-Info.ps1 "  Set FailoverThreshold=1024 for '$groupName'"
+    try {
+        $repairProcess = & $processLauncher `
+            -UserName $config.Core.Username `
+            -Domain $config.Domain.NetBiosName `
+            -Password $config.Core.Password `
+            -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" `
+            -ArgumentList @(
+                '-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
+                '-File', $vcoRepairScript,
+                '-ConfigFile', $protocolConfigFile,
+                '-ResultPath', $vcoRepairResult
+            ) `
+            -WorkingDirectory $scriptPath `
+            -WaitForExit -TimeoutSeconds 600
+        if ($repairProcess.ExitCode -ne 0) {
+            throw "Cluster VCO repair process exited with code $($repairProcess.ExitCode)."
         }
-        catch {
-            .\Write-Info.ps1 "  Warning: Could not set FailoverThreshold for '$groupName': $_" -ForegroundColor Yellow
+        if (-not (Test-Path $vcoRepairResult)) {
+            throw 'Cluster VCO repair process returned no result.'
         }
-    } else {
-        .\Write-Info.ps1 "  Warning: Cluster group '$groupName' not found, skipping FailoverThreshold" -ForegroundColor Yellow
+        $vcoRepairOutcome = (Get-Content -LiteralPath $vcoRepairResult -Raw).Trim()
+        if ($vcoRepairOutcome -notlike 'SUCCESS|*') {
+            throw "Cluster VCO repair failed: $vcoRepairOutcome"
+        }
+        .\Write-Info.ps1 "[OK] Cluster virtual computer objects verified: $($vcoRepairOutcome.Substring(8))"
     }
-}
+    finally {
+        Remove-Item -LiteralPath $vcoRepairResult -Force -ErrorAction SilentlyContinue
+    }
 
-#----------------------------------------------------------------------------
-# Ending
-#----------------------------------------------------------------------------
-.\Write-Info.ps1 "Completed setup cluster failover ENV."
-Pop-Location
-Stop-Transcript
-exit 0
+    foreach ($groupName in @('Cluster Group', $generalFsName, $scaleOutName)) {
+        $group = Get-ClusterGroup -Name $groupName -ErrorAction SilentlyContinue
+        if ($null -ne $group) { $group.FailoverThreshold = 1024 }
+    }
+
+    Wait-DeploymentCondition -Condition {
+        & (Join-Path $PSScriptRoot 'Test-ClusterReadiness.ps1') `
+            -ConfigureFile $ConfigureFile
+    } -TimeoutSeconds 600 -PollIntervalSeconds 15 `
+        -Phase 'ClusterFormation' -Operation 'Wait for live Cluster readiness' `
+        -HeartbeatPath $HeartbeatPath -LastCheckpoint 'Cluster roles and IPs repaired' |
+        Out-Null
+    return $true
+}
+catch {
+    .\Write-Error.ps1 "Cluster formation/repair failed: $($_.Exception.Message)"
+    throw
+}
+finally {
+    if ($transcriptStarted) { Stop-Transcript | Out-Null }
+    Pop-Location
+}

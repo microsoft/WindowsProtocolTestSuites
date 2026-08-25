@@ -21,7 +21,7 @@ The Portal renders a form from [`main.bicep`](main.bicep) (compiled to [`azurede
 - The package embeds a **fixed test-suite drop** (a snapshot) — appropriate for demo/onboarding, not for testing an arbitrary build.
 - Marketplace **image terms** for the SUT/Driver images may need to be accepted once per subscription (see the [top-level README](../README.md)); otherwise the deployment can fail on first use.
 - **Disk encryption is off by default for the button** (`enableDiskEncryption=false`). Azure Disk Encryption (ADE) is applied by `deploy.ps1` as a *post-deploy* step, which the Portal button cannot run — so for the button the Key Vault would be created but never used. Managed disks are platform-encrypted at rest regardless. If you specifically want ADE and your subscription has the required Key Vault permissions, set `enableDiskEncryption` to **true** in the form.
-- **VM sizes default to burstable (B-series):** driver `Standard_B4ms`, SUT `Standard_B8ms` — chosen for **broad regional availability** (fewest capacity errors) and low cost for demo/onboarding. Trade-off: the driver's CPU may throttle during long test runs, so runs can be slower than `deploy.ps1` (which uses compute-optimized sizes). For faster runs, change the VM sizes in the form or use `deploy.ps1`.
+- **VM sizes use curated dropdowns with burstable defaults:** Driver `Standard_B4ms`, SUT `Standard_B8ms`. Approved D/F-series alternatives are available for regions where the defaults are constrained or when higher sustained throughput is needed. The Driver's burstable CPU may throttle during long runs, so `deploy.ps1` remains preferable for maximum performance.
 - **VM capacity / quota** can still vary by region. If the deployment fails preflight with `SkuNotAvailable`, `AllocationFailed`, or `ZonalAllocationFailed`, pick a different **Region** (the template deploys into the resource group's region) or change the **driver/SUT VM size** in the form. Unlike `deploy.ps1`, the one-click button **cannot auto-retry across SKUs**, so this is a manual choice.
 
 **Publishing / updating the package + template** (maintainers): see [Publishing the public package](#publishing-the-public-package-deploy-to-azure-button) below.
@@ -86,13 +86,13 @@ $adminPassword = Read-Host "Enter admin password" -AsSecureString
   -AdminPassword $adminPassword
 ```
 
-### 3. Wait for deployment and automatic tests
+### 3. Wait for deployment and optional automatic tests
 
 The script runs a single Bicep deployment (~5 min for Azure resources). Bastion is deployed alongside the VMs after core networking, so Bastion provisioning does not delay VM creation. The same command then remains attached while the VMs configure themselves:
 
 1. **SUT**: Feature preparation, one planned reboot, post-reboot shares/FSRM convergence, then environment setup
 2. **Driver** (~10-15 min): Tools install, RSA keys, test environment setup
-3. **Tests run automatically** — a scheduled task on the Driver waits for SUT readiness, then executes the full test suite. No login required.
+3. **Tests run automatically by default** — a scheduled task on the Driver waits for SUT readiness, then executes the full test suite. Set `enableTestAutoRun = false` in `parameters/workgroup.bicepparam` (or disable it in the Portal form) to stop after configuration and run `Invoke-TestRun.ps1` manually.
 
 The command does not report success merely because ARM reports `Succeeded`. It requires fresh SUT and Driver signals, both test completion signals, and at least one TRX file. Each Run Command probe is bounded and transient probe errors use capped backoff.
 
@@ -130,12 +130,11 @@ Get-ChildItem C:\Test\TestResults\*.trx
 | `ResourceGroupName` | Target resource group name |
 | `AdminPassword` | SecureString password for testadmin account |
 
-> **Note:** The Azure region is read from `param location` in the bicepparam file (single source of truth). Edit `parameters/workgroup.bicepparam` to change it.
-
 ### Optional Parameters (command-line)
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
+| `Location` | `West US 2` | Azure region used when creating the resource group |
 | `ParametersFile` | `parameters/workgroup.bicepparam` | Bicep parameters file |
 | `DscFolderPath` | `DSC/` (adjacent to deploy.ps1) | Path to DSC scripts folder |
 | `DscPackageZipUrl` | *(empty)* | Direct URL to pre-built DSC package zip |
@@ -154,7 +153,6 @@ Edit [`parameters/workgroup.bicepparam`](parameters/workgroup.bicepparam) to cus
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `location` | `West US 2` | Azure region |
 | `environmentPrefix` | `fstest` | Prefix for resource names |
 | `driverVmSize` | `Standard_F4as_v6` | Driver VM size (auto-fallback) |
 | `sutVmSize` | `Standard_D8ls_v5` | SUT VM size (auto-fallback) |

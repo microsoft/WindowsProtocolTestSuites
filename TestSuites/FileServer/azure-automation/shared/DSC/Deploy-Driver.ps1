@@ -71,6 +71,12 @@ if (Test-Path $configFile) {
     try { $cfg = Get-Content -Path $configFile -Raw | ConvertFrom-Json }
     catch { Write-Warning "Could not parse Config.json: $_" }
 }
+$testAutoRun = if ($null -eq $cfg -or $null -eq $cfg.TestExecution -or
+    $null -eq $cfg.TestExecution.AutoRun) {
+    $true
+} else {
+    [Convert]::ToBoolean("$($cfg.TestExecution.AutoRun)")
+}
 $validateScript = "$scriptsPath\Validate-ConfigFile.ps1"
 if (Test-Path $validateScript) {
     .\Write-Info.ps1 "Validating Config.json..." -ForegroundColor Cyan
@@ -82,6 +88,14 @@ if (Test-Path $validateScript) {
         .\Write-Error.ps1 "[FAIL] Config.json validation failed: $($_.Exception.Message)"
         Pop-Location; Stop-Transcript; throw
     }
+}
+
+if ($null -ne $cfg -and $cfg.Core.Scenario -eq 'Cluster') {
+    Pop-Location
+    Stop-Transcript
+    & (Join-Path $dscFolder 'Deploy-ClusterDriver.ps1') `
+        -WorkingPath $WorkingPath
+    return
 }
 
 $toolsJsonPath = "$WorkingPath\Tools.json"
@@ -779,7 +793,14 @@ if ($currentStep -eq 1) {
     $phase3 = [System.Diagnostics.Stopwatch]::StartNew()
 
     $testRunScript = Join-Path $scriptsPath 'Invoke-TestRun.ps1'
-    if (-not $phase2Ok) {
+    if (-not $testAutoRun) {
+        $phase3.Stop()
+        $staleTestTask = Get-ScheduledTask -TaskName 'RunFileServerTests' -ErrorAction SilentlyContinue
+        if ($null -ne $staleTestTask) {
+            Unregister-ScheduledTask -TaskName 'RunFileServerTests' -Confirm:$false
+        }
+        .\Write-Info.ps1 "[SKIP] Automatic FileServer test execution is disabled in Config.json." -ForegroundColor Yellow
+    } elseif (-not $phase2Ok) {
         $phase3.Stop()
         .\Write-Info.ps1 "[SKIP] Not scheduling test run -- earlier phases failed" -ForegroundColor Yellow
     } elseif (-not $fl2Done) {
@@ -967,7 +988,9 @@ if ($isLinuxDriver) {
 
     # Launch test run in background via nohup
     $testRunScript = Join-Path $scriptsPath 'Invoke-TestRun.ps1'
-    if ($phase2Ok -and (Test-Path $testRunScript)) {
+    if (-not $testAutoRun) {
+        .\Write-Info.ps1 "[SKIP] Automatic FileServer test execution is disabled in Config.json." -ForegroundColor Yellow
+    } elseif ($phase2Ok -and (Test-Path $testRunScript)) {
         $pwshExe = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
         if (-not $pwshExe) { $pwshExe = '/usr/bin/pwsh' }
         $testRunLog = Join-Path $dscFolder 'Invoke-TestRun.log'

@@ -28,6 +28,10 @@ param(
     [Parameter(Mandatory)]
     [string]$PasswordBase64,
 
+    [string]$ConfigJsonBase64 = '',
+
+    [string]$EnableTestAutoRun = 'true',
+
     [switch]$PackageAlreadyExtracted
 )
 
@@ -37,7 +41,11 @@ $packagePath = "C:\$PackageName"
 $deploySignalName = "$([IO.Path]::GetFileNameWithoutExtension($DeployScript)).Completed.signal"
 $deploySignalPath = Join-Path $packagePath "DSC\$deploySignalName"
 $hadPreviousDeploySignal = Test-Path -LiteralPath $deploySignalPath
-$stagedPackagePath = if ($PackageAlreadyExtracted) { Split-Path $PSCommandPath -Parent } else { $null }
+$stagedPackagePath = if ($PackageAlreadyExtracted) {
+    Split-Path $PSCommandPath -Parent
+} else {
+    "C:\$PackageName.bootstrap-$([guid]::NewGuid().ToString('N'))"
+}
 Start-Transcript -Path "C:\$Scenario-$Role-setup.log" -Append
 
 function Complete-Bootstrap {
@@ -45,12 +53,60 @@ function Complete-Bootstrap {
 
     Stop-Transcript -ErrorAction SilentlyContinue
     Set-Location 'C:\'
-    if ($stagedPackagePath) {
-        Remove-Item -LiteralPath $stagedPackagePath -Recurse -Force -ErrorAction SilentlyContinue
-    } else {
-        Remove-Item -LiteralPath $PSCommandPath -Force -ErrorAction SilentlyContinue
-    }
+    Remove-Item -LiteralPath $stagedPackagePath -Recurse -Force -ErrorAction SilentlyContinue
+    Remove-Item -LiteralPath $PSCommandPath -Force -ErrorAction SilentlyContinue
     exit $ExitCode
+}
+
+function Test-PackagePayload {
+    param([Parameter(Mandatory)][string]$RootPath)
+
+    $contractsPath = Join-Path $RootPath 'DSC\Scripts\Package-Contracts.ps1'
+    if (Test-Path -LiteralPath $contractsPath -PathType Leaf) {
+        . $contractsPath
+        Test-DscPackageManifest -PackageRoot $RootPath `
+            -ExpectedScenario $Scenario -ThrowOnFailure | Out-Null
+        Write-Output 'Package manifest and content hashes verified'
+        return
+    }
+
+    if ($Scenario -eq 'cluster') {
+        throw 'Package-Contracts.ps1 is missing from the Cluster package.'
+    }
+
+    foreach ($legacyRequiredPath in @(
+        (Join-Path $RootPath 'Config.json'),
+        (Join-Path $RootPath "DSC\$DeployScript"),
+        (Join-Path $RootPath 'DSC\Scripts\InstallMSIAndTools.ps1')
+    )) {
+        if (-not (Test-Path -LiteralPath $legacyRequiredPath -PathType Leaf)) {
+            throw "Required legacy package content is missing: '$legacyRequiredPath'."
+        }
+    }
+}
+
+function Stop-PackageConsumers {
+    $packagePattern = [regex]::Escape($packagePath)
+
+    foreach ($task in @(Get-ScheduledTask -ErrorAction SilentlyContinue)) {
+        $actionText = @($task.Actions | ForEach-Object {
+            "$($_.Execute) $($_.Arguments)"
+        }) -join ' '
+        if ($task.State -eq 'Running' -and $actionText -match $packagePattern) {
+            Write-Output "Stopping package consumer task '$($task.TaskName)'..."
+            Stop-ScheduledTask -InputObject $task -ErrorAction Stop
+        }
+    }
+
+    foreach ($process in @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+        Where-Object {
+            $_.ProcessId -ne $PID -and
+            -not [string]::IsNullOrWhiteSpace($_.CommandLine) -and
+            $_.CommandLine -match $packagePattern
+        })) {
+        Write-Output "Stopping package consumer process '$($process.Name)' (PID $($process.ProcessId))..."
+        Stop-Process -Id $process.ProcessId -Force -ErrorAction Stop
+    }
 }
 
 trap {
@@ -59,7 +115,6 @@ trap {
 }
 
 Write-Output "Starting $Scenario $Role setup..."
-New-Item -ItemType Directory -Path $packagePath -Force | Out-Null
 
 if ($Role -eq 'driver') {
     Write-Output 'Reconciling any stale Driver test run before replacing the package...'
@@ -109,8 +164,7 @@ if ($Role -eq 'driver') {
 }
 
 if ($PackageAlreadyExtracted) {
-    Write-Output "Installing staged package from $stagedPackagePath..."
-    Copy-Item -Path (Join-Path $stagedPackagePath '*') -Destination $packagePath -Recurse -Force
+    Write-Output "Validating staged package from $stagedPackagePath..."
 } else {
     # Direct/manual execution fallback. Normal CSE delivery pre-extracts the
     # downloaded package and supplies -PackageAlreadyExtracted.
@@ -149,16 +203,79 @@ if ($PackageAlreadyExtracted) {
     }
 
     Write-Output "Extracting $($zipFile.Name)..."
-    Expand-Archive -Path $zipFile.FullName -DestinationPath $packagePath -Force
+    New-Item -ItemType Directory -Path $stagedPackagePath -Force | Out-Null
+    Expand-Archive -Path $zipFile.FullName -DestinationPath $stagedPackagePath -Force
     Remove-Item $zipFile.FullName -Force
 }
 
-Write-Output 'Package extracted successfully'
+Test-PackagePayload -RootPath $stagedPackagePath
+
+$stagedFullPath = [IO.Path]::GetFullPath($stagedPackagePath).TrimEnd('\')
+$packageFullPath = [IO.Path]::GetFullPath($packagePath).TrimEnd('\')
+if ($stagedFullPath -eq $packageFullPath) {
+    throw 'The staged package path must be separate from the installed package path.'
+}
+
+Write-Output "Replacing installed package at $packagePath..."
+Stop-PackageConsumers
+$packageRemoved = -not (Test-Path -LiteralPath $packagePath)
+for ($attempt = 1; $attempt -le 12 -and -not $packageRemoved; $attempt++) {
+    try {
+        Remove-Item -LiteralPath $packagePath -Recurse -Force -ErrorAction Stop
+        $packageRemoved = -not (Test-Path -LiteralPath $packagePath)
+    }
+    catch {
+        if ($attempt -eq 12) { break }
+        Write-Output "Package replacement attempt $attempt failed: $($_.Exception.Message)"
+        Stop-PackageConsumers
+        Start-Sleep -Seconds 5
+    }
+}
+if (-not $packageRemoved) {
+    $consumers = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue |
+        Where-Object {
+            -not [string]::IsNullOrWhiteSpace($_.CommandLine) -and
+            $_.CommandLine -match [regex]::Escape($packagePath)
+        } |
+        ForEach-Object { "$($_.Name) (PID $($_.ProcessId))" })
+    $consumerSummary = if ($consumers.Count -gt 0) {
+        $consumers -join ', '
+    } else {
+        '<none detected>'
+    }
+    throw "Existing package path could not be removed: '$packagePath'. Consumers: $consumerSummary."
+}
+New-Item -ItemType Directory -Path $packagePath -Force | Out-Null
+Copy-Item -Path (Join-Path $stagedPackagePath '*') -Destination $packagePath -Recurse -Force
+Write-Output 'Clean package installed successfully'
 Remove-Item -LiteralPath $deploySignalPath -Force -ErrorAction SilentlyContinue
+
+if (-not [string]::IsNullOrWhiteSpace($ConfigJsonBase64)) {
+    $configJson = [Text.Encoding]::UTF8.GetString(
+        [Convert]::FromBase64String($ConfigJsonBase64)
+    )
+    $null = $configJson | ConvertFrom-Json -ErrorAction Stop
+    foreach ($configPath in @(
+        (Join-Path $packagePath 'Config.json'),
+        (Join-Path $packagePath 'DSC\Scripts\Config.json')
+    )) {
+        Set-Content -LiteralPath $configPath -Value $configJson `
+            -Encoding UTF8 -NoNewline -Force
+    }
+    Write-Output 'One-click Config.json override applied'
+}
 
 if (Test-Path "$packagePath\DSC\Scripts\Set-ConfigCredential.ps1") {
     Write-Output 'Injecting credential into Config.json...'
     & "$packagePath\DSC\Scripts\Set-ConfigCredential.ps1" -PasswordBase64 $PasswordBase64
+}
+
+if ($Role -eq 'driver') {
+    $testExecutionScript = "$packagePath\DSC\Scripts\Set-ConfigTestExecution.ps1"
+    if (-not (Test-Path -LiteralPath $testExecutionScript -PathType Leaf)) {
+        throw "Set-ConfigTestExecution.ps1 not found at '$testExecutionScript'."
+    }
+    & $testExecutionScript -EnableTestAutoRun $EnableTestAutoRun
 }
 
 if (Test-Path "$packagePath\DSC\$DeployScript") {

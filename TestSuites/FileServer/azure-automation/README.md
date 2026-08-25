@@ -20,6 +20,24 @@ Automated Infrastructure-as-Code (IaC) for deploying complete File Server Protoc
 
 > **Not sure?** Start with **Domain** — it covers the full test suite with the simplest setup. Use **Workgroup** if you need fast, fully-automatic runs (e.g., CI). Use **Cluster** only when testing failover scenarios.
 
+## Controlling automatic test execution
+
+All scenarios expose `enableTestAutoRun`, which defaults to `true`. Set it to
+`false` in the Azure Portal form or the scenario's `.bicepparam` file to finish
+after environment configuration without starting FileServer tests. The setting
+is persisted as `TestExecution.AutoRun` in `Config.json`, so resumed deployments
+retain the selected behavior.
+
+When autorun is disabled, start the prepared test plan manually on the Driver:
+
+```powershell
+pwsh -File "C:\<Scenario>-Package\DSC\Scripts\Invoke-TestRun.ps1" `
+    -WorkingPath "C:\<Scenario>-Package"
+```
+
+`-SkipTestWait` is different: it detaches the local Workgroup deployment command
+from test monitoring but does not disable the Driver's test run.
+
 ## Prerequisites
 
 These apply to all three scenarios:
@@ -157,7 +175,7 @@ flowchart TB
     upload --> phase1
 
     subgraph phase1 [Phase 1 — Bicep Deployment]
-        net[Network<br/>VNet, Subnets, NSGs, Bastion]
+        net[Network<br/>VNet, Subnets, NSGs, Bastion<br/>NAT Gateway]
         net --> dc[DC01<br/>Domain Controller]
         net --> storage[Storage01<br/>iSCSI Target Server<br/>4 virtual disks]
     end
@@ -167,9 +185,12 @@ flowchart TB
     poll -- DC ready --> phase2
 
     subgraph phase2 [Phase 2 — Bicep Deployment]
+        ilb[Standard internal load balancer<br/>4 dual-subnet frontends]
         node1[Node01<br/>Cluster Node]
         node2[Node02<br/>Cluster Node]
         driver[Client01<br/>Driver]
+        ilb --> node1
+        ilb --> node2
     end
 
     phase2 --> configure[Node01 forms cluster<br/>and creates clustered roles/shares]
@@ -244,16 +265,26 @@ Azure VNet: 192.168.0.0/16
 │   ├── DC01        .10     (Domain/Cluster only)
 │   ├── Node01      .11     (SUT or Cluster Node 1)
 │   ├── Node02      .12     (Cluster only)
+│   ├── Cluster01   .100    (Cluster ILB frontend, Cluster only)
+│   ├── GeneralFS   .200    (Cluster ILB frontend, Cluster only)
 │   ├── Storage01   .50     (Cluster only, NOT domain-joined)
 │   └── Client01    .111    (Driver — runs test cases)
 └── External2 Subnet    192.168.2.0/24    ← Secondary network
     ├── DC01        .10
     ├── Node01      .11
     ├── Node02      .12     (Cluster only)
+    ├── Cluster01   .100    (Cluster ILB frontend, Cluster only)
+    ├── GeneralFS   .200    (Cluster ILB frontend, Cluster only)
     └── Client01    .111
 ```
 
-IP addresses are configurable in each scenario's parameter files: [Domain](domain-bicep/parameters/), [Cluster](cluster-bicep/parameters/), and [Workgroup](workgroup-bicep/parameters/).
+Cluster node subnets use a NAT Gateway for deterministic outbound package and
+tool downloads. Its Standard internal load balancer uses floating-IP rules and
+role-specific health probes so Cluster and GeneralFS names remain reachable
+after ownership moves between nodes. IP addresses are configurable in each
+scenario's parameter files: [Domain](domain-bicep/parameters/),
+[Cluster](cluster-bicep/parameters/), and
+[Workgroup](workgroup-bicep/parameters/).
 
 ## Customization
 

@@ -29,6 +29,8 @@ var bastionNetworkSecurityGroupName = '${environmentPrefix}-bastion-nsg'
 var vnetName = '${environmentPrefix}-cluster-vnet'
 var bastionName = '${environmentPrefix}-bastion'
 var bastionPublicIpName = '${bastionName}-pip'
+var natGatewayName = '${environmentPrefix}-nat'
+var natGatewayPublicIpName = '${natGatewayName}-pip'
 
 // Network Security Group for VMs
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-04-01' = {
@@ -162,6 +164,19 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2023-04-0
           destinationAddressPrefix: '*'
           access: 'Allow'
           priority: 109
+          direction: 'Inbound'
+        }
+      }
+      {
+        name: 'AllowClusterLoadBalancerProbes'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '59998-60001'
+          sourceAddressPrefix: 'AzureLoadBalancer'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          priority: 110
           direction: 'Inbound'
         }
       }
@@ -307,6 +322,36 @@ resource bastionPublicIp 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
   }
 }
 
+// Standard internal load balancer backend membership removes implicit outbound
+// SNAT. The nodes use external1 as their default route, so this gateway provides
+// deterministic package/tool download connectivity without public VM addresses.
+resource natGatewayPublicIp 'Microsoft.Network/publicIPAddresses@2023-04-01' = {
+  name: natGatewayPublicIpName
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
+
+resource natGateway 'Microsoft.Network/natGateways@2023-04-01' = {
+  name: natGatewayName
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    idleTimeoutInMinutes: 10
+    publicIpAddresses: [
+      {
+        id: natGatewayPublicIp.id
+      }
+    ]
+  }
+}
+
 // Virtual Network
 resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' = {
   name: vnetName
@@ -333,6 +378,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' = {
           addressPrefix: external1SubnetPrefix
           networkSecurityGroup: {
             id: networkSecurityGroup.id
+          }
+          natGateway: {
+            id: natGateway.id
           }
         }
       }
@@ -383,3 +431,4 @@ output external1SubnetId string = resourceId('Microsoft.Network/virtualNetworks/
 output external2SubnetId string = resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, 'external2-subnet')
 output networkSecurityGroupId string = networkSecurityGroup.id
 output bastionFqdn string = bastionPublicIp.properties.dnsSettings.fqdn
+output natGatewayId string = natGateway.id
