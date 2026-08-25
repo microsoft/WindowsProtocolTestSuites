@@ -22,6 +22,8 @@ trigger: none
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
   parameters:
+    settings:
+      networkIsolationPolicy: Permissive,CFSClean
     pool:
       os: windows
       image: windows-2019
