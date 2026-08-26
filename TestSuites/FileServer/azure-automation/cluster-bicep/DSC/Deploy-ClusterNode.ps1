@@ -23,6 +23,7 @@ $convergenceMofFolder = Join-Path $dscFolder "MOF\$NodeRole"
 $logFile = Join-Path $dscFolder "Deploy-$NodeRole.log"
 $heartbeatFile = Join-Path $dscFolder "Deploy-$NodeRole.heartbeat.json"
 $configFile = Join-Path $WorkingPath 'Config.json'
+$remoteDscFolder = Join-Path $WorkingPath 'DSC'
 $roleStateName = "Cluster$NodeRole"
 $phaseRegistryName = "Cluster${NodeRole}DeployPhase"
 $preReadySignal = Join-Path $dscFolder "$NodeRole.PreClusterReady.signal"
@@ -234,7 +235,7 @@ function Register-NodePlannedReboot {
 function Complete-ClusterPhase {
     if ($NodeRole -eq 'Node01') {
         $node02Name = "$($config.Machines.Node02.ComputerName)"
-        $node02SignalPath = 'C:\Cluster-Package\DSC\Node02.PreClusterReady.signal'
+        $node02SignalPath = Join-Path $remoteDscFolder 'Node02.PreClusterReady.signal'
         try {
             Wait-DeploymentCondition -Condition {
                 Invoke-Command -ComputerName $node02Name -ScriptBlock {
@@ -289,7 +290,7 @@ function Complete-ClusterPhase {
     }
     else {
         $node01Name = "$($config.Machines.Node01.ComputerName)"
-        $node01SignalPath = 'C:\Cluster-Package\DSC\Deploy-Cluster.Completed.signal'
+        $node01SignalPath = Join-Path $remoteDscFolder 'Deploy-Cluster.Completed.signal'
         try {
             Wait-DeploymentCondition -Condition {
                 Invoke-Command -ComputerName $node01Name -ScriptBlock {

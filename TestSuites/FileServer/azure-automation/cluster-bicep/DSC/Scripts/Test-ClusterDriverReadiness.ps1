@@ -14,6 +14,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $dscFolder = Split-Path $PSScriptRoot -Parent
+$remoteDscFolder = Join-Path $WorkingPath 'DSC'
 . (Join-Path $dscFolder 'Deploy-CommonHelpers.ps1')
 $failures = New-Object System.Collections.Generic.List[string]
 
@@ -182,14 +183,14 @@ foreach ($node in @(
     @{ Name = $node02; Signal = 'Deploy-Node02.Completed.signal'; Role = 'Node02' }
 )) {
     try {
+        $signalPath = Join-Path $remoteDscFolder $node.Signal
         $ready = Invoke-Command -ComputerName $node.Name -ScriptBlock {
-            param($signalName, $role)
-            $path = Join-Path 'C:\Cluster-Package\DSC' $signalName
+            param($path, $role)
             $item = Get-Item -LiteralPath $path -ErrorAction SilentlyContinue
             if ($null -eq $item -or $item.Length -le 0) { return $false }
             $content = Get-Content -LiteralPath $path -Raw
             return $content -match "^NODE COMPLETE; SchemaVersion=1\.0; Role=$role;"
-        } -ArgumentList $node.Signal, $node.Role -Credential $domainCredential `
+        } -ArgumentList $signalPath, $node.Role -Credential $domainCredential `
             -Authentication Kerberos -ErrorAction Stop
         if ($ready -ne $true) {
             Add-DriverReadinessFailure "$($node.Role) final completion signal is invalid."
@@ -201,10 +202,12 @@ foreach ($node in @(
 }
 
 try {
+    $remoteReadinessScript = Join-Path $remoteDscFolder 'Scripts\Test-ClusterReadiness.ps1'
     $clusterOutput = @(Invoke-Command -ComputerName $node01 -ScriptBlock {
-        & 'C:\Cluster-Package\DSC\Scripts\Test-ClusterReadiness.ps1' `
-            -ConfigureFile 'C:\Cluster-Package\Config.json'
-    } -Credential $domainCredential -Authentication Kerberos -ErrorAction Stop)
+        param($readinessScript, $configFile)
+        & $readinessScript -ConfigureFile $configFile
+    } -ArgumentList $remoteReadinessScript, $ConfigureFile `
+        -Credential $domainCredential -Authentication Kerberos -ErrorAction Stop)
     if ($clusterOutput.Count -eq 0 -or $clusterOutput[-1] -ne $true) {
         Add-DriverReadinessFailure 'Remote live Cluster readiness validation failed.'
     }

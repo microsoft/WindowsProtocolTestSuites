@@ -265,6 +265,33 @@ Describe 'Cluster deterministic deployment foundation guardrails' {
         $readiness.Contains('SMBClustered') | Should Be $true
     }
 
+    It 'derives remote node readiness paths from the configured working path' {
+        $nodeDeploy = Read-AutomationFile 'cluster-bicep\DSC\Deploy-ClusterNode.ps1'
+        $driverReadiness = Read-AutomationFile `
+            'cluster-bicep\DSC\Scripts\Test-ClusterDriverReadiness.ps1'
+
+        foreach ($script in @($nodeDeploy, $driverReadiness)) {
+            $script.Contains("`$remoteDscFolder = Join-Path `$WorkingPath 'DSC'") |
+                Should Be $true
+            $script.Contains('C:\Cluster-Package') | Should Be $false
+        }
+        $nodeDeploy.Contains(
+            "`$node02SignalPath = Join-Path `$remoteDscFolder 'Node02.PreClusterReady.signal'"
+        ) | Should Be $true
+        $nodeDeploy.Contains(
+            "`$node01SignalPath = Join-Path `$remoteDscFolder 'Deploy-Cluster.Completed.signal'"
+        ) | Should Be $true
+        $driverReadiness.Contains(
+            "`$signalPath = Join-Path `$remoteDscFolder `$node.Signal"
+        ) | Should Be $true
+        $driverReadiness.Contains(
+            "`$remoteReadinessScript = Join-Path `$remoteDscFolder 'Scripts\Test-ClusterReadiness.ps1'"
+        ) | Should Be $true
+        $driverReadiness.Contains(
+            '-ArgumentList $remoteReadinessScript, $ConfigureFile'
+        ) | Should Be $true
+    }
+
     It 'resolves Azure Cluster endpoints through dual-subnet load-balancer DNS' {
         $driverConfig = Read-AutomationFile 'shared\DSC\Driver-Configuration.ps1'
         $dnsRecords = Read-AutomationFile 'shared\DSC\Scripts\Create-DNSRecords.ps1'
