@@ -2,6 +2,12 @@
 
 Automated Infrastructure-as-Code (IaC) for deploying complete File Server Protocol Test Suite environments on Azure. Each scenario deploys a ready-to-use test environment with networking, VMs, Active Directory (where applicable), file server roles, and test tooling — all configured end-to-end.
 
+## One-Click Deploy to Azure
+
+| Workgroup | Domain | Cluster |
+|---|---|---|
+| [![Deploy Workgroup to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.9.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fworkgroup-bicep%2Fazuredeploy.json) | [![Deploy Domain to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.9.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fdomain-bicep%2Fazuredeploy.json) | [![Deploy Cluster to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.9.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fcluster-bicep%2Fazuredeploy.json) |
+
 ## Which Scenario Do I Need?
 
 | | [Workgroup](workgroup-bicep/README.md) | [Domain](domain-bicep/README.md) | [Cluster](cluster-bicep/README.md) |
@@ -65,13 +71,13 @@ the staged PowerShell files through ESRP, runs the tests under
 - `Domain-Package.zip`
 - `SHA256SUMS.txt`
 
-Cluster is not included because it currently uses the phased `deploy.ps1`
-workflow and does not have a `Publish-DscPackage.ps1` wrapper or a single
-deploy-to-Azure template.
+Cluster has a single deploy-to-Azure template, but its package is not currently
+produced by this release pipeline. Publish its template and `Cluster-Package.zip`
+separately before using the Cluster button.
 
 The pipeline publishes the files as the `FileServer-OneClick-Packages` pipeline
 artifact. A release owner must download that artifact, complete the clean Azure
-deployment checks, and upload the unchanged ZIP files to the `4.26.8.0`
+deployment checks, and upload the unchanged ZIP files to the `4.26.9.0`
 FileServer GitHub release alongside the primary test-suite assets. Do not
 rebuild or replace packages after signing.
 
@@ -88,7 +94,8 @@ cd TestSuites/FileServer/azure-automation/cluster-bicep      # Failover testing
 
 ### 2. Run the deployment
 
-**Domain** or **Cluster**:
+**All scenarios**:
+
 ```powershell
 $password = Read-Host -Prompt "Enter admin password" -AsSecureString
 
@@ -98,15 +105,8 @@ $password = Read-Host -Prompt "Enter admin password" -AsSecureString
     -AdminPassword $password
 ```
 
-**Workgroup** (one password is used for the VM administrator and ordinary test accounts):
-```powershell
-$adminPass = Read-Host -Prompt "Admin password" -AsSecureString
-
-.\deploy.ps1 `
-    -SubscriptionId "your-subscription-id" `
-    -ResourceGroupName "fileserver-test" `
-    -AdminPassword $adminPass
-```
+For Workgroup, this password is used for both the VM administrator and the
+ordinary test accounts.
 
 ### 3. Wait for VM configuration to finish
 

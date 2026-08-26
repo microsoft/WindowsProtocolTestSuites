@@ -27,7 +27,7 @@ Describe 'Cluster one-click deployment contract' {
 
     It 'pins a public manifest-validated package and keeps credentials protected' {
         $main.Contains(
-            'https://github.com/anamikoye/wpts-deploy-test/releases/download/cluster-test-v1/Cluster-Package.zip'
+            'https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.9.0/Cluster-Package.zip'
         ) | Should Be $true
         $main.Contains("Password: '#{ADMIN_PASSWORD}#'") | Should Be $true
 
