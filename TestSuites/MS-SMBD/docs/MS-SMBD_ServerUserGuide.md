@@ -368,6 +368,9 @@ The following table describes the most common configuration properties used in t
 | SecurityPackageForSmb2UserAuthentication| The Security Package Type for SMB2 user authentication.| 
 | | The supported value is "Negotiate", "Kerberos" or "Ntlm".| 
 | | The default value is "Negotiate"| 
+| NDVersion| The Network Direct Service Provider Interface (NDSPI) version used by the RDMA layer.| 
+| |Must match the NDVersion the Smbd project (ProtoSDK\MS-SMBD\Smbd.csproj) was built with. <br> NDv1 - uses the wrapper defined in ProtoSDK\RDMA. <br> NDv2 - uses the wrapper defined in ProtoSDK\RDMANdv2| 
+| | The default value is “NDv2”|
 
 
 * **RDMA Capability Settings.**
