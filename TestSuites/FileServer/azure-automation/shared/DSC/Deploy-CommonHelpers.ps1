@@ -117,6 +117,37 @@ function Remove-ResumeTask {
     }
 }
 
+function Test-BenignPendingFileRename {
+    <#
+    .SYNOPSIS
+        Returns $true when a PendingFileRenameOperations entry is a known-benign
+        rename that must NOT be treated as a system reboot reason.
+    .DESCRIPTION
+        Windows images ship a per-user OneDrive updater (OneDriveSetup.exe staged
+        under each profile's AppData\Local\Microsoft\OneDrive). Its background
+        self-update queues file swaps via PendingFileRenameOperations that are
+        applied at next boot. These are unrelated to deployment state and can
+        never be satisfied by a deployment reboot budget, so counting them as a
+        pending system reboot spuriously trips the reboot circuit breaker and
+        terminally fails an otherwise-healthy orchestrator (observed on the
+        Cluster driver). Only genuinely benign, deployment-irrelevant entries are
+        excluded here; every other rename (and CBS/Windows Update signals) still
+        counts as a real reboot reason.
+    #>
+    param([string]$Entry)
+
+    $path = ("$Entry").Trim()
+    if ([string]::IsNullOrWhiteSpace($path)) {
+        # Empty destination slots in the source/destination pairs carry no meaning.
+        return $true
+    }
+    $isOneDrivePath = $path -match '\\AppData\\Local\\Microsoft\\OneDrive\\'
+    # Match the updater executable as an exact path segment so lookalikes such as
+    # OldOneDriveSetup.exe or OneDriveSetup.exe.config still count as reboot reasons.
+    $isOneDriveSetupExe = $path -match '(?:^|\\)OneDriveSetup\.exe$'
+    return ($isOneDrivePath -and $isOneDriveSetupExe)
+}
+
 function Get-PendingSystemRebootReasons {
     $reasons = New-Object System.Collections.Generic.List[string]
     $pendingRenames = Get-ItemProperty `
@@ -124,7 +155,10 @@ function Get-PendingSystemRebootReasons {
         -Name 'PendingFileRenameOperations' -ErrorAction SilentlyContinue
     $pendingRenameOperations = if ($null -ne $pendingRenames) {
         @($pendingRenames.PendingFileRenameOperations |
-            Where-Object { -not [string]::IsNullOrWhiteSpace("$_") })
+            Where-Object {
+                -not [string]::IsNullOrWhiteSpace("$_") -and
+                -not (Test-BenignPendingFileRename $_)
+            })
     } else {
         @()
     }

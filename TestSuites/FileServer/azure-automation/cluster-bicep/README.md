@@ -224,6 +224,25 @@ To deploy just Phase 1 (e.g., to verify DC setup before continuing):
 .\deploy.ps1 ... -SkipPhase2
 ```
 
+### Node Self-Healing on Transient Post-Reboot Conditions
+
+The cluster node orchestrators (`Deploy-ClusterNode.ps1`, shared by Node01 and Node02) reconcile a large set of *foundation readiness* conditions after each post-reboot resume — iSCSI shared-disk count, secure channel, DSC convergence, required services, and local shares. Several of these are legitimately transient in the seconds-to-minutes after a reboot (most notably the iSCSI target reconnect), so a single point-in-time miss must not be treated as fatal.
+
+To keep this deterministic and robust:
+- **Settle window** — the readiness gate polls for a short window (default 180s) so a transient miss can clear on its own before the node re-converges or forms the cluster.
+- **Retryable, not terminal** — if readiness is still unsatisfied, the node exits cleanly and the `TKFRSAR` resume task (5-minute repetition) re-runs it later, rather than raising a terminal failure that would remove the resume task and permanently strand the node.
+- **Bounded budget** — the retry loop is capped by a per-node deadline (default 45 minutes, tracked in `HKLM:\SOFTWARE\ProtocolTestSuites`). Only after the budget is exhausted does the node fail terminally, so a genuinely broken node still surfaces instead of retrying forever.
+
+This prevents a transient foundation miss on one node from cascading into a stalled driver gate (the driver waits for both nodes' completion signals) and a full deployment timeout.
+
+### Ignoring Benign Pending-Reboot Signals
+
+All orchestrators guard against reboot loops with a bounded per-role reboot budget: when a genuine OS reboot is still pending but the budget is exhausted, the deployment fails terminally on purpose. That guard depends on `Test-PendingSystemReboot` (in `shared/DSC/Deploy-CommonHelpers.ps1`) reporting *only* real reboot reasons.
+
+The standard Windows heuristic treats any non-empty `PendingFileRenameOperations` list as "reboot required." On stock images the per-user **OneDrive updater** (`OneDriveSetup.exe`, staged under each profile's `AppData\Local\Microsoft\OneDrive`) queues its own self-update file swaps there in the background — entries that are unrelated to the deployment and can never be satisfied by a deployment reboot. Left unfiltered, that benign noise can trip the reboot circuit breaker and terminally fail an otherwise-healthy role (observed on the Cluster driver).
+
+`Get-PendingSystemRebootReasons` therefore excludes these benign per-user OneDrive updater renames via `Test-BenignPendingFileRename`. Component Based Servicing, Windows Update, and every non-OneDrive pending rename still count as real reboot reasons, so genuine servicing reboots are unaffected.
+
 ## Deployment Parameters
 
 ### Script Parameters (command-line)

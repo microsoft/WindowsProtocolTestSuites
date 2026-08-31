@@ -38,6 +38,15 @@ $toolsInstaller = Join-Path $scriptsPath 'InstallMSIAndTools.ps1'
 $toolsJobTimeoutSeconds = 3600
 $kerberosAlignmentVersion = 1
 $kerberosAlignmentMarkerName = 'KerberosMachinePasswordAlignmentVersion'
+# Foundation readiness (iSCSI disks, secure channel, DSC state, services) is
+# legitimately transient right after a post-reboot resume. Absorb that with a
+# short in-run settle window, and treat a still-unsatisfied gate as retryable
+# (the resume task re-runs every ~5 min) up to a bounded budget before failing
+# terminally. This prevents a single transient miss from removing the resume
+# task and permanently stranding the node (and, downstream, the driver gate).
+$foundationSettleTimeoutSeconds = 180
+$foundationRetryBudgetMinutes = 45
+$foundationRetryDeadlineName = "ClusterNode${NodeRole}FoundationRetryDeadline"
 
 $env:Path += ";$scriptsPath"
 Push-Location $scriptsPath
@@ -139,6 +148,93 @@ function Test-RequiredNodeFoundationState {
         -MofPath $convergenceMofFolder *>&1)
     $lastResult = Get-LastMeaningfulDeploymentOutput -Output $output
     return (Test-DeploymentSuccessValue -Value $lastResult)
+}
+
+function Test-NodeFoundationReadySettled {
+    <#
+    .SYNOPSIS
+        Returns $true when node foundation readiness is (or becomes) satisfied
+        within a short settle window, $false otherwise.
+    .DESCRIPTION
+        Foundation readiness aggregates many point-in-time conditions (iSCSI
+        disk count, secure channel, DSC drift, services, shares). Several of
+        these are transiently false immediately after a post-reboot resume and
+        recover on their own within seconds to a couple of minutes. Polling for
+        a bounded window absorbs that race instead of failing on the first miss.
+    #>
+    param([int]$TimeoutSeconds = $foundationSettleTimeoutSeconds)
+
+    try {
+        Wait-DeploymentCondition -Condition { Test-RequiredNodeFoundationState } `
+            -TimeoutSeconds $TimeoutSeconds -PollIntervalSeconds 15 `
+            -Phase 'NodeFoundation' `
+            -Operation "$NodeRole foundation readiness settle" `
+            -HeartbeatPath $heartbeatFile `
+            -LastCheckpoint 'Waiting for foundation readiness to settle' | Out-Null
+        return $true
+    }
+    catch {
+        # Wait-DeploymentCondition throws only on timeout (it internally tolerates
+        # per-poll condition errors). Treat that as "not ready yet" so the caller
+        # can retry, but surface the reason instead of swallowing it silently.
+        .\Write-Info.ps1 (
+            "[WAIT] $NodeRole foundation readiness did not settle within " +
+            "$TimeoutSeconds s: $($_.Exception.Message)"
+        ) -ForegroundColor Yellow
+        return $false
+    }
+}
+
+function Complete-NodeFoundationGate {
+    <#
+    .SYNOPSIS
+        Resolves the post-convergence foundation readiness gate.
+        Returns $true when ready; returns $false to signal "retry later"
+        (the resume task will re-run); throws terminally only after the bounded
+        retry budget is exhausted.
+    #>
+    if (Test-NodeFoundationReadySettled) {
+        Remove-DeploymentRegistryValue -Name $foundationRetryDeadlineName
+        return $true
+    }
+
+    $now = (Get-Date).ToUniversalTime()
+    $deadlineRaw = Get-DeploymentRegistryValue -Name $foundationRetryDeadlineName
+    if ([string]::IsNullOrWhiteSpace("$deadlineRaw")) {
+        $deadline = $now.AddMinutes($foundationRetryBudgetMinutes)
+        Set-DeploymentRegistryValue -Name $foundationRetryDeadlineName `
+            -Value $deadline.ToString('o')
+    }
+    else {
+        try {
+            $deadline = [datetime]::Parse("$deadlineRaw", $null,
+                [System.Globalization.DateTimeStyles]::RoundtripKind).ToUniversalTime()
+        }
+        catch {
+            $deadline = $now.AddMinutes($foundationRetryBudgetMinutes)
+            Set-DeploymentRegistryValue -Name $foundationRetryDeadlineName `
+                -Value $deadline.ToString('o')
+        }
+    }
+
+    if ($now -ge $deadline) {
+        Remove-DeploymentRegistryValue -Name $foundationRetryDeadlineName
+        throw ("$NodeRole foundation readiness is incomplete after convergence and " +
+            "did not recover within $foundationRetryBudgetMinutes minutes.")
+    }
+
+    $remaining = [int][Math]::Ceiling(($deadline - $now).TotalMinutes)
+    .\Write-Info.ps1 (
+        "[WAIT] $NodeRole foundation readiness is not yet satisfied after convergence; " +
+        "the resume task will retry (up to ~$remaining more minute(s))."
+    ) -ForegroundColor Yellow
+    if ($heartbeatFile) {
+        Write-DeploymentHeartbeat -Phase 'NodeFoundation' `
+            -Operation "$NodeRole waiting for foundation readiness to recover" `
+            -StartedAt (Get-Date) -HeartbeatPath $heartbeatFile `
+            -LastCheckpoint "Transient foundation miss; retry budget ~$remaining min remaining"
+    }
+    return $false
 }
 
 function Test-RequiredNodeKerberosAlignment {
@@ -504,7 +600,7 @@ try {
 
     if ((Test-VerifiedDeploymentSignal -Path $preReadySignal `
             -ExpectedContentPattern $preReadyPattern) -and
-        (Test-RequiredNodeFoundationState) -and
+        (Test-NodeFoundationReadySettled) -and
         (Test-RequiredNodeKerberosAlignment)) {
         Set-DeploymentPhase -Name $phaseRegistryName -Phase 2
         $currentPhase = 2
@@ -638,8 +734,10 @@ try {
     }
 
     Connect-ConfiguredStorageTarget
-    if (-not (Test-RequiredNodeFoundationState)) {
-        throw "$NodeRole foundation readiness is incomplete after convergence."
+    if (-not (Complete-NodeFoundationGate)) {
+        # Transient foundation miss after convergence (e.g., iSCSI reconnect race).
+        # Leave the resume task in place so it retries; do not fail terminally.
+        return
     }
     if (Test-PendingSystemReboot) {
         throw "$NodeRole convergence requested an unexpected second normal reboot."
@@ -666,6 +764,10 @@ try {
 catch {
     $failureMessage = "$NodeRole deployment failed: $($_.Exception.Message)"
     .\Write-Error.ps1 $failureMessage
+    # Terminal failure ends the foundation retry episode (the resume task is removed below),
+    # so the retry budget is no longer meaningful. Clear it here so a later deployment on the
+    # same VM starts with a fresh recovery window instead of inheriting a stale/expired deadline.
+    Remove-DeploymentRegistryValue -Name $foundationRetryDeadlineName
     Stop-DeploymentForTerminalFailure -Message $failureMessage `
         -Phase $NodeRole -Operation 'Deterministic Cluster node foundation' `
         -HeartbeatPath $heartbeatFile
