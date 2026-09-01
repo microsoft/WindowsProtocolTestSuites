@@ -29,6 +29,22 @@ manifest before applying the generated topology override, then injects the
 deployment password from encrypted Custom Script Extension
 `protectedSettings`.
 
+### Publishing the public package
+
+The OneClick release pipeline builds and ESRP-signs `Cluster-Package.zip`
+alongside the Workgroup and Domain packages. To build the same credential-free
+package locally without uploading it:
+
+```powershell
+.\Publish-DscPackage.ps1 `
+    -Tag 4.26.9.0 `
+    -SkipUpload `
+    -OutputZipPath .\Cluster-Package.zip
+```
+
+The tag must match the `clusterPackageZipUrl` default in `main.bicep` and
+`azuredeploy.json`.
+
 ## Architecture Overview
 
 ```

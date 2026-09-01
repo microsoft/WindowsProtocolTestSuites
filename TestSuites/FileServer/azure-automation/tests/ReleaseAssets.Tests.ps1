@@ -16,7 +16,7 @@ Describe 'OneClick release asset pinning' {
         }
 
         try {
-            foreach ($scenario in @('workgroup-bicep', 'domain-bicep')) {
+            foreach ($scenario in @('workgroup-bicep', 'domain-bicep', 'cluster-bicep')) {
                 $target = Join-Path $testRoot "$scenario\DSC\Scripts"
                 New-Item -ItemType Directory -Path $target -Force | Out-Null
                 Copy-Item -LiteralPath (Join-Path $root "$scenario\DSC\Scripts\Tools.json") `
@@ -31,7 +31,7 @@ Describe 'OneClick release asset pinning' {
                 -PtmCliAssetUrl 'https://example.test/4.26.8.0/PTMCli.zip' `
                 -PtmCliAssetSha256 $hashes.PTMCli
 
-            foreach ($scenario in @('workgroup-bicep', 'domain-bicep')) {
+            foreach ($scenario in @('workgroup-bicep', 'domain-bicep', 'cluster-bicep')) {
                 $tools = Get-Content -LiteralPath (
                     Join-Path $testRoot "$scenario\DSC\Scripts\Tools.json"
                 ) -Raw | ConvertFrom-Json
@@ -59,9 +59,26 @@ Describe 'OneClick release asset pinning' {
                     throw "$scenario contains an incorrect PTMCli SHA-256."
                 }
             }
+
         }
         finally {
             Remove-Item -LiteralPath $testRoot -Recurse -Force -ErrorAction SilentlyContinue
         }
+    }
+
+    It 'builds Workgroup, Domain, and Cluster public packages' {
+        $pipeline = Get-Content -LiteralPath (
+            Join-Path $root '..\..\..\pipelines\1es\FileServer-OneClick-Release.yml'
+        ) -Raw
+        $clusterPublisher = Join-Path $root 'cluster-bicep\Publish-DscPackage.ps1'
+
+        foreach ($scenario in @('Workgroup', 'Domain', 'Cluster')) {
+            $pipeline.Contains("Scenario = '$scenario'") | Should Be $true
+        }
+        (Test-Path -LiteralPath $clusterPublisher -PathType Leaf) | Should Be $true
+
+        $publisher = Get-Content -LiteralPath $clusterPublisher -Raw
+        $publisher.Contains("-Scenario 'Cluster'") | Should Be $true
+        $publisher.Contains("-PackageUrlParamName 'clusterPackageZipUrl'") | Should Be $true
     }
 }

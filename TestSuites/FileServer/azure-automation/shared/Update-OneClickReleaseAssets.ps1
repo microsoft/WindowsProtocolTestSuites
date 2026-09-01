@@ -72,7 +72,7 @@ $assetPins = @{
     }
 }
 
-$scenarios = @('workgroup-bicep', 'domain-bicep')
+$scenarios = @('workgroup-bicep', 'domain-bicep', 'cluster-bicep')
 foreach ($scenario in $scenarios) {
     $toolsPath = Join-Path $AutomationRoot "$scenario\DSC\Scripts\Tools.json"
     if (-not (Test-Path -LiteralPath $toolsPath -PathType Leaf)) {
