@@ -35,6 +35,10 @@ parameters:
     displayName: Domain OneClick tag
     type: string
     default: 4.26.8.0
+  - name: clusterTag
+    displayName: Cluster OneClick tag
+    type: string
+    default: 4.26.9.0
 variables:
   - group: ESRP Variables
   - name: codeSign.signerSubject
@@ -185,6 +189,7 @@ extends:
                 env:
                   WORKGROUP_TAG: ${{ parameters.workgroupTag }}
                   DOMAIN_TAG: ${{ parameters.domainTag }}
+                  CLUSTER_TAG: ${{ parameters.clusterTag }}
                 inputs:
                   targetType: inline
                   pwsh: true
@@ -203,6 +208,11 @@ extends:
                         Scenario = 'Domain'
                         Script = "$root\domain-bicep\Publish-DscPackage.ps1"
                         Tag = [string]$env:DOMAIN_TAG
+                      },
+                      @{
+                        Scenario = 'Cluster'
+                        Script = "$root\cluster-bicep\Publish-DscPackage.ps1"
+                        Tag = [string]$env:CLUSTER_TAG
                       }
                     )
 

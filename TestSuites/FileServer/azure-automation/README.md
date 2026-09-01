@@ -69,11 +69,8 @@ the staged PowerShell files through ESRP, runs the tests under
 
 - `Workgroup-Package.zip`
 - `Domain-Package.zip`
+- `Cluster-Package.zip`
 - `SHA256SUMS.txt`
-
-Cluster has a single deploy-to-Azure template, but its package is not currently
-produced by this release pipeline. Publish its template and `Cluster-Package.zip`
-separately before using the Cluster button.
 
 The pipeline publishes the files as the `FileServer-OneClick-Packages` pipeline
 artifact. A release owner must download that artifact, complete the clean Azure
