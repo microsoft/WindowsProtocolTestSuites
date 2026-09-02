@@ -57,10 +57,37 @@ The scripts first validate a cached Az PowerShell context. If its token expired 
 
 ## Release packages
 
-The official OneClick release pipeline is
-`pipelines/1es/FileServer-OneClick-Release.yml`. Run it only after the signed
-FileServer, PTMService, and PTMCli archives are final. Supply the HTTPS URL and
-SHA-256 hash for each signed archive.
+The combined release pipeline is
+`pipelines/1es/FileServer-Release-Orchestrator.yml`. It queues codesign pipeline
+56330 for an exact WPTS commit, verifies the resulting provenance and signed ZIP
+hash, updates the staged Workgroup, Domain, and Cluster `Tools.json` files, and
+builds the signed OneClick packages. Supply the final release tag plus the
+full codesign-helper commit SHA and the signed PTMService and PTMCli URLs,
+versions, and SHA-256 hashes. The helper commit must contain the immutable
+source-pinning and provenance contract used by pipeline 56330. The orchestrator
+does not publish to GitHub or modify the source `Tools.json` files.
+
+Set optional `existingCodeSignBuildId` to a completed successful pipeline 56330
+build to reuse its signed ZIP instead of queueing another signing run. The
+orchestrator still verifies the definition, helper commit, source provenance,
+archive hash, signer contract, and release version. Leave it as `0` to queue a
+new codesign build.
+
+The pipeline publishes one `FileServer-Release-Bundle` artifact containing:
+
+- `FileServer-TestSuite-ServerEP.zip`
+- `FileServer-TestSuite-ServerEP.provenance.json`
+- `FileServer-Release-Orchestration.json`
+- `Workgroup-Package.zip`
+- `Domain-Package.zip`
+- `Cluster-Package.zip`
+- `FileServer-Release-Bundle.json`
+- `SHA256SUMS.txt`
+
+`pipelines/1es/FileServer-OneClick-Release.yml` remains available when the
+signed FileServer archive already exists. Supply the HTTPS URL and SHA-256 hash
+for each signed archive; optional version parameters update the corresponding
+staged `Tools.json` entries.
 
 The pipeline copies the deployment sources into an isolated staging directory,
 pins those release assets in each publishable scenario's `Tools.json`, signs
@@ -72,7 +99,8 @@ the staged PowerShell files through ESRP, runs the tests under
 - `Cluster-Package.zip`
 - `SHA256SUMS.txt`
 
-The pipeline publishes the files as the `FileServer-OneClick-Packages` pipeline
+The OneClick-only pipeline publishes the files as the
+`FileServer-OneClick-Packages` pipeline
 artifact. A release owner must download that artifact, complete the clean Azure
 deployment checks, and upload the unchanged ZIP files to the `4.26.9.0`
 FileServer GitHub release alongside the primary test-suite assets. Do not

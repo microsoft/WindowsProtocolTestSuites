@@ -109,6 +109,17 @@ bootstrap verifies scenario, required content, lengths, and SHA-256 hashes
 before executing role scripts. Cluster packages fail closed if these integrity
 contracts are absent.
 
+FileServer releases use
+`pipelines/1es/FileServer-Release-Orchestrator.yml`. The manual pipeline pins
+the WPTS source to a full commit SHA, queues codesign pipeline 56330, verifies
+the signed FileServer ZIP against its provenance sidecar, updates release URLs,
+versions, and hashes only in staged `Tools.json` files, and emits one artifact
+with the signed FileServer archive plus Workgroup, Domain, and Cluster OneClick
+packages. Reuse
+`TestSuites/FileServer/azure-automation/shared/Invoke-FileServerCodeSign.ps1`
+and `pipelines/1es/templates/FileServer-OneClick-Package-Steps.yml` rather than
+duplicating queueing, provenance validation, ESRP signing, or packaging logic.
+
 The three one-click templates expose curated VM-size dropdowns through Bicep
 `@allowed` values. Keep their burstable defaults and role-specific alternatives
 aligned across Workgroup, Domain, and Cluster; the dropdowns improve selection

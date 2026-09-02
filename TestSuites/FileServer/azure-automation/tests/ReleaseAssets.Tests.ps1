@@ -14,6 +14,11 @@ Describe 'OneClick release asset pinning' {
             PTMService = 'b' * 64
             PTMCli = 'c' * 64
         }
+        $versions = @{
+            FileServer = '4.26.9.0'
+            PTMService = '1.1.2'
+            PTMCli = '4.26.9.0'
+        }
 
         try {
             foreach ($scenario in @('workgroup-bicep', 'domain-bicep', 'cluster-bicep')) {
@@ -26,10 +31,13 @@ Describe 'OneClick release asset pinning' {
             & $updateScript -AutomationRoot $testRoot `
                 -FileServerAssetUrl 'https://example.test/4.26.8.0/FileServer-TestSuite-ServerEP.zip' `
                 -FileServerAssetSha256 $hashes.FileServer `
+                -FileServerAssetVersion $versions.FileServer `
                 -PtmServiceAssetUrl 'https://example.test/ptmservice@1.1.2/PTMService.zip' `
                 -PtmServiceAssetSha256 $hashes.PTMService `
+                -PtmServiceAssetVersion $versions.PTMService `
                 -PtmCliAssetUrl 'https://example.test/4.26.8.0/PTMCli.zip' `
-                -PtmCliAssetSha256 $hashes.PTMCli
+                -PtmCliAssetSha256 $hashes.PTMCli `
+                -PtmCliAssetVersion $versions.PTMCli
 
             foreach ($scenario in @('workgroup-bicep', 'domain-bicep', 'cluster-bicep')) {
                 $tools = Get-Content -LiteralPath (
@@ -57,6 +65,15 @@ Describe 'OneClick release asset pinning' {
                 }
                 if (@($ptmCli | Where-Object { $_.SHA256 -ne $hashes.PTMCli }).Count -gt 0) {
                     throw "$scenario contains an incorrect PTMCli SHA-256."
+                }
+                if (@($fileServer | Where-Object { $_.version -ne $versions.FileServer }).Count -gt 0) {
+                    throw "$scenario contains an incorrect FileServer version."
+                }
+                if (@($ptmService | Where-Object { $_.version -ne $versions.PTMService }).Count -gt 0) {
+                    throw "$scenario contains an incorrect PTMService version."
+                }
+                if (@($ptmCli | Where-Object { $_.version -ne $versions.PTMCli }).Count -gt 0) {
+                    throw "$scenario contains an incorrect PTMCli version."
                 }
             }
 
