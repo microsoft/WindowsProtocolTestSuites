@@ -61,6 +61,7 @@ var dcVmName = '${environmentPrefix}-dc01'
 var dcNic1Name = '${dcVmName}-nic1'
 var dcNic2Name = '${dcVmName}-nic2'
 var dcIsHotpatch = contains(dcOsVersion, 'azure-edition')
+var dcCommandToExecute = 'powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command "$stage=\'C:\\Temp\\wpts-cluster-dc\'; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path \'.\\Cluster-Package.zip\' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File \'C:\\Temp\\wpts-cluster-dc\\cse-bootstrap.ps1\' -Scenario \'cluster\' -Role \'dc\' -PackageName \'Cluster-Package\' -DeployScript \'Deploy-DC.ps1\' -PasswordBase64 \'${base64(adminPassword)}\' -PackageAlreadyExtracted; exit $LASTEXITCODE"'
 
 var dcImageRef = !empty(dcCustomImageId) ? {
   id: dcCustomImageId
@@ -216,13 +217,12 @@ resource dcVmExtension 'Microsoft.Compute/virtualMachines/extensions@2023-03-01'
     type: 'CustomScriptExtension'
     typeHandlerVersion: '1.10'
     autoUpgradeMinorVersion: true
-    settings: {
+    settings: {}
+    protectedSettings: {
       fileUris: [
         clusterPackageZipUrl
       ]
-    }
-    protectedSettings: {
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -Command "Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force; Start-Transcript -Path C:\\dc-extension-setup.log -Append; Write-Output \\"Starting Domain Controller Setup for Cluster Environment...\\"; New-Item -ItemType Directory -Path C:\\Cluster-Package -Force; $zipFile = Get-ChildItem -Path . -Filter *.zip | Select-Object -First 1; if ($zipFile) { Write-Output \\"Extracting $($zipFile.Name)...\\"; Expand-Archive -Path $zipFile.FullName -DestinationPath C:\\Cluster-Package -Force; Write-Output \\"Package extracted successfully\\"; Remove-Item $zipFile.FullName -Force; } else { Write-Output \\"No zip file found\\"; exit 1; }; Write-Output \\"Starting Deploy-DC.ps1 execution...\\"; if (Test-Path C:\\Cluster-Package\\DSC\\Deploy-DC.ps1) { & C:\\Cluster-Package\\DSC\\Deploy-DC.ps1 -WorkingPath C:\\Cluster-Package; } else { Write-Output \\"Deploy-DC.ps1 not found, skipping configuration\\"; }; Write-Output \\"Domain Controller extension setup completed\\"; Stop-Transcript"'
+      commandToExecute: dcCommandToExecute
     }
   }
 }

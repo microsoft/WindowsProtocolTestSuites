@@ -2,6 +2,12 @@
 
 Automated Infrastructure-as-Code (IaC) for deploying complete File Server Protocol Test Suite environments on Azure. Each scenario deploys a ready-to-use test environment with networking, VMs, Active Directory (where applicable), file server roles, and test tooling — all configured end-to-end.
 
+## One-Click Deploy to Azure
+
+| Workgroup | Domain | Cluster |
+|---|---|---|
+| [![Deploy Workgroup to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.9.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fworkgroup-bicep%2Fazuredeploy.json) | [![Deploy Domain to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.9.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fdomain-bicep%2Fazuredeploy.json) | [![Deploy Cluster to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.9.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fcluster-bicep%2Fazuredeploy.json) |
+
 ## Which Scenario Do I Need?
 
 | | [Workgroup](workgroup-bicep/README.md) | [Domain](domain-bicep/README.md) | [Cluster](cluster-bicep/README.md) |
@@ -10,7 +16,8 @@ Automated Infrastructure-as-Code (IaC) for deploying complete File Server Protoc
 | **VMs deployed** | 2 (Driver + SUT) | 3 (DC + Driver + SUT) | 5 (DC + Storage + 2 Nodes + Driver) |
 | **Active Directory** | No | Yes | Yes |
 | **Deploy time** | ~15 min | ~30 min | ~40 min |
-| **Post-deploy manual steps** | None (tests run automatically) | None | Cluster formation (~15 min) |
+| **Command returns** | After VM configuration and automatic tests are verified | After VM configuration and automatic tests are verified | After cluster configuration and automatic tests are verified |
+| **Post-deploy manual steps** | None | None | None (manual checks remain available for troubleshooting) |
 | **Authentication** | Local accounts | Domain accounts (Kerberos, NTLM) | Domain accounts (Kerberos, NTLM) |
 | **Test coverage** | SMB2, DFSC, FSA, SQOS, RSVD | Full suite (SMB2, FSA, DFSC, Auth, FSRVP, RSVD, SQOS, QUIC) | Full suite + ServerFailover, clustered shares |
 | **Linux driver support** | Yes | Yes | Yes |
@@ -19,23 +26,68 @@ Automated Infrastructure-as-Code (IaC) for deploying complete File Server Protoc
 
 > **Not sure?** Start with **Domain** — it covers the full test suite with the simplest setup. Use **Workgroup** if you need fast, fully-automatic runs (e.g., CI). Use **Cluster** only when testing failover scenarios.
 
+## Controlling automatic test execution
+
+All scenarios expose `enableTestAutoRun`, which defaults to `true`. Set it to
+`false` in the Azure Portal form or the scenario's `.bicepparam` file to finish
+after environment configuration without starting FileServer tests. The setting
+is persisted as `TestExecution.AutoRun` in `Config.json`, so resumed deployments
+retain the selected behavior.
+
+When autorun is disabled, start the prepared test plan manually on the Driver:
+
+```powershell
+pwsh -File "C:\<Scenario>-Package\DSC\Scripts\Invoke-TestRun.ps1" `
+    -WorkingPath "C:\<Scenario>-Package"
+```
+
+`-SkipTestWait` is different: it detaches the local Workgroup deployment command
+from test monitoring but does not disable the Driver's test run.
+
 ## Prerequisites
 
 These apply to all three scenarios:
 
+- **PowerShell 7**
 - **Azure subscription** with permissions to create resource groups, VMs, storage accounts, and Key Vaults
-- **Azure PowerShell modules**: `Az.Accounts`, `Az.Resources`, `Az.Storage`, `Az.Compute`
-  ```powershell
-  Install-Module Az -Scope CurrentUser
-  ```
-- **Bicep CLI** (installed automatically by the deploy scripts if missing, or install manually via `az bicep install`)
+- **PowerShellGet** with access to PowerShell Gallery. The scripts install missing `Az.Accounts`, `Az.Resources`, `Az.Storage`, and `Az.Compute` modules for the current user.
+- **Bicep CLI or Azure CLI**. If `bicep` is missing, the scripts install it through `az bicep install` with bounded retries.
+
+The scripts first validate a cached Az PowerShell context. If its token expired after a workstation restart, they reuse an authenticated Azure CLI session through a process-scoped ARM token. Interactive Azure authentication occurs only when neither context is usable. Tokens, credentials, and signed package URLs are not written to deployment logs.
 
 ## Release packages
 
-The official OneClick release pipeline is
-`pipelines/1es/FileServer-OneClick-Release.yml`. Run it only after the signed
-FileServer, PTMService, and PTMCli archives are final. Supply the HTTPS URL and
-SHA-256 hash for each signed archive.
+The combined release pipeline is
+`pipelines/1es/FileServer-Release-Orchestrator.yml`. It queues codesign pipeline
+56330 for an exact WPTS commit, verifies the resulting provenance and signed ZIP
+hash, updates the staged Workgroup, Domain, and Cluster `Tools.json` files, and
+builds the signed OneClick packages. Supply the final release tag plus the
+full codesign-helper commit SHA and the signed PTMService and PTMCli URLs,
+versions, and SHA-256 hashes. The helper commit must contain the immutable
+source-pinning and provenance contract used by pipeline 56330. The orchestrator
+does not publish to GitHub or modify the source `Tools.json` files.
+
+Set optional `existingCodeSignBuildId` to a completed successful pipeline 56330
+build to reuse its signed ZIP instead of queueing another signing run. The
+orchestrator still verifies the definition, helper commit, source provenance,
+archive hash, signer contract, and release version. Leave it as `0` to queue a
+new codesign build.
+
+The pipeline publishes one `FileServer-Release-Bundle` artifact containing:
+
+- `FileServer-TestSuite-ServerEP.zip`
+- `FileServer-TestSuite-ServerEP.provenance.json`
+- `FileServer-Release-Orchestration.json`
+- `Workgroup-Package.zip`
+- `Domain-Package.zip`
+- `Cluster-Package.zip`
+- `FileServer-Release-Bundle.json`
+- `SHA256SUMS.txt`
+
+`pipelines/1es/FileServer-OneClick-Release.yml` remains available when the
+signed FileServer archive already exists. Supply the HTTPS URL and SHA-256 hash
+for each signed archive; optional version parameters update the corresponding
+staged `Tools.json` entries.
 
 The pipeline copies the deployment sources into an isolated staging directory,
 pins those release assets in each publishable scenario's `Tools.json`, signs
@@ -44,15 +96,13 @@ the staged PowerShell files through ESRP, runs the tests under
 
 - `Workgroup-Package.zip`
 - `Domain-Package.zip`
+- `Cluster-Package.zip`
 - `SHA256SUMS.txt`
 
-Cluster is not included because it currently uses the phased `deploy.ps1`
-workflow and does not have a `Publish-DscPackage.ps1` wrapper or a single
-deploy-to-Azure template.
-
-The pipeline publishes the files as the `FileServer-OneClick-Packages` pipeline
+The OneClick-only pipeline publishes the files as the
+`FileServer-OneClick-Packages` pipeline
 artifact. A release owner must download that artifact, complete the clean Azure
-deployment checks, and upload the unchanged ZIP files to the `4.26.8.0`
+deployment checks, and upload the unchanged ZIP files to the `4.26.9.0`
 FileServer GitHub release alongside the primary test-suite assets. Do not
 rebuild or replace packages after signing.
 
@@ -69,7 +119,8 @@ cd TestSuites/FileServer/azure-automation/cluster-bicep      # Failover testing
 
 ### 2. Run the deployment
 
-**Domain** or **Cluster**:
+**All scenarios**:
+
 ```powershell
 $password = Read-Host -Prompt "Enter admin password" -AsSecureString
 
@@ -79,29 +130,25 @@ $password = Read-Host -Prompt "Enter admin password" -AsSecureString
     -AdminPassword $password
 ```
 
-**Workgroup** (requires a second password for the local test user):
-```powershell
-$adminPass = Read-Host -Prompt "Admin password" -AsSecureString
-$localPass = Read-Host -Prompt "Local user password" -AsSecureString
-
-.\deploy.ps1 `
-    -SubscriptionId "your-subscription-id" `
-    -ResourceGroupName "fileserver-test" `
-    -AdminPassword $adminPass `
-    -LocalUserPassword $localPass
-```
+For Workgroup, this password is used for both the VM administrator and the
+ordinary test accounts.
 
 ### 3. Wait for VM configuration to finish
 
-Azure Portal will show "Succeeded" before VMs finish their background configuration (AD promotion, domain joins, feature installation). Use the verification methods below to confirm readiness.
+Azure Portal can show an ARM deployment as `Succeeded` before guest configuration finishes (AD promotion, domain joins, feature installation). All three deployment scripts perform integrated guest and automatic-test verification. They require role completion signals, both test finalization signals, a complete summary, and at least one TRX result. After terminal test finalization, requested Azure Disk Encryption and auto-shutdown schedules are handled before the command returns. All known terminal test classifications are printed and uploaded without being conflated with deployment-orchestration failure. Missing summaries/TRX, failed uploads, incomplete guest setup, and post-test infrastructure failures still produce a nonzero exit. VM responsiveness is checked again after encryption.
+
+For an ad-hoc recheck, use the shared verifier:
 
 **All scenarios** — use the shared verification script:
 ```powershell
 # From any scenario folder (or use the full path)
-..\shared\scripts\Verify-Deployment.ps1 -ResourceGroupName "fileserver-test"
+..\shared\scripts\Verify-Deployment.ps1 `
+    -SubscriptionId "your-subscription-id" `
+    -ResourceGroupName "fileserver-test" `
+    -Scenario Workgroup
 ```
 
-This auto-detects which VMs are present (Domain, Cluster, or Workgroup) and polls their signal files until all report complete.
+Pass `-WaitForTests` when that scenario launches tests automatically. Each Azure Run Command probe has its own timeout; transient probe failures use bounded backoff. Pass `-Scenario` explicitly for partial or failed deployments so a missing VM cannot be mistaken for a smaller successful scenario.
 
 ### 4. Connect and use
 
@@ -137,8 +184,10 @@ flowchart TB
         gate --> ext_sut[Node01 CustomScriptExtension]
     end
 
-    ext_driver --> done([All VMs configuring in background<br/>Check signal files for completion])
-    ext_sut --> done
+    ext_driver --> verify[Verify fresh member signals<br/>and complete automatic tests]
+    ext_sut --> verify
+    verify --> ade{ADE enabled?}
+    ade --> done([Report terminal result])
 ```
 
 ### Cluster Scenario
@@ -151,7 +200,7 @@ flowchart TB
     upload --> phase1
 
     subgraph phase1 [Phase 1 — Bicep Deployment]
-        net[Network<br/>VNet, Subnets, NSGs, Bastion]
+        net[Network<br/>VNet, Subnets, NSGs, Bastion<br/>NAT Gateway]
         net --> dc[DC01<br/>Domain Controller]
         net --> storage[Storage01<br/>iSCSI Target Server<br/>4 virtual disks]
     end
@@ -161,13 +210,18 @@ flowchart TB
     poll -- DC ready --> phase2
 
     subgraph phase2 [Phase 2 — Bicep Deployment]
+        ilb[Standard internal load balancer<br/>4 dual-subnet frontends]
         node1[Node01<br/>Cluster Node]
         node2[Node02<br/>Cluster Node]
         driver[Client01<br/>Driver]
+        ilb --> node1
+        ilb --> node2
     end
 
-    phase2 --> verify[Run Verify-ClusterDeployment.ps1<br/>Poll signal files on all 5 VMs]
-    verify --> manual[Manual: form cluster on Node01<br/>Initialize disks, create cluster,<br/>add ScaleOutFS, create shares]
+    phase2 --> configure[Node01 forms cluster<br/>and creates clustered roles/shares]
+    configure --> verify[Verify all role signals<br/>and complete automatic tests]
+    verify --> ade{ADE enabled?}
+    ade --> done([Report terminal result])
 ```
 
 ### Workgroup Scenario
@@ -191,7 +245,11 @@ flowchart TB
 
     ext_driver --> test[Scheduled task fires<br/>Waits for SUT readiness<br/>Runs full test suite automatically]
     ext_sut --> test
-    test --> results([Results at C:\Test\TestResults\])
+    test --> verify[Verify fresh VM + test signals<br/>and TRX output]
+    verify --> ade{ADE enabled?}
+    ade -- Yes --> encrypt[Encrypt both VMs<br/>then verify VM agents]
+    ade -- No --> results([Results at C:\Test\TestResults\])
+    encrypt --> results
 ```
 
 ### On-VM Configuration Flow
@@ -232,16 +290,26 @@ Azure VNet: 192.168.0.0/16
 │   ├── DC01        .10     (Domain/Cluster only)
 │   ├── Node01      .11     (SUT or Cluster Node 1)
 │   ├── Node02      .12     (Cluster only)
+│   ├── Cluster01   .100    (Cluster ILB frontend, Cluster only)
+│   ├── GeneralFS   .200    (Cluster ILB frontend, Cluster only)
 │   ├── Storage01   .50     (Cluster only, NOT domain-joined)
 │   └── Client01    .111    (Driver — runs test cases)
 └── External2 Subnet    192.168.2.0/24    ← Secondary network
     ├── DC01        .10
     ├── Node01      .11
     ├── Node02      .12     (Cluster only)
+    ├── Cluster01   .100    (Cluster ILB frontend, Cluster only)
+    ├── GeneralFS   .200    (Cluster ILB frontend, Cluster only)
     └── Client01    .111
 ```
 
-IP addresses are configurable in each scenario's parameter files: [Domain](domain-bicep/parameters/), [Cluster](cluster-bicep/parameters/), and [Workgroup](workgroup-bicep/parameters/).
+Cluster node subnets use a NAT Gateway for deterministic outbound package and
+tool downloads. Its Standard internal load balancer uses floating-IP rules and
+role-specific health probes so Cluster and GeneralFS names remain reachable
+after ownership moves between nodes. IP addresses are configurable in each
+scenario's parameter files: [Domain](domain-bicep/parameters/),
+[Cluster](cluster-bicep/parameters/), and
+[Workgroup](workgroup-bicep/parameters/).
 
 ## Customization
 
@@ -280,7 +348,18 @@ Domain and Cluster deployments support resuming from Phase 2 if Phase 1 succeede
 
 This retrieves Phase 1 outputs automatically (subnet IDs, DC IP), reuses the previously uploaded DSC package, and redeploys only Phase 2 resources.
 
+Continuation preserves AD computer objects for VMs that still exist. Unchanged Phase 1 roles may use their existing completion signals; redeployed Phase 2 roles and test signals must be newer than the continuation start time.
+
+If the local shell or workstation restarts, VM-side extensions, scheduled tasks, and test processes continue independently. The local `deploy.ps1` process does not checkpoint and restart itself: rerun Workgroup with `-Resume`, or Domain/Cluster with `-SkipPhase1`. An authenticated Azure CLI session can restore the Az PowerShell context without another interactive login.
+
 You can also deploy Phase 1 only (`-SkipPhase2`) to inspect the DC before continuing, or validate templates without deploying (`-ValidateOnly`).
+
+## Automatic Test Reliability and Results
+
+- Every VSTest invocation has a 60-minute watchdog by default. A timed-out process tree is terminated, recorded in an `*.execution.json` manifest, and later test stages still run.
+- The verifier reports a `Started` manifest as stalled after 70 minutes. Scenario deploy scripts allow 360 minutes for the complete plan; direct verifier use defaults to 120 minutes unless overridden.
+- Finalization writes `test.summary.json` and `test.summary.txt`, then uploads TRX files, execution manifests, summaries, and non-secret Driver/SUT diagnostics. `test.results.upload.failed.signal` records an incomplete upload.
+- Summary classifications are `Passed`, `TestFailures`, `InfrastructureOrConfigurationFailure`, or `MixedTestAndInfrastructureFailures`. These are test-run outcomes: they do not stop later stages or fail the deployment command after the complete report is printed and uploaded. Verification still fails for missing or malformed terminal evidence, failed upload, incomplete guest readiness, active stalls, or failed ADE/schedule finalization.
 
 ## Troubleshooting
 

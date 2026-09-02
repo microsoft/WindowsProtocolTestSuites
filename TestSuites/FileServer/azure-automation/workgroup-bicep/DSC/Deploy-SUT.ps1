@@ -133,6 +133,38 @@ function Test-RequiredSutImperativeState {
             $missing += "imperative-path:$path"
         }
     }
+
+    $requiredReparsePoints = @(
+        'C:\FileShare\link.txt',
+        'C:\FileShare\MountPoint',
+        'C:\SMBBasic\symboliclink',
+        'C:\SMBBasic\sub\symboliclink2'
+    )
+    if (Test-Path 'K:\SMBReFSShare') {
+        $requiredReparsePoints += @(
+            'K:\SMBReFSShare\link.txt',
+            'K:\SMBReFSShare\MountPoint'
+        )
+    }
+    foreach ($path in $requiredReparsePoints) {
+        $item = Get-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+        if ($null -eq $item -or
+            ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) {
+            $missing += "reparse-point:$path"
+        }
+    }
+
+    foreach ($path in @(
+        'C:\FileShare\ExistingFile.txt',
+        'K:\SMBReFSShare\ExistingFile.txt',
+        'J:\SMBFAT32Share\ExistingFile.txt'
+    )) {
+        $file = Get-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+        if ($null -eq $file -or $file.Length -eq 0) {
+            $missing += "fsa-data-file:$path"
+        }
+    }
+
     foreach ($namespace in @('SMBDfs', 'Standalone')) {
         $dfsRoot = "\\$env:COMPUTERNAME\$namespace"
         & dfsutil.exe root $dfsRoot *> $null

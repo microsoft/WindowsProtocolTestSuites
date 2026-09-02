@@ -16,7 +16,9 @@
                 "MSIName": "PowerShellCore.msi",
                 "version": "7.3.4",
                 "CPUArchitecture": "x64",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/PowerShellCore.msi"
+                "Url": "https://github.com/PowerShell/PowerShell/releases/download/v7.3.4/PowerShell-7.3.4-win-x64.msi",
+                "SHA256": "61b31ec847d4fdc4d39050f4f650968c55acf6f16cb66b1f00bf05db4e946559",
+                "PostInstallPath": "%ProgramFiles%\\PowerShell\\7\\pwsh.exe"
             },
             {
                 "name": "Win32-OpenSSH",
@@ -24,16 +26,47 @@
                 "version": "v9.2.2.0p1-Beta",
                 "CPUArchitecture": "x64",
                 "targetFolder": "%SystemDrive%\\",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/OpenSSH-Win64.zip"
+                "Url": "https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.2.2.0p1-Beta/OpenSSH-Win64.zip",
+                "SHA256": "ec8144a107014740ec3ce16ec51710398fc390fca5344931c1506e7cc2e181f3",
+                "ExpectedEntries": [
+                    "OpenSSH-Win64/ssh.exe",
+                    "OpenSSH-Win64/sshd.exe"
+                ],
+                "PostInstallPath": "%SystemDrive%\\OpenSSH-Win64\\ssh.exe",
+                "ExistingInstallPaths": [
+                    "%SystemDrive%\\OpenSSH-Win64\\ssh.exe",
+                    "%SystemDrive%\\OpenSSH-Win64\\sshd.exe"
+                ],
+                "ExistingServiceNames": [
+                    "sshd"
+                ]
             },
             {
                 "name": "Win32-OpenSSH-Certs",
                 "ZipName": "win_ssh_keys.zip",
                 "targetFolder": "%SystemDrive%\\OpenSSH-Win64",
                 "installScript": "install.ps1",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/win_ssh_keys.zip"
+                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/win_ssh_keys.zip",
+                "version": "current-configured",
+                "SHA256": "c798d116599f980c56b9925192ea144e539dc4a9fe293dd5c4d0a6443f3cc254",
+                "ExpectedEntries": [
+                    "install.ps1",
+                    "sshd_config"
+                ],
+                "PostInstallPath": "%SystemDrive%\\OpenSSH-Win64\\sshd_config",
+                "ExistingInstallPaths": [
+                    "%SystemDrive%\\OpenSSH-Win64\\sshd_config"
+                ],
+                "ExistingServiceNames": [
+                    "sshd"
+                ]
             }
-        ]
+        ],
+        "TestsuiteZips": []
+    },
+    "Storage": {
+        "Tools": [],
+        "TestsuiteZips": []
     },
     "Node01": {
         "Tools": [
@@ -42,7 +75,9 @@
                 "MSIName": "PowerShellCore.msi",
                 "version": "7.3.4",
                 "CPUArchitecture": "x64",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/PowerShellCore.msi"
+                "Url": "https://github.com/PowerShell/PowerShell/releases/download/v7.3.4/PowerShell-7.3.4-win-x64.msi",
+                "SHA256": "61b31ec847d4fdc4d39050f4f650968c55acf6f16cb66b1f00bf05db4e946559",
+                "PostInstallPath": "%ProgramFiles%\\PowerShell\\7\\pwsh.exe"
             },
             {
                 "name": "Win32-OpenSSH",
@@ -50,14 +85,40 @@
                 "version": "v9.2.2.0p1-Beta",
                 "CPUArchitecture": "x64",
                 "targetFolder": "%SystemDrive%\\",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/OpenSSH-Win64.zip"
+                "Url": "https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.2.2.0p1-Beta/OpenSSH-Win64.zip",
+                "SHA256": "ec8144a107014740ec3ce16ec51710398fc390fca5344931c1506e7cc2e181f3",
+                "ExpectedEntries": [
+                    "OpenSSH-Win64/ssh.exe",
+                    "OpenSSH-Win64/sshd.exe"
+                ],
+                "PostInstallPath": "%SystemDrive%\\OpenSSH-Win64\\ssh.exe",
+                "ExistingInstallPaths": [
+                    "%SystemDrive%\\OpenSSH-Win64\\ssh.exe",
+                    "%SystemDrive%\\OpenSSH-Win64\\sshd.exe"
+                ],
+                "ExistingServiceNames": [
+                    "sshd"
+                ]
             },
             {
                 "name": "Win32-OpenSSH-Certs",
                 "ZipName": "win_ssh_keys.zip",
                 "targetFolder": "%SystemDrive%\\OpenSSH-Win64",
                 "installScript": "install.ps1",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/win_ssh_keys.zip"
+                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/win_ssh_keys.zip",
+                "version": "current-configured",
+                "SHA256": "c798d116599f980c56b9925192ea144e539dc4a9fe293dd5c4d0a6443f3cc254",
+                "ExpectedEntries": [
+                    "install.ps1",
+                    "sshd_config"
+                ],
+                "PostInstallPath": "%SystemDrive%\\OpenSSH-Win64\\sshd_config",
+                "ExistingInstallPaths": [
+                    "%SystemDrive%\\OpenSSH-Win64\\sshd_config"
+                ],
+                "ExistingServiceNames": [
+                    "sshd"
+                ]
             },
             {
                 "name": "WindowsAdminCenter",
@@ -66,9 +127,11 @@
                 "CPUArchitecture": "x64",
                 "ArgumentList": "/silent SME_PORT=6516 SSL_CERTIFICATE_OPTION=generate",
                 "NotSupportedOSBuilds": "9200",
-                "Url": "https://go.microsoft.com/fwlink/?linkid=2220149&clcid=0x809&culture=en-gb&country=gb"
+                "Url": "https://go.microsoft.com/fwlink/?linkid=2220149&clcid=0x809&culture=en-gb&country=gb",
+                "Required": false
             }
-        ]
+        ],
+        "TestsuiteZips": []
     },
     "Node02": {
         "Tools": [
@@ -77,7 +140,9 @@
                 "MSIName": "PowerShellCore.msi",
                 "version": "7.3.4",
                 "CPUArchitecture": "x64",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/PowerShellCore.msi"
+                "Url": "https://github.com/PowerShell/PowerShell/releases/download/v7.3.4/PowerShell-7.3.4-win-x64.msi",
+                "SHA256": "61b31ec847d4fdc4d39050f4f650968c55acf6f16cb66b1f00bf05db4e946559",
+                "PostInstallPath": "%ProgramFiles%\\PowerShell\\7\\pwsh.exe"
             },
             {
                 "name": "Win32-OpenSSH",
@@ -85,26 +150,55 @@
                 "version": "v9.2.2.0p1-Beta",
                 "CPUArchitecture": "x64",
                 "targetFolder": "%SystemDrive%\\",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/OpenSSH-Win64.zip"
+                "Url": "https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.2.2.0p1-Beta/OpenSSH-Win64.zip",
+                "SHA256": "ec8144a107014740ec3ce16ec51710398fc390fca5344931c1506e7cc2e181f3",
+                "ExpectedEntries": [
+                    "OpenSSH-Win64/ssh.exe",
+                    "OpenSSH-Win64/sshd.exe"
+                ],
+                "PostInstallPath": "%SystemDrive%\\OpenSSH-Win64\\ssh.exe",
+                "ExistingInstallPaths": [
+                    "%SystemDrive%\\OpenSSH-Win64\\ssh.exe",
+                    "%SystemDrive%\\OpenSSH-Win64\\sshd.exe"
+                ],
+                "ExistingServiceNames": [
+                    "sshd"
+                ]
             },
             {
                 "name": "Win32-OpenSSH-Certs",
                 "ZipName": "win_ssh_keys.zip",
                 "targetFolder": "%SystemDrive%\\OpenSSH-Win64",
                 "installScript": "install.ps1",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/win_ssh_keys.zip"
+                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/win_ssh_keys.zip",
+                "version": "current-configured",
+                "SHA256": "c798d116599f980c56b9925192ea144e539dc4a9fe293dd5c4d0a6443f3cc254",
+                "ExpectedEntries": [
+                    "install.ps1",
+                    "sshd_config"
+                ],
+                "PostInstallPath": "%SystemDrive%\\OpenSSH-Win64\\sshd_config",
+                "ExistingInstallPaths": [
+                    "%SystemDrive%\\OpenSSH-Win64\\sshd_config"
+                ],
+                "ExistingServiceNames": [
+                    "sshd"
+                ]
             }
-        ]
+        ],
+        "TestsuiteZips": []
     },
     "DriverComputer": {
         "Tools": [
             {
                 "name": "DotNetCore",
                 "EXEName": "dotnet-sdk-8.0.405-win-x64.exe",
-                "version": "Latest",
+                "version": "8.0.405",
                 "CPUArchitecture": "x64",
                 "ArgumentList": "/quiet",
-                "Url": "https://download.visualstudio.microsoft.com/download/pr/4b3b488c-9e69-4d60-bba2-79412b68d15d/b55f49a270c3413a6ea4b208f820515d/dotnet-sdk-8.0.405-win-x64.exe"
+                "Url": "https://download.visualstudio.microsoft.com/download/pr/4b3b488c-9e69-4d60-bba2-79412b68d15d/b55f49a270c3413a6ea4b208f820515d/dotnet-sdk-8.0.405-win-x64.exe",
+                "SHA256": "c5c6709149fa9ef3a49873257999c3f5d5d7d2894b0e9490653e7f9f768c4f74",
+                "PostInstallPath": "%ProgramFiles%\\dotnet\\dotnet.exe"
             },
             {
                 "name": "Win32-OpenSSH",
@@ -112,47 +206,105 @@
                 "version": "v9.2.2.0p1-Beta",
                 "CPUArchitecture": "x64",
                 "targetFolder": "%SystemDrive%\\",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/OpenSSH-Win64.zip"
+                "Url": "https://github.com/PowerShell/Win32-OpenSSH/releases/download/v9.2.2.0p1-Beta/OpenSSH-Win64.zip",
+                "SHA256": "ec8144a107014740ec3ce16ec51710398fc390fca5344931c1506e7cc2e181f3",
+                "ExpectedEntries": [
+                    "OpenSSH-Win64/ssh.exe",
+                    "OpenSSH-Win64/sshd.exe"
+                ],
+                "PostInstallPath": "%SystemDrive%\\OpenSSH-Win64\\ssh.exe",
+                "ExistingInstallPaths": [
+                    "%SystemDrive%\\OpenSSH-Win64\\ssh.exe",
+                    "%SystemDrive%\\OpenSSH-Win64\\sshd.exe"
+                ],
+                "ExistingServiceNames": [
+                    "sshd"
+                ]
             },
             {
                 "name": "Win32-OpenSSH-Certs",
                 "ZipName": "win_ssh_keys.zip",
                 "targetFolder": "%SystemDrive%\\OpenSSH-Win64",
                 "installScript": "install.ps1",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/win_ssh_keys.zip"
+                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/win_ssh_keys.zip",
+                "version": "current-configured",
+                "SHA256": "c798d116599f980c56b9925192ea144e539dc4a9fe293dd5c4d0a6443f3cc254",
+                "ExpectedEntries": [
+                    "install.ps1",
+                    "sshd_config"
+                ],
+                "PostInstallPath": "%SystemDrive%\\OpenSSH-Win64\\sshd_config",
+                "ExistingInstallPaths": [
+                    "%SystemDrive%\\OpenSSH-Win64\\sshd_config"
+                ],
+                "ExistingServiceNames": [
+                    "sshd"
+                ]
             },
             {
                 "name": "PowerShellCore",
                 "MSIName": "PowerShellCore.msi",
                 "version": "7.3.4",
                 "CPUArchitecture": "x64",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/PowerShellCore.msi"
+                "Url": "https://github.com/PowerShell/PowerShell/releases/download/v7.3.4/PowerShell-7.3.4-win-x64.msi",
+                "SHA256": "61b31ec847d4fdc4d39050f4f650968c55acf6f16cb66b1f00bf05db4e946559",
+                "PostInstallPath": "%ProgramFiles%\\PowerShell\\7\\pwsh.exe"
             },
             {
                 "name": "certs",
                 "ZipName": "id_rsa.zip",
                 "targetFolder": "%SystemDrive%\\id_rsa\\.ssh",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/id_rsa.zip"
+                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/id_rsa.zip",
+                "version": "current-configured",
+                "SHA256": "9282a7719fcad26bc4c290319536e77814ca6672e9b0a3be9f30ac1a35d0b140",
+                "ExpectedEntries": [
+                    "id_rsa",
+                    "id_rsa.pub",
+                    "known_hosts",
+                    "config"
+                ],
+                "PostInstallPath": "%SystemDrive%\\id_rsa\\.ssh\\id_rsa"
             },
             {
                 "name": "PTMService",
                 "ZipName": "PTMService.zip",
                 "targetFolder": "%SystemDrive%\\PTMService",
                 "installScript": "install.ps1",
-                "Url": "https://ptsresources-czfwdxa0fdbychcp.b01.azurefd.net/tools/PTMService.zip"
+                "Url": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/PTMService.zip",
+                "version": "4.26.8.0",
+                "SHA256": "afc675c6f48de4f835a1f4b2a0f75479b473eeed861109f4e30aa788898d4263",
+                "ExpectedEntries": [
+                    "install.ps1",
+                    "PTMService.exe"
+                ],
+                "PostInstallPath": "%SystemDrive%\\PTMService\\PTMService.exe"
             },
             {
                 "name": "PTMCli",
                 "ZipName": "PTMCli.zip",
                 "targetFolder": "%SystemDrive%\\PTMCli",
-                "Url": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.25.8.0/PTMCli.zip"
+                "Url": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.25.8.0/PTMCli.zip",
+                "version": "4.25.8.0",
+                "SHA256": "7f77bfc1a821a665c015c33bda4709e4ac8e6d9268023d8dfdc1f7b4e9922ff9",
+                "ExpectedEntries": [
+                    "PTMCli.exe"
+                ],
+                "PostInstallPath": "%SystemDrive%\\PTMCli\\PTMCli.exe"
             }
         ],
         "TestsuiteZips": [
             {
                 "ZipName": "FileServer-TestSuite-ServerEP.zip",
                 "targetFolder": "%SystemDrive%\\FileServer-TestSuite-ServerEP",
-                "Url": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/latest/download/FileServer-TestSuite-ServerEP.zip"
+                "Url": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.9.0/FileServer-TestSuite-ServerEP.zip",
+                "name": "FileServerTestSuite",
+                "version": "4.26.9.0",
+                "SHA256": "2fd82405302bc516a1ebadef7752c298ff5167f70ebf151aaafe89c7fb95dbd8",
+                "ExpectedEntries": [
+                    "Bin/.version",
+                    "Batch/RunTestCasesByFilter.ps1"
+                ],
+                "PostInstallPath": "%SystemDrive%\\FileServer-TestSuite-ServerEP\\Bin\\.version"
             }
         ]
     }

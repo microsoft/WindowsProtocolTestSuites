@@ -14,10 +14,13 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$ResourceGroupName,
 
+    [Parameter(Mandatory=$false)]
+    [string]$Location = 'West US 2',
+
     [Parameter(Mandatory=$true)]
     [SecureString]$AdminPassword,
 
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [SecureString]$LocalUserPassword,
 
     [Parameter(Mandatory=$false)]
@@ -39,7 +42,25 @@ param(
     [switch]$SkipDiskEncryption,
 
     [Parameter(Mandatory=$false)]
-    [switch]$Resume
+    [switch]$Resume,
+
+    [Parameter(Mandatory=$false)]
+    [ValidateRange(1, 1440)]
+    [int]$ConfigurationTimeoutMinutes = 90,
+
+    [Parameter(Mandatory=$false)]
+    [ValidateRange(0, 3)]
+    [int]$ConfigurationRecoveryAttempts = 1,
+
+    [Parameter(Mandatory=$false)]
+    [ValidateRange(1, 1440)]
+    [int]$TestTimeoutMinutes = 360,
+
+    [Parameter(Mandatory=$false)]
+    [switch]$SkipTestWait,
+
+    [Parameter(Mandatory=$false)]
+    [switch]$DeferAutoShutdownRestore
 )
 
 $ErrorActionPreference = "Stop"
@@ -73,23 +94,7 @@ if (-not (Test-Path $helpersPath)) {
 }
 Import-Module $helpersPath -Force
 
-# Ensure Bicep CLI is on PATH (required for New-AzResourceGroupDeployment with .bicep files)
-if (-not (Get-Command bicep -ErrorAction SilentlyContinue)) {
-    Write-Output "Bicep CLI not found on PATH. Installing via Azure CLI..."
-    az bicep install
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error "Failed to install Bicep CLI. Please install manually: https://aka.ms/bicep-install"
-        exit 1
-    }
-    # az bicep install places the binary in ~/.azure/bin — add it to PATH for this session
-    $azBicepDir = Join-Path $env:USERPROFILE '.azure\bin'
-    if (Test-Path (Join-Path $azBicepDir 'bicep.exe')) {
-        $env:PATH = "$azBicepDir;$env:PATH"
-        Write-Output "✅ Bicep CLI installed and added to PATH"
-    } else {
-        Write-Warning "Bicep installed via az, but binary not found at '$azBicepDir'. You may need to add it to PATH manually."
-    }
-}
+Initialize-BicepCli
 
 # Initialize Azure connection
 Import-AzureModules
@@ -97,32 +102,177 @@ Connect-AzureSubscription -SubscriptionId $SubscriptionId
 
 # Convert passwords securely
 $plainPassword = ConvertFrom-SecurePassword -SecurePassword $AdminPassword
-$plainLocalUserPassword = ConvertFrom-SecurePassword -SecurePassword $LocalUserPassword
+$plainLocalUserPassword = if ($LocalUserPassword) {
+    ConvertFrom-SecurePassword -SecurePassword $LocalUserPassword
+} else {
+    $plainPassword
+}
 
 # Parse all parameters from bicepparam file (single source of truth for Config.json
 # generation, pre-flight validation, and Bicep deployment).
 $templateParams = ConvertFrom-BicepParam -Path $ParametersFile
 
 $config = Resolve-DeploymentConfig -Params $templateParams -Defaults @{
-    location          = 'West US 2'
+    location          = $Location
     adminUsername     = 'testadmin'
     driverOsType     = 'Windows'
     sutExternal1Ip   = '192.168.1.11'
     sutExternal2Ip   = '192.168.2.11'
     driverExternal1Ip = '192.168.1.111'
     driverExternal2Ip = '192.168.2.111'
+    enableTestAutoRun = $true
 }
+$testAutoRun = $config.enableTestAutoRun -ne $false
+
+$autoShutdownRequested = $templateParams['enableAutoShutdown'] -eq $true
+$autoShutdownTime = if ($templateParams['autoShutdownTime']) { $templateParams['autoShutdownTime'] } else { '2000' }
+$autoShutdownTimeZone = if ($templateParams['autoShutdownTimeZone']) { $templateParams['autoShutdownTimeZone'] } else { 'UTC' }
+$templateParams['enableAutoShutdown'] = $false
 
 # Override enableDiskEncryption if -SkipDiskEncryption was specified
 if ($SkipDiskEncryption) {
     $templateParams['enableDiskEncryption'] = $false
 }
 
-Write-Output "   Location (from bicepparam): $($config.location)"
+Write-Output "   Location: $($config.location)"
 
 # Post-deploy Azure Disk Encryption runs only when the bicepparam enables it
 # (otherwise no Key Vault exists) and -SkipDiskEncryption was not passed.
 $diskEncryptionRequested = (-not $SkipDiskEncryption) -and ($templateParams['enableDiskEncryption'] -ne $false)
+if ($SkipTestWait -and $testAutoRun -and $diskEncryptionRequested) {
+    throw "-SkipTestWait cannot be combined while Azure Disk Encryption is enabled because ADE may reboot a VM during the automatic test run. Also pass -SkipDiskEncryption, or allow the script to wait for tests."
+}
+
+$verifyScript = Join-Path $PSScriptRoot '..\shared\scripts\Verify-Deployment.ps1'
+function Invoke-WorkgroupVerification {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)] [datetime]$NotBeforeUtc,
+        [switch]$IncludeTests,
+        [switch]$DeferTestFailure,
+        [int]$VmTimeoutMinutes = $ConfigurationTimeoutMinutes
+    )
+
+    $verificationParams = @{
+        ResourceGroupName = $ResourceGroupName
+        SubscriptionId    = $SubscriptionId
+        Scenario          = 'Workgroup'
+        TimeoutMinutes    = $VmTimeoutMinutes
+        TestTimeoutMinutes = $TestTimeoutMinutes
+        NotBeforeUtc      = $NotBeforeUtc
+    }
+    if ($IncludeTests) {
+        $verificationParams['WaitForTests'] = $true
+    }
+    if ($DeferTestFailure) {
+        $verificationParams['DeferTestFailure'] = $true
+    }
+    if ($tempStorage -and $tempStorage.Name) {
+        $verificationParams['ResultsStorageAccountName'] = $tempStorage.Name
+    } elseif ($StorageAccountName) {
+        $verificationParams['ResultsStorageAccountName'] = $StorageAccountName
+    }
+
+    & $verifyScript @verificationParams
+}
+
+function Invoke-WorkgroupDiskEncryptionSafely {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)] $DeploymentOutputs,
+        [Parameter(Mandatory)] [string]$SutVmName,
+        [Parameter(Mandatory)] [string]$DriverVmName,
+        [Parameter(Mandatory)] [datetime]$NotBeforeUtc
+    )
+
+    Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
+        -DeploymentOutputs $DeploymentOutputs -VMNames @($SutVmName, $DriverVmName)
+    Invoke-WorkgroupVerification -NotBeforeUtc $NotBeforeUtc -VmTimeoutMinutes 20
+}
+
+function Test-IsWorkgroupConfigurationFailure {
+    param([System.Management.Automation.ErrorRecord]$ErrorRecord)
+
+    if ($null -eq $ErrorRecord) { return $false }
+    if ($ErrorRecord.FullyQualifiedErrorId -match 'DeploymentConfiguration(Timeout|Failed)') {
+        return $true
+    }
+
+    $errorText = @(
+        $ErrorRecord.Exception.Message
+        $ErrorRecord.ErrorDetails.Message
+        $ErrorRecord.Exception.InnerException.Message
+    ) -join "`n"
+    return $errorText -match "Timeout after \d+ minutes: some 'Workgroup' VMs did not complete configuration" -or
+        $errorText -match 'ResumeDeployment task failed'
+}
+
+function Write-WorkgroupTimeoutDiagnostics {
+    param([string[]]$VMNames)
+
+    Write-Output "`nCollecting bounded Workgroup timeout diagnostics..."
+    $diagnosticScript = @'
+$packageRoot = 'C:\Workgroup-Package\DSC'
+Write-Output "Computer: $env:COMPUTERNAME"
+Write-Output "UTC: $([DateTime]::UtcNow.ToString('o'))"
+Write-Output '--- Scheduled tasks ---'
+foreach ($taskName in @('ResumeDeployment', 'TKFRSAR', 'PostDeployReboot', 'Config-ForceLevel2', 'RunFileServerTests')) {
+    $task = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+    $info = if ($task) { Get-ScheduledTaskInfo -TaskName $taskName -ErrorAction SilentlyContinue } else { $null }
+    Write-Output "$taskName state=$($task.State) lastResult=$($info.LastTaskResult) lastRun=$($info.LastRunTime)"
+}
+Write-Output '--- Signals ---'
+Get-ChildItem $packageRoot -Filter '*.signal' -File -ErrorAction SilentlyContinue |
+    Sort-Object Name | ForEach-Object { Write-Output "$($_.Name) modifiedUtc=$($_.LastWriteTimeUtc.ToString('o'))" }
+Write-Output '--- Latest deployment logs (last 40 lines each) ---'
+Get-ChildItem $packageRoot -Filter 'Deploy-*.log' -File -ErrorAction SilentlyContinue |
+    Sort-Object Name | ForEach-Object {
+        Write-Output "=== $($_.Name) ==="
+        Get-Content -LiteralPath $_.FullName -Tail 40 -ErrorAction SilentlyContinue
+    }
+'@
+
+    $diagnosticJobs = @()
+    foreach ($vmName in $VMNames) {
+        try {
+            $job = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+                -VMName $vmName -CommandId 'RunPowerShellScript' `
+                -ScriptString $diagnosticScript -AsJob -ErrorAction Stop
+            $diagnosticJobs += [pscustomobject]@{ VMName = $vmName; Job = $job }
+        } catch {
+            Write-Warning "Could not submit diagnostics for '$vmName': $($_.Exception.Message)"
+        }
+    }
+
+    if ($diagnosticJobs.Count -eq 0) { return }
+    Wait-Job -Job @($diagnosticJobs.Job) -Timeout 180 | Out-Null
+    foreach ($entry in $diagnosticJobs) {
+        try {
+            if ($entry.Job.State -in @('Running', 'NotStarted')) {
+                Stop-Job -Job $entry.Job -ErrorAction SilentlyContinue
+                throw 'Diagnostic Run Command exceeded 180 seconds.'
+            }
+            if ($entry.Job.State -ne 'Completed') {
+                throw "Diagnostic Run Command ended in state '$($entry.Job.State)'."
+            }
+            Write-Output "`n--- $($entry.VMName) diagnostics ---"
+            $result = @($entry.Job | Receive-Job -ErrorAction Stop)
+            @($result | ForEach-Object { @($_.Value) } | ForEach-Object { $_.Message }) |
+                ForEach-Object { Write-Output $_ }
+        } catch {
+            Write-Warning "Could not collect diagnostics for '$($entry.VMName)': $($_.Exception.Message)"
+        } finally {
+            Remove-Job -Job $entry.Job -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+function Write-ManualWorkgroupRecoveryCommand {
+    Write-Output "`nAutomatic recovery is exhausted. The VMs and logs were retained."
+    Write-Output 'Run this bounded manual recovery after reviewing the diagnostics:'
+    Write-Output '$password = Read-Host ''Admin password'' -AsSecureString'
+    Write-Output "& '$PSCommandPath' -SubscriptionId '$SubscriptionId' -ResourceGroupName '$ResourceGroupName' -AdminPassword `$password -ParametersFile '$ParametersFile' -Resume -ConfigurationRecoveryAttempts 0"
+}
 
 $generateScript = Join-Path $PSScriptRoot "..\shared\Generate-ConfigJson.ps1"
 
@@ -142,9 +292,10 @@ if (-not $Resume) {
 
 Write-Output "`nValidating VM sizes and OS images in $($config.location)..."
 
-# Fetch all VM SKUs for the region (single API call, reused for both checks)
-$vmSkus = Get-AzComputeResourceSku -Location $config.location |
-    Where-Object { $_.ResourceType -eq 'virtualMachines' }
+# Fetch the lightweight regional VM-size snapshot once and reuse it for candidate
+# selection and regional quota math. ARM pre-validation below remains authoritative
+# for policy, zone restrictions, family quota, and current capacity.
+$vmSkus = @(Get-RegionalVmSkuSnapshot -Location $config.location)
 
 # Resolve driver VM size (with fallbacks for capacity-constrained regions).
 # The per-role fallback lists are data, not code: ../shared/parameters/VmSizeFallbacks.psd1.
@@ -208,9 +359,9 @@ if (-not $templateParams['sutCustomImageId']) {
 # ===========================================================================
 # Advisory: Warn if auto-shutdown is near
 # ===========================================================================
-if ($templateParams['enableAutoShutdown'] -eq $true) {
-    $shutdownTime = $templateParams['autoShutdownTime']       # e.g. '2000'
-    $shutdownTz   = $templateParams['autoShutdownTimeZone']   # e.g. 'UTC'
+if ($autoShutdownRequested) {
+    $shutdownTime = $autoShutdownTime
+    $shutdownTz   = $autoShutdownTimeZone
     if ($shutdownTime -and $shutdownTz) {
         try {
             $tzInfo = [System.TimeZoneInfo]::FindSystemTimeZoneById($shutdownTz)
@@ -273,8 +424,11 @@ if ($ValidateOnly) {
     return
 }
 
-# Create or validate the resource group (uses location from bicepparam)
+# Create or validate the resource group.
 Initialize-ResourceGroup -ResourceGroupName $ResourceGroupName -Location $config.location
+$envPrefix = if ($templateParams['environmentPrefix']) { $templateParams['environmentPrefix'] } else { 'fstest' }
+$autoShutdownVmNames = @("$envPrefix-node01", "$envPrefix-client01")
+$autoShutdownRestored = $false
 
 # Handle DSC package upload
 $actualDscPackageZipUrl = $DscPackageZipUrl
@@ -291,6 +445,11 @@ $DscFolderPath = if ([System.IO.Path]::IsPathRooted($DscFolderPath)) {
 # is always cleaned up, even if packaging (Generate-ConfigJson, Compress-Archive,
 # Send-BlobWithSasUrl) or deployment fails.
 try {
+
+if ($autoShutdownRequested) {
+    Remove-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+        -VMNames $autoShutdownVmNames
+}
 
 if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
     Write-Output "`nPreparing DSC package for upload..."
@@ -314,6 +473,7 @@ if (-not $DscPackageZipUrl -and (Test-Path $DscFolderPath)) {
             DriverExternal2Ip = $config.driverExternal2Ip
             LocalUserPassword = $plainLocalUserPassword
             DriverOSType      = $config.driverOsType
+            EnableTestAutoRun = $testAutoRun
             # Create every test account with the single admin password so secondary
             # accounts match the framework's PasswordForAllUsers (works for any chosen
             # password; a no-op when the admin password already matches ParamConfig).
@@ -392,61 +552,218 @@ if ($Resume) {
 Write-Output '=== Resume Configuration ($($vc.Role)) ==='
 Write-Output 'Downloading DSC package...'
 New-Item -ItemType Directory -Path C:\Temp -Force | Out-Null
-Invoke-WebRequest -Uri '$actualDscPackageZipUrl' -OutFile 'C:\Temp\DSC-Package.zip' -UseBasicParsing
+`$downloaded = `$false
+for (`$downloadAttempt = 1; `$downloadAttempt -le 5; `$downloadAttempt++) {
+    try {
+        Invoke-WebRequest -Uri '$actualDscPackageZipUrl' -OutFile 'C:\Temp\DSC-Package.zip' -UseBasicParsing -TimeoutSec 120 -ErrorAction Stop
+        `$downloaded = `$true
+        break
+    } catch {
+        if (`$downloadAttempt -eq 5) { throw }
+        `$delaySeconds = [math]::Min(10 * [math]::Pow(2, `$downloadAttempt - 1), 60)
+        Write-Output "Download attempt `$downloadAttempt failed: `$(`$_.Exception.Message). Retrying in `$delaySeconds seconds."
+        Start-Sleep -Seconds `$delaySeconds
+    }
+}
+if (-not `$downloaded) { throw 'DSC package download did not complete.' }
+Write-Output 'Stopping stale deployment and test tasks...'
+foreach (`$taskName in @('ResumeDeployment', 'TKFRSAR', 'PostDeployReboot', 'Config-ForceLevel2', 'RunFileServerTests')) {
+    `$task = Get-ScheduledTask -TaskName `$taskName -ErrorAction SilentlyContinue
+    if (`$task) {
+        Stop-ScheduledTask -TaskName `$taskName -ErrorAction SilentlyContinue
+        Unregister-ScheduledTask -TaskName `$taskName -Confirm:`$false -ErrorAction SilentlyContinue
+    }
+}
+`$allProcesses = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue)
+`$staleProcessIds = [System.Collections.Generic.HashSet[int]]::new()
+foreach (`$process in `$allProcesses) {
+    if (`$process.CommandLine -match 'C:\\$packageName\\DSC\\(Deploy-(SUT|Driver)|Scripts\\(Invoke-TestRun|Create-TestAccount))') {
+        [void]`$staleProcessIds.Add([int]`$process.ProcessId)
+    }
+}
+do {
+    `$addedChild = `$false
+    foreach (`$process in `$allProcesses) {
+        if (`$staleProcessIds.Contains([int]`$process.ParentProcessId) -and
+            -not `$staleProcessIds.Contains([int]`$process.ProcessId)) {
+            [void]`$staleProcessIds.Add([int]`$process.ProcessId)
+            `$addedChild = `$true
+        }
+    }
+} while (`$addedChild)
+foreach (`$processId in @(`$staleProcessIds)) {
+    Stop-Process -Id `$processId -Force -ErrorAction SilentlyContinue
+}
 Write-Output 'Extracting to C:\$packageName...'
 New-Item -ItemType Directory -Path 'C:\$packageName' -Force | Out-Null
 Expand-Archive -Path 'C:\Temp\DSC-Package.zip' -DestinationPath 'C:\$packageName' -Force
 Remove-Item 'C:\Temp\DSC-Package.zip' -Force
+Write-Output 'Synchronizing the existing local deployment account credential...'
+`$resumeConfig = Get-Content -LiteralPath 'C:\$packageName\Config.json' -Raw -ErrorAction Stop | ConvertFrom-Json
+if ([string]::IsNullOrWhiteSpace(`$resumeConfig.Core.Username) -or
+    [string]::IsNullOrWhiteSpace(`$resumeConfig.Core.Password)) {
+    throw 'The resumed package does not contain a usable local deployment credential.'
+}
+`$localAdmin = Get-LocalUser -Name `$resumeConfig.Core.Username -ErrorAction Stop
+`$resumeAdminPassword = ConvertTo-SecureString `$resumeConfig.Core.Password -AsPlainText -Force
+Set-LocalUser -InputObject `$localAdmin -Password `$resumeAdminPassword -ErrorAction Stop
+Write-Output 'Local deployment account credential synchronized.'
 Write-Output 'Clearing signal files and registry state...'
-Get-ChildItem 'C:\$packageName' -Filter '*.signal' -Recurse -ErrorAction SilentlyContinue | Remove-Item -Force
+Get-ChildItem 'C:\$packageName\DSC' -Filter 'Deploy-*.Completed.signal' -Recurse -ErrorAction SilentlyContinue | Remove-Item -Force
+Remove-Item 'C:\$packageName\DSC\ForceLevel2.Completed.signal' -Force -ErrorAction SilentlyContinue
+Remove-Item 'C:\Test\test.finished.signal', 'C:\Test\test.run.completed.signal', 'C:\Test\test.results.upload.failed.signal' -Force -ErrorAction SilentlyContinue
 Remove-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'DeployStep' -ErrorAction SilentlyContinue
 Remove-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'RebootCount' -ErrorAction SilentlyContinue
 Write-Output 'Scheduling $($vc.Script)...'
 `$a = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-ExecutionPolicy Unrestricted -File C:\$packageName\DSC\$($vc.Script) -WorkingPath C:\$packageName'
-`$t = New-ScheduledTaskTrigger -Once -At (Get-Date).AddSeconds(10)
+`$t = New-ScheduledTaskTrigger -AtStartup
 `$s = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
 Register-ScheduledTask -TaskName 'ResumeDeployment' -Action `$a -Trigger `$t -Settings `$s -User 'SYSTEM' -RunLevel Highest -Force | Out-Null
+`$launchCommand = 'powershell.exe -NoProfile -ExecutionPolicy Unrestricted -File "C:\$packageName\DSC\$($vc.Script)" -WorkingPath "C:\$packageName"'
+`$launchResult = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = `$launchCommand } -ErrorAction Stop
+if (`$launchResult.ReturnValue -ne 0) {
+    throw "Detached deployment launch failed with Win32 return code `$(`$launchResult.ReturnValue)."
+}
+Write-Output "Detached deployment process started (PID `$(`$launchResult.ProcessId)); startup task retained as reboot fallback."
 Write-Output '=== Resume setup complete ==='
 "@
         $job = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
             -VMName $vc.Name -CommandId 'RunPowerShellScript' `
             -ScriptString $script -AsJob
-        $resumeJobs += @{ Job = $job; VM = $vc }
+        $resumeJobs += @{ Job = $job; VM = $vc; Script = $script }
     }
 
-    # Wait for all RunCommand jobs
+    # Wait for all RunCommand jobs with a per-command bound so one unhealthy VM
+    # cannot block the resume operation forever.
+    $resumeFailures = @()
     foreach ($rj in $resumeJobs) {
         Write-Output "`n   [$($rj.VM.Role)] Waiting for resume command on $($rj.VM.Name)..."
-        try {
-            $result = $rj.Job | Receive-Job -Wait -AutoRemoveJob -ErrorAction Stop
-            if ($result.Value) {
-                foreach ($v in $result.Value) {
-                    if ($v.Message) {
-                        $v.Message -split "`n" | ForEach-Object { Write-Output "      $_" }
+        $resumeSucceeded = $false
+        for ($resumeAttempt = 1; $resumeAttempt -le 3; $resumeAttempt++) {
+            try {
+                $completedResumeJob = Wait-Job -Job $rj.Job -Timeout 300
+                if ($null -eq $completedResumeJob) {
+                    Stop-Job -Job $rj.Job -ErrorAction SilentlyContinue
+                    throw "Resume Run Command exceeded 300 seconds."
+                }
+                if ($rj.Job.State -ne 'Completed') {
+                    throw "Resume Run Command ended in state '$($rj.Job.State)'."
+                }
+                $result = $rj.Job | Receive-Job -ErrorAction Stop
+                Remove-Job -Job $rj.Job -Force -ErrorAction SilentlyContinue
+                $resumeOutput = @($result | ForEach-Object { @($_.Value) } |
+                    ForEach-Object { $_.Message }) -join "`n"
+                if ($resumeOutput -notmatch '=== Resume setup complete ===') {
+                    throw "Resume Run Command did not report successful setup. Output: $resumeOutput"
+                }
+                if ($result.Value) {
+                    foreach ($v in $result.Value) {
+                        if ($v.Message) {
+                            $v.Message -split "`n" | ForEach-Object { Write-Output "      $_" }
+                        }
                     }
                 }
+                $resumeSucceeded = $true
+                break
+            } catch {
+                $failedAzureJob = $rj.Job.State -eq 'Failed'
+                $resumeError = $_
+                Remove-Job -Job $rj.Job -Force -ErrorAction SilentlyContinue
+                if ($failedAzureJob -and $resumeAttempt -lt 3) {
+                    Write-Warning "   Retrying failed resume Run Command on $($rj.VM.Name) (attempt $($resumeAttempt + 1)/3)."
+                    Start-Sleep -Seconds 5
+                    $rj.Job = Invoke-AzVMRunCommand -ResourceGroupName $ResourceGroupName `
+                        -VMName $rj.VM.Name -CommandId 'RunPowerShellScript' `
+                        -ScriptString $rj.Script -AsJob -ErrorAction Stop
+                    continue
+                }
+                Write-Warning "   Resume command failed on $($rj.VM.Name): $($resumeError.Exception.Message)"
+                break
             }
-        } catch {
-            Write-Warning "   Resume command failed on $($rj.VM.Name): $($_.Exception.Message)"
-            $rj.Job | Remove-Job -Force -ErrorAction SilentlyContinue
         }
+        if (-not $resumeSucceeded) {
+            $resumeFailures += $rj.VM.Name
+        }
+    }
+
+    if ($resumeFailures.Count -gt 0) {
+        throw "Resume commands failed for: $($resumeFailures -join ', ')"
     }
 
     $resumeDuration = [math]::Round(((Get-Date) - $resumeStart).TotalMinutes, 1)
 
+    $resumeVerification = Invoke-WorkgroupVerification -NotBeforeUtc $resumeStart.ToUniversalTime() `
+        -IncludeTests:($testAutoRun -and -not $SkipTestWait) `
+        -DeferTestFailure:($testAutoRun -and -not $SkipTestWait)
+    Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+
+    $resumeInfrastructureFinalizationError = $null
+    if ($diskEncryptionRequested) {
+        $resumeDeployment = Get-AzResourceGroupDeployment -ResourceGroupName $ResourceGroupName `
+            -ErrorAction Stop |
+            Where-Object {
+                $_.ProvisioningState -eq 'Succeeded' -and $_.Outputs -and
+                $_.Outputs.ContainsKey('keyVaultId') -and
+                $_.Outputs.ContainsKey('keyVaultUrl')
+            } |
+            Sort-Object Timestamp -Descending |
+            Select-Object -First 1
+        if (-not $resumeDeployment) {
+            throw "No successful Workgroup deployment with Key Vault outputs was found in '$ResourceGroupName'; disk encryption cannot be finalized."
+        }
+
+        try {
+            Invoke-WorkgroupDiskEncryptionSafely -DeploymentOutputs $resumeDeployment.Outputs `
+                -SutVmName $sutVmName -DriverVmName $driverVmName `
+                -NotBeforeUtc $resumeStart.ToUniversalTime()
+        } catch {
+            $resumeInfrastructureFinalizationError = $_
+            Write-Warning "Workgroup resume disk encryption or post-encryption verification failed: $($_.Exception.Message)"
+        }
+    }
+
+    if ($autoShutdownRequested -and -not $DeferAutoShutdownRestore) {
+        Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+        Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+            -Location $config.location -VMNames @($sutVmName, $driverVmName) `
+            -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+        $autoShutdownRestored = $true
+    }
+
+    if ($resumeInfrastructureFinalizationError) {
+        throw "Workgroup resume infrastructure finalization failed after configuration/test finalization; shutdown schedules were restored. $($resumeInfrastructureFinalizationError.Exception.Message)"
+    }
+    Complete-DeploymentTestOutcome -Verification $resumeVerification
+
+    $resumeTestDetails = if (-not $testAutoRun) {
+@"
+  Test execution: automatic execution was disabled.
+  Start tests manually on ${driverVmName}:
+    pwsh -File "C:\$packageName\DSC\Scripts\Invoke-TestRun.ps1" -WorkingPath "C:\$packageName"
+"@
+    } elseif ($SkipTestWait) {
+@"
+  Test execution: automatic execution was started without waiting for its terminal outcome.
+  Driver log: C:\$packageName\DSC\Invoke-TestRun.log
+"@
+    } else {
+@"
+  Test execution completed.
+  Classification: $($resumeVerification.TestClassification)
+  Passed tests: $($resumeVerification.PassedTestCount)
+  Inconclusive tests: $($resumeVerification.InconclusiveTestCount)
+  Failed tests: $($resumeVerification.FailedTestCount)
+  Results: C:\Test\TestResults\
+"@
+    }
+
     Write-Output @"
 
-  RESUME INITIATED ($resumeDuration min)
+  RESUME COMPLETE ($resumeDuration min to initiate configuration)
 
-  VMs have received updated packages. Deploy scripts are running in the background.
+  VMs received updated packages and passed the requested readiness checks.
 
-  Monitor progress:
-    - SUT:    RDP/Bastion -> $sutVmName -> C:\$packageName\DSC\Deploy-SUT.log
-    - Driver: RDP/Bastion -> $driverVmName -> C:\$packageName\DSC\Deploy-Driver.log
-
-  Completion signals:
-    - SUT:    C:\$packageName\DSC\Deploy-SUT.Completed.signal
-    - Driver: C:\$packageName\DSC\Deploy-Driver.Completed.signal
+$resumeTestDetails
 "@
     return
 }
@@ -489,19 +806,114 @@ $deploymentResult = Invoke-DeploymentWithSkuFallback `
     -DeploymentNamePrefix 'Workgroup'
 
 $deployDuration = [math]::Round(((Get-Date) - $deployStart).TotalMinutes, 1)
-Write-Output "`n[OK] Deployment completed in $deployDuration minutes"
+Write-Output "`n[OK] Azure resource deployment completed in $deployDuration minutes"
+
+# The VM extensions can return after scheduling a reboot or the automatic test
+# task. Verify fresh guest postconditions before ADE, whose reboot would otherwise
+# race with DSC, tool installation, or the test run.
+try {
+    $verification = Invoke-WorkgroupVerification -NotBeforeUtc $deployStart.ToUniversalTime() `
+        -IncludeTests:($testAutoRun -and -not $SkipTestWait) `
+        -DeferTestFailure:($testAutoRun -and -not $SkipTestWait)
+} catch {
+    if ($ConfigurationRecoveryAttempts -gt 0 -and
+        (Test-IsWorkgroupConfigurationFailure -ErrorRecord $_)) {
+        $envPrefix = if ($templateParams['environmentPrefix']) { $templateParams['environmentPrefix'] } else { 'fstest' }
+        $recoveryVmNames = @("$envPrefix-node01", "$envPrefix-client01")
+        Write-Warning "Workgroup configuration exceeded $ConfigurationTimeoutMinutes minutes. Starting one automatic reconciliation cycle."
+        Write-WorkgroupTimeoutDiagnostics -VMNames $recoveryVmNames
+
+        $recoveryParams = @{} + $PSBoundParameters
+        $recoveryParams['Resume'] = $true
+        $recoveryParams['ConfigurationRecoveryAttempts'] = 0
+        $recoveryParams['DeferAutoShutdownRestore'] = $true
+        try {
+            & $PSCommandPath @recoveryParams
+            if ($autoShutdownRequested) {
+                Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+                Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+                    -Location $config.location -VMNames $recoveryVmNames `
+                    -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+                $autoShutdownRestored = $true
+            }
+            Write-Output '[OK] Automatic Workgroup reconciliation completed and passed verification.'
+            return
+        } catch {
+            $recoveryError = $_
+            Write-Warning "Automatic Workgroup reconciliation failed: $($recoveryError.Exception.Message)"
+            Write-WorkgroupTimeoutDiagnostics -VMNames $recoveryVmNames
+            Write-ManualWorkgroupRecoveryCommand
+            throw $recoveryError
+        }
+    } else {
+        throw
+    }
+}
+Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
 
 # ===========================================================================
 # Disk Encryption — SUT + Driver (after deployment)
 # ===========================================================================
+$infrastructureFinalizationError = $null
 if ($diskEncryptionRequested -and $deploymentResult) {
     $envPrefix = if ($templateParams['environmentPrefix']) { $templateParams['environmentPrefix'] } else { 'fstest' }
     $sutVmName    = "$envPrefix-node01"
     $driverVmName = "$envPrefix-client01"
+    try {
+        Invoke-WorkgroupDiskEncryptionSafely -DeploymentOutputs $deploymentResult.Outputs `
+            -SutVmName $sutVmName -DriverVmName $driverVmName `
+            -NotBeforeUtc $deployStart.ToUniversalTime()
+    } catch {
+        $infrastructureFinalizationError = $_
+        Write-Warning "Workgroup disk encryption or post-encryption verification failed: $($_.Exception.Message)"
+    }
+}
 
-    Invoke-DiskEncryptionForVMs -ResourceGroupName $ResourceGroupName `
-        -DeploymentOutputs $deploymentResult.Outputs `
-        -VMNames @($sutVmName, $driverVmName)
+    if ($autoShutdownRequested) {
+        Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+        $envPrefix = if ($templateParams['environmentPrefix']) { $templateParams['environmentPrefix'] } else { 'fstest' }
+        Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+        -Location $config.location `
+        -VMNames @("$envPrefix-node01", "$envPrefix-client01") `
+        -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+        $autoShutdownRestored = $true
+    }
+
+if ($infrastructureFinalizationError) {
+    throw "Workgroup infrastructure finalization failed after configuration/test finalization; shutdown schedules were restored. $($infrastructureFinalizationError.Exception.Message)"
+}
+Complete-DeploymentTestOutcome -Verification $verification
+
+$testExecutionDetails = if (-not $testAutoRun) {
+    $manualCommand = if ($config.driverOsType -eq 'Linux') {
+        'pwsh -File "/opt/Workgroup-Package/DSC/Scripts/Invoke-TestRun.ps1" -WorkingPath "/opt/Workgroup-Package"'
+    } else {
+        'pwsh -File "C:\Workgroup-Package\DSC\Scripts\Invoke-TestRun.ps1" -WorkingPath "C:\Workgroup-Package"'
+    }
+@"
+Test execution:
+  - Automatic FileServer test execution was disabled.
+  - Start tests manually on Client01:
+    $manualCommand
+"@
+} elseif ($SkipTestWait) {
+@"
+Test execution:
+  - Automatic FileServer test execution was started.
+  - This command was configured not to wait for the terminal test outcome.
+  - Log: C:\Workgroup-Package\DSC\Invoke-TestRun.log
+"@
+} else {
+@"
+Test execution:
+  - Automatic FileServer test execution completed.
+  - Classification: $($verification.TestClassification)
+  - Passed tests: $($verification.PassedTestCount)
+  - Inconclusive tests: $($verification.InconclusiveTestCount)
+  - Failed tests: $($verification.FailedTestCount)
+  - Results: C:\Test\TestResults\
+  - Completion signal: C:\Test\test.finished.signal
+"@
 }
 
 # ===========================================================================
@@ -522,19 +934,23 @@ Network Configuration:
   - Client01: External1 = $($config.driverExternal1Ip), External2 = $($config.driverExternal2Ip)
   - Node01:   External1 = $($config.sutExternal1Ip), External2 = $($config.sutExternal2Ip)
 
-What happens next (fully automatic):
-1. Both VMs run their deployment scripts in parallel (DSC + tools install)
-2. Driver VM waits for SUT readiness, then runs Execute-TestCaseByContext.ps1
-3. Results will be written to C:\Test\TestResults\ once complete
-4. Signal file: C:\Test\test.finished.signal indicates completion
-
-To monitor progress:
-  - RDP/Bastion into Client01 and check C:\Workgroup-Package\DSC\Invoke-TestRun.log
+$testExecutionDetails
 
 For detailed instructions, see: README.md
 "@
 
 } finally {
+    if ($autoShutdownRequested -and -not $DeferAutoShutdownRestore -and -not $autoShutdownRestored) {
+        try {
+            Connect-AzureSubscription -SubscriptionId $SubscriptionId | Out-Host
+            Enable-VmAutoShutdownSchedules -ResourceGroupName $ResourceGroupName `
+                -Location $config.location -VMNames $autoShutdownVmNames `
+                -Time $autoShutdownTime -TimeZone $autoShutdownTimeZone
+            $autoShutdownRestored = $true
+        } catch {
+            Write-Warning "Failed to restore VM auto-shutdown schedules (non-fatal): $($_.Exception.Message)"
+        }
+    }
     # Storage account is kept alive for test results upload.
     if ($tempStorage) {
         Write-Output "`nStorage account '$($tempStorage.Name)' retained for test results upload."

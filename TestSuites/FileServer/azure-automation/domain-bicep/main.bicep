@@ -9,9 +9,7 @@
 // Add-Computer with exponential backoff, so members wait out promotion without any
 // PowerShell orchestration. deploy.ps1's two-phase flow remains for CLI use.
 
-@description('Resource group location. Defaults to the resource group\'s region so the "Deploy to Azure" button deploys where you have quota/capacity. deploy.ps1 sets this explicitly from the bicepparam file.')
-@minLength(1)
-param location string = resourceGroup().location
+var location = resourceGroup().location
 
 @description('Environment name prefix')
 @minLength(1)
@@ -35,6 +33,14 @@ param domainName string = 'contoso.com'
 param domainNetBiosName string = 'CONTOSO'
 
 @description('Domain Controller VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button; deploy.ps1 uses a compute-optimized size from the bicepparam file.')
+@allowed([
+  'Standard_B4ms'
+  'Standard_D2s_v5'
+  'Standard_D2as_v5'
+  'Standard_D4s_v5'
+  'Standard_D4as_v5'
+  'Standard_D4s_v6'
+])
 @minLength(1)
 param dcVmSize string = 'Standard_B4ms'
 
@@ -50,12 +56,29 @@ param dcOsVersion string = '2025-datacenter-azure-edition'
 param dcCustomImageId string = ''
 
 @description('Driver computer VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button.')
+@allowed([
+  'Standard_B4ms'
+  'Standard_F4as_v6'
+  'Standard_F4s_v2'
+  'Standard_D4s_v5'
+  'Standard_D4as_v5'
+  'Standard_D4s_v6'
+])
 @minLength(1)
 param driverVmSize string = 'Standard_B4ms'
 
-@description('SUT computer VM size. Defaults to a broadly-available burstable (B-series) size for the one-click button.')
+@description('SUT computer VM size. Defaults to a broadly-available burstable (B-series) size with additional capacity for FileServer tests.')
+@allowed([
+  'Standard_B4ms'
+  'Standard_B8ms'
+  'Standard_D8ls_v5'
+  'Standard_D8s_v5'
+  'Standard_D8as_v5'
+  'Standard_D8s_v6'
+  'Standard_D8as_v6'
+])
 @minLength(1)
-param sutVmSize string = 'Standard_B4ms'
+param sutVmSize string = 'Standard_B8ms'
 
 @description('Driver computer OS type')
 @allowed([
@@ -147,6 +170,9 @@ param sutExternal2Ip string = '192.168.2.11'
 @description('Enable auto-shutdown. Default false for the domain lab: auto-shutdown DEALLOCATES VMs, and a deallocate/restart of a domain-joined member can collide with machine-account password handling. Members set Netlogon\\DisablePasswordChange to stay safe, but keeping the lab running by default avoids the deallocation churn entirely. Opt in explicitly to save cost.')
 param enableAutoShutdown bool = false
 
+@description('Run FileServer tests automatically after Driver and SUT configuration completes')
+param enableTestAutoRun bool = true
+
 @description('Auto-shutdown time (HH:mm in UTC)')
 @minLength(1)
 param autoShutdownTime string = '20:00'
@@ -156,7 +182,7 @@ param autoShutdownTime string = '20:00'
 param autoShutdownTimeZone string = 'UTC'
 
 @description('URL to the Domain DSC package zip (contains DSC/ folder, Config.json, Tools.json). Defaults to the public GitHub Release asset that the "Deploy to Azure" button consumes; the on-VM Custom Script Extension injects the real admin password into the package\'s placeholder Config.json at deploy time. deploy.ps1 overrides this with a freshly built, credential-baked package.')
-param domainPackageZipUrl string = 'https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.8.0/Domain-Package.zip'
+param domainPackageZipUrl string = 'https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.9.0/Domain-Package.zip'
 
 @description('Enable Azure Disk Encryption (creates a Key Vault for encryption keys). Defaults OFF for the one-click button: ADE is applied by deploy.ps1 as a post-deploy step (which the Portal button cannot run), so for the button the vault would be created but never used. Managed disks are platform-encrypted at rest regardless. deploy.ps1 sets this true via the bicepparam file.')
 param enableDiskEncryption bool = false
@@ -219,6 +245,7 @@ module phase2 'phase2.bicep' = {
     dcExternal1Ip: phase1.outputs.dcExternal1Ip
     dcExternal2Ip: phase1.outputs.dcExternal2Ip
     enableAutoShutdown: enableAutoShutdown
+    enableTestAutoRun: enableTestAutoRun
     autoShutdownTime: autoShutdownTime
     autoShutdownTimeZone: autoShutdownTimeZone
     domainPackageZipUrl: domainPackageZipUrl

@@ -117,6 +117,37 @@ function Remove-ResumeTask {
     }
 }
 
+function Test-BenignPendingFileRename {
+    <#
+    .SYNOPSIS
+        Returns $true when a PendingFileRenameOperations entry is a known-benign
+        rename that must NOT be treated as a system reboot reason.
+    .DESCRIPTION
+        Windows images ship a per-user OneDrive updater (OneDriveSetup.exe staged
+        under each profile's AppData\Local\Microsoft\OneDrive). Its background
+        self-update queues file swaps via PendingFileRenameOperations that are
+        applied at next boot. These are unrelated to deployment state and can
+        never be satisfied by a deployment reboot budget, so counting them as a
+        pending system reboot spuriously trips the reboot circuit breaker and
+        terminally fails an otherwise-healthy orchestrator (observed on the
+        Cluster driver). Only genuinely benign, deployment-irrelevant entries are
+        excluded here; every other rename (and CBS/Windows Update signals) still
+        counts as a real reboot reason.
+    #>
+    param([string]$Entry)
+
+    $path = ("$Entry").Trim()
+    if ([string]::IsNullOrWhiteSpace($path)) {
+        # Empty destination slots in the source/destination pairs carry no meaning.
+        return $true
+    }
+    $isOneDrivePath = $path -match '\\AppData\\Local\\Microsoft\\OneDrive\\'
+    # Match the updater executable as an exact path segment so lookalikes such as
+    # OldOneDriveSetup.exe or OneDriveSetup.exe.config still count as reboot reasons.
+    $isOneDriveSetupExe = $path -match '(?:^|\\)OneDriveSetup\.exe$'
+    return ($isOneDrivePath -and $isOneDriveSetupExe)
+}
+
 function Get-PendingSystemRebootReasons {
     $reasons = New-Object System.Collections.Generic.List[string]
     $pendingRenames = Get-ItemProperty `
@@ -124,7 +155,10 @@ function Get-PendingSystemRebootReasons {
         -Name 'PendingFileRenameOperations' -ErrorAction SilentlyContinue
     $pendingRenameOperations = if ($null -ne $pendingRenames) {
         @($pendingRenames.PendingFileRenameOperations |
-            Where-Object { -not [string]::IsNullOrWhiteSpace("$_") })
+            Where-Object {
+                -not [string]::IsNullOrWhiteSpace("$_") -and
+                -not (Test-BenignPendingFileRename $_)
+            })
     } else {
         @()
     }
@@ -145,6 +179,255 @@ function Test-PendingSystemReboot {
     return @(Get-PendingSystemRebootReasons).Count -gt 0
 }
 
+function Test-ShareUtilForceLevel2Output {
+    param([object[]]$Output)
+    $text = @($Output | ForEach-Object { "$_" }) -join "`n"
+    if ($text -match 'SHI1005_FLAGS_FORCE_LEVELII_OPLOCK') {
+        return $true
+    }
+    foreach ($match in [regex]::Matches($text, '(?m)(?:^|:\s*)(\d+)\s*$')) {
+        [uint64]$value = 0
+        if ([uint64]::TryParse($match.Groups[1].Value, [ref]$value) -and
+            ($value -band 0x1000) -ne 0) {
+            return $true
+        }
+    }
+    return $false
+}
+
+function Get-DeploymentRegistryValue {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+
+        $DefaultValue = $null,
+
+        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+    )
+
+    $value = Get-ItemProperty -Path $RegistryPath -Name $Name -ErrorAction SilentlyContinue
+    if ($null -eq $value -or $value.PSObject.Properties.Name -notcontains $Name) {
+        return $DefaultValue
+    }
+    return $value.$Name
+}
+
+function Set-DeploymentRegistryValue {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+
+        [Parameter(Mandatory)]
+        $Value,
+
+        [ValidateSet('Binary', 'DWord', 'ExpandString', 'MultiString', 'QWord', 'String')]
+        [string]$Type = 'String',
+
+        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+    )
+
+    if (-not (Test-Path $RegistryPath)) {
+        New-Item -Path $RegistryPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $RegistryPath -Name $Name -Value $Value -Type $Type -Force
+}
+
+function Remove-DeploymentRegistryValue {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+
+        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+    )
+
+    Remove-ItemProperty -Path $RegistryPath -Name $Name -Force -ErrorAction SilentlyContinue
+}
+
+function Get-DeploymentRoleStateNames {
+    param(
+        [Parameter(Mandatory)]
+        [ValidatePattern('^[A-Za-z][A-Za-z0-9]*$')]
+        [string]$Role,
+
+        [ValidatePattern('^[A-Za-z0-9]*$')]
+        [string]$RebootScope = ''
+    )
+
+    $rebootPrefix = "$Role$RebootScope"
+    return [pscustomobject]@{
+        PhaseName = "${Role}DeployPhase"
+        RebootPendingName = "${rebootPrefix}RebootPending"
+        PreRebootBootTimeName = "${rebootPrefix}PreRebootBootTimeUtc"
+        RebootCountName = "${rebootPrefix}RebootCount"
+    }
+}
+
+function Get-CurrentBootTimeUtc {
+    $operatingSystem = Get-CimInstance -ClassName Win32_OperatingSystem -ErrorAction Stop
+    if ($null -eq $operatingSystem -or $null -eq $operatingSystem.LastBootUpTime) {
+        throw 'The operating-system boot time could not be determined.'
+    }
+    return ([datetime]$operatingSystem.LastBootUpTime).ToUniversalTime()
+}
+
+function Test-DeploymentBootTimeAdvanced {
+    param(
+        [Parameter(Mandatory)]
+        [string]$RecordedBootTimeUtc,
+
+        [datetime]$CurrentBootTimeUtc = (Get-CurrentBootTimeUtc)
+    )
+
+    $recordedBootTime = [datetime]::MinValue
+    if (-not [datetime]::TryParse(
+        $RecordedBootTimeUtc,
+        [System.Globalization.CultureInfo]::InvariantCulture,
+        [System.Globalization.DateTimeStyles]::RoundtripKind,
+        [ref]$recordedBootTime
+    )) {
+        return $false
+    }
+
+    return $CurrentBootTimeUtc.ToUniversalTime() -gt $recordedBootTime.ToUniversalTime()
+}
+
+function Set-DeploymentRebootPending {
+    param(
+        [Parameter(Mandatory)]
+        [ValidatePattern('^[A-Za-z][A-Za-z0-9]*$')]
+        [string]$Role,
+
+        [ValidatePattern('^[A-Za-z0-9]*$')]
+        [string]$RebootScope = '',
+
+        [Parameter(Mandatory)]
+        [ValidateRange(1, 20)]
+        [int]$MaximumRebootCount,
+
+        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+    )
+
+    $names = Get-DeploymentRoleStateNames -Role $Role -RebootScope $RebootScope
+    $rebootCount = [int](Get-DeploymentRegistryValue -Name $names.RebootCountName `
+        -DefaultValue 0 -RegistryPath $RegistryPath)
+    if ($rebootCount -ge $MaximumRebootCount) {
+        throw "$Role reboot circuit breaker reached its limit of $MaximumRebootCount."
+    }
+
+    $bootTime = Get-CurrentBootTimeUtc
+    Set-DeploymentRegistryValue -Name $names.PreRebootBootTimeName `
+        -Value $bootTime.ToString('o') -Type String -RegistryPath $RegistryPath
+    Set-DeploymentRegistryValue -Name $names.RebootCountName `
+        -Value ($rebootCount + 1) -Type DWord -RegistryPath $RegistryPath
+    Set-DeploymentRegistryValue -Name $names.RebootPendingName `
+        -Value 1 -Type DWord -RegistryPath $RegistryPath
+
+    return [pscustomobject]@{
+        Role = $Role
+        RebootScope = $RebootScope
+        RebootCount = $rebootCount + 1
+        PreRebootBootTimeUtc = $bootTime
+    }
+}
+
+function Confirm-DeploymentReboot {
+    param(
+        [Parameter(Mandatory)]
+        [ValidatePattern('^[A-Za-z][A-Za-z0-9]*$')]
+        [string]$Role,
+
+        [ValidatePattern('^[A-Za-z0-9]*$')]
+        [string]$RebootScope = '',
+
+        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
+    )
+
+    $names = Get-DeploymentRoleStateNames -Role $Role -RebootScope $RebootScope
+    $pending = [int](Get-DeploymentRegistryValue -Name $names.RebootPendingName `
+        -DefaultValue 0 -RegistryPath $RegistryPath)
+    if ($pending -ne 1) {
+        return $false
+    }
+
+    $recordedBootTime = [string](Get-DeploymentRegistryValue `
+        -Name $names.PreRebootBootTimeName -DefaultValue '' -RegistryPath $RegistryPath)
+    if (-not (Test-DeploymentBootTimeAdvanced -RecordedBootTimeUtc $recordedBootTime)) {
+        throw "$Role persisted a pending reboot, but a newer boot was not observed."
+    }
+
+    Set-DeploymentRegistryValue -Name $names.RebootPendingName `
+        -Value 0 -Type DWord -RegistryPath $RegistryPath
+    return $true
+}
+
+function Test-VerifiedDeploymentSignal {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path,
+
+        [string]$ExpectedContentPattern,
+
+        [string]$ExpectedVersion,
+
+        [switch]$RemoveInvalid
+    )
+
+    $isValid = $false
+    try {
+        $signal = Get-Item -LiteralPath $Path -ErrorAction SilentlyContinue
+        if ($null -eq $signal -or $signal.PSIsContainer -or $signal.Length -le 0) {
+            return $false
+        }
+
+        $content = Get-Content -LiteralPath $Path -Raw -ErrorAction Stop
+        if ([string]::IsNullOrWhiteSpace($content)) {
+            return $false
+        }
+        if ($ExpectedContentPattern -and
+            -not [regex]::IsMatch($content, $ExpectedContentPattern)) {
+            return $false
+        }
+
+        if ($ExpectedVersion) {
+            $actualVersion = $null
+            try {
+                $signalData = $content | ConvertFrom-Json -ErrorAction Stop
+                foreach ($propertyName in @('SchemaVersion', 'SignalVersion', 'Version')) {
+                    if ($signalData.PSObject.Properties.Name -contains $propertyName) {
+                        $actualVersion = "$($signalData.$propertyName)"
+                        break
+                    }
+                }
+            }
+            catch {
+                $versionMatch = [regex]::Match(
+                    $content,
+                    '(?im)^\s*(?:SchemaVersion|SignalVersion|Version)\s*[:=]\s*[\x22\x27]?([^\x22\x27,;\s]+)'
+                )
+                if ($versionMatch.Success) {
+                    $actualVersion = $versionMatch.Groups[1].Value
+                }
+            }
+
+            if ($actualVersion -ne $ExpectedVersion) {
+                return $false
+            }
+        }
+
+        $isValid = $true
+        return $true
+    }
+    catch {
+        return $false
+    }
+    finally {
+        if (-not $isValid -and $RemoveInvalid -and
+            $null -ne (Get-Item -LiteralPath $Path -ErrorAction SilentlyContinue)) {
+            Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
 function Write-VerifiedDeploymentSignal {
     param(
         [Parameter(Mandatory)]
@@ -154,29 +437,29 @@ function Write-VerifiedDeploymentSignal {
         [string]$Content
     )
 
-    $Content | Set-Content -LiteralPath $Path -Force -ErrorAction Stop
-    $signal = Get-Item -LiteralPath $Path -ErrorAction Stop
-    if ($signal.Length -le 0) {
-        throw "Deployment completion signal '$Path' is empty."
+    if ([string]::IsNullOrWhiteSpace($Content)) {
+        throw 'Deployment completion signal content must not be empty.'
     }
-}
 
-function Get-DeploymentRegistryValue {
-    param(
-        [Parameter(Mandatory)]
-        [string]$Name,
+    $signalDirectory = Split-Path -Path $Path -Parent
+    if ($signalDirectory -and -not (Test-Path -LiteralPath $signalDirectory)) {
+        New-Item -ItemType Directory -Path $signalDirectory -Force | Out-Null
+    }
 
-        $DefaultValue,
+    $temporaryPath = "$Path.tmp.$PID.$([guid]::NewGuid().ToString('N'))"
+    try {
+        $Content | Set-Content -LiteralPath $temporaryPath -Force -ErrorAction Stop
+        Move-Item -LiteralPath $temporaryPath -Destination $Path -Force -ErrorAction Stop
 
-        [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
-    )
-
-    $item = Get-ItemProperty -Path $RegistryPath -ErrorAction SilentlyContinue
-    if ($null -eq $item) { return $DefaultValue }
-
-    $property = $item.PSObject.Properties[$Name]
-    if ($null -eq $property) { return $DefaultValue }
-    return $property.Value
+        $writtenContent = Get-Content -LiteralPath $Path -Raw -ErrorAction Stop
+        if ([string]::IsNullOrWhiteSpace($writtenContent) -or
+            $writtenContent.Trim() -ne $Content.Trim()) {
+            throw "Deployment completion signal '$Path' failed content verification."
+        }
+    }
+    finally {
+        Remove-Item -LiteralPath $temporaryPath -Force -ErrorAction SilentlyContinue
+    }
 }
 
 function Get-DeploymentPhase {
@@ -203,10 +486,8 @@ function Set-DeploymentPhase {
         [string]$RegistryPath = 'HKLM:\SOFTWARE\ProtocolTestSuites'
     )
 
-    if (-not (Test-Path $RegistryPath)) {
-        New-Item -Path $RegistryPath -Force | Out-Null
-    }
-    Set-ItemProperty -Path $RegistryPath -Name $Name -Value $Phase -Type DWord -Force
+    Set-DeploymentRegistryValue -Name $Name -Value $Phase -Type DWord `
+        -RegistryPath $RegistryPath
 }
 
 function Write-DeploymentHeartbeat {
@@ -303,14 +584,225 @@ function Wait-DeploymentJob {
     }
 
     if ($Job.State -in @('NotStarted', 'Running', 'Blocked')) {
-        Stop-Job -Job $Job
+        Stop-Job -Job $Job -ErrorAction SilentlyContinue
         throw "$Operation exceeded the $TimeoutSeconds-second timeout."
     }
     if ($Job.State -ne 'Completed') {
         $reason = $Job.ChildJobs[0].JobStateInfo.Reason
-        throw "$Operation ended in state '$($Job.State)': $reason"
+        $failureOutput = @(Receive-Job -Job $Job -Keep -ErrorAction SilentlyContinue 2>&1 |
+            ForEach-Object { "$_" } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+        $details = @("$reason") + $failureOutput |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+            Select-Object -Unique
+        $detailText = if (@($details).Count -gt 0) { $details -join '; ' } else { 'No job failure details were returned.' }
+        throw "$Operation ended in state '$($Job.State)': $detailText"
     }
     return $Job
+}
+
+function Get-LastMeaningfulDeploymentOutput {
+    param([object[]]$Output)
+
+    $meaningful = @($Output | Where-Object {
+        $null -ne $_ -and
+        (-not ($_ -is [string]) -or -not [string]::IsNullOrWhiteSpace($_))
+    })
+    if ($meaningful.Count -eq 0) {
+        return $null
+    }
+    return $meaningful[-1]
+}
+
+function Test-DeploymentSuccessValue {
+    param($Value)
+
+    if ($Value -is [bool]) {
+        return $Value
+    }
+    if ($Value -is [byte] -or $Value -is [int16] -or
+        $Value -is [int32] -or $Value -is [int64]) {
+        return ([int64]$Value -ne 0)
+    }
+
+    $text = "$Value".Trim()
+    if ($text -match '^(?i:true)$') { return $true }
+    if ($text -match '^(?i:false)$') { return $false }
+    return $false
+}
+
+function Wait-DeploymentCondition {
+    param(
+        [Parameter(Mandatory)]
+        [scriptblock]$Condition,
+
+        [Parameter(Mandatory)]
+        [ValidateRange(1, 86400)]
+        [int]$TimeoutSeconds,
+
+        [ValidateRange(1, 600)]
+        [int]$PollIntervalSeconds = 10,
+
+        [string]$Phase = 'Readiness',
+
+        [Parameter(Mandatory)]
+        [string]$Operation,
+
+        [string]$HeartbeatPath,
+
+        [string]$LastCheckpoint,
+
+        [ValidateRange(1, 600)]
+        [int]$HeartbeatIntervalSeconds = 60
+    )
+
+    $startedAt = Get-Date
+    $deadline = $startedAt.AddSeconds($TimeoutSeconds)
+    $nextHeartbeat = $startedAt
+    $lastError = $null
+
+    while ((Get-Date) -lt $deadline) {
+        if ((Get-Date) -ge $nextHeartbeat) {
+            Write-DeploymentHeartbeat -Phase $Phase -Operation $Operation `
+                -StartedAt $startedAt -Deadline $deadline -HeartbeatPath $HeartbeatPath `
+                -LastCheckpoint $LastCheckpoint
+            $nextHeartbeat = (Get-Date).AddSeconds($HeartbeatIntervalSeconds)
+        }
+
+        try {
+            $conditionOutput = @(& $Condition)
+            $conditionResult = Get-LastMeaningfulDeploymentOutput -Output $conditionOutput
+            if (Test-DeploymentSuccessValue -Value $conditionResult) {
+                return $true
+            }
+            $lastError = $null
+        }
+        catch {
+            $lastError = $_.Exception.Message
+        }
+
+        $remainingSeconds = [int][Math]::Ceiling(($deadline - (Get-Date)).TotalSeconds)
+        if ($remainingSeconds -le 0) { break }
+        Start-Sleep -Seconds ([Math]::Min($PollIntervalSeconds, $remainingSeconds))
+    }
+
+    $errorSuffix = if ($lastError) { " Last error: $lastError" } else { '' }
+    throw "$Operation did not satisfy its readiness condition within $TimeoutSeconds seconds.$errorSuffix"
+}
+
+function Assert-DeploymentChildResult {
+    param(
+        [object[]]$Output,
+
+        [Parameter(Mandatory)]
+        [string]$Operation,
+
+        [int]$ExitCode,
+
+        [switch]$RequireTrueResult
+    )
+
+    if ($PSBoundParameters.ContainsKey('ExitCode') -and $ExitCode -ne 0) {
+        throw "$Operation failed with exit code $ExitCode."
+    }
+
+    if ($RequireTrueResult) {
+        $lastOutput = Get-LastMeaningfulDeploymentOutput -Output $Output
+        if (-not (Test-DeploymentSuccessValue -Value $lastOutput)) {
+            throw "$Operation did not return a final success result."
+        }
+    }
+
+    return $true
+}
+
+function Invoke-CheckedPowerShellProcess {
+    param(
+        [Parameter(Mandatory)]
+        [string]$ScriptPath,
+
+        [string[]]$ArgumentList = @(),
+
+        [string]$WorkingDirectory = (Split-Path -Path $ScriptPath -Parent),
+
+        [Parameter(Mandatory)]
+        [string]$Operation,
+
+        [ValidateRange(1, 14400)]
+        [int]$TimeoutSeconds = 1800
+    )
+
+    $scriptFile = Get-Item -LiteralPath $ScriptPath -ErrorAction SilentlyContinue
+    if ($null -eq $scriptFile -or $scriptFile.PSIsContainer -or $scriptFile.Length -le 0) {
+        throw "$Operation script was not found at '$ScriptPath'."
+    }
+
+    $quotedScript = '"' + $ScriptPath.Replace('"', '\"') + '"'
+    $arguments = @(
+        '-NoProfile',
+        '-NonInteractive',
+        '-ExecutionPolicy', 'Bypass',
+        '-File', $quotedScript
+    )
+    foreach ($argument in $ArgumentList) {
+        $arguments += ('"' + "$argument".Replace('"', '\"') + '"')
+    }
+
+    $process = Start-Process -FilePath 'powershell.exe' `
+        -ArgumentList ($arguments -join ' ') `
+        -WorkingDirectory $WorkingDirectory -PassThru
+    try {
+        if (-not $process.WaitForExit($TimeoutSeconds * 1000)) {
+            Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+            throw "$Operation exceeded the $TimeoutSeconds-second timeout."
+        }
+        if ($process.ExitCode -ne 0) {
+            throw "$Operation failed with exit code $($process.ExitCode)."
+        }
+    }
+    finally {
+        $process.Dispose()
+    }
+    return $true
+}
+
+function Stop-DeploymentForTerminalFailure {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Message,
+
+        [string]$Phase = 'Failure',
+
+        [string]$Operation = 'Deployment',
+
+        [string]$HeartbeatPath,
+
+        [datetime]$StartedAt = (Get-Date),
+
+        [string[]]$UnsafeTaskName = @('PostDeployReboot', 'TKFRSAR')
+    )
+
+    try {
+        Write-DeploymentHeartbeat -Phase $Phase -Operation $Operation `
+            -StartedAt $StartedAt -HeartbeatPath $HeartbeatPath `
+            -LastCheckpoint "FAILED: $Message"
+    }
+    catch {
+        Write-Warning "Could not update deployment failure heartbeat: $($_.Exception.Message)"
+    }
+
+    foreach ($taskName in @($UnsafeTaskName | Where-Object { $_ } | Select-Object -Unique)) {
+        try {
+            $task = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+            if ($null -ne $task) {
+                Unregister-ScheduledTask -TaskName $taskName -Confirm:$false
+            }
+        }
+        catch {
+            Write-Warning "Could not remove unsafe scheduled task '$taskName': $($_.Exception.Message)"
+        }
+    }
+
+    throw $Message
 }
 
 function ConvertTo-DscDiagnosticText {

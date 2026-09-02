@@ -66,6 +66,14 @@ function Add-DnsRecord {
         [string]$HostIPv4Address
     )
 
+    $existingAddresses = @(Get-DnsServerResourceRecord -ZoneName $DNSZone `
+        -Name $HostName -RRType A -ErrorAction SilentlyContinue |
+        ForEach-Object { "$($_.RecordData.IPv4Address)" })
+    if ($existingAddresses -contains $HostIPv4Address) {
+        .\Write-Info.ps1 "DNS record for $HostName already resolves to $HostIPv4Address, skipping."
+        return
+    }
+
     .\Write-Info.ps1 "Add a new DNS record for $HostName to resolve $HostName.$DNSZone to $HostIPv4Address"
     Add-DnsServerResourceRecordA -Name $HostName -ZoneName $DNSZone -AllowUpdateAny -IPv4Address $HostIPv4Address
 }

@@ -4,6 +4,49 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 
 > **Choosing a scenario?** See the [top-level azure-automation README](../README.md) for a comparison of Domain vs. Cluster vs. Workgroup.
 
+## One-Click Deploy ("Deploy to Azure" button)
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.9.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fcluster-bicep%2Fazuredeploy.json)
+
+[`main.bicep`](main.bicep), compiled to [`azuredeploy.json`](azuredeploy.json),
+provides the single-template Portal deployment. Enter an admin password and the
+template deploys both infrastructure phases, configures all five VMs, forms the
+cluster, and waits for live Cluster and Driver readiness.
+
+The template preserves the phased safety gates by using managed deployment
+scripts. It applies optional Azure Disk Encryption before each group of VM
+configuration extensions, waits for verified DC and Storage completion before
+deploying the domain members, and reports success only after Node01, Node02, and
+the Driver pass their readiness checks.
+
+The Portal exposes curated VM-size dropdowns with burstable defaults for broad
+regional availability and lower onboarding cost: `Standard_B4ms` for DC,
+Storage, and Driver, and `Standard_B8ms` for each Cluster node. Approved D/F
+series alternatives are available when the defaults are constrained or higher
+sustained throughput is required. Long test runs may still be slower than the
+compute-oriented defaults used by `deploy.ps1`.
+
+The template's public package contains no credentials. It validates the package
+manifest before applying the generated topology override, then injects the
+deployment password from encrypted Custom Script Extension
+`protectedSettings`.
+
+### Publishing the public package
+
+The OneClick release pipeline builds and ESRP-signs `Cluster-Package.zip`
+alongside the Workgroup and Domain packages. To build the same credential-free
+package locally without uploading it:
+
+```powershell
+.\Publish-DscPackage.ps1 `
+    -Tag 4.26.9.0 `
+    -SkipUpload `
+    -OutputZipPath .\Cluster-Package.zip
+```
+
+The tag must match the `clusterPackageZipUrl` default in `main.bicep` and
+`azuredeploy.json`.
+
 ## Architecture Overview
 
 ```
@@ -34,6 +77,10 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 │  │                │ │  Node02        .12 │←→──── .12        │      │
 │  │                │ │  Cluster Node 2    │ │                 │      │
 │  │                │ └────────────────────┘ │                 │      │
+│  │                │ │  Cluster01     .100│←→──── .100       │      │
+│  │                │ │  GeneralFS     .200│←→──── .200       │      │
+│  │                │ │  Standard ILB VIPs │ │                 │      │
+│  │                │ └────────────────────┘ │                 │      │
 │  │                │ ┌────────────────────┐ │                 │      │
 │  │                │ │  Client01     .111 │←→──── .111       │      │
 │  │                │ │  Driver (Tests)    │ │                 │      │
@@ -53,6 +100,12 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 - **Driver Computer (Client01)**: Windows 11 Enterprise or Ubuntu Linux for running test cases
 
 The driver computer supports both Windows and Linux. Custom Azure VM images can be used for any VM by providing a resource ID.
+
+The node subnets use a NAT Gateway for deterministic outbound downloads. A
+Standard internal load balancer supplies Cluster01 and GeneralFS frontends on
+both subnets. Floating-IP rules and four health probes follow clustered role
+ownership, so the Driver resolves virtual names through DNS rather than pinning
+them to Node01.
 
 ## Prerequisites
 
@@ -79,6 +132,10 @@ $password = Read-Host -Prompt "Enter your secure password" -AsSecureString
     -AdminPassword $password
 ```
 
+`enableTestAutoRun` in `parameters/phase2.bicepparam` defaults to `true`. Set it
+to `false` to configure the complete cluster without scheduling tests on
+Client01.
+
 ### 3. Wait for deployment to complete
 
 The script deploys in two Bicep phases with progress output:
@@ -87,7 +144,7 @@ The script deploys in two Bicep phases with progress output:
 2. **DC readiness poll** (~15-25 min): Script waits for AD DS promotion to finish
 3. **Phase 2** (~10-15 min): Cluster Nodes + Driver VM
 
-After Phase 2, VMs continue configuring in the background (domain join, iSCSI connection, feature installation). Use the verification script to monitor progress:
+After Phase 2, the command remains attached while VMs join the domain, connect iSCSI, form the cluster, and create clustered roles/shares. With `enableTestAutoRun = true`, it also runs automatic tests and requires a terminal test summary. With autorun disabled, it completes after all five role signals. For an optional ad-hoc recheck:
 
 ```powershell
 .\scripts\Verify-ClusterDeployment.ps1 -ResourceGroupName "fileserver-cluster-test"
@@ -115,12 +172,12 @@ This polls all 5 VMs for their completion signal files and displays status:
 
 Connect via **Azure Bastion** in the portal (no public IPs are exposed).
 
-- Username: `CONTOSO\Administrator`
+- Username: `CONTOSO\testadmin`
 - Password: the password you provided during deployment
 
-### 5. Configure the Failover Cluster
+### 5. Inspect the Failover Cluster
 
-After all VMs finish configuration (all signal files present), connect to **Node01** via Bastion and follow the [Post-Deployment Cluster Setup](#post-deployment-cluster-setup) section below.
+Node01 forms the cluster and creates GeneralFS, ScaleoutFS, InfraFS, disks, and shares automatically. Connect through Bastion only for inspection or troubleshooting.
 
 ### Deployment Timeline
 
@@ -132,8 +189,8 @@ After all VMs finish configuration (all signal files present), connect to **Node
 | Phase 2 (Nodes + Driver VMs) | ~10-15 min | Bicep deployment |
 | Node configuration | ~15-25 min | Domain join, features, iSCSI connection |
 | Driver configuration | ~10-15 min | Domain join, tools install |
-| **Total (automated)** | **~30-40 min** | |
-| Post-deployment cluster setup | ~15 min | Manual steps on Node01 |
+| Automatic test execution | Varies | Each invocation is bounded to 60 min; complete-plan wait defaults to 360 min |
+| **Total (automated)** | **Environment-dependent** | Includes cluster formation and terminal test verification |
 
 ## Deployment Strategy
 
@@ -141,12 +198,14 @@ The deployment uses a **two-phase Bicep approach** to ensure proper sequencing:
 
 **Phase 1** (`phase1.bicep`) deploys:
 - Virtual Network with dual subnets (External1, External2)
+- NAT Gateway for Cluster node outbound connectivity
 - Network Security Groups with required firewall rules (SMB, iSCSI, cluster communication)
 - Azure Bastion for secure remote access
 - DC01 — installs AD DS, creates `contoso.com` domain, configures DNS
 - Storage01 — installs iSCSI Target Server, creates 4 virtual disks (NOT domain-joined)
 
 **Phase 2** (`phase2.bicep`) deploys after the DC is ready:
+- Standard internal load balancer with Cluster01 and GeneralFS frontends on both subnets
 - Node01 and Node02 — join domain, install Failover Clustering and File Server, connect to iSCSI storage
 - Client01 — joins domain, installs test tools
 
@@ -167,7 +226,11 @@ If Phase 1 completed successfully but Phase 2 failed (e.g., DC timeout, VM exten
 When resuming, the script will:
 1. **Verify DC readiness** — Checks the DC signal file before proceeding (skip with `-SkipDCReadyCheck` if you're certain the DC is ready)
 2. **Retrieve Phase 1 outputs** — Automatically reads subnet IDs, DC IP, Storage IP, and domain info from the previous Phase 1 deployment
-3. **Reuse the uploaded package** — Searches existing storage accounts in the resource group for a previously uploaded `Cluster-Package.zip` and generates a fresh SAS URL
+3. **Refresh the package** — Builds a fresh private package when local sources are available, otherwise finds an existing `Cluster-Package.zip` and generates a fresh signed URL
+4. **Preserve live identities** — Keeps physical-member and cluster endpoint AD objects while their VMs/cluster survive
+5. **Verify by phase** — Accepts existing DC/Storage signals while requiring fresh Node01, Node02, Driver, and test signals
+
+If the local shell or workstation restarts, VM-side setup and tests continue, but `deploy.ps1` does not automatically resume its local checkpoint. Rerun with `-SkipPhase1`. An authenticated Azure CLI session can restore an expired Az PowerShell context.
 
 You can also provide a package URL directly:
 ```powershell
@@ -178,6 +241,25 @@ To deploy just Phase 1 (e.g., to verify DC setup before continuing):
 ```powershell
 .\deploy.ps1 ... -SkipPhase2
 ```
+
+### Node Self-Healing on Transient Post-Reboot Conditions
+
+The cluster node orchestrators (`Deploy-ClusterNode.ps1`, shared by Node01 and Node02) reconcile a large set of *foundation readiness* conditions after each post-reboot resume — iSCSI shared-disk count, secure channel, DSC convergence, required services, and local shares. Several of these are legitimately transient in the seconds-to-minutes after a reboot (most notably the iSCSI target reconnect), so a single point-in-time miss must not be treated as fatal.
+
+To keep this deterministic and robust:
+- **Settle window** — the readiness gate polls for a short window (default 180s) so a transient miss can clear on its own before the node re-converges or forms the cluster.
+- **Retryable, not terminal** — if readiness is still unsatisfied, the node exits cleanly and the `TKFRSAR` resume task (5-minute repetition) re-runs it later, rather than raising a terminal failure that would remove the resume task and permanently strand the node.
+- **Bounded budget** — the retry loop is capped by a per-node deadline (default 45 minutes, tracked in `HKLM:\SOFTWARE\ProtocolTestSuites`). Only after the budget is exhausted does the node fail terminally, so a genuinely broken node still surfaces instead of retrying forever.
+
+This prevents a transient foundation miss on one node from cascading into a stalled driver gate (the driver waits for both nodes' completion signals) and a full deployment timeout.
+
+### Ignoring Benign Pending-Reboot Signals
+
+All orchestrators guard against reboot loops with a bounded per-role reboot budget: when a genuine OS reboot is still pending but the budget is exhausted, the deployment fails terminally on purpose. That guard depends on `Test-PendingSystemReboot` (in `shared/DSC/Deploy-CommonHelpers.ps1`) reporting *only* real reboot reasons.
+
+The standard Windows heuristic treats any non-empty `PendingFileRenameOperations` list as "reboot required." On stock images the per-user **OneDrive updater** (`OneDriveSetup.exe`, staged under each profile's `AppData\Local\Microsoft\OneDrive`) queues its own self-update file swaps there in the background — entries that are unrelated to the deployment and can never be satisfied by a deployment reboot. Left unfiltered, that benign noise can trip the reboot circuit breaker and terminally fail an otherwise-healthy role (observed on the Cluster driver).
+
+`Get-PendingSystemRebootReasons` therefore excludes these benign per-user OneDrive updater renames via `Test-BenignPendingFileRename`. Component Based Servicing, Windows Update, and every non-OneDrive pending rename still count as real reboot reasons, so genuine servicing reboots are unaffected.
 
 ## Deployment Parameters
 
@@ -203,6 +285,7 @@ To deploy just Phase 1 (e.g., to verify DC setup before continuing):
 | `ClusterPackageZip` | *(empty)* | Local zip file with configuration scripts |
 | `ClusterPackageZipUrl` | *(empty)* | Pre-uploaded package URL (skips upload) |
 | `DCReadyTimeoutMinutes` | `45` | How long to wait for DC configuration |
+| `TestTimeoutMinutes` | `360` | Maximum wait for the complete automatic test plan and finalization |
 | `SkipPhase1` | `$false` | Skip Phase 1 and resume from Phase 2 |
 | `SkipPhase2` | `$false` | Deploy Phase 1 only |
 | `SkipDCReadyCheck` | `$false` | Skip DC readiness verification when resuming |
@@ -238,76 +321,26 @@ Edit these files to customize the environment. All template configuration lives 
 | `node01External1Ip` | `192.168.1.11` | Node01 primary IP |
 | `node02External1Ip` | `192.168.1.12` | Node02 primary IP |
 | `driverExternal1Ip` | `192.168.1.111` | Driver computer IP |
+| `clusterExternal1Ip` / `clusterExternal2Ip` | `.100` on each subnet | Cluster core load-balancer frontends |
+| `generalFSExternal1Ip` / `generalFSExternal2Ip` | `.200` on each subnet | GeneralFS load-balancer frontends |
+| `clusterExternal1ProbePort` / `clusterExternal2ProbePort` | `59998` / `59999` | Cluster core health probes |
+| `generalFSExternal1ProbePort` / `generalFSExternal2ProbePort` | `60000` / `60001` | GeneralFS health probes |
 | `driverCustomImageId` | *(empty)* | Custom image for driver (overrides marketplace) |
 | `clusterNodeCustomImageId` | *(empty)* | Custom image for cluster nodes (overrides marketplace) |
 
-## Post-Deployment Cluster Setup
+## Automated Cluster Setup Verification
 
-After all VMs finish their background configuration (all signal files present), connect to **Node01** via Bastion and run these steps to form the failover cluster.
-
-### Step 1: Initialize shared disks
+Node01 performs disk preparation, cluster creation, quorum setup, clustered role creation, and share creation. These non-destructive commands are useful for verification:
 
 ```powershell
-# View the iSCSI disks
-Get-Disk | Where-Object {$_.BusType -eq "iSCSI"}
-
-# Initialize all RAW iSCSI disks
-$iscsiDisks = Get-Disk | Where-Object {$_.BusType -eq "iSCSI" -and $_.PartitionStyle -eq "RAW"}
-$iscsiDisks | ForEach-Object { Initialize-Disk -Number $_.Number -PartitionStyle GPT }
-
-# Create volumes — the 1GB disk is quorum, the 10GB disks are data
-$quorumDisk = $iscsiDisks | Where-Object {$_.Size -eq 1GB}
-$fsDisk01 = $iscsiDisks | Where-Object {$_.Size -eq 10GB} | Select-Object -First 1
-$fsDisk02 = $iscsiDisks | Where-Object {$_.Size -eq 10GB} | Select-Object -Skip 1 -First 1
-
-New-Partition -DiskNumber $quorumDisk.Number -UseMaximumSize |
-    Format-Volume -FileSystem NTFS -NewFileSystemLabel "QuorumDisk" -Confirm:$false
-
-New-Partition -DiskNumber $fsDisk01.Number -DriveLetter F -UseMaximumSize |
-    Format-Volume -FileSystem NTFS -NewFileSystemLabel "FSDisk01" -Confirm:$false
-
-New-Partition -DiskNumber $fsDisk02.Number -DriveLetter G -UseMaximumSize |
-    Format-Volume -FileSystem NTFS -NewFileSystemLabel "FSDisk02" -Confirm:$false
+Get-ClusterNode
+Get-ClusterGroup
+Get-ClusterSharedVolume
+Get-SmbShare -ScopeName GeneralFS
+Get-SmbShare -ScopeName ScaleoutFS
 ```
 
-### Step 2: Create the failover cluster
-
-```powershell
-# Validate cluster prerequisites
-Test-Cluster -Node Node01, Node02
-
-# Create the cluster (no storage yet — added in next step)
-New-Cluster -Name Cluster01 -Node Node01, Node02 -StaticAddress 192.168.1.100 -NoStorage
-
-# Add shared disks and configure quorum
-Get-ClusterAvailableDisk | Add-ClusterDisk
-Set-ClusterQuorum -NodeAndDiskMajority "Cluster Disk 1"
-```
-
-### Step 3: Create Scale-Out File Server and shares
-
-```powershell
-# Add Scale-Out File Server role
-Add-ClusterScaleOutFileServerRole -Name ScaleOutFS
-
-# Add storage to the role
-Add-ClusterSharedVolume -Name "Cluster Disk 2"
-Add-ClusterSharedVolume -Name "Cluster Disk 3"
-
-# Create required SMB shares
-New-Item -Path C:\ClusterStorage\Volume1\SMBClustered -ItemType Directory -Force
-New-SmbShare -Name SMBClustered -Path C:\ClusterStorage\Volume1\SMBClustered `
-    -FullAccess Everyone -ContinuouslyAvailable $true
-
-New-Item -Path C:\ClusterStorage\Volume1\SMBClusteredEncrypted -ItemType Directory -Force
-New-SmbShare -Name SMBClusteredEncrypted -Path C:\ClusterStorage\Volume1\SMBClusteredEncrypted `
-    -FullAccess Everyone -EncryptData $true -ContinuouslyAvailable $true
-
-New-Item -Path C:\ClusterStorage\Volume2\SMBClusteredForceLevel2 -ItemType Directory -Force
-New-SmbShare -Name SMBClusteredForceLevel2 -Path C:\ClusterStorage\Volume2\SMBClusteredForceLevel2 `
-    -FullAccess Everyone -ContinuouslyAvailable $true
-Set-SmbShare -Name SMBClusteredForceLevel2 -ForceLevelIIOplock $true -Confirm:$false
-```
+Do not rerun `New-Cluster`, disk initialization, or role-creation commands against an existing deployment. Resume with `-SkipPhase1` so the orchestrators reconcile state safely.
 
 ## Domain Configuration
 
@@ -427,13 +460,16 @@ Get-ItemProperty HKLM:\SOFTWARE\ProtocolTestSuites
 
 ## Known Issues
 
-1. **GeneralFS virtual IP not routable in Azure**: The GeneralFS clustered file server virtual IP is not directly routable in Azure networking. As a workaround, Client01 maps `GeneralFS` to Node01's IP address via the hosts file (`C:\Windows\System32\drivers\etc\hosts`).
+1. **Cluster virtual IPs require the Standard internal load balancer**: The
+   Cluster01 and GeneralFS addresses use floating-IP load-balancer rules and
+   probe ports. Do not replace them with direct hosts-file mappings to a
+   physical node.
 
 2. **ksetup trust relationship**: The `ksetup /SetComputerPassword` command runs after domain join. AD account password synchronization is performed via `Set-ADAccountPassword` on the DC side.
 
-3. **Auto-shutdown enabled by default**: All VMs are configured with auto-shutdown at 20:00 UTC. Control this with the `enableAutoShutdown` parameter in the Bicep templates.
+3. **Auto-shutdown enabled by default**: The deploy script removes schedules before setup/tests and restores them only after terminal test finalization and optional encryption. Known terminal test classifications are reported without failing deployment orchestration; missing output, failed upload/readiness, and post-test infrastructure failures remain fatal. Control the final schedule with `enableAutoShutdown` and `autoShutdownTime`.
 
-4. **Azure Disk Encryption enabled by default**: All VMs have Azure Disk Encryption enabled, which requires Key Vault permissions. Use `-SkipDiskEncryption` to disable this if your subscription lacks Key Vault access or to speed up deployment.
+4. **Azure Disk Encryption enabled by default**: ADE is applied only after cluster and automatic tests reach terminal finalization, then VM responsiveness is checked. Use `-SkipDiskEncryption` if your subscription lacks Key Vault access or to shorten deployment.
 
 ## Key Differences from Domain Scenario
 
@@ -442,15 +478,19 @@ Get-ItemProperty HKLM:\SOFTWARE\ProtocolTestSuites
 | VMs | 3 (DC + Driver + SUT) | 5 (DC + Storage + 2 Nodes + Driver) |
 | Shared storage | None | 4 iSCSI virtual disks |
 | Failover Clustering | No | Yes (Node01 + Node02) |
-| Post-deploy manual steps | None | Cluster formation (~15 min) |
+| Post-deploy manual steps | None | None (formation is automated) |
 | Additional NSG rules | — | iSCSI (3260/tcp), cluster communication |
 
 ## File Structure
 
 ```
 cluster-bicep/
+├── main.bicep                       # One-click, readiness-gated deployment
+├── azuredeploy.json                 # Compiled one-click ARM template
 ├── phase1.bicep                     # Phase 1: Network + DC + Storage
+├── phase1.json                      # Compiled Phase 1 ARM template
 ├── phase2.bicep                     # Phase 2: Cluster Nodes + Driver
+├── phase2.json                      # Compiled Phase 2 ARM template
 ├── deploy.ps1                       # PowerShell deployment script (supports resume)
 ├── README.md                        # This file
 ├── modules/
@@ -458,7 +498,9 @@ cluster-bicep/
 │   ├── domain-controller.bicep    # Domain Controller VM
 │   ├── storage-server.bicep       # Storage Server (iSCSI) VM
 │   ├── cluster-nodes.bicep        # Cluster Node VMs (Node01, Node02)
-│   └── driver-computer.bicep      # Driver Computer VM
+│   ├── driver-computer.bicep      # Driver Computer VM
+│   ├── service-extensions.bicep   # DC + Storage one-click configuration
+│   └── computer-extensions.bicep  # Nodes + Driver one-click configuration
 ├── DSC/
 │   ├── Deploy-Storage.ps1          # Storage Server configuration script
 │   ├── Deploy-Node01.ps1           # Cluster Node 1 configuration script

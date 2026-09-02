@@ -248,7 +248,7 @@ The minimum requirements for the SUT computer in the Windows environment are spe
 | Requirement       | Description                                                                                                                                   |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Computer name     | Node01                                                                                                                                        |
-| Operating system  | Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later versions. Note that this computer is **not** set up as a domain controller (DC). |
+| Operating system  | Microsoft® Windows Server 2022 (version 21H2), Microsoft® Windows Server 2025 (version 24H2), Standard Edition or later versions. Note that this computer is **not** set up as a domain controller (DC). |
 | Features          | N/A                                                                                                                                           |
 | Role Services     | File Server                                                                                                                                   |
 | Memory            | 16 GB RAM                                                                                                                                      |
@@ -262,7 +262,7 @@ The minimum requirements for the SUT computer in the Windows environment are spe
 | Requirement       | Description                                                                              |
 | ----------------- | ---------------------------------------------------------------------------------------- |
 | Computer name     | Node01,Node02                                                                            |
-| Operating system  | Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later versions.                   |
+| Operating system  | Microsoft® Windows Server 2022 (version 21H2), Microsoft® Windows Server 2025 (version 24H2), Standard Edition or later versions.                   |
 | Features          | Failover Clustering                                                                      |
 | Role Services     | File Server, DFS Namespaces, File Server Resource Manager, File Server VSS Agent Service |
 | Memory            | 16 GB RAM                                                                                 |
@@ -304,7 +304,7 @@ The minimum requirements for the storage area network (SAN) server computer are 
 | Requirement      | Description                                                            |
 | ---------------- | ---------------------------------------------------------------------- |
 | Computer name    | Storage01                                                              |
-| Operating system | Microsoft® Windows Server 2022 (version 21H2), Standard Edition or later versions. |
+| Operating system | Microsoft® Windows Server 2022 (version 21H2), Microsoft® Windows Server 2025 (version 24H2), Standard Edition or later versions. |
 | Features         | N/A                                                                    |
 | Role Services    | File Server, iSCSI Target Server                                       |
 | Memory           | 16 GB RAM                                                               |

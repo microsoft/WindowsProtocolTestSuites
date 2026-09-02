@@ -26,6 +26,6 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = if (enableDiskEncrypt
   }
 }
 
-output keyVaultName string = enableDiskEncryption ? keyVault.name : ''
-output keyVaultId string = enableDiskEncryption ? keyVault.id : ''
-output keyVaultUrl string = enableDiskEncryption ? keyVault.properties.vaultUri : ''
+output keyVaultName string = keyVault.?name ?? ''
+output keyVaultId string = keyVault.?id ?? ''
+output keyVaultUrl string = keyVault.?properties.?vaultUri ?? ''

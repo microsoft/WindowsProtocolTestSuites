@@ -1,0 +1,262 @@
+parameters:
+  - name: automationSourcePath
+    type: string
+  - name: fileServerAssetUrl
+    type: string
+  - name: fileServerAssetSha256
+    type: string
+  - name: fileServerAssetVersion
+    type: string
+    default: ''
+  - name: ptmServiceAssetUrl
+    type: string
+  - name: ptmServiceAssetSha256
+    type: string
+  - name: ptmServiceAssetVersion
+    type: string
+    default: ''
+  - name: ptmCliAssetUrl
+    type: string
+  - name: ptmCliAssetSha256
+    type: string
+  - name: ptmCliAssetVersion
+    type: string
+    default: ''
+  - name: workgroupTag
+    type: string
+  - name: domainTag
+    type: string
+  - name: clusterTag
+    type: string
+  - name: packageSourceRevision
+    type: string
+  - name: codeSignBuildId
+    type: string
+    default: ''
+
+steps:
+  - task: PowerShell@2
+    displayName: Stage deployment sources and pin release assets
+    env:
+      AUTOMATION_SOURCE: ${{ parameters.automationSourcePath }}
+      FILESERVER_ASSET_URL: ${{ parameters.fileServerAssetUrl }}
+      FILESERVER_ASSET_SHA256: ${{ parameters.fileServerAssetSha256 }}
+      FILESERVER_ASSET_VERSION: ${{ parameters.fileServerAssetVersion }}
+      PTMSERVICE_ASSET_URL: ${{ parameters.ptmServiceAssetUrl }}
+      PTMSERVICE_ASSET_SHA256: ${{ parameters.ptmServiceAssetSha256 }}
+      PTMSERVICE_ASSET_VERSION: ${{ parameters.ptmServiceAssetVersion }}
+      PTMCLI_ASSET_URL: ${{ parameters.ptmCliAssetUrl }}
+      PTMCLI_ASSET_SHA256: ${{ parameters.ptmCliAssetSha256 }}
+      PTMCLI_ASSET_VERSION: ${{ parameters.ptmCliAssetVersion }}
+    inputs:
+      targetType: inline
+      pwsh: true
+      script: |
+        $source = $env:AUTOMATION_SOURCE
+        $staging = "$(Build.ArtifactStagingDirectory)\staging\azure-automation"
+        if (-not (Test-Path -LiteralPath $source -PathType Container)) {
+          throw "Automation source was not found: $source"
+        }
+        Remove-Item -LiteralPath $staging -Recurse -Force -ErrorAction SilentlyContinue
+        New-Item -ItemType Directory -Path (Split-Path $staging -Parent) -Force | Out-Null
+        Copy-Item -LiteralPath $source -Destination $staging -Recurse -Force
+
+        & "$staging\shared\Update-OneClickReleaseAssets.ps1" `
+          -AutomationRoot $staging `
+          -FileServerAssetUrl $env:FILESERVER_ASSET_URL `
+          -FileServerAssetSha256 $env:FILESERVER_ASSET_SHA256 `
+          -FileServerAssetVersion $env:FILESERVER_ASSET_VERSION `
+          -PtmServiceAssetUrl $env:PTMSERVICE_ASSET_URL `
+          -PtmServiceAssetSha256 $env:PTMSERVICE_ASSET_SHA256 `
+          -PtmServiceAssetVersion $env:PTMSERVICE_ASSET_VERSION `
+          -PtmCliAssetUrl $env:PTMCLI_ASSET_URL `
+          -PtmCliAssetSha256 $env:PTMCLI_ASSET_SHA256 `
+          -PtmCliAssetVersion $env:PTMCLI_ASSET_VERSION
+
+  - task: SFP.build-tasks.custom-build-task-1.EsrpCodeSigning@5
+    displayName: ESRP sign OneClick PowerShell files
+    inputs:
+      ConnectedServiceName: $(ConnectedServiceName)
+      UseMSIAuthentication: true
+      AppRegistrationClientId: $(AppRegistrationClientId)
+      AppRegistrationTenantId: $(AppRegistrationTenantId)
+      EsrpClientId: $(EsrpClientId)
+      AuthAKVName: $(AuthAKVName)
+      AuthSignCertName: $(AuthSignCertName)
+      FolderPath: $(Build.ArtifactStagingDirectory)/staging/azure-automation
+      Pattern: '*.ps1,*.psm1'
+      SessionTimeout: 90
+      ServiceEndpointUrl: $(ServiceEndpointUrl)
+      MaxConcurrency: 25
+      signConfigType: inlineSignParams
+      inlineOperation: |
+        [
+          {
+            "KeyCode": "CP-230012",
+            "OperationCode": "SigntoolSign",
+            "Parameters": {
+              "OpusName": "Microsoft",
+              "OpusInfo": "http://www.microsoft.com",
+              "FileDigest": "/fd \"SHA256\"",
+              "PageHash": "/NPH",
+              "TimeStamp": "/tr \"http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer\" /td sha256"
+            },
+            "ToolName": "sign",
+            "ToolVersion": "1.0"
+          },
+          {
+            "KeyCode": "CP-230012",
+            "OperationCode": "SigntoolVerify",
+            "Parameters": {},
+            "ToolName": "sign",
+            "ToolVersion": "1.0"
+          }
+        ]
+
+  - task: PowerShell@2
+    displayName: Install Bicep CLI
+    inputs:
+      targetType: inline
+      script: |
+        az bicep install
+        az bicep version
+
+  - task: PowerShell@2
+    displayName: Run OneClick validation tests
+    inputs:
+      targetType: inline
+      script: |
+        $testPath = "$(Build.ArtifactStagingDirectory)\staging\azure-automation\tests\ReleaseAssets.Tests.ps1"
+        $pester = Get-Module Pester -ListAvailable |
+          Sort-Object Version -Descending |
+          Select-Object -First 1
+        if (-not $pester) {
+          throw 'Pester is required on the release agent.'
+        }
+        Import-Module $pester.Path -Force
+        $result = if ($pester.Version.Major -ge 5) {
+          Invoke-Pester -Path $testPath -PassThru
+        }
+        else {
+          Invoke-Pester -Script $testPath -PassThru
+        }
+        if ($result.FailedCount -gt 0) {
+          throw "$($result.FailedCount) OneClick validation test(s) failed."
+        }
+
+  - task: PowerShell@2
+    displayName: Build signed public packages
+    env:
+      WORKGROUP_TAG: ${{ parameters.workgroupTag }}
+      DOMAIN_TAG: ${{ parameters.domainTag }}
+      CLUSTER_TAG: ${{ parameters.clusterTag }}
+      PACKAGE_SOURCE_REVISION: ${{ parameters.packageSourceRevision }}
+    inputs:
+      targetType: inline
+      pwsh: true
+      script: |
+        $root = "$(Build.ArtifactStagingDirectory)\staging\azure-automation"
+        $output = "$(Build.ArtifactStagingDirectory)\drop"
+        New-Item -ItemType Directory -Path $output -Force | Out-Null
+        if ($env:PACKAGE_SOURCE_REVISION) {
+          $env:BUILD_SOURCEVERSION = $env:PACKAGE_SOURCE_REVISION
+        }
+
+        $packages = @(
+          @{
+            Scenario = 'Workgroup'
+            Script = "$root\workgroup-bicep\Publish-DscPackage.ps1"
+            Tag = [string]$env:WORKGROUP_TAG
+          },
+          @{
+            Scenario = 'Domain'
+            Script = "$root\domain-bicep\Publish-DscPackage.ps1"
+            Tag = [string]$env:DOMAIN_TAG
+          },
+          @{
+            Scenario = 'Cluster'
+            Script = "$root\cluster-bicep\Publish-DscPackage.ps1"
+            Tag = [string]$env:CLUSTER_TAG
+          }
+        )
+
+        foreach ($package in $packages) {
+          $zipPath = Join-Path $output "$($package.Scenario)-Package.zip"
+          & $package.Script -Tag $package.Tag -Target $env:PACKAGE_SOURCE_REVISION `
+            -SkipUpload -OutputZipPath $zipPath
+          if (-not (Test-Path -LiteralPath $zipPath -PathType Leaf)) {
+            throw "$($package.Scenario) package was not created."
+          }
+        }
+
+  - task: PowerShell@2
+    displayName: Verify packaged signatures and generate release metadata
+    env:
+      FILESERVER_ASSET_URL: ${{ parameters.fileServerAssetUrl }}
+      FILESERVER_ASSET_SHA256: ${{ parameters.fileServerAssetSha256 }}
+      FILESERVER_ASSET_VERSION: ${{ parameters.fileServerAssetVersion }}
+      PTMSERVICE_ASSET_URL: ${{ parameters.ptmServiceAssetUrl }}
+      PTMSERVICE_ASSET_SHA256: ${{ parameters.ptmServiceAssetSha256 }}
+      PTMSERVICE_ASSET_VERSION: ${{ parameters.ptmServiceAssetVersion }}
+      PTMCLI_ASSET_URL: ${{ parameters.ptmCliAssetUrl }}
+      PTMCLI_ASSET_SHA256: ${{ parameters.ptmCliAssetSha256 }}
+      PTMCLI_ASSET_VERSION: ${{ parameters.ptmCliAssetVersion }}
+      PACKAGE_SOURCE_REVISION: ${{ parameters.packageSourceRevision }}
+      CODESIGN_BUILD_ID: ${{ parameters.codeSignBuildId }}
+    inputs:
+      targetType: inline
+      pwsh: true
+      script: |
+        $drop = "$(Build.ArtifactStagingDirectory)\drop"
+        foreach ($zip in Get-ChildItem $drop -Filter '*-Package.zip') {
+          $extractPath = Join-Path $env:TEMP $zip.BaseName
+          Remove-Item $extractPath -Recurse -Force -ErrorAction SilentlyContinue
+          Expand-Archive -LiteralPath $zip.FullName -DestinationPath $extractPath
+          try {
+            $signableFiles = Get-ChildItem $extractPath -Recurse -File |
+              Where-Object Extension -In '.ps1', '.psm1'
+            foreach ($file in $signableFiles) {
+              $signature = Get-AuthenticodeSignature -LiteralPath $file.FullName
+              if ($signature.Status -ne 'Valid' -or
+                  $signature.SignerCertificate.Subject -ne "$(codeSign.signerSubject)") {
+                throw "Invalid signature: $($file.FullName) ($($signature.Status))"
+              }
+            }
+          }
+          finally {
+            Remove-Item $extractPath -Recurse -Force -ErrorAction SilentlyContinue
+          }
+        }
+
+        $checksumLines = foreach ($zip in Get-ChildItem $drop -Filter '*.zip') {
+          $hash = Get-FileHash -LiteralPath $zip.FullName -Algorithm SHA256
+          "$($hash.Hash.ToLowerInvariant())  $($zip.Name)"
+        }
+        $checksumLines | Set-Content -LiteralPath (Join-Path $drop 'SHA256SUMS.txt') `
+          -Encoding ASCII
+
+        [ordered]@{
+          SchemaVersion = '1.0'
+          GeneratedUtc = [DateTime]::UtcNow.ToString('o')
+          TestSuitesSourceCommit = $env:PACKAGE_SOURCE_REVISION
+          CodeSignBuildId = $env:CODESIGN_BUILD_ID
+          Assets = [ordered]@{
+            FileServer = [ordered]@{
+              Version = $env:FILESERVER_ASSET_VERSION
+              Url = $env:FILESERVER_ASSET_URL
+              SHA256 = $env:FILESERVER_ASSET_SHA256.ToLowerInvariant()
+            }
+            PTMService = [ordered]@{
+              Version = $env:PTMSERVICE_ASSET_VERSION
+              Url = $env:PTMSERVICE_ASSET_URL
+              SHA256 = $env:PTMSERVICE_ASSET_SHA256.ToLowerInvariant()
+            }
+            PTMCli = [ordered]@{
+              Version = $env:PTMCLI_ASSET_VERSION
+              Url = $env:PTMCLI_ASSET_URL
+              SHA256 = $env:PTMCLI_ASSET_SHA256.ToLowerInvariant()
+            }
+          }
+        } | ConvertTo-Json -Depth 8 |
+          Set-Content -LiteralPath (Join-Path $drop 'FileServer-Release-Bundle.json') `
+            -Encoding UTF8

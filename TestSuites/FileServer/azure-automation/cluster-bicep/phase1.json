@@ -1,0 +1,1638 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.44.1.10279",
+      "templateHash": "11754721826979073278"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "West US 2",
+      "metadata": {
+        "description": "Resource group location"
+      }
+    },
+    "environmentPrefix": {
+      "type": "string",
+      "defaultValue": "fstest-cluster",
+      "metadata": {
+        "description": "Environment name prefix (e.g., fstest)"
+      }
+    },
+    "adminUsername": {
+      "type": "string",
+      "defaultValue": "testadmin",
+      "metadata": {
+        "description": "Admin username for VMs"
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Admin password for VMs"
+      }
+    },
+    "dcVmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D4s_v5",
+      "metadata": {
+        "description": "Domain Controller VM size"
+      }
+    },
+    "storageVmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D4s_v5",
+      "metadata": {
+        "description": "Storage server VM size"
+      }
+    },
+    "dcOsVersion": {
+      "type": "string",
+      "defaultValue": "2025-datacenter-azure-edition",
+      "allowedValues": [
+        "2019-datacenter-gensecond",
+        "2022-datacenter-g2",
+        "2025-datacenter-azure-edition"
+      ],
+      "metadata": {
+        "description": "Domain Controller OS version"
+      }
+    },
+    "storageOsVersion": {
+      "type": "string",
+      "defaultValue": "2022-datacenter-g2",
+      "allowedValues": [
+        "2019-datacenter-gensecond",
+        "2022-datacenter-g2",
+        "2025-datacenter-azure-edition"
+      ],
+      "metadata": {
+        "description": "Storage server OS version"
+      }
+    },
+    "dcCustomImageId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Custom image resource ID for DC VM (overrides marketplace image when set). Must be a Windows image."
+      }
+    },
+    "storageCustomImageId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Custom image resource ID for storage VM (overrides marketplace image when set). Must be a Windows image."
+      }
+    },
+    "vnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.0.0/16",
+      "metadata": {
+        "description": "Virtual network address space"
+      }
+    },
+    "bastionSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.0.0/26",
+      "metadata": {
+        "description": "Azure Bastion subnet address prefix (must be /26 or larger)"
+      }
+    },
+    "external1SubnetPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.1.0/24",
+      "metadata": {
+        "description": "External1 subnet address prefix"
+      }
+    },
+    "external2SubnetPrefix": {
+      "type": "string",
+      "defaultValue": "192.168.2.0/24",
+      "metadata": {
+        "description": "External2 subnet address prefix"
+      }
+    },
+    "dcExternal1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.10",
+      "metadata": {
+        "description": "Domain Controller External1 IP address"
+      }
+    },
+    "dcExternal2Ip": {
+      "type": "string",
+      "defaultValue": "192.168.2.10",
+      "metadata": {
+        "description": "Domain Controller External2 IP address"
+      }
+    },
+    "storageExternal1Ip": {
+      "type": "string",
+      "defaultValue": "192.168.1.50",
+      "metadata": {
+        "description": "Storage server External1 IP address"
+      }
+    },
+    "bastionSku": {
+      "type": "string",
+      "defaultValue": "Basic",
+      "allowedValues": [
+        "Basic",
+        "Standard"
+      ],
+      "metadata": {
+        "description": "Azure Bastion SKU"
+      }
+    },
+    "domainName": {
+      "type": "string",
+      "defaultValue": "contoso.com",
+      "metadata": {
+        "description": "Domain name"
+      }
+    },
+    "domainNetBiosName": {
+      "type": "string",
+      "defaultValue": "CONTOSO",
+      "metadata": {
+        "description": "Domain NetBIOS name"
+      }
+    },
+    "autoShutdownTime": {
+      "type": "string",
+      "defaultValue": "20:00",
+      "metadata": {
+        "description": "Auto-shutdown time (HH:mm in UTC)"
+      }
+    },
+    "autoShutdownTimeZone": {
+      "type": "string",
+      "defaultValue": "UTC",
+      "metadata": {
+        "description": "Auto-shutdown timezone"
+      }
+    },
+    "enableAutoShutdown": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable auto-shutdown"
+      }
+    },
+    "clusterPackageZipUrl": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "URL to Cluster-Package.zip file in Azure Storage"
+      }
+    },
+    "enableDiskEncryption": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable Azure Disk Encryption (creates a Key Vault for encryption keys)"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('{0}-disk-encryption-vault', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "enableDiskEncryption": {
+            "value": "[parameters('enableDiskEncryption')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.44.1.10279",
+              "templateHash": "7473720631014425135"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix (used for unique Key Vault naming)"
+              }
+            },
+            "enableDiskEncryption": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Enable Azure Disk Encryption (creates a Key Vault for encryption keys)"
+              }
+            }
+          },
+          "resources": [
+            {
+              "condition": "[parameters('enableDiskEncryption')]",
+              "type": "Microsoft.KeyVault/vaults",
+              "apiVersion": "2023-07-01",
+              "name": "[format('kv{0}', uniqueString(resourceGroup().id, parameters('environmentPrefix')))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "sku": {
+                  "family": "A",
+                  "name": "standard"
+                },
+                "tenantId": "[subscription().tenantId]",
+                "enabledForDiskEncryption": true,
+                "enableSoftDelete": true,
+                "softDeleteRetentionInDays": 7,
+                "accessPolicies": []
+              }
+            }
+          ],
+          "outputs": {
+            "keyVaultName": {
+              "type": "string",
+              "value": "[coalesce(if(parameters('enableDiskEncryption'), format('kv{0}', uniqueString(resourceGroup().id, parameters('environmentPrefix'))), null()), '')]"
+            },
+            "keyVaultId": {
+              "type": "string",
+              "value": "[coalesce(if(parameters('enableDiskEncryption'), resourceId('Microsoft.KeyVault/vaults', format('kv{0}', uniqueString(resourceGroup().id, parameters('environmentPrefix')))), null()), '')]"
+            },
+            "keyVaultUrl": {
+              "type": "string",
+              "value": "[coalesce(tryGet(tryGet(if(parameters('enableDiskEncryption'), reference(resourceId('Microsoft.KeyVault/vaults', format('kv{0}', uniqueString(resourceGroup().id, parameters('environmentPrefix')))), '2023-07-01', 'full'), null()), 'properties'), 'vaultUri'), '')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('{0}-network-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "vnetAddressPrefix": {
+            "value": "[parameters('vnetAddressPrefix')]"
+          },
+          "bastionSubnetPrefix": {
+            "value": "[parameters('bastionSubnetPrefix')]"
+          },
+          "external1SubnetPrefix": {
+            "value": "[parameters('external1SubnetPrefix')]"
+          },
+          "external2SubnetPrefix": {
+            "value": "[parameters('external2SubnetPrefix')]"
+          },
+          "bastionSku": {
+            "value": "[parameters('bastionSku')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.44.1.10279",
+              "templateHash": "13343733179869987045"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "West US 2",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix (e.g., fstest)"
+              }
+            },
+            "vnetAddressPrefix": {
+              "type": "string",
+              "defaultValue": "192.168.0.0/16",
+              "metadata": {
+                "description": "Virtual network address space"
+              }
+            },
+            "bastionSubnetPrefix": {
+              "type": "string",
+              "defaultValue": "192.168.0.0/26",
+              "metadata": {
+                "description": "Azure Bastion subnet address prefix (must be /26 or larger)"
+              }
+            },
+            "external1SubnetPrefix": {
+              "type": "string",
+              "defaultValue": "192.168.1.0/24",
+              "metadata": {
+                "description": "External1 subnet address prefix"
+              }
+            },
+            "external2SubnetPrefix": {
+              "type": "string",
+              "defaultValue": "192.168.2.0/24",
+              "metadata": {
+                "description": "External2 subnet address prefix"
+              }
+            },
+            "bastionSku": {
+              "type": "string",
+              "defaultValue": "Basic",
+              "allowedValues": [
+                "Basic",
+                "Standard"
+              ],
+              "metadata": {
+                "description": "Azure Bastion SKU"
+              }
+            }
+          },
+          "variables": {
+            "networkSecurityGroupName": "[format('{0}-cluster-nsg', parameters('environmentPrefix'))]",
+            "bastionNetworkSecurityGroupName": "[format('{0}-bastion-nsg', parameters('environmentPrefix'))]",
+            "vnetName": "[format('{0}-cluster-vnet', parameters('environmentPrefix'))]",
+            "bastionName": "[format('{0}-bastion', parameters('environmentPrefix'))]",
+            "bastionPublicIpName": "[format('{0}-pip', variables('bastionName'))]",
+            "natGatewayName": "[format('{0}-nat', parameters('environmentPrefix'))]",
+            "natGatewayPublicIpName": "[format('{0}-pip', variables('natGatewayName'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('networkSecurityGroupName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "AllowSMB",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "445",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 100,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowWinRM",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "5985",
+                        "5986"
+                      ],
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 102,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowRPCDynamic",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "49152-65535",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 103,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowDNS",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "53",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 104,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowKerberos",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "88",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 105,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowLDAP",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "389",
+                        "636"
+                      ],
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 106,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowBastion",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "22",
+                        "3389"
+                      ],
+                      "sourceAddressPrefix": "[parameters('bastionSubnetPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 107,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowiSCSI",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "3260",
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 108,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowClusterCommunication",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "3343",
+                        "135"
+                      ],
+                      "sourceAddressPrefix": "[parameters('vnetAddressPrefix')]",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 109,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowClusterLoadBalancerProbes",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "59998-60001",
+                      "sourceAddressPrefix": "AzureLoadBalancer",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 110,
+                      "direction": "Inbound"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('bastionNetworkSecurityGroupName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "securityRules": [
+                  {
+                    "name": "AllowHttpsInbound",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "Internet",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 1000,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowGatewayManagerInbound",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "GatewayManager",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 1001,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowAzureLoadBalancerInbound",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "AzureLoadBalancer",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 1002,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowBastionHostCommunication",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "8080",
+                        "5701"
+                      ],
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 1003,
+                      "direction": "Inbound"
+                    }
+                  },
+                  {
+                    "name": "AllowSshRdpOutbound",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "22",
+                        "3389"
+                      ],
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 1000,
+                      "direction": "Outbound"
+                    }
+                  },
+                  {
+                    "name": "AllowAzureCloudOutbound",
+                    "properties": {
+                      "protocol": "Tcp",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "443",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "AzureCloud",
+                      "access": "Allow",
+                      "priority": 1001,
+                      "direction": "Outbound"
+                    }
+                  },
+                  {
+                    "name": "AllowBastionCommunication",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRanges": [
+                        "8080",
+                        "5701"
+                      ],
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 1002,
+                      "direction": "Outbound"
+                    }
+                  },
+                  {
+                    "name": "AllowGetSessionInformation",
+                    "properties": {
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "80",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "Internet",
+                      "access": "Allow",
+                      "priority": 1003,
+                      "direction": "Outbound"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "Microsoft.Network/publicIPAddresses",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('bastionPublicIpName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "Standard"
+              },
+              "properties": {
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                  "domainNameLabel": "[format('{0}-{1}', variables('bastionName'), uniqueString(resourceGroup().id))]"
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Network/publicIPAddresses",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('natGatewayPublicIpName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "Standard"
+              },
+              "properties": {
+                "publicIPAllocationMethod": "Static"
+              }
+            },
+            {
+              "type": "Microsoft.Network/natGateways",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('natGatewayName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "Standard"
+              },
+              "properties": {
+                "idleTimeoutInMinutes": 10,
+                "publicIpAddresses": [
+                  {
+                    "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('natGatewayPublicIpName'))]"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('natGatewayPublicIpName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('vnetName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "addressSpace": {
+                  "addressPrefixes": [
+                    "[parameters('vnetAddressPrefix')]"
+                  ]
+                },
+                "subnets": [
+                  {
+                    "name": "AzureBastionSubnet",
+                    "properties": {
+                      "addressPrefix": "[parameters('bastionSubnetPrefix')]",
+                      "networkSecurityGroup": {
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('bastionNetworkSecurityGroupName'))]"
+                      }
+                    }
+                  },
+                  {
+                    "name": "external1-subnet",
+                    "properties": {
+                      "addressPrefix": "[parameters('external1SubnetPrefix')]",
+                      "networkSecurityGroup": {
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+                      },
+                      "natGateway": {
+                        "id": "[resourceId('Microsoft.Network/natGateways', variables('natGatewayName'))]"
+                      }
+                    }
+                  },
+                  {
+                    "name": "external2-subnet",
+                    "properties": {
+                      "addressPrefix": "[parameters('external2SubnetPrefix')]",
+                      "networkSecurityGroup": {
+                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+                      }
+                    }
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('bastionNetworkSecurityGroupName'))]",
+                "[resourceId('Microsoft.Network/natGateways', variables('natGatewayName'))]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Network/bastionHosts",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('bastionName')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[parameters('bastionSku')]"
+              },
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "IpConf",
+                    "properties": {
+                      "subnet": {
+                        "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'AzureBastionSubnet')]"
+                      },
+                      "publicIPAddress": {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('bastionPublicIpName'))]"
+                      }
+                    }
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('bastionPublicIpName'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "vnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks', variables('vnetName'))]"
+            },
+            "vnetName": {
+              "type": "string",
+              "value": "[variables('vnetName')]"
+            },
+            "external1SubnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'external1-subnet')]"
+            },
+            "external2SubnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), 'external2-subnet')]"
+            },
+            "networkSecurityGroupId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+            },
+            "bastionFqdn": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('bastionPublicIpName')), '2023-04-01').dnsSettings.fqdn]"
+            },
+            "natGatewayId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/natGateways', variables('natGatewayName'))]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('{0}-dc-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "dcVmSize": {
+            "value": "[parameters('dcVmSize')]"
+          },
+          "dcOsVersion": {
+            "value": "[parameters('dcOsVersion')]"
+          },
+          "dcCustomImageId": {
+            "value": "[parameters('dcCustomImageId')]"
+          },
+          "domainName": {
+            "value": "[parameters('domainName')]"
+          },
+          "domainNetBiosName": {
+            "value": "[parameters('domainNetBiosName')]"
+          },
+          "external1SubnetId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.external1SubnetId.value]"
+          },
+          "external2SubnetId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.external2SubnetId.value]"
+          },
+          "dcExternal1Ip": {
+            "value": "[parameters('dcExternal1Ip')]"
+          },
+          "dcExternal2Ip": {
+            "value": "[parameters('dcExternal2Ip')]"
+          },
+          "enableAutoShutdown": {
+            "value": "[parameters('enableAutoShutdown')]"
+          },
+          "autoShutdownTime": {
+            "value": "[parameters('autoShutdownTime')]"
+          },
+          "autoShutdownTimeZone": {
+            "value": "[parameters('autoShutdownTimeZone')]"
+          },
+          "clusterPackageZipUrl": {
+            "value": "[parameters('clusterPackageZipUrl')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.44.1.10279",
+              "templateHash": "15366290671901627320"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "West US 2",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix"
+              }
+            },
+            "adminUsername": {
+              "type": "string",
+              "defaultValue": "testadmin",
+              "metadata": {
+                "description": "Admin username for VMs"
+              }
+            },
+            "adminPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Admin password for VMs"
+              }
+            },
+            "dcVmSize": {
+              "type": "string",
+              "defaultValue": "Standard_D2s_v3",
+              "metadata": {
+                "description": "Domain Controller VM size"
+              }
+            },
+            "dcOsVersion": {
+              "type": "string",
+              "defaultValue": "2025-datacenter-azure-edition",
+              "allowedValues": [
+                "2019-datacenter-gensecond",
+                "2022-datacenter-g2",
+                "2025-datacenter-azure-edition"
+              ],
+              "metadata": {
+                "description": "Domain Controller OS version"
+              }
+            },
+            "dcCustomImageId": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "Custom image resource ID for DC VM (overrides marketplace image when set). Must be a Windows image."
+              }
+            },
+            "domainName": {
+              "type": "string",
+              "defaultValue": "contoso.com",
+              "metadata": {
+                "description": "Domain name"
+              }
+            },
+            "domainNetBiosName": {
+              "type": "string",
+              "defaultValue": "CONTOSO",
+              "metadata": {
+                "description": "Domain NetBIOS name"
+              }
+            },
+            "external1SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External1 subnet ID"
+              }
+            },
+            "external2SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External2 subnet ID"
+              }
+            },
+            "dcExternal1Ip": {
+              "type": "string",
+              "defaultValue": "192.168.1.10",
+              "metadata": {
+                "description": "Domain Controller External1 IP address"
+              }
+            },
+            "dcExternal2Ip": {
+              "type": "string",
+              "defaultValue": "192.168.2.10",
+              "metadata": {
+                "description": "Domain Controller External2 IP address"
+              }
+            },
+            "enableAutoShutdown": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Enable auto-shutdown"
+              }
+            },
+            "autoShutdownTime": {
+              "type": "string",
+              "defaultValue": "20:00",
+              "metadata": {
+                "description": "Auto-shutdown time (HH:mm in UTC)"
+              }
+            },
+            "autoShutdownTimeZone": {
+              "type": "string",
+              "defaultValue": "UTC",
+              "metadata": {
+                "description": "Auto-shutdown timezone"
+              }
+            },
+            "clusterPackageZipUrl": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "URL to Cluster-Package.zip file in Azure Storage"
+              }
+            }
+          },
+          "variables": {
+            "dcVmName": "[format('{0}-dc01', parameters('environmentPrefix'))]",
+            "dcNic1Name": "[format('{0}-nic1', variables('dcVmName'))]",
+            "dcNic2Name": "[format('{0}-nic2', variables('dcVmName'))]",
+            "dcIsHotpatch": "[contains(parameters('dcOsVersion'), 'azure-edition')]",
+            "dcCommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"$stage=''C:\\Temp\\wpts-cluster-dc''; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path ''.\\Cluster-Package.zip'' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\Temp\\wpts-cluster-dc\\cse-bootstrap.ps1'' -Scenario ''cluster'' -Role ''dc'' -PackageName ''Cluster-Package'' -DeployScript ''Deploy-DC.ps1'' -PasswordBase64 ''{0}'' -PackageAlreadyExtracted; exit $LASTEXITCODE\"', base64(parameters('adminPassword')))]",
+            "dcImageRef": "[if(not(empty(parameters('dcCustomImageId'))), createObject('id', parameters('dcCustomImageId')), createObject('publisher', 'MicrosoftWindowsServer', 'offer', 'WindowsServer', 'sku', parameters('dcOsVersion'), 'version', 'latest'))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('dcNic1Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external1-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('dcExternal1Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external1SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": true
+              }
+            },
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('dcNic2Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external2-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('dcExternal2Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external2SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": true
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2023-03-01",
+              "name": "[variables('dcVmName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "[parameters('dcVmSize')]"
+                },
+                "osProfile": {
+                  "computerName": "DC01",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]",
+                  "windowsConfiguration": {
+                    "enableAutomaticUpdates": "[variables('dcIsHotpatch')]",
+                    "provisionVMAgent": true,
+                    "winRM": {
+                      "listeners": [
+                        {
+                          "protocol": "Http"
+                        }
+                      ]
+                    },
+                    "patchSettings": {
+                      "patchMode": "[if(variables('dcIsHotpatch'), 'AutomaticByPlatform', 'Manual')]",
+                      "assessmentMode": "ImageDefault"
+                    }
+                  }
+                },
+                "storageProfile": {
+                  "imageReference": "[variables('dcImageRef')]",
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "diskSizeGB": 128,
+                    "managedDisk": {
+                      "storageAccountType": "Premium_LRS"
+                    }
+                  },
+                  "dataDisks": [
+                    {
+                      "createOption": "Empty",
+                      "diskSizeGB": 64,
+                      "lun": 0,
+                      "managedDisk": {
+                        "storageAccountType": "Premium_LRS"
+                      }
+                    }
+                  ]
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('dcNic1Name'))]",
+                      "properties": {
+                        "primary": true
+                      }
+                    },
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('dcNic2Name'))]",
+                      "properties": {
+                        "primary": false
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('dcNic1Name'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('dcNic2Name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('enableAutoShutdown')]",
+              "type": "Microsoft.DevTestLab/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('shutdown-computevm-{0}', variables('dcVmName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', variables('dcVmName'))]",
+                "notificationSettings": {
+                  "status": "Disabled"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('dcVmName'))]"
+              ]
+            },
+            {
+              "condition": "[not(empty(parameters('clusterPackageZipUrl')))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('dcVmName'), 'ConfigureDomainController')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {},
+                "protectedSettings": {
+                  "fileUris": [
+                    "[parameters('clusterPackageZipUrl')]"
+                  ],
+                  "commandToExecute": "[variables('dcCommandToExecute')]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('dcVmName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "dcVmId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('dcVmName'))]"
+            },
+            "dcVmName": {
+              "type": "string",
+              "value": "[variables('dcVmName')]"
+            },
+            "dcPrivateIps": {
+              "type": "array",
+              "value": [
+                "[parameters('dcExternal1Ip')]",
+                "[parameters('dcExternal2Ip')]"
+              ]
+            },
+            "domainName": {
+              "type": "string",
+              "value": "[parameters('domainName')]"
+            },
+            "domainNetBiosName": {
+              "type": "string",
+              "value": "[parameters('domainNetBiosName')]"
+            },
+            "dcExternal1Ip": {
+              "type": "string",
+              "value": "[parameters('dcExternal1Ip')]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
+      "name": "[format('{0}-storage-deployment', parameters('environmentPrefix'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "environmentPrefix": {
+            "value": "[parameters('environmentPrefix')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "storageVmSize": {
+            "value": "[parameters('storageVmSize')]"
+          },
+          "storageOsVersion": {
+            "value": "[parameters('storageOsVersion')]"
+          },
+          "storageCustomImageId": {
+            "value": "[parameters('storageCustomImageId')]"
+          },
+          "external1SubnetId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.external1SubnetId.value]"
+          },
+          "storageExternal1Ip": {
+            "value": "[parameters('storageExternal1Ip')]"
+          },
+          "enableAutoShutdown": {
+            "value": "[parameters('enableAutoShutdown')]"
+          },
+          "autoShutdownTime": {
+            "value": "[parameters('autoShutdownTime')]"
+          },
+          "autoShutdownTimeZone": {
+            "value": "[parameters('autoShutdownTimeZone')]"
+          },
+          "clusterPackageZipUrl": {
+            "value": "[parameters('clusterPackageZipUrl')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.44.1.10279",
+              "templateHash": "7569444482398161578"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "West US 2",
+              "metadata": {
+                "description": "Resource group location"
+              }
+            },
+            "environmentPrefix": {
+              "type": "string",
+              "metadata": {
+                "description": "Environment name prefix"
+              }
+            },
+            "adminUsername": {
+              "type": "string",
+              "defaultValue": "testadmin",
+              "metadata": {
+                "description": "Admin username for VMs"
+              }
+            },
+            "adminPassword": {
+              "type": "securestring",
+              "metadata": {
+                "description": "Admin password for VMs"
+              }
+            },
+            "storageVmSize": {
+              "type": "string",
+              "defaultValue": "Standard_D4s_v5",
+              "metadata": {
+                "description": "Storage server VM size"
+              }
+            },
+            "storageOsVersion": {
+              "type": "string",
+              "defaultValue": "2022-datacenter-g2",
+              "allowedValues": [
+                "2019-datacenter-gensecond",
+                "2022-datacenter-g2",
+                "2025-datacenter-azure-edition"
+              ],
+              "metadata": {
+                "description": "Storage server OS version"
+              }
+            },
+            "storageCustomImageId": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "Custom image resource ID for storage VM (overrides marketplace image when set). Must be a Windows image."
+              }
+            },
+            "external1SubnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "External1 subnet ID"
+              }
+            },
+            "storageExternal1Ip": {
+              "type": "string",
+              "defaultValue": "192.168.1.50",
+              "metadata": {
+                "description": "Storage server External1 IP address"
+              }
+            },
+            "enableAutoShutdown": {
+              "type": "bool",
+              "defaultValue": true,
+              "metadata": {
+                "description": "Enable auto-shutdown"
+              }
+            },
+            "autoShutdownTime": {
+              "type": "string",
+              "defaultValue": "20:00",
+              "metadata": {
+                "description": "Auto-shutdown time (HH:mm in UTC)"
+              }
+            },
+            "autoShutdownTimeZone": {
+              "type": "string",
+              "defaultValue": "UTC",
+              "metadata": {
+                "description": "Auto-shutdown timezone"
+              }
+            },
+            "clusterPackageZipUrl": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "URL to Cluster-Package.zip file in Azure Storage"
+              }
+            }
+          },
+          "variables": {
+            "storageIsHotpatch": "[contains(parameters('storageOsVersion'), 'azure-edition')]",
+            "storageImageRef": "[if(not(empty(parameters('storageCustomImageId'))), createObject('id', parameters('storageCustomImageId')), createObject('publisher', 'MicrosoftWindowsServer', 'offer', 'WindowsServer', 'sku', parameters('storageOsVersion'), 'version', 'latest'))]",
+            "storageVmName": "[format('{0}-storage01', parameters('environmentPrefix'))]",
+            "storageNic1Name": "[format('{0}-nic1', variables('storageVmName'))]",
+            "storageCommandToExecute": "[format('powershell.exe -ExecutionPolicy Unrestricted -NoProfile -Command \"$stage=''C:\\Temp\\wpts-cluster-storage''; Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue; Expand-Archive -Path ''.\\Cluster-Package.zip'' -DestinationPath $stage -Force; & powershell.exe -ExecutionPolicy Unrestricted -NoProfile -File ''C:\\Temp\\wpts-cluster-storage\\cse-bootstrap.ps1'' -Scenario ''cluster'' -Role ''storage'' -PackageName ''Cluster-Package'' -DeployScript ''Deploy-Storage.ps1'' -PasswordBase64 ''{0}'' -PackageAlreadyExtracted; exit $LASTEXITCODE\"', base64(parameters('adminPassword')))]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkInterfaces",
+              "apiVersion": "2023-04-01",
+              "name": "[variables('storageNic1Name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "external1-config",
+                    "properties": {
+                      "privateIPAllocationMethod": "Static",
+                      "privateIPAddress": "[parameters('storageExternal1Ip')]",
+                      "subnet": {
+                        "id": "[parameters('external1SubnetId')]"
+                      }
+                    }
+                  }
+                ],
+                "enableIPForwarding": false
+              }
+            },
+            {
+              "type": "Microsoft.Compute/virtualMachines",
+              "apiVersion": "2023-03-01",
+              "name": "[variables('storageVmName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "hardwareProfile": {
+                  "vmSize": "[parameters('storageVmSize')]"
+                },
+                "osProfile": {
+                  "computerName": "Storage01",
+                  "adminUsername": "[parameters('adminUsername')]",
+                  "adminPassword": "[parameters('adminPassword')]",
+                  "windowsConfiguration": {
+                    "enableAutomaticUpdates": "[variables('storageIsHotpatch')]",
+                    "provisionVMAgent": true,
+                    "winRM": {
+                      "listeners": [
+                        {
+                          "protocol": "Http"
+                        }
+                      ]
+                    },
+                    "patchSettings": {
+                      "patchMode": "[if(variables('storageIsHotpatch'), 'AutomaticByPlatform', 'Manual')]",
+                      "assessmentMode": "ImageDefault"
+                    }
+                  }
+                },
+                "storageProfile": {
+                  "imageReference": "[variables('storageImageRef')]",
+                  "osDisk": {
+                    "createOption": "FromImage",
+                    "diskSizeGB": 128,
+                    "managedDisk": {
+                      "storageAccountType": "Premium_LRS"
+                    }
+                  },
+                  "dataDisks": [
+                    {
+                      "createOption": "Empty",
+                      "diskSizeGB": 64,
+                      "lun": 0,
+                      "managedDisk": {
+                        "storageAccountType": "Premium_LRS"
+                      },
+                      "caching": "None"
+                    },
+                    {
+                      "createOption": "Empty",
+                      "diskSizeGB": 32,
+                      "lun": 1,
+                      "managedDisk": {
+                        "storageAccountType": "Premium_LRS"
+                      },
+                      "caching": "None"
+                    }
+                  ]
+                },
+                "networkProfile": {
+                  "networkInterfaces": [
+                    {
+                      "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('storageNic1Name'))]",
+                      "properties": {
+                        "primary": true
+                      }
+                    }
+                  ]
+                },
+                "diagnosticsProfile": {
+                  "bootDiagnostics": {
+                    "enabled": true
+                  }
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('storageNic1Name'))]"
+              ]
+            },
+            {
+              "condition": "[parameters('enableAutoShutdown')]",
+              "type": "Microsoft.DevTestLab/schedules",
+              "apiVersion": "2018-09-15",
+              "name": "[format('shutdown-computevm-{0}', variables('storageVmName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "status": "Enabled",
+                "taskType": "ComputeVmShutdownTask",
+                "dailyRecurrence": {
+                  "time": "[parameters('autoShutdownTime')]"
+                },
+                "timeZoneId": "[parameters('autoShutdownTimeZone')]",
+                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', variables('storageVmName'))]",
+                "notificationSettings": {
+                  "status": "Disabled"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('storageVmName'))]"
+              ]
+            },
+            {
+              "condition": "[not(empty(parameters('clusterPackageZipUrl')))]",
+              "type": "Microsoft.Compute/virtualMachines/extensions",
+              "apiVersion": "2023-03-01",
+              "name": "[format('{0}/{1}', variables('storageVmName'), 'ConfigureStorageServer')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "publisher": "Microsoft.Compute",
+                "type": "CustomScriptExtension",
+                "typeHandlerVersion": "1.10",
+                "autoUpgradeMinorVersion": true,
+                "settings": {},
+                "protectedSettings": {
+                  "fileUris": [
+                    "[parameters('clusterPackageZipUrl')]"
+                  ],
+                  "commandToExecute": "[variables('storageCommandToExecute')]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines', variables('storageVmName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "storageVmId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Compute/virtualMachines', variables('storageVmName'))]"
+            },
+            "storageVmName": {
+              "type": "string",
+              "value": "[variables('storageVmName')]"
+            },
+            "storagePrivateIps": {
+              "type": "array",
+              "value": [
+                "[parameters('storageExternal1Ip')]"
+              ]
+            },
+            "storageExternal1Ip": {
+              "type": "string",
+              "value": "[parameters('storageExternal1Ip')]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix')))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "resourceGroupName": {
+      "type": "string",
+      "value": "[resourceGroup().name]"
+    },
+    "vnetName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.vnetName.value]"
+    },
+    "bastionFqdn": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.bastionFqdn.value]"
+    },
+    "external1SubnetId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.external1SubnetId.value]"
+    },
+    "external2SubnetId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-network-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.external2SubnetId.value]"
+    },
+    "domainControllerName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-dc-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.dcVmName.value]"
+    },
+    "storageServerName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-storage-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.storageVmName.value]"
+    },
+    "domainName": {
+      "type": "string",
+      "value": "[parameters('domainName')]"
+    },
+    "domainNetBiosName": {
+      "type": "string",
+      "value": "[parameters('domainNetBiosName')]"
+    },
+    "dcExternal1Ip": {
+      "type": "string",
+      "value": "[parameters('dcExternal1Ip')]"
+    },
+    "dcExternal2Ip": {
+      "type": "string",
+      "value": "[parameters('dcExternal2Ip')]"
+    },
+    "storageExternal1Ip": {
+      "type": "string",
+      "value": "[parameters('storageExternal1Ip')]"
+    },
+    "dcPrivateIps": {
+      "type": "array",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-dc-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.dcPrivateIps.value]"
+    },
+    "storagePrivateIps": {
+      "type": "array",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-storage-deployment', parameters('environmentPrefix'))), '2025-04-01').outputs.storagePrivateIps.value]"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-disk-encryption-vault', parameters('environmentPrefix'))), '2025-04-01').outputs.keyVaultName.value]"
+    },
+    "keyVaultId": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-disk-encryption-vault', parameters('environmentPrefix'))), '2025-04-01').outputs.keyVaultId.value]"
+    },
+    "keyVaultUrl": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}-disk-encryption-vault', parameters('environmentPrefix'))), '2025-04-01').outputs.keyVaultUrl.value]"
+    }
+  }
+}

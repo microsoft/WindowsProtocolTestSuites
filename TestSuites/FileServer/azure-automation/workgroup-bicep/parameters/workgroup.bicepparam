@@ -4,12 +4,11 @@
 using '../main.bicep'
 
 // Environment
-param location = 'West US 2'
 param environmentPrefix = 'fstest'
 
 // Admin credentials (password overridden at deployment time)
 param adminUsername = 'testadmin'
-param adminPassword = ''
+param adminPassword = '#{ADMIN_PASSWORD}#'
 
 // VM sizes
 param driverVmSize = 'Standard_F4as_v6'
@@ -42,6 +41,7 @@ param sutExternal2Ip = '192.168.2.11'
 
 // Auto-shutdown configuration
 param enableAutoShutdown = true
+param enableTestAutoRun = true
 param autoShutdownTime = '2000'
 param autoShutdownTimeZone = 'UTC'
 

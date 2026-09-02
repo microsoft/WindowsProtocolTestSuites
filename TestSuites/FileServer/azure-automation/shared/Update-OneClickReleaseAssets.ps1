@@ -13,6 +13,8 @@ param(
     [ValidatePattern('^[A-Fa-f0-9]{64}$')]
     [string]$FileServerAssetSha256,
 
+    [string]$FileServerAssetVersion = '',
+
     [Parameter(Mandatory)]
     [uri]$PtmServiceAssetUrl,
 
@@ -20,12 +22,16 @@ param(
     [ValidatePattern('^[A-Fa-f0-9]{64}$')]
     [string]$PtmServiceAssetSha256,
 
+    [string]$PtmServiceAssetVersion = '',
+
     [Parameter(Mandatory)]
     [uri]$PtmCliAssetUrl,
 
     [Parameter(Mandatory)]
     [ValidatePattern('^[A-Fa-f0-9]{64}$')]
-    [string]$PtmCliAssetSha256
+    [string]$PtmCliAssetSha256,
+
+    [string]$PtmCliAssetVersion = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -61,18 +67,21 @@ $assetPins = @{
     FileServer = @{
         Url = $FileServerAssetUrl.AbsoluteUri
         SHA256 = $FileServerAssetSha256.ToLowerInvariant()
+        Version = $FileServerAssetVersion
     }
     PTMService = @{
         Url = $PtmServiceAssetUrl.AbsoluteUri
         SHA256 = $PtmServiceAssetSha256.ToLowerInvariant()
+        Version = $PtmServiceAssetVersion
     }
     PTMCli = @{
         Url = $PtmCliAssetUrl.AbsoluteUri
         SHA256 = $PtmCliAssetSha256.ToLowerInvariant()
+        Version = $PtmCliAssetVersion
     }
 }
 
-$scenarios = @('workgroup-bicep', 'domain-bicep')
+$scenarios = @('workgroup-bicep', 'domain-bicep', 'cluster-bicep')
 foreach ($scenario in $scenarios) {
     $toolsPath = Join-Path $AutomationRoot "$scenario\DSC\Scripts\Tools.json"
     if (-not (Test-Path -LiteralPath $toolsPath -PathType Leaf)) {
@@ -92,6 +101,9 @@ foreach ($scenario in $scenarios) {
                 $pin = $assetPins[$tool.name]
                 Set-PropertyValue -Object $tool -Name Url -Value $pin.Url
                 Set-PropertyValue -Object $tool -Name SHA256 -Value $pin.SHA256
+                if ($pin.Version) {
+                    Set-PropertyValue -Object $tool -Name version -Value $pin.Version
+                }
                 $counts[$tool.name]++
             }
         }
@@ -101,6 +113,9 @@ foreach ($scenario in $scenarios) {
                 $pin = $assetPins.FileServer
                 Set-PropertyValue -Object $testSuite -Name Url -Value $pin.Url
                 Set-PropertyValue -Object $testSuite -Name SHA256 -Value $pin.SHA256
+                if ($pin.Version) {
+                    Set-PropertyValue -Object $testSuite -Name version -Value $pin.Version
+                }
                 $counts.FileServer++
             }
         }

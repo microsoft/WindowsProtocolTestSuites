@@ -1,10 +1,8 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-# Tier-0 drift guard for the one-click "Deploy to Azure" buttons.
-# The committed azuredeploy.json *is* the template served from raw.githubusercontent.com,
-# so it must stay byte-identical to `bicep build main.bicep`. This test recompiles each
-# main.bicep and fails if the committed artifact has drifted.
+# Tier-0 drift guard for committed ARM templates.
+# The generated JSON files must stay synchronized with their Bicep entry points.
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = (Resolve-Path (Join-Path $here '..')).Path
@@ -38,29 +36,40 @@ function Get-CommittedGeneratorVersion {
     return $null
 }
 
-function Normalize-TemplateText {
+function ConvertTo-NormalizedTemplateText {
     param([string]$Text)
     return (($Text -replace "`r`n", "`n").TrimEnd())
 }
 
-$scenarios = @(
-    @{ Name = 'workgroup'; Dir = 'workgroup-bicep' }
-    @{ Name = 'domain';    Dir = 'domain-bicep' }
+function ConvertTo-NormalizedOutputJson {
+    param([object]$Outputs)
+
+    $json = $Outputs | ConvertTo-Json -Depth 50
+    $deploymentReferencePattern = "(reference\(resourceId\('Microsoft\.Resources/deployments'.*?\), )'\d{4}-\d{2}-\d{2}'(\)\.outputs\.)"
+    return ($json -replace $deploymentReferencePattern, "`$1'<compiler-selected-api-version>'`$2")
+}
+
+$templates = @(
+    @{ Name = 'workgroup';     Dir = 'workgroup-bicep'; Bicep = 'main.bicep';   Json = 'azuredeploy.json' }
+    @{ Name = 'domain';        Dir = 'domain-bicep';    Bicep = 'main.bicep';   Json = 'azuredeploy.json' }
+    @{ Name = 'cluster';       Dir = 'cluster-bicep';   Bicep = 'main.bicep';   Json = 'azuredeploy.json' }
+    @{ Name = 'cluster-phase1'; Dir = 'cluster-bicep';  Bicep = 'phase1.bicep'; Json = 'phase1.json' }
+    @{ Name = 'cluster-phase2'; Dir = 'cluster-bicep';  Bicep = 'phase2.bicep'; Json = 'phase2.json' }
 )
 
-Describe 'Deploy-to-Azure template drift (azuredeploy.json vs main.bicep)' {
+Describe 'Generated ARM template drift' {
 
     It 'has a bicep builder available (standalone bicep or az bicep)' {
         (Get-BicepBuilder) | Should Not BeNullOrEmpty
     }
 
-    foreach ($s in $scenarios) {
-        Context "$($s.Name)-bicep" {
-            $dir       = $s.Dir
-            $committedPath = Join-Path (Join-Path $root $dir) 'azuredeploy.json'
-            $mainPath      = Join-Path (Join-Path $root $dir) 'main.bicep'
+    foreach ($template in $templates) {
+        Context $template.Name {
+            $dir = $template.Dir
+            $committedPath = Join-Path (Join-Path $root $dir) $template.Json
+            $mainPath = Join-Path (Join-Path $root $dir) $template.Bicep
 
-            It 'recompiles main.bicep and matches the committed azuredeploy.json' {
+            It 'recompiles the Bicep entry point and matches the committed JSON' {
                 $builder = Get-BicepBuilder
                 $builder | Should Not BeNullOrEmpty
 
@@ -78,8 +87,10 @@ Describe 'Deploy-to-Azure template drift (azuredeploy.json vs main.bicep)' {
                     # and rewired outputs regardless of the local bicep version.
                     ($committedJson.parameters | ConvertTo-Json -Depth 50) |
                         Should Be ($freshJson.parameters | ConvertTo-Json -Depth 50)
-                    ($committedJson.outputs | ConvertTo-Json -Depth 50) |
-                        Should Be ($freshJson.outputs | ConvertTo-Json -Depth 50)
+                    # Bicep selects the nested-deployment reference API version. That
+                    # version can change between compilers without changing output wiring.
+                    (ConvertTo-NormalizedOutputJson $committedJson.outputs) |
+                        Should Be (ConvertTo-NormalizedOutputJson $freshJson.outputs)
 
                     # Exact guard: only enforced when the local bicep version matches the one
                     # that produced the committed template, otherwise formatting differences
@@ -87,8 +98,8 @@ Describe 'Deploy-to-Azure template drift (azuredeploy.json vs main.bicep)' {
                     # version (see the scenario README "Publishing the public package").
                     $committedVersion = Get-CommittedGeneratorVersion $committedPath
                     if ($builder.Version -and $committedVersion -and $builder.Version -eq $committedVersion) {
-                        (Normalize-TemplateText (Get-Content $tmp -Raw)) |
-                            Should Be (Normalize-TemplateText (Get-Content $committedPath -Raw))
+                        (ConvertTo-NormalizedTemplateText (Get-Content $tmp -Raw)) |
+                            Should Be (ConvertTo-NormalizedTemplateText (Get-Content $committedPath -Raw))
                     }
                 }
                 finally {

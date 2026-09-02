@@ -84,6 +84,18 @@ param(
     [Parameter(Mandatory=$false)]
     [string]$GeneralFSExternal2Ip = "192.168.2.200",
 
+    [Parameter(Mandatory=$false)]
+    [int]$ClusterExternal1ProbePort = 59998,
+
+    [Parameter(Mandatory=$false)]
+    [int]$ClusterExternal2ProbePort = 59999,
+
+    [Parameter(Mandatory=$false)]
+    [int]$GeneralFSExternal1ProbePort = 60000,
+
+    [Parameter(Mandatory=$false)]
+    [int]$GeneralFSExternal2ProbePort = 60001,
+
     # Workgroup-only parameter
     [Parameter(Mandatory=$false)]
     [string]$LocalUserPassword = "",
@@ -92,6 +104,9 @@ param(
     [Parameter(Mandatory=$false)]
     [ValidateSet("Windows", "Linux")]
     [string]$DriverOSType = "Windows",
+
+    [Parameter(Mandatory=$false)]
+    [bool]$EnableTestAutoRun = $true,
 
     # When set, marks Config.json so on-VM account creation gives EVERY test account
     # the single admin password (Core.Password). The one-click Deploy-to-Azure button
@@ -388,12 +403,14 @@ elseif ($Scenario -eq "Cluster") {
             Name     = $ClusterName
             IpConfig = @(
                 @{
-                    NIC = "External1"
-                    Ip  = $ClusterExternal1Ip
+                    NIC       = "External1"
+                    Ip        = $ClusterExternal1Ip
+                    ProbePort = $ClusterExternal1ProbePort
                 },
                 @{
-                    NIC = "External2"
-                    Ip  = $ClusterExternal2Ip
+                    NIC       = "External2"
+                    Ip        = $ClusterExternal2Ip
+                    ProbePort = $ClusterExternal2ProbePort
                 }
             )
         }
@@ -401,12 +418,14 @@ elseif ($Scenario -eq "Cluster") {
             Name     = "GeneralFS"
             IpConfig = @(
                 @{
-                    NIC = "External1"
-                    Ip  = $GeneralFSExternal1Ip
+                    NIC       = "External1"
+                    Ip        = $GeneralFSExternal1Ip
+                    ProbePort = $GeneralFSExternal1ProbePort
                 },
                 @{
-                    NIC = "External2"
-                    Ip  = $GeneralFSExternal2Ip
+                    NIC       = "External2"
+                    Ip        = $GeneralFSExternal2Ip
+                    ProbePort = $GeneralFSExternal2ProbePort
                 }
             )
         }
@@ -428,6 +447,10 @@ elseif ($Scenario -eq "Cluster") {
 # single admin password (see -UnifyAccountPasswords). Off by default.
 if ($UnifyAccountPasswords) {
     $config.Core.UsePasswordForAllUsers = "true"
+}
+
+$config.TestExecution = @{
+    AutoRun = $EnableTestAutoRun
 }
 
 $jsonContent = $config | ConvertTo-Json -Depth 10

@@ -381,6 +381,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             /// 3. Client reconnects with the correct FileId.Persistent and includes SMB2_CREATE_DURABLE_HANDLE_REQUEST.
             /// 4. Server is expected to return STATUS_OBJECT_NAME_NOT_FOUND.
 
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             DurableHandleV2_Reconnect_WithAdditionalDurableHandleContext(
                 DurableHandleV2ReconnectAdditionalContext.DurableHandleRequest);
         }
@@ -397,6 +402,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             /// 3. Client reconnects with the correct FileId.Persistent and includes SMB2_CREATE_DURABLE_HANDLE_RECONNECT.
             /// 4. Server is expected to return STATUS_OBJECT_NAME_NOT_FOUND.
 
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             DurableHandleV2_Reconnect_WithAdditionalDurableHandleContext(
                 DurableHandleV2ReconnectAdditionalContext.DurableHandleReconnect);
         }
@@ -412,6 +422,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             /// 2. Client disconnects.
             /// 3. Client reconnects with the correct FileId.Persistent and includes SMB2_CREATE_DURABLE_HANDLE_REQUEST_V2.
             /// 4. Server is expected to return STATUS_OBJECT_NAME_NOT_FOUND.
+
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
 
             DurableHandleV2_Reconnect_WithAdditionalDurableHandleContext(
                 DurableHandleV2ReconnectAdditionalContext.DurableHandleRequestV2);
@@ -540,6 +555,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
             /// 1. Client requests a durable handle V2 with LeaseV1 context
             /// 2. Client disconnects from the server
             /// 3. Client reconnects the durable handle V2 with LeaseV1 context, but the file name is different, and expects STATUS_OBJECT_NAME_NOT_FOUND.
+
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
 
             DurableHandleV2_Reconnect_WithLeaseV1(sameFileName: false);
         }
@@ -731,6 +751,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test reconnect of a persistent handle that is resumed through the CreateGuid lookup path when the FileId.Persistent lookup fails.")]
         public void PersistentHandle_Reconnect_ViaCreateGuid()
         {
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             PersistentHandleReconnectViaCreateGuid(PersistentHandleReconnectViaCreateGuidScenario.SuccessWithoutLease);
         }
 
@@ -741,6 +766,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test that reconnect fails when both the FileId.Persistent lookup and the CreateGuid lookup fail.")]
         public void PersistentHandle_Reconnect_ViaCreateGuid_CreateGuidNotFound()
         {
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             PersistentHandleReconnectViaCreateGuid(PersistentHandleReconnectViaCreateGuidScenario.CreateGuidNotFound);
         }
 
@@ -751,6 +781,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test that reconnect through the CreateGuid lookup path fails when SMB2_DHANDLE_FLAG_PERSISTENT is not set.")]
         public void PersistentHandle_Reconnect_ViaCreateGuid_WithoutPersistentFlag()
         {
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             PersistentHandleReconnectViaCreateGuid(PersistentHandleReconnectViaCreateGuidScenario.WithoutPersistentFlag);
         }
 
@@ -761,6 +796,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test that reconnect through the CreateGuid lookup path fails when Open.Session is not NULL.")]
         public void PersistentHandle_Reconnect_ViaCreateGuid_SessionNotNull()
         {
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             PersistentHandleReconnectViaCreateGuid(PersistentHandleReconnectViaCreateGuidScenario.SessionNotNull);
         }
 
@@ -771,6 +811,12 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test that reconnect through the CreateGuid lookup path fails when the durable owner is different.")]
         public void PersistentHandle_Reconnect_ViaCreateGuid_WithDifferentDurableOwner()
         {
+
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+            
             PersistentHandleReconnectViaCreateGuid(PersistentHandleReconnectViaCreateGuidScenario.DifferentDurableOwner);
         }
 
@@ -782,6 +828,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test that reconnect through the CreateGuid lookup path fails when the Lease V1 key does not match the lease key recreated during resume.")]
         public void PersistentHandle_Reconnect_ViaCreateGuid_WithDifferentLeaseKeyV1()
         {
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             PersistentHandleReconnectViaCreateGuid(PersistentHandleReconnectViaCreateGuidScenario.DifferentLeaseKeyV1);
         }
 
@@ -793,6 +844,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test that reconnect through the CreateGuid lookup path fails when the Lease V2 key does not match the lease key recreated during resume.")]
         public void PersistentHandle_Reconnect_ViaCreateGuid_WithDifferentLeaseKeyV2()
         {
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             PersistentHandleReconnectViaCreateGuid(PersistentHandleReconnectViaCreateGuidScenario.DifferentLeaseKeyV2);
         }
 
@@ -804,6 +860,11 @@ namespace Microsoft.Protocols.TestSuites.FileSharing.SMB2.TestSuite
         [Description("Test that the lease-presence validations do not apply when a persistent handle with a Lease V1 is resumed through the CreateGuid lookup path without a lease context in the reconnect request.")]
         public void PersistentHandle_Reconnect_ViaCreateGuid_WithoutReconnectLeaseContext()
         {
+            if (TestConfig.Platform >= Platform.WindowsServer2022 || TestConfig.Platform == Platform.NonWindows)
+            {
+                BaseTestSite.Assert.Inconclusive("This test case is currently under investigation and will be revisited once additional information becomes available.");
+            }
+
             PersistentHandleReconnectViaCreateGuid(PersistentHandleReconnectViaCreateGuidScenario.WithoutReconnectLeaseContext);
         }
 

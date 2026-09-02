@@ -300,8 +300,15 @@ try {
         .\Write-Info.ps1 "Setting up FSA for $shareFolder (filesystem: $fileSystem)..." -ForegroundColor Yellow
 
         New-Item -Type Directory -Path "$shareFolder\ExistingFolder" -Force | Out-Null
-        if (-not (Test-Path "$shareFolder\ExistingFile.txt")) {
-            New-Item -Type File -Path "$shareFolder\ExistingFile.txt" -Force | Out-Null
+        $existingFilePath = "$shareFolder\ExistingFile.txt"
+        if (-not (Test-Path $existingFilePath)) {
+            New-Item -Type File -Path $existingFilePath -Force | Out-Null
+        }
+        $existingFile = Get-Item -LiteralPath $existingFilePath -Force
+        if ($existingFile.Length -eq 0) {
+            $fixtureBytes = [byte[]]::new(8192)
+            [System.IO.File]::WriteAllBytes($existingFilePath, $fixtureBytes)
+            .\Write-Info.ps1 "[OK] Allocated FSA retrieval-pointer fixture: $existingFilePath" -ForegroundColor Green
         }
 
         if ($fileSystem -ne 'FAT32' -and -not (Test-Path "$shareFolder\link.txt")) {
@@ -311,12 +318,34 @@ try {
         # Mount point (NTFS/ReFS only)
         if ($fileSystem -notin @('FAT32')) {
             $mpPath = "$shareFolder\MountPoint"
-            if (-not (Test-Path $mpPath)) {
-                New-Item -Type Directory -Path $mpPath -Force | Out-Null
-                $volumeInfo = (mountvol $Path /l 2>&1) | Select-Object -First 1
-                if ($volumeInfo -match '^\\\\\?\\') {
-                    cmd /C "mountvol `"$mpPath`" $volumeInfo" 2>&1 | .\Write-Info.ps1
+            $mountPoint = Get-Item -LiteralPath $mpPath -Force -ErrorAction SilentlyContinue
+            $isMountPoint = $null -ne $mountPoint -and
+                ($mountPoint.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0
+            if (-not $isMountPoint) {
+                if ($mountPoint) {
+                    $mountPointContents = @(Get-ChildItem -LiteralPath $mpPath -Force -ErrorAction Stop)
+                    if ($mountPointContents.Count -gt 0) {
+                        throw "Cannot repair mount point '$mpPath' because the stale directory is not empty."
+                    }
+                    Remove-Item -LiteralPath $mpPath -Force
                 }
+                New-Item -Type Directory -Path $mpPath -Force | Out-Null
+                $volumeInfo = "$($volume.DeviceID)".Trim()
+                if ($volumeInfo -notmatch '^\\\\\?\\Volume\{[^}]+\}\\$') {
+                    throw "Could not resolve the volume GUID for '$Path'."
+                }
+                & mountvol.exe $mpPath $volumeInfo 2>&1 | .\Write-Info.ps1
+                if ($LASTEXITCODE -ne 0) {
+                    throw "mountvol failed for '$mpPath' with exit code $LASTEXITCODE."
+                }
+
+                $mountPoint = Get-Item -LiteralPath $mpPath -Force -ErrorAction Stop
+                if (($mountPoint.Attributes -band [IO.FileAttributes]::ReparsePoint) -eq 0) {
+                    throw "Mount point verification failed for '$mpPath'."
+                }
+                .\Write-Info.ps1 "[OK] Mount point $mpPath -> $volumeInfo" -ForegroundColor Green
+            } else {
+                .\Write-Info.ps1 "[OK] Mount point $mpPath exists" -ForegroundColor Green
             }
         }
 

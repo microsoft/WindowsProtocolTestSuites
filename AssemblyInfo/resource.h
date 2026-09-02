@@ -11,7 +11,7 @@
 #define COMPANY_NAME	"Microsoft"
 #define PRODUCT_NAME	"Windows Protocol Test Suites"
 
-#define BUILD_VERSION	"4.26.8.1"
-#define INET_VER         4,26,8,1
+#define BUILD_VERSION	"4.26.9.0"
+#define INET_VER         4,26,9,0
 
 #endif

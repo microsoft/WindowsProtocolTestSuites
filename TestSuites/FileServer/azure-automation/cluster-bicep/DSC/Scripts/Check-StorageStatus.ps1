@@ -1,60 +1,30 @@
 # Copyright (c) Microsoft. All rights reserved.
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+[CmdletBinding()]
 param(
-    [ValidateSet("CreateCheckerTask", "StartChecker")]
-    [string]$action="CreateCheckerTask"
+    [string]$ConfigureFile = (Join-Path (Split-Path $PSScriptRoot -Parent) '..\Config.json'),
+    [switch]$NoTranscript
 )
 
-#----------------------------------------------------------------------------
-# Global variables
-#----------------------------------------------------------------------------
-$scriptPath = Split-Path $MyInvocation.MyCommand.Definition -parent
-$scriptName = $MyInvocation.MyCommand.Path
-$env:Path += ";$scriptPath"
-
-#----------------------------------------------------------------------------
-# Start loging using start-transcript cmdlet
-#----------------------------------------------------------------------------
-[string]$logFile = $MyInvocation.MyCommand.Path + ".log"
-Start-Transcript -Path "$logFile" -Append -Force
-
-#----------------------------------------------------------------------------
-# Create checker task
-#----------------------------------------------------------------------------
-if($action -eq "CreateCheckerTask")
-{
-    .\Write-Info.ps1 "Create checker task."
-    $TaskName = "ExecuteChecker"
-    $Task = "PowerShell $scriptName StartChecker"
-    # Create a task which will auto run current script every 5 minutes with StartChecker action.
-    CMD.exe /C "schtasks /Create /RU SYSTEM /SC MINUTE /MO 5 /TN `"$TaskName`" /TR `"$Task`" /IT /F"
-
-    .\Write-Info.ps1 "Start checker after create the checker task."
-    $action = "StartChecker"  
+$ErrorActionPreference = 'Stop'
+$transcriptStarted = $false
+if (-not $NoTranscript) {
+    Start-Transcript -Path "$PSCommandPath.log" -Append -Force | Out-Null
+    $transcriptStarted = $true
 }
 
-#----------------------------------------------------------------------------
-# Start checker
-#----------------------------------------------------------------------------
-if($action -eq "StartChecker")
-{
-    $iscsiServerTarget = Get-IscsiServerTarget
-    if($null -ne $iscsiServerTarget)
-    {
-        $iscsiServerTarget | Format-List TargetName,TargetIqn,Status,InitiatorIds,LastLogin,LunMappings
+try {
+    $output = @(& (Join-Path $PSScriptRoot 'Test-StorageReadiness.ps1') `
+        -ConfigureFile $ConfigureFile -Detailed)
+    $output | ForEach-Object { Write-Output $_ }
+    if ($output.Count -eq 0 -or $output[-1] -ne $true) {
+        throw 'Storage readiness validation failed.'
     }
-    else
-    {
-        .\Write-Error.ps1 "Cannot find Iscsi Server Target."
-    }
-
-    .\Write-Info.ps1 "Finish checker."
-    Start-Sleep 5 # To display above messages
+    return $true
 }
-
-#----------------------------------------------------------------------------
-# Ending
-#----------------------------------------------------------------------------
-Stop-Transcript
-exit 0
+finally {
+    if ($transcriptStarted) {
+        Stop-Transcript | Out-Null
+    }
+}

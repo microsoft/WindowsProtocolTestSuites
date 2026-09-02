@@ -3,141 +3,260 @@
 
 <#
 .SYNOPSIS
-    Imperative steps for the Storage Server (Storage01).
-    Run AFTER DSC has been applied.
-
-.DESCRIPTION
-    Step 1: Create iSCSI target with virtual disks for the failover cluster.
-      - Installs iSCSI target feature (idempotent, DSC also installs it)
-      - Creates iSCSI server target
-      - Creates 4 virtual disks (3x data + 1x quorum)
-      - Maps disks to the target
-      - Ensures WinTarget service is set to auto-start
-
-.PARAMETER WorkingPath
-    Path to the Cluster-Package folder.
-
-.PARAMETER Step
-    Which step to execute (currently only 1).
-
-.EXAMPLE
-    .\Invoke-StorageImperativeSteps.ps1 -Step 1 -WorkingPath C:\Cluster-Package
+    Creates or repairs the Cluster iSCSI target without replacing healthy state.
 #>
 
+[CmdletBinding()]
 param(
     [string]$WorkingPath = (Split-Path $PSScriptRoot -Parent),
-    [ValidateSet(1)]
-    [int]$Step = 1,
-    [string]$ConfigureFile = "$WorkingPath\Config.json"
+    [string]$ConfigureFile = "$WorkingPath\Config.json",
+    [string]$HeartbeatPath,
+    [switch]$NoTranscript
 )
 
 $ErrorActionPreference = 'Stop'
-$scriptsPath = "$PSScriptRoot\Scripts"
-$env:Path += ";$scriptsPath"
+$scriptsPath = Join-Path $PSScriptRoot 'Scripts'
+$logFile = Join-Path $PSScriptRoot 'Invoke-StorageImperativeSteps.log'
+$transcriptStarted = $false
+
 Push-Location $scriptsPath
-
-[string]$logFile = "$PSScriptRoot\Invoke-StorageImperativeSteps.log"
-Start-Transcript -Path $logFile -Append -Force
-
-$config = $null
-if (Test-Path $ConfigureFile) {
-    try { $config = Get-Content -Path $ConfigureFile -Raw | ConvertFrom-Json }
-    catch { Write-Warning "Failed to parse Config.json: $_" }
+if (-not $NoTranscript) {
+    Start-Transcript -Path $logFile -Append -Force | Out-Null
+    $transcriptStarted = $true
 }
 
-if ($null -eq $config) {
-    .\Write-Error.ps1 "Config.json not loaded. Cannot proceed."
-    Stop-Transcript; Pop-Location; return $false
+function Stop-StorageTranscript {
+    if ($transcriptStarted) {
+        Stop-Transcript | Out-Null
+    }
+    Pop-Location
 }
 
-# ===========================================================================
-# STEP 1: Create iSCSI Target
-# ===========================================================================
-if ($Step -eq 1) {
-  # -- TLS Cipher Suite Configuration --
-  try {
-    .\Write-Info.ps1 "Configuring TLS cipher suites..." -ForegroundColor Yellow
-    $tlsResult = & "$scriptsPath\Configure-TlsCipherSuites.ps1"
-    if ($tlsResult) {
-        .\Write-Info.ps1 "[OK] TLS cipher suites configured" -ForegroundColor Green
-    }
-  } catch {
-    .\Write-Info.ps1 "[WARN] TLS cipher suite config failed: $($_.Exception.Message)" -ForegroundColor Yellow
-  }
+function Write-StorageHeartbeat {
+    param([string]$Checkpoint, [datetime]$StartedAt)
+    if (-not $HeartbeatPath) { return }
+    Write-DeploymentHeartbeat -Phase 'StorageConvergence' `
+        -Operation 'Create or repair iSCSI target' `
+        -StartedAt $StartedAt -HeartbeatPath $HeartbeatPath `
+        -LastCheckpoint $Checkpoint
+}
 
-  try {
-    .\Write-Info.ps1 "---- Step 1: Create iSCSI Target ----" -ForegroundColor Yellow
+function Get-StorageDataRoot {
+    $mountPath = 'C:\StorageData'
+    $mountAccessPath = "$mountPath\"
+    $existingPartition = Get-Partition -ErrorAction SilentlyContinue |
+        Where-Object { @($_.AccessPaths) -contains $mountAccessPath } |
+        Select-Object -First 1
 
-    $storageMachine = $config.Machines.Storage
-    $targetName = if ($storageMachine.iSCSITargetName) { $storageMachine.iSCSITargetName } else { 'ClusterTarget' }
-
-    # Check if target already exists
-    $existingTarget = Get-IscsiServerTarget -TargetName $targetName -ErrorAction SilentlyContinue
-    if ($null -ne $existingTarget) {
-        .\Write-Info.ps1 "[OK] iSCSI target '$targetName' already exists -- skipping creation" -ForegroundColor Green
-        Stop-Transcript; Pop-Location; return $true
-    }
-
-    # Determine virtual disk storage path from data disks
-    $systemDrive = $env:SystemDrive
-    $vhdPath = "$systemDrive\iSCSIVirtualDisks"
-    New-Item -ItemType Directory -Path $vhdPath -Force | Out-Null
-
-    # Create iSCSI server target (allow all initiators)
-    .\Write-Info.ps1 "Creating iSCSI target '$targetName'..." -ForegroundColor Cyan
-    New-IscsiServerTarget -TargetName $targetName -InitiatorIds @("IQN:*")
-    .\Write-Info.ps1 "[OK] iSCSI target created" -ForegroundColor Green
-
-    # Create virtual disks
-    $diskSpecs = @(
-        @{ Name = 'disk1'; SizeBytes = 10GB },
-        @{ Name = 'disk2'; SizeBytes = 10GB },
-        @{ Name = 'disk3'; SizeBytes = 10GB },
-        @{ Name = 'diskq'; SizeBytes = 1GB }
-    )
-
-    foreach ($spec in $diskSpecs) {
-        $diskPath = "$vhdPath\$($spec.Name).vhdx"
-        if (Test-Path $diskPath) {
-            .\Write-Info.ps1 "[OK] Virtual disk $($spec.Name) already exists" -ForegroundColor Green
-        } else {
-            .\Write-Info.ps1 "Creating virtual disk $($spec.Name) ($([math]::Round($spec.SizeBytes / 1GB))GB)..." -ForegroundColor Cyan
-            New-IscsiVirtualDisk -Path $diskPath -SizeBytes $spec.SizeBytes
-            .\Write-Info.ps1 "[OK] Virtual disk $($spec.Name) created" -ForegroundColor Green
+    if ($null -eq $existingPartition) {
+        $dataDisk = Get-Disk -ErrorAction Stop |
+            Where-Object {
+                -not $_.IsBoot -and -not $_.IsSystem -and
+                $_.Location -match 'LUN 0(?:\s*)$'
+            } |
+            Select-Object -First 1
+        if ($null -eq $dataDisk) {
+            $dataDisk = Get-Disk -ErrorAction Stop |
+                Where-Object {
+                    -not $_.IsBoot -and -not $_.IsSystem -and
+                    [long]$_.Size -ge [long](60GB) -and
+                    "$($_.BusType)" -in @('SAS', 'SCSI', 'RAID')
+                } |
+                Sort-Object Number |
+                Select-Object -First 1
+        }
+        if ($null -eq $dataDisk) {
+            throw 'The Storage data disk (LUN 0 / at least 60 GB) was not found.'
         }
 
-        # Map disk to target
-        $mapping = Get-IscsiServerTarget -TargetName $targetName -ErrorAction SilentlyContinue
-        $alreadyMapped = $false
-        if ($null -ne $mapping -and $null -ne $mapping.LunMappings) {
-            foreach ($lun in $mapping.LunMappings) {
-                if ($lun.Path -eq $diskPath) { $alreadyMapped = $true; break }
+        if ($dataDisk.IsOffline) {
+            Set-Disk -Number $dataDisk.Number -IsOffline $false -ErrorAction Stop
+        }
+        if ($dataDisk.IsReadOnly) {
+            Set-Disk -Number $dataDisk.Number -IsReadOnly $false -ErrorAction Stop
+        }
+        $dataDisk = Get-Disk -Number $dataDisk.Number -ErrorAction Stop
+
+        if ($dataDisk.PartitionStyle -eq 'RAW') {
+            Initialize-Disk -Number $dataDisk.Number -PartitionStyle GPT -ErrorAction Stop
+        }
+        elseif ($dataDisk.PartitionStyle -ne 'GPT') {
+            throw "Storage data disk $($dataDisk.Number) uses unsupported partition style '$($dataDisk.PartitionStyle)'."
+        }
+
+        $usablePartitions = @(Get-Partition -DiskNumber $dataDisk.Number `
+            -ErrorAction SilentlyContinue | Where-Object { $_.Type -ne 'Reserved' })
+        if ($usablePartitions.Count -gt 1) {
+            throw "Storage data disk $($dataDisk.Number) has multiple usable partitions; refusing to choose one."
+        }
+        $existingPartition = $usablePartitions | Select-Object -First 1
+        if ($null -eq $existingPartition) {
+            $existingPartition = New-Partition -DiskNumber $dataDisk.Number `
+                -UseMaximumSize -ErrorAction Stop
+        }
+
+        $volume = $existingPartition | Get-Volume -ErrorAction SilentlyContinue
+        if ($null -eq $volume -or [string]::IsNullOrWhiteSpace("$($volume.FileSystem)")) {
+            $volume = $existingPartition | Format-Volume -FileSystem NTFS `
+                -NewFileSystemLabel 'ClusterIscsiData' -Confirm:$false -ErrorAction Stop
+        }
+        elseif ($volume.FileSystem -ne 'NTFS') {
+            throw "Storage data volume uses '$($volume.FileSystem)'; refusing to reformat it."
+        }
+
+        New-Item -ItemType Directory -Path $mountPath -Force | Out-Null
+        if (@($existingPartition.AccessPaths) -notcontains $mountAccessPath) {
+            Add-PartitionAccessPath -DiskNumber $existingPartition.DiskNumber `
+                -PartitionNumber $existingPartition.PartitionNumber `
+                -AccessPath $mountAccessPath -ErrorAction Stop
+        }
+    }
+
+    $root = Join-Path $mountPath 'iSCSIVirtualDisks'
+    New-Item -ItemType Directory -Path $root -Force | Out-Null
+    return $root
+}
+
+$startedAt = Get-Date
+try {
+    . (Join-Path $PSScriptRoot 'Deploy-CommonHelpers.ps1')
+    $config = Get-Content -LiteralPath $ConfigureFile -Raw -ErrorAction Stop |
+        ConvertFrom-Json -ErrorAction Stop
+    $storage = $config.Machines.Storage
+    if ($null -eq $storage) { throw 'Config.json is missing Machines.Storage.' }
+
+    $targetName = if ($storage.iSCSITargetName) {
+        "$($storage.iSCSITargetName)"
+    } else {
+        'ClusterTarget'
+    }
+    $nodeIps = @(
+        $config.Machines.Node01.IpConfig[0].Ip,
+        $config.Machines.Node02.IpConfig[0].Ip
+    ) | Where-Object { -not [string]::IsNullOrWhiteSpace("$_") } |
+        Select-Object -Unique
+    if ($nodeIps.Count -ne 2) {
+        throw 'Exactly two Cluster node initiator IP addresses are required.'
+    }
+    $initiatorIds = @($nodeIps | ForEach-Object { "IPAddress:$_" })
+
+    $diskSpecs = @(
+        @{ Name = 'disk1.vhdx'; SizeBytes = [long](10GB) },
+        @{ Name = 'disk2.vhdx'; SizeBytes = [long](10GB) },
+        @{ Name = 'disk3.vhdx'; SizeBytes = [long](10GB) },
+        @{ Name = 'diskq.vhdx'; SizeBytes = [long](1GB) }
+    )
+    $legacyRoot = 'C:\iSCSIVirtualDisks'
+    $dataRoot = $null
+
+    Write-StorageHeartbeat -Checkpoint 'Loading existing target state' -StartedAt $startedAt
+    $target = Get-IscsiServerTarget -TargetName $targetName -ErrorAction SilentlyContinue
+    if ($null -eq $target) {
+        New-IscsiServerTarget -TargetName $targetName `
+            -InitiatorId $initiatorIds -ErrorAction Stop | Out-Null
+        $target = Get-IscsiServerTarget -TargetName $targetName -ErrorAction Stop
+    }
+    else {
+        $actualInitiators = @($target.InitiatorIds | ForEach-Object { "$_" })
+        $initiatorsMatch = @($initiatorIds | Where-Object {
+            $actualInitiators -notcontains $_
+        }).Count -eq 0
+        if (-not $initiatorsMatch) {
+            if ($actualInitiators -contains 'IQN:*' -and "$($target.Status)" -eq 'Connected') {
+                .\Write-Info.ps1 (
+                    "[WARN] Preserving connected legacy IQN:* initiator policy for '$targetName'."
+                ) -ForegroundColor Yellow
+            }
+            else {
+                Set-IscsiServerTarget -TargetName $targetName `
+                    -InitiatorId $initiatorIds -ErrorAction Stop | Out-Null
             }
         }
-        if (-not $alreadyMapped) {
-            Add-IscsiVirtualDiskTargetMapping -TargetName $targetName -Path $diskPath
-            .\Write-Info.ps1 "  Mapped $($spec.Name) to target" -ForegroundColor DarkGray
+    }
+
+    $existingMappings = @($target.LunMappings)
+    $unexpectedMappings = @($existingMappings | Where-Object {
+        [System.IO.Path]::GetFileName("$($_.Path)") -notin $diskSpecs.Name
+    })
+    if ($unexpectedMappings.Count -gt 0) {
+        throw "Target '$targetName' contains unexpected mappings; refusing destructive cleanup: $($unexpectedMappings.Path -join ', ')"
+    }
+
+    foreach ($spec in $diskSpecs) {
+        Write-StorageHeartbeat -Checkpoint "Repairing $($spec.Name)" -StartedAt $startedAt
+        $mapping = @($existingMappings | Where-Object {
+            [System.IO.Path]::GetFileName("$($_.Path)") -ieq $spec.Name
+        } | Select-Object -First 1)
+
+        if ($mapping.Count -eq 1) {
+            $diskPath = "$($mapping[0].Path)"
         }
+        else {
+            $legacyPath = Join-Path $legacyRoot $spec.Name
+            if (Test-Path -LiteralPath $legacyPath -PathType Leaf) {
+                $diskPath = $legacyPath
+            }
+            else {
+                if (-not $dataRoot) { $dataRoot = Get-StorageDataRoot }
+                $diskPath = Join-Path $dataRoot $spec.Name
+            }
+        }
+
+        $virtualDisk = Get-IscsiVirtualDisk -Path $diskPath -ErrorAction SilentlyContinue
+        if ($null -eq $virtualDisk -and (Test-Path -LiteralPath $diskPath -PathType Leaf)) {
+            Import-IscsiVirtualDisk -Path $diskPath -ErrorAction Stop | Out-Null
+            $virtualDisk = Get-IscsiVirtualDisk -Path $diskPath -ErrorAction Stop
+        }
+        if ($null -eq $virtualDisk) {
+            New-IscsiVirtualDisk -Path $diskPath `
+                -SizeBytes $spec.SizeBytes -ErrorAction Stop | Out-Null
+            $virtualDisk = Get-IscsiVirtualDisk -Path $diskPath -ErrorAction Stop
+        }
+        if ([long]$virtualDisk.Size -ne [long]$spec.SizeBytes) {
+            throw "Existing virtual disk '$diskPath' has size $($virtualDisk.Size); expected $($spec.SizeBytes)."
+        }
+
+        $target = Get-IscsiServerTarget -TargetName $targetName -ErrorAction Stop
+        $mapped = @($target.LunMappings | Where-Object { "$($_.Path)" -ieq $diskPath })
+        if ($mapped.Count -eq 0) {
+            Add-IscsiVirtualDiskTargetMapping -TargetName $targetName `
+                -Path $diskPath -ErrorAction Stop | Out-Null
+        }
+        $existingMappings = @(
+            (Get-IscsiServerTarget -TargetName $targetName -ErrorAction Stop).LunMappings
+        )
     }
 
-    # Ensure WinTarget service auto-starts
-    $winTarget = Get-Service WinTarget -ErrorAction SilentlyContinue
-    if ($null -ne $winTarget -and $winTarget.StartType -ne 'Automatic') {
-        Set-Service WinTarget -StartupType Automatic
-        .\Write-Info.ps1 "[OK] WinTarget service set to Automatic" -ForegroundColor Green
+    Set-Service WinTarget -StartupType Automatic -ErrorAction Stop
+    $service = Get-Service WinTarget -ErrorAction Stop
+    if ($service.Status -ne 'Running') {
+        Start-Service WinTarget -ErrorAction Stop
+    }
+    Wait-DeploymentCondition -Condition {
+        $running = (Get-Service WinTarget -ErrorAction SilentlyContinue).Status -eq 'Running'
+        $listening = $null -ne (Get-NetTCPConnection -LocalPort 3260 `
+            -State Listen -ErrorAction SilentlyContinue)
+        return ($running -and $listening)
+    } -TimeoutSeconds 120 -PollIntervalSeconds 5 `
+        -Phase 'StorageConvergence' -Operation 'Wait for iSCSI target listener' `
+        -HeartbeatPath $HeartbeatPath -LastCheckpoint 'Target mappings repaired' | Out-Null
+
+    Write-StorageHeartbeat -Checkpoint 'Verifying complete Storage readiness' -StartedAt $startedAt
+    $readinessOutput = @(& (Join-Path $scriptsPath 'Test-StorageReadiness.ps1') `
+        -ConfigureFile $ConfigureFile -Detailed *>&1)
+    $readinessOutput | ForEach-Object { .\Write-Info.ps1 "$_" }
+    if ($readinessOutput.Count -eq 0 -or $readinessOutput[-1] -ne $true) {
+        throw 'Storage postconditions are incomplete after target repair.'
     }
 
-    # Start the service if not running
-    if ($null -ne $winTarget -and $winTarget.Status -ne 'Running') {
-        Start-Service WinTarget
-        .\Write-Info.ps1 "[OK] WinTarget service started" -ForegroundColor Green
-    }
-
-    .\Write-Info.ps1 "=== Storage imperative steps completed ===" -ForegroundColor Cyan
-    Stop-Transcript; Pop-Location; return $true
-  }
-  catch {
-    .\Write-Error.ps1 "Storage imperative step 1 failed: $($_.Exception.Message)"
-    Stop-Transcript; Pop-Location; throw
-  }
+    .\Write-Info.ps1 '[OK] Storage target and all four LUN mappings are ready.' `
+        -ForegroundColor Green
+    return $true
+}
+catch {
+    .\Write-Error.ps1 "Storage convergence failed: $($_.Exception.Message)"
+    throw
+}
+finally {
+    Stop-StorageTranscript
 }

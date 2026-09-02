@@ -12,8 +12,51 @@ param(
     [int]$TimeoutMinutes = 60,
 
     [Parameter(Mandatory=$false)]
-    [int]$PollIntervalSeconds = 30
+    [int]$PollIntervalSeconds = 30,
+
+    [Parameter(Mandatory=$false)]
+    [string]$SubscriptionId,
+
+    [Parameter(Mandatory=$false)]
+    [int]$ProbeTimeoutSeconds = 120,
+
+    [Parameter(Mandatory=$false)]
+    [datetime]$NotBeforeUtc,
+
+    [Parameter(Mandatory=$false)]
+    [switch]$WaitForTests,
+
+    [Parameter(Mandatory=$false)]
+    [switch]$DeferTestFailure,
+
+    [Parameter(Mandatory=$false)]
+    [string[]]$ExpectedRoles,
+
+    [Parameter(Mandatory=$false)]
+    [int]$TestTimeoutMinutes = 180,
+
+    [Parameter(Mandatory=$false)]
+    [string]$ResultsStorageAccountName
 )
+
+$sharedVerifier = Join-Path $PSScriptRoot '..\..\shared\scripts\Verify-Deployment.ps1'
+$verificationParams = @{
+    ResourceGroupName = $ResourceGroupName
+    Scenario = 'Cluster'
+    TimeoutMinutes = $TimeoutMinutes
+    PollIntervalSeconds = $PollIntervalSeconds
+    ProbeTimeoutSeconds = $ProbeTimeoutSeconds
+    TestTimeoutMinutes = $TestTimeoutMinutes
+}
+if ($SubscriptionId) { $verificationParams['SubscriptionId'] = $SubscriptionId }
+if ($PSBoundParameters.ContainsKey('NotBeforeUtc')) { $verificationParams['NotBeforeUtc'] = $NotBeforeUtc }
+if ($WaitForTests) { $verificationParams['WaitForTests'] = $true }
+if ($DeferTestFailure) { $verificationParams['DeferTestFailure'] = $true }
+if ($ExpectedRoles) { $verificationParams['ExpectedRoles'] = $ExpectedRoles }
+if ($ResultsStorageAccountName) { $verificationParams['ResultsStorageAccountName'] = $ResultsStorageAccountName }
+
+& $sharedVerifier @verificationParams
+return
 
 Write-Output "🔍 Verifying cluster deployment completion..."
 Write-Output "Resource Group: $ResourceGroupName"

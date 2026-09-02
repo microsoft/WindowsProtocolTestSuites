@@ -90,6 +90,75 @@ Describe 'Tool installation completion' {
         Test-Path $signalFile | Should Be $true
     }
 
+    It 'skips package application when configured installation evidence already exists' {
+        $existingPath = Join-Path $targetFolder 'existing.exe'
+        New-Item -ItemType Directory -Path $targetFolder -Force | Out-Null
+        'installed' | Set-Content -LiteralPath $existingPath
+        Write-TestConfiguration @{
+            name = 'ExistingTool'
+            ZipName = 'missing.zip'
+            targetFolder = $targetFolder
+            ExistingInstallPaths = @($existingPath)
+            ExistingServiceNames = @('EventLog')
+        }
+
+        $result = Invoke-TestInstaller
+
+        $result | Should Be $true
+        Test-Path $signalFile | Should Be $true
+        Test-Path (Join-Path $toolsPath 'missing.zip') | Should Be $false
+    }
+
+    It 'rejects a baked package whose SHA-256 does not match' {
+        New-TestZip | Out-Null
+        Write-TestConfiguration @{
+            name = 'HashMismatch'
+            ZipName = 'package.zip'
+            targetFolder = $targetFolder
+            SHA256 = ('0' * 64)
+        }
+
+        $result = Invoke-TestInstaller
+
+        $result | Should Be $false
+        Test-Path $signalFile | Should Be $false
+        Test-Path (Join-Path $toolsPath 'package.zip') | Should Be $false
+    }
+
+    It 'rejects a ZIP missing a configured expected entry' {
+        $packagePath = New-TestZip
+        $hash = (Get-FileHash -LiteralPath $packagePath -Algorithm SHA256).Hash.ToLowerInvariant()
+        Write-TestConfiguration @{
+            name = 'MissingEntry'
+            ZipName = 'package.zip'
+            targetFolder = $targetFolder
+            SHA256 = $hash
+            ExpectedEntries = @('required-file.txt')
+        }
+
+        $result = Invoke-TestInstaller
+
+        $result | Should Be $false
+        Test-Path $signalFile | Should Be $false
+        Test-Path $packagePath | Should Be $false
+    }
+
+    It 'rejects an invalid baked package during preparation' {
+        New-TestZip | Out-Null
+        Write-TestConfiguration @{
+            name = 'PrepareHashMismatch'
+            ZipName = 'package.zip'
+            targetFolder = $targetFolder
+            SHA256 = ('f' * 64)
+        }
+
+        $result = Invoke-TestInstaller -Operation Prepare
+
+        $result | Should Be $false
+        Test-Path $preparedSignalFile | Should Be $false
+        Test-Path (Join-Path $toolsPath 'package.zip') | Should Be $false
+    }
+
     It 'fails when a required package is unavailable offline and removes a stale signal' {
         'stale' | Set-Content -Path $signalFile
         Write-TestConfiguration @{

@@ -225,6 +225,7 @@ Azure Pipelines definitions are in `pipelines/`:
 | `DotNetCore-PullRequestValidation.yml` | PR validation — builds and runs quick validation |
 | `DotNetCore-PTMCli-Build.yml` | Builds PtmCli |
 | `DotNetCore-MSBuild-Build.yml` | MSBuild-based build (legacy) |
+| `1es/FileServer-OneClick-Release.yml` | ESRP-signs and packages Workgroup, Domain, and Cluster OneClick release assets |
 
 All pipelines run on `windows-2022` pool and reference a template repo at `AzurePipelines-main` branch for the actual build steps.
 

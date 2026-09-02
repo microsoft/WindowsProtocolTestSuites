@@ -15,6 +15,9 @@ param adminPassword string
 ])
 param driverOsType string = 'Windows'
 
+@description('Run FileServer tests automatically after configuration')
+param enableTestAutoRun bool = true
+
 @description('URL to Domain-Package.zip file in Azure Storage')
 param domainPackageZipUrl string
 
@@ -26,6 +29,7 @@ module memberConfiguration 'modules/domain-computer-extensions.bicep' = {
     sutVmName: '${environmentPrefix}-node01'
     adminPassword: adminPassword
     driverOsType: driverOsType
+    enableTestAutoRun: enableTestAutoRun
     domainPackageZipUrl: domainPackageZipUrl
   }
 }

@@ -464,9 +464,11 @@ try {
                             $success = $false
 
                             if ($sutReachable) {
-                                $netArgs = @('use', "\\$sutComputerName\IPC`$", "/user:$netUsePrefix\$adminUser", $adminPass)
-                                $netProc = Start-Process -FilePath 'net.exe' -ArgumentList $netArgs -Wait -NoNewWindow -PassThru -ErrorAction SilentlyContinue
-                                .\Write-Info.ps1 "  net use exit code: $($netProc.ExitCode)" -ForegroundColor DarkGray
+                                $connectionResult = & "$scriptsPath\Connect-WindowsSmbShare.ps1" `
+                                    -RemotePath "\\$sutComputerName\IPC`$" `
+                                    -CredentialUser "$netUsePrefix\$adminUser" `
+                                    -CredentialPassword $adminPass
+                                .\Write-Info.ps1 "  SMB connection result: $connectionResult" -ForegroundColor DarkGray
 
                                 $maxRetries = 3
                                 for ($i = 0; $i -lt $maxRetries; $i++) {
@@ -522,8 +524,8 @@ if (-not (Test-Connection -ComputerName `$SutName -Count 1 -Quiet -ErrorAction S
 }
 `$isWg = [string]::IsNullOrWhiteSpace(`$cfg.Core.DomainName) -or `$cfg.Core.DomainName -eq 'Workgroup'
 `$NetUsePrefix = if (`$isWg) { `$SutName } else { (`$cfg.Core.DomainName -split '\.')[0] }
-`$netArgs = @('use', "\\`$SutName\IPC`$", "/user:`$NetUsePrefix\`$AdminUser", `$AdminPass)
-Start-Process -FilePath 'net.exe' -ArgumentList `$netArgs -Wait -NoNewWindow -ErrorAction SilentlyContinue
+& '$scriptsPath\Connect-WindowsSmbShare.ps1' -RemotePath "\\`$SutName\IPC`$" ``
+    -CredentialUser "`$NetUsePrefix\`$AdminUser" -CredentialPassword `$AdminPass | Out-Null
 & `$ShareUtil `$SutName ShareForceLevel2 SHI1005_FLAGS_FORCE_LEVELII_OPLOCK true 2>&1 | Out-Null
 if (`$LASTEXITCODE -eq 0) {
     Add-Content -Path `$logPath -Value "[`$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] ForceLevel2 configured successfully. Finalizing Driver deployment."
@@ -595,3 +597,4 @@ if ($Step -eq 2 -and -not $toolsOk) {
 
 Stop-LocalTranscript
 Pop-Location
+return $true

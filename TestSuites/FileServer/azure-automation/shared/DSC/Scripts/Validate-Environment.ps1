@@ -445,6 +445,9 @@ Function ValidateGeneralFS {
     if ($excludeClusterTestCases)
     {
         Write-Info.ps1 "Failed when check existence of the General FS path. Will exclude GeneralFS related cases."
+        if ($VMConfig.Core.Scenario -eq 'Cluster') {
+            throw 'GeneralFS live validation failed in a deterministic Cluster deployment.'
+        }
         #Modify ptfconfig to exclude the persistent handle, Replay durable handle, and some Appinstance ID cases which access the GeneralFS.
         Modify-ConfigFileNode.ps1 $CommonTestSuitePtfConfig "CAShareServerName" ""
         Modify-ConfigFileNode.ps1 $CommonTestSuitePtfConfig "CAShareName" ""
@@ -483,6 +486,9 @@ Function ValidateScaleoutFS {
 
     if ($excludeClusterTestCases) {
         Write-Info.ps1 "Failed when check existence of the Scale out FS path. Will exclude Scale-out related cases."  -ForegroundColor yellow
+        if ($VMConfig.Core.Scenario -eq 'Cluster') {
+            throw 'ScaleoutFS live validation failed in a deterministic Cluster deployment.'
+        }
         Modify-ConfigFileNode.ps1 $serverFailoverPtfConfig "ClusteredScaleOutFileServerName" ""
         Modify-ConfigFileNode.ps1 $serverFailoverPtfConfig "OptimumNodeOfAsymmetricShare" ""
         Modify-ConfigFileNode.ps1 $serverFailoverPtfConfig "NonOptimumNodeOfAsymmetricShare" ""

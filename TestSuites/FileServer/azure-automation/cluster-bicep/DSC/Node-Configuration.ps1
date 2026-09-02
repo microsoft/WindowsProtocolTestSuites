@@ -3,9 +3,7 @@
 
 <#
 .SYNOPSIS
-    DSC Configuration for Cluster Nodes (Node01 and Node02).
-    Handles Windows features, SMB shares, firewall, registry, hosts file,
-    and directories declaratively.
+    Non-disruptive convergence DSC for Cluster Nodes (Node01 and Node02).
 
 .DESCRIPTION
     Shared DSC configuration used by both Node01 (primary) and Node02 (secondary).
@@ -13,8 +11,9 @@
       - Node01: Full set of shares (FileShare, SMBBasic, SMBEncrypted, DFS roots, Az*, etc.)
       - Node02: Minimal set (FileShare, SMBBasic only)
 
-    Both nodes get the same Windows features (Failover-Clustering, File-Services, etc.)
-    and common settings (firewall, routing, signing, asymmetry, password).
+    Disruptive Windows features are installed by Node-FeatureConfiguration.ps1.
+    Both nodes receive common convergence state (firewall, routing, signing,
+    asymmetry, remoting, directories, and shares).
 
     Imperative steps (Invoke-Node01ImperativeSteps.ps1 / Invoke-Node02ImperativeSteps.ps1):
       - Domain join + reboot
@@ -26,7 +25,7 @@
 .EXAMPLE
     . .\Node-Configuration.ps1
     NodeConfiguration -ConfigFilePath .\..\Config.json -NodeRole 'Node01' -OutputPath .\MOF
-    Start-DscConfiguration -Path .\MOF -Wait -Verbose -Force
+    Invoke-VerifiedDscConfiguration -Path .\MOF
 #>
 
 Configuration NodeConfiguration {
@@ -125,77 +124,6 @@ Configuration NodeConfiguration {
                 $block += "$marker END`r`n"
                 Set-Content -Path $hostsPath -Value ($content + $block) -Force -Encoding ASCII
             }
-        }
-        #endregion
-
-        #region -- Windows Features (batched) ---------------------------------
-        WindowsFeatureSet ClusterNodeFeatures {
-            Name   = @(
-                'Failover-Clustering',
-                'RSAT-Clustering',
-                'RSAT-Clustering-Mgmt',
-                'RSAT-Clustering-PowerShell',
-                'RSAT-Clustering-CmdInterface',
-                'File-Services',
-                'FS-BranchCache',
-                'FS-VSS-Agent',
-                'BranchCache',
-                'FS-DFS-Namespace',
-                'RSAT-File-Services',
-                'RSAT-DFS-Mgmt-Con',
-                'FS-Resource-Manager',
-                'RSAT-AD-PowerShell'
-            )
-            Ensure = 'Present'
-        }
-
-        # FS-SMB1: conditionally install on OS builds < 26100
-        Script FSSMB1Feature {
-            DependsOn  = '[WindowsFeatureSet]ClusterNodeFeatures'
-            GetScript  = {
-                $f = Get-WindowsFeature FS-SMB1 -ErrorAction SilentlyContinue
-                @{ Result = if ($f) { $f.InstallState } else { 'NotAvailable' } }
-            }
-            TestScript = {
-                $osBuild = [System.Environment]::OSVersion.Version.Build
-                if ($osBuild -ge 26100) { return $true }
-                $f = Get-WindowsFeature FS-SMB1 -ErrorAction SilentlyContinue
-                if ($null -eq $f) { return $true }
-                return ($f.InstallState -eq 'Installed')
-            }
-            SetScript  = {
-                $result = Add-WindowsFeature FS-SMB1 -IncludeAllSubFeature -IncludeManagementTools -ErrorAction SilentlyContinue
-                if ($null -eq $result -or -not $result.Success) {
-                    Write-Warning 'FS-SMB1 installation failed (source files may not be available on this image).'
-                }
-            }
-        }
-
-        # Hyper-V via Enable-WindowsOptionalFeature
-        Script HyperV {
-            DependsOn  = '[WindowsFeatureSet]ClusterNodeFeatures'
-            GetScript  = {
-                $hv = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -ErrorAction SilentlyContinue
-                @{ Result = if ($hv) { $hv.State } else { 'NotAvailable' } }
-            }
-            TestScript = {
-                $hv = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -ErrorAction SilentlyContinue
-                return ($null -ne $hv -and $hv.State -eq 'Enabled')
-            }
-            SetScript  = {
-                try {
-                    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All -NoRestart -ErrorAction Stop
-                } catch {
-                    Write-Warning "Hyper-V install failed (nested virt may not be supported): $($_.Exception.Message)"
-                }
-            }
-        }
-
-        WindowsFeature RSATHyperV {
-            DependsOn            = '[Script]HyperV'
-            Name                 = 'RSAT-Hyper-V-Tools'
-            Ensure               = 'Present'
-            IncludeAllSubFeature = $true
         }
         #endregion
 
@@ -452,7 +380,6 @@ Configuration NodeConfiguration {
         #region -- FSRM Classification (Node01 only) -----------------------
         if ($NodeRole -eq 'Node01') {
             Script FSRMClassification {
-                DependsOn  = '[WindowsFeatureSet]ClusterNodeFeatures'
                 GetScript  = {
                     $marker = Get-ItemProperty -Path 'HKLM:\SOFTWARE\ProtocolTestSuites' -Name 'FSRMClassificationUpdated' -ErrorAction SilentlyContinue
                     @{ Result = if ($marker) { 'Updated' } else { 'NotUpdated' } }
@@ -540,7 +467,6 @@ Configuration NodeConfiguration {
             $shareCache    = $share.Cache
 
             Script "Share_$shareName" {
-                DependsOn  = '[WindowsFeatureSet]ClusterNodeFeatures'
                 GetScript  = {
                     $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='$($using:shareName)'" -ErrorAction SilentlyContinue
                     @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -560,7 +486,12 @@ Configuration NodeConfiguration {
                         -EncryptData $using:shareEncrypt
 
                     if ($using:shareCompress) {
-                        Set-SmbShare -Name $using:shareName -CompressData $true -Force
+                        $setShare = Get-Command Set-SmbShare -ErrorAction SilentlyContinue
+                        if ([System.Environment]::OSVersion.Version.Build -ge 20348 -and
+                            $null -ne $setShare -and
+                            $setShare.Parameters.ContainsKey('CompressData')) {
+                            Set-SmbShare -Name $using:shareName -CompressData $true -Force
+                        }
                     }
                 }
             }
@@ -577,7 +508,6 @@ Configuration NodeConfiguration {
                 $sharePath = $share.Path
 
                 Script "Share_$shareName" {
-                    DependsOn  = '[WindowsFeatureSet]ClusterNodeFeatures'
                     GetScript  = {
                         $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='$($using:shareName)'" -ErrorAction SilentlyContinue
                         @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -609,7 +539,6 @@ Configuration NodeConfiguration {
             }
 
             Script Share_AzCBAC {
-                DependsOn  = '[WindowsFeatureSet]ClusterNodeFeatures'
                 GetScript  = {
                     $s = Get-CimInstance -ClassName Win32_Share -Filter "Name='AzCBAC'" -ErrorAction SilentlyContinue
                     @{ Result = if ($s) { $s.Path } else { 'NotFound' } }
@@ -633,7 +562,6 @@ Configuration NodeConfiguration {
 # ===========================================================================
 function Invoke-NodeDsc {
     param(
-        [switch]$Apply,
         [string]$OutputPath = "$PSScriptRoot\MOF",
         [string]$ConfigFilePath = "$PSScriptRoot\..\Config.json",
         [ValidateSet('Node01', 'Node02')]
@@ -642,14 +570,5 @@ function Invoke-NodeDsc {
 
     Write-Host "Compiling $NodeRole DSC configuration..." -ForegroundColor Cyan
     NodeConfiguration -ConfigFilePath $ConfigFilePath -NodeRole $NodeRole -OutputPath $OutputPath
-
-    if ($Apply) {
-        Write-Host "Applying $NodeRole DSC configuration..." -ForegroundColor Yellow
-        Start-DscConfiguration -Path $OutputPath -Wait -Verbose -Force
-        Write-Host "$NodeRole DSC configuration applied." -ForegroundColor Green
-    }
-    else {
-        Write-Host "MOF compiled to $OutputPath. Run:" -ForegroundColor Green
-        Write-Host "  Start-DscConfiguration -Path '$OutputPath' -Wait -Verbose -Force"
-    }
+    Write-Host "$NodeRole convergence MOF compiled to '$OutputPath'." -ForegroundColor Green
 }

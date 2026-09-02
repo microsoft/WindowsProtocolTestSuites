@@ -220,7 +220,7 @@ Test scenarios are categorized as below table and will be described in following
 
 | Category                 | Test Cases | Comments                                                                                                          |
 |--------------------------|------------|-------------------------------------------------------------------------------------------------------------------|
-| SMB2 BVT                 | 101         | SMB2 common scenarios.                                                                                            |
+| SMB2 BVT                 | 114         | SMB2 common scenarios.                                                                                            |
 | SMB2 Feature Test        | 2664       | This test is divided by features. It contains both Model-Based test cases and traditional cases. The traditional cases are used to cover the statements which are not suitable to cover by Model-Based test cases.  About Model-Based Testing, please see [Spec Explorer](http://msdn.microsoft.com/en-us/library/ee620411.aspx)       |
 | SMB2 Feature Combination | 12         | Extended test with more complex message sequence for new features in SMB 3.0 dialect and later.                   |
 | FSRVP Test               | 14         | Test for MS-FSRVP                                                                                                 |
@@ -1615,7 +1615,7 @@ This is used to test SMB2 common user scenarios.
 
 |||
 |---|---|
-|**Description**|This scenario is to test whether server can handle lease correctly.|
+|**Description**|This scenario is to test whether server can handle lease correctly and lease state changes correctly.|
 |**Message Sequence**|**Based on NIC1, create Client1:**|
 ||NEGOTIATE|
 ||SESSION_SETUP|
@@ -1830,6 +1830,165 @@ This is used to test SMB2 common user scenarios.
 ||Server sends TREE_DISCONNECT response|
 ||Client sends LOGOFF request|
 ||Server sends LOGOFF response|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_WriteCache_BreakOnIncompatibleShareMode|
+|**Description**|This test case verifies that WRITE caching lease is broken when a second client with a different ClientLeaseId opens a file with GENERIC_WRITE access, as described in MS-SMB2 section 3.3.1.4 and MS-FSA section 2.1.4.12.|
+|**Prerequisites**||
+|**Test Execution Steps**| Client1 opens a file with Read+Write lease state and FILE_SHARE_READ \| FILE_SHARE_WRITE share access.|
+||Client1 verifies that the server grants the Read+Write lease.|
+||Client2 opens the same file with GENERIC_WRITE access from a different ClientLeaseId.|
+||Client1 receives a LEASE_BREAK_NOTIFICATION and verifies that the lease state changes from Read+Write to Read.|
+||Client1 acknowledges the lease break.|
+||Close the files, disconnect the trees, and log off both clients.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_WriteCache_NoBreakOnReadControl|
+|**Description**|This test case verifies that WRITE caching lease is NOT broken when a second client opens a file with READ_CONTROL access, which is compatible with existing opens per MS-FSA section 2.1.4.12.|
+|**Prerequisites**||
+|**Test Execution Steps**| Client1 opens a file with Read+Write lease state and FILE_SHARE_READ \| FILE_SHARE_WRITE share access.|
+||Client2 opens the same file with READ_CONTROL access.|
+||Client1 verifies that the WRITE caching lease is not broken and the lease state remains Read+Write.|
+|**Cleanup**|The test helper performs cleanup after the lease verification.|
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_WriteCache_NoBreakOnReadControlV2|
+|**Description**|This test case verifies that WRITE caching lease is not broken when a second client opens a file with READ_CONTROL access, which is compatible with existing opens per MS-FSA section 2.1.4.12.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write LeaseV2 state.|
+||Client2 opens the same file with READ_CONTROL access.|
+||Client1 verifies that the WRITE caching lease is not broken and the lease state remains Read+Write.|
+|**Cleanup**|The test helper performs cleanup after the lease verification.|
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_WriteCache_BreakOnReadDataAccess|
+|**Description**|This test case verifies that WRITE caching lease is broken when a second client opens a file with FILE_READ_DATA access from a different ClientLeaseId, per MS-FSA section 2.1.4.12.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write lease state.|
+||Client2 opens the same file with FILE_READ_DATA access from a different ClientLeaseId.|
+||Client1 receives a LEASE_BREAK_NOTIFICATION and verifies that the WRITE caching lease is broken and the lease state changes to Read.|
+|**Cleanup**|The test helper performs cleanup after the lease verification.|
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_WriteCache_BreakOnWriteDataAccess|
+|**Description**|This test case verifies that WRITE caching lease is broken when a second client opens a file with FILE_WRITE_DATA access from a different ClientLeaseId, per MS-FSA section 2.1.4.12.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write lease state.|
+||Client2 opens the same file with FILE_WRITE_DATA access from a different ClientLeaseId.|
+||Client1 receives a LEASE_BREAK_NOTIFICATION and verifies that the WRITE caching lease is broken and the lease state changes to Read.|
+|**Cleanup**|The test helper performs cleanup after the lease verification.|
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_LeaseState_PartialOverlapRequest_NotDowngrade|
+|**Description**|Verify that a partial-overlap lease request from the same client does not downgrade the existing lease state.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write lease state.|
+||Client1 opens the same file again with the same LeaseKey, requesting Read+Handle lease state.|
+||Client1 verifies that the existing Read+Write lease state is not downgraded.|
+||Close the files, disconnect the trees, and log off client1.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_LeaseState_DowngradeNotAllowed|
+|**Description**|Verify that a strict-subset lease request from the same client does not downgrade the existing lease state.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write+Handle lease state.|
+||Client1 opens the same file again with the same LeaseKey, requesting only Read caching.|
+||Client1 verifies that the existing Read+Write+Handle lease state is not downgraded.|
+||Close the files, disconnect the trees, and log off client1.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_LeaseState_UpgradeOnSupersetRequest|
+|**Description**|Verify that a superset lease request from the same client upgrades the existing lease state.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write lease state.|
+||Client1 opens the same file again with the same LeaseKey, requesting Read+Write+Handle lease state.|
+||Client1 verifies that the existing lease state is upgraded from Read+Write to Read+Write+Handle.|
+||Close the files, disconnect the trees, and log off client1.|
+|**Cleanup**||
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_LeaseState_PartialOverlapRequest_NotDowngradeV2|
+|**Description**|Verify that a partial-overlap lease request from the same client does not downgrade the existing lease state. (LeaseV2)|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write LeaseV2 state.|
+||Client1 opens the same file again with the same LeaseKey, requesting Read+Handle lease state.|
+||Client1 verifies that the existing Read+Write LeaseV2 state is not downgraded.|
+||Close the files, disconnect the trees, and log off client1.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_LeaseState_DowngradeNotAllowedV2|
+|**Description**|Verify that a strict-subset lease request from the same client does not downgrade the existing lease state. (LeaseV2)|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write+Handle LeaseV2 state|
+||Client1 opens the same file again with the same LeaseKey, requesting only Read caching.|
+||Client1 verifies that the existing Read+Write+Handle LeaseV2 state is not downgraded.|
+||Close the files, disconnect the trees, and log off client1.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_LeaseState_UpgradeOnSupersetRequestV2|
+|**Description**|Verify that a superset lease request from the same client upgrades the existing lease state. (LeaseV2)|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write LeaseV2 state.|
+||Client1 opens the same file again with the same LeaseKey, requesting Read+Write+Handle lease state.|
+||Client1 verifies that the existing lease state is upgraded from Read+Write to Read+Write+Handle.|
+||Close the files, disconnect the trees, and log off client1.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_CreateDuringLeaseBreak_SameLeaseKey_NotBlocked|
+|**Description**|Verify that a CREATE with the same LeaseKey while a lease break is pending does not block until the lease break is acknowledged.|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write+Handle lease state.|
+||Client2 opens the same file from a different ClientLeaseId to trigger a lease break. |
+||Client2 close the file, disconnect the tree, and log off.|
+||While the lease break is pending, Client1 sends another CREATE with the same LeaseKey.|
+||Client1 verifies that the CREATE succeeds without waiting for the lease break acknowledgment.|
+||Client1 acknowledges the lease break.|
+||Close the files, disconnect the trees, and log off client1.|
+|**Cleanup**||
+
+
+|||
+|---|---|
+|**Test ID**|BVT_Leasing_CreateDuringLeaseBreak_SameLeaseKey_NotBlockedV2|
+|**Description**|Verify that a CREATE with the same LeaseKey while a lease break is pending does not block until the lease break is acknowledged. (LeaseV2)|
+|**Prerequisites**||
+|**Test Execution Steps**|Client1 opens a file with Read+Write+Handle LeaseV2 state.|
+||Client2 opens the same file from a different ClientLeaseId to trigger a lease break.|
+||Client2 close the file, disconnect the tree, and log off.|
+||While the lease break is pending, Client1 sends another CREATE with the same LeaseKey.|
+||Client1 verifies that the CREATE succeeds without waiting for the lease break acknowledgment.|
+||Client1 acknowledges the lease break.|
+||Close the files, disconnect the trees, and log off Client1.|
 |**Cleanup**||
 
 #### <a name="3.1.18">Replay
