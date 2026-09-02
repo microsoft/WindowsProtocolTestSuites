@@ -24,7 +24,7 @@
       "type": "securestring"
     },
     "clusterPackageZipUrl": {
-      "type": "securestring",
+      "type": "string",
       "defaultValue": "https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.9.0/Cluster-Package.zip",
       "minLength": 1,
       "metadata": {

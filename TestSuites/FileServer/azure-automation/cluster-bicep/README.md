@@ -6,6 +6,8 @@ This folder contains Bicep templates and deployment scripts for creating a compl
 
 ## One-Click Deploy ("Deploy to Azure" button)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoft%2FWindowsProtocolTestSuites%2F4.26.9.0%2FTestSuites%2FFileServer%2Fazure-automation%2Fcluster-bicep%2Fazuredeploy.json)
+
 [`main.bicep`](main.bicep), compiled to [`azuredeploy.json`](azuredeploy.json),
 provides the single-template Portal deployment. Enter an admin password and the
 template deploys both infrastructure phases, configures all five VMs, forms the

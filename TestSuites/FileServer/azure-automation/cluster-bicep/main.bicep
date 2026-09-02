@@ -10,7 +10,6 @@ param adminPassword string
 
 @description('Published, manifest-validated Cluster-Package.zip URL')
 @minLength(1)
-@secure()
 param clusterPackageZipUrl string = 'https://github.com/microsoft/WindowsProtocolTestSuites/releases/download/4.26.9.0/Cluster-Package.zip'
 
 param domainName string = 'contoso.com'
