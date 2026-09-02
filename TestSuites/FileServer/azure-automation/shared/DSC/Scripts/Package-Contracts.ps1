@@ -185,14 +185,14 @@ function New-DscPackageManifest {
     $manifestPath = Join-Path $resolvedRoot 'PackageManifest.json'
     Remove-Item -LiteralPath $manifestPath -Force -ErrorAction SilentlyContinue
 
-    $files = foreach ($file in (Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File |
-        Sort-Object FullName)) {
-        $relativePath = $file.FullName.Substring($resolvedRoot.Length).TrimStart('\', '/') `
-            -replace '\\', '/'
+    $files = foreach ($relativePath in (Get-ChildItem -LiteralPath $resolvedRoot `
+        -Recurse -File -Name | Sort-Object)) {
+        $fullPath = Join-Path $resolvedRoot $relativePath
+        $file = Get-Item -LiteralPath $fullPath
         [ordered]@{
-            Path = $relativePath
+            Path = $relativePath -replace '\\', '/'
             Length = [long]$file.Length
-            SHA256 = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            SHA256 = (Get-FileHash -LiteralPath $fullPath -Algorithm SHA256).Hash.ToLowerInvariant()
         }
     }
 
@@ -289,11 +289,9 @@ function Test-DscPackageManifest {
         }
 
         if ($resolvedRoot) {
-            $actualPaths = @(Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File |
-                Where-Object { $_.Name -ne 'PackageManifest.json' } |
-                ForEach-Object {
-                    $_.FullName.Substring($resolvedRoot.Length).TrimStart('\', '/') -replace '\\', '/'
-                })
+            $actualPaths = @(Get-ChildItem -LiteralPath $resolvedRoot -Recurse -File -Name |
+                Where-Object { (Split-Path $_ -Leaf) -ne 'PackageManifest.json' } |
+                ForEach-Object { $_ -replace '\\', '/' })
             foreach ($actualPath in $actualPaths) {
                 if (-not $manifestPaths.Contains($actualPath)) {
                     $failures.Add("Package contains unmanifested file '$actualPath'.")

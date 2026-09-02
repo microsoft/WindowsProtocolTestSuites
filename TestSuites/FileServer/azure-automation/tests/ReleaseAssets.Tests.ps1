@@ -66,19 +66,41 @@ Describe 'OneClick release asset pinning' {
         }
     }
 
-    It 'builds Workgroup, Domain, and Cluster public packages' {
-        $pipeline = Get-Content -LiteralPath (
-            Join-Path $root '..\..\..\pipelines\1es\FileServer-OneClick-Release.yml'
-        ) -Raw
-        $clusterPublisher = Join-Path $root 'cluster-bicep\Publish-DscPackage.ps1'
-
-        foreach ($scenario in @('Workgroup', 'Domain', 'Cluster')) {
-            $pipeline.Contains("Scenario = '$scenario'") | Should Be $true
+    It 'contains correctly configured public package publishers for every scenario' {
+        $publishers = @{
+            Workgroup = @{
+                Directory = 'workgroup-bicep'
+                UrlParameter = 'dscPackageZipUrl'
+            }
+            Domain = @{
+                Directory = 'domain-bicep'
+                UrlParameter = 'domainPackageZipUrl'
+            }
+            Cluster = @{
+                Directory = 'cluster-bicep'
+                UrlParameter = 'clusterPackageZipUrl'
+            }
         }
-        (Test-Path -LiteralPath $clusterPublisher -PathType Leaf) | Should Be $true
 
-        $publisher = Get-Content -LiteralPath $clusterPublisher -Raw
-        $publisher.Contains("-Scenario 'Cluster'") | Should Be $true
-        $publisher.Contains("-PackageUrlParamName 'clusterPackageZipUrl'") | Should Be $true
+        foreach ($scenario in $publishers.Keys) {
+            $configuration = $publishers[$scenario]
+            $publisherPath = Join-Path $root (
+                "$($configuration.Directory)\Publish-DscPackage.ps1"
+            )
+
+            if (-not (Test-Path -LiteralPath $publisherPath -PathType Leaf)) {
+                throw "$scenario publisher was not found: $publisherPath"
+            }
+
+            $publisher = Get-Content -LiteralPath $publisherPath -Raw
+            if (-not $publisher.Contains("-Scenario '$scenario'")) {
+                throw "$scenario publisher does not pass the expected scenario name."
+            }
+            if (-not $publisher.Contains(
+                "-PackageUrlParamName '$($configuration.UrlParameter)'"
+            )) {
+                throw "$scenario publisher does not pass the expected package URL parameter."
+            }
+        }
     }
 }
