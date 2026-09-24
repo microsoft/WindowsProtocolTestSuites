@@ -30,6 +30,7 @@
         * [FileInfo_Set_FileBasicInformation_Timestamp_MinusOne](#FileInfo_Set_FileBasicInformation_Timestamp_MinusOne)
         * [FileInfo_Set_FileBasicInformation_Timestamp_MinusTwo](#FileInfo_Set_FileBasicInformaiton_Timestamp_MinusTwo)
     * [Scenarios for FileSystemInformation](#Scenarios-for-FileSystemInformation)
+        * [FsInfo_FileFsVolumeInformation](#FsInfo_FileFsVolumeInformation)
         * [FsInfo_FileFsAttributeInformation](#FsInfo_FileFsAttributeInformation)
         * [FsInfo_IsObjectIdSupported](#FsInfo_IsObjectIdSupported)
         * [FsInfo_FileFsSizeInformation_ClusterSize](#FsInfo_FileFsSizeInformation_ClusterSize)
@@ -200,6 +201,13 @@
             * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_File_CreationTime)
             * [FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_CreationTime](#FileInfo_Set_FileBasicInformation_Timestamp_Negative_Dir_CreationTime)
     * [Test cases for FileSystemInformation](#Test-cases-for-FileSystemInformation)
+        * [FileFsVolumeInformation](#FileFsVolumeInformation)
+            * [FsInfo_Query_FileFsVolumeInformation_File_OutputBufferSizeLessThanMinimum](#FsInfo_Query_FileFsVolumeInformation_File_OutputBufferSizeLessThanMinimum)
+            * [FsInfo_Query_FileFsVolumeInformation_Dir_OutputBufferSizeLessThanMinimum](#FsInfo_Query_FileFsVolumeInformation_Dir_OutputBufferSizeLessThanMinimum)
+            * [FsInfo_Query_FileFsVolumeInformation_File_OutputBufferOverflow](#FsInfo_Query_FileFsVolumeInformation_File_OutputBufferOverflow)
+            * [FsInfo_Query_FileFsVolumeInformation_Dir_OutputBufferOverflow](#FsInfo_Query_FileFsVolumeInformation_Dir_OutputBufferOverflow)
+            * [FsInfo_Query_FileFsVolumeInformation_File_OutputValues (BVT)](#FsInfo_Query_FileFsVolumeInformation_File_OutputValues-BVT)
+            * [FsInfo_Query_FileFsVolumeInformation_Dir_OutputValues](#FsInfo_Query_FileFsVolumeInformation_Dir_OutputValues)
         * [IsObjectIdSupported](#IsObjectIdSupported)
             * [FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported (BVT)](#FsInfo_Query_FileFsObjectIdInformation_File_IsObjectIdSupported-BVT)
             * [FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported](#FsInfo_Query_FileFsObjectIdInformation_Dir_IsObjectIdSupported)
@@ -516,12 +524,12 @@ The following diagram shows the basic test environment for MS-FSA. The **DC01** 
 ### <a name="Traditional-Test-cases"/>Traditional Test cases
 
 Traditional Test cases are designed specific to new algorithms in Win8, ReFS file system and Alternate Data Stream.
-There are 228 test cases in total:
+There are 234 test cases in total:
 
 |  **Category** |  **Scenarios** | **Test cases (BVT)** |
 | ------------- | -------------- | -------------------- |
 | Scenarios for FileInformation | 11 | 84 (49) |
-| Scenarios for FileSystemInformation | 4 | 24 (7) |
+| Scenarios for FileSystemInformation | 5 | 30 (8) |
 | Scenarios for FsControlRequest | 13 | 101 (32) |
 | Scenarios for Alternate Data Stream | 9 | 41 (12) |
 | Scenarios for QuotaInformation | 1 | 2 (0) |
@@ -804,6 +812,22 @@ There are 343 test cases in total:
 | | Modify file|
 | | Verify timestamp attribute is set to current time|
 ### <a name="Scenarios-for-FileSystemInformation"/>Scenarios for FileSystemInformation
+
+#### <a name="FsInfo_FileFsVolumeInformation"/>FsInfo_FileFsVolumeInformation
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To query FileFsVolumeInformation and validate the MS-FSA processing rules for fixed fields, the variable-length volume label, ByteCount, and status.|
+| | Test environment: FAT32, NTFS, ReFS|
+| | Test object: DataFile, DirectoryFile|
+| | Test coverage:|
+| | FsInfoClass: FileFsVolumeInformation|
+| | If OutputBufferSize is smaller than BlockAlign(FieldOffset(FILE_FS_VOLUME_INFORMATION.VolumeLabel), 8), the operation returns **STATUS_INFO_LENGTH_MISMATCH**.|
+| | If the buffer contains the fixed fields but cannot contain all VolumeLabel bytes, the response contains the available prefix, ByteCount equals FieldOffset(VolumeLabel) plus BytesToCopy, and the operation returns **STATUS_BUFFER_OVERFLOW**.|
+| | If the buffer can contain the complete label, the response contains VolumeCreationTime, VolumeSerialNumber, VolumeLabelLength, SupportsObjects set to TRUE, Reserved set to zero, and the complete VolumeLabel; ByteCount is exact and the operation returns **STATUS_SUCCESS**.|
+| Message Sequence| CreateFile.|
+| | QueryInfo with FsInfoClass.FileFsVolumeInformation and boundary-sized output buffers.|
+| | Verify the returned status, ByteCount, fixed fields, and VolumeLabel bytes.|
 
 #### <a name="FsInfo_FileFsAttributeInformation"/>FsInfo_FileFsAttributeInformation
 
@@ -2975,6 +2999,78 @@ There are 343 test cases in total:
 | | Verify STATUS_INVALID_PARAMETER is returned |
 
 ### <a name="Test-cases-for-FileSystemInformation">Test cases for FileSystemInformation
+
+#### <a name="FileFsVolumeInformation"/>FileFsVolumeInformation
+
+##### <a name="FsInfo_Query_FileFsVolumeInformation_File_OutputBufferSizeLessThanMinimum"/>FsInfo_Query_FileFsVolumeInformation_File_OutputBufferSizeLessThanMinimum
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To verify the minimum aligned output-buffer requirement for FileFsVolumeInformation queried from a data file.|
+| | Category: FSA, QueryFileSystemInformation, NonSmb, Positive|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile).|
+| | QueryInfo with FsInfoClass.FileFsVolumeInformation and OutputBufferSize equal to BlockAlign(FieldOffset(VolumeLabel), 8) - 1.|
+| Pass Criteria| The operation returns **STATUS_INFO_LENGTH_MISMATCH**.|
+
+##### <a name="FsInfo_Query_FileFsVolumeInformation_Dir_OutputBufferSizeLessThanMinimum"/>FsInfo_Query_FileFsVolumeInformation_Dir_OutputBufferSizeLessThanMinimum
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To verify the minimum aligned output-buffer requirement for FileFsVolumeInformation queried from a directory.|
+| | Category: FSA, QueryFileSystemInformation, NonSmb, Positive|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | QueryInfo with FsInfoClass.FileFsVolumeInformation and OutputBufferSize equal to BlockAlign(FieldOffset(VolumeLabel), 8) - 1.|
+| Pass Criteria| The operation returns **STATUS_INFO_LENGTH_MISMATCH**.|
+
+##### <a name="FsInfo_Query_FileFsVolumeInformation_File_OutputBufferOverflow"/>FsInfo_Query_FileFsVolumeInformation_File_OutputBufferOverflow
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To verify the partial-volume-label response for FileFsVolumeInformation queried from a data file.|
+| | Category: FSA, QueryFileSystemInformation, NonSmb, Positive|
+| | Test environment: FAT32, NTFS, ReFS; requires a volume label long enough to exceed the minimum aligned response buffer.|
+| Message Sequence| CreateFile (DataFile).|
+| | Query the complete FileFsVolumeInformation response to determine VolumeLabelLength.|
+| | Query again with space for all fixed fields and all but one UTF-16 code unit of VolumeLabel.|
+| Pass Criteria| The operation returns **STATUS_BUFFER_OVERFLOW**; ByteCount equals FieldOffset(VolumeLabel) plus BytesToCopy; the fixed fields match the complete response; and the returned VolumeLabel is the expected prefix.|
+
+##### <a name="FsInfo_Query_FileFsVolumeInformation_Dir_OutputBufferOverflow"/>FsInfo_Query_FileFsVolumeInformation_Dir_OutputBufferOverflow
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To verify the partial-volume-label response for FileFsVolumeInformation queried from a directory.|
+| | Category: FSA, QueryFileSystemInformation, NonSmb, Positive|
+| | Test environment: FAT32, NTFS, ReFS; requires a volume label long enough to exceed the minimum aligned response buffer.|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query the complete FileFsVolumeInformation response to determine VolumeLabelLength.|
+| | Query again with space for all fixed fields and all but one UTF-16 code unit of VolumeLabel.|
+| Pass Criteria| The operation returns **STATUS_BUFFER_OVERFLOW**; ByteCount equals FieldOffset(VolumeLabel) plus BytesToCopy; the fixed fields match the complete response; and the returned VolumeLabel is the expected prefix.|
+
+##### <a name="FsInfo_Query_FileFsVolumeInformation_File_OutputValues-BVT"/>FsInfo_Query_FileFsVolumeInformation_File_OutputValues (BVT)
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To verify a complete FileFsVolumeInformation response queried from a data file.|
+| | Category: BVT, FSA, QueryFileSystemInformation, NonSmb|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DataFile).|
+| | Query the complete FileFsVolumeInformation response.|
+| | Query again with the minimum buffer that can contain the complete response.|
+| Pass Criteria| Both queries return **STATUS_SUCCESS**; VolumeCreationTime is nonnegative; VolumeLabelLength matches the Unicode label bytes; SupportsObjects is TRUE; Reserved is zero; ByteCount is exact; and all volume fields are stable across both responses.|
+
+##### <a name="FsInfo_Query_FileFsVolumeInformation_Dir_OutputValues"/>FsInfo_Query_FileFsVolumeInformation_Dir_OutputValues
+
+| &#32;| &#32; |
+| -------------| ------------- |
+| Description| To verify a complete FileFsVolumeInformation response queried from a directory.|
+| | Category: FSA, QueryFileSystemInformation, NonSmb, Positive|
+| | Test environment: FAT32, NTFS, ReFS|
+| Message Sequence| CreateFile (DirectoryFile).|
+| | Query the complete FileFsVolumeInformation response.|
+| | Query again with the minimum buffer that can contain the complete response.|
+| Pass Criteria| Both queries return **STATUS_SUCCESS**; VolumeCreationTime is nonnegative; VolumeLabelLength matches the Unicode label bytes; SupportsObjects is TRUE; Reserved is zero; ByteCount is exact; and all volume fields are stable across both responses.|
 
 #### <a name="IsObjectIdSupported"/>IsObjectIdSupported
 
