@@ -16,6 +16,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
     <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 </Project>
