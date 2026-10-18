@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Protocols.TestTools" Version="2.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Asn1Base\Asn1Base.csproj" />
